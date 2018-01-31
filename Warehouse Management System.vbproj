@@ -1,0 +1,1166 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{E8476CF7-A457-4776-BDA9-A1138977D015}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <StartupObject>Warehouse_Management_System.My.MyApplication</StartupObject>
+    <RootNamespace>Warehouse_Management_System</RootNamespace>
+    <AssemblyName>Warehouse Management System</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <MyType>WindowsForms</MyType>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>C:\Users\GLOBAL-B\Desktop\Backup_Publish\Publish\Dream Hearts\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ProductName>Warehouse Management System</ProductName>
+    <PublisherName>Globagility Inc.</PublisherName>
+    <ApplicationRevision>101</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <CreateDesktopShortcut>true</CreateDesktopShortcut>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>false</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DocumentationFile>Warehouse Management System.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DocumentationFile>Warehouse Management System.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionExplicit>On</OptionExplicit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionCompare>Binary</OptionCompare>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionStrict>Off</OptionStrict>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionInfer>On</OptionInfer>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>C036E1F5DFFDAD1883B721363E591A7B4F115835</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>Warehouse Management System_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>system_logo01.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.ReportSource, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.Shared, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.Windows.Forms, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="DevComponents.DotNetBar2, Version=10.0.0.3, Culture=neutral, PublicKeyToken=7eb7c3a35b91de04, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\DevComponents.DotNetBar2.dll</HintPath>
+    </Reference>
+    <Reference Include="MySql.Data, Version=6.8.3.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Spire.Barcode">
+      <HintPath>..\..\..\..\..\..\..\Program Files\e-iceblue\Spire.Barcode\Bin\NET4.0\Spire.Barcode.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+  </ItemGroup>
+  <ItemGroup>
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="System" />
+    <Import Include="System.Collections" />
+    <Import Include="System.Collections.Generic" />
+    <Import Include="System.Data" />
+    <Import Include="System.Drawing" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.Windows.Forms" />
+    <Import Include="System.Linq" />
+    <Import Include="System.Xml.Linq" />
+    <Import Include="System.Threading.Tasks" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Admin\OrganizationForm.Designer.vb">
+      <DependentUpon>OrganizationForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\OrganizationForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Admin\PostionViewForm.Designer.vb">
+      <DependentUpon>PostionViewForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\PostionViewForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Admin\UserForm.Designer.vb">
+      <DependentUpon>UserForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\UserForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ApplicationEvents.vb" />
+    <Compile Include="General\DummyForm.Designer.vb">
+      <DependentUpon>DummyForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="General\DummyForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="General\LoginForm.designer.vb">
+      <DependentUpon>LoginForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="General\LoginForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="General\PrimaryForm.Designer.vb">
+      <DependentUpon>PrimaryForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="General\PrimaryForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="General\ReportViewer.Designer.vb">
+      <DependentUpon>ReportViewer.vb</DependentUpon>
+    </Compile>
+    <Compile Include="General\ReportViewer.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Information\AboutForm.Designer.vb">
+      <DependentUpon>AboutForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Information\AboutForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Information\SystemIllustrationForm.Designer.vb">
+      <DependentUpon>SystemIllustrationForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Information\SystemIllustrationForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Menu\BundlesForm.Designer.vb">
+      <DependentUpon>BundlesForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Menu\BundlesForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Menu\ContactsForm.Designer.vb">
+      <DependentUpon>ContactsForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Menu\ContactsForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Menu\CustomerOrdersForm.Designer.vb">
+      <DependentUpon>CustomerOrdersForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Menu\CustomerOrdersForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Menu\AccountsForm.Designer.vb">
+      <DependentUpon>AccountsForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Menu\AccountsForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Menu\InventoryLocationsForm.Designer.vb">
+      <DependentUpon>InventoryLocationsForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Menu\InventoryLocationsForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Menu\LineUpDeliveryForm.Designer.vb">
+      <DependentUpon>LineUpDeliveryForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Menu\LineUpDeliveryForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Menu\PackingListForm.Designer.vb">
+      <DependentUpon>PackingListForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Menu\PackingListForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Menu\PickListForm.Designer.vb">
+      <DependentUpon>PickListForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Menu\PickListForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Menu\ProductsForm.Designer.vb">
+      <DependentUpon>ProductsForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Menu\ProductsForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Menu\PulloutForm.Designer.vb">
+      <DependentUpon>PulloutForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Menu\PulloutForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Menu\PurchaseForm.Designer.vb">
+      <DependentUpon>PurchaseForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Menu\PurchaseForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Menu\ReceivingForm.Designer.vb">
+      <DependentUpon>ReceivingForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Menu\ReceivingForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Menu\ReferencesForm.Designer.vb">
+      <DependentUpon>ReferencesForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Menu\ReferencesForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Menu\ReturnForm.Designer.vb">
+      <DependentUpon>ReturnForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Menu\ReturnForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Menu\ReturnsForm.Designer.vb">
+      <DependentUpon>ReturnsForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Menu\ReturnsForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Menu\StockAdjustmentForm.Designer.vb">
+      <DependentUpon>StockAdjustmentForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Menu\StockAdjustmentForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Menu\StockTransferForm.Designer.vb">
+      <DependentUpon>StockTransferForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Menu\StockTransferForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Menu\VerifyPickListForm.Designer.vb">
+      <DependentUpon>VerifyPickListForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Menu\VerifyPickListForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Modules\MarvinModule.vb" />
+    <Compile Include="Modules\mdlStoredProcedure.vb" />
+    <Compile Include="Modules\mdlValidation.vb" />
+    <Compile Include="Modules\myModule.vb" />
+    <Compile Include="Modules\sqlModule.vb" />
+    <Compile Include="My Project\AssemblyInfo.vb" />
+    <Compile Include="My Project\Application.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Application.myapp</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Resources.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Settings.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="Print\AgingReportPrint.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AgingReportPrint.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Print\BrokenSizesPrint.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BrokenSizesPrint.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Print\ConsignorPLReportPrint.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ConsignorPLReportPrint.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Print\ConsignorPrint.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ConsignorPrint.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Print\CycleCountPrint.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CycleCountPrint.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Print\CycleCountReportA.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CycleCountReportA.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Print\CycleCountReportB.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CycleCountReportB.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Print\DataSetA.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DataSetA.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Print\DataSetA.vb">
+      <DependentUpon>DataSetA.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Print\DeliveryPerformancePrint.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DeliveryPerformancePrint.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Print\DeliveryPerformanceRevPrint.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DeliveryPerformanceRevPrint.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Print\OutrightPrintBRev.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OutrightPrintBRev.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Print\OutrightPrintC.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OutrightPrintC.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Print\OutrightPrintB.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OutrightPrintB.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Print\OutrightPrintD.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OutrightPrintD.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Print\PickListReportPrint.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PickListReportPrint.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Print\PullOutBPrint.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PullOutBPrint.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Print\SKUTagPrint.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SKUTagPrint.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Print\StockLevelPrint.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>StockLevelPrint.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Print\OutrightPrint.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OutrightPrint.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Print\PickListPrint.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PickListPrint.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Print\PullOutAPrint.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PullOutAPrint.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Print\PurchaseOrderPrint.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PurchaseOrderPrint.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Print\ReceivingPrint.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ReceivingPrint.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Print\SalesAndQtyPrint.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SalesAndQtyPrint.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Print\SellThroughPrintA.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SellThroughPrintA.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Print\SellThroughPrintB.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SellThroughPrintB.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Print\SubReportA.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SubReportA.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Print\TestPrint.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TestPrint.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Print\VendorReportPrint.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>VendorReportPrint.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Print\VerifyPickListPrint.vb">
+      <DependentUpon>VerifyPickListPrint.rpt</DependentUpon>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="Print\VerifyPickListPrintB.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>VerifyPickListPrintB.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\AgingReportForm.Designer.vb">
+      <DependentUpon>AgingReportForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\AgingReportForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Reports\BrokenSizesForm.Designer.vb">
+      <DependentUpon>BrokenSizesForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\BrokenSizesForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Reports\CycleCountForm.Designer.vb">
+      <DependentUpon>CycleCountForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\CycleCountForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Reports\DeliveryPerformanceForm.Designer.vb">
+      <DependentUpon>DeliveryPerformanceForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\DeliveryPerformanceForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Print\OutrightPrintE.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OutrightPrintE.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\PickListReportForm.Designer.vb">
+      <DependentUpon>PickListReportForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\PickListReportForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Reports\SalesAndQtyForm.Designer.vb">
+      <DependentUpon>SalesAndQtyForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\SalesAndQtyForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Reports\SellThroughForm.Designer.vb">
+      <DependentUpon>SellThroughForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\SellThroughForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Reports\StockLevelForm.Designer.vb">
+      <DependentUpon>StockLevelForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\StockLevelForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Settings\AddressForm.Designer.vb">
+      <DependentUpon>AddressForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Settings\AddressForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Settings\ColorsForm.Designer.vb">
+      <DependentUpon>ColorsForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Settings\ColorsForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Settings\ContactPersonForm.Designer.vb">
+      <DependentUpon>ContactPersonForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Settings\ContactPersonForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SubForms\AddBranchCodeNameForm.Designer.vb">
+      <DependentUpon>AddBranchCodeNameForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="SubForms\AddBranchCodeNameForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SubForms\AddCategoryForm.Designer.vb">
+      <DependentUpon>AddCategoryForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="SubForms\AddCategoryForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SubForms\AddClassDescriptionForm.Designer.vb">
+      <DependentUpon>AddClassDescriptionForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="SubForms\AddClassDescriptionForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SubForms\AddCodeForm.Designer.vb">
+      <DependentUpon>AddCodeForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="SubForms\AddCodeForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SubForms\AddCycleCountForm.Designer.vb">
+      <DependentUpon>AddCycleCountForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="SubForms\AddCycleCountForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SubForms\AddDriverForm.Designer.vb">
+      <DependentUpon>AddDriverForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="SubForms\AddDriverForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SubForms\AdditionalItemsForm.Designer.vb">
+      <DependentUpon>AdditionalItemsForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="SubForms\AdditionalItemsForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SubForms\AddLineUpForm.Designer.vb">
+      <DependentUpon>AddLineUpForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="SubForms\AddLineUpForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SubForms\AddPackerForm.Designer.vb">
+      <DependentUpon>AddPackerForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="SubForms\AddPackerForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SubForms\AddPickerForm.Designer.vb">
+      <DependentUpon>AddPickerForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="SubForms\AddPickerForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SubForms\AddCustomersForm.Designer.vb">
+      <DependentUpon>AddCustomersForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="SubForms\AddCustomersForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SubForms\AddPullOutDetailsForm.Designer.vb">
+      <DependentUpon>AddPullOutDetailsForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="SubForms\AddPullOutDetailsForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SubForms\AddShiftForm.Designer.vb">
+      <DependentUpon>AddShiftForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="SubForms\AddShiftForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SubForms\AddSizeForm.Designer.vb">
+      <DependentUpon>AddSizeForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="SubForms\AddSizeForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SubForms\AddSupplierForm.Designer.vb">
+      <DependentUpon>AddSupplierForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="SubForms\AddSupplierForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SubForms\AddToCartonForm.Designer.vb">
+      <DependentUpon>AddToCartonForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="SubForms\AddToCartonForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SubForms\AddTruckForm.Designer.vb">
+      <DependentUpon>AddTruckForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="SubForms\AddTruckForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SubForms\AddTruckShiftForm.Designer.vb">
+      <DependentUpon>AddTruckShiftForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="SubForms\AddTruckShiftForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SubForms\AddVendorCodeNameForm.Designer.vb">
+      <DependentUpon>AddVendorCodeNameForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="SubForms\AddVendorCodeNameForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SubForms\EditBundleItemsAForm.Designer.vb">
+      <DependentUpon>EditBundleItemsAForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="SubForms\EditBundleItemsAForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SubForms\EditBundleItemsBForm.Designer.vb">
+      <DependentUpon>EditBundleItemsBForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="SubForms\EditBundleItemsBForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SubForms\EditCartonForm.Designer.vb">
+      <DependentUpon>EditCartonForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="SubForms\EditCartonForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SubForms\EditRackShelfColumnForm.Designer.vb">
+      <DependentUpon>EditRackShelfColumnForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="SubForms\EditRackShelfColumnForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SubForms\ImportProductsForm.Designer.vb">
+      <DependentUpon>ImportProductsForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="SubForms\ImportProductsForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SubForms\NewRR.Designer.vb">
+      <DependentUpon>NewRR.vb</DependentUpon>
+    </Compile>
+    <Compile Include="SubForms\NewRR.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SubForms\SelectPickListForm.Designer.vb">
+      <DependentUpon>SelectPickListForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="SubForms\SelectPickListForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SubForms\StockForm.Designer.vb">
+      <DependentUpon>StockForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="SubForms\StockForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SubForms\AddTagsForm.Designer.vb">
+      <DependentUpon>AddTagsForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="SubForms\AddTagsForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SubForms\ViewCartonItemsForm.Designer.vb">
+      <DependentUpon>ViewCartonItemsForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="SubForms\ViewCartonItemsForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SubForms\ViewCartonsForm.Designer.vb">
+      <DependentUpon>ViewCartonsForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="SubForms\ViewCartonsForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SubForms\ViewEditLineUpDeliveryForm.Designer.vb">
+      <DependentUpon>ViewEditLineUpDeliveryForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="SubForms\ViewEditLineUpDeliveryForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Admin\OrganizationForm.resx">
+      <DependentUpon>OrganizationForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Admin\PostionViewForm.resx">
+      <DependentUpon>PostionViewForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Admin\UserForm.resx">
+      <DependentUpon>UserForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="General\DummyForm.resx">
+      <DependentUpon>DummyForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="General\LoginForm.resx">
+      <DependentUpon>LoginForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="General\PrimaryForm.resx">
+      <DependentUpon>PrimaryForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="General\ReportViewer.resx">
+      <DependentUpon>ReportViewer.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Information\AboutForm.resx">
+      <DependentUpon>AboutForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Information\SystemIllustrationForm.resx">
+      <DependentUpon>SystemIllustrationForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Menu\BundlesForm.resx">
+      <DependentUpon>BundlesForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Menu\ContactsForm.resx">
+      <DependentUpon>ContactsForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Menu\CustomerOrdersForm.resx">
+      <DependentUpon>CustomerOrdersForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Menu\AccountsForm.resx">
+      <DependentUpon>AccountsForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Menu\InventoryLocationsForm.resx">
+      <DependentUpon>InventoryLocationsForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Menu\LineUpDeliveryForm.resx">
+      <DependentUpon>LineUpDeliveryForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Menu\PackingListForm.resx">
+      <DependentUpon>PackingListForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Menu\PickListForm.resx">
+      <DependentUpon>PickListForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Menu\ProductsForm.resx">
+      <DependentUpon>ProductsForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Menu\PulloutForm.resx">
+      <DependentUpon>PulloutForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Menu\PurchaseForm.resx">
+      <DependentUpon>PurchaseForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Menu\ReceivingForm.resx">
+      <DependentUpon>ReceivingForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Menu\ReferencesForm.resx">
+      <DependentUpon>ReferencesForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Menu\ReturnForm.resx">
+      <DependentUpon>ReturnForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Menu\ReturnsForm.resx">
+      <DependentUpon>ReturnsForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Menu\StockAdjustmentForm.resx">
+      <DependentUpon>StockAdjustmentForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Menu\StockTransferForm.resx">
+      <DependentUpon>StockTransferForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Menu\VerifyPickListForm.resx">
+      <DependentUpon>VerifyPickListForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="My Project\Resources.resx">
+      <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Print\AgingReportPrint.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>AgingReportPrint.vb</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Print\BrokenSizesPrint.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>BrokenSizesPrint.vb</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Print\ConsignorPLReportPrint.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>ConsignorPLReportPrint.vb</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Print\ConsignorPrint.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>ConsignorPrint.vb</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Print\CycleCountPrint.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>CycleCountPrint.vb</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Print\CycleCountReportA.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>CycleCountReportA.vb</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Print\CycleCountReportB.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>CycleCountReportB.vb</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Print\DeliveryPerformancePrint.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>DeliveryPerformancePrint.vb</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Print\DeliveryPerformanceRevPrint.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>DeliveryPerformanceRevPrint.vb</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Print\OutrightPrintBRev.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>OutrightPrintBRev.vb</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Print\OutrightPrintC.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>OutrightPrintC.vb</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Print\OutrightPrintB.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>OutrightPrintB.vb</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Print\OutrightPrintD.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>OutrightPrintD.vb</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Print\PickListReportPrint.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>PickListReportPrint.vb</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Print\PullOutBPrint.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>PullOutBPrint.vb</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Print\SKUTagPrint.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>SKUTagPrint.vb</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Print\StockLevelPrint.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>StockLevelPrint.vb</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Print\OutrightPrint.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>OutrightPrint.vb</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Print\PickListPrint.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>PickListPrint.vb</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Print\PullOutAPrint.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>PullOutAPrint.vb</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Print\PurchaseOrderPrint.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>PurchaseOrderPrint.vb</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Print\ReceivingPrint.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>ReceivingPrint.vb</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Print\SalesAndQtyPrint.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>SalesAndQtyPrint.vb</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Print\SellThroughPrintA.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>SellThroughPrintA.vb</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Print\SellThroughPrintB.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>SellThroughPrintB.vb</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Print\SubReportA.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>SubReportA.vb</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Print\TestPrint.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>TestPrint.vb</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Print\VendorReportPrint.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>VendorReportPrint.vb</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Print\VerifyPickListPrint.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>VerifyPickListPrint.vb</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Print\VerifyPickListPrintB.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>VerifyPickListPrintB.vb</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\AgingReportForm.resx">
+      <DependentUpon>AgingReportForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\BrokenSizesForm.resx">
+      <DependentUpon>BrokenSizesForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\CycleCountForm.resx">
+      <DependentUpon>CycleCountForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\DeliveryPerformanceForm.resx">
+      <DependentUpon>DeliveryPerformanceForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Print\OutrightPrintE.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>OutrightPrintE.vb</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\PickListReportForm.resx">
+      <DependentUpon>PickListReportForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\SalesAndQtyForm.resx">
+      <DependentUpon>SalesAndQtyForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\SellThroughForm.resx">
+      <DependentUpon>SellThroughForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\StockLevelForm.resx">
+      <DependentUpon>StockLevelForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Settings\AddressForm.resx">
+      <DependentUpon>AddressForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Settings\ColorsForm.resx">
+      <DependentUpon>ColorsForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Settings\ContactPersonForm.resx">
+      <DependentUpon>ContactPersonForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SubForms\AddBranchCodeNameForm.resx">
+      <DependentUpon>AddBranchCodeNameForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SubForms\AddCategoryForm.resx">
+      <DependentUpon>AddCategoryForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SubForms\AddClassDescriptionForm.resx">
+      <DependentUpon>AddClassDescriptionForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SubForms\AddCodeForm.resx">
+      <DependentUpon>AddCodeForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SubForms\AddCycleCountForm.resx">
+      <DependentUpon>AddCycleCountForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SubForms\AddDriverForm.resx">
+      <DependentUpon>AddDriverForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SubForms\AdditionalItemsForm.resx">
+      <DependentUpon>AdditionalItemsForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SubForms\AddLineUpForm.resx">
+      <DependentUpon>AddLineUpForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SubForms\AddPackerForm.resx">
+      <DependentUpon>AddPackerForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SubForms\AddPickerForm.resx">
+      <DependentUpon>AddPickerForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SubForms\AddCustomersForm.resx">
+      <DependentUpon>AddCustomersForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SubForms\AddPullOutDetailsForm.resx">
+      <DependentUpon>AddPullOutDetailsForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SubForms\AddShiftForm.resx">
+      <DependentUpon>AddShiftForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SubForms\AddSizeForm.resx">
+      <DependentUpon>AddSizeForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SubForms\AddSupplierForm.resx">
+      <DependentUpon>AddSupplierForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SubForms\AddToCartonForm.resx">
+      <DependentUpon>AddToCartonForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SubForms\AddTruckForm.resx">
+      <DependentUpon>AddTruckForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SubForms\AddTruckShiftForm.resx">
+      <DependentUpon>AddTruckShiftForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SubForms\AddVendorCodeNameForm.resx">
+      <DependentUpon>AddVendorCodeNameForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SubForms\EditBundleItemsAForm.resx">
+      <DependentUpon>EditBundleItemsAForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SubForms\EditBundleItemsBForm.resx">
+      <DependentUpon>EditBundleItemsBForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SubForms\EditCartonForm.resx">
+      <DependentUpon>EditCartonForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SubForms\EditRackShelfColumnForm.resx">
+      <DependentUpon>EditRackShelfColumnForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SubForms\ImportProductsForm.resx">
+      <DependentUpon>ImportProductsForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SubForms\NewRR.resx">
+      <DependentUpon>NewRR.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SubForms\SelectPickListForm.resx">
+      <DependentUpon>SelectPickListForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SubForms\StockForm.resx">
+      <DependentUpon>StockForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SubForms\AddTagsForm.resx">
+      <DependentUpon>AddTagsForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SubForms\ViewCartonItemsForm.resx">
+      <DependentUpon>ViewCartonItemsForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SubForms\ViewCartonsForm.resx">
+      <DependentUpon>ViewCartonsForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SubForms\ViewEditLineUpDeliveryForm.resx">
+      <DependentUpon>ViewEditLineUpDeliveryForm.vb</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
+    <None Include="My Project\app.manifest" />
+    <None Include="My Project\Application.myapp">
+      <Generator>MyApplicationCodeGenerator</Generator>
+      <LastGenOutput>Application.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="My Project\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <CustomToolNamespace>My</CustomToolNamespace>
+      <LastGenOutput>Settings.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="App.config" />
+    <None Include="Print\DataSetA.xsc">
+      <DependentUpon>DataSetA.xsd</DependentUpon>
+    </None>
+    <None Include="Print\DataSetA.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>DataSetA.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="Print\DataSetA.xss">
+      <DependentUpon>DataSetA.xsd</DependentUpon>
+    </None>
+    <None Include="Warehouse Management System_TemporaryKey.pfx" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <PublishFile Include="stdole">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Exclude</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="11-512.ico" />
+    <Content Include="system_logo.ico" />
+    <Content Include="system_logo01.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{C0C07587-41A7-46C8-8FBD-3F9C8EBE2DDC}" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
