@@ -512,4 +512,8 @@ Public Class PickListReportForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
+    Private Sub pnlOptions_Paint(sender As Object, e As PaintEventArgs) Handles pnlOptions.Paint
+
+    End Sub
 End Class

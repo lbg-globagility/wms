@@ -850,3 +850,88 @@ C:\Users\GLOBAL-B\Desktop\Current Projects\Dreamhearts\Warehouse Management Syst
 C:\Users\GLOBAL-B\Desktop\Current Projects\Dreamhearts\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse Management System.exe
 C:\Users\GLOBAL-B\Desktop\Current Projects\Dreamhearts\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse Management System.xml
 C:\Users\GLOBAL-B\Desktop\Current Projects\Dreamhearts\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse Management System.pdb
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\bin\Debug\Warehouse Management System.exe.config
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse Management System.exe
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse Management System.xml
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse Management System.pdb
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\bin\Debug\Warehouse Management System.exe.manifest
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\bin\Debug\Warehouse Management System.application
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\bin\Debug\Warehouse Management System.exe
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\bin\Debug\Warehouse Management System.pdb
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\bin\Debug\Warehouse Management System.xml
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\bin\Debug\Spire.Barcode.xml
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse Management System.vbprojResolveAssemblyReference.cache
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.OrganizationForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.PostionViewForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.UserForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.DummyForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.LoginForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.PrimaryForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.ReportViewer.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.AboutForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.SystemIllustrationForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.BundlesForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.ContactsForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.CustomerOrdersForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.AccountsForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.InventoryLocationsForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.LineUpDeliveryForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.PackingListForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.PickListForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.ProductsForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.PulloutForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.PurchaseForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.ReceivingForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.ReferencesForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.ReturnForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.ReturnsForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.StockAdjustmentForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.StockTransferForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.VerifyPickListForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.Resources.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.AgingReportForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.BrokenSizesForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.CycleCountForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.DeliveryPerformanceForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.PickListReportForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.SalesAndQtyForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.SellThroughForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.StockLevelForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.AddressForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.ColorsForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.ContactPersonForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.AddBranchCodeNameForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.AddCategoryForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.AddClassDescriptionForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.AddCodeForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.AddCycleCountForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.AddDriverForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.AdditionalItemsForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.AddLineUpForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.AddPackerForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.AddPickerForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.AddCustomersForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.AddPullOutDetailsForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.AddShiftForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.AddSizeForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.AddSupplierForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.AddToCartonForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.AddTruckForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.AddTruckShiftForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.AddVendorCodeNameForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.EditBundleItemsAForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.EditBundleItemsBForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.EditCartonForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.EditRackShelfColumnForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.ImportProductsForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.NewRR.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.SelectPickListForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.StockForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.AddTagsForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.ViewCartonItemsForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.ViewCartonsForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse_Management_System.ViewEditLineUpDeliveryForm.resources
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse Management System.vbproj.GenerateResource.Cache
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse Management System.TrustInfo.xml
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse Management System.exe.manifest
+C:\Users\GLOBAL-A\Desktop\My Project\Warehouse Management System\Warehouse Management System\obj\Debug\Warehouse Management System.application
