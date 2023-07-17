@@ -94,12 +94,11 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\Debug\DevComponents.DotNetBar2.dll</HintPath>
     </Reference>
-    <Reference Include="MySql.Data, Version=6.8.3.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Debug\MySql.Data.dll</HintPath>
+    <Reference Include="MySql.Data, Version=6.9.12.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>packages\MySql.Data.6.9.12\lib\net45\MySql.Data.dll</HintPath>
     </Reference>
-    <Reference Include="Spire.Barcode">
-      <HintPath>..\..\..\..\..\..\..\Program Files\e-iceblue\Spire.Barcode\Bin\NET4.0\Spire.Barcode.dll</HintPath>
+    <Reference Include="Spire.Barcode, Version=7.2.0.0, Culture=neutral, PublicKeyToken=663f351905198cb3, processorArchitecture=MSIL">
+      <HintPath>packages\Spire.Barcode.7.2.0\lib\net40\Spire.Barcode.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -1110,6 +1109,7 @@
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
     <None Include="App.config" />
+    <None Include="packages.config" />
     <None Include="Print\DataSetA.xsc">
       <DependentUpon>DataSetA.xsd</DependentUpon>
     </None>
@@ -1149,6 +1149,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="11-512.ico" />
+    <Content Include="References\DevComponents.DotNetBar2.dll" />
     <Content Include="system_logo.ico" />
     <Content Include="system_logo01.ico" />
   </ItemGroup>
