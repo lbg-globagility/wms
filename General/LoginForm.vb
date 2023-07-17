@@ -19,6 +19,7 @@ Public Class LoginForm
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
             conn.Close()
+            SkipLoginCredentials()
         End Try
         Me.Cursor = Cursors.Default
     End Sub
@@ -228,5 +229,12 @@ Public Class LoginForm
             conn.Close()
         End Try
         Me.Cursor = Cursors.Default
+    End Sub
+
+    Private Sub SkipLoginCredentials()
+        If Not Debugger.IsAttached Then Return
+
+        txtUsername.Text = "admin"
+        txtPassword.Text = "admin"
     End Sub
 End Class
