@@ -2,3 +2,5 @@
 bin/Debug/app.publish
 bin/Debug
 obj/Debug
+packages/MySql.Data.6.9.12
+packages/Spire.Barcode.7.2.0
