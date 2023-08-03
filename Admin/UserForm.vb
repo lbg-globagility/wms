@@ -1,17 +1,9 @@
-﻿Imports MySql.Data.MySqlClient
-Imports System.IO
-Imports System.Windows.Forms
-Imports CrystalDecisions.CrystalReports.Engine
-Imports System.Linq
-Imports System.Collections
-Imports System.Collections.Generic
-Imports System.Data
-Imports System.Diagnostics
-Imports System.Runtime.InteropServices
-Imports System.Text.RegularExpressions
+﻿Imports System.IO
+Imports MySql.Data.MySqlClient
+
 Public Class UserForm
     Dim manager As New sqlModule.Manager
-    Dim conn As New MySqlConnection(Manager.GetConnString)
+    Dim conn As New MySqlConnection(manager.GetConnString)
     Dim sqlquery As String
     Dim sqlcmd As MySqlCommand
     Dim sqlrd As MySqlDataReader
@@ -25,6 +17,7 @@ Public Class UserForm
     Dim saveuserid, positionid As Integer
     Dim FileName, FileExtension As String
     Dim susername, spassword, decryptusername, decryptpassword, encryptusername, encryptpassword As String
+
     Private Sub UserForm_Load(sender As Object, e As EventArgs) Handles Me.Load
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -40,6 +33,7 @@ Public Class UserForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub UserForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -51,15 +45,20 @@ Public Class UserForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #Region "Functions"
+
     Sub callAutoCompleteFunctions()
         autocompletePosition()
     End Sub
+
     Sub callAutoPopulateFunctions()
         autopopulatePosition()
         autopopulateStatus()
     End Sub
+
 #Region "Clear/Enable/Visible Functions"
+
     Sub clearfields()
         Try
             cue = ""
@@ -74,6 +73,7 @@ Public Class UserForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearUserInformation()
         Try
             txtEmailAddress.Text = ""
@@ -92,6 +92,7 @@ Public Class UserForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearAttachment()
         Try
             txtFileName.Text = ""
@@ -105,6 +106,7 @@ Public Class UserForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearTabAttachment2()
         Try
             txtFileName.Text = ""
@@ -118,6 +120,7 @@ Public Class UserForm
             conn.Close()
         End Try
     End Sub
+
     Sub enableGB(ByVal enable1 As Boolean, ByVal enable2 As Boolean, ByVal enable3 As Boolean)
         Try
             gbUserList.Enabled = enable1
@@ -129,6 +132,7 @@ Public Class UserForm
             conn.Close()
         End Try
     End Sub
+
     Sub enablegbAddAttachment(ByVal enable1 As Boolean, ByVal enable2 As Boolean)
         Try
             txtFileName.Enabled = enable1
@@ -140,6 +144,7 @@ Public Class UserForm
             conn.Close()
         End Try
     End Sub
+
     Sub enableANDvisibleMS(ByVal enable1 As Boolean, ByVal enable2 As Boolean, ByVal visible1 As Boolean)
         Try
             msNew.Enabled = enable1
@@ -151,8 +156,11 @@ Public Class UserForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Click Functions"
+
     Sub tsrefreshperformclick()
         Try
             errProvider.Clear()
@@ -166,8 +174,11 @@ Public Class UserForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Attachments Functions"
+
     Sub getAttachment(ByVal rowid As Integer)
         Try
             FileExtension = "" : AttachedFile = Nothing
@@ -186,6 +197,7 @@ Public Class UserForm
             conn.Close()
         End Try
     End Sub
+
     Sub ShowImage()
         Try
             If IsDBNull(AttachedFile) Then
@@ -201,6 +213,7 @@ Public Class UserForm
             conn.Close()
         End Try
     End Sub
+
     Sub downloadImage(ByVal dgattachmentfilename As String)
         Dim image As Image = pbImage.Image
         Dim filename As String = dgattachmentfilename
@@ -243,6 +256,7 @@ Public Class UserForm
             End While
         End If
     End Sub
+
     Public Function downloadFile(ByVal rowid As Integer, ByVal sFileName As String, ByVal sFileExtension As String)
         Try
             sqlquery = "SELECT attachedfile FROM attachments WHERE rowid = '" & rowid & "' "
@@ -277,7 +291,6 @@ Public Class UserForm
                     End Using
                 End If
             End If
-
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -285,9 +298,13 @@ Public Class UserForm
         End Try
         Return True
     End Function
+
 #End Region
+
 #Region "Display Functions"
+
 #Region "AutoComplete Functions"
+
     Sub autocompletePosition()
         Try
             Dim positionname As New AutoCompleteStringCollection
@@ -306,8 +323,11 @@ Public Class UserForm
         End Try
         conn.Close()
     End Sub
+
 #End Region
+
 #Region "AutoPopulate Functions"
+
     Sub autopopulatePosition()
         Try
             cboPosition.Items.Clear()
@@ -327,6 +347,7 @@ Public Class UserForm
             conn.Close()
         End Try
     End Sub
+
     Sub autopopulateStatus()
         Try
             cboStatus.Items.Clear()
@@ -346,12 +367,15 @@ Public Class UserForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Display"
+
     Public Function displayUserDetails()
         If conn.State = ConnectionState.Open Then conn.Close()
-        sqlquery = "SELECT u.rowid,COALESCE(u.emailaddress,''),COALESCE(u.comments,''),COALESCE(u.firstname,''),COALESCE(u.middlename,''),COALESCE(u.lastname,'')," & _
-            "COALESCE(p.positionname,''),COALESCE(u.status,'') FROM users u LEFT JOIN positions p ON u.positionid = p.rowid  " & _
+        sqlquery = "SELECT u.rowid,COALESCE(u.emailaddress,''),COALESCE(u.comments,''),COALESCE(u.firstname,''),COALESCE(u.middlename,''),COALESCE(u.lastname,'')," &
+            "COALESCE(p.positionname,''),COALESCE(u.status,'') FROM users u LEFT JOIN positions p ON u.positionid = p.rowid  " &
             "WHERE u.organizationid = '" & Z_OrganizationID & "' ORDER BY u.rowid "
         dgUsers.Rows.Clear()
         Dim sqlcmd As New MySqlCommand(sqlquery, conn)
@@ -391,9 +415,10 @@ Public Class UserForm
         conn.Close()
         Return Nothing
     End Function
+
     Public Function displayUserAttachments(ByVal iuserid As Integer)
         If conn.State = ConnectionState.Open Then conn.Close()
-        sqlquery = "SELECT a.rowid,a.filename,a.filetype,a.remarks,DATE_FORMAT(a.created,'%d-%b-%Y'),COALESCE(DATE_FORMAT(a.lastupd,'%d-%b-%Y'),'') FROM attachments a " & _
+        sqlquery = "SELECT a.rowid,a.filename,a.filetype,a.remarks,DATE_FORMAT(a.created,'%d-%b-%Y'),COALESCE(DATE_FORMAT(a.lastupd,'%d-%b-%Y'),'') FROM attachments a " &
             "WHERE a.organizationid = " & Z_OrganizationID & " AND a.createdby = " & iuserid & " AND a.status = 'Active' ORDER BY a.filename "
         dgAttachments.Rows.Clear()
         Dim sqlcmd As New MySqlCommand(sqlquery, conn)
@@ -434,9 +459,13 @@ Public Class UserForm
         conn.Close()
         Return Nothing
     End Function
+
 #End Region
+
 #End Region
+
 #Region "Saving Functions"
+
     Sub getUserInfo(ByVal iuserid As Integer)
         Try
             getUserInformmation(iuserid)
@@ -447,6 +476,7 @@ Public Class UserForm
             conn.Close()
         End Try
     End Sub
+
     Sub getUserInformmation(ByVal euserid As Integer)
         Try
             susername = "" : spassword = ""
@@ -465,6 +495,7 @@ Public Class UserForm
             conn.Close()
         End Try
     End Sub
+
     Sub decryptUserInformation(ByVal iusername As String, ByVal ipassword As String)
         Try
             decryptusername = Nothing : decryptpassword = Nothing
@@ -486,6 +517,7 @@ Public Class UserForm
             conn.Close()
         End Try
     End Sub
+
     Sub encryptUserInformation(ByVal iusername As String, ByVal ipassword As String)
         Try
             encryptusername = Nothing : encryptpassword = Nothing
@@ -507,6 +539,7 @@ Public Class UserForm
             conn.Close()
         End Try
     End Sub
+
     Sub getUserID(ByVal iusername As String)
         Try
             saveuserid = 0
@@ -524,6 +557,7 @@ Public Class UserForm
             conn.Close()
         End Try
     End Sub
+
     Sub getUpdUserID(ByVal iuserid As Integer, ByVal iusername As String)
         Try
             saveuserid = 0
@@ -541,6 +575,7 @@ Public Class UserForm
             conn.Close()
         End Try
     End Sub
+
     Sub getPositionIDA(ByVal ipositionname As String)
         Try
             positionid = 0
@@ -558,8 +593,11 @@ Public Class UserForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #End Region
+
     Private Sub tabMain_DrawItem(sender As Object, e As DrawItemEventArgs) Handles tabMain.DrawItem
         Try
             TabControlColor(tabMain, e)
@@ -569,6 +607,7 @@ Public Class UserForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbClose_Click(sender As Object, e As EventArgs) Handles pbClose.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -583,6 +622,7 @@ Public Class UserForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboStatus_Leave(sender As Object, e As EventArgs) Handles cboStatus.Leave
         Try
             txtUsername.Focus()
@@ -592,6 +632,7 @@ Public Class UserForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub btnAddFile_Leave(sender As Object, e As EventArgs) Handles btnAddFile.Leave
         Try
             txtFileName.Focus()
@@ -601,6 +642,7 @@ Public Class UserForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub tsRefresh_Click(sender As Object, e As EventArgs) Handles tsRefresh.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -613,6 +655,7 @@ Public Class UserForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msNew_Click(sender As Object, e As EventArgs) Handles msNew.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -651,6 +694,7 @@ Public Class UserForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msCancel_Click(sender As Object, e As EventArgs) Handles msCancel.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -685,6 +729,7 @@ Public Class UserForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgUsers_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgUsers.CellClick
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -716,6 +761,7 @@ Public Class UserForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgUsers_KeyUp(sender As Object, e As KeyEventArgs) Handles dgUsers.KeyUp
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -749,6 +795,7 @@ Public Class UserForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub txtUsername_Leave(sender As Object, e As EventArgs) Handles txtUsername.Leave
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -774,6 +821,7 @@ Public Class UserForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     'Private Sub txtUsername_TextChanged(sender As Object, e As EventArgs) Handles txtUsername.TextChanged
     '    Me.Cursor = Cursors.WaitCursor
     '    Try
@@ -875,6 +923,7 @@ Public Class UserForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub btnClearFile_Click(sender As Object, e As EventArgs) Handles btnClearFile.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -891,6 +940,7 @@ Public Class UserForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgAttachments_MouseUp(sender As Object, e As MouseEventArgs) Handles dgAttachments.MouseUp
         Try
             Dim hitTestinfo As DataGridView.HitTestInfo
@@ -908,6 +958,7 @@ Public Class UserForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub dgAttachments_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgAttachments.CellClick
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -929,6 +980,7 @@ Public Class UserForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgAttachments_KeyUp(sender As Object, e As KeyEventArgs) Handles dgAttachments.KeyUp
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -952,6 +1004,7 @@ Public Class UserForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msSave_Click(sender As Object, e As EventArgs) Handles msSave.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1060,6 +1113,7 @@ Public Class UserForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgAttachments_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgAttachments.CellContentClick
         Try
             itemno = 1
@@ -1120,7 +1174,9 @@ Public Class UserForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #Region "Datagrid Errors"
+
     Private Sub dgUsers_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgUsers.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1161,6 +1217,7 @@ Public Class UserForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgAttachments_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgAttachments.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1201,5 +1258,7 @@ Public Class UserForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #End Region
+
 End Class

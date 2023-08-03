@@ -1,16 +1,7 @@
-﻿Imports MySql.Data.MySqlClient
-Imports System.IO
-Imports System.Windows.Forms
-Imports CrystalDecisions.CrystalReports.Engine
-Imports System.Linq
-Imports System.Collections
-Imports System.Collections.Generic
-Imports System.Data
-Imports System.Diagnostics
-Imports System.Runtime.InteropServices
-Imports System.Text.RegularExpressions
+﻿Imports System.Data.OleDb
+Imports MySql.Data.MySqlClient
 Imports Spire.Barcode
-Imports System.Data.OleDb
+
 Public Class DummyForm
     Dim manager As New sqlModule.Manager
     Dim conn As New MySqlConnection(manager.GetConnString)
@@ -25,6 +16,7 @@ Public Class DummyForm
     Dim examplecount As Integer = 5
     Dim examplestring As String
     Dim printcount As Integer
+
     Private Sub btnPrint_Click(sender As Object, e As EventArgs) Handles btnPrint.Click
         Try
             printcount = 1
@@ -51,6 +43,7 @@ Public Class DummyForm
             MsgBox(getErrExcptn(ex, Me.Name))
         End Try
     End Sub
+
     Private Sub btnImport_Click(sender As Object, e As EventArgs) Handles btnImport.Click
         Try
             fileOpener.Filter = "Excel files (*.xls;*.xlsx)|*.xls;*.xlsx"
@@ -66,7 +59,9 @@ Public Class DummyForm
             MsgBox(getErrExcptn(ex, Me.Name))
         End Try
     End Sub
+
 #Region "Functions"
+
     Sub ImportExcelFile(ByVal iexcelfilepath As String)
         Try
             dtExcelData = New DataTable
@@ -102,6 +97,7 @@ Public Class DummyForm
             dtExcelData = Nothing
         End Try
     End Sub
+
     Function ReadExcelFile(ByVal eexcelfilepath As String)
         Dim da As New OleDbDataAdapter
         Dim dt As New DataTable
@@ -126,5 +122,7 @@ Public Class DummyForm
         End Try
         Return dt
     End Function
+
 #End Region
+
 End Class

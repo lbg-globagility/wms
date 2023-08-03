@@ -1,17 +1,10 @@
-﻿Imports MySql.Data.MySqlClient
-Imports System.IO
-Imports System.Windows.Forms
-Imports CrystalDecisions.CrystalReports.Engine
-Imports System.Linq
-Imports System.Collections
-Imports System.Collections.Generic
-Imports System.Data
-Imports System.Diagnostics
-Imports System.Runtime.InteropServices
-Imports System.Text.RegularExpressions
+﻿Imports Microsoft.Extensions.DependencyInjection
+Imports MySql.Data.MySqlClient
+Imports WarehouseManagementSystem.Core.Interfaces
+
 Public Class PickListForm
     Dim manager As New sqlModule.Manager
-    Dim conn As New MySqlConnection(Manager.GetConnString)
+    Dim conn As New MySqlConnection(manager.GetConnString)
     Dim conn1 As New MySqlConnection(manager.GetConnString)
     Dim conn2 As New MySqlConnection(manager.GetConnString)
     Dim conn3 As New MySqlConnection(manager.GetConnString)
@@ -31,7 +24,12 @@ Public Class PickListForm
     Dim simplesearchphrase, datephrase, commonphrase, pagefilter1, pagefilter2, plnewpicklistcreated, plgeneratepickliststatus As String
     Dim pluserid, plcountcos, plloadingbar, plinventorylocationdid, plpicklistid, plpicklistorderid, plcontactid, plpicklistorderitemid, plcustomerid, pllistofvalueid As Integer
     Dim ploverallqtyordered, pltotalqtyordered, pltotalqtypicked, ploverallqtytopick, plqtytopick, plqtytopickbalance, plqtyorderedsum, pltotalqtytopicksum, plqtytopicksum As Integer
-    Private Sub PickListForm_Load(sender As Object, e As EventArgs) Handles Me.Load
+
+    Private Async Sub PickListForm_Load(sender As Object, e As EventArgs) Handles Me.Load
+
+        Dim _systemOwnerService = MainServiceProvider.GetRequiredService(Of ISystemOwnerService)
+        Dim _systemOwner = Await _systemOwnerService.GetCurrentSystemOwnerEntityAsync()
+
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
@@ -48,6 +46,7 @@ Public Class PickListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub PickListForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -59,17 +58,22 @@ Public Class PickListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #Region "Functions"
+
     Sub callAutoCompleteFunctions()
         globalautocompleteContactName(cboPickerName, "Picker", Me)
         globalautocompleteLocationName(cboLocationName, Me)
     End Sub
+
     Sub callAutoPopulateFunctions()
         autopopulatecboSearch()
         globalautopopulateContactName(cboPickerName, "Picker", Me)
         globalautopopulateLocationName(cboLocationName, Me)
     End Sub
+
 #Region "Clear/Enable/Visible"
+
     Sub clearfields()
         Try
             cue = ""
@@ -90,6 +94,7 @@ Public Class PickListForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearRightPage()
         Try
             cue = ""
@@ -107,6 +112,7 @@ Public Class PickListForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearSearchItems()
         Try
             txtSimpleSearch.Text = ""
@@ -124,6 +130,7 @@ Public Class PickListForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearcboSearch()
         Try
             txtPage.Text = ""
@@ -139,6 +146,7 @@ Public Class PickListForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearPickListInformation()
         Try
             txtPickListNo.Text = ""
@@ -156,6 +164,7 @@ Public Class PickListForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearCustomerOrders()
         Try
             txtOverallQtyOrdered.Text = ""
@@ -166,6 +175,7 @@ Public Class PickListForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearCustomerOrderItems()
         Try
             chkOtherInfo.Checked = fraud
@@ -178,6 +188,7 @@ Public Class PickListForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearRackShelfColumn()
         Try
             txtQtyToPick.Text = ""
@@ -187,6 +198,7 @@ Public Class PickListForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearDatagrids()
         Try
             dgCustomerOrders.Rows.Clear()
@@ -198,6 +210,7 @@ Public Class PickListForm
             conn.Close()
         End Try
     End Sub
+
     Sub enableGB(ByVal enable1 As Boolean, ByVal enable2 As Boolean, ByVal enable3 As Boolean)
         Try
             gbSearch.Enabled = enable1
@@ -212,6 +225,7 @@ Public Class PickListForm
             conn.Close()
         End Try
     End Sub
+
     Sub visibleCustomerOrderItems(ByVal visible1 As Boolean)
         Try
             ci_verifiedby.Visible = visible1
@@ -224,6 +238,7 @@ Public Class PickListForm
             conn.Close()
         End Try
     End Sub
+
     Sub enableANDvisibleMS(ByVal enable1 As Boolean, ByVal enable2 As Boolean, ByVal enable3 As Boolean, ByVal visible1 As Boolean)
         Try
             msNew.Enabled = enable1
@@ -236,8 +251,11 @@ Public Class PickListForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Click"
+
     Sub tsrefreshperformclick()
         Try
             errProvider.Clear()
@@ -253,8 +271,11 @@ Public Class PickListForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Computations"
+
     Sub getTotalQtyOrdered(ByVal icustomerorderid As Integer)
         Try
             pltotalqtyordered = 0
@@ -272,10 +293,11 @@ Public Class PickListForm
             conn.Close()
         End Try
     End Sub
+
     Sub getOverallQtyToPicked(ByVal ipicklistid As Integer, ByVal icustomerorderid As Integer)
         Try
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT plo.rowid FROM picklistorders plo LEFT JOIN orderitems ci ON plo.orderitemid = ci.rowid WHERE plo.picklistid = " & ipicklistid & " " & _
+            Dim sql1 As String = "SELECT plo.rowid FROM picklistorders plo LEFT JOIN orderitems ci ON plo.orderitemid = ci.rowid WHERE plo.picklistid = " & ipicklistid & " " &
                     "AND plo.orderid = " & icustomerorderid & " AND plo.organizationid = " & Z_OrganizationID & " AND plo.`status` != 'Inactive' AND ci.itemtype != 'B' "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -292,6 +314,7 @@ Public Class PickListForm
             conn.Close()
         End Try
     End Sub
+
     Sub getTotalQtyPickedA(ByVal ipicklistorderid As Integer)
         Try
             pltotalqtypicked = 0
@@ -309,6 +332,7 @@ Public Class PickListForm
             conn1.Close()
         End Try
     End Sub
+
     Sub getTotalQtyPickedB(ByVal ipicklistorderid As Integer, ByVal iproductinventorylocationid As Integer)
         Try
             pltotalqtypicked = 0
@@ -326,6 +350,7 @@ Public Class PickListForm
             conn1.Close()
         End Try
     End Sub
+
     Sub picklistformcomputations()
         Try
             ploverallqtyordered = 0 : ploverallqtytopick = 0 : plqtyorderedsum = 0 : pltotalqtytopicksum = 0 : plqtytopicksum = 0
@@ -370,8 +395,11 @@ Public Class PickListForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Page Setup"
+
     Sub pageSetup()
         Try
             getCountPageNum()
@@ -392,6 +420,7 @@ Public Class PickListForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCountPageNum()
         Try
             countpagenum = 0
@@ -409,6 +438,7 @@ Public Class PickListForm
             conn.Close()
         End Try
     End Sub
+
     Sub pageSetup1(ByVal isearchstring As String)
         Try
             getCountPageNum1(isearchstring)
@@ -429,12 +459,13 @@ Public Class PickListForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCountPageNum1(ByVal esearchstring As String)
         Try
             countpagenum = 0
             If conn.State = ConnectionState.Open Then conn.Close()
             Dim dtCid As New DataTable
-            dtCid = getDataTableForSQL("SELECT COALESCE(COUNT(pl.rowid),0) FROM picklist pl LEFT JOIN contacts co ON pl.contactid = co.rowid WHERE pl.organizationid = " & Z_OrganizationID & " AND " & _
+            dtCid = getDataTableForSQL("SELECT COALESCE(COUNT(pl.rowid),0) FROM picklist pl LEFT JOIN contacts co ON pl.contactid = co.rowid WHERE pl.organizationid = " & Z_OrganizationID & " AND " &
                             "(pl.picklistno LIKE ""%" & esearchstring & "%"" OR pl.status LIKE ""%" & esearchstring & "%"" OR co.firstname LIKE ""%" & esearchstring & "%"" OR co.lastname LIKE ""%" & esearchstring & "%"") ")
             If dtCid.Rows.Count <> 0 Then
                 countpagenum = dtCid.Rows(0)(0)
@@ -447,6 +478,7 @@ Public Class PickListForm
             conn.Close()
         End Try
     End Sub
+
     Sub pageSetup2(ByVal idatesearch As String)
         Try
             getCountPageNum2(idatesearch)
@@ -467,13 +499,14 @@ Public Class PickListForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCountPageNum2(ByVal edatesearch As String)
         Try
             countpagenum = 0
             If conn.State = ConnectionState.Open Then conn.Close()
             Dim dtCid As New DataTable
-            dtCid = getDataTableForSQL("SELECT COALESCE(COUNT(pl.rowid),0) FROM picklist pl WHERE pl.organizationid = " & Z_OrganizationID & " AND " & _
-                            "(" & edatesearch & " >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' " & _
+            dtCid = getDataTableForSQL("SELECT COALESCE(COUNT(pl.rowid),0) FROM picklist pl WHERE pl.organizationid = " & Z_OrganizationID & " AND " &
+                            "(" & edatesearch & " >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' " &
                             "AND " & edatesearch & " <= '" & dtpToSearch.Value.Year & "-" & dtpToSearch.Value.Month & "-" & dtpToSearch.Value.Day & "' ) ")
             If dtCid.Rows.Count <> 0 Then
                 countpagenum = dtCid.Rows(0)(0)
@@ -486,6 +519,7 @@ Public Class PickListForm
             conn.Close()
         End Try
     End Sub
+
     Sub pageSetup3(ByVal icommonstring As String, ByVal idatesearch As String)
         Try
             getCountPageNum3(icommonstring, idatesearch)
@@ -506,6 +540,7 @@ Public Class PickListForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCountPageNum3(ByVal ecommonstring As String, ByVal edatesearch As String)
         Try
             countpagenum = 0
@@ -523,6 +558,7 @@ Public Class PickListForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCommonPhrase(ByVal icommonbox As ComboBox, ByVal icommonstring As String)
         Try
             commonphrase = ""
@@ -543,13 +579,17 @@ Public Class PickListForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Display"
+
 #Region "AutoComplete"
+
     Sub autocompleteCustomerName(ByVal icombobox As ComboBox)
         Try
             Dim customername As New AutoCompleteStringCollection
-            Dim cmd As New MySqlCommand("SELECT COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),'') AS 'customername' FROM picklist pl LEFT JOIN picklistorders plo ON pl.rowid = plo.picklistid " & _
+            Dim cmd As New MySqlCommand("SELECT COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),'') AS 'customername' FROM picklist pl LEFT JOIN picklistorders plo ON pl.rowid = plo.picklistid " &
                             "LEFT JOIN orders co ON plo.orderid = co.rowid LEFT JOIN accounts cu ON co.accountid = cu.rowid WHERE pl.organizationid = " & Z_OrganizationID & " GROUP BY cu.rowid ", conn)
             Dim ds As New DataSet
             Dim da As New MySqlDataAdapter(cmd)
@@ -567,6 +607,7 @@ Public Class PickListForm
             conn.Close()
         End Try
     End Sub
+
     Sub autocompletePickerName(ByVal icombobox As ComboBox)
         Try
             Dim contactname As New AutoCompleteStringCollection
@@ -594,6 +635,7 @@ Public Class PickListForm
             globalconn.Close()
         End Try
     End Sub
+
     Sub autocompleteStatus(ByVal icombobox As ComboBox)
         Try
             Dim plstatus As New AutoCompleteStringCollection
@@ -614,8 +656,11 @@ Public Class PickListForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "AutoPopulate"
+
     Sub autopopulatecboSearch()
         Try
             cboDate.Items.Clear()
@@ -633,11 +678,12 @@ Public Class PickListForm
             conn.Close()
         End Try
     End Sub
+
     Sub autopopulateCustomerName(ByVal icombobox As ComboBox)
         Try
             icombobox.Items.Clear()
             If conn.State = ConnectionState.Open Then conn.Close()
-            Dim sql1 As String = "SELECT COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),'') AS 'customername' FROM picklist pl LEFT JOIN picklistorders plo ON pl.rowid = plo.picklistid " & _
+            Dim sql1 As String = "SELECT COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),'') AS 'customername' FROM picklist pl LEFT JOIN picklistorders plo ON pl.rowid = plo.picklistid " &
                             "LEFT JOIN orders co ON plo.orderid = co.rowid LEFT JOIN accounts cu ON co.accountid = cu.rowid WHERE pl.organizationid = " & Z_OrganizationID & " GROUP BY cu.rowid ORDER BY cu.companyname "
             If conn.State = ConnectionState.Closed Then conn.Open()
             Dim cmd1 As New MySqlCommand(sql1, conn)
@@ -654,6 +700,7 @@ Public Class PickListForm
             conn.Close()
         End Try
     End Sub
+
     Sub autopopulatePickerName(ByVal icombobox As ComboBox)
         Try
             icombobox.Items.Clear()
@@ -674,6 +721,7 @@ Public Class PickListForm
             conn.Close()
         End Try
     End Sub
+
     Sub autopopulateStatus(ByVal icombobox As ComboBox)
         Try
             icombobox.Items.Clear()
@@ -694,13 +742,16 @@ Public Class PickListForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Datagrids"
+
     Sub displayPickList(ByVal istartpage As Integer)
         Try
             dgPickList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT pl.rowid,COALESCE(pl.picklistno,''),DATE_FORMAT(pl.picklistdate,'%d-%b-%Y'),COALESCE(pl.status,'') FROM picklist pl " & _
+            Dim sql1 As String = "SELECT pl.rowid,COALESCE(pl.picklistno,''),DATE_FORMAT(pl.picklistdate,'%d-%b-%Y'),COALESCE(pl.status,'') FROM picklist pl " &
                         "WHERE pl.organizationid = " & Z_OrganizationID & " ORDER BY pl.picklistdate DESC,pl.picklistno LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -728,13 +779,14 @@ Public Class PickListForm
             conn.Close()
         End Try
     End Sub
+
     Sub displaySearchPhrase(ByVal isearchphrase As String, ByVal istartpage As Integer)
         Try
             dgPickList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT pl.rowid,COALESCE(pl.picklistno,''),DATE_FORMAT(pl.picklistdate,'%d-%b-%Y'),COALESCE(pl.status,'') FROM picklist pl " & _
-                        "LEFT JOIN contacts co ON pl.contactid = co.rowid WHERE pl.organizationid = " & Z_OrganizationID & " AND " & _
-                        "(pl.picklistno LIKE ""%" & isearchphrase & "%"" OR pl.status LIKE ""%" & isearchphrase & "%"" OR co.firstname LIKE ""%" & isearchphrase & "%"" OR co.lastname LIKE ""%" & isearchphrase & "%"") " & _
+            Dim sql1 As String = "SELECT pl.rowid,COALESCE(pl.picklistno,''),DATE_FORMAT(pl.picklistdate,'%d-%b-%Y'),COALESCE(pl.status,'') FROM picklist pl " &
+                        "LEFT JOIN contacts co ON pl.contactid = co.rowid WHERE pl.organizationid = " & Z_OrganizationID & " AND " &
+                        "(pl.picklistno LIKE ""%" & isearchphrase & "%"" OR pl.status LIKE ""%" & isearchphrase & "%"" OR co.firstname LIKE ""%" & isearchphrase & "%"" OR co.lastname LIKE ""%" & isearchphrase & "%"") " &
                         "ORDER BY pl.picklistdate DESC,pl.picklistno LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -762,13 +814,14 @@ Public Class PickListForm
             conn.Close()
         End Try
     End Sub
+
     Sub displayDateSearch(ByVal istartpage As Integer, ByVal idatesearch As String)
         Try
             dgPickList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT pl.rowid,COALESCE(pl.picklistno,''),DATE_FORMAT(pl.picklistdate,'%d-%b-%Y'),COALESCE(pl.status,'') FROM picklist pl WHERE pl.organizationid = " & Z_OrganizationID & " " & _
-                        "AND (" & idatesearch & " >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " & _
-                        "" & idatesearch & " <= '" & dtpToSearch.Value.Year & "-" & dtpToSearch.Value.Month & "-" & dtpToSearch.Value.Day & "' ) " & _
+            Dim sql1 As String = "SELECT pl.rowid,COALESCE(pl.picklistno,''),DATE_FORMAT(pl.picklistdate,'%d-%b-%Y'),COALESCE(pl.status,'') FROM picklist pl WHERE pl.organizationid = " & Z_OrganizationID & " " &
+                        "AND (" & idatesearch & " >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " &
+                        "" & idatesearch & " <= '" & dtpToSearch.Value.Year & "-" & dtpToSearch.Value.Month & "-" & dtpToSearch.Value.Day & "' ) " &
                         "GROUP BY pl.rowid ORDER BY pl.picklistdate DESC,pl.picklistno LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -796,14 +849,15 @@ Public Class PickListForm
             conn.Close()
         End Try
     End Sub
+
     Sub displayCommonPhrase(ByVal icommonphrase As String, ByVal idatesearch As String, ByVal istartpage As Integer)
         Try
             dgPickList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT pl.rowid,COALESCE(pl.picklistno,''),DATE_FORMAT(pl.picklistdate,'%d-%b-%Y'),COALESCE(pl.status,'') FROM picklist pl " & _
-                        "LEFT JOIN picklistorders plo ON pl.rowid = plo.picklistid LEFT JOIN orders co ON plo.orderid = co.rowid " & _
-                        "LEFT JOIN accounts cu ON co.accountid = cu.rowid LEFT JOIN picklistgroup pg ON cu.picklistgroupid = pg.rowid " & _
-                        "WHERE pl.organizationid = " & Z_OrganizationID & " AND " & icommonphrase & " " & idatesearch & " " & _
+            Dim sql1 As String = "SELECT pl.rowid,COALESCE(pl.picklistno,''),DATE_FORMAT(pl.picklistdate,'%d-%b-%Y'),COALESCE(pl.status,'') FROM picklist pl " &
+                        "LEFT JOIN picklistorders plo ON pl.rowid = plo.picklistid LEFT JOIN orders co ON plo.orderid = co.rowid " &
+                        "LEFT JOIN accounts cu ON co.accountid = cu.rowid LEFT JOIN picklistgroup pg ON cu.picklistgroupid = pg.rowid " &
+                        "WHERE pl.organizationid = " & Z_OrganizationID & " AND " & icommonphrase & " " & idatesearch & " " &
                         "GROUP BY pl.rowid ORDER BY pl.picklistdate DESC,pl.picklistno LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -831,12 +885,13 @@ Public Class PickListForm
             conn.Close()
         End Try
     End Sub
+
     Sub displayPickListInformation(ByVal ipicklistid As Integer)
         Try
             If conn1.State = ConnectionState.Closed Then conn1.Open()
-            Dim sql1 As String = "SELECT COALESCE(pl.picklistno,''),DATE_FORMAT(pl.picklistdate,'%d-%b-%Y'),COALESCE(DATE_FORMAT(pl.completeddate,'%d-%b-%Y'),'')," & _
-                        "COALESCE(CONCAT(COALESCE(c.firstname,''),' ',COALESCE(c.middlename,''),' ',COALESCE(c.lastname,''),' ',COALESCE(c.suffix,''),' - ',COALESCE(c.contactno,'')),'')," & _
-                        "COALESCE(pl.status,''),COALESCE(il.name,''),COALESCE(pl.comments,'') FROM picklist pl LEFT JOIN contacts c ON pl.contactid = c.rowid " & _
+            Dim sql1 As String = "SELECT COALESCE(pl.picklistno,''),DATE_FORMAT(pl.picklistdate,'%d-%b-%Y'),COALESCE(DATE_FORMAT(pl.completeddate,'%d-%b-%Y'),'')," &
+                        "COALESCE(CONCAT(COALESCE(c.firstname,''),' ',COALESCE(c.middlename,''),' ',COALESCE(c.lastname,''),' ',COALESCE(c.suffix,''),' - ',COALESCE(c.contactno,'')),'')," &
+                        "COALESCE(pl.status,''),COALESCE(il.name,''),COALESCE(pl.comments,'') FROM picklist pl LEFT JOIN contacts c ON pl.contactid = c.rowid " &
                         "LEFT JOIN inventorylocations il ON pl.inventorylocationid = il.rowid WHERE pl.rowid = " & ipicklistid & " "
             Dim cmd1 As New MySqlCommand(sql1, conn1)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -858,12 +913,13 @@ Public Class PickListForm
             conn1.Close()
         End Try
     End Sub
+
     Sub displayCustomerOrdersA(ByVal ipicklistid As Integer)
         Try
             dgCustomerOrders.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT COALESCE(plo.orderid,0) FROM picklistorders plo LEFT JOIN orders co ON plo.orderid = co.rowid " & _
-                    "WHERE plo.organizationid = " & Z_OrganizationID & " AND plo.picklistid = " & ipicklistid & " AND plo.status != 'Inactive' " & _
+            Dim sql1 As String = "SELECT COALESCE(plo.orderid,0) FROM picklistorders plo LEFT JOIN orders co ON plo.orderid = co.rowid " &
+                    "WHERE plo.organizationid = " & Z_OrganizationID & " AND plo.picklistid = " & ipicklistid & " AND plo.status != 'Inactive' " &
                     "GROUP BY plo.orderid ORDER BY co.targetdate ASC "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -895,11 +951,12 @@ Public Class PickListForm
             conn.Close()
         End Try
     End Sub
+
     Sub displayCustomerOrdersB(ByVal icustomerorderid As Integer)
         Try
             If conn1.State = ConnectionState.Closed Then conn1.Open()
-            Dim sql1 As String = "SELECT co.rowid,COALESCE(co.ordernumber,''),COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),''),DATE_FORMAT(co.orderdate,'%d-%b-%Y')," & _
-                        "DATE_FORMAT(co.targetdate,'%d-%b-%Y'),COALESCE(co.status,''),COALESCE(pg.groupname,''),COALESCE(co.referencenumber,''),DATE_FORMAT(co.enddate,'%d-%b-%Y') FROM orders co " & _
+            Dim sql1 As String = "SELECT co.rowid,COALESCE(co.ordernumber,''),COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),''),DATE_FORMAT(co.orderdate,'%d-%b-%Y')," &
+                        "DATE_FORMAT(co.targetdate,'%d-%b-%Y'),COALESCE(co.status,''),COALESCE(pg.groupname,''),COALESCE(co.referencenumber,''),DATE_FORMAT(co.enddate,'%d-%b-%Y') FROM orders co " &
                         "LEFT JOIN accounts cu ON co.accountid = cu.rowid LEFT JOIN picklistgroup pg ON cu.picklistgroupid = pg.rowid WHERE co.rowid = " & icustomerorderid & " "
             Dim cmd1 As New MySqlCommand(sql1, conn1)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -923,16 +980,17 @@ Public Class PickListForm
             conn1.Close()
         End Try
     End Sub
+
     Sub displayCustomerOrderItems(ByVal ipicklistid As Integer, ByVal icustomerorderid As Integer)
         Try
             dgCustomerOrderItems.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT ci.rowid,COALESCE(ci.productcolorsizeid,0),COALESCE(ci.productbundleid,0),COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(b.bundlename,'')," & _
-                    "COALESCE(c.colorname,''),COALESCE(pcs.size,''),COALESCE(pcs.seasoncode,''),COALESCE(ci.qtyordered,0),COALESCE(pcs.sku,''),COALESCE(b.sku,''),COALESCE(ci.unitofmeasure,''),COALESCE(ci.itemtype,'')," & _
-                    "COALESCE(ci.remarks,''),(SELECT plo.status FROM picklistorders plo WHERE plo.picklistid = " & ipicklistid & " AND plo.orderid = " & icustomerorderid & " AND plo.organizationid = " & Z_OrganizationID & " AND  plo.orderitemid = ci.rowid)," & _
-                    "COALESCE(CONCAT(COALESCE(vb.firstname,''),' ',COALESCE(vb.lastname,''),' - ',COALESCE(vb.rowid,'')),''),COALESCE(DATE_FORMAT(ci.verifieddate,'%d-%b-%Y'),''),COALESCE(ci.sku,'') FROM orderitems ci " & _
-                    "LEFT JOIN productbundles b ON ci.productbundleid = b.rowid LEFT JOIN productcolorsizes pcs ON ci.productcolorsizeid = pcs.rowid LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid " & _
-                    "LEFT JOIN colors c ON pc.colorid = c.rowid LEFT JOIN products p ON pc.productid = p.rowid LEFT JOIN users vb ON ci.verifiedby = vb.rowid WHERE ci.orderid = " & icustomerorderid & " " & _
+            Dim sql1 As String = "SELECT ci.rowid,COALESCE(ci.productcolorsizeid,0),COALESCE(ci.productbundleid,0),COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(b.bundlename,'')," &
+                    "COALESCE(c.colorname,''),COALESCE(pcs.size,''),COALESCE(pcs.seasoncode,''),COALESCE(ci.qtyordered,0),COALESCE(pcs.sku,''),COALESCE(b.sku,''),COALESCE(ci.unitofmeasure,''),COALESCE(ci.itemtype,'')," &
+                    "COALESCE(ci.remarks,''),(SELECT plo.status FROM picklistorders plo WHERE plo.picklistid = " & ipicklistid & " AND plo.orderid = " & icustomerorderid & " AND plo.organizationid = " & Z_OrganizationID & " AND  plo.orderitemid = ci.rowid)," &
+                    "COALESCE(CONCAT(COALESCE(vb.firstname,''),' ',COALESCE(vb.lastname,''),' - ',COALESCE(vb.rowid,'')),''),COALESCE(DATE_FORMAT(ci.verifieddate,'%d-%b-%Y'),''),COALESCE(ci.sku,'') FROM orderitems ci " &
+                    "LEFT JOIN productbundles b ON ci.productbundleid = b.rowid LEFT JOIN productcolorsizes pcs ON ci.productcolorsizeid = pcs.rowid LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid " &
+                    "LEFT JOIN colors c ON pc.colorid = c.rowid LEFT JOIN products p ON pc.productid = p.rowid LEFT JOIN users vb ON ci.verifiedby = vb.rowid WHERE ci.orderid = " & icustomerorderid & " " &
                     "AND ci.organizationid = " & Z_OrganizationID & " AND ci.status != 'Inactive' AND ci.itemtype != 'BI' ORDER BY ci.rowid "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -1006,12 +1064,13 @@ Public Class PickListForm
             conn.Close()
         End Try
     End Sub
+
     Sub displayRackShelfColumn(ByVal iproductcolorsizeid As Integer, ByVal iinventorylocationid As Integer)
         Try
             dgRackShelfColumn.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT pil.rowid,COALESCE(rsc.rackno,''),COALESCE(rsc.shelfno,''),COALESCE(rsc.columnno,''),COALESCE(pil.totalavailableqty,0),COALESCE(rsc.pickorderno,0),COALESCE(pil.totalallocatedqty,0) " & _
-                            "FROM productinventorylocation pil LEFT JOIN rackshelfcolumn rsc ON pil.rackshelfcolumnid = rsc.rowid WHERE pil.organizationid = " & Z_OrganizationID & " " & _
+            Dim sql1 As String = "SELECT pil.rowid,COALESCE(rsc.rackno,''),COALESCE(rsc.shelfno,''),COALESCE(rsc.columnno,''),COALESCE(pil.totalavailableqty,0),COALESCE(rsc.pickorderno,0),COALESCE(pil.totalallocatedqty,0) " &
+                            "FROM productinventorylocation pil LEFT JOIN rackshelfcolumn rsc ON pil.rackshelfcolumnid = rsc.rowid WHERE pil.organizationid = " & Z_OrganizationID & " " &
                             "AND pil.productcolorsizeid = " & iproductcolorsizeid & "  AND rsc.inventorylocationid = " & iinventorylocationid & " ORDER BY rsc.pickorderno ASC "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -1059,8 +1118,11 @@ Public Class PickListForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Colors"
+
     Sub colorCoding()
         Try
             If dgPickList.Rows.Count <> 0 Then
@@ -1099,9 +1161,13 @@ Public Class PickListForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #End Region
+
 #Region "Generating"
+
     Sub countCustomerOrders()
         Try
             plloadingbar = 0
@@ -1119,6 +1185,7 @@ Public Class PickListForm
             conn.Close()
         End Try
     End Sub
+
     Sub countPickListGroupsA()
         Try
             plcountcos = 0
@@ -1136,6 +1203,7 @@ Public Class PickListForm
             conn.Close()
         End Try
     End Sub
+
     Sub countPickListGroupsB()
         Try
             plcountcos = 0
@@ -1153,10 +1221,11 @@ Public Class PickListForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCustomerPickListGroups()
         Try
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT COALESCE(cu.picklistgroupid,0) FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid WHERE co.organizationid = " & Z_OrganizationID & " " & _
+            Dim sql1 As String = "SELECT COALESCE(cu.picklistgroupid,0) FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid WHERE co.organizationid = " & Z_OrganizationID & " " &
                         "AND co.ordertype = 'CO' AND co.`status` = 'Submitted To Warehouse' AND cu.picklistgroupid IS NOT NULL GROUP BY cu.picklistgroupid ORDER BY co.targetdate ASC "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -1179,10 +1248,11 @@ Public Class PickListForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCustomerOrdersA(ByVal ipicklistgroupid As Integer)
         Try
             If conn1.State = ConnectionState.Closed Then conn1.Open()
-            Dim sql1 As String = "SELECT co.rowid FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid WHERE co.organizationid = " & Z_OrganizationID & " " & _
+            Dim sql1 As String = "SELECT co.rowid FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid WHERE co.organizationid = " & Z_OrganizationID & " " &
                         "AND co.ordertype = 'CO' AND co.`status` = 'Submitted To Warehouse' AND cu.picklistgroupid = " & ipicklistgroupid & " ORDER BY co.targetdate ASC "
             Dim cmd1 As New MySqlCommand(sql1, conn1)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -1214,10 +1284,11 @@ Public Class PickListForm
             conn1.Close()
         End Try
     End Sub
+
     Sub getCustomerOrdersB()
         Try
             If conn1.State = ConnectionState.Closed Then conn1.Open()
-            Dim sql1 As String = "SELECT co.rowid FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid WHERE co.organizationid = " & Z_OrganizationID & " " & _
+            Dim sql1 As String = "SELECT co.rowid FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid WHERE co.organizationid = " & Z_OrganizationID & " " &
                         "AND co.ordertype = 'CO' AND co.`status` = 'Submitted To Warehouse' AND cu.picklistgroupid IS NULL ORDER BY co.targetdate ASC "
             Dim cmd1 As New MySqlCommand(sql1, conn1)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -1256,10 +1327,11 @@ Public Class PickListForm
             conn1.Close()
         End Try
     End Sub
+
     Sub getCustomerOrderItems(ByVal icustomerorderid As Integer, ByVal ipicklistid As Integer)
         Try
             If conn2.State = ConnectionState.Closed Then conn2.Open()
-            Dim sql1 As String = "SELECT ci.rowid,COALESCE(ci.productcolorsizeid,0),COALESCE(ci.qtyordered,0) FROM orderitems ci " & _
+            Dim sql1 As String = "SELECT ci.rowid,COALESCE(ci.productcolorsizeid,0),COALESCE(ci.qtyordered,0) FROM orderitems ci " &
                         "WHERE ci.orderid = " & icustomerorderid & " AND ci.organizationid = " & Z_OrganizationID & " AND ci.`status` = 'New' AND ci.itemtype != 'B' ORDER BY ci.rowid "
             Dim cmd1 As New MySqlCommand(sql1, conn2)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -1286,12 +1358,13 @@ Public Class PickListForm
             conn2.Close()
         End Try
     End Sub
+
     Sub getRackShelfColumn(ByVal iproductcolorsizeid As Integer, ByVal iqtyordered As Integer, ByVal ipicklistorderid As Integer, ByVal iinventorylocationid As Integer)
         Try
             plqtytopickbalance = pagedivisor : rowscount = 0
             If conn3.State = ConnectionState.Closed Then conn3.Open()
-            Dim sql1 As String = "SELECT pil.rowid,COALESCE(pil.totalavailableqty,0),COALESCE(pil.totalallocatedqty,0) FROM productinventorylocation pil LEFT JOIN rackshelfcolumn rsc ON pil.rackshelfcolumnid = rsc.rowid " & _
-                    "WHERE pil.organizationid = " & Z_OrganizationID & " AND rsc.inventorylocationid = " & iinventorylocationid & " AND pil.productcolorsizeid = " & iproductcolorsizeid & " " & _
+            Dim sql1 As String = "SELECT pil.rowid,COALESCE(pil.totalavailableqty,0),COALESCE(pil.totalallocatedqty,0) FROM productinventorylocation pil LEFT JOIN rackshelfcolumn rsc ON pil.rackshelfcolumnid = rsc.rowid " &
+                    "WHERE pil.organizationid = " & Z_OrganizationID & " AND rsc.inventorylocationid = " & iinventorylocationid & " AND pil.productcolorsizeid = " & iproductcolorsizeid & " " &
                     "AND pil.totalavailableqty - pil.totalallocatedqty > 0 ORDER BY pil.totalavailableqty ASC "
             Dim cmd1 As New MySqlCommand(sql1, conn3)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -1332,6 +1405,7 @@ Public Class PickListForm
             conn3.Close()
         End Try
     End Sub
+
     Sub getGeneratePickListInfo()
         Try
             pllistofvalueid = 0 : plgeneratepickliststatus = ""
@@ -1350,12 +1424,15 @@ Public Class PickListForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Checking"
+
     Sub checkCustomerOrderItemsQtyOrderable(ByVal icustomerorderid As Integer)
         Try
             If conn2.State = ConnectionState.Closed Then conn2.Open()
-            Dim sql1 As String = "SELECT ci.rowid,COALESCE(ci.productcolorsizeid,0),COALESCE(ci.qtyordered,0) FROM orderitems ci " & _
+            Dim sql1 As String = "SELECT ci.rowid,COALESCE(ci.productcolorsizeid,0),COALESCE(ci.qtyordered,0) FROM orderitems ci " &
                         "WHERE ci.orderid = " & icustomerorderid & " AND ci.organizationid = " & Z_OrganizationID & " AND ci.`status` = 'New' AND ci.itemtype != 'B' ORDER BY ci.rowid "
             Dim cmd1 As New MySqlCommand(sql1, conn2)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -1376,12 +1453,15 @@ Public Class PickListForm
             conn2.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Deleting"
+
     Sub getAllPickListOrdersID(ByVal ipicklistid As Integer, ByVal iorderid As Integer)
         Try
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT plo.rowid,COALESCE(plo.orderitemid,0) FROM picklistorders plo WHERE plo.organizationid = " & Z_OrganizationID & " " & _
+            Dim sql1 As String = "SELECT plo.rowid,COALESCE(plo.orderitemid,0) FROM picklistorders plo WHERE plo.organizationid = " & Z_OrganizationID & " " &
                         "AND plo.picklistid = " & ipicklistid & " AND plo.orderid = " & iorderid & " ORDER BY plo.rowid "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -1403,6 +1483,7 @@ Public Class PickListForm
             conn.Close()
         End Try
     End Sub
+
     Sub getAllPickListOrdersItemID(ByVal ipicklistorderid As Integer, ByVal istatus As String)
         Try
             If conn1.State = ConnectionState.Closed Then conn1.Open()
@@ -1425,8 +1506,11 @@ Public Class PickListForm
             conn1.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Cancelling"
+
     Sub cancelPickList(ByVal ipicklistid As Integer)
         Try
             If conn.State = ConnectionState.Closed Then conn.Open()
@@ -1451,6 +1535,7 @@ Public Class PickListForm
             conn.Close()
         End Try
     End Sub
+
     Sub reopenCustomerOrders(ByVal ipicklistid As Integer)
         Try
             If conn.State = ConnectionState.Closed Then conn.Open()
@@ -1469,8 +1554,11 @@ Public Class PickListForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Printing"
+
     Sub checkCustomerOrderItems(ByVal ipicklistid As Integer)
         Try
             plincompleteqtytopickcue = fraud
@@ -1493,15 +1581,16 @@ Public Class PickListForm
             conn.Close()
         End Try
     End Sub
+
     Sub printPickList(ByVal ipicklistid As Integer, ByVal iinventorylocationid As Integer)
         Try
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT COALESCE(CONCAT(COALESCE(rsc.rackno,''),' / ',COALESCE(rsc.columnno,''),' / ',COALESCE(rsc.shelfno,'')),''),COALESCE(CONCAT(COALESCE(p.productcode,''),' - ',COALESCE(pcs.seasoncode,'')),''),COALESCE(co.colorname,''),COALESCE(pcs.size,''),COALESCE(pli.qtypicked,0)," & _
-                        "COALESCE(pl.picklistno,''),COALESCE(CONCAT(COALESCE(c.firstname,''),' ',COALESCE(c.middlename,''),' ',COALESCE(c.lastname,''),' ',COALESCE(c.suffix,''),' - ',COALESCE(c.contactno,'')),''),COALESCE(DATE_FORMAT(pl.picklistdate,'%d-%b-%Y')),COALESCE(il.name,''),p.image," & _
-                        "COALESCE(CONCAT('C.O. No.: ',COALESCE(o.ordernumber,''),' / P.O. No.: ',COALESCE(o.referencenumber,''),' / Branch: ',COALESCE(bc.branchname,''),' - ',COALESCE(bc.branchcode,'')),'') FROM picklistorderitems pli LEFT JOIN picklistorders plo ON pli.picklistorderid = plo.rowid " & _
-                        "LEFT JOIN orders o ON plo.orderid = o.rowid LEFT JOIN branches bc ON o.branchid = bc.rowid LEFT JOIN picklist pl ON plo.picklistid = pl.rowid LEFT JOIN inventorylocations il ON pl.inventorylocationid = il.rowid LEFT JOIN contacts c ON pl.contactid = c.rowid " & _
-                        "LEFT JOIN productinventorylocation pil ON pli.productinventorylocationid = pil.rowid LEFT JOIN rackshelfcolumn rsc ON pil.rackshelfcolumnid = rsc.rowid LEFT JOIN productcolorsizes pcs ON pil.productcolorsizeid = pcs.rowid " & _
-                        "LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN colors co ON pc.colorid = co.rowid LEFT JOIN products p ON pc.productid = p.rowid WHERE pl.organizationid = " & Z_OrganizationID & " AND " & _
+            Dim sql1 As String = "SELECT COALESCE(CONCAT(COALESCE(rsc.rackno,''),' / ',COALESCE(rsc.columnno,''),' / ',COALESCE(rsc.shelfno,'')),''),COALESCE(CONCAT(COALESCE(p.productcode,''),' - ',COALESCE(pcs.seasoncode,'')),''),COALESCE(co.colorname,''),COALESCE(pcs.size,''),COALESCE(pli.qtypicked,0)," &
+                        "COALESCE(pl.picklistno,''),COALESCE(CONCAT(COALESCE(c.firstname,''),' ',COALESCE(c.middlename,''),' ',COALESCE(c.lastname,''),' ',COALESCE(c.suffix,''),' - ',COALESCE(c.contactno,'')),''),COALESCE(DATE_FORMAT(pl.picklistdate,'%d-%b-%Y')),COALESCE(il.name,''),p.image," &
+                        "COALESCE(CONCAT('C.O. No.: ',COALESCE(o.ordernumber,''),' / P.O. No.: ',COALESCE(o.referencenumber,''),' / Branch: ',COALESCE(bc.branchname,''),' - ',COALESCE(bc.branchcode,'')),'') FROM picklistorderitems pli LEFT JOIN picklistorders plo ON pli.picklistorderid = plo.rowid " &
+                        "LEFT JOIN orders o ON plo.orderid = o.rowid LEFT JOIN branches bc ON o.branchid = bc.rowid LEFT JOIN picklist pl ON plo.picklistid = pl.rowid LEFT JOIN inventorylocations il ON pl.inventorylocationid = il.rowid LEFT JOIN contacts c ON pl.contactid = c.rowid " &
+                        "LEFT JOIN productinventorylocation pil ON pli.productinventorylocationid = pil.rowid LEFT JOIN rackshelfcolumn rsc ON pil.rackshelfcolumnid = rsc.rowid LEFT JOIN productcolorsizes pcs ON pil.productcolorsizeid = pcs.rowid " &
+                        "LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN colors co ON pc.colorid = co.rowid LEFT JOIN products p ON pc.productid = p.rowid WHERE pl.organizationid = " & Z_OrganizationID & " AND " &
                         "pl.rowid = " & ipicklistid & " AND plo.`status` != 'Inactive' AND pli.`status` != 'Inactive' AND pl.inventorylocationid = " & iinventorylocationid & " AND pli.qtypicked > 0 ORDER BY rsc.pickorderno ASC,p.productcode ASC "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             cmd1.CommandTimeout = commantimeoutlimit
@@ -1522,8 +1611,11 @@ Public Class PickListForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #End Region
+
     Private Sub tabMain_DrawItem(sender As Object, e As DrawItemEventArgs) Handles tabMain.DrawItem
         Try
             TabControlColor(tabMain, e)
@@ -1533,6 +1625,7 @@ Public Class PickListForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbClose_Click(sender As Object, e As EventArgs) Handles pbClose.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1547,6 +1640,7 @@ Public Class PickListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub tsRefresh_Click(sender As Object, e As EventArgs) Handles tsRefresh.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1559,6 +1653,7 @@ Public Class PickListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msNew_Click(sender As Object, e As EventArgs) Handles msNew.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1657,6 +1752,7 @@ Public Class PickListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgPickList_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgPickList.CellClick
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1691,6 +1787,7 @@ Public Class PickListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgPickList_KeyUp(sender As Object, e As KeyEventArgs) Handles dgPickList.KeyUp
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1727,6 +1824,7 @@ Public Class PickListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub pbAddPicker_MouseEnter(sender As Object, e As EventArgs) Handles pbAddPicker.MouseEnter
         Try
             pbAddPicker.BackColor = Color.MediumSpringGreen
@@ -1736,6 +1834,7 @@ Public Class PickListForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbAddPicker_MouseLeave(sender As Object, e As EventArgs) Handles pbAddPicker.MouseLeave
         Try
             pbAddPicker.BackColor = Color.Transparent
@@ -1745,6 +1844,7 @@ Public Class PickListForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbAddPicker_Click(sender As Object, e As EventArgs) Handles pbAddPicker.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1778,6 +1878,7 @@ Public Class PickListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub chkOtherInfo_CheckedChanged(sender As Object, e As EventArgs) Handles chkOtherInfo.CheckedChanged
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1793,6 +1894,7 @@ Public Class PickListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgCustomerOrders_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgCustomerOrders.CellClick
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1809,6 +1911,7 @@ Public Class PickListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgCustomerOrders_KeyUp(sender As Object, e As KeyEventArgs) Handles dgCustomerOrders.KeyUp
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1827,6 +1930,7 @@ Public Class PickListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgCustomerOrderItems_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgCustomerOrderItems.CellClick
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1864,6 +1968,7 @@ Public Class PickListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgCustomerOrderItems_KeyUp(sender As Object, e As KeyEventArgs) Handles dgCustomerOrderItems.KeyUp
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1903,6 +2008,7 @@ Public Class PickListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgRackShelfColumn_CellEndEdit(sender As Object, e As DataGridViewCellEventArgs) Handles dgRackShelfColumn.CellEndEdit
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1935,6 +2041,7 @@ Public Class PickListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msSaveRSC_Click(sender As Object, e As EventArgs) Handles msSaveRSC.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2033,7 +2140,7 @@ Public Class PickListForm
                                     getTotalQtyAllocatedC(CInt(dgRackShelfColumn.Rows(a).Cells("rsc_rowid").Value), Me)
                                     If CInt(dgRackShelfColumn.Rows(a).Cells("rsc_qtytopick").Value) < CInt(dgCustomerOrderItems.CurrentRow.Cells("ci_qtyordered").Value) Then
                                         If plpicklistorderitemid = 0 Then
-                                            I_PickListOrderItems(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, plpicklistorderid, CInt(dgRackShelfColumn.Rows(a).Cells("rsc_rowid").Value), CInt(dgRackShelfColumn.Rows(a).Cells("rsc_qtytopick").Value), _
+                                            I_PickListOrderItems(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, plpicklistorderid, CInt(dgRackShelfColumn.Rows(a).Cells("rsc_rowid").Value), CInt(dgRackShelfColumn.Rows(a).Cells("rsc_qtytopick").Value),
                                                 globaltotalqtyavailable - globaltotalqtyallocated, If(dgRackShelfColumn.Rows(a).Cells("rsc_issueflg").Value = legit, "Y", "N"), "Active", CStr(dgRackShelfColumn.Rows(a).Cells("rsc_remarks").Value), Me)
                                             U_ProductInventoryLocationQtyAllocated(CInt(dgRackShelfColumn.Rows(a).Cells("rsc_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, globaltotalqtyallocated + CInt(dgRackShelfColumn.Rows(a).Cells("rsc_qtytopick").Value), Me)
                                         Else
@@ -2042,12 +2149,12 @@ Public Class PickListForm
                                             ElseIf globalpicklistorderitemqtypicked < CInt(dgRackShelfColumn.Rows(a).Cells("rsc_qtytopick").Value) Then
                                                 U_ProductInventoryLocationQtyAllocated(CInt(dgRackShelfColumn.Rows(a).Cells("rsc_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, globaltotalqtyallocated + (CInt(dgRackShelfColumn.Rows(a).Cells("rsc_qtytopick").Value) - globalpicklistorderitemqtypicked), Me)
                                             End If
-                                            U_PickListOrderItems(plpicklistorderitemid, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, CInt(dgRackShelfColumn.Rows(a).Cells("rsc_qtytopick").Value), globaltotalqtyavailable - globaltotalqtyallocated, _
+                                            U_PickListOrderItems(plpicklistorderitemid, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, CInt(dgRackShelfColumn.Rows(a).Cells("rsc_qtytopick").Value), globaltotalqtyavailable - globaltotalqtyallocated,
                                                 If(dgRackShelfColumn.Rows(a).Cells("rsc_issueflg").Value = legit, "Y", "N"), CStr(dgRackShelfColumn.Rows(a).Cells("rsc_remarks").Value), Me)
                                         End If
                                     ElseIf CInt(dgRackShelfColumn.Rows(a).Cells("rsc_qtytopick").Value) = CInt(dgCustomerOrderItems.CurrentRow.Cells("ci_qtyordered").Value) Then
                                         If plpicklistorderitemid = 0 Then
-                                            I_PickListOrderItems(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, plpicklistorderid, CInt(dgRackShelfColumn.Rows(a).Cells("rsc_rowid").Value), CInt(dgRackShelfColumn.Rows(a).Cells("rsc_qtytopick").Value), _
+                                            I_PickListOrderItems(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, plpicklistorderid, CInt(dgRackShelfColumn.Rows(a).Cells("rsc_rowid").Value), CInt(dgRackShelfColumn.Rows(a).Cells("rsc_qtytopick").Value),
                                                 globaltotalqtyavailable - globaltotalqtyallocated, If(dgRackShelfColumn.Rows(a).Cells("rsc_issueflg").Value = legit, "Y", "N"), "Active", CStr(dgRackShelfColumn.Rows(a).Cells("rsc_remarks").Value), Me)
                                             U_ProductInventoryLocationQtyAllocated(CInt(dgRackShelfColumn.Rows(a).Cells("rsc_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, globaltotalqtyallocated + CInt(dgRackShelfColumn.Rows(a).Cells("rsc_qtytopick").Value), Me)
                                         Else
@@ -2056,7 +2163,7 @@ Public Class PickListForm
                                             ElseIf globalpicklistorderitemqtypicked < CInt(dgRackShelfColumn.Rows(a).Cells("rsc_qtytopick").Value) Then
                                                 U_ProductInventoryLocationQtyAllocated(CInt(dgRackShelfColumn.Rows(a).Cells("rsc_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, globaltotalqtyallocated + (CInt(dgRackShelfColumn.Rows(a).Cells("rsc_qtytopick").Value) - globalpicklistorderitemqtypicked), Me)
                                             End If
-                                            U_PickListOrderItems(plpicklistorderitemid, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, CInt(dgRackShelfColumn.Rows(a).Cells("rsc_qtytopick").Value), globaltotalqtyavailable - globaltotalqtyallocated, _
+                                            U_PickListOrderItems(plpicklistorderitemid, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, CInt(dgRackShelfColumn.Rows(a).Cells("rsc_qtytopick").Value), globaltotalqtyavailable - globaltotalqtyallocated,
                                                 If(dgRackShelfColumn.Rows(a).Cells("rsc_issueflg").Value = legit, "Y", "N"), CStr(dgRackShelfColumn.Rows(a).Cells("rsc_remarks").Value), Me)
                                         End If
                                     End If
@@ -2090,6 +2197,7 @@ Public Class PickListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msSave_Click(sender As Object, e As EventArgs) Handles msSave.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2160,6 +2268,7 @@ Public Class PickListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgCustomerOrders_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgCustomerOrders.CellContentClick
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2259,6 +2368,7 @@ Public Class PickListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msOrder_Click(sender As Object, e As EventArgs) Handles msOrder.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2328,6 +2438,7 @@ Public Class PickListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub lnkViewEditBundleItems_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles lnkViewEditBundleItems.LinkClicked
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2386,6 +2497,7 @@ Public Class PickListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msPrint_Click(sender As Object, e As EventArgs) Handles msPrint.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2488,7 +2600,9 @@ Public Class PickListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #Region "Search/Page Setup"
+
     Private Sub txtSimpleSearch_KeyDown(sender As Object, e As KeyEventArgs) Handles txtSimpleSearch.KeyDown
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2513,6 +2627,7 @@ Public Class PickListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboSearch1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboSearch1.SelectedIndexChanged
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2536,6 +2651,7 @@ Public Class PickListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboSearch2_KeyDown(sender As Object, e As KeyEventArgs) Handles cboSearch2.KeyDown
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2580,10 +2696,10 @@ Public Class PickListForm
                             pagefilter1 = "" & commonphrase & ""
                         End If
                         If cboDate.Text = "CompletedDate" Then
-                            pagefilter2 = " AND (pl.completeddate >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " & _
+                            pagefilter2 = " AND (pl.completeddate >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " &
                                 "pl.completeddate <= '" & dtpToSearch.Value.Year & "-" & dtpToSearch.Value.Month & "-" & dtpToSearch.Value.Day & "') "
                         ElseIf cboDate.Text = "PickListDate" Then
-                            pagefilter2 = " AND (pl.picklistdate >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " & _
+                            pagefilter2 = " AND (pl.picklistdate >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " &
                                 "pl.picklistdate <= '" & dtpToSearch.Value.Year & "-" & dtpToSearch.Value.Month & "-" & dtpToSearch.Value.Day & "') "
                         Else
                             pagefilter2 = ""
@@ -2602,6 +2718,7 @@ Public Class PickListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdFirst_Click(sender As Object, e As EventArgs) Handles cmdFirst.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2625,6 +2742,7 @@ Public Class PickListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdPrev_Click(sender As Object, e As EventArgs) Handles cmdPrev.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2656,6 +2774,7 @@ Public Class PickListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdNext_Click(sender As Object, e As EventArgs) Handles cmdNext.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2683,6 +2802,7 @@ Public Class PickListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdLast_Click(sender As Object, e As EventArgs) Handles cmdLast.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2710,6 +2830,7 @@ Public Class PickListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub txtPage_KeyDown(sender As Object, e As KeyEventArgs) Handles txtPage.KeyDown
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2754,8 +2875,11 @@ Public Class PickListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #End Region
+
 #Region "Datagrid MouseUp"
+
     Private Sub dgRackShelfColumn_MouseUp(sender As Object, e As MouseEventArgs) Handles dgRackShelfColumn.MouseUp
         Try
             Dim hitTestinfo As DataGridView.HitTestInfo
@@ -2773,8 +2897,11 @@ Public Class PickListForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Datagrid Errors"
+
     Private Sub dgPickList_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgPickList.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2815,6 +2942,7 @@ Public Class PickListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgCustomerOrders_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgCustomerOrders.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2855,6 +2983,7 @@ Public Class PickListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgCustomerOrderItems_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgCustomerOrderItems.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2895,6 +3024,7 @@ Public Class PickListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgRackShelfColumn_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgRackShelfColumn.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2935,5 +3065,7 @@ Public Class PickListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #End Region
+
 End Class

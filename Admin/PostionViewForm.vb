@@ -1,17 +1,9 @@
-﻿Imports MySql.Data.MySqlClient
-Imports System.IO
-Imports System.Windows.Forms
-Imports CrystalDecisions.CrystalReports.Engine
-Imports System.Linq
-Imports System.Collections
-Imports System.Collections.Generic
-Imports System.Data
-Imports System.Diagnostics
-Imports System.Runtime.InteropServices
-Imports System.Text.RegularExpressions
+﻿Imports System.IO
+Imports MySql.Data.MySqlClient
+
 Public Class PostionViewForm
     Dim manager As New sqlModule.Manager
-    Dim conn As New MySqlConnection(Manager.GetConnString)
+    Dim conn As New MySqlConnection(manager.GetConnString)
     Dim sqlquery As String
     Dim sqlcmd As MySqlCommand
     Dim sqlrd As MySqlDataReader
@@ -27,6 +19,7 @@ Public Class PostionViewForm
     Dim thefilepath As String = Nothing
     Dim FileName, FileExtension As String
     Dim nowDate = Date.Now.ToString("yyyy/MM/dd HH:mm:ss")
+
     Private Sub PostionViewForm_Load(sender As Object, e As EventArgs) Handles Me.Load
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -42,6 +35,7 @@ Public Class PostionViewForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub PostionViewForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -53,15 +47,20 @@ Public Class PostionViewForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #Region "Functions"
+
     Sub callAutoCompleteFunctions()
         SearchCompletePosition()
     End Sub
+
     Sub callAutoPopulateFunctions()
         populatePosition()
         populateStatus()
     End Sub
+
 #Region "Clear/Enable/Visible Functions"
+
     Sub clearfields()
         Try
             cue = ""
@@ -76,6 +75,7 @@ Public Class PostionViewForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearPositionInformation()
         Try
             txtPositionName.Text = ""
@@ -89,6 +89,7 @@ Public Class PostionViewForm
             conn.Close()
         End Try
     End Sub
+
     Sub enableGB(ByVal enable1 As Boolean, ByVal enable2 As Boolean, ByVal enable3 As Boolean)
         Try
             gbPositionList.Enabled = enable1
@@ -101,6 +102,7 @@ Public Class PostionViewForm
             conn.Close()
         End Try
     End Sub
+
     Sub enableANDvisibleMS(ByVal enable1 As Boolean, ByVal enable2 As Boolean, ByVal visible1 As Boolean)
         Try
             msNew.Enabled = enable1
@@ -112,8 +114,11 @@ Public Class PostionViewForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Click Functions"
+
     Sub tsrefreshperformclick()
         Try
             errProvider.Clear()
@@ -128,9 +133,13 @@ Public Class PostionViewForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Display Functions"
+
 #Region "AutoComplete Functions"
+
     Sub SearchCompletePosition()
         Try
             Dim position As New AutoCompleteStringCollection
@@ -149,8 +158,11 @@ Public Class PostionViewForm
         End Try
         conn.Close()
     End Sub
+
 #End Region
+
 #Region "AutoPopulate Functions"
+
     Sub populatePosition()
         Try
             cboPosition.Items.Clear()
@@ -170,6 +182,7 @@ Public Class PostionViewForm
             conn.Close()
         End Try
     End Sub
+
     Sub populateStatus()
         Try
             cboStatus.Items.Clear()
@@ -189,12 +202,15 @@ Public Class PostionViewForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Display Datagrids"
+
     Public Function displayPositionDetails()
         If conn.State = ConnectionState.Open Then conn.Close()
-        sqlquery = "SELECT p.rowid,COALESCE(pp.positionname,''),COALESCE(p.comments,''),COALESCE(p.positionname,''),COALESCE(p.status,'') " & _
-            "FROM positions p LEFT JOIN positions pp ON p.parentpositionid = pp.rowid  " & _
+        sqlquery = "SELECT p.rowid,COALESCE(pp.positionname,''),COALESCE(p.comments,''),COALESCE(p.positionname,''),COALESCE(p.status,'') " &
+            "FROM positions p LEFT JOIN positions pp ON p.parentpositionid = pp.rowid  " &
             "WHERE p.organizationid = '" & Z_OrganizationID & "' ORDER BY p.positionname "
         dgPositions.Rows.Clear()
         Dim sqlcmd As New MySqlCommand(sqlquery, conn)
@@ -235,9 +251,10 @@ Public Class PostionViewForm
         conn.Close()
         Return Nothing
     End Function
+
     Public Function displayUserDetails(ByVal ipositionid As Integer)
         If conn.State = ConnectionState.Open Then conn.Close()
-        sqlquery = "SELECT u.rowid,COALESCE(u.firstname,''),COALESCE(u.middlename,''),COALESCE(u.lastname,''),COALESCE(u.status,'') " & _
+        sqlquery = "SELECT u.rowid,COALESCE(u.firstname,''),COALESCE(u.middlename,''),COALESCE(u.lastname,''),COALESCE(u.status,'') " &
             "FROM users u WHERE u.organizationid = '" & Z_OrganizationID & "' AND u.positionid = '" & ipositionid & "' ORDER BY u.rowid "
         dgUsers.Rows.Clear()
         Dim sqlcmd As New MySqlCommand(sqlquery, conn)
@@ -275,9 +292,10 @@ Public Class PostionViewForm
         conn.Close()
         Return Nothing
     End Function
+
     Public Function displayPositionViews(ByVal spositionid As Integer)
         If conn.State = ConnectionState.Open Then conn.Close()
-        sqlquery = "SELECT pv.rowid,pv.viewid,COALESCE(v.viewname,''),COALESCE(pv.creates,''),COALESCE(pv.updates,''),COALESCE(pv.disable,''),COALESCE(pv.readonly,''),COALESCE(pv.remarks,'') " & _
+        sqlquery = "SELECT pv.rowid,pv.viewid,COALESCE(v.viewname,''),COALESCE(pv.creates,''),COALESCE(pv.updates,''),COALESCE(pv.disable,''),COALESCE(pv.readonly,''),COALESCE(pv.remarks,'') " &
             "FROM positionviews pv LEFT JOIN views v ON pv.viewid = v.rowid WHERE pv.organizationid = '" & Z_OrganizationID & "' AND pv.positionid = '" & spositionid & "' ORDER BY v.viewname "
         dgUnknown.Rows.Clear()
         Dim sqlcmd As New MySqlCommand(sqlquery, conn)
@@ -336,6 +354,7 @@ Public Class PostionViewForm
         conn.Close()
         Return Nothing
     End Function
+
     Public Function displayNewPositionViews()
         If conn.State = ConnectionState.Open Then conn.Close()
         sqlquery = "SELECT v.rowid,v.viewname FROM views v WHERE v.organizationid = " & Z_OrganizationID & " ORDER BY v.viewname "
@@ -380,9 +399,13 @@ Public Class PostionViewForm
         conn.Close()
         Return Nothing
     End Function
+
 #End Region
+
 #End Region
+
 #Region "Saving Functions"
+
     Sub getPositionIDA(ByVal spositionname As String)
         Try
             positionid = 0
@@ -400,6 +423,7 @@ Public Class PostionViewForm
             conn.Close()
         End Try
     End Sub
+
     Sub getUpdPositionID(ByVal srowid As Integer, ByVal spositionname As String)
         Try
             positionid = 0
@@ -417,6 +441,7 @@ Public Class PostionViewForm
             conn.Close()
         End Try
     End Sub
+
     Sub insertPositionViews(ByVal savepositionid As Integer)
         Try
             If conn.State = ConnectionState.Open Then conn.Close()
@@ -439,8 +464,11 @@ Public Class PostionViewForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #End Region
+
     Private Sub tabMain_DrawItem(sender As Object, e As DrawItemEventArgs) Handles tabMain.DrawItem
         Try
             TabControlColor(tabMain, e)
@@ -450,6 +478,7 @@ Public Class PostionViewForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbClose_Click(sender As Object, e As EventArgs) Handles pbClose.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -464,6 +493,7 @@ Public Class PostionViewForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub tsRefresh_Click(sender As Object, e As EventArgs) Handles tsRefresh.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -476,6 +506,7 @@ Public Class PostionViewForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msNew_Click(sender As Object, e As EventArgs) Handles msNew.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -514,6 +545,7 @@ Public Class PostionViewForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msCancel_Click(sender As Object, e As EventArgs) Handles msCancel.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -542,6 +574,7 @@ Public Class PostionViewForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgPositions_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgPositions.CellClick
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -567,6 +600,7 @@ Public Class PostionViewForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgPositions_KeyUp(sender As Object, e As KeyEventArgs) Handles dgPositions.KeyUp
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -596,6 +630,7 @@ Public Class PostionViewForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub txtPositionName_Leave(sender As Object, e As EventArgs) Handles txtPositionName.Leave
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -618,6 +653,7 @@ Public Class PostionViewForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     'Private Sub txtPositionName_TextChanged(sender As Object, e As EventArgs) Handles txtPositionName.TextChanged
     '    Me.Cursor = Cursors.WaitCursor
     '    Try
@@ -665,6 +701,7 @@ Public Class PostionViewForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub dgUnknown_CellEndEdit(sender As Object, e As DataGridViewCellEventArgs) Handles dgUnknown.CellEndEdit
         Try
             dgUnknown.CommitEdit(True)
@@ -679,6 +716,7 @@ Public Class PostionViewForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub dgUnknown_MouseUp(sender As Object, e As MouseEventArgs) Handles dgUnknown.MouseUp
         Try
             Dim hitTestinfo As DataGridView.HitTestInfo
@@ -696,6 +734,7 @@ Public Class PostionViewForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub msSave_Click(sender As Object, e As EventArgs) Handles msSave.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -753,7 +792,7 @@ Public Class PostionViewForm
                     ElseIf cue = "Edit" Then
                         U_Position(CInt(dgPositions.CurrentRow.Cells("p_rowid").Value), nowDate, Z_UserID, txtPositionName.Text, If(positionid = 0, DBNull.Value, positionid), DBNull.Value, cboStatus.Text, txtComments.Text, Me)
                         For c = 0 To dgUnknown.Rows.Count - 1
-                            U_PositionView(CInt(dgUnknown.Rows(c).Cells("pv_rowid").Value), nowDate, Z_UserID, If(dgUnknown.Rows(c).Cells("pv_create").Value = True, "Y", "N"), If(dgUnknown.Rows(c).Cells("pv_updates").Value = True, "Y", "N"), _
+                            U_PositionView(CInt(dgUnknown.Rows(c).Cells("pv_rowid").Value), nowDate, Z_UserID, If(dgUnknown.Rows(c).Cells("pv_create").Value = True, "Y", "N"), If(dgUnknown.Rows(c).Cells("pv_updates").Value = True, "Y", "N"),
                                             If(dgUnknown.Rows(c).Cells("pv_disable").Value = True, "Y", "N"), If(dgUnknown.Rows(c).Cells("pv_readonly").Value = True, "Y", "N"), dgUnknown.Rows(c).Cells("pv_remarks").Value, Me)
                         Next
                         If myModule.systemerrorfound = False Then
@@ -773,7 +812,9 @@ Public Class PostionViewForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #Region "Datagrid Data Error"
+
     Private Sub dgPositions_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgPositions.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -814,6 +855,7 @@ Public Class PostionViewForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgUsers_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgUsers.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -854,6 +896,7 @@ Public Class PostionViewForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgUnknown_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgUnknown.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -894,5 +937,7 @@ Public Class PostionViewForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #End Region
+
 End Class

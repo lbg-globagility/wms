@@ -1,18 +1,9 @@
 ﻿Imports MySql.Data.MySqlClient
-Imports System.IO
-Imports System.Windows.Forms
-Imports CrystalDecisions.CrystalReports.Engine
-Imports System.Linq
-Imports System.Collections
-Imports System.Collections.Generic
-Imports System.Data
-Imports System.Diagnostics
-Imports System.Runtime.InteropServices
-Imports System.Text.RegularExpressions
+
 Public Class LineUpDeliveryForm
     Dim manager As New sqlModule.Manager
-    Dim conn As New MySqlConnection(Manager.GetConnString)
-    Dim conn1 As New MySqlConnection(Manager.GetConnString)
+    Dim conn As New MySqlConnection(manager.GetConnString)
+    Dim conn1 As New MySqlConnection(manager.GetConnString)
     Dim sqlcmd As MySqlCommand
     Dim sqlrd As MySqlDataReader
     Dim sqlquery As String
@@ -20,6 +11,7 @@ Public Class LineUpDeliveryForm
     Dim itemno, rowscount As Integer
     Dim luddisplaydays, ludlineupcartonsqty, luddeliverytruckshiftid As Integer
     Dim ludstringdate, ludstringday, ludcustomerorderslineup, ludbasisdate, ludselectedcell, ludselectedcolumn As String
+
     Private Sub LineUpDeliveryForm_Load(sender As Object, e As EventArgs) Handles Me.Load
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -44,6 +36,7 @@ Public Class LineUpDeliveryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub LineUpDeliveryForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -55,8 +48,11 @@ Public Class LineUpDeliveryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #Region "Functions"
+
 #Region "Click"
+
     Sub tsrefreshperformclick()
         Try
             errProvider.Clear()
@@ -79,9 +75,13 @@ Public Class LineUpDeliveryForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Display"
+
 #Region "Datagrids"
+
     Sub displayLineUpCalenderColumn()
         Try
             dgLineUpCalendar.Columns.Clear()
@@ -101,8 +101,8 @@ Public Class LineUpDeliveryForm
             startcol.Name = "lud_date"
             dgLineUpCalendar.Columns.Add(startcol)
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT COALESCE(CONCAT(COALESCE(dt.truckname,''),' - ',COALESCE(dt.truckno,''),' / ',COALESCE(s.shiftname,'')),'') " & _
-                        "FROM deliverytruckshifts dts LEFT JOIN deliverytrucks dt ON dts.deliverytruckid = dt.rowid LEFT JOIN shifts s ON dts.shiftid = s.rowid " & _
+            Dim sql1 As String = "SELECT COALESCE(CONCAT(COALESCE(dt.truckname,''),' - ',COALESCE(dt.truckno,''),' / ',COALESCE(s.shiftname,'')),'') " &
+                        "FROM deliverytruckshifts dts LEFT JOIN deliverytrucks dt ON dts.deliverytruckid = dt.rowid LEFT JOIN shifts s ON dts.shiftid = s.rowid " &
                         "WHERE dts.organizationid = " & Z_OrganizationID & " AND dts.`status` = 'Active' ORDER BY dt.truckname,s.shiftname DESC "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -124,6 +124,7 @@ Public Class LineUpDeliveryForm
             conn.Close()
         End Try
     End Sub
+
     Sub displayLineUpCalenderRows(ByVal inumberofdays As Integer)
         Try
             dgLineUpCalendar.Rows.Clear()
@@ -138,9 +139,9 @@ Public Class LineUpDeliveryForm
                 Dim m As Integer = 0
                 For j = 0 To dgLineUpCalendar.Columns.Count - 1
                     If conn.State = ConnectionState.Closed Then conn.Open()
-                    Dim sql1 As String = "SELECT COALESCE(DATE_FORMAT(lu.lineupdate,'%d-%b-%Y'),''),COALESCE(CONCAT(COALESCE(dt.truckname,''),' - ',COALESCE(dt.truckno,''),' / ',COALESCE(s.shiftname,'')),'')," & _
-                                "COALESCE(o.ordernumber,'') FROM lineups lu LEFT JOIN orders o ON lu.orderid = o.rowid LEFT JOIN deliverytruckshifts dts ON lu.deliverytruckshiftid = dts.rowid " & _
-                                "LEFT JOIN deliverytrucks dt ON dts.deliverytruckid = dt.rowid LEFT JOIN shifts s ON dts.shiftid = s.rowid " & _
+                    Dim sql1 As String = "SELECT COALESCE(DATE_FORMAT(lu.lineupdate,'%d-%b-%Y'),''),COALESCE(CONCAT(COALESCE(dt.truckname,''),' - ',COALESCE(dt.truckno,''),' / ',COALESCE(s.shiftname,'')),'')," &
+                                "COALESCE(o.ordernumber,'') FROM lineups lu LEFT JOIN orders o ON lu.orderid = o.rowid LEFT JOIN deliverytruckshifts dts ON lu.deliverytruckshiftid = dts.rowid " &
+                                "LEFT JOIN deliverytrucks dt ON dts.deliverytruckid = dt.rowid LEFT JOIN shifts s ON dts.shiftid = s.rowid " &
                                 "WHERE lu.organizationid = " & Z_OrganizationID & " AND lu.`status` != 'Cancelled' "
                     Dim cmd1 As New MySqlCommand(sql1, conn)
                     Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -169,13 +170,14 @@ Public Class LineUpDeliveryForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCustomerOrdersLineUp(ByVal ilineupdate As String, ByVal ideliverytruckshift As String)
         Try
             ludcustomerorderslineup = "" : rowscount = 0
             If conn1.State = ConnectionState.Closed Then conn1.Open()
-            Dim sql1 As String = "SELECT lu.rowid,COALESCE(CONCAT(COALESCE(o.ordernumber,''),' (C.O. No.) / ',COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),'')),'') FROM lineups lu " & _
-                        "LEFT JOIN orders o ON lu.orderid = o.rowid LEFT JOIN accounts cu ON o.accountid = cu.rowid LEFT JOIN deliverytruckshifts dts ON lu.deliverytruckshiftid = dts.rowid " & _
-                        "LEFT JOIN deliverytrucks dt ON dts.deliverytruckid = dt.rowid LEFT JOIN shifts s ON dts.shiftid = s.rowid WHERE lu.organizationid = " & Z_OrganizationID & " AND lu.`status` != 'Cancelled' " & _
+            Dim sql1 As String = "SELECT lu.rowid,COALESCE(CONCAT(COALESCE(o.ordernumber,''),' (C.O. No.) / ',COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),'')),'') FROM lineups lu " &
+                        "LEFT JOIN orders o ON lu.orderid = o.rowid LEFT JOIN accounts cu ON o.accountid = cu.rowid LEFT JOIN deliverytruckshifts dts ON lu.deliverytruckshiftid = dts.rowid " &
+                        "LEFT JOIN deliverytrucks dt ON dts.deliverytruckid = dt.rowid LEFT JOIN shifts s ON dts.shiftid = s.rowid WHERE lu.organizationid = " & Z_OrganizationID & " AND lu.`status` != 'Cancelled' " &
                         "AND COALESCE(DATE_FORMAT(lu.lineupdate,'%d-%b-%Y'),'') = """ & ilineupdate & """ AND COALESCE(CONCAT(COALESCE(dt.truckname,''),' - ',COALESCE(dt.truckno,''),' / ',COALESCE(s.shiftname,'')),'') = """ & ideliverytruckshift & """ ORDER BY o.ordernumber "
             Dim cmd1 As New MySqlCommand(sql1, conn1)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -196,6 +198,7 @@ Public Class LineUpDeliveryForm
             conn1.Close()
         End Try
     End Sub
+
     Sub countLineUpCartons(ByVal ilineupid As Integer)
         Try
             ludlineupcartonsqty = 0
@@ -210,8 +213,11 @@ Public Class LineUpDeliveryForm
             MsgBox(getErrExcptn(ex, Me.Name))
         End Try
     End Sub
+
 #End Region
+
 #Region "Colors"
+
     Sub colorCoding()
         Try
             If dgLineUpCalendar.Rows.Count <> 0 Then
@@ -232,9 +238,13 @@ Public Class LineUpDeliveryForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #End Region
+
 #End Region
+
     Private Sub pbClose_Click(sender As Object, e As EventArgs) Handles pbClose.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -249,6 +259,7 @@ Public Class LineUpDeliveryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dtpFromSearch_ValueChanged(sender As Object, e As EventArgs) Handles dtpFromSearch.ValueChanged
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -271,6 +282,7 @@ Public Class LineUpDeliveryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dtpToSearch_ValueChanged(sender As Object, e As EventArgs) Handles dtpToSearch.ValueChanged
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -293,6 +305,7 @@ Public Class LineUpDeliveryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msRefresh_Click(sender As Object, e As EventArgs) Handles msRefresh.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -305,6 +318,7 @@ Public Class LineUpDeliveryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msNew_Click(sender As Object, e As EventArgs) Handles msNew.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -347,6 +361,7 @@ Public Class LineUpDeliveryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msViewEdit_Click(sender As Object, e As EventArgs) Handles msViewEdit.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -373,6 +388,7 @@ Public Class LineUpDeliveryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgLineUpCalendar_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgLineUpCalendar.CellClick
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -420,7 +436,9 @@ Public Class LineUpDeliveryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #Region "Datagrid Errors"
+
     Private Sub dgLineUpCalendar_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgLineUpCalendar.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -461,5 +479,7 @@ Public Class LineUpDeliveryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #End Region
+
 End Class

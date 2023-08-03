@@ -1,19 +1,10 @@
 ﻿Imports MySql.Data.MySqlClient
-Imports System.IO
-Imports System.Windows.Forms
-Imports CrystalDecisions.CrystalReports.Engine
-Imports System.Linq
-Imports System.Collections
-Imports System.Collections.Generic
-Imports System.Data
-Imports System.Diagnostics
-Imports System.Runtime.InteropServices
-Imports System.Text.RegularExpressions
 Imports Spire.Barcode
+
 Public Class PackingListForm
     Dim manager As New sqlModule.Manager
-    Dim conn As New MySqlConnection(Manager.GetConnString)
-    Dim conn1 As New MySqlConnection(Manager.GetConnString)
+    Dim conn As New MySqlConnection(manager.GetConnString)
+    Dim conn1 As New MySqlConnection(manager.GetConnString)
     Dim sqlcmd As MySqlCommand
     Dim sqlrd As MySqlDataReader
     Dim printdataset As New DataSetA.SetADataTable
@@ -29,6 +20,7 @@ Public Class PackingListForm
     Dim palcustomerid, palcontactid, palorderid, palpackinglistid, palcountpackinglistboxes As Integer
     Dim simplesearchphrase, datephrase, commonphrase, pagefilter1, pagefilter2, palstartidentifier, palendindentifier, palmothersku, palprintsku, palorderitemstatus As String
     Dim paltotalqtyincarton, palqtyincartonsum, paltotalqtypickedsum, paltotalqtyincartonsum, palqtyincarton, palqtytopacksum, paltotalqtypicked, palqtypicked, palqtyordered As Integer
+
     Private Sub PackingListForm_Load(sender As Object, e As EventArgs) Handles Me.Load
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -46,6 +38,7 @@ Public Class PackingListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub PackingListForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -57,11 +50,15 @@ Public Class PackingListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #Region "Functions"
+
     Sub callAutoPopulateFunctions()
         autopopulatecboSearch()
     End Sub
+
 #Region "Clear/Enable/Visible"
+
     Sub clearfields()
         Try
             cue = ""
@@ -81,6 +78,7 @@ Public Class PackingListForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearRightPage()
         Try
             cue = ""
@@ -97,6 +95,7 @@ Public Class PackingListForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearSearchItems()
         Try
             txtSimpleSearch.Text = ""
@@ -114,6 +113,7 @@ Public Class PackingListForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearcboSearch()
         Try
             txtPage.Text = ""
@@ -129,6 +129,7 @@ Public Class PackingListForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearPackingListInformation()
         Try
             txtPackingListNo.Text = ""
@@ -152,6 +153,7 @@ Public Class PackingListForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearCustomerOrderItems()
         Try
             txtTotalItems.Text = ""
@@ -166,6 +168,7 @@ Public Class PackingListForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearCartonItems()
         Try
             txtQtyInCartonSum.Text = ""
@@ -175,6 +178,7 @@ Public Class PackingListForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearDatagrids()
         Try
             dgCustomerOrderItems.Rows.Clear()
@@ -186,6 +190,7 @@ Public Class PackingListForm
             conn.Close()
         End Try
     End Sub
+
     Sub enableGB(ByVal enable1 As Boolean, ByVal enable2 As Boolean, ByVal enable3 As Boolean)
         Try
             gbSearch.Enabled = enable1
@@ -200,6 +205,7 @@ Public Class PackingListForm
             conn.Close()
         End Try
     End Sub
+
     Sub visibleCustomerOrderItems(ByVal visible1 As Boolean)
         Try
             ci_qtyordered.Visible = visible1
@@ -216,6 +222,7 @@ Public Class PackingListForm
             conn.Close()
         End Try
     End Sub
+
     Sub enableANDvisibleMS(ByVal enable1 As Boolean, ByVal enable2 As Boolean, ByVal enable3 As Boolean, ByVal visible1 As Boolean, ByVal visible2 As Boolean)
         Try
             msNew.Enabled = enable1
@@ -229,8 +236,11 @@ Public Class PackingListForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Click"
+
     Sub tsrefreshperformclick()
         Try
             errProvider.Clear()
@@ -245,8 +255,11 @@ Public Class PackingListForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Computations"
+
     Sub getPickListOrderIDA(ByVal iorderid As Integer, ByVal iorderitemid As Integer)
         Try
             paltotalqtypicked = 0
@@ -259,6 +272,7 @@ Public Class PackingListForm
             MsgBox(getErrExcptn(ex, Me.Name))
         End Try
     End Sub
+
     Sub getPickListOrderIDB(ByVal eorderid As Integer)
         Try
             paltotalqtypickedsum = 0
@@ -278,6 +292,7 @@ Public Class PackingListForm
             conn.Close()
         End Try
     End Sub
+
     Sub getTotalQtyPickedA(ByVal ipicklistorderid As Integer)
         Try
             Dim dtGtq As New DataTable
@@ -289,6 +304,7 @@ Public Class PackingListForm
             MsgBox(getErrExcptn(ex, Me.Name))
         End Try
     End Sub
+
     Sub getTotalQtyPickedB(ByVal ipicklistorderid As Integer)
         Try
             Dim dtGtq As New DataTable
@@ -300,6 +316,7 @@ Public Class PackingListForm
             MsgBox(getErrExcptn(ex, Me.Name))
         End Try
     End Sub
+
     Sub getTotalQtyInCarton(ByVal epackinglistid As Integer, ByVal eorderitemid As Integer)
         Try
             paltotalqtyincarton = 0
@@ -314,6 +331,7 @@ Public Class PackingListForm
             MsgBox(getErrExcptn(ex, Me.Name))
         End Try
     End Sub
+
     Sub getPackingListCartonID(ByVal epackinglistid As Integer)
         Try
             If conn.State = ConnectionState.Closed Then conn.Open()
@@ -333,6 +351,7 @@ Public Class PackingListForm
             conn.Close()
         End Try
     End Sub
+
     Sub getQtyInCarton(ByVal ipackinglistcartonid As Integer)
         Try
             palqtyincarton = 0
@@ -347,6 +366,7 @@ Public Class PackingListForm
             MsgBox(getErrExcptn(ex, Me.Name))
         End Try
     End Sub
+
     Sub packinglistcomputations(ByVal iorderid As Integer, ByVal ipackinglistid As Integer)
         Try
             palqtyincartonsum = 0 : paltotalqtyincartonsum = 0 : palqtytopacksum = 0
@@ -408,8 +428,11 @@ Public Class PackingListForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Page Setup"
+
     Sub pageSetup()
         Try
             getCountPageNum()
@@ -430,6 +453,7 @@ Public Class PackingListForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCountPageNum()
         Try
             countpagenum = 0
@@ -447,6 +471,7 @@ Public Class PackingListForm
             conn.Close()
         End Try
     End Sub
+
     Sub pageSetup1(ByVal isearchstring As String)
         Try
             getCountPageNum1(isearchstring)
@@ -467,12 +492,13 @@ Public Class PackingListForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCountPageNum1(ByVal esearchstring As String)
         Try
             countpagenum = 0
             If conn.State = ConnectionState.Open Then conn.Close()
             Dim dtCid As New DataTable
-            dtCid = getDataTableForSQL("SELECT COALESCE(COUNT(pal.rowid),0) FROM packinglist pal LEFT JOIN orders co ON pal.orderid = co.rowid LEFT JOIN accounts cu ON co.accountid = cu.rowid WHERE pal.organizationid = " & Z_OrganizationID & " AND " & _
+            dtCid = getDataTableForSQL("SELECT COALESCE(COUNT(pal.rowid),0) FROM packinglist pal LEFT JOIN orders co ON pal.orderid = co.rowid LEFT JOIN accounts cu ON co.accountid = cu.rowid WHERE pal.organizationid = " & Z_OrganizationID & " AND " &
                             "(pal.packinglistno LIKE ""%" & esearchstring & "%"" OR pal.status LIKE ""%" & esearchstring & "%"" OR co.ordernumber LIKE ""%" & esearchstring & "%"" OR cu.companyname LIKE ""%" & esearchstring & "%"") ")
             If dtCid.Rows.Count <> 0 Then
                 countpagenum = dtCid.Rows(0)(0)
@@ -485,6 +511,7 @@ Public Class PackingListForm
             conn.Close()
         End Try
     End Sub
+
     Sub pageSetup2(ByVal idatesearch As String)
         Try
             getCountPageNum2(idatesearch)
@@ -505,13 +532,14 @@ Public Class PackingListForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCountPageNum2(ByVal edatesearch As String)
         Try
             countpagenum = 0
             If conn.State = ConnectionState.Open Then conn.Close()
             Dim dtCid As New DataTable
-            dtCid = getDataTableForSQL("SELECT COALESCE(COUNT(pal.rowid),0) FROM packinglist pal LEFT JOIN orders co ON pal.orderid = co.rowid WHERE pal.organizationid = " & Z_OrganizationID & " AND " & _
-                            "(" & edatesearch & " >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' " & _
+            dtCid = getDataTableForSQL("SELECT COALESCE(COUNT(pal.rowid),0) FROM packinglist pal LEFT JOIN orders co ON pal.orderid = co.rowid WHERE pal.organizationid = " & Z_OrganizationID & " AND " &
+                            "(" & edatesearch & " >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' " &
                             "AND " & edatesearch & " <= '" & dtpToSearch.Value.Year & "-" & dtpToSearch.Value.Month & "-" & dtpToSearch.Value.Day & "' ) ")
             If dtCid.Rows.Count <> 0 Then
                 countpagenum = dtCid.Rows(0)(0)
@@ -524,6 +552,7 @@ Public Class PackingListForm
             conn.Close()
         End Try
     End Sub
+
     Sub pageSetup3(ByVal icommonstring As String, ByVal idatesearch As String)
         Try
             getCountPageNum3(icommonstring, idatesearch)
@@ -544,6 +573,7 @@ Public Class PackingListForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCountPageNum3(ByVal ecommonstring As String, ByVal edatesearch As String)
         Try
             countpagenum = 0
@@ -561,6 +591,7 @@ Public Class PackingListForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCommonPhrase(ByVal icommonbox As ComboBox, ByVal icommonstring As String)
         Try
             commonphrase = ""
@@ -583,9 +614,13 @@ Public Class PackingListForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Display"
+
 #Region "AutoComplete"
+
     Sub autocompleteCartonNos(ByVal icombobox As ComboBox)
         Try
             Dim cartonnos As New AutoCompleteStringCollection
@@ -606,10 +641,11 @@ Public Class PackingListForm
             conn.Close()
         End Try
     End Sub
+
     Sub autocompleteCustomerName(ByVal icombobox As ComboBox)
         Try
             Dim customername As New AutoCompleteStringCollection
-            Dim cmd As New MySqlCommand("SELECT COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),'') AS 'customername' FROM packinglist pal " & _
+            Dim cmd As New MySqlCommand("SELECT COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),'') AS 'customername' FROM packinglist pal " &
                             "LEFT JOIN orders co ON pal.orderid = co.rowid LEFT JOIN accounts cu ON co.accountid = cu.rowid WHERE pal.organizationid = " & Z_OrganizationID & " GROUP BY cu.rowid ", conn)
             Dim ds As New DataSet
             Dim da As New MySqlDataAdapter(cmd)
@@ -627,6 +663,7 @@ Public Class PackingListForm
             conn.Close()
         End Try
     End Sub
+
     Sub autocompletePackerName(ByVal icombobox As ComboBox)
         Try
             Dim contactname As New AutoCompleteStringCollection
@@ -654,6 +691,7 @@ Public Class PackingListForm
             globalconn.Close()
         End Try
     End Sub
+
     Sub autocompleteStatus(ByVal icombobox As ComboBox)
         Try
             Dim palstatus As New AutoCompleteStringCollection
@@ -674,8 +712,11 @@ Public Class PackingListForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "AutoPopulate"
+
     Sub autopopulatecboSearch()
         Try
             cboDate.Items.Clear()
@@ -694,6 +735,7 @@ Public Class PackingListForm
             conn.Close()
         End Try
     End Sub
+
     Sub autopopulateCartonNos(ByVal icombobox As ComboBox)
         Try
             icombobox.Items.Clear()
@@ -714,11 +756,12 @@ Public Class PackingListForm
             conn.Close()
         End Try
     End Sub
+
     Sub autopopulateCustomerName(ByVal icombobox As ComboBox)
         Try
             icombobox.Items.Clear()
             If conn.State = ConnectionState.Open Then conn.Close()
-            Dim sql1 As String = "SELECT COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),'') AS 'customername' FROM packinglist pal " & _
+            Dim sql1 As String = "SELECT COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),'') AS 'customername' FROM packinglist pal " &
                             "LEFT JOIN orders co ON pal.orderid = co.rowid LEFT JOIN accounts cu ON co.accountid = cu.rowid WHERE pal.organizationid = " & Z_OrganizationID & " GROUP BY cu.rowid ORDER BY cu.companyname "
             If conn.State = ConnectionState.Closed Then conn.Open()
             Dim cmd1 As New MySqlCommand(sql1, conn)
@@ -735,6 +778,7 @@ Public Class PackingListForm
             conn.Close()
         End Try
     End Sub
+
     Sub autopopulatePackerName(ByVal icombobox As ComboBox)
         Try
             icombobox.Items.Clear()
@@ -755,6 +799,7 @@ Public Class PackingListForm
             conn.Close()
         End Try
     End Sub
+
     Sub autopopulateStatus(ByVal icombobox As ComboBox)
         Try
             icombobox.Items.Clear()
@@ -775,15 +820,18 @@ Public Class PackingListForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Datagrids"
+
     Sub displayPackingList(ByVal istartpage As Integer)
         Try
             dgPackingList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT pal.rowid,COALESCE(pal.packinglistno,''),DATE_FORMAT(pal.packinglistdate,'%d-%b-%Y'),COALESCE(co.ordernumber,'')," & _
-                        "COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),''),COALESCE(pal.status,'') FROM packinglist pal " & _
-                        "LEFT JOIN orders co ON pal.orderid = co.rowid LEFT JOIN accounts cu ON co.accountid = cu.rowid " & _
+            Dim sql1 As String = "SELECT pal.rowid,COALESCE(pal.packinglistno,''),DATE_FORMAT(pal.packinglistdate,'%d-%b-%Y'),COALESCE(co.ordernumber,'')," &
+                        "COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),''),COALESCE(pal.status,'') FROM packinglist pal " &
+                        "LEFT JOIN orders co ON pal.orderid = co.rowid LEFT JOIN accounts cu ON co.accountid = cu.rowid " &
                         "WHERE pal.organizationid = " & Z_OrganizationID & " ORDER BY pal.packinglistdate DESC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -814,14 +862,15 @@ Public Class PackingListForm
             conn.Close()
         End Try
     End Sub
+
     Sub displaySearchPhrase(ByVal isearchphrase As String, ByVal istartpage As Integer)
         Try
             dgPackingList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT pal.rowid,COALESCE(pal.packinglistno,''),DATE_FORMAT(pal.packinglistdate,'%d-%b-%Y'),COALESCE(co.ordernumber,'')," & _
-                        "COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),''),COALESCE(pal.`status`,'') FROM packinglist pal " & _
-                        "LEFT JOIN orders co ON pal.orderid = co.rowid LEFT JOIN accounts cu ON co.accountid = cu.rowid WHERE pal.organizationid = " & Z_OrganizationID & " AND " & _
-                        "(pal.packinglistno LIKE ""%" & isearchphrase & "%"" OR pal.status LIKE ""%" & isearchphrase & "%"" OR co.ordernumber LIKE ""%" & isearchphrase & "%"" OR cu.companyname LIKE ""%" & isearchphrase & "%"") " & _
+            Dim sql1 As String = "SELECT pal.rowid,COALESCE(pal.packinglistno,''),DATE_FORMAT(pal.packinglistdate,'%d-%b-%Y'),COALESCE(co.ordernumber,'')," &
+                        "COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),''),COALESCE(pal.`status`,'') FROM packinglist pal " &
+                        "LEFT JOIN orders co ON pal.orderid = co.rowid LEFT JOIN accounts cu ON co.accountid = cu.rowid WHERE pal.organizationid = " & Z_OrganizationID & " AND " &
+                        "(pal.packinglistno LIKE ""%" & isearchphrase & "%"" OR pal.status LIKE ""%" & isearchphrase & "%"" OR co.ordernumber LIKE ""%" & isearchphrase & "%"" OR cu.companyname LIKE ""%" & isearchphrase & "%"") " &
                         "ORDER BY pal.packinglistdate DESC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -852,15 +901,16 @@ Public Class PackingListForm
             conn.Close()
         End Try
     End Sub
+
     Sub displayDateSearch(ByVal istartpage As Integer, ByVal idatesearch As String)
         Try
             dgPackingList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT pal.rowid,COALESCE(pal.packinglistno,''),DATE_FORMAT(pal.packinglistdate,'%d-%b-%Y'),COALESCE(co.ordernumber,'')," & _
-                        "COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),''),COALESCE(pal.status,'') FROM packinglist pal " & _
-                        "LEFT JOIN orders co ON pal.orderid = co.rowid LEFT JOIN accounts cu ON co.accountid = cu.rowid WHERE pal.organizationid = " & Z_OrganizationID & " " & _
-                        "AND (" & idatesearch & " >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " & _
-                        "" & idatesearch & " <= '" & dtpToSearch.Value.Year & "-" & dtpToSearch.Value.Month & "-" & dtpToSearch.Value.Day & "' ) " & _
+            Dim sql1 As String = "SELECT pal.rowid,COALESCE(pal.packinglistno,''),DATE_FORMAT(pal.packinglistdate,'%d-%b-%Y'),COALESCE(co.ordernumber,'')," &
+                        "COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),''),COALESCE(pal.status,'') FROM packinglist pal " &
+                        "LEFT JOIN orders co ON pal.orderid = co.rowid LEFT JOIN accounts cu ON co.accountid = cu.rowid WHERE pal.organizationid = " & Z_OrganizationID & " " &
+                        "AND (" & idatesearch & " >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " &
+                        "" & idatesearch & " <= '" & dtpToSearch.Value.Year & "-" & dtpToSearch.Value.Month & "-" & dtpToSearch.Value.Day & "' ) " &
                         "GROUP BY pal.rowid  ORDER BY pal.packinglistdate DESC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -891,13 +941,14 @@ Public Class PackingListForm
             conn.Close()
         End Try
     End Sub
+
     Sub displayCommonPhrase(ByVal icommonphrase As String, ByVal idatesearch As String, ByVal istartpage As Integer)
         Try
             dgPackingList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT pal.rowid,COALESCE(pal.packinglistno,''),DATE_FORMAT(pal.packinglistdate,'%d-%b-%Y'),COALESCE(co.ordernumber,'')," & _
-                        "COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),''),COALESCE(pal.status,'') FROM packinglist pal " & _
-                        "LEFT JOIN orders co ON pal.orderid = co.rowid LEFT JOIN accounts cu ON co.accountid = cu.rowid LEFT JOIN packinglistcartons pc ON pal.rowid = pc.packinglistid " & _
+            Dim sql1 As String = "SELECT pal.rowid,COALESCE(pal.packinglistno,''),DATE_FORMAT(pal.packinglistdate,'%d-%b-%Y'),COALESCE(co.ordernumber,'')," &
+                        "COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),''),COALESCE(pal.status,'') FROM packinglist pal " &
+                        "LEFT JOIN orders co ON pal.orderid = co.rowid LEFT JOIN accounts cu ON co.accountid = cu.rowid LEFT JOIN packinglistcartons pc ON pal.rowid = pc.packinglistid " &
                         "WHERE pal.organizationid = " & Z_OrganizationID & " AND " & icommonphrase & " " & idatesearch & " GROUP BY pal.rowid ORDER BY pal.packinglistdate DESC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -928,14 +979,15 @@ Public Class PackingListForm
             conn.Close()
         End Try
     End Sub
+
     Sub displayCustomerOrderItems(ByVal icustomerorderid As Integer, ByVal ipackinglistid As Integer)
         Try
             dgCustomerOrderItems.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT ci.rowid,COALESCE(ci.productcolorsizeid,0),COALESCE(ci.productbundleid,0),COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(b.bundlename,''),COALESCE(c.colorname,''),COALESCE(pcs.size,'')," & _
-                    "COALESCE(pcs.seasoncode,''),COALESCE(ci.qtyordered,0),COALESCE(pcs.sku,''),COALESCE(b.sku,''),COALESCE(ci.unitofmeasure,''),COALESCE(ci.itemtype,''),COALESCE(ci.remarks,''),COALESCE(ci.`status`,''),COALESCE(DATE_FORMAT(ci.packeddate,'%d-%b-%Y'),'')," & _
-                    "COALESCE(CONCAT(COALESCE(pa.firstname,''),' ',COALESCE(pa.middlename,''),' ',COALESCE(pa.lastname,''),' ',COALESCE(pa.suffix,''),' - ',COALESCE(pa.contactno,'')),''),COALESCE(ci.srp,''),COALESCE(ci.tags,''),COALESCE(ci.sku,'') FROM orderitems ci LEFT JOIN productbundles b ON ci.productbundleid = b.rowid " & _
-                    "LEFT JOIN productcolorsizes pcs ON ci.productcolorsizeid = pcs.rowid LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN colors c ON pc.colorid = c.rowid LEFT JOIN products p ON pc.productid = p.rowid LEFT JOIN contacts pa ON ci.packedby = pa.rowid " & _
+            Dim sql1 As String = "SELECT ci.rowid,COALESCE(ci.productcolorsizeid,0),COALESCE(ci.productbundleid,0),COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(b.bundlename,''),COALESCE(c.colorname,''),COALESCE(pcs.size,'')," &
+                    "COALESCE(pcs.seasoncode,''),COALESCE(ci.qtyordered,0),COALESCE(pcs.sku,''),COALESCE(b.sku,''),COALESCE(ci.unitofmeasure,''),COALESCE(ci.itemtype,''),COALESCE(ci.remarks,''),COALESCE(ci.`status`,''),COALESCE(DATE_FORMAT(ci.packeddate,'%d-%b-%Y'),'')," &
+                    "COALESCE(CONCAT(COALESCE(pa.firstname,''),' ',COALESCE(pa.middlename,''),' ',COALESCE(pa.lastname,''),' ',COALESCE(pa.suffix,''),' - ',COALESCE(pa.contactno,'')),''),COALESCE(ci.srp,''),COALESCE(ci.tags,''),COALESCE(ci.sku,'') FROM orderitems ci LEFT JOIN productbundles b ON ci.productbundleid = b.rowid " &
+                    "LEFT JOIN productcolorsizes pcs ON ci.productcolorsizeid = pcs.rowid LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN colors c ON pc.colorid = c.rowid LEFT JOIN products p ON pc.productid = p.rowid LEFT JOIN contacts pa ON ci.packedby = pa.rowid " &
                     "WHERE ci.orderid = " & icustomerorderid & " AND ci.organizationid = " & Z_OrganizationID & " AND ci.status != 'Inactive' AND ci.itemtype != 'BI' ORDER BY ci.rowid "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -1023,10 +1075,11 @@ Public Class PackingListForm
             conn.Close()
         End Try
     End Sub
+
     Sub displayPackingListInformation(ByVal ipackinglistid As Integer)
         Try
             If conn1.State = ConnectionState.Closed Then conn1.Open()
-            Dim sql1 As String = "SELECT COALESCE(pal.packinglistno,''),COALESCE(DATE_FORMAT(pal.packinglistdate,'%d-%b-%Y'),''),COALESCE(pal.`status`,''),COALESCE(CONCAT(COALESCE(o.ordernumber,''),' (C.O. No.) / ',COALESCE(a.companyname,''),' - ',COALESCE(a.accountno,'')),'')," & _
+            Dim sql1 As String = "SELECT COALESCE(pal.packinglistno,''),COALESCE(DATE_FORMAT(pal.packinglistdate,'%d-%b-%Y'),''),COALESCE(pal.`status`,''),COALESCE(CONCAT(COALESCE(o.ordernumber,''),' (C.O. No.) / ',COALESCE(a.companyname,''),' - ',COALESCE(a.accountno,'')),'')," &
                         "COALESCE(pal.comments,'') FROM packinglist pal LEFT JOIN orders o ON pal.orderid = o.rowid LEFT JOIN accounts a ON o.accountid = a.rowid WHERE pal.rowid = " & ipackinglistid & " "
             Dim cmd1 As New MySqlCommand(sql1, conn1)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -1046,11 +1099,12 @@ Public Class PackingListForm
             conn1.Close()
         End Try
     End Sub
+
     Sub displayPackingListCartons(ByVal ipackinglistid As Integer)
         Try
             dgCartons.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT pc.rowid,COALESCE(pc.cartonno,''),COALESCE(CONCAT(COALESCE(c.firstname,''),' ',COALESCE(c.middlename,''),' ',COALESCE(c.lastname,''),' ',COALESCE(c.suffix,''),' - ',COALESCE(c.contactno,'')),''),COALESCE(DATE_FORMAT(pc.packeddate,'%d-%b-%Y'),''),COALESCE(pc.`status`,''),COALESCE(cs.sizename,''),COALESCE(pc.amount,'')," & _
+            Dim sql1 As String = "SELECT pc.rowid,COALESCE(pc.cartonno,''),COALESCE(CONCAT(COALESCE(c.firstname,''),' ',COALESCE(c.middlename,''),' ',COALESCE(c.lastname,''),' ',COALESCE(c.suffix,''),' - ',COALESCE(c.contactno,'')),''),COALESCE(DATE_FORMAT(pc.packeddate,'%d-%b-%Y'),''),COALESCE(pc.`status`,''),COALESCE(cs.sizename,''),COALESCE(pc.amount,'')," &
                         "COALESCE(CONCAT(COALESCE(pc.weight,''),' ',COALESCE(pc.weightuom,'')),'') FROM packinglistcartons pc LEFT JOIN contacts c ON pc.contactid = c.rowid LEFT JOIN cartonsizes cs ON pc.cartonsizeid = cs.rowid WHERE pc.packinglistid = " & ipackinglistid & " AND pc.organizationid = " & Z_OrganizationID & " AND pc.`status` != 'Inactive' ORDER BY pc.cartonno "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -1090,12 +1144,13 @@ Public Class PackingListForm
             conn.Close()
         End Try
     End Sub
+
     Sub displayPackingListCartonItems(ByVal ipackinglistcartonid As Integer)
         Try
             dgCartonItems.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT pci.rowid,COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(c.colorname,''),COALESCE(pcs.size,''),COALESCE(pcs.seasoncode,''),COALESCE(pci.qtyincarton,0),COALESCE(pcs.sku,''),COALESCE(oi.unitofmeasure,''),COALESCE(oi.itemtype,''),COALESCE(oi.sku,'') " & _
-                    "FROM packinglistcartonitems pci LEFT JOIN orderitems oi ON pci.orderitemid = oi.rowid LEFT JOIN productcolorsizes pcs ON oi.productcolorsizeid = pcs.rowid LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN colors c ON pc.colorid = c.rowid " & _
+            Dim sql1 As String = "SELECT pci.rowid,COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(c.colorname,''),COALESCE(pcs.size,''),COALESCE(pcs.seasoncode,''),COALESCE(pci.qtyincarton,0),COALESCE(pcs.sku,''),COALESCE(oi.unitofmeasure,''),COALESCE(oi.itemtype,''),COALESCE(oi.sku,'') " &
+                    "FROM packinglistcartonitems pci LEFT JOIN orderitems oi ON pci.orderitemid = oi.rowid LEFT JOIN productcolorsizes pcs ON oi.productcolorsizeid = pcs.rowid LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN colors c ON pc.colorid = c.rowid " &
                     "LEFT JOIN products p ON pc.productid = p.rowid WHERE pci.packinglistcartonid = " & ipackinglistcartonid & " AND pci.organizationid = " & Z_OrganizationID & " AND pci.`status` != 'Inactive' ORDER BY p.productcode,c.colorname,pcs.size "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -1144,8 +1199,11 @@ Public Class PackingListForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Colors"
+
     Sub colorCoding()
         Try
             If dgCustomerOrderItems.Rows.Count <> 0 Then
@@ -1177,9 +1235,13 @@ Public Class PackingListForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #End Region
+
 #Region "Printing"
+
     Sub countPackingListBoxes(ByVal ipackinglistid As Integer)
         Try
             palcountpackinglistboxes = 0
@@ -1192,6 +1254,7 @@ Public Class PackingListForm
             MsgBox(getErrExcptn(ex, Me.Name))
         End Try
     End Sub
+
     Sub getCodeIndentifiers()
         Try
             palstartidentifier = "" : palendindentifier = ""
@@ -1205,11 +1268,12 @@ Public Class PackingListForm
             MsgBox(getErrExcptn(ex, Me.Name))
         End Try
     End Sub
+
     Sub getMotherSKU(ByVal icustomerorderid As Integer, ByVal ipackinglistid As Integer)
         Try
             palmothersku = ""
             Dim dtMsku As New DataTable
-            dtMsku = getDataTableForSQL("SELECT ci.rowid,COALESCE(b.bundlename,''),COALESCE(ci.qtyordered,0),COALESCE(b.sku,''),COALESCE(ci.srp,'') FROM orderitems ci LEFT JOIN productbundles b ON ci.productbundleid = b.rowid " & _
+            dtMsku = getDataTableForSQL("SELECT ci.rowid,COALESCE(b.bundlename,''),COALESCE(ci.qtyordered,0),COALESCE(b.sku,''),COALESCE(ci.srp,'') FROM orderitems ci LEFT JOIN productbundles b ON ci.productbundleid = b.rowid " &
                     "WHERE ci.orderid = " & icustomerorderid & " AND ci.organizationid = " & Z_OrganizationID & " AND ci.status != 'Inactive' AND ci.itemtype != 'BI' ORDER BY ci.rowid ")
             If dtMsku.Rows.Count <> 0 Then
                 palmothersku = dtMsku.Rows(0)(3)
@@ -1218,6 +1282,7 @@ Public Class PackingListForm
             MsgBox(getErrExcptn(ex, Me.Name))
         End Try
     End Sub
+
     Sub printPackingListA(ByVal ipackinglistid As Integer)
         Try
             rowscount = startingpage
@@ -1227,8 +1292,8 @@ Public Class PackingListForm
             '            "COALESCE(CONCAT(COALESCE(o.referencenumber,''),',',COALESCE(o.drnumber,'')),'') AS '2DCodeA',COALESCE(pc.amount,0.0) AS '2DCodeB',COALESCE(bc.branchcode,''),COALESCE(cs.`length`,0.0),COALESCE(cs.`width`,0.0),COALESCE(cs.`height`,0.0),COALESCE(pc.`weight`,0.0) AS '2DCodeC' FROM packinglistcartons pc " & _
             '            "LEFT JOIN packinglist pal ON pc.packinglistid = pal.rowid LEFT JOIN orders o ON pal.orderid = o.rowid LEFT JOIN combinecodings cc ON o.combinecodingid = cc.rowid LEFT JOIN codings c1 ON cc.codingida = c1.rowid LEFT JOIN codings c2 ON cc.codingidb = c2.rowid LEFT JOIN codings c3 ON cc.codingidc = c3.rowid " & _
             '            "LEFT JOIN branches bc ON o.branchid = bc.rowid LEFT JOIN companies ve ON o.companyid = ve.rowid LEFT JOIN cartonsizes cs ON pc.cartonsizeid = cs.rowid WHERE pc.packinglistid = " & ipackinglistid & " AND pc.organizationid = " & Z_OrganizationID & " AND pc.`status` != 'Inactive' ORDER BY pc.rowid "
-            Dim sql1 As String = "SELECT pc.rowid,COALESCE(ve.companycode,''),COALESCE(bc.branchcode,''),COALESCE(CONCAT(COALESCE(bc.branchcode,''),' - ', COALESCE(bc.branchname,'')),''),COALESCE(o.referencenumber,''),COALESCE(o.drnumber,''),COALESCE(c1.codename,''),COALESCE(cs.`length`,0.00),COALESCE(cs.lengthuom,''),COALESCE(cs.`width`,0.00)," & _
-            "COALESCE(cs.widthuom,''),COALESCE(cs.`height`,0.00),COALESCE(cs.heightuom,''),COALESCE(pc.`weight`,0.00),COALESCE(pc.weightuom,'') FROM packinglistcartons pc LEFT JOIN packinglist pal ON pc.packinglistid = pal.rowid LEFT JOIN orders o ON pal.orderid = o.rowid LEFT JOIN companies ve ON o.companyid = ve.rowid " & _
+            Dim sql1 As String = "SELECT pc.rowid,COALESCE(ve.companycode,''),COALESCE(bc.branchcode,''),COALESCE(CONCAT(COALESCE(bc.branchcode,''),' - ', COALESCE(bc.branchname,'')),''),COALESCE(o.referencenumber,''),COALESCE(o.drnumber,''),COALESCE(c1.codename,''),COALESCE(cs.`length`,0.00),COALESCE(cs.lengthuom,''),COALESCE(cs.`width`,0.00)," &
+            "COALESCE(cs.widthuom,''),COALESCE(cs.`height`,0.00),COALESCE(cs.heightuom,''),COALESCE(pc.`weight`,0.00),COALESCE(pc.weightuom,'') FROM packinglistcartons pc LEFT JOIN packinglist pal ON pc.packinglistid = pal.rowid LEFT JOIN orders o ON pal.orderid = o.rowid LEFT JOIN companies ve ON o.companyid = ve.rowid " &
             "LEFT JOIN branches bc ON o.branchid = bc.rowid LEFT JOIN combinecodings cc ON o.combinecodingid = cc.rowid LEFT JOIN codings c1 ON cc.codingida = c1.rowid LEFT JOIN cartonsizes cs ON pc.cartonsizeid = cs.rowid WHERE pc.packinglistid = " & ipackinglistid & " AND pc.organizationid = " & Z_OrganizationID & " AND pc.`status` != 'Inactive' ORDER BY pc.rowid "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -1262,13 +1327,14 @@ Public Class PackingListForm
             conn.Close()
         End Try
     End Sub
+
     Sub printPackingListB(ByVal ipackinglistid As Integer)
         Try
             rowscount = startingpage
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT COALESCE(CONCAT(COALESCE(pc.rowid,''),'-',COALESCE(pal.rowid,'')),''),COALESCE(CONCAT(COALESCE(ve.companycode,''),' ',COALESCE(ve.companyname,'')),''),COALESCE(CONCAT(COALESCE(bc.branchcode,''),' ',COALESCE(bc.branchname,'')),''),COALESCE(o.drnumber,''),COALESCE(CONCAT(COALESCE(c1.codeno,''),'-',COALESCE(c2.codeno,''),'-',COALESCE(c3.codeno,'')),'')," & _
-                        "COALESCE(cc.codename,''),COALESCE(CONCAT(COALESCE(bc.branchcode,''),',',COALESCE(ve.companycode,''),',',COALESCE(o.drnumber,''),',',COALESCE(c1.codeno,''),',',COALESCE(c2.codeno,''),',',COALESCE(c3.codeno,'')),'') AS '2DCodeA',COALESCE(pc.amount,'') AS '2DCodeB',COALESCE(o.branchid,0),COALESCE(o.ordernumber,'') FROM packinglistcartons pc " & _
-                        "LEFT JOIN packinglist pal ON pc.packinglistid = pal.rowid LEFT JOIN orders o ON pal.orderid = o.rowid LEFT JOIN combinecodings cc ON o.combinecodingid = cc.rowid LEFT JOIN codings c1 ON cc.codingida = c1.rowid LEFT JOIN codings c2 ON cc.codingidb = c2.rowid LEFT JOIN codings c3 ON cc.codingidc = c3.rowid " & _
+            Dim sql1 As String = "SELECT COALESCE(CONCAT(COALESCE(pc.rowid,''),'-',COALESCE(pal.rowid,'')),''),COALESCE(CONCAT(COALESCE(ve.companycode,''),' ',COALESCE(ve.companyname,'')),''),COALESCE(CONCAT(COALESCE(bc.branchcode,''),' ',COALESCE(bc.branchname,'')),''),COALESCE(o.drnumber,''),COALESCE(CONCAT(COALESCE(c1.codeno,''),'-',COALESCE(c2.codeno,''),'-',COALESCE(c3.codeno,'')),'')," &
+                        "COALESCE(cc.codename,''),COALESCE(CONCAT(COALESCE(bc.branchcode,''),',',COALESCE(ve.companycode,''),',',COALESCE(o.drnumber,''),',',COALESCE(c1.codeno,''),',',COALESCE(c2.codeno,''),',',COALESCE(c3.codeno,'')),'') AS '2DCodeA',COALESCE(pc.amount,'') AS '2DCodeB',COALESCE(o.branchid,0),COALESCE(o.ordernumber,'') FROM packinglistcartons pc " &
+                        "LEFT JOIN packinglist pal ON pc.packinglistid = pal.rowid LEFT JOIN orders o ON pal.orderid = o.rowid LEFT JOIN combinecodings cc ON o.combinecodingid = cc.rowid LEFT JOIN codings c1 ON cc.codingida = c1.rowid LEFT JOIN codings c2 ON cc.codingidb = c2.rowid LEFT JOIN codings c3 ON cc.codingidc = c3.rowid " &
                         "LEFT JOIN branches bc ON o.branchid = bc.rowid LEFT JOIN companies ve ON o.companyid = ve.rowid LEFT JOIN cartonsizes cs ON pc.cartonsizeid = cs.rowid WHERE pc.packinglistid = " & ipackinglistid & " AND pc.organizationid = " & Z_OrganizationID & " AND pc.`status` != 'Inactive' ORDER BY pc.rowid "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -1300,12 +1366,13 @@ Public Class PackingListForm
             conn.Close()
         End Try
     End Sub
+
     Sub printPackingListC(ByVal ipackinglistid As Integer)
         Try
             rowscount = startingpage
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT pc.rowid,COALESCE(ve.companycode,''),COALESCE(bc.branchcode,''),COALESCE(CONCAT(COALESCE(bc.branchcode,''),' - ', COALESCE(bc.branchname,'')),''),COALESCE(o.referencenumber,''),COALESCE(o.drnumber,''),COALESCE(c1.codename,''),COALESCE(cs.`length`,0.00),COALESCE(cs.lengthuom,''),COALESCE(cs.`width`,0.00)," & _
-                        "COALESCE(cs.widthuom,''),COALESCE(cs.`height`,0.00),COALESCE(cs.heightuom,''),COALESCE(pc.`weight`,0.00),COALESCE(pc.weightuom,'') FROM packinglistcartons pc LEFT JOIN packinglist pal ON pc.packinglistid = pal.rowid LEFT JOIN orders o ON pal.orderid = o.rowid LEFT JOIN companies ve ON o.companyid = ve.rowid " & _
+            Dim sql1 As String = "SELECT pc.rowid,COALESCE(ve.companycode,''),COALESCE(bc.branchcode,''),COALESCE(CONCAT(COALESCE(bc.branchcode,''),' - ', COALESCE(bc.branchname,'')),''),COALESCE(o.referencenumber,''),COALESCE(o.drnumber,''),COALESCE(c1.codename,''),COALESCE(cs.`length`,0.00),COALESCE(cs.lengthuom,''),COALESCE(cs.`width`,0.00)," &
+                        "COALESCE(cs.widthuom,''),COALESCE(cs.`height`,0.00),COALESCE(cs.heightuom,''),COALESCE(pc.`weight`,0.00),COALESCE(pc.weightuom,'') FROM packinglistcartons pc LEFT JOIN packinglist pal ON pc.packinglistid = pal.rowid LEFT JOIN orders o ON pal.orderid = o.rowid LEFT JOIN companies ve ON o.companyid = ve.rowid " &
                         "LEFT JOIN branches bc ON o.branchid = bc.rowid LEFT JOIN combinecodings cc ON o.combinecodingid = cc.rowid LEFT JOIN codings c1 ON cc.codingida = c1.rowid LEFT JOIN cartonsizes cs ON pc.cartonsizeid = cs.rowid WHERE pc.packinglistid = " & ipackinglistid & " AND pc.organizationid = " & Z_OrganizationID & " AND pc.`status` != 'Inactive' ORDER BY pc.rowid "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -1333,10 +1400,11 @@ Public Class PackingListForm
             conn.Close()
         End Try
     End Sub
+
     Sub fillbarcodeA(ByVal ipackinglistcartonid As Integer, ByVal ipono As String, ByVal idrno As String, ByVal ibranchcode As String, ByVal ilength As String, ByVal iwidth As String, ByVal iheight As String, ByVal iweight As String)
         Try
             If conn1.State = ConnectionState.Closed Then conn1.Open()
-            Dim sql1 As String = "SELECT pci.rowid,COALESCE(bi.sku,''),COALESCE(b.sku,''),COALESCE(bi.srp,0.00) FROM packinglistcartonitems pci LEFT JOIN orderitems oi ON pci.orderitemid = oi.rowid LEFT JOIN orderitems bi ON oi.orderitemid = bi.rowid " & _
+            Dim sql1 As String = "SELECT pci.rowid,COALESCE(bi.sku,''),COALESCE(b.sku,''),COALESCE(bi.srp,0.00) FROM packinglistcartonitems pci LEFT JOIN orderitems oi ON pci.orderitemid = oi.rowid LEFT JOIN orderitems bi ON oi.orderitemid = bi.rowid " &
                         "LEFT JOIN productbundles b ON bi.productbundleid = b.rowid WHERE pci.packinglistcartonid = " & ipackinglistcartonid & " AND pci.organizationid = " & Z_OrganizationID & " AND pci.`status` != 'Inactive' "
             Dim cmd1 As New MySqlCommand(sql1, conn1)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -1357,12 +1425,13 @@ Public Class PackingListForm
             conn1.Close()
         End Try
     End Sub
+
     Sub fillbarcodeB(ByVal ipackinglistcartonid As Integer, ByVal ipono As String, ByVal idrno As String, ByVal ibranchcode As String, ByVal ilength As String, ByVal iwidth As String, ByVal iheight As String, ByVal iweight As String)
         Try
             itemno = startingpage
             If conn1.State = ConnectionState.Closed Then conn1.Open()
-            Dim sql1 As String = "SELECT pci.rowid,COALESCE(oi.sku,''),COALESCE(pcs.sku,''),COALESCE(pci.qtyincarton,0),COALESCE(oi.srp,0.00) FROM packinglistcartonitems pci LEFT JOIN orderitems oi ON pci.orderitemid = oi.rowid " & _
-                        "LEFT JOIN productcolorsizes pcs ON oi.productcolorsizeid = pcs.rowid LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN colors c ON pc.colorid = c.rowid LEFT JOIN products p ON pc.productid = p.rowid " & _
+            Dim sql1 As String = "SELECT pci.rowid,COALESCE(oi.sku,''),COALESCE(pcs.sku,''),COALESCE(pci.qtyincarton,0),COALESCE(oi.srp,0.00) FROM packinglistcartonitems pci LEFT JOIN orderitems oi ON pci.orderitemid = oi.rowid " &
+                        "LEFT JOIN productcolorsizes pcs ON oi.productcolorsizeid = pcs.rowid LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN colors c ON pc.colorid = c.rowid LEFT JOIN products p ON pc.productid = p.rowid " &
                         "WHERE pci.packinglistcartonid = " & ipackinglistcartonid & " AND pci.organizationid = " & Z_OrganizationID & " AND pci.`status` != 'Inactive' ORDER BY p.productcode,c.colorname,pcs.size,pcs.seasoncode "
             Dim cmd1 As New MySqlCommand(sql1, conn1)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -1398,12 +1467,15 @@ Public Class PackingListForm
             conn1.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Deleting"
+
     Sub deleteCartonItems(ByVal ipackinglistcartonid As Integer)
         Try
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT pci.rowid,pci.orderitemid,COALESCE(pci.qtyincarton,0) FROM packinglistcartonitems pci " & _
+            Dim sql1 As String = "SELECT pci.rowid,pci.orderitemid,COALESCE(pci.qtyincarton,0) FROM packinglistcartonitems pci " &
                     "WHERE pci.packinglistcartonid = " & ipackinglistcartonid & " AND pci.organizationid = " & Z_OrganizationID & " AND pci.`status` != 'Inactive' ORDER BY pci.rowid "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -1433,8 +1505,11 @@ Public Class PackingListForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Cancelling"
+
     Sub cancelPackingListCartons(ByVal ipackinglistid As Integer)
         Try
             If conn.State = ConnectionState.Closed Then conn.Open()
@@ -1454,10 +1529,11 @@ Public Class PackingListForm
             conn.Close()
         End Try
     End Sub
+
     Sub cancelCartonItems(ByVal ipackinglistcartonid As Integer)
         Try
             If conn1.State = ConnectionState.Closed Then conn1.Open()
-            Dim sql1 As String = "SELECT pci.rowid,pci.orderitemid FROM packinglistcartonitems pci " & _
+            Dim sql1 As String = "SELECT pci.rowid,pci.orderitemid FROM packinglistcartonitems pci " &
                     "WHERE pci.packinglistcartonid = " & ipackinglistcartonid & " AND pci.organizationid = " & Z_OrganizationID & " AND pci.`status` != 'Inactive' ORDER BY pci.rowid "
             Dim cmd1 As New MySqlCommand(sql1, conn1)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -1476,8 +1552,11 @@ Public Class PackingListForm
             conn1.Close()
         End Try
     End Sub
+
 #End Region
+
 #End Region
+
     Private Sub tabMain_DrawItem(sender As Object, e As DrawItemEventArgs) Handles tabMain.DrawItem
         Try
             TabControlColor(tabMain, e)
@@ -1487,6 +1566,7 @@ Public Class PackingListForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbClose_Click(sender As Object, e As EventArgs) Handles pbClose.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1501,6 +1581,7 @@ Public Class PackingListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub tsRefresh_Click(sender As Object, e As EventArgs) Handles tsRefresh.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1513,6 +1594,7 @@ Public Class PackingListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msNew_Click(sender As Object, e As EventArgs) Handles msNew.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1559,6 +1641,7 @@ Public Class PackingListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msCancel_Click(sender As Object, e As EventArgs) Handles msCancel.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1608,6 +1691,7 @@ Public Class PackingListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgPackingList_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgPackingList.CellClick
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1655,6 +1739,7 @@ Public Class PackingListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgPackingList_KeyUp(sender As Object, e As KeyEventArgs) Handles dgPackingList.KeyUp
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1704,6 +1789,7 @@ Public Class PackingListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub txtPackingListNo_Leave(sender As Object, e As EventArgs) Handles txtPackingListNo.Leave
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1751,6 +1837,7 @@ Public Class PackingListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     'Private Sub txtPackingListNo_TextChanged(sender As Object, e As EventArgs) Handles txtPackingListNo.TextChanged
     '    Me.Cursor = Cursors.WaitCursor
     '    Try
@@ -1857,6 +1944,7 @@ Public Class PackingListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     'Private Sub cboCustomerOrderInfo_TextChanged(sender As Object, e As EventArgs) Handles cboCustomerOrderInfo.TextChanged
     '    Me.Cursor = Cursors.WaitCursor
     '    Try
@@ -1990,6 +2078,7 @@ Public Class PackingListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgCustomerOrderItems_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgCustomerOrderItems.CellClick
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2020,6 +2109,7 @@ Public Class PackingListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgCustomerOrderItems_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgCustomerOrderItems.CellContentClick
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2047,6 +2137,7 @@ Public Class PackingListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgCustomerOrderItems_KeyUp(sender As Object, e As KeyEventArgs) Handles dgCustomerOrderItems.KeyUp
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2079,6 +2170,7 @@ Public Class PackingListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgCustomerOrderItems_CellEndEdit(sender As Object, e As DataGridViewCellEventArgs) Handles dgCustomerOrderItems.CellEndEdit
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2094,6 +2186,7 @@ Public Class PackingListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub btnAddToCarton_Click(sender As Object, e As EventArgs) Handles btnAddToCarton.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2195,6 +2288,7 @@ Public Class PackingListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgCartons_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgCartons.CellClick
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2211,6 +2305,7 @@ Public Class PackingListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgCartons_KeyUp(sender As Object, e As KeyEventArgs) Handles dgCartons.KeyUp
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2229,6 +2324,7 @@ Public Class PackingListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgCartons_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgCartons.CellContentClick
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2250,6 +2346,7 @@ Public Class PackingListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub lnkViewEditBundleItems_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles lnkViewEditBundleItems.LinkClicked
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2305,6 +2402,7 @@ Public Class PackingListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmsEdit_Click(sender As Object, e As EventArgs) Handles cmsEdit.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2358,6 +2456,7 @@ Public Class PackingListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msSave_Click(sender As Object, e As EventArgs) Handles msSave.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2515,6 +2614,7 @@ Public Class PackingListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmsDelete_Click(sender As Object, e As EventArgs) Handles cmsDelete.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2571,6 +2671,7 @@ Public Class PackingListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgCartonItems_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgCartonItems.CellContentClick
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2645,6 +2746,7 @@ Public Class PackingListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msOrder_Click(sender As Object, e As EventArgs) Handles msOrder.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2743,6 +2845,7 @@ Public Class PackingListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msOutright_Click(sender As Object, e As EventArgs) Handles msOutrightA.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2819,6 +2922,7 @@ Public Class PackingListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msOutrightB_Click(sender As Object, e As EventArgs) Handles msOutrightB.Click
         'Me.Cursor = Cursors.WaitCursor
         'Try
@@ -2892,6 +2996,7 @@ Public Class PackingListForm
         'End Try
         'Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub tsExtraSmall_Click(sender As Object, e As EventArgs) Handles tsExtraSmall.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2965,6 +3070,7 @@ Public Class PackingListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub tsSmall_Click(sender As Object, e As EventArgs) Handles tsSmall.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -3038,6 +3144,7 @@ Public Class PackingListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub tsMedium_Click(sender As Object, e As EventArgs) Handles tsMedium.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -3111,6 +3218,7 @@ Public Class PackingListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub tsLarge_Click(sender As Object, e As EventArgs) Handles tsLarge.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -3184,6 +3292,7 @@ Public Class PackingListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub tsExtraLarge_Click(sender As Object, e As EventArgs) Handles tsExtraLarge.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -3258,6 +3367,7 @@ Public Class PackingListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msConsignor_Click(sender As Object, e As EventArgs) Handles msConsignor.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -3331,7 +3441,9 @@ Public Class PackingListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #Region "Search/Page Setup"
+
     Private Sub txtSimpleSearch_KeyDown(sender As Object, e As KeyEventArgs) Handles txtSimpleSearch.KeyDown
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -3356,6 +3468,7 @@ Public Class PackingListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboSearch1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboSearch1.SelectedIndexChanged
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -3382,6 +3495,7 @@ Public Class PackingListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboSearch2_KeyDown(sender As Object, e As KeyEventArgs) Handles cboSearch2.KeyDown
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -3426,10 +3540,10 @@ Public Class PackingListForm
                             pagefilter1 = "" & commonphrase & ""
                         End If
                         If cboDate.Text = "PackingDate" Then
-                            pagefilter2 = " AND (pal.packinglistdate >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " & _
+                            pagefilter2 = " AND (pal.packinglistdate >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " &
                                 "pal.packinglistdate <= '" & dtpToSearch.Value.Year & "-" & dtpToSearch.Value.Month & "-" & dtpToSearch.Value.Day & "') "
                         ElseIf cboDate.Text = "TargetDate" Then
-                            pagefilter2 = " AND (co.targetdate >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " & _
+                            pagefilter2 = " AND (co.targetdate >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " &
                                 "co.targetdate <= '" & dtpToSearch.Value.Year & "-" & dtpToSearch.Value.Month & "-" & dtpToSearch.Value.Day & "') "
                         Else
                             pagefilter2 = ""
@@ -3448,6 +3562,7 @@ Public Class PackingListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdFirst_Click(sender As Object, e As EventArgs) Handles cmdFirst.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -3471,6 +3586,7 @@ Public Class PackingListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdPrev_Click(sender As Object, e As EventArgs) Handles cmdPrev.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -3502,6 +3618,7 @@ Public Class PackingListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdNext_Click(sender As Object, e As EventArgs) Handles cmdNext.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -3529,6 +3646,7 @@ Public Class PackingListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdLast_Click(sender As Object, e As EventArgs) Handles cmdLast.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -3556,6 +3674,7 @@ Public Class PackingListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub txtPage_KeyDown(sender As Object, e As KeyEventArgs) Handles txtPage.KeyDown
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -3600,8 +3719,11 @@ Public Class PackingListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #End Region
+
 #Region "Datagrid MouseUp"
+
     Private Sub dgCartons_MouseUp(sender As Object, e As MouseEventArgs) Handles dgCartons.MouseUp
         Try
             Dim hitTestinfo As DataGridView.HitTestInfo
@@ -3619,6 +3741,7 @@ Public Class PackingListForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub dgCartonItems_MouseUp(sender As Object, e As MouseEventArgs) Handles dgCartonItems.MouseUp
         Try
             Dim hitTestinfo As DataGridView.HitTestInfo
@@ -3636,6 +3759,7 @@ Public Class PackingListForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub dgCustomerOrderItems_MouseUp(sender As Object, e As MouseEventArgs) Handles dgCustomerOrderItems.MouseUp
         Try
             Dim hitTestinfo As DataGridView.HitTestInfo
@@ -3653,8 +3777,11 @@ Public Class PackingListForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Datagrid Errors"
+
     Private Sub dgPackingList_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgPackingList.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -3695,6 +3822,7 @@ Public Class PackingListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgCustomerOrderItems_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgCustomerOrderItems.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -3735,6 +3863,7 @@ Public Class PackingListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgCartons_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgCartons.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -3775,6 +3904,7 @@ Public Class PackingListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgCartonItems_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgCartonItems.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -3815,5 +3945,7 @@ Public Class PackingListForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #End Region
+
 End Class

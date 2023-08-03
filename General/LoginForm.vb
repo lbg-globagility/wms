@@ -1,11 +1,21 @@
 ﻿Imports MySql.Data.MySqlClient
-Imports System.IO
-Imports System.Windows.Forms
-Imports System.Data
+
 Public Class LoginForm
     Dim ctr As Integer = 0
     Dim manager As New sqlModule.Manager
-    Dim conn As New MySqlConnection(Manager.GetConnString)
+    Dim conn As New MySqlConnection(manager.GetConnString)
+
+    Public Sub New()
+
+        ' This call is required by the designer.
+        InitializeComponent()
+
+        ' Add any initialization after the InitializeComponent() call.
+
+        DependencyInjectionHelper.ConfigureDependencyInjection()
+
+    End Sub
+
     Private Sub LoginForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -23,6 +33,7 @@ Public Class LoginForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub LoginForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
         Try
             myBalloon(, , btnLogin, , , 1)
@@ -32,7 +43,9 @@ Public Class LoginForm
             conn.Close()
         End Try
     End Sub
+
 #Region "Functions"
+
     Sub autopopulateCompanyName()
         Try
             Dim strQuery As String = "SELECT COALESCE(o.name,'') FROM organizations o "
@@ -44,6 +57,7 @@ Public Class LoginForm
             conn.Close()
         End Try
     End Sub
+
     Sub displayCompanyImage(ByVal icompanyname As String)
         Try
             PhotoImages.Image = Nothing
@@ -75,10 +89,13 @@ Public Class LoginForm
         End Try
         conn.Close()
     End Sub
+
 #End Region
+
     Private Sub btnCancel_Click(sender As Object, e As EventArgs) Handles btnCancel.Click
         Me.Close()
     End Sub
+
     Private Sub cboOrganization_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboOrganization.SelectedIndexChanged
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -90,6 +107,7 @@ Public Class LoginForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub txtPassword_KeyDown(sender As Object, e As KeyEventArgs) Handles txtPassword.KeyDown
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -161,6 +179,7 @@ Public Class LoginForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub btnLogin_Click(sender As Object, e As EventArgs) Handles btnLogin.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -237,4 +256,5 @@ Public Class LoginForm
         txtUsername.Text = "admin"
         txtPassword.Text = "admin"
     End Sub
+
 End Class

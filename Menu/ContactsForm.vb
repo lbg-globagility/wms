@@ -1,15 +1,5 @@
 ﻿Imports MySql.Data.MySqlClient
-Imports System.IO
-Imports System.Windows.Forms
-Imports CrystalDecisions.CrystalReports.Engine
-Imports System.Linq
-Imports System.Collections
-Imports System.Collections.Generic
-Imports System.Data
-Imports System.Diagnostics
-Imports System.Runtime.InteropServices
-Imports System.Text.RegularExpressions
-Imports System.ComponentModel
+
 Public Class ContactsForm
     Dim manager As New sqlModule.Manager
     Dim conn As New MySqlConnection(manager.GetConnString)
@@ -22,6 +12,7 @@ Public Class ContactsForm
     Dim spagenumB, countpagenumB, numofpagesB, validpagesB As Integer
     Dim spagenumC, countpagenumC, numofpagesC, validpagesC As Integer
     Dim pageequation1, pageequation2, pageequation3, additionalpage As Decimal
+
     Private Sub ContactsForm_Load(sender As Object, e As EventArgs) Handles Me.Load
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -45,6 +36,7 @@ Public Class ContactsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub ContactsForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -56,13 +48,16 @@ Public Class ContactsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #Region "Functions"
+
     Sub callAutoComplete()
         autocompleteSuffix(cboSuffix)
         autocompleteSalutation(cboSalutation)
         autocompleteGender(cboGender)
         autocompleteCivilStatus(cboCivilStatus)
     End Sub
+
     Sub callAutoPopulate()
         autopopulateContactType()
         autopopulateSuffix(cboSuffix)
@@ -71,7 +66,9 @@ Public Class ContactsForm
         autopopulateCivilStatus(cboCivilStatus)
         autopopulateStatus(cboStatus)
     End Sub
+
 #Region "Clear/Enable/Visible"
+
     Sub clearfields()
         Try
             cue = ""
@@ -88,6 +85,7 @@ Public Class ContactsForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearRightPage()
         Try
             cue = ""
@@ -101,6 +99,7 @@ Public Class ContactsForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearContactInformation()
         Try
             txtContactNo.Text = ""
@@ -133,6 +132,7 @@ Public Class ContactsForm
             conn.Close()
         End Try
     End Sub
+
     Sub enableGB(ByVal enable1 As Boolean)
         Try
             gbPickerList.Enabled = enable1
@@ -144,6 +144,7 @@ Public Class ContactsForm
             conn.Close()
         End Try
     End Sub
+
     Sub enableFields(ByVal enable1 As Boolean, ByVal enable2 As Boolean)
         Try
             cboContactType.Enabled = enable2
@@ -169,6 +170,7 @@ Public Class ContactsForm
             conn.Close()
         End Try
     End Sub
+
     Sub enableANDvisibleMS(ByVal enable1 As Boolean, ByVal enable2 As Boolean, ByVal visible1 As Boolean)
         Try
             msNew.Enabled = enable1
@@ -180,8 +182,11 @@ Public Class ContactsForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Click"
+
     Sub tsrefreshperformclick()
         Try
             errProvider.Clear()
@@ -203,8 +208,11 @@ Public Class ContactsForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Page Setup"
+
     Sub pageSetupA()
         Try
             getCountPageNumA()
@@ -225,6 +233,7 @@ Public Class ContactsForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCountPageNumA()
         Try
             countpagenumA = 0
@@ -242,6 +251,7 @@ Public Class ContactsForm
             conn.Close()
         End Try
     End Sub
+
     Sub pageSetupB()
         Try
             getCountPageNumB()
@@ -262,6 +272,7 @@ Public Class ContactsForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCountPageNumB()
         Try
             countpagenumB = 0
@@ -279,6 +290,7 @@ Public Class ContactsForm
             conn.Close()
         End Try
     End Sub
+
     Sub pageSetupC()
         Try
             getCountPageNumC()
@@ -299,6 +311,7 @@ Public Class ContactsForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCountPageNumC()
         Try
             countpagenumC = 0
@@ -316,9 +329,13 @@ Public Class ContactsForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Display"
+
 #Region "AutoComplete"
+
     Sub autocompleteSuffix(ByVal icombobox As ComboBox)
         Try
             Dim suffix As New AutoCompleteStringCollection
@@ -337,6 +354,7 @@ Public Class ContactsForm
         End Try
         conn.Close()
     End Sub
+
     Sub autocompleteSalutation(ByVal icombobox As ComboBox)
         Try
             Dim salutation As New AutoCompleteStringCollection
@@ -355,6 +373,7 @@ Public Class ContactsForm
         End Try
         conn.Close()
     End Sub
+
     Sub autocompleteGender(ByVal icombobox As ComboBox)
         Try
             Dim gender As New AutoCompleteStringCollection
@@ -373,6 +392,7 @@ Public Class ContactsForm
         End Try
         conn.Close()
     End Sub
+
     Sub autocompleteCivilStatus(ByVal icombobox As ComboBox)
         Try
             Dim civilstatus As New AutoCompleteStringCollection
@@ -391,8 +411,11 @@ Public Class ContactsForm
         End Try
         conn.Close()
     End Sub
+
 #End Region
+
 #Region "AutoPopulate"
+
     Sub autopopulateContactType()
         Try
 
@@ -406,6 +429,7 @@ Public Class ContactsForm
             conn.Close()
         End Try
     End Sub
+
     Sub autopopulateSuffix(ByVal icombobox As ComboBox)
         Try
             icombobox.Items.Clear()
@@ -426,6 +450,7 @@ Public Class ContactsForm
             conn.Close()
         End Try
     End Sub
+
     Sub autopopulateSalutation(ByVal icombobox As ComboBox)
         Try
             icombobox.Items.Clear()
@@ -446,6 +471,7 @@ Public Class ContactsForm
             conn.Close()
         End Try
     End Sub
+
     Sub autopopulateGender(ByVal icombobox As ComboBox)
         Try
             icombobox.Items.Clear()
@@ -466,6 +492,7 @@ Public Class ContactsForm
             conn.Close()
         End Try
     End Sub
+
     Sub autopopulateCivilStatus(ByVal icombobox As ComboBox)
         Try
             icombobox.Items.Clear()
@@ -486,6 +513,7 @@ Public Class ContactsForm
             conn.Close()
         End Try
     End Sub
+
     Sub autopopulateStatus(ByVal icombobox As ComboBox)
         Try
             icombobox.Items.Clear()
@@ -505,13 +533,16 @@ Public Class ContactsForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Datagrids"
+
     Sub displayPickerList(ByVal istartpage As Integer)
         Try
             dgPickerList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT p.rowid,COALESCE(p.contactno,''),COALESCE(p.firstname,''),COALESCE(p.lastname,''),COALESCE(p.middlename,'') FROM contacts p " & _
+            Dim sql1 As String = "SELECT p.rowid,COALESCE(p.contactno,''),COALESCE(p.firstname,''),COALESCE(p.lastname,''),COALESCE(p.middlename,'') FROM contacts p " &
                         "WHERE p.organizationid = " & Z_OrganizationID & " AND p.`type` = 'Picker' ORDER BY p.contactno ASC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -541,11 +572,12 @@ Public Class ContactsForm
             conn.Close()
         End Try
     End Sub
+
     Sub displayPackerList(ByVal istartpage As Integer)
         Try
             dgPackerList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT p.rowid,COALESCE(p.contactno,''),COALESCE(p.firstname,''),COALESCE(p.lastname,''),COALESCE(p.middlename,'') FROM contacts p " & _
+            Dim sql1 As String = "SELECT p.rowid,COALESCE(p.contactno,''),COALESCE(p.firstname,''),COALESCE(p.lastname,''),COALESCE(p.middlename,'') FROM contacts p " &
                         "WHERE p.organizationid = " & Z_OrganizationID & " AND p.`type` = 'Packer' ORDER BY p.contactno ASC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -575,11 +607,12 @@ Public Class ContactsForm
             conn.Close()
         End Try
     End Sub
+
     Sub displayDriverList(ByVal istartpage As Integer)
         Try
             dgDriverList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT p.rowid,COALESCE(p.contactno,''),COALESCE(p.firstname,''),COALESCE(p.lastname,''),COALESCE(p.middlename,'') FROM contacts p " & _
+            Dim sql1 As String = "SELECT p.rowid,COALESCE(p.contactno,''),COALESCE(p.firstname,''),COALESCE(p.lastname,''),COALESCE(p.middlename,'') FROM contacts p " &
                         "WHERE p.organizationid = " & Z_OrganizationID & " AND p.`type` = 'Driver' ORDER BY p.contactno ASC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -609,10 +642,11 @@ Public Class ContactsForm
             conn.Close()
         End Try
     End Sub
+
     Sub getContactInformation(ByVal icontactid As Integer)
         Try
             Dim dtCinfo As New DataTable
-            dtCinfo = getDataTableForSQL("SELECT COALESCE(c.`type`,''),COALESCE(c.contactno,''),COALESCE(c.firstname,''),COALESCE(c.middlename,''),COALESCE(c.lastname,''),COALESCE(c.salutation,''),COALESCE(c.suffix,''),COALESCE(c.nickname,''),COALESCE(c.gender,''),COALESCE(c.civilstatus,'')," & _
+            dtCinfo = getDataTableForSQL("SELECT COALESCE(c.`type`,''),COALESCE(c.contactno,''),COALESCE(c.firstname,''),COALESCE(c.middlename,''),COALESCE(c.lastname,''),COALESCE(c.salutation,''),COALESCE(c.suffix,''),COALESCE(c.nickname,''),COALESCE(c.gender,''),COALESCE(c.civilstatus,'')," &
                         "COALESCE(c.tinnumber,''),COALESCE(c.mainphone,''),COALESCE(c.alternatephone,''),COALESCE(c.faxnumber,''),COALESCE(c.birthday,''),COALESCE(c.status,''),COALESCE(c.comments,''),COALESCE(c.emailaddress,'') FROM contacts c WHERE c.rowid = " & icontactid & " ")
             If dtCinfo.Rows.Count <> 0 Then
                 cboContactType.Text = dtCinfo.Rows(0)(0)
@@ -638,9 +672,13 @@ Public Class ContactsForm
             MsgBox(getErrExcptn(ex, Me.Name))
         End Try
     End Sub
+
 #End Region
+
 #End Region
+
 #End Region
+
     Private Sub pbClose_Click(sender As Object, e As EventArgs) Handles pbClose.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -655,6 +693,7 @@ Public Class ContactsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub txtComments_Leave(sender As Object, e As EventArgs) Handles txtComments.Leave
         Try
             txtFName.Focus()
@@ -664,6 +703,7 @@ Public Class ContactsForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub msNew_Click(sender As Object, e As EventArgs) Handles msNew.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -697,6 +737,7 @@ Public Class ContactsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msCancel_Click(sender As Object, e As EventArgs) Handles msCancel.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -708,6 +749,7 @@ Public Class ContactsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgPickerList_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgPickerList.CellClick
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -733,6 +775,7 @@ Public Class ContactsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgPickerList_KeyUp(sender As Object, e As KeyEventArgs) Handles dgPickerList.KeyUp
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -760,6 +803,7 @@ Public Class ContactsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgPackerList_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgPackerList.CellClick
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -785,6 +829,7 @@ Public Class ContactsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgPackerList_KeyUp(sender As Object, e As KeyEventArgs) Handles dgPackerList.KeyUp
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -812,6 +857,7 @@ Public Class ContactsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgDriverList_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgDriverList.CellClick
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -837,6 +883,7 @@ Public Class ContactsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgDriverList_KeyUp(sender As Object, e As KeyEventArgs) Handles dgDriverList.KeyUp
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -864,6 +911,7 @@ Public Class ContactsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboContactType_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboContactType.SelectedIndexChanged
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -886,6 +934,7 @@ Public Class ContactsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msSave_Click(sender As Object, e As EventArgs) Handles msSave.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -953,15 +1002,15 @@ Public Class ContactsForm
                 If cue = "New" Then
                     If cboContactType.Text = "Driver" Then
                         getContactNo("Driver", Me)
-                        I_Contact(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, globalcontactno, "Driver", cboSalutation.Text, txtFName.Text, txtMName.Text, txtLName.Text, cboSuffix.Text, txtMainPhone.Text, txtAlternatePhone.Text, dtpBirthday.Value, _
+                        I_Contact(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, globalcontactno, "Driver", cboSalutation.Text, txtFName.Text, txtMName.Text, txtLName.Text, cboSuffix.Text, txtMainPhone.Text, txtAlternatePhone.Text, dtpBirthday.Value,
                                 cboGender.Text, cboCivilStatus.Text, txtEmailAddress.Text, txtTIN.Text, txtComments.Text, cboStatus.Text, "", "", txtFaxNo.Text, "Driver", txtNickName.Text, Me)
                     ElseIf cboContactType.Text = "Packer" Then
                         getContactNo("Packer", Me)
-                        I_Contact(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, globalcontactno, "Packer", cboSalutation.Text, txtFName.Text, txtMName.Text, txtLName.Text, cboSuffix.Text, txtMainPhone.Text, txtAlternatePhone.Text, dtpBirthday.Value, _
+                        I_Contact(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, globalcontactno, "Packer", cboSalutation.Text, txtFName.Text, txtMName.Text, txtLName.Text, cboSuffix.Text, txtMainPhone.Text, txtAlternatePhone.Text, dtpBirthday.Value,
                                 cboGender.Text, cboCivilStatus.Text, txtEmailAddress.Text, txtTIN.Text, txtComments.Text, cboStatus.Text, "", "", txtFaxNo.Text, "Packer", txtNickName.Text, Me)
                     ElseIf cboContactType.Text = "Picker" Then
                         getContactNo("Picker", Me)
-                        I_Contact(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, globalcontactno, "Picker", cboSalutation.Text, txtFName.Text, txtMName.Text, txtLName.Text, cboSuffix.Text, txtMainPhone.Text, txtAlternatePhone.Text, dtpBirthday.Value, _
+                        I_Contact(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, globalcontactno, "Picker", cboSalutation.Text, txtFName.Text, txtMName.Text, txtLName.Text, cboSuffix.Text, txtMainPhone.Text, txtAlternatePhone.Text, dtpBirthday.Value,
                                 cboGender.Text, cboCivilStatus.Text, txtEmailAddress.Text, txtTIN.Text, txtComments.Text, cboStatus.Text, "", "", txtFaxNo.Text, "Picker", txtNickName.Text, Me)
                     End If
                     If CStr(txtContactNo.Text) <> CStr(globalcontactno) Then
@@ -974,13 +1023,13 @@ Public Class ContactsForm
                     End If
                 ElseIf cue = "Edit" Then
                     If cboContactType.Text = "Driver" Then
-                        U_Contacts(CInt(dgDriverList.CurrentRow.Cells("dr_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, cboSalutation.Text, txtFName.Text, txtMName.Text, txtLName.Text, cboSuffix.Text, txtMainPhone.Text, txtAlternatePhone.Text, dtpBirthday.Value, _
+                        U_Contacts(CInt(dgDriverList.CurrentRow.Cells("dr_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, cboSalutation.Text, txtFName.Text, txtMName.Text, txtLName.Text, cboSuffix.Text, txtMainPhone.Text, txtAlternatePhone.Text, dtpBirthday.Value,
                                 cboGender.Text, cboCivilStatus.Text, txtEmailAddress.Text, txtTIN.Text, txtComments.Text, "", "", txtFaxNo.Text, "Driver", txtNickName.Text, cboStatus.Text, Me)
                     ElseIf cboContactType.Text = "Packer" Then
-                        U_Contacts(CInt(dgPackerList.CurrentRow.Cells("pa_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, cboSalutation.Text, txtFName.Text, txtMName.Text, txtLName.Text, cboSuffix.Text, txtMainPhone.Text, txtAlternatePhone.Text, dtpBirthday.Value, _
+                        U_Contacts(CInt(dgPackerList.CurrentRow.Cells("pa_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, cboSalutation.Text, txtFName.Text, txtMName.Text, txtLName.Text, cboSuffix.Text, txtMainPhone.Text, txtAlternatePhone.Text, dtpBirthday.Value,
                                 cboGender.Text, cboCivilStatus.Text, txtEmailAddress.Text, txtTIN.Text, txtComments.Text, "", "", txtFaxNo.Text, "Packer", txtNickName.Text, cboStatus.Text, Me)
                     ElseIf cboContactType.Text = "Picker" Then
-                        U_Contacts(CInt(dgPickerList.CurrentRow.Cells("p_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, cboSalutation.Text, txtFName.Text, txtMName.Text, txtLName.Text, cboSuffix.Text, txtMainPhone.Text, txtAlternatePhone.Text, dtpBirthday.Value, _
+                        U_Contacts(CInt(dgPickerList.CurrentRow.Cells("p_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, cboSalutation.Text, txtFName.Text, txtMName.Text, txtLName.Text, cboSuffix.Text, txtMainPhone.Text, txtAlternatePhone.Text, dtpBirthday.Value,
                                 cboGender.Text, cboCivilStatus.Text, txtEmailAddress.Text, txtTIN.Text, txtComments.Text, "", "", txtFaxNo.Text, "Picker", txtNickName.Text, cboStatus.Text, Me)
                     End If
                     If myModule.systemerrorfound = False Then
@@ -996,7 +1045,9 @@ Public Class ContactsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #Region "Search/Page Setup"
+
     Private Sub cmdFirstPickerList_Click(sender As Object, e As EventArgs) Handles cmdFirstPickerList.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1018,6 +1069,7 @@ Public Class ContactsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdPrevPickerList_Click(sender As Object, e As EventArgs) Handles cmdPrevPickerList.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1047,6 +1099,7 @@ Public Class ContactsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdNextPickerList_Click(sender As Object, e As EventArgs) Handles cmdNextPickerList.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1072,6 +1125,7 @@ Public Class ContactsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdLastPickerList_Click(sender As Object, e As EventArgs) Handles cmdLastPickerList.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1097,6 +1151,7 @@ Public Class ContactsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub txtPagePickerList_KeyDown(sender As Object, e As KeyEventArgs) Handles txtPagePickerList.KeyDown
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1139,6 +1194,7 @@ Public Class ContactsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdFirstPackerList_Click(sender As Object, e As EventArgs) Handles cmdFirstPackerList.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1160,6 +1216,7 @@ Public Class ContactsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdPrevPackerList_Click(sender As Object, e As EventArgs) Handles cmdPrevPackerList.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1189,6 +1246,7 @@ Public Class ContactsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdNextPackerList_Click(sender As Object, e As EventArgs) Handles cmdNextPackerList.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1214,6 +1272,7 @@ Public Class ContactsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdLastPackerList_Click(sender As Object, e As EventArgs) Handles cmdLastPackerList.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1239,6 +1298,7 @@ Public Class ContactsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub txtPagePackerList_KeyDown(sender As Object, e As KeyEventArgs) Handles txtPagePackerList.KeyDown
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1281,6 +1341,7 @@ Public Class ContactsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdFirstDriverList_Click(sender As Object, e As EventArgs) Handles cmdFirstDriverList.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1302,6 +1363,7 @@ Public Class ContactsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdPrevDriverList_Click(sender As Object, e As EventArgs) Handles cmdPrevDriverList.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1331,6 +1393,7 @@ Public Class ContactsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdNextDriverList_Click(sender As Object, e As EventArgs) Handles cmdNextDriverList.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1356,6 +1419,7 @@ Public Class ContactsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdLastDriverList_Click(sender As Object, e As EventArgs) Handles cmdLastDriverList.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1381,6 +1445,7 @@ Public Class ContactsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub txtPageDriverList_KeyDown(sender As Object, e As KeyEventArgs) Handles txtPageDriverList.KeyDown
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1423,8 +1488,11 @@ Public Class ContactsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #End Region
+
 #Region "Datagrid Errors"
+
     Private Sub dgPickerList_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgPickerList.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1465,6 +1533,7 @@ Public Class ContactsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgPackerList_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgPackerList.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1505,6 +1574,7 @@ Public Class ContactsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgDriverList_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgDriverList.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1545,5 +1615,7 @@ Public Class ContactsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #End Region
+
 End Class

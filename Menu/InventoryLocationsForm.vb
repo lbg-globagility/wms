@@ -1,16 +1,5 @@
 ﻿Imports MySql.Data.MySqlClient
-Imports System.IO
-Imports System.Windows.Forms
-Imports CrystalDecisions.CrystalReports.Engine
-Imports System.Linq
-Imports System.Collections
-Imports System.Collections.Generic
-Imports System.Data
-Imports System.Diagnostics
-Imports System.Runtime.InteropServices
-Imports System.Text.RegularExpressions
-Imports System.ComponentModel
-Imports System.Data.OleDb
+
 Public Class InventoryLocationsForm
     Dim manager As New sqlModule.Manager
     Dim conn As New MySqlConnection(manager.GetConnString)
@@ -25,6 +14,7 @@ Public Class InventoryLocationsForm
     Dim simplesearchphrase, commonphrase, pagefilter1, pagefilter2, pagefilter3 As String
     Dim spagenum, countpagenum, numofpages, validpages, rcspagenum, rcscountpagenum, rcsnumofpages, rcsvalidpages As Integer
     Dim iltotalqtyavailable, iltotalqtyreserve, iltotalqtydamage, iltotalqtyallocated, iltotalqtyorderable, ilinventorylocationid, iladdressid, ilrackshelfcolumnid As Integer
+
     Private Sub InventoryLocationsForm_Load(sender As Object, e As EventArgs) Handles Me.Load
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -42,6 +32,7 @@ Public Class InventoryLocationsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub InventoryLocationsForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -56,12 +47,15 @@ Public Class InventoryLocationsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #Region "Functions"
+
     Sub callAutoCompleteFunctions()
         autocompleteRack(cboRack)
         autocompleteShelf(cboShelf)
         autocompleteColumn(cboColumn)
     End Sub
+
     Sub callAutoPopulateFunctions()
         autopopulatecboSearch()
         autopopulateLocationTypeB(cboLocationType)
@@ -69,7 +63,9 @@ Public Class InventoryLocationsForm
         autopopulateShelf(cboShelf)
         autopopulateColumn(cboColumn)
     End Sub
+
 #Region "Clear/Enable/Visible"
+
     Sub clearfields()
         Try
             cue = ""
@@ -88,6 +84,7 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearRightPage()
         Try
             cue = ""
@@ -103,6 +100,7 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearSearchItems()
         Try
             txtSimpleSearch.Text = ""
@@ -120,6 +118,7 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearcboSearch()
         Try
             txtPage.Text = ""
@@ -134,6 +133,7 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearInventoryLocationInformation()
         Try
             txtLocationName.Text = ""
@@ -158,6 +158,7 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
     End Sub
+
     Sub cleargbAddRSC()
         Try
             cboRack.Text = ""
@@ -174,6 +175,7 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearDataGrids()
         Try
             dgRackShelfColumn.Rows.Clear()
@@ -184,6 +186,7 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
     End Sub
+
     Sub enableGB(ByVal enable1 As Boolean, ByVal enable2 As Boolean, ByVal enable3 As Boolean, ByVal enable4 As Boolean)
         Try
             gbSearch.Enabled = enable1
@@ -197,6 +200,7 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
     End Sub
+
     Sub enableANDvisibleMS(ByVal enable1 As Boolean, ByVal enable2 As Boolean, ByVal visible1 As Boolean)
         Try
             msNew.Enabled = enable1
@@ -208,6 +212,7 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
     End Sub
+
     Sub visibleProducts(ByVal visible1 As Boolean)
         Try
             p_qtyavailable.Visible = visible1
@@ -218,8 +223,11 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Click"
+
     Sub tsrefreshperformclick()
         Try
             errProvider.Clear()
@@ -235,6 +243,7 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
     End Sub
+
     Sub btnAddRSCperformclick()
         Try
             errProvider.Clear()
@@ -354,8 +363,11 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Computations"
+
     Sub totalcomputation()
         Try
             iltotalqtyavailable = 0 : iltotalqtyreserve = 0 : iltotalqtydamage = 0
@@ -391,8 +403,11 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Page Setup"
+
     Sub pageSetup()
         Try
             getCountPageNum()
@@ -413,6 +428,7 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCountPageNum()
         Try
             countpagenum = 0
@@ -430,6 +446,7 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
     End Sub
+
     Sub pageSetup1(ByVal isearchstring As String)
         Try
             getCountPageNum1(isearchstring)
@@ -450,12 +467,13 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCountPageNum1(ByVal esearchstring As String)
         Try
             countpagenum = 0
             If conn.State = ConnectionState.Open Then conn.Close()
             Dim dtCid As New DataTable
-            dtCid = getDataTableForSQL("SELECT COUNT(il.rowid) FROM inventorylocations il LEFT JOIN rackshelfcolumn rsc ON il.rowid = rsc.inventorylocationid " & _
+            dtCid = getDataTableForSQL("SELECT COUNT(il.rowid) FROM inventorylocations il LEFT JOIN rackshelfcolumn rsc ON il.rowid = rsc.inventorylocationid " &
                         "WHERE il.organizationid = " & Z_OrganizationID & " AND (il.name LIKE ""%" & esearchstring & "%"" OR il.type LIKE ""%" & esearchstring & "%"" OR rsc.rackno LIKE ""%" & esearchstring & "%"" OR rsc.shelfno LIKE ""%" & esearchstring & "%"" OR rsc.columnno LIKE ""%" & esearchstring & "%"")")
             If dtCid.Rows.Count <> 0 Then
                 countpagenum = dtCid.Rows(0)(0)
@@ -468,6 +486,7 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
     End Sub
+
     Sub pageSetup2(ByVal isearchstring As String)
         Try
             getCountPageNum2(isearchstring)
@@ -488,6 +507,7 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCountPageNum2(ByVal ecommontring As String)
         Try
             countpagenum = 0
@@ -505,6 +525,7 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCommonPhrase(ByVal icommonbox As ComboBox, ByVal icommonstring As String)
         Try
             commonphrase = ""
@@ -523,6 +544,7 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
     End Sub
+
     Sub pageSetupRCS(ByVal iinventorylocationid As Integer)
         Try
             getCountPageNumRCS(iinventorylocationid)
@@ -543,6 +565,7 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCountPageNumRCS(ByVal einventorylocationid As Integer)
         Try
             rcscountpagenum = 0
@@ -560,9 +583,13 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Display Functions"
+
 #Region "AutoComplete"
+
     Sub autocompleteLocationType(ByVal icombobox As ComboBox)
         Try
             Dim locationtype As New AutoCompleteStringCollection
@@ -583,6 +610,7 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
     End Sub
+
     Sub autocompleteRack(ByVal icombobox As ComboBox)
         Try
             Dim rackno As New AutoCompleteStringCollection
@@ -603,6 +631,7 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
     End Sub
+
     Sub autocompleteShelf(ByVal icombobox As ComboBox)
         Try
             Dim shelfno As New AutoCompleteStringCollection
@@ -623,6 +652,7 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
     End Sub
+
     Sub autocompleteColumn(ByVal icombobox As ComboBox)
         Try
             Dim columnno As New AutoCompleteStringCollection
@@ -643,8 +673,11 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "AutoPopulate"
+
     Sub autopopulatecboSearch()
         Try
             cboSearch1.Items.Clear()
@@ -665,6 +698,7 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
     End Sub
+
     Sub autopopulateLocationTypeA(ByVal icombobox As ComboBox)
         Try
             icombobox.Items.Clear()
@@ -685,6 +719,7 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
     End Sub
+
     Sub autopopulateLocationTypeB(ByVal icombobox As ComboBox)
         Try
             icombobox.Items.Clear()
@@ -704,6 +739,7 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
     End Sub
+
     Sub autopopulateRack(ByVal icombobox As ComboBox)
         Try
             icombobox.Items.Clear()
@@ -724,6 +760,7 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
     End Sub
+
     Sub autopopulateShelf(ByVal icombobox As ComboBox)
         Try
             icombobox.Items.Clear()
@@ -744,6 +781,7 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
     End Sub
+
     Sub autopopulateColumn(ByVal icombobox As ComboBox)
         Try
             icombobox.Items.Clear()
@@ -764,13 +802,16 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Datagrids"
+
     Sub displayInventoryLocationList(ByVal istartpage As Integer)
         Try
             dgInventoryLocationList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT il.rowid,COALESCE(il.name,''),COALESCE(il.type,''),COALESCE(il.mainphone,'') FROM inventorylocations il " & _
+            Dim sql1 As String = "SELECT il.rowid,COALESCE(il.name,''),COALESCE(il.type,''),COALESCE(il.mainphone,'') FROM inventorylocations il " &
                         "WHERE il.organizationid = " & Z_OrganizationID & " ORDER BY il.name,il.type LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -807,12 +848,13 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
     End Sub
+
     Sub displaySearchPhrase(ByVal isearchphrase As String, ByVal istartpage As Integer)
         Try
             dgInventoryLocationList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT il.rowid,COALESCE(il.name,''),COALESCE(il.type,''),COALESCE(il.mainphone,'') FROM inventorylocations il LEFT JOIN rackshelfcolumn rsc ON il.rowid = rsc. inventorylocationid " & _
-                        "WHERE il.organizationid = " & Z_OrganizationID & " AND (il.name LIKE ""%" & isearchphrase & "%"" OR il.type LIKE ""%" & isearchphrase & "%"" OR rsc.rackno " & _
+            Dim sql1 As String = "SELECT il.rowid,COALESCE(il.name,''),COALESCE(il.type,''),COALESCE(il.mainphone,'') FROM inventorylocations il LEFT JOIN rackshelfcolumn rsc ON il.rowid = rsc. inventorylocationid " &
+                        "WHERE il.organizationid = " & Z_OrganizationID & " AND (il.name LIKE ""%" & isearchphrase & "%"" OR il.type LIKE ""%" & isearchphrase & "%"" OR rsc.rackno " &
                         "LIKE ""%" & isearchphrase & "%"" OR rsc.shelfno LIKE ""%" & isearchphrase & "%"" OR rsc.columnno LIKE ""%" & isearchphrase & "%"") ORDER BY il.name,il.type LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -849,11 +891,12 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
     End Sub
+
     Sub displayCommonPhrase(ByVal icommonphrase As String, ByVal istartpage As Integer)
         Try
             dgInventoryLocationList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT il.rowid,COALESCE(il.name,''),COALESCE(il.type,''),COALESCE(il.mainphone,'') FROM inventorylocations il LEFT JOIN rackshelfcolumn rsc ON il.rowid = rsc.inventorylocationid " & _
+            Dim sql1 As String = "SELECT il.rowid,COALESCE(il.name,''),COALESCE(il.type,''),COALESCE(il.mainphone,'') FROM inventorylocations il LEFT JOIN rackshelfcolumn rsc ON il.rowid = rsc.inventorylocationid " &
                         "WHERE il.organizationid = " & Z_OrganizationID & " AND " & icommonphrase & " ORDER BY il.name,il.type LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -890,11 +933,12 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
     End Sub
+
     Sub displayInventoryLocationInformation(ByVal iinventorylocationid As Integer)
         Try
             If conn1.State = ConnectionState.Closed Then conn1.Open()
-            Dim sql1 As String = "SELECT COALESCE(il.name,''),COALESCE(il.type,''),COALESCE(il.mainphone,''),COALESCE(il.mobilephone,''),COALESCE(il.faxnumber,''),COALESCE(il.comments,''),COALESCE(il.addressid,0)," & _
-                        "COALESCE(CONCAT(COALESCE(ad.streetaddress1,''),' ',COALESCE(ad.streetaddress2,''),' ',COALESCE(ad.barangay,''),' ',COALESCE(ad.citytown,''),' ',COALESCE(ad.province,''),' ',COALESCE(ad.state,''),' ',COALESCE(ad.zipcode,''),' ',COALESCE(ad.country,'')),'') " & _
+            Dim sql1 As String = "SELECT COALESCE(il.name,''),COALESCE(il.type,''),COALESCE(il.mainphone,''),COALESCE(il.mobilephone,''),COALESCE(il.faxnumber,''),COALESCE(il.comments,''),COALESCE(il.addressid,0)," &
+                        "COALESCE(CONCAT(COALESCE(ad.streetaddress1,''),' ',COALESCE(ad.streetaddress2,''),' ',COALESCE(ad.barangay,''),' ',COALESCE(ad.citytown,''),' ',COALESCE(ad.province,''),' ',COALESCE(ad.state,''),' ',COALESCE(ad.zipcode,''),' ',COALESCE(ad.country,'')),'') " &
                         "FROM inventorylocations il LEFT JOIN address ad ON il.addressid = ad.rowid WHERE il.rowid = " & iinventorylocationid & " "
             Dim cmd1 As New MySqlCommand(sql1, conn1)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -917,11 +961,12 @@ Public Class InventoryLocationsForm
             conn1.Close()
         End Try
     End Sub
+
     Sub displayRackShelfColumn(ByVal iinventorylocationid As Integer, ByVal istartpage As Integer)
         Try
             dgRackShelfColumn.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT rsc.rowid,COALESCE(rsc.rackno,''),COALESCE(rsc.shelfno,''),COALESCE(rsc.columnno,''),COALESCE(rsc.pickorderno,0),COALESCE(rsc.remarks,'') FROM rackshelfcolumn rsc " & _
+            Dim sql1 As String = "SELECT rsc.rowid,COALESCE(rsc.rackno,''),COALESCE(rsc.shelfno,''),COALESCE(rsc.columnno,''),COALESCE(rsc.pickorderno,0),COALESCE(rsc.remarks,'') FROM rackshelfcolumn rsc " &
                         "WHERE rsc.organizationid = " & Z_OrganizationID & " AND rsc.inventorylocationid = " & iinventorylocationid & " ORDER BY rsc.pickorderno ASC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -961,12 +1006,13 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
     End Sub
+
     Sub displayProducts(ByVal irackshelfcolumnid As Integer)
         Try
             dgProducts.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT pil.rowid,COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(c.colorname,''),COALESCE(pcs.size,''),COALESCE(pil.totalavailableqty,0),COALESCE(pil.totalreserveqty,0),COALESCE(pil.totaldamageqty,0),COALESCE(pcs.sku,''),COALESCE(pcs.seasoncode,'')," & _
-                        "COALESCE(pil.totalallocatedqty,0) FROM productinventorylocation pil LEFT JOIN productcolorsizes pcs ON pil.productcolorsizeid = pcs.rowid LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN colors c ON pc.colorid = c.rowid " & _
+            Dim sql1 As String = "SELECT pil.rowid,COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(c.colorname,''),COALESCE(pcs.size,''),COALESCE(pil.totalavailableqty,0),COALESCE(pil.totalreserveqty,0),COALESCE(pil.totaldamageqty,0),COALESCE(pcs.sku,''),COALESCE(pcs.seasoncode,'')," &
+                        "COALESCE(pil.totalallocatedqty,0) FROM productinventorylocation pil LEFT JOIN productcolorsizes pcs ON pil.productcolorsizeid = pcs.rowid LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN colors c ON pc.colorid = c.rowid " &
                         "LEFT JOIN products p ON pc.productid = p.rowid WHERE pil.organizationid = " & Z_OrganizationID & " AND pil.rackshelfcolumnid = " & irackshelfcolumnid & " ORDER BY p.productcode ASC,c.colorname ASC "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -1013,8 +1059,11 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Colors"
+
     Sub colorCoding()
         Try
             If dgProducts.Rows.Count <> 0 Then
@@ -1031,9 +1080,13 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #End Region
+
 #Region "Saving Functions"
+
     Sub addRackShelfColumnRow()
         Try
             dgRackShelfColumn.Rows.Add()
@@ -1054,8 +1107,11 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #End Region
+
     Private Sub tabMain_DrawItem(sender As Object, e As DrawItemEventArgs) Handles tabMain.DrawItem
         Try
             TabControlColor(tabMain, e)
@@ -1065,6 +1121,7 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbClose_Click(sender As Object, e As EventArgs) Handles pbClose.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1079,6 +1136,7 @@ Public Class InventoryLocationsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub txtComments_Leave(sender As Object, e As EventArgs) Handles txtComments.Leave
         Try
             txtLocationName.Focus()
@@ -1088,6 +1146,7 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub btnAddRSC_Leave(sender As Object, e As EventArgs) Handles btnAddRSC.Leave
         Try
             cboRack.Focus()
@@ -1097,6 +1156,7 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbEditAddress_MouseEnter(sender As Object, e As EventArgs) Handles pbEditAddress.MouseEnter
         Try
             pbEditAddress.BackColor = Color.MediumSpringGreen
@@ -1106,6 +1166,7 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbEditAddress_MouseLeave(sender As Object, e As EventArgs) Handles pbEditAddress.MouseLeave
         Try
             pbEditAddress.BackColor = Color.Transparent
@@ -1115,6 +1176,7 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbEditAddress_Click(sender As Object, e As EventArgs) Handles pbEditAddress.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1155,6 +1217,7 @@ Public Class InventoryLocationsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub pbAutoAddRack_MouseEnter(sender As Object, e As EventArgs) Handles pbAutoAddRack.MouseEnter
         Try
             pbAutoAddRack.BackColor = Color.MediumSpringGreen
@@ -1164,6 +1227,7 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbAutoAddRack_MouseLeave(sender As Object, e As EventArgs) Handles pbAutoAddRack.MouseLeave
         Try
             pbAutoAddRack.BackColor = Color.Transparent
@@ -1173,6 +1237,7 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbAutoAddRack_Click(sender As Object, e As EventArgs) Handles pbAutoAddRack.Click
         Try
             myBalloon("Automatic adding of rack.", "Auto-Add", pbAutoAddRack, -15, -65)
@@ -1182,6 +1247,7 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbAutoAddColumn_MouseEnter(sender As Object, e As EventArgs) Handles pbAutoAddColumn.MouseEnter
         Try
             pbAutoAddColumn.BackColor = Color.MediumSpringGreen
@@ -1191,6 +1257,7 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbAutoAddColumn_MouseLeave(sender As Object, e As EventArgs) Handles pbAutoAddColumn.MouseLeave
         Try
             pbAutoAddColumn.BackColor = Color.Transparent
@@ -1200,6 +1267,7 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbAutoAddColumn_Click(sender As Object, e As EventArgs) Handles pbAutoAddColumn.Click
         Try
             myBalloon("Automatic adding of column.", "Auto-Add", pbAutoAddColumn, -15, -65)
@@ -1209,6 +1277,7 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbAutoAddShelf_MouseEnter(sender As Object, e As EventArgs) Handles pbAutoAddShelf.MouseEnter
         Try
             pbAutoAddShelf.BackColor = Color.MediumSpringGreen
@@ -1218,6 +1287,7 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbAutoAddShelf_MouseLeave(sender As Object, e As EventArgs) Handles pbAutoAddShelf.MouseLeave
         Try
             pbAutoAddShelf.BackColor = Color.Transparent
@@ -1227,6 +1297,7 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbAutoAddShelf_Click(sender As Object, e As EventArgs) Handles pbAutoAddShelf.Click
         Try
             myBalloon("Automatic adding of shelf.", "Auto-Add", pbAutoAddShelf, -15, -65)
@@ -1236,6 +1307,7 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub tsRefresh_Click(sender As Object, e As EventArgs) Handles tsRefresh.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1248,6 +1320,7 @@ Public Class InventoryLocationsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msNew_Click(sender As Object, e As EventArgs) Handles msNew.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1287,6 +1360,7 @@ Public Class InventoryLocationsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msCancel_Click(sender As Object, e As EventArgs) Handles msCancel.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1315,6 +1389,7 @@ Public Class InventoryLocationsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgInventoryLocationList_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgInventoryLocationList.CellClick
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1340,6 +1415,7 @@ Public Class InventoryLocationsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgInventoryLocationList_KeyUp(sender As Object, e As KeyEventArgs) Handles dgInventoryLocationList.KeyUp
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1367,6 +1443,7 @@ Public Class InventoryLocationsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdFirstRCS_Click(sender As Object, e As EventArgs) Handles cmdFirstRCS.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1385,6 +1462,7 @@ Public Class InventoryLocationsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdPrevRCS_Click(sender As Object, e As EventArgs) Handles cmdPrevRCS.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1412,6 +1490,7 @@ Public Class InventoryLocationsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdNextRCS_Click(sender As Object, e As EventArgs) Handles cmdNextRCS.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1435,6 +1514,7 @@ Public Class InventoryLocationsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdLastRCS_Click(sender As Object, e As EventArgs) Handles cmdLastRCS.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1458,6 +1538,7 @@ Public Class InventoryLocationsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub txtLocationName_Leave(sender As Object, e As EventArgs) Handles txtLocationName.Leave
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1484,6 +1565,7 @@ Public Class InventoryLocationsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     'Private Sub txtLocationName_TextChanged(sender As Object, e As EventArgs) Handles txtLocationName.TextChanged
     '    Me.Cursor = Cursors.WaitCursor
     '    Try
@@ -1533,6 +1615,7 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub btnAddRSC_Click(sender As Object, e As EventArgs) Handles btnAddRSC.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1544,6 +1627,7 @@ Public Class InventoryLocationsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboShelf_KeyDown(sender As Object, e As KeyEventArgs) Handles cboShelf.KeyDown
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1557,6 +1641,7 @@ Public Class InventoryLocationsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub txtPickOrderNo_KeyDown(sender As Object, e As KeyEventArgs) Handles txtPickOrderNo.KeyDown
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1570,6 +1655,7 @@ Public Class InventoryLocationsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub txtRemarks_KeyDown(sender As Object, e As KeyEventArgs) Handles txtRemarks.KeyDown
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1583,6 +1669,7 @@ Public Class InventoryLocationsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboRack_TextChanged(sender As Object, e As EventArgs) Handles cboRack.TextChanged
         Try
             errProvider.Clear()
@@ -1592,6 +1679,7 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub cboShelf_TextChanged(sender As Object, e As EventArgs) Handles cboShelf.TextChanged
         Try
             errProvider.Clear()
@@ -1601,6 +1689,7 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub cboColumn_TextChanged(sender As Object, e As EventArgs) Handles cboColumn.TextChanged
         Try
             errProvider.Clear()
@@ -1610,6 +1699,7 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub dgRackShelfColumn_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgRackShelfColumn.CellClick
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1640,6 +1730,7 @@ Public Class InventoryLocationsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgRackShelfColumn_KeyUp(sender As Object, e As KeyEventArgs) Handles dgRackShelfColumn.KeyUp
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1672,6 +1763,7 @@ Public Class InventoryLocationsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgRackShelfColumn_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgRackShelfColumn.CellContentClick
         Try
             If dgRackShelfColumn.Rows.Count <> 0 Then
@@ -1699,6 +1791,7 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub chkOtherInfo_CheckedChanged(sender As Object, e As EventArgs) Handles chkOtherInfo.CheckedChanged
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1714,6 +1807,7 @@ Public Class InventoryLocationsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmsDelete_Click(sender As Object, e As EventArgs) Handles cmsDelete.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1751,6 +1845,7 @@ Public Class InventoryLocationsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmsEdit_Click(sender As Object, e As EventArgs) Handles cmsEdit.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1803,6 +1898,7 @@ Public Class InventoryLocationsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msSave_Click(sender As Object, e As EventArgs) Handles msSave.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1857,7 +1953,7 @@ Public Class InventoryLocationsForm
                             txtLocationName.Focus()
                             Exit Try
                         End If
-                        I_InventoryLocations(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, If(iladdressid = 0, DBNull.Value, iladdressid), txtLocationName.Text, cboLocationType.Text, _
+                        I_InventoryLocations(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, If(iladdressid = 0, DBNull.Value, iladdressid), txtLocationName.Text, cboLocationType.Text,
                                     txtMainPhone.Text, txtAlternatePhone.Text, txtFaxNo.Text, "Active", txtComments.Text, Me)
                         If myModule.systemerrorfound = False Then
                             If dgRackShelfColumn.Rows.Count <> 0 Then
@@ -1865,7 +1961,7 @@ Public Class InventoryLocationsForm
                                 ilinventorylocationid = globalinventorylocationid
                                 For a = 0 To dgRackShelfColumn.Rows.Count - 1
                                     If myModule.systemerrorfound = False Then
-                                        I_RackShelfColumn(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, ilinventorylocationid, CStr(dgRackShelfColumn.Rows(a).Cells("rsc_rack").Value), CStr(dgRackShelfColumn.Rows(a).Cells("rsc_shelf").Value), _
+                                        I_RackShelfColumn(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, ilinventorylocationid, CStr(dgRackShelfColumn.Rows(a).Cells("rsc_rack").Value), CStr(dgRackShelfColumn.Rows(a).Cells("rsc_shelf").Value),
                                              CStr(dgRackShelfColumn.Rows(a).Cells("rsc_column").Value), CInt(dgRackShelfColumn.Rows(a).Cells("rsc_pickorderno").Value), CStr(dgRackShelfColumn.Rows(a).Cells("rsc_remarks").Value), "Active", Me)
                                     Else
                                         Exit Try
@@ -1886,7 +1982,7 @@ Public Class InventoryLocationsForm
                             txtLocationName.Focus()
                             Exit Try
                         End If
-                        U_InventoryLocations(CInt(dgInventoryLocationList.CurrentRow.Cells("il_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, If(iladdressid = 0, DBNull.Value, iladdressid), txtLocationName.Text, cboLocationType.Text, _
+                        U_InventoryLocations(CInt(dgInventoryLocationList.CurrentRow.Cells("il_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, If(iladdressid = 0, DBNull.Value, iladdressid), txtLocationName.Text, cboLocationType.Text,
                                     txtMainPhone.Text, txtAlternatePhone.Text, txtFaxNo.Text, txtComments.Text, Me)
                         If myModule.systemerrorfound = False Then
                             If dgRackShelfColumn.Rows.Count <> 0 Then
@@ -1896,7 +1992,7 @@ Public Class InventoryLocationsForm
                                             getRackShelfColumnID("" & dgRackShelfColumn.Rows(a).Cells("rsc_rack").Value & "" & dgRackShelfColumn.Rows(a).Cells("rsc_shelf").Value & "" & dgRackShelfColumn.Rows(a).Cells("rsc_column").Value & "", CInt(dgInventoryLocationList.CurrentRow.Cells("il_rowid").Value), Me)
                                             ilrackshelfcolumnid = globalrackshelfcolumnid
                                             If ilrackshelfcolumnid = 0 Then
-                                                I_RackShelfColumn(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, CInt(dgInventoryLocationList.CurrentRow.Cells("il_rowid").Value), CStr(dgRackShelfColumn.Rows(a).Cells("rsc_rack").Value), _
+                                                I_RackShelfColumn(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, CInt(dgInventoryLocationList.CurrentRow.Cells("il_rowid").Value), CStr(dgRackShelfColumn.Rows(a).Cells("rsc_rack").Value),
                                                     CStr(dgRackShelfColumn.Rows(a).Cells("rsc_shelf").Value), CStr(dgRackShelfColumn.Rows(a).Cells("rsc_column").Value), CInt(dgRackShelfColumn.Rows(a).Cells("rsc_pickorderno").Value), CStr(dgRackShelfColumn.Rows(a).Cells("rsc_remarks").Value), "Active", Me)
                                             End If
                                         End If
@@ -1923,7 +2019,9 @@ Public Class InventoryLocationsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #Region "Search/Page Setup"
+
     Private Sub txtSimpleSearch_KeyDown(sender As Object, e As KeyEventArgs) Handles txtSimpleSearch.KeyDown
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1948,6 +2046,7 @@ Public Class InventoryLocationsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboSearch1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboSearch1.SelectedIndexChanged
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1974,6 +2073,7 @@ Public Class InventoryLocationsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboSearch3_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboSearch3.SelectedIndexChanged
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2000,6 +2100,7 @@ Public Class InventoryLocationsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboSearch2_KeyDown(sender As Object, e As KeyEventArgs) Handles cboSearch2.KeyDown
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2044,6 +2145,7 @@ Public Class InventoryLocationsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboSearch4_KeyDown(sender As Object, e As KeyEventArgs) Handles cboSearch4.KeyDown
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2088,6 +2190,7 @@ Public Class InventoryLocationsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdFirst_Click(sender As Object, e As EventArgs) Handles cmdFirst.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2109,6 +2212,7 @@ Public Class InventoryLocationsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdPrev_Click(sender As Object, e As EventArgs) Handles cmdPrev.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2138,6 +2242,7 @@ Public Class InventoryLocationsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdNext_Click(sender As Object, e As EventArgs) Handles cmdNext.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2163,6 +2268,7 @@ Public Class InventoryLocationsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdLast_Click(sender As Object, e As EventArgs) Handles cmdLast.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2188,6 +2294,7 @@ Public Class InventoryLocationsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub txtPage_KeyDown(sender As Object, e As KeyEventArgs) Handles txtPage.KeyDown
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2231,8 +2338,11 @@ Public Class InventoryLocationsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #End Region
+
 #Region "Datagrid Errors"
+
     Private Sub dgInventoryLocationList_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgInventoryLocationList.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2273,6 +2383,7 @@ Public Class InventoryLocationsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgRackShelfColumn_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgRackShelfColumn.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2313,6 +2424,7 @@ Public Class InventoryLocationsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgProducts_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgProducts.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2353,5 +2465,7 @@ Public Class InventoryLocationsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #End Region
+
 End Class

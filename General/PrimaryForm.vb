@@ -1,14 +1,5 @@
 ﻿Imports MySql.Data.MySqlClient
-Imports System.IO
-Imports System.Windows.Forms
-Imports CrystalDecisions.CrystalReports.Engine
-Imports System.Linq
-Imports System.Collections
-Imports System.Collections.Generic
-Imports System.Data
-Imports System.Diagnostics
-Imports System.Runtime.InteropServices
-Imports System.Text.RegularExpressions
+
 Public Class PrimaryForm
     Dim manager As New sqlModule.Manager
     Dim conn As New MySqlConnection(manager.GetConnString)
@@ -48,6 +39,7 @@ Public Class PrimaryForm
     Public DlvryPrfmForm As Boolean = False
     Public StkLvlForm As Boolean = False
     Public PckLstRForm As Boolean = False
+
     Private Sub PrimaryForm_Load(sender As Object, e As EventArgs) Handles Me.Load
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -65,6 +57,7 @@ Public Class PrimaryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub PrimaryForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -88,9 +81,13 @@ Public Class PrimaryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #Region "Functions"
+
 #Region "Display"
+
 #Region "ChangeForm"
+
     Public Sub ChangeDisplayForm(ByVal Formname As Form, ByVal Ima As Image, ByVal tstext As String, ByVal tstooltiptext As String)
         Try
             Application.DoEvents()
@@ -124,16 +121,19 @@ Public Class PrimaryForm
             MsgBox(getErrExcptn(ex, Me.Name))
         End Try
     End Sub
+
 #End Region
+
 #Region "Datagrids"
+
     Sub displayNewCustomerOrders()
         Try
             dgNewCO.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT co.rowid,COALESCE(co.ordernumber,''),COALESCE(co.referencenumber,''),COALESCE(DATE_FORMAT(co.orderdate,'%d-%b-%Y'),''),COALESCE(DATE_FORMAT(co.targetdate,'%d-%b-%Y'),'')," & _
-                        "COALESCE(DATE_FORMAT(co.enddate,'%d-%b-%Y'),''),COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),''),COALESCE(CONCAT(COALESCE(cb.firstname,''),' ',COALESCE(cb.lastname,''),' - ',COALESCE(cb.rowid,'')),'')," & _
-                        "COALESCE(CONCAT(COALESCE(bc.branchcode,''),' - ',COALESCE(bc.branchname,'')),''),COALESCE(CONCAT(COALESCE(ve.companycode,''),' - ',COALESCE(ve.companyname,'')),''),COALESCE(CONCAT(COALESCE(cc.codename,''),' / ',COALESCE(c1.codeno,''),'-',COALESCE(c2.codeno,''),'-',COALESCE(c3.codeno,'')),'') " & _
-                        "FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid LEFT JOIN users cb ON co.createdby = cb.rowid LEFT JOIN branches bc ON co.branchid = bc.rowid LEFT JOIN companies ve ON co.companyid = ve.rowid LEFT JOIN combinecodings cc ON co.combinecodingid = cc.rowid " & _
+            Dim sql1 As String = "SELECT co.rowid,COALESCE(co.ordernumber,''),COALESCE(co.referencenumber,''),COALESCE(DATE_FORMAT(co.orderdate,'%d-%b-%Y'),''),COALESCE(DATE_FORMAT(co.targetdate,'%d-%b-%Y'),'')," &
+                        "COALESCE(DATE_FORMAT(co.enddate,'%d-%b-%Y'),''),COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),''),COALESCE(CONCAT(COALESCE(cb.firstname,''),' ',COALESCE(cb.lastname,''),' - ',COALESCE(cb.rowid,'')),'')," &
+                        "COALESCE(CONCAT(COALESCE(bc.branchcode,''),' - ',COALESCE(bc.branchname,'')),''),COALESCE(CONCAT(COALESCE(ve.companycode,''),' - ',COALESCE(ve.companyname,'')),''),COALESCE(CONCAT(COALESCE(cc.codename,''),' / ',COALESCE(c1.codeno,''),'-',COALESCE(c2.codeno,''),'-',COALESCE(c3.codeno,'')),'') " &
+                        "FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid LEFT JOIN users cb ON co.createdby = cb.rowid LEFT JOIN branches bc ON co.branchid = bc.rowid LEFT JOIN companies ve ON co.companyid = ve.rowid LEFT JOIN combinecodings cc ON co.combinecodingid = cc.rowid " &
                         "LEFT JOIN codings c1 ON cc.codingida = c1.rowid LEFT JOIN codings c2 ON cc.codingidb = c2.rowid LEFT JOIN codings c3 ON cc.codingidc = c3.rowid WHERE co.organizationid = " & Z_OrganizationID & " AND co.ordertype = 'CO' AND co.`status` = 'New' ORDER BY co.ordernumber DESC "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -176,14 +176,15 @@ Public Class PrimaryForm
             conn.Close()
         End Try
     End Sub
+
     Sub displaySubmittedToWarehouseCustomerOrders()
         Try
             dgSubmittedToWarehouseCO.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT co.rowid,COALESCE(co.ordernumber,''),COALESCE(co.referencenumber,''),COALESCE(DATE_FORMAT(co.orderdate,'%d-%b-%Y'),''),COALESCE(DATE_FORMAT(co.targetdate,'%d-%b-%Y'),''),COALESCE(DATE_FORMAT(co.enddate,'%d-%b-%Y'),'')," & _
-                        "COALESCE(DATE_FORMAT(co.datesubmitted,'%d-%b-%Y'),''),COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),''),COALESCE(CONCAT(COALESCE(cb.firstname,''),' ',COALESCE(cb.lastname,''),' - ',COALESCE(cb.rowid,'')),'')," & _
-                        "COALESCE(CONCAT(COALESCE(bc.branchcode,''),' - ',COALESCE(bc.branchname,'')),''),COALESCE(CONCAT(COALESCE(ve.companycode,''),' - ',COALESCE(ve.companyname,'')),''),COALESCE(CONCAT(COALESCE(cc.codename,''),' / ',COALESCE(c1.codeno,''),'-',COALESCE(c2.codeno,''),'-',COALESCE(c3.codeno,'')),'') " & _
-                        "FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid LEFT JOIN users cb ON co.createdby = cb.rowid LEFT JOIN branches bc ON co.branchid = bc.rowid LEFT JOIN companies ve ON co.companyid = ve.rowid LEFT JOIN combinecodings cc ON co.combinecodingid = cc.rowid " & _
+            Dim sql1 As String = "SELECT co.rowid,COALESCE(co.ordernumber,''),COALESCE(co.referencenumber,''),COALESCE(DATE_FORMAT(co.orderdate,'%d-%b-%Y'),''),COALESCE(DATE_FORMAT(co.targetdate,'%d-%b-%Y'),''),COALESCE(DATE_FORMAT(co.enddate,'%d-%b-%Y'),'')," &
+                        "COALESCE(DATE_FORMAT(co.datesubmitted,'%d-%b-%Y'),''),COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),''),COALESCE(CONCAT(COALESCE(cb.firstname,''),' ',COALESCE(cb.lastname,''),' - ',COALESCE(cb.rowid,'')),'')," &
+                        "COALESCE(CONCAT(COALESCE(bc.branchcode,''),' - ',COALESCE(bc.branchname,'')),''),COALESCE(CONCAT(COALESCE(ve.companycode,''),' - ',COALESCE(ve.companyname,'')),''),COALESCE(CONCAT(COALESCE(cc.codename,''),' / ',COALESCE(c1.codeno,''),'-',COALESCE(c2.codeno,''),'-',COALESCE(c3.codeno,'')),'') " &
+                        "FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid LEFT JOIN users cb ON co.createdby = cb.rowid LEFT JOIN branches bc ON co.branchid = bc.rowid LEFT JOIN companies ve ON co.companyid = ve.rowid LEFT JOIN combinecodings cc ON co.combinecodingid = cc.rowid " &
                         "LEFT JOIN codings c1 ON cc.codingida = c1.rowid LEFT JOIN codings c2 ON cc.codingidb = c2.rowid LEFT JOIN codings c3 ON cc.codingidc = c3.rowid WHERE co.organizationid = " & Z_OrganizationID & " AND co.ordertype = 'CO' AND co.`status` = 'Submitted To Warehouse' ORDER BY co.ordernumber DESC "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -228,14 +229,15 @@ Public Class PrimaryForm
             conn.Close()
         End Try
     End Sub
+
     Sub displayPickListedCustomerOrders()
         Try
             dgPickListedCO.Rows.Clear()
             If conn1.State = ConnectionState.Closed Then conn1.Open()
-            Dim sql1 As String = "SELECT co.rowid,COALESCE(co.ordernumber,''),COALESCE(co.referencenumber,''),COALESCE(DATE_FORMAT(co.orderdate,'%d-%b-%Y'),''),COALESCE(DATE_FORMAT(co.targetdate,'%d-%b-%Y'),''),COALESCE(DATE_FORMAT(co.enddate,'%d-%b-%Y'),'')," & _
-                        "COALESCE(DATE_FORMAT(co.datesubmitted,'%d-%b-%Y'),''),COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),''),COALESCE(CONCAT(COALESCE(cb.firstname,''),' ',COALESCE(cb.lastname,''),' - ',COALESCE(cb.rowid,'')),'')," & _
-                        "COALESCE(CONCAT(COALESCE(bc.branchcode,''),' - ',COALESCE(bc.branchname,'')),''),COALESCE(CONCAT(COALESCE(ve.companycode,''),' - ',COALESCE(ve.companyname,'')),''),COALESCE(CONCAT(COALESCE(cc.codename,''),' / ',COALESCE(c1.codeno,''),'-',COALESCE(c2.codeno,''),'-',COALESCE(c3.codeno,'')),'') " & _
-                        "FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid LEFT JOIN users cb ON co.createdby = cb.rowid LEFT JOIN branches bc ON co.branchid = bc.rowid LEFT JOIN companies ve ON co.companyid = ve.rowid LEFT JOIN combinecodings cc ON co.combinecodingid = cc.rowid " & _
+            Dim sql1 As String = "SELECT co.rowid,COALESCE(co.ordernumber,''),COALESCE(co.referencenumber,''),COALESCE(DATE_FORMAT(co.orderdate,'%d-%b-%Y'),''),COALESCE(DATE_FORMAT(co.targetdate,'%d-%b-%Y'),''),COALESCE(DATE_FORMAT(co.enddate,'%d-%b-%Y'),'')," &
+                        "COALESCE(DATE_FORMAT(co.datesubmitted,'%d-%b-%Y'),''),COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),''),COALESCE(CONCAT(COALESCE(cb.firstname,''),' ',COALESCE(cb.lastname,''),' - ',COALESCE(cb.rowid,'')),'')," &
+                        "COALESCE(CONCAT(COALESCE(bc.branchcode,''),' - ',COALESCE(bc.branchname,'')),''),COALESCE(CONCAT(COALESCE(ve.companycode,''),' - ',COALESCE(ve.companyname,'')),''),COALESCE(CONCAT(COALESCE(cc.codename,''),' / ',COALESCE(c1.codeno,''),'-',COALESCE(c2.codeno,''),'-',COALESCE(c3.codeno,'')),'') " &
+                        "FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid LEFT JOIN users cb ON co.createdby = cb.rowid LEFT JOIN branches bc ON co.branchid = bc.rowid LEFT JOIN companies ve ON co.companyid = ve.rowid LEFT JOIN combinecodings cc ON co.combinecodingid = cc.rowid " &
                         "LEFT JOIN codings c1 ON cc.codingida = c1.rowid LEFT JOIN codings c2 ON cc.codingidb = c2.rowid LEFT JOIN codings c3 ON cc.codingidc = c3.rowid WHERE co.organizationid = " & Z_OrganizationID & " AND co.ordertype = 'CO' AND co.`status` = 'Pick Listed' ORDER BY co.ordernumber DESC "
             Dim cmd1 As New MySqlCommand(sql1, conn1)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -283,14 +285,15 @@ Public Class PrimaryForm
             conn1.Close()
         End Try
     End Sub
+
     Sub displayForPackingCustomerOrders()
         Try
             dgForPackingCO.Rows.Clear()
             If conn1.State = ConnectionState.Closed Then conn1.Open()
-            Dim sql1 As String = "SELECT co.rowid,COALESCE(co.ordernumber,''),COALESCE(co.referencenumber,''),COALESCE(DATE_FORMAT(co.orderdate,'%d-%b-%Y'),''),COALESCE(DATE_FORMAT(co.targetdate,'%d-%b-%Y'),'')," & _
-                        "COALESCE(DATE_FORMAT(co.enddate,'%d-%b-%Y'),''),COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),''),COALESCE(CONCAT(COALESCE(cb.firstname,''),' ',COALESCE(cb.lastname,''),' - ',COALESCE(cb.rowid,'')),'')," & _
-                        "COALESCE(CONCAT(COALESCE(bc.branchcode,''),' - ',COALESCE(bc.branchname,'')),''),COALESCE(CONCAT(COALESCE(ve.companycode,''),' - ',COALESCE(ve.companyname,'')),''),COALESCE(CONCAT(COALESCE(cc.codename,''),' / ',COALESCE(c1.codeno,''),'-',COALESCE(c2.codeno,''),'-',COALESCE(c3.codeno,'')),'') " & _
-                        "FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid LEFT JOIN users cb ON co.createdby = cb.rowid LEFT JOIN branches bc ON co.branchid = bc.rowid LEFT JOIN companies ve ON co.companyid = ve.rowid LEFT JOIN combinecodings cc ON co.combinecodingid = cc.rowid " & _
+            Dim sql1 As String = "SELECT co.rowid,COALESCE(co.ordernumber,''),COALESCE(co.referencenumber,''),COALESCE(DATE_FORMAT(co.orderdate,'%d-%b-%Y'),''),COALESCE(DATE_FORMAT(co.targetdate,'%d-%b-%Y'),'')," &
+                        "COALESCE(DATE_FORMAT(co.enddate,'%d-%b-%Y'),''),COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),''),COALESCE(CONCAT(COALESCE(cb.firstname,''),' ',COALESCE(cb.lastname,''),' - ',COALESCE(cb.rowid,'')),'')," &
+                        "COALESCE(CONCAT(COALESCE(bc.branchcode,''),' - ',COALESCE(bc.branchname,'')),''),COALESCE(CONCAT(COALESCE(ve.companycode,''),' - ',COALESCE(ve.companyname,'')),''),COALESCE(CONCAT(COALESCE(cc.codename,''),' / ',COALESCE(c1.codeno,''),'-',COALESCE(c2.codeno,''),'-',COALESCE(c3.codeno,'')),'') " &
+                        "FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid LEFT JOIN users cb ON co.createdby = cb.rowid LEFT JOIN branches bc ON co.branchid = bc.rowid LEFT JOIN companies ve ON co.companyid = ve.rowid LEFT JOIN combinecodings cc ON co.combinecodingid = cc.rowid " &
                         "LEFT JOIN codings c1 ON cc.codingida = c1.rowid LEFT JOIN codings c2 ON cc.codingidb = c2.rowid LEFT JOIN codings c3 ON cc.codingidc = c3.rowid WHERE co.organizationid = " & Z_OrganizationID & " AND co.ordertype = 'CO' AND co.`status` = 'For Packing' ORDER BY co.ordernumber DESC "
             Dim cmd1 As New MySqlCommand(sql1, conn1)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -336,14 +339,15 @@ Public Class PrimaryForm
             conn1.Close()
         End Try
     End Sub
+
     Sub displayPackingCustomerOrders()
         Try
             dgPackingCO.Rows.Clear()
             If conn1.State = ConnectionState.Closed Then conn1.Open()
-            Dim sql1 As String = "SELECT co.rowid,COALESCE(co.ordernumber,''),COALESCE(co.referencenumber,''),COALESCE(co.drnumber,''),COALESCE(DATE_FORMAT(co.orderdate,'%d-%b-%Y'),''),COALESCE(DATE_FORMAT(co.targetdate,'%d-%b-%Y'),'')," & _
-                        "COALESCE(DATE_FORMAT(co.enddate,'%d-%b-%Y'),''),COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),''),COALESCE(CONCAT(COALESCE(cb.firstname,''),' ',COALESCE(cb.lastname,''),' - ',COALESCE(cb.rowid,'')),'')," & _
-                        "COALESCE(CONCAT(COALESCE(bc.branchcode,''),' - ',COALESCE(bc.branchname,'')),''),COALESCE(CONCAT(COALESCE(ve.companycode,''),' - ',COALESCE(ve.companyname,'')),''),COALESCE(CONCAT(COALESCE(cc.codename,''),' / ',COALESCE(c1.codeno,''),'-',COALESCE(c2.codeno,''),'-',COALESCE(c3.codeno,'')),'') " & _
-                        "FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid LEFT JOIN users cb ON co.createdby = cb.rowid LEFT JOIN branches bc ON co.branchid = bc.rowid LEFT JOIN companies ve ON co.companyid = ve.rowid LEFT JOIN combinecodings cc ON co.combinecodingid = cc.rowid " & _
+            Dim sql1 As String = "SELECT co.rowid,COALESCE(co.ordernumber,''),COALESCE(co.referencenumber,''),COALESCE(co.drnumber,''),COALESCE(DATE_FORMAT(co.orderdate,'%d-%b-%Y'),''),COALESCE(DATE_FORMAT(co.targetdate,'%d-%b-%Y'),'')," &
+                        "COALESCE(DATE_FORMAT(co.enddate,'%d-%b-%Y'),''),COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),''),COALESCE(CONCAT(COALESCE(cb.firstname,''),' ',COALESCE(cb.lastname,''),' - ',COALESCE(cb.rowid,'')),'')," &
+                        "COALESCE(CONCAT(COALESCE(bc.branchcode,''),' - ',COALESCE(bc.branchname,'')),''),COALESCE(CONCAT(COALESCE(ve.companycode,''),' - ',COALESCE(ve.companyname,'')),''),COALESCE(CONCAT(COALESCE(cc.codename,''),' / ',COALESCE(c1.codeno,''),'-',COALESCE(c2.codeno,''),'-',COALESCE(c3.codeno,'')),'') " &
+                        "FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid LEFT JOIN users cb ON co.createdby = cb.rowid LEFT JOIN branches bc ON co.branchid = bc.rowid LEFT JOIN companies ve ON co.companyid = ve.rowid LEFT JOIN combinecodings cc ON co.combinecodingid = cc.rowid " &
                         "LEFT JOIN codings c1 ON cc.codingida = c1.rowid LEFT JOIN codings c2 ON cc.codingidb = c2.rowid LEFT JOIN codings c3 ON cc.codingidc = c3.rowid WHERE co.organizationid = " & Z_OrganizationID & " AND co.ordertype = 'CO' AND co.`status` = 'Packing' ORDER BY co.ordernumber DESC "
             Dim cmd1 As New MySqlCommand(sql1, conn1)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -391,14 +395,15 @@ Public Class PrimaryForm
             conn1.Close()
         End Try
     End Sub
+
     Sub displayLinedUpCustomerOrders()
         Try
             dgLinedUpCO.Rows.Clear()
             If conn1.State = ConnectionState.Closed Then conn1.Open()
-            Dim sql1 As String = "SELECT co.rowid,COALESCE(co.ordernumber,''),COALESCE(co.referencenumber,''),COALESCE(co.drnumber,''),COALESCE(DATE_FORMAT(co.orderdate,'%d-%b-%Y'),''),COALESCE(DATE_FORMAT(co.targetdate,'%d-%b-%Y'),'')," & _
-                        "COALESCE(DATE_FORMAT(co.enddate,'%d-%b-%Y'),''),COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),''),COALESCE(CONCAT(COALESCE(cb.firstname,''),' ',COALESCE(cb.lastname,''),' - ',COALESCE(cb.rowid,'')),'')," & _
-                        "COALESCE(CONCAT(COALESCE(bc.branchcode,''),' - ',COALESCE(bc.branchname,'')),''),COALESCE(CONCAT(COALESCE(ve.companycode,''),' - ',COALESCE(ve.companyname,'')),''),COALESCE(CONCAT(COALESCE(cc.codename,''),' / ',COALESCE(c1.codeno,''),'-',COALESCE(c2.codeno,''),'-',COALESCE(c3.codeno,'')),'') " & _
-                        "FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid LEFT JOIN users cb ON co.createdby = cb.rowid LEFT JOIN branches bc ON co.branchid = bc.rowid LEFT JOIN companies ve ON co.companyid = ve.rowid LEFT JOIN combinecodings cc ON co.combinecodingid = cc.rowid " & _
+            Dim sql1 As String = "SELECT co.rowid,COALESCE(co.ordernumber,''),COALESCE(co.referencenumber,''),COALESCE(co.drnumber,''),COALESCE(DATE_FORMAT(co.orderdate,'%d-%b-%Y'),''),COALESCE(DATE_FORMAT(co.targetdate,'%d-%b-%Y'),'')," &
+                        "COALESCE(DATE_FORMAT(co.enddate,'%d-%b-%Y'),''),COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),''),COALESCE(CONCAT(COALESCE(cb.firstname,''),' ',COALESCE(cb.lastname,''),' - ',COALESCE(cb.rowid,'')),'')," &
+                        "COALESCE(CONCAT(COALESCE(bc.branchcode,''),' - ',COALESCE(bc.branchname,'')),''),COALESCE(CONCAT(COALESCE(ve.companycode,''),' - ',COALESCE(ve.companyname,'')),''),COALESCE(CONCAT(COALESCE(cc.codename,''),' / ',COALESCE(c1.codeno,''),'-',COALESCE(c2.codeno,''),'-',COALESCE(c3.codeno,'')),'') " &
+                        "FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid LEFT JOIN users cb ON co.createdby = cb.rowid LEFT JOIN branches bc ON co.branchid = bc.rowid LEFT JOIN companies ve ON co.companyid = ve.rowid LEFT JOIN combinecodings cc ON co.combinecodingid = cc.rowid " &
                         "LEFT JOIN codings c1 ON cc.codingida = c1.rowid LEFT JOIN codings c2 ON cc.codingidb = c2.rowid LEFT JOIN codings c3 ON cc.codingidc = c3.rowid WHERE co.organizationid = " & Z_OrganizationID & " AND co.ordertype = 'CO' AND co.`status` = 'Lined Up' ORDER BY co.ordernumber DESC "
             Dim cmd1 As New MySqlCommand(sql1, conn1)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -443,13 +448,14 @@ Public Class PrimaryForm
             conn1.Close()
         End Try
     End Sub
+
     Sub displayForApprovalReceiving()
         Try
             dgForApproval.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT rr.rowid,COALESCE(rr.ordernumber,''),DATE_FORMAT(rr.orderdate,'%d-%b-%Y'),COALESCE(CONCAT(COALESCE(ac.companyname,''),' - ',COALESCE(ac.accountno,''),' - ',COALESCE(ac.accounttype,'')),'')," & _
-                        "COALESCE(o.ordernumber,''),COALESCE(o.ordertype,'Blank'),COALESCE(CONCAT(COALESCE(cb.firstname,''),' ',COALESCE(cb.lastname,''),' - ',COALESCE(cb.rowid,'')),'') FROM orders rr " & _
-                        "LEFT JOIN accounts ac ON rr.accountid = ac.rowid LEFT JOIN orders o ON rr.relatedorderid = o.rowid LEFT JOIN users cb ON rr.createdby = cb.rowid " & _
+            Dim sql1 As String = "SELECT rr.rowid,COALESCE(rr.ordernumber,''),DATE_FORMAT(rr.orderdate,'%d-%b-%Y'),COALESCE(CONCAT(COALESCE(ac.companyname,''),' - ',COALESCE(ac.accountno,''),' - ',COALESCE(ac.accounttype,'')),'')," &
+                        "COALESCE(o.ordernumber,''),COALESCE(o.ordertype,'Blank'),COALESCE(CONCAT(COALESCE(cb.firstname,''),' ',COALESCE(cb.lastname,''),' - ',COALESCE(cb.rowid,'')),'') FROM orders rr " &
+                        "LEFT JOIN accounts ac ON rr.accountid = ac.rowid LEFT JOIN orders o ON rr.relatedorderid = o.rowid LEFT JOIN users cb ON rr.createdby = cb.rowid " &
                         "WHERE rr.organizationid = " & Z_OrganizationID & " AND rr.ordertype = 'RR' AND rr.`status` = 'For Approval' ORDER BY rr.orderdate ASC "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -487,12 +493,13 @@ Public Class PrimaryForm
             conn.Close()
         End Try
     End Sub
+
     Sub displayPurchaseOrdersReceiving()
         Try
             dgPurchaseOrders.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT po.rowid,COALESCE(po.ordernumber,''),DATE_FORMAT(po.orderdate,'%d-%b-%Y'),COALESCE(CONCAT(COALESCE(ac.companyname,''),' - ',COALESCE(ac.accountno,'')),'')," & _
-                        "COALESCE(CONCAT(COALESCE(cb.firstname,''),' ',COALESCE(cb.lastname,''),' - ',COALESCE(cb.rowid,'')),'') FROM orders po LEFT JOIN accounts ac ON po.accountid = ac.rowid " & _
+            Dim sql1 As String = "SELECT po.rowid,COALESCE(po.ordernumber,''),DATE_FORMAT(po.orderdate,'%d-%b-%Y'),COALESCE(CONCAT(COALESCE(ac.companyname,''),' - ',COALESCE(ac.accountno,'')),'')," &
+                        "COALESCE(CONCAT(COALESCE(cb.firstname,''),' ',COALESCE(cb.lastname,''),' - ',COALESCE(cb.rowid,'')),'') FROM orders po LEFT JOIN accounts ac ON po.accountid = ac.rowid " &
                         "LEFT JOIN users cb ON po.createdby = cb.rowid WHERE po.organizationid = " & Z_OrganizationID & " AND po.ordertype = 'PO' AND po.`status` = 'New' ORDER BY po.ordernumber DESC "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -526,12 +533,13 @@ Public Class PrimaryForm
             conn.Close()
         End Try
     End Sub
+
     Sub displayPullOutReceiving()
         Try
             dgPullOut.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT po.rowid,COALESCE(po.ordernumber,''),DATE_FORMAT(po.orderdate,'%d-%b-%Y'),COALESCE(CONCAT(COALESCE(ac.companyname,''),' - ',COALESCE(ac.accountno,'')),'')," & _
-                        "COALESCE(CONCAT(COALESCE(cb.firstname,''),' ',COALESCE(cb.lastname,''),' - ',COALESCE(cb.rowid,'')),'') FROM orders po LEFT JOIN accounts ac ON po.accountid = ac.rowid " & _
+            Dim sql1 As String = "SELECT po.rowid,COALESCE(po.ordernumber,''),DATE_FORMAT(po.orderdate,'%d-%b-%Y'),COALESCE(CONCAT(COALESCE(ac.companyname,''),' - ',COALESCE(ac.accountno,'')),'')," &
+                        "COALESCE(CONCAT(COALESCE(cb.firstname,''),' ',COALESCE(cb.lastname,''),' - ',COALESCE(cb.rowid,'')),'') FROM orders po LEFT JOIN accounts ac ON po.accountid = ac.rowid " &
                         "LEFT JOIN users cb ON po.createdby = cb.rowid WHERE po.organizationid = " & Z_OrganizationID & " AND po.ordertype = 'Pull-Out' AND po.`status` = 'New' ORDER BY po.ordernumber DESC "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -565,12 +573,13 @@ Public Class PrimaryForm
             conn.Close()
         End Try
     End Sub
+
     Sub displayReturnsReceiving()
         Try
             dgReturns.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT po.rowid,COALESCE(po.ordernumber,''),DATE_FORMAT(po.orderdate,'%d-%b-%Y'),COALESCE(CONCAT(COALESCE(ac.companyname,''),' - ',COALESCE(ac.accountno,'')),'')," & _
-                        "COALESCE(CONCAT(COALESCE(cb.firstname,''),' ',COALESCE(cb.lastname,''),' - ',COALESCE(cb.rowid,'')),'') FROM orders po LEFT JOIN accounts ac ON po.accountid = ac.rowid " & _
+            Dim sql1 As String = "SELECT po.rowid,COALESCE(po.ordernumber,''),DATE_FORMAT(po.orderdate,'%d-%b-%Y'),COALESCE(CONCAT(COALESCE(ac.companyname,''),' - ',COALESCE(ac.accountno,'')),'')," &
+                        "COALESCE(CONCAT(COALESCE(cb.firstname,''),' ',COALESCE(cb.lastname,''),' - ',COALESCE(cb.rowid,'')),'') FROM orders po LEFT JOIN accounts ac ON po.accountid = ac.rowid " &
                         "LEFT JOIN users cb ON po.createdby = cb.rowid WHERE po.organizationid = " & Z_OrganizationID & " AND po.ordertype = 'Return' AND po.`status` = 'New' ORDER BY po.ordernumber DESC "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -604,10 +613,15 @@ Public Class PrimaryForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #End Region
+
 #End Region
+
 #Region "msClicks/tsClicks"
+
     Private Sub msCustomerOrders_Click(sender As Object, e As EventArgs) Handles msCustomerOrders.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -633,6 +647,7 @@ Public Class PrimaryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msPurchaseOrders_Click(sender As Object, e As EventArgs) Handles msPurchaseOrders.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -658,6 +673,7 @@ Public Class PrimaryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msPullOut_Click(sender As Object, e As EventArgs) Handles msPullOut.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -683,6 +699,7 @@ Public Class PrimaryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msReturns_Click(sender As Object, e As EventArgs) Handles msReturns.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -708,6 +725,7 @@ Public Class PrimaryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msPickList_Click(sender As Object, e As EventArgs) Handles msPickList.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -733,6 +751,7 @@ Public Class PrimaryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msVerifyPickList_Click(sender As Object, e As EventArgs) Handles msVerifyPickList.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -758,6 +777,7 @@ Public Class PrimaryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msPackingList_Click(sender As Object, e As EventArgs) Handles msPackingList.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -783,6 +803,7 @@ Public Class PrimaryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msLineUpAndDelivery_Click(sender As Object, e As EventArgs) Handles msLineUpAndDelivery.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -808,6 +829,7 @@ Public Class PrimaryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msReceiving_Click(sender As Object, e As EventArgs) Handles msReceiving.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -833,6 +855,7 @@ Public Class PrimaryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msProducts_Click(sender As Object, e As EventArgs) Handles msProducts.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -858,6 +881,7 @@ Public Class PrimaryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msBundles_Click(sender As Object, e As EventArgs) Handles msBundles.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -883,6 +907,7 @@ Public Class PrimaryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msInventoryLocations_Click(sender As Object, e As EventArgs) Handles msInventoryLocations.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -908,6 +933,7 @@ Public Class PrimaryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub mStockTransfer_Click(sender As Object, e As EventArgs) Handles mStockTransfer.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -933,6 +959,7 @@ Public Class PrimaryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msStockAdjustment_Click(sender As Object, e As EventArgs) Handles msStockAdjustment.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -958,6 +985,7 @@ Public Class PrimaryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msAccounts_Click(sender As Object, e As EventArgs) Handles msAccounts.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -983,6 +1011,7 @@ Public Class PrimaryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msContacts_Click(sender As Object, e As EventArgs) Handles msContacts.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1008,6 +1037,7 @@ Public Class PrimaryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msReference_Click(sender As Object, e As EventArgs) Handles msReferences.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1033,6 +1063,7 @@ Public Class PrimaryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msCycleCount_Click(sender As Object, e As EventArgs) Handles msCycleCount.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1058,6 +1089,7 @@ Public Class PrimaryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msBrokenSizes_Click(sender As Object, e As EventArgs) Handles msBrokenSizes.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1083,6 +1115,7 @@ Public Class PrimaryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msSellThrough_Click(sender As Object, e As EventArgs) Handles msSellThrough.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1108,6 +1141,7 @@ Public Class PrimaryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msAging_Click(sender As Object, e As EventArgs) Handles msAging.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1133,6 +1167,7 @@ Public Class PrimaryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msSalesAndQty_Click(sender As Object, e As EventArgs) Handles msSalesAndQty.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1158,6 +1193,7 @@ Public Class PrimaryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msDeliveryPerformance_Click(sender As Object, e As EventArgs) Handles msDeliveryPerformance.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1183,6 +1219,7 @@ Public Class PrimaryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msStockLevel_Click(sender As Object, e As EventArgs) Handles msStockLevel.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1208,6 +1245,7 @@ Public Class PrimaryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msPickListed_Click(sender As Object, e As EventArgs) Handles msPickListed.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1233,6 +1271,7 @@ Public Class PrimaryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msOrganizations_Click(sender As Object, e As EventArgs) Handles msOrganizations.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1258,6 +1297,7 @@ Public Class PrimaryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msUsers_Click(sender As Object, e As EventArgs) Handles msUsers.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1283,6 +1323,7 @@ Public Class PrimaryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msPositionsAndViews_Click(sender As Object, e As EventArgs) Handles msPositionsAndViews.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1308,6 +1349,7 @@ Public Class PrimaryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msAbout_Click(sender As Object, e As EventArgs) Handles msAbout.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1322,6 +1364,7 @@ Public Class PrimaryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msSystemIllustration_Click(sender As Object, e As EventArgs) Handles msSystemIllustration.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1336,7 +1379,9 @@ Public Class PrimaryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #End Region
+
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
         Try
             tsTimeValue.Text = Date.Now.ToString("h:mm:ss tt")
@@ -1344,6 +1389,7 @@ Public Class PrimaryForm
             MsgBox(getErrExcptn(ex, Me.Name))
         End Try
     End Sub
+
     Private Sub Timer2_Tick(sender As Object, e As EventArgs) Handles Timer2.Tick
         Try
             Me.Cursor = Cursors.WaitCursor
@@ -1357,6 +1403,7 @@ Public Class PrimaryForm
             MsgBox(getErrExcptn(ex, Me.Name))
         End Try
     End Sub
+
     Private Sub tabCustomerOrders_DrawItem(sender As Object, e As DrawItemEventArgs) Handles tabCustomerOrders.DrawItem
         Try
             TabControlColor(tabCustomerOrders, e)
@@ -1366,6 +1413,7 @@ Public Class PrimaryForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub tabReceiving_DrawItem(sender As Object, e As DrawItemEventArgs) Handles tabReceiving.DrawItem
         Try
             TabControlColor(tabReceiving, e)
@@ -1375,6 +1423,7 @@ Public Class PrimaryForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub tabCustomerOrders_SelectedIndexChanged(sender As Object, e As EventArgs) Handles tabCustomerOrders.SelectedIndexChanged
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1396,6 +1445,7 @@ Public Class PrimaryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub tabReceiving_SelectedIndexChanged(sender As Object, e As EventArgs) Handles tabReceiving.SelectedIndexChanged
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1413,6 +1463,7 @@ Public Class PrimaryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub tsRefreshCO_Click(sender As Object, e As EventArgs) Handles tsRefreshCO.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1434,6 +1485,7 @@ Public Class PrimaryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub tsRefreshRR_Click(sender As Object, e As EventArgs) Handles tsRefreshRR.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1451,6 +1503,7 @@ Public Class PrimaryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub pbUnPin_Click(sender As Object, e As EventArgs) Handles pbUnPin.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1462,6 +1515,7 @@ Public Class PrimaryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub pbPin_Click(sender As Object, e As EventArgs) Handles pbPin.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1473,6 +1527,7 @@ Public Class PrimaryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub tsHome_Click(sender As Object, e As EventArgs) Handles tsHome.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1489,4 +1544,5 @@ Public Class PrimaryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 End Class

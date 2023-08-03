@@ -1,0 +1,44 @@
+﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
+using WarehouseManagementSystem.Core.Entities.Base;
+
+namespace WarehouseManagementSystem.Core.Entities
+{
+    [Table("orderitems")]
+    public class OrderItem : OrganizationalEntity
+    {
+        public int? AccountID { get; set; }
+
+        [ForeignKey("Order")]
+        public int OrderID { get; set; }
+
+        public int? ProductColorSizeID { get; set; }
+        public int? ProductBundleID { get; set; }
+
+        public int? OrderItemID { get; set; }
+
+        public int? VerifiedBy { get; set; }
+        public int? PackedBy { get; set; }
+        public int? DeliveredBy { get; set; }
+        public DateTime? VerifiedDate { get; set; }
+        public DateTime? PackedDate { get; set; }
+        public DateTime? DeliveredDate { get; set; }
+        public int? QtyOrdered { get; set; }
+        public int? QtyAvailable { get; set; }
+        public int? QtyDelivered { get; set; }
+        public int? QtyDamaged { get; set; }
+        public int? QtyReceived { get; set; }
+        public decimal? SRP { get; set; }
+        public string ItemType { get; set; }
+        public string Approval { get; set; }
+        public string ItemCode { get; set; }
+        public string SKU { get; set; }
+        public string UnitOfMeasure { get; set; }
+        public string Tags { get; set; }
+        public string Status { get; set; }
+        public string Remarks { get; set; }
+        public string Reasons { get; set; }
+
+        public virtual Order Order { get; set; }
+    }
+}

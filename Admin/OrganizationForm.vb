@@ -1,14 +1,6 @@
-﻿Imports MySql.Data.MySqlClient
-Imports System.IO
-Imports System.Windows.Forms
-Imports CrystalDecisions.CrystalReports.Engine
-Imports System.Linq
-Imports System.Collections
-Imports System.Collections.Generic
-Imports System.Data
-Imports System.Diagnostics
-Imports System.Runtime.InteropServices
-Imports System.Text.RegularExpressions
+﻿Imports System.IO
+Imports MySql.Data.MySqlClient
+
 Public Class OrganizationForm
     Dim manager As New sqlModule.Manager
     Dim conn As New MySqlConnection(manager.GetConnString)
@@ -23,6 +15,7 @@ Public Class OrganizationForm
     Dim ImageData() As Byte
     Dim organizationlogo As Object
     Dim orgprimaryaddressid, orgpremiseaddressid, orgcontactid, orgorganizationid As Integer
+
     Private Sub OrganizationForm_Load(sender As Object, e As EventArgs) Handles Me.Load
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -38,6 +31,7 @@ Public Class OrganizationForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub OrganizationForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -49,14 +43,19 @@ Public Class OrganizationForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #Region "Functions"
+
     Sub callAutoCompleteFunctions()
         autocompleteOrganizationType()
     End Sub
+
     Sub callAutoPopulateFunctions()
         autopopulateOrganizationType()
     End Sub
+
 #Region "Clear/Enable/Visible"
+
     Sub clearfields()
         Try
             cue = ""
@@ -71,6 +70,7 @@ Public Class OrganizationForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearOrganizationInformation()
         Try
             txtOrganizationName.Text = ""
@@ -94,6 +94,7 @@ Public Class OrganizationForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearOrganizationLogo()
         Try
             txtImagePath.Clear()
@@ -104,6 +105,7 @@ Public Class OrganizationForm
             conn.Close()
         End Try
     End Sub
+
     Sub enableGB(ByVal enable1 As Boolean, ByVal enable2 As Boolean)
         Try
             gbOrganizationList.Enabled = enable1
@@ -116,6 +118,7 @@ Public Class OrganizationForm
             conn.Close()
         End Try
     End Sub
+
     Sub enableANDvisibleMS(ByVal enable1 As Boolean)
         Try
             msSave.Enabled = enable1
@@ -125,8 +128,11 @@ Public Class OrganizationForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Click"
+
     Sub tsrefreshperformclick()
         Try
             errProvider.Clear()
@@ -140,9 +146,13 @@ Public Class OrganizationForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Display "
+
 #Region "AutoComplete "
+
     Sub autocompleteOrganizationType()
         Try
             Dim organizationtype As New AutoCompleteStringCollection
@@ -161,8 +171,11 @@ Public Class OrganizationForm
         End Try
         conn.Close()
     End Sub
+
 #End Region
+
 #Region "AutoPopulate"
+
     Sub autopopulateOrganizationType()
         Try
             cboOrganizationType.Items.Clear()
@@ -182,8 +195,11 @@ Public Class OrganizationForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Datagrids"
+
     Sub displayOrganizationList()
         Try
             dgOrganizationList.Rows.Clear()
@@ -217,14 +233,15 @@ Public Class OrganizationForm
             conn.Close()
         End Try
     End Sub
+
     Sub displayOrganizationInformation(ByVal iorganizationid As Integer)
         Try
             organizationlogo = Nothing
             If conn1.State = ConnectionState.Closed Then conn1.Open()
-            Dim sql1 As String = "SELECT COALESCE(o.name,''),COALESCE(o.tradename,''),COALESCE(o.organizationtype,''),COALESCE(CONCAT(COALESCE(c.firstname,''),' ',COALESCE(c.middlename,''),' ',COALESCE(c.lastname,'')),''),COALESCE(o.mainphone,''),COALESCE(o.altphone,''),COALESCE(o.emailaddress,'')," & _
-                        "COALESCE(CONCAT(COALESCE(pa.streetaddress1,''),' ',COALESCE(pa.streetaddress2,''),' ',COALESCE(pa.barangay,''),' ',COALESCE(pa.citytown,''),' ',COALESCE(pa.province,''),' ',COALESCE(pa.state,''),' ',COALESCE(pa.zipcode,''),' ',COALESCE(pa.country,'')),'')," & _
-                        "COALESCE(CONCAT(COALESCE(ad.streetaddress1,''),' ',COALESCE(ad.streetaddress2,''),' ',COALESCE(ad.barangay,''),' ',COALESCE(ad.citytown,''),' ',COALESCE(ad.province,''),' ',COALESCE(ad.state,''),' ',COALESCE(ad.zipcode,''),' ',COALESCE(ad.country,'')),'')," & _
-                        "COALESCE(o.altemailaddress,''),COALESCE(o.faxnumber,''),COALESCE(o.tinno,''),COALESCE(o.website,''),COALESCE(o.comments,''),COALESCE(o.primaryaddressid,0),COALESCE(o.premiseaddressid,0),COALESCE(o.primarycontactid,0),o.image FROM organizations o " & _
+            Dim sql1 As String = "SELECT COALESCE(o.name,''),COALESCE(o.tradename,''),COALESCE(o.organizationtype,''),COALESCE(CONCAT(COALESCE(c.firstname,''),' ',COALESCE(c.middlename,''),' ',COALESCE(c.lastname,'')),''),COALESCE(o.mainphone,''),COALESCE(o.altphone,''),COALESCE(o.emailaddress,'')," &
+                        "COALESCE(CONCAT(COALESCE(pa.streetaddress1,''),' ',COALESCE(pa.streetaddress2,''),' ',COALESCE(pa.barangay,''),' ',COALESCE(pa.citytown,''),' ',COALESCE(pa.province,''),' ',COALESCE(pa.state,''),' ',COALESCE(pa.zipcode,''),' ',COALESCE(pa.country,'')),'')," &
+                        "COALESCE(CONCAT(COALESCE(ad.streetaddress1,''),' ',COALESCE(ad.streetaddress2,''),' ',COALESCE(ad.barangay,''),' ',COALESCE(ad.citytown,''),' ',COALESCE(ad.province,''),' ',COALESCE(ad.state,''),' ',COALESCE(ad.zipcode,''),' ',COALESCE(ad.country,'')),'')," &
+                        "COALESCE(o.altemailaddress,''),COALESCE(o.faxnumber,''),COALESCE(o.tinno,''),COALESCE(o.website,''),COALESCE(o.comments,''),COALESCE(o.primaryaddressid,0),COALESCE(o.premiseaddressid,0),COALESCE(o.primarycontactid,0),o.image FROM organizations o " &
                         "LEFT JOIN contacts c ON o.primarycontactid = c.rowid LEFT JOIN address pa ON o.primaryaddressid = pa.rowid  LEFT JOIN address ad ON o.premiseaddressid = ad.rowid WHERE o.rowid = " & iorganizationid & " "
             Dim cmd1 As New MySqlCommand(sql1, conn1)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -262,11 +279,12 @@ Public Class OrganizationForm
             conn1.Close()
         End Try
     End Sub
+
     Sub displayOrganizationUsers(ByVal iorganizationid As Integer)
         Try
             dgUsers.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT u.rowid,COALESCE(u.firstname,''),COALESCE(u.middlename,''),COALESCE(u.lastname,''),COALESCE(p.positionname,''),COALESCE(u.emailaddress,'')," & _
+            Dim sql1 As String = "SELECT u.rowid,COALESCE(u.firstname,''),COALESCE(u.middlename,''),COALESCE(u.lastname,''),COALESCE(p.positionname,''),COALESCE(u.emailaddress,'')," &
                         "COALESCE(u.status,'') FROM users u LEFT JOIN positions p ON u.positionid = p.rowid WHERE u.organizationid = " & iorganizationid & " ORDER BY u.firstname "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -304,9 +322,13 @@ Public Class OrganizationForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #End Region
+
 #End Region
+
     Private Sub tabMain_DrawItem(sender As Object, e As DrawItemEventArgs) Handles tabMain.DrawItem
         Try
             TabControlColor(tabMain, e)
@@ -316,6 +338,7 @@ Public Class OrganizationForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbClose_Click(sender As Object, e As EventArgs) Handles pbClose.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -330,6 +353,7 @@ Public Class OrganizationForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub tsRefresh_Click(sender As Object, e As EventArgs) Handles tsRefresh.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -342,6 +366,7 @@ Public Class OrganizationForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgOrganizationList_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgOrganizationList.CellClick
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -366,6 +391,7 @@ Public Class OrganizationForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgOrganizationList_KeyUp(sender As Object, e As KeyEventArgs) Handles dgOrganizationList.KeyUp
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -392,6 +418,7 @@ Public Class OrganizationForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub txtOrganizationName_Leave(sender As Object, e As EventArgs) Handles txtOrganizationName.Leave
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -410,6 +437,7 @@ Public Class OrganizationForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     'Private Sub txtOrganizationName_TextChanged(sender As Object, e As EventArgs) Handles txtOrganizationName.TextChanged
     '    Me.Cursor = Cursors.WaitCursor
     '    Try
@@ -437,6 +465,7 @@ Public Class OrganizationForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbAutoAddA_MouseLeave(sender As Object, e As EventArgs) Handles pbAutoAddA.MouseLeave
         Try
             pbAutoAddA.BackColor = Color.Transparent
@@ -446,6 +475,7 @@ Public Class OrganizationForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbAutoAddA_Click(sender As Object, e As EventArgs) Handles pbAutoAddA.Click
         Try
             myBalloon("Automatic adding of organization type.", "Auto-Add", pbAutoAddA, -15, -65)
@@ -455,6 +485,7 @@ Public Class OrganizationForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbEditPrimAddress_MouseEnter(sender As Object, e As EventArgs) Handles pbEditPrimAddress.MouseEnter
         Try
             pbEditPrimAddress.BackColor = Color.MediumSpringGreen
@@ -464,6 +495,7 @@ Public Class OrganizationForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbEditPrimAddress_MouseLeave(sender As Object, e As EventArgs) Handles pbEditPrimAddress.MouseLeave
         Try
             pbEditPrimAddress.BackColor = Color.Transparent
@@ -473,6 +505,7 @@ Public Class OrganizationForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbEditPremAddress_MouseEnter(sender As Object, e As EventArgs) Handles pbEditPremAddress.MouseEnter
         Try
             pbEditPremAddress.BackColor = Color.MediumSpringGreen
@@ -482,6 +515,7 @@ Public Class OrganizationForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbEditPremAddress_MouseLeave(sender As Object, e As EventArgs) Handles pbEditPremAddress.MouseLeave
         Try
             pbEditPremAddress.BackColor = Color.Transparent
@@ -491,6 +525,7 @@ Public Class OrganizationForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbEditContactPerson_MouseEnter(sender As Object, e As EventArgs) Handles pbEditContactPerson.MouseEnter
         Try
             pbEditContactPerson.BackColor = Color.MediumSpringGreen
@@ -500,6 +535,7 @@ Public Class OrganizationForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbEditContactPerson_MouseLeave(sender As Object, e As EventArgs) Handles pbEditContactPerson.MouseLeave
         Try
             pbEditContactPerson.BackColor = Color.Transparent
@@ -509,6 +545,7 @@ Public Class OrganizationForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbEditPrimAddress_Click(sender As Object, e As EventArgs) Handles pbEditPrimAddress.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -550,6 +587,7 @@ Public Class OrganizationForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub pbEditPremAddress_Click(sender As Object, e As EventArgs) Handles pbEditPremAddress.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -591,6 +629,7 @@ Public Class OrganizationForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub pbEditContactPerson_Click(sender As Object, e As EventArgs) Handles pbEditContactPerson.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -632,6 +671,7 @@ Public Class OrganizationForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub btnChangeLogo_Click(sender As Object, e As EventArgs) Handles btnChangeLogo.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -669,6 +709,7 @@ Public Class OrganizationForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub btnRemoveLogo_Click(sender As Object, e As EventArgs) Handles btnRemoveLogo.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -716,6 +757,7 @@ Public Class OrganizationForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msSave_Click(sender As Object, e As EventArgs) Handles msSave.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -765,7 +807,7 @@ Public Class OrganizationForm
                             br.Close()
                             fs.Close()
                         End If
-                        U_Organizations(CInt(dgOrganizationList.CurrentRow.Cells("o_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, If(orgprimaryaddressid = 0, DBNull.Value, orgprimaryaddressid), If(orgpremiseaddressid = 0, DBNull.Value, orgpremiseaddressid), If(orgcontactid = 0, DBNull.Value, orgcontactid), _
+                        U_Organizations(CInt(dgOrganizationList.CurrentRow.Cells("o_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, If(orgprimaryaddressid = 0, DBNull.Value, orgprimaryaddressid), If(orgpremiseaddressid = 0, DBNull.Value, orgpremiseaddressid), If(orgcontactid = 0, DBNull.Value, orgcontactid),
                                 txtOrganizationName.Text, txtTradeName.Text, txtMainPhone.Text, txtAlternatePhone.Text, txtFaxNo.Text, txtEmailAddress.Text, txtOtherEmail.Text, txtTIN.Text, txtWebsite.Text, cboOrganizationType.Text, txtComments.Text, If(txtImagePath.Text <> "", ImageData, DBNull.Value), Me)
                         If myModule.systemerrorfound = False Then
                             myBalloon("Successfully Updated", "Update", lblsavemsg, -15, -65)
@@ -781,7 +823,9 @@ Public Class OrganizationForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #Region "Datagrid Errors"
+
     Private Sub dgOrganizationList_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgOrganizationList.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -822,6 +866,7 @@ Public Class OrganizationForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgUsers_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgUsers.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -862,5 +907,7 @@ Public Class OrganizationForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #End Region
+
 End Class

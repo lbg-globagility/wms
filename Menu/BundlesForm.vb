@@ -1,14 +1,5 @@
 ﻿Imports MySql.Data.MySqlClient
-Imports System.IO
-Imports System.Windows.Forms
-Imports CrystalDecisions.CrystalReports.Engine
-Imports System.Linq
-Imports System.Collections
-Imports System.Collections.Generic
-Imports System.Data
-Imports System.Diagnostics
-Imports System.Runtime.InteropServices
-Imports System.Text.RegularExpressions
+
 Public Class BundlesForm
     Dim manager As New sqlModule.Manager
     Dim conn As New MySqlConnection(manager.GetConnString)
@@ -22,6 +13,7 @@ Public Class BundlesForm
     Dim pageequation1, pageequation2, pageequation3, additionalpage As Decimal
     Dim simplesearchphrase, commonphrase, pagefilter1, pagefilter2, pagefilter3 As String
     Dim bfproductcolorsizesid, bfproductid, bftotalqtyavailable, bfproductbundleid, bfskuid, bfproductbundleitemid, bfcategoryid, bfbrandid, bfcompanyid As Integer
+
     Private Sub BundlesForm_Load(sender As Object, e As EventArgs) Handles Me.Load
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -39,6 +31,7 @@ Public Class BundlesForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub BundlesForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -50,13 +43,16 @@ Public Class BundlesForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #Region "Functions"
+
     Sub callAutoComplete()
         globalautocompleteListOfValues(cboUnitOfMeasure, "Unit Of Measure", Me)
         autocompleteBrandName(cboBrandName)
         autocompleteCategory(cboCategory)
         autocompleteCompany(cboCompany)
     End Sub
+
     Sub callAutoPopulate()
         autopopulatecboSearch()
         autopopulatecboBy()
@@ -66,7 +62,9 @@ Public Class BundlesForm
         autopopulateCompany(cboCompany)
         autopopulateStatus(cboStatus)
     End Sub
+
 #Region "Clear/Enable/Visible"
+
     Sub clearfields()
         Try
             cue = ""
@@ -88,6 +86,7 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearRightPage()
         Try
             cue = ""
@@ -106,6 +105,7 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearSearchItems()
         Try
             txtSimpleSearch.Text = ""
@@ -123,6 +123,7 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearcboSearch()
         Try
             txtPage.Text = ""
@@ -137,6 +138,7 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearBundleInformation()
         Try
             txtBundleName.Text = ""
@@ -161,6 +163,7 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearAddProduct()
         Try
             cboBy.Text = ""
@@ -174,6 +177,7 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
     Sub enableGB(ByVal enable1 As Boolean, ByVal enable2 As Boolean)
         Try
             gbSearch.Enabled = enable1
@@ -187,6 +191,7 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
     Sub enableANDvisibleMS(ByVal enable1 As Boolean, ByVal enable2 As Boolean, ByVal visible1 As Boolean)
         Try
             msNew.Enabled = enable1
@@ -198,6 +203,7 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
     Sub visibleGB(ByVal visible1 As Boolean, ByVal visible2 As Boolean)
         Try
             dgProductColorSizes.Visible = visible1
@@ -209,8 +215,11 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Click"
+
     Sub tsrefreshperformclick()
         Try
             errProvider.Clear()
@@ -226,6 +235,7 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
     Sub btnAddperformclick()
         Try
             errProvider.Clear()
@@ -277,8 +287,11 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Computations"
+
     Sub totalcomputation()
         Try
             bftotalqtyavailable = 0
@@ -298,8 +311,11 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Page Setup"
+
     Sub pageSetup()
         Try
             getCountPageNum()
@@ -320,6 +336,7 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCountPageNum()
         Try
             countpagenum = 0
@@ -337,6 +354,7 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
     Sub pageSetup1(ByVal isearchstring As String)
         Try
             getCountPageNum1(isearchstring)
@@ -357,6 +375,7 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCountPageNum1(ByVal esearchstring As String)
         Try
             countpagenum = 0
@@ -374,6 +393,7 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
     Sub pageSetup2(ByVal isearchstring As String)
         Try
             getCountPageNum2(isearchstring)
@@ -394,12 +414,13 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCountPageNum2(ByVal ecommontring As String)
         Try
             countpagenum = 0
             If conn.State = ConnectionState.Open Then conn.Close()
             Dim dtCid As New DataTable
-            dtCid = getDataTableForSQL("SELECT COUNT(b.rowid) FROM productbundles b LEFT JOIN productbundleitems pbi ON b.rowid = pbi.productbundleid LEFT JOIN productcolorsizes pcs ON pbi.productcolorsizeid = pcs.rowid " & _
+            dtCid = getDataTableForSQL("SELECT COUNT(b.rowid) FROM productbundles b LEFT JOIN productbundleitems pbi ON b.rowid = pbi.productbundleid LEFT JOIN productcolorsizes pcs ON pbi.productcolorsizeid = pcs.rowid " &
                         "LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN products p ON pc.productid = p.rowid WHERE b.organizationid = " & Z_OrganizationID & " AND " & ecommontring & " ")
             If dtCid.Rows.Count <> 0 Then
                 countpagenum = dtCid.Rows(0)(0)
@@ -412,6 +433,7 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCommonPhrase(ByVal icommonbox As ComboBox, ByVal icommonstring As String)
         Try
             commonphrase = ""
@@ -428,9 +450,13 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Display"
+
 #Region "AutoComplete"
+
     Sub autocompleteBrandName(ByVal icombobox As ComboBox)
         Try
             Dim brandname As New AutoCompleteStringCollection
@@ -451,6 +477,7 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
     Sub autocompleteCategory(ByVal icombobox As ComboBox)
         Try
             Dim categoryname As New AutoCompleteStringCollection
@@ -471,6 +498,7 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
     Sub autocompleteCompany(ByVal icombobox As ComboBox)
         Try
             Dim companyname As New AutoCompleteStringCollection
@@ -491,6 +519,7 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
     Sub autocompleteStatus(ByVal icombobox As ComboBox)
         Try
             Dim status As New AutoCompleteStringCollection
@@ -511,10 +540,11 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
     Sub autocompleteProductCode(ByVal icombobox As ComboBox)
         Try
             Dim productcode As New AutoCompleteStringCollection
-            Dim cmd As New MySqlCommand("SELECT COALESCE(p.productcode,'') AS 'productcode' FROM productbundles b LEFT JOIN productbundleitems pbi ON b.rowid = pbi.productbundleid LEFT JOIN productcolorsizes pcs ON pbi.productcolorsizeid = pcs.rowid " & _
+            Dim cmd As New MySqlCommand("SELECT COALESCE(p.productcode,'') AS 'productcode' FROM productbundles b LEFT JOIN productbundleitems pbi ON b.rowid = pbi.productbundleid LEFT JOIN productcolorsizes pcs ON pbi.productcolorsizeid = pcs.rowid " &
                                 "LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN products p ON pc.productid = p.rowid WHERE b.organizationid = " & Z_OrganizationID & " GROUP BY p.productcode ORDER BY p.productcode ", conn)
             Dim ds As New DataSet
             Dim da As New MySqlDataAdapter(cmd)
@@ -532,10 +562,11 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
     Sub autocompleteSKU(ByVal icombobox As ComboBox)
         Try
             Dim sku As New AutoCompleteStringCollection
-            Dim cmd As New MySqlCommand("SELECT COALESCE(pcs.sku,'') AS 'sku' FROM productbundles b LEFT JOIN productbundleitems pbi ON b.rowid = pbi.productbundleid " & _
+            Dim cmd As New MySqlCommand("SELECT COALESCE(pcs.sku,'') AS 'sku' FROM productbundles b LEFT JOIN productbundleitems pbi ON b.rowid = pbi.productbundleid " &
                                 "LEFT JOIN productcolorsizes pcs ON pbi.productcolorsizeid = pcs.rowid WHERE b.organizationid = " & Z_OrganizationID & " GROUP BY pcs.sku ORDER BY pcs.sku ", conn)
             Dim ds As New DataSet
             Dim da As New MySqlDataAdapter(cmd)
@@ -553,6 +584,7 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
     Sub autocompleteBySKU(ByVal icombobox As ComboBox)
         Try
             Dim sku As New AutoCompleteStringCollection
@@ -573,8 +605,11 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "AutoPopulate"
+
     Sub autopopulatecboSearch()
         Try
             cboSearch1.Items.Clear()
@@ -593,6 +628,7 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
     Sub autopopulatecboBy()
         Try
             cboBy.Items.Clear()
@@ -606,6 +642,7 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
     Sub autopopulateBrandName(ByVal icombobox As ComboBox)
         Try
             icombobox.Items.Clear()
@@ -626,6 +663,7 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
     Sub autopopulateCategory(ByVal icombobox As ComboBox)
         Try
             icombobox.Items.Clear()
@@ -646,6 +684,7 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
     Sub autopopulateCompany(ByVal icombobox As ComboBox)
         Try
             icombobox.Items.Clear()
@@ -666,6 +705,7 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
     Sub autopopulateStatus(ByVal icombobox As ComboBox)
         Try
             icombobox.Items.Clear()
@@ -685,11 +725,12 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
     Sub autopopulateProductCode(ByVal icombobox As ComboBox)
         Try
             icombobox.Items.Clear()
             If conn.State = ConnectionState.Open Then conn.Close()
-            Dim sql1 As String = "SELECT COALESCE(p.productcode,'') AS 'productcode' FROM productbundles b LEFT JOIN productbundleitems pbi ON b.rowid = pbi.productbundleid LEFT JOIN productcolorsizes pcs ON pbi.productcolorsizeid = pcs.rowid " & _
+            Dim sql1 As String = "SELECT COALESCE(p.productcode,'') AS 'productcode' FROM productbundles b LEFT JOIN productbundleitems pbi ON b.rowid = pbi.productbundleid LEFT JOIN productcolorsizes pcs ON pbi.productcolorsizeid = pcs.rowid " &
                                 "LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN products p ON pc.productid = p.rowid WHERE b.organizationid = " & Z_OrganizationID & " GROUP BY p.productcode ORDER BY p.productcode "
             If conn.State = ConnectionState.Closed Then conn.Open()
             Dim cmd1 As New MySqlCommand(sql1, conn)
@@ -706,11 +747,12 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
     Sub autopopulateSKU(ByVal icombobox As ComboBox)
         Try
             icombobox.Items.Clear()
             If conn.State = ConnectionState.Open Then conn.Close()
-            Dim sql1 As String = "SELECT COALESCE(pcs.sku,'') AS 'sku' FROM productbundles b LEFT JOIN productbundleitems pbi ON b.rowid = pbi.productbundleid " & _
+            Dim sql1 As String = "SELECT COALESCE(pcs.sku,'') AS 'sku' FROM productbundles b LEFT JOIN productbundleitems pbi ON b.rowid = pbi.productbundleid " &
                                 "LEFT JOIN productcolorsizes pcs ON pbi.productcolorsizeid = pcs.rowid WHERE b.organizationid = " & Z_OrganizationID & " GROUP BY pcs.sku ORDER BY pcs.sku "
             If conn.State = ConnectionState.Closed Then conn.Open()
             Dim cmd1 As New MySqlCommand(sql1, conn)
@@ -727,6 +769,7 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
     Sub autopopulateBySKU(ByVal icombobox As ComboBox)
         Try
             icombobox.Items.Clear()
@@ -747,13 +790,16 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Datagrids"
+
     Sub displayBundleList(ByVal istartpage As Integer)
         Try
             dgBundleList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT b.rowid,COALESCE(b.bundlename,''),COALESCE(b.sku,''),COALESCE(b.srp,0.0),COALESCE(b.status,'') FROM productbundles b " & _
+            Dim sql1 As String = "SELECT b.rowid,COALESCE(b.bundlename,''),COALESCE(b.sku,''),COALESCE(b.srp,0.0),COALESCE(b.status,'') FROM productbundles b " &
                         "WHERE b.organizationid = " & Z_OrganizationID & " ORDER BY b.bundlename ASC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -782,12 +828,13 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
     Sub displaySearchPhrase(ByVal isearchphrase As String, ByVal istartpage As Integer)
         Try
             dgBundleList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT b.rowid,COALESCE(b.bundlename,''),COALESCE(b.sku,''),COALESCE(b.srp,0.0),COALESCE(b.status,'') FROM productbundles b LEFT JOIN categories ct ON b.categoryid = ct.rowid " & _
-                        "WHERE b.organizationid = " & Z_OrganizationID & " AND (b.bundlename LIKE ""%" & isearchphrase & "%"" OR b.sku LIKE ""%" & isearchphrase & "%"" OR ct.categoryname LIKE ""%" & isearchphrase & "%"" OR " & _
+            Dim sql1 As String = "SELECT b.rowid,COALESCE(b.bundlename,''),COALESCE(b.sku,''),COALESCE(b.srp,0.0),COALESCE(b.status,'') FROM productbundles b LEFT JOIN categories ct ON b.categoryid = ct.rowid " &
+                        "WHERE b.organizationid = " & Z_OrganizationID & " AND (b.bundlename LIKE ""%" & isearchphrase & "%"" OR b.sku LIKE ""%" & isearchphrase & "%"" OR ct.categoryname LIKE ""%" & isearchphrase & "%"" OR " &
                         "b.status LIKE ""%" & isearchphrase & "%"") ORDER BY b.bundlename ASC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -816,12 +863,13 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
     Sub displayCommonPhrase(ByVal icommonphrase As String, ByVal istartpage As Integer)
         Try
             dgBundleList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT b.rowid,COALESCE(b.bundlename,''),COALESCE(b.sku,''),COALESCE(b.srp,0.0),COALESCE(b.status,'') FROM productbundles b LEFT JOIN productbundleitems pbi ON b.rowid = pbi.productbundleid " & _
-                            "LEFT JOIN productcolorsizes pcs ON pbi.productcolorsizeid = pcs.rowid LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN products p ON pc.productid = p.rowid " & _
+            Dim sql1 As String = "SELECT b.rowid,COALESCE(b.bundlename,''),COALESCE(b.sku,''),COALESCE(b.srp,0.0),COALESCE(b.status,'') FROM productbundles b LEFT JOIN productbundleitems pbi ON b.rowid = pbi.productbundleid " &
+                            "LEFT JOIN productcolorsizes pcs ON pbi.productcolorsizeid = pcs.rowid LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN products p ON pc.productid = p.rowid " &
                             "WHERE b.organizationid = " & Z_OrganizationID & " AND " & icommonphrase & " ORDER BY b.bundlename ASC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -850,10 +898,11 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
     Sub displayBundleInformation(ByVal iproductbundleid As Integer)
         Try
             If conn1.State = ConnectionState.Closed Then conn1.Open()
-            Dim sql1 As String = "SELECT COALESCE(b.bundlename,''),COALESCE(b.sku,''),COALESCE(b.srp,0.0),COALESCE(b.status,''),COALESCE(b.unitofmeasure,''),COALESCE(b.description,''),COALESCE(br.brandname,''),COALESCE(ct.categoryname,'')," & _
+            Dim sql1 As String = "SELECT COALESCE(b.bundlename,''),COALESCE(b.sku,''),COALESCE(b.srp,0.0),COALESCE(b.status,''),COALESCE(b.unitofmeasure,''),COALESCE(b.description,''),COALESCE(br.brandname,''),COALESCE(ct.categoryname,'')," &
                 "COALESCE(cm.companyname,'') FROM productbundles b LEFT JOIN brands br ON b.brandid = br.rowid LEFT JOIN categories ct ON b.categoryid = ct.rowid LEFT JOIN companies cm ON b.companyid = cm.rowid WHERE b.rowid = " & iproductbundleid & " "
             Dim cmd1 As New MySqlCommand(sql1, conn1)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -877,12 +926,13 @@ Public Class BundlesForm
             conn1.Close()
         End Try
     End Sub
+
     Sub displayBundleItems(ByVal iproductbundleid As Integer)
         Try
             dgBundleItems.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT bi.rowid,COALESCE(bi.productcolorsizeid,0),COALESCE(c.colorvalue,''),COALESCE(bi.qtyavailable,0),COALESCE(p.productcode,''),COALESCE(c.colorname,''),COALESCE(pcs.size,''),COALESCE(pcs.seasoncode,''),COALESCE(pcs.sku,'') " & _
-                    "FROM productbundleitems bi LEFT JOIN productcolorsizes pcs ON bi.productcolorsizeid = pcs.rowid LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN colors c ON pc.colorid = c.rowid " & _
+            Dim sql1 As String = "SELECT bi.rowid,COALESCE(bi.productcolorsizeid,0),COALESCE(c.colorvalue,''),COALESCE(bi.qtyavailable,0),COALESCE(p.productcode,''),COALESCE(c.colorname,''),COALESCE(pcs.size,''),COALESCE(pcs.seasoncode,''),COALESCE(pcs.sku,'') " &
+                    "FROM productbundleitems bi LEFT JOIN productcolorsizes pcs ON bi.productcolorsizeid = pcs.rowid LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN colors c ON pc.colorid = c.rowid " &
                     "LEFT JOIN products p ON pc.productid = p.rowid WHERE bi.productbundleid = " & iproductbundleid & " AND bi.organizationid = " & Z_OrganizationID & " AND bi.status = 'Active' ORDER BY p.productcode,c.colorname "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -923,11 +973,12 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
     Sub displayProductsA(ByVal iproductcolorsizeid As Integer)
         Try
             dgProductColorSizes.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT pcs.rowid,COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(c.colorname,''),COALESCE(pcs.size,''),COALESCE(pcs.seasoncode,''),COALESCE(pcs.sku,'') FROM productcolorsizes pcs " & _
+            Dim sql1 As String = "SELECT pcs.rowid,COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(c.colorname,''),COALESCE(pcs.size,''),COALESCE(pcs.seasoncode,''),COALESCE(pcs.sku,'') FROM productcolorsizes pcs " &
                 "LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN colors c ON pc.colorid = c.rowid LEFT JOIN products p ON pc.productid = p.rowid WHERE pcs.rowid = " & iproductcolorsizeid & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -964,11 +1015,12 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
     Sub displayProductsB(ByVal iproductid As Integer)
         Try
             dgProductColors.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT pc.rowid,COALESCE(c.colorvalue,''),COALESCE(c.colorname,'') FROM productcolors pc LEFT JOIN colors c ON pc.colorid = c.rowid " & _
+            Dim sql1 As String = "SELECT pc.rowid,COALESCE(c.colorvalue,''),COALESCE(c.colorname,'') FROM productcolors pc LEFT JOIN colors c ON pc.colorid = c.rowid " &
                             "WHERE pc.organizationid = " & Z_OrganizationID & " AND pc.productid = " & iproductid & " ORDER BY c.colorname ASC "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -998,6 +1050,7 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
     Sub displayProductsC(ByVal iproductcolorid As Integer)
         Try
             dgProductSizes.Rows.Clear()
@@ -1031,8 +1084,11 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Colors"
+
     Sub colorCoding()
         Try
             If dgProductColorSizes.Rows.Count <> 0 Then
@@ -1065,9 +1121,13 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #End Region
+
 #Region "Adding Functions"
+
     Sub checkProductBundleItemsA()
         Try
             If dgProductColorSizes.Rows.Count <> 0 Then
@@ -1118,6 +1178,7 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
     Sub checkProductBundleItemsB()
         Try
             If dgProductSizes.Rows.Count <> 0 Then
@@ -1158,10 +1219,11 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
     Sub addProductBundleItem(ByVal iproductcolorsizeid As Integer, ByVal iqtyavailable As Integer)
         Try
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT pcs.rowid,COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(c.colorname,''),COALESCE(pcs.size,''),COALESCE(pcs.seasoncode,''),COALESCE(pcs.sku,'') FROM productcolorsizes pcs " & _
+            Dim sql1 As String = "SELECT pcs.rowid,COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(c.colorname,''),COALESCE(pcs.size,''),COALESCE(pcs.seasoncode,''),COALESCE(pcs.sku,'') FROM productcolorsizes pcs " &
                 "LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN colors c ON pc.colorid = c.rowid LEFT JOIN products p ON pc.productid = p.rowid WHERE pcs.rowid = " & iproductcolorsizeid & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -1194,8 +1256,11 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #End Region
+
     Private Sub tabMain_DrawItem(sender As Object, e As DrawItemEventArgs) Handles tabMain.DrawItem
         Try
             TabControlColor(tabMain, e)
@@ -1205,6 +1270,7 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbClose_Click(sender As Object, e As EventArgs) Handles pbClose.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1219,6 +1285,7 @@ Public Class BundlesForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub txtDescription_Leave(sender As Object, e As EventArgs) Handles txtDescription.Leave
         Try
             txtBundleName.Focus()
@@ -1228,6 +1295,7 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub btnAddProduct_Leave(sender As Object, e As EventArgs) Handles btnAddProduct.Leave
         Try
             cboByPhrase.Focus()
@@ -1237,6 +1305,7 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbAutoAddA_MouseEnter(sender As Object, e As EventArgs) Handles pbAutoAddA.MouseEnter
         Try
             pbAutoAddA.BackColor = Color.MediumSpringGreen
@@ -1246,6 +1315,7 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbAutoAddA_MouseLeave(sender As Object, e As EventArgs) Handles pbAutoAddA.MouseLeave
         Try
             pbAutoAddA.BackColor = Color.Transparent
@@ -1255,6 +1325,7 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbAutoAddA_Click(sender As Object, e As EventArgs) Handles pbAutoAddA.Click
         Try
             myBalloon("Automatic adding of unit of measure.", "Auto-Add", pbAutoAddA, -15, -65)
@@ -1264,6 +1335,7 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbAutoAddB_MouseEnter(sender As Object, e As EventArgs) Handles pbAutoAddB.MouseEnter
         Try
             pbAutoAddB.BackColor = Color.MediumSpringGreen
@@ -1273,6 +1345,7 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbAutoAddB_MouseLeave(sender As Object, e As EventArgs) Handles pbAutoAddB.MouseLeave
         Try
             pbAutoAddB.BackColor = Color.Transparent
@@ -1282,6 +1355,7 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbAutoAddB_Click(sender As Object, e As EventArgs) Handles pbAutoAddB.Click
         Try
             myBalloon("Automatic adding of brand name.", "Auto-Add", pbAutoAddB, -15, -65)
@@ -1291,6 +1365,7 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbAutoAddC_MouseEnter(sender As Object, e As EventArgs) Handles pbAutoAddC.MouseEnter
         Try
             pbAutoAddC.BackColor = Color.MediumSpringGreen
@@ -1300,6 +1375,7 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbAutoAddC_MouseLeave(sender As Object, e As EventArgs) Handles pbAutoAddC.MouseLeave
         Try
             pbAutoAddC.BackColor = Color.Transparent
@@ -1309,6 +1385,7 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbAutoAddC_Click(sender As Object, e As EventArgs) Handles pbAutoAddC.Click
         Try
             myBalloon("Automatic adding of category.", "Auto-Add", pbAutoAddC, -15, -65)
@@ -1318,6 +1395,7 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbAutoAddD_MouseEnter(sender As Object, e As EventArgs) Handles pbAutoAddD.MouseEnter
         Try
             pbAutoAddD.BackColor = Color.MediumSpringGreen
@@ -1327,6 +1405,7 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbAutoAddD_MouseLeave(sender As Object, e As EventArgs) Handles pbAutoAddD.MouseLeave
         Try
             pbAutoAddD.BackColor = Color.Transparent
@@ -1336,6 +1415,7 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbAutoAddD_Click(sender As Object, e As EventArgs) Handles pbAutoAddD.Click
         Try
             myBalloon("Automatic adding of vendor name.", "Auto-Add", pbAutoAddD, -15, -65)
@@ -1345,6 +1425,7 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub tsRefresh_Click(sender As Object, e As EventArgs) Handles tsRefresh.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1357,6 +1438,7 @@ Public Class BundlesForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msNew_Click(sender As Object, e As EventArgs) Handles msNew.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1398,6 +1480,7 @@ Public Class BundlesForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msCancel_Click(sender As Object, e As EventArgs) Handles msCancel.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1428,6 +1511,7 @@ Public Class BundlesForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgBundleList_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgBundleList.CellClick
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1455,6 +1539,7 @@ Public Class BundlesForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgBundleList_KeyUp(sender As Object, e As KeyEventArgs) Handles dgBundleList.KeyUp
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1484,6 +1569,7 @@ Public Class BundlesForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub txtBundleName_Leave(sender As Object, e As EventArgs) Handles txtBundleName.Leave
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1510,6 +1596,7 @@ Public Class BundlesForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     'Private Sub txtBundleName_TextChanged(sender As Object, e As EventArgs) Handles txtBundleName.TextChanged
     '    Me.Cursor = Cursors.WaitCursor
     '    Try
@@ -1574,6 +1661,7 @@ Public Class BundlesForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     'Private Sub txtSKU_TextChanged(sender As Object, e As EventArgs) Handles txtSKU.TextChanged
     '    Me.Cursor = Cursors.WaitCursor
     '    Try
@@ -1644,6 +1732,7 @@ Public Class BundlesForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboByPhrase_Leave(sender As Object, e As EventArgs) Handles cboByPhrase.Leave
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1694,6 +1783,7 @@ Public Class BundlesForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     'Private Sub cboByPhrase_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboByPhrase.SelectedIndexChanged
     '    Me.Cursor = Cursors.WaitCursor
     '    Try
@@ -1807,6 +1897,7 @@ Public Class BundlesForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgProductColors_KeyUp(sender As Object, e As KeyEventArgs) Handles dgProductColors.KeyUp
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1822,6 +1913,7 @@ Public Class BundlesForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgProductSizes_KeyDown(sender As Object, e As KeyEventArgs) Handles dgProductSizes.KeyDown
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1837,6 +1929,7 @@ Public Class BundlesForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgProductSizes_MouseUp(sender As Object, e As MouseEventArgs) Handles dgProductSizes.MouseUp
         Try
             Dim hitTestinfo As DataGridView.HitTestInfo
@@ -1854,6 +1947,7 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub dgBundleItems_MouseUp(sender As Object, e As MouseEventArgs) Handles dgBundleItems.MouseUp
         Try
             Dim hitTestinfo As DataGridView.HitTestInfo
@@ -1871,6 +1965,7 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub txtQty_TextChanged(sender As Object, e As EventArgs) Handles txtQty.TextChanged
         Try
             errProvider.Clear()
@@ -1880,6 +1975,7 @@ Public Class BundlesForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub btnAddProduct_Click(sender As Object, e As EventArgs) Handles btnAddProduct.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1891,6 +1987,7 @@ Public Class BundlesForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub txtQty_KeyDown(sender As Object, e As KeyEventArgs) Handles txtQty.KeyDown
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1904,6 +2001,7 @@ Public Class BundlesForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msSave_Click(sender As Object, e As EventArgs) Handles msSave.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2007,7 +2105,7 @@ Public Class BundlesForm
                             txtBundleName.Focus()
                             Exit Try
                         End If
-                        I_ProductBundles(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, If(bfcategoryid = 0, DBNull.Value, bfcategoryid), If(bfbrandid = 0, DBNull.Value, bfbrandid), If(bfcompanyid = 0, DBNull.Value, bfcompanyid), _
+                        I_ProductBundles(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, If(bfcategoryid = 0, DBNull.Value, bfcategoryid), If(bfbrandid = 0, DBNull.Value, bfbrandid), If(bfcompanyid = 0, DBNull.Value, bfcompanyid),
                                 txtBundleName.Text, If(bfskuid = 0, txtSKU.Text, ""), cboUnitOfMeasure.Text, txtDescription.Text, cboStatus.Text, If(IsNumeric(txtSRP.Text), CDec(txtSRP.Text), 0.0), Me)
                         If myModule.systemerrorfound = False Then
                             If dgBundleItems.Rows.Count <> 0 Then
@@ -2015,7 +2113,7 @@ Public Class BundlesForm
                                 bfproductbundleid = globalproductbundleid
                                 For a = 0 To dgBundleItems.Rows.Count - 1
                                     If myModule.systemerrorfound = False Then
-                                        I_ProductBundleItems(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, bfproductbundleid, CInt(dgBundleItems.Rows(a).Cells("bi_pcsrowid").Value), _
+                                        I_ProductBundleItems(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, bfproductbundleid, CInt(dgBundleItems.Rows(a).Cells("bi_pcsrowid").Value),
                                                 If(IsNumeric(dgBundleItems.Rows(a).Cells("bi_qtyavailable").Value), CInt(dgBundleItems.Rows(a).Cells("bi_qtyavailable").Value), 0), "Active", Me)
                                     Else
                                         Exit Try
@@ -2042,7 +2140,7 @@ Public Class BundlesForm
                             txtBundleName.Focus()
                             Exit Try
                         End If
-                        U_ProductBundles(CInt(dgBundleList.CurrentRow.Cells("b_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, If(bfcategoryid = 0, DBNull.Value, bfcategoryid), If(bfbrandid = 0, DBNull.Value, bfbrandid), _
+                        U_ProductBundles(CInt(dgBundleList.CurrentRow.Cells("b_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, If(bfcategoryid = 0, DBNull.Value, bfcategoryid), If(bfbrandid = 0, DBNull.Value, bfbrandid),
                                 If(bfcompanyid = 0, DBNull.Value, bfcompanyid), txtBundleName.Text, If(bfskuid = 0, txtSKU.Text, ""), cboUnitOfMeasure.Text, txtDescription.Text, cboStatus.Text, If(IsNumeric(txtSRP.Text), CDec(txtSRP.Text), 0.0), Me)
                         If myModule.systemerrorfound = False Then
                             If dgBundleItems.Rows.Count <> 0 Then
@@ -2051,7 +2149,7 @@ Public Class BundlesForm
                                         getProductBundleItemID(CInt(dgBundleList.CurrentRow.Cells("b_rowid").Value), CInt(dgBundleItems.Rows(a).Cells("bi_pcsrowid").Value), Me)
                                         bfproductbundleitemid = globalproductbundleitemid
                                         If bfproductbundleitemid = 0 Then
-                                            I_ProductBundleItems(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, CInt(dgBundleList.CurrentRow.Cells("b_rowid").Value), CInt(dgBundleItems.Rows(a).Cells("bi_pcsrowid").Value), _
+                                            I_ProductBundleItems(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, CInt(dgBundleList.CurrentRow.Cells("b_rowid").Value), CInt(dgBundleItems.Rows(a).Cells("bi_pcsrowid").Value),
                                                 If(IsNumeric(dgBundleItems.Rows(a).Cells("bi_qtyavailable").Value), CInt(dgBundleItems.Rows(a).Cells("bi_qtyavailable").Value), 0), "Active", Me)
                                         Else
                                             U_ProductBundleItems(bfproductbundleitemid, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, If(IsNumeric(dgBundleItems.Rows(a).Cells("bi_qtyavailable").Value), CInt(dgBundleItems.Rows(a).Cells("bi_qtyavailable").Value), 0), "Active", Me)
@@ -2079,6 +2177,7 @@ Public Class BundlesForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgBundleItems_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgBundleItems.CellContentClick
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2140,7 +2239,9 @@ Public Class BundlesForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #Region "Search/Page Setup"
+
     Private Sub txtSimpleSearch_KeyDown(sender As Object, e As KeyEventArgs) Handles txtSimpleSearch.KeyDown
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2165,6 +2266,7 @@ Public Class BundlesForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboSearch1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboSearch1.SelectedIndexChanged
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2188,6 +2290,7 @@ Public Class BundlesForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboSearch3_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboSearch3.SelectedIndexChanged
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2211,6 +2314,7 @@ Public Class BundlesForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboSearch2_KeyDown(sender As Object, e As KeyEventArgs) Handles cboSearch2.KeyDown
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2255,6 +2359,7 @@ Public Class BundlesForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboSearch4_KeyDown(sender As Object, e As KeyEventArgs) Handles cboSearch4.KeyDown
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2299,6 +2404,7 @@ Public Class BundlesForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdFirst_Click(sender As Object, e As EventArgs) Handles cmdFirst.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2320,6 +2426,7 @@ Public Class BundlesForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdPrev_Click(sender As Object, e As EventArgs) Handles cmdPrev.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2349,6 +2456,7 @@ Public Class BundlesForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdNext_Click(sender As Object, e As EventArgs) Handles cmdNext.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2374,6 +2482,7 @@ Public Class BundlesForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdLast_Click(sender As Object, e As EventArgs) Handles cmdLast.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2399,6 +2508,7 @@ Public Class BundlesForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub txtPage_KeyDown(sender As Object, e As KeyEventArgs) Handles txtPage.KeyDown
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2442,8 +2552,11 @@ Public Class BundlesForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #End Region
+
 #Region "Datagrid Errors"
+
     Private Sub dgBundleList_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgBundleList.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2484,6 +2597,7 @@ Public Class BundlesForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgProductColorSizes_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgProductColorSizes.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2524,6 +2638,7 @@ Public Class BundlesForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgProductColors_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgProductColors.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2564,6 +2679,7 @@ Public Class BundlesForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgProductSizes_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgProductSizes.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2604,6 +2720,7 @@ Public Class BundlesForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgBundleItems_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgBundleItems.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2644,5 +2761,7 @@ Public Class BundlesForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #End Region
+
 End Class

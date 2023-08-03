@@ -1,14 +1,5 @@
 ﻿Imports MySql.Data.MySqlClient
-Imports System.IO
-Imports System.Windows.Forms
-Imports CrystalDecisions.CrystalReports.Engine
-Imports System.Linq
-Imports System.Collections
-Imports System.Collections.Generic
-Imports System.Data
-Imports System.Diagnostics
-Imports System.Runtime.InteropServices
-Imports System.Text.RegularExpressions
+
 Public Class StockTransferForm
     Dim manager As New sqlModule.Manager
     Dim conn As New MySqlConnection(manager.GetConnString)
@@ -21,6 +12,7 @@ Public Class StockTransferForm
     Dim spagenum, countpagenum, numofpages, validpages As Integer
     Dim pageequation1, pageequation2, pageequation3, additionalpage As Decimal
     Dim getilid, getpilocid, getrscid, getnewpilocid, storderid, sttotalqtytotransfer As Integer
+
     Private Sub StocktTransferForm_Load(sender As Object, e As EventArgs) Handles Me.Load
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -37,6 +29,7 @@ Public Class StockTransferForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub StocktTransferForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -48,8 +41,11 @@ Public Class StockTransferForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #Region "Function"
+
 #Region "Clear/Enable/Visible"
+
     Sub clearfields()
         Try
             cue = ""
@@ -70,6 +66,7 @@ Public Class StockTransferForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearRightPage()
         Try
             cue = ""
@@ -87,6 +84,7 @@ Public Class StockTransferForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearSearchItems()
         Try
             txtSimpleSearch.Text = ""
@@ -98,6 +96,7 @@ Public Class StockTransferForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearStockTransInformation()
         Try
             txtStockTransferNo.Text = ""
@@ -111,6 +110,7 @@ Public Class StockTransferForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearAddProductA()
         Try
             cboFrom.Text = ""
@@ -125,6 +125,7 @@ Public Class StockTransferForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearDatagrids()
         Try
             dgRackShelfColumnFrom.Rows.Clear()
@@ -136,6 +137,7 @@ Public Class StockTransferForm
             conn.Close()
         End Try
     End Sub
+
     Sub visibleRackShelfColumnFrom(ByVal visible1 As Boolean)
         Try
             r_unitofmeasure.Visible = visible1
@@ -147,6 +149,7 @@ Public Class StockTransferForm
             conn.Close()
         End Try
     End Sub
+
     Sub visibleDatagrids(ByVal visible1 As Boolean, ByVal visible2 As Boolean)
         Try
             dgProductHistory.Visible = visible1
@@ -161,6 +164,7 @@ Public Class StockTransferForm
             conn.Close()
         End Try
     End Sub
+
     Sub enableGB(ByVal enable1 As Boolean, ByVal enable2 As Boolean, ByVal enable3 As Boolean)
         Try
             gbSearch.Enabled = enable1
@@ -173,6 +177,7 @@ Public Class StockTransferForm
             conn.Close()
         End Try
     End Sub
+
     Sub enableANDvisibleMS(ByVal enable1 As Boolean, ByVal enable2 As Boolean, ByVal visible1 As Boolean)
         Try
             msNew.Enabled = enable1
@@ -184,8 +189,11 @@ Public Class StockTransferForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Computation"
+
     Sub stocktransfercomputation()
         Try
             sttotalqtytotransfer = 0
@@ -203,8 +211,11 @@ Public Class StockTransferForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Click"
+
     Sub tsrefreshperformclick()
         Try
             errProvider.Clear()
@@ -218,8 +229,11 @@ Public Class StockTransferForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Page Setup"
+
     Sub pageSetup()
         Try
             getCountPageNum()
@@ -240,6 +254,7 @@ Public Class StockTransferForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCountPageNum()
         Try
             countpagenum = 0
@@ -257,6 +272,7 @@ Public Class StockTransferForm
             conn.Close()
         End Try
     End Sub
+
     Sub pageSetup1(ByVal isearchstring As String)
         Try
             getCountPageNum1(isearchstring)
@@ -277,12 +293,13 @@ Public Class StockTransferForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCountPageNum1(ByVal esearchstring As String)
         Try
             countpagenum = 0
             If conn.State = ConnectionState.Open Then conn.Close()
             Dim dtCid As New DataTable
-            dtCid = getDataTableForSQL("SELECT COALESCE(COUNT(po.rowid),0) FROM orders po WHERE po.organizationid = " & Z_OrganizationID & " AND po.ordertype = 'Stock Trans.' " & _
+            dtCid = getDataTableForSQL("SELECT COALESCE(COUNT(po.rowid),0) FROM orders po WHERE po.organizationid = " & Z_OrganizationID & " AND po.ordertype = 'Stock Trans.' " &
                             " AND (po.ordernumber LIKE ""%" & esearchstring & "%"" OR po.status LIKE ""%" & esearchstring & "%"") ")
             If dtCid.Rows.Count <> 0 Then
                 countpagenum = dtCid.Rows(0)(0)
@@ -295,14 +312,18 @@ Public Class StockTransferForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Display"
+
 #Region "AutoComplete"
+
     Sub autocompleteStockFrom(ByVal icombobox As ComboBox)
         Try
             Dim stockfrom As New AutoCompleteStringCollection
-            Dim cmd As New MySqlCommand("SELECT COALESCE(CONCAT(COALESCE(p.productcode,''),' / ',COALESCE(c.colorname,''),' / ',COALESCE(pcs.size,''),' / ',COALESCE(pcs.seasoncode,''),' - ',COALESCE(rsc.rackno,''),' / ',COALESCE(rsc.columnno,''),' / ',COALESCE(rsc.shelfno,'')),'') AS 'StockFrom' FROM productinventorylocation pil " & _
-                            "LEFT JOIN rackshelfcolumn rsc ON pil.rackshelfcolumnid = rsc.rowid LEFT JOIN productcolorsizes pcs ON pil.productcolorsizeid = pcs.rowid LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN colors c ON pc.colorid = c.rowid LEFT JOIN products p ON pc.productid = p.rowid " & _
+            Dim cmd As New MySqlCommand("SELECT COALESCE(CONCAT(COALESCE(p.productcode,''),' / ',COALESCE(c.colorname,''),' / ',COALESCE(pcs.size,''),' / ',COALESCE(pcs.seasoncode,''),' - ',COALESCE(rsc.rackno,''),' / ',COALESCE(rsc.columnno,''),' / ',COALESCE(rsc.shelfno,'')),'') AS 'StockFrom' FROM productinventorylocation pil " &
+                            "LEFT JOIN rackshelfcolumn rsc ON pil.rackshelfcolumnid = rsc.rowid LEFT JOIN productcolorsizes pcs ON pil.productcolorsizeid = pcs.rowid LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN colors c ON pc.colorid = c.rowid LEFT JOIN products p ON pc.productid = p.rowid " &
                             "WHERE pil.organizationid = " & Z_OrganizationID & " AND rsc.inventorylocationid = " & getilid & " AND pil.totalavailableqty - pil.totalallocatedqty > 0 GROUP BY pil.rowid ", conn)
             Dim ds As New DataSet
             Dim da As New MySqlDataAdapter(cmd)
@@ -320,10 +341,11 @@ Public Class StockTransferForm
             conn.Close()
         End Try
     End Sub
+
     Sub autocompleteRackColumnShelf(ByVal icombobox As ComboBox)
         Try
             Dim rackcolumnshelf As New AutoCompleteStringCollection
-            Dim cmd As New MySqlCommand("SELECT COALESCE(CONCAT(COALESCE(rsc.rackno,''),' / ',COALESCE(rsc.columnno,''),' / ',COALESCE(rsc.shelfno,'')),'') AS 'RackColumnShelf' FROM rackshelfcolumn rsc " & _
+            Dim cmd As New MySqlCommand("SELECT COALESCE(CONCAT(COALESCE(rsc.rackno,''),' / ',COALESCE(rsc.columnno,''),' / ',COALESCE(rsc.shelfno,'')),'') AS 'RackColumnShelf' FROM rackshelfcolumn rsc " &
                             "WHERE rsc.organizationid = " & Z_OrganizationID & " AND rsc.`status` = 'Active' AND rsc.inventorylocationid = " & getilid & " GROUP BY rsc.rowid ", conn)
             Dim ds As New DataSet
             Dim da As New MySqlDataAdapter(cmd)
@@ -341,14 +363,17 @@ Public Class StockTransferForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "AutoPopulate"
+
     Sub autopopulateStockFrom(ByVal icombobox As ComboBox)
         Try
             icombobox.Items.Clear()
             If conn.State = ConnectionState.Open Then conn.Close()
-            Dim sql1 As String = "SELECT COALESCE(CONCAT(COALESCE(p.productcode,''),' / ',COALESCE(c.colorname,''),' / ',COALESCE(pcs.size,''),' / ',COALESCE(pcs.seasoncode,''),' - ',COALESCE(rsc.rackno,''),' / ',COALESCE(rsc.columnno,''),' / ',COALESCE(rsc.shelfno,'')),'') AS 'StockFrom' FROM productinventorylocation pil " & _
-                            "LEFT JOIN rackshelfcolumn rsc ON pil.rackshelfcolumnid = rsc.rowid LEFT JOIN productcolorsizes pcs ON pil.productcolorsizeid = pcs.rowid LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN colors c ON pc.colorid = c.rowid LEFT JOIN products p ON pc.productid = p.rowid " & _
+            Dim sql1 As String = "SELECT COALESCE(CONCAT(COALESCE(p.productcode,''),' / ',COALESCE(c.colorname,''),' / ',COALESCE(pcs.size,''),' / ',COALESCE(pcs.seasoncode,''),' - ',COALESCE(rsc.rackno,''),' / ',COALESCE(rsc.columnno,''),' / ',COALESCE(rsc.shelfno,'')),'') AS 'StockFrom' FROM productinventorylocation pil " &
+                            "LEFT JOIN rackshelfcolumn rsc ON pil.rackshelfcolumnid = rsc.rowid LEFT JOIN productcolorsizes pcs ON pil.productcolorsizeid = pcs.rowid LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN colors c ON pc.colorid = c.rowid LEFT JOIN products p ON pc.productid = p.rowid " &
                             "WHERE pil.organizationid = " & Z_OrganizationID & " AND rsc.inventorylocationid = " & getilid & " AND pil.totalavailableqty - pil.totalallocatedqty > 0 GROUP BY pil.rowid ORDER BY p.productcode,c.colorname,pcs.size "
             If conn.State = ConnectionState.Closed Then conn.Open()
             Dim cmd1 As New MySqlCommand(sql1, conn)
@@ -365,11 +390,12 @@ Public Class StockTransferForm
             conn.Close()
         End Try
     End Sub
+
     Sub autopopulateRackColumnShelf(ByVal icombobox As ComboBox)
         Try
             icombobox.Items.Clear()
             If conn.State = ConnectionState.Open Then conn.Close()
-            Dim sql1 As String = "SELECT COALESCE(CONCAT(COALESCE(rsc.rackno,''),' / ',COALESCE(rsc.columnno,''),' / ',COALESCE(rsc.shelfno,'')),'') AS 'RackColumnShelf' FROM rackshelfcolumn rsc " & _
+            Dim sql1 As String = "SELECT COALESCE(CONCAT(COALESCE(rsc.rackno,''),' / ',COALESCE(rsc.columnno,''),' / ',COALESCE(rsc.shelfno,'')),'') AS 'RackColumnShelf' FROM rackshelfcolumn rsc " &
                             "WHERE rsc.organizationid = " & Z_OrganizationID & " AND rsc.`status` = 'Active' AND rsc.inventorylocationid = " & getilid & " GROUP BY rsc.rowid ORDER BY rsc.rackno,rsc.columnno,rsc.shelfno "
             If conn.State = ConnectionState.Closed Then conn.Open()
             Dim cmd1 As New MySqlCommand(sql1, conn)
@@ -386,13 +412,16 @@ Public Class StockTransferForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Datagrids"
+
     Sub displayStockTransferList(ByVal istartpage As Integer)
         Try
             dgStockTransferList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT s.rowid,COALESCE(s.ordernumber,''),DATE_FORMAT(s.orderdate,'%d-%b-%Y'),COALESCE(s.status,'') FROM orders s " & _
+            Dim sql1 As String = "SELECT s.rowid,COALESCE(s.ordernumber,''),DATE_FORMAT(s.orderdate,'%d-%b-%Y'),COALESCE(s.status,'') FROM orders s " &
                         "WHERE s.organizationid = " & Z_OrganizationID & " AND s.ordertype = 'Stock Trans.' ORDER BY s.orderdate DESC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -420,12 +449,13 @@ Public Class StockTransferForm
             conn.Close()
         End Try
     End Sub
+
     Sub displaySearchPhrase(ByVal isearchphrase As String, ByVal istartpage As Integer)
         Try
             dgStockTransferList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT s.rowid,COALESCE(s.ordernumber,''),DATE_FORMAT(s.orderdate,'%d-%b-%Y'),COALESCE(s.status,'') FROM orders s " & _
-                        "WHERE s.organizationid = " & Z_OrganizationID & " AND s.ordertype = 'Stock Trans.' AND (s.ordernumber LIKE ""%" & isearchphrase & "%"" OR s.status LIKE ""%" & isearchphrase & "%"") " & _
+            Dim sql1 As String = "SELECT s.rowid,COALESCE(s.ordernumber,''),DATE_FORMAT(s.orderdate,'%d-%b-%Y'),COALESCE(s.status,'') FROM orders s " &
+                        "WHERE s.organizationid = " & Z_OrganizationID & " AND s.ordertype = 'Stock Trans.' AND (s.ordernumber LIKE ""%" & isearchphrase & "%"" OR s.status LIKE ""%" & isearchphrase & "%"") " &
                         "ORDER BY s.orderdate DESC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -453,12 +483,13 @@ Public Class StockTransferForm
             conn.Close()
         End Try
     End Sub
+
     Sub displayStockFrom(ByVal iproductinventorylocid As Integer)
         Try
             dgRackShelfColumnFrom.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT pil.rowid,COALESCE(pil.productcolorsizeid,0),COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(c.colorname,''),COALESCE(pcs.size,''),COALESCE(pcs.seasoncode,''),COALESCE(p.unitofmeasure),COALESCE(pcs.sku,'')," & _
-                            "COALESCE(rsc.rackno,''),COALESCE(rsc.columnno,''),COALESCE(rsc.shelfno,''),COALESCE(pil.totalavailableqty,0),COALESCE(pil.totalallocatedqty,0) FROM productinventorylocation pil LEFT JOIN rackshelfcolumn rsc ON pil.rackshelfcolumnid = rsc.rowid " & _
+            Dim sql1 As String = "SELECT pil.rowid,COALESCE(pil.productcolorsizeid,0),COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(c.colorname,''),COALESCE(pcs.size,''),COALESCE(pcs.seasoncode,''),COALESCE(p.unitofmeasure),COALESCE(pcs.sku,'')," &
+                            "COALESCE(rsc.rackno,''),COALESCE(rsc.columnno,''),COALESCE(rsc.shelfno,''),COALESCE(pil.totalavailableqty,0),COALESCE(pil.totalallocatedqty,0) FROM productinventorylocation pil LEFT JOIN rackshelfcolumn rsc ON pil.rackshelfcolumnid = rsc.rowid " &
                             "LEFT JOIN productcolorsizes pcs ON pil.productcolorsizeid = pcs.rowid LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN colors c ON pc.colorid = c.rowid LEFT JOIN products p ON pc.productid = p.rowid WHERE pil.rowid = " & iproductinventorylocid & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -509,6 +540,7 @@ Public Class StockTransferForm
             conn.Close()
         End Try
     End Sub
+
     Sub displayStockTransferInformation(ByVal istocktransferid As Integer)
         Try
             If conn1.State = ConnectionState.Closed Then conn1.Open()
@@ -532,13 +564,14 @@ Public Class StockTransferForm
             conn1.Close()
         End Try
     End Sub
+
     Sub displayProductHistory(ByVal istocktransferid As Integer)
         Try
             dgProductHistory.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT h.rowid,COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(c.colorname,''),COALESCE(pcs.size,''),COALESCE(pcs.seasoncode,''),COALESCE(p.unitofmeasure),COALESCE(pcs.sku,''),COALESCE(rsc.rackno,'')," & _
-                        "COALESCE(rsc.columnno,''),COALESCE(rsc.shelfno,''),COALESCE(h.currentqty,0),COALESCE(h.qtytoapply,0),COALESCE(h.newqty,0),COALESCE(h.transactiontype,'') FROM productmovementhistory h LEFT JOIN productcolorsizes pcs ON h.productcolorsizeid = pcs.rowid " & _
-                        "LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN colors c ON pc.colorid = c.rowid LEFT JOIN products p ON pc.productid = p.rowid LEFT JOIN productinventorylocation pil ON h.productinventorylocationida = pil.rowid LEFT JOIN rackshelfcolumn rsc ON pil.rackshelfcolumnid = rsc.rowid " & _
+            Dim sql1 As String = "SELECT h.rowid,COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(c.colorname,''),COALESCE(pcs.size,''),COALESCE(pcs.seasoncode,''),COALESCE(p.unitofmeasure),COALESCE(pcs.sku,''),COALESCE(rsc.rackno,'')," &
+                        "COALESCE(rsc.columnno,''),COALESCE(rsc.shelfno,''),COALESCE(h.currentqty,0),COALESCE(h.qtytoapply,0),COALESCE(h.newqty,0),COALESCE(h.transactiontype,'') FROM productmovementhistory h LEFT JOIN productcolorsizes pcs ON h.productcolorsizeid = pcs.rowid " &
+                        "LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN colors c ON pc.colorid = c.rowid LEFT JOIN products p ON pc.productid = p.rowid LEFT JOIN productinventorylocation pil ON h.productinventorylocationida = pil.rowid LEFT JOIN rackshelfcolumn rsc ON pil.rackshelfcolumnid = rsc.rowid " &
                         "WHERE h.organizationid = " & Z_OrganizationID & " AND h.orderid = " & istocktransferid & " ORDER BY h.transactiontype "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -588,8 +621,11 @@ Public Class StockTransferForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Colors"
+
     Sub colorCoding()
         Try
             If dgRackShelfColumnFrom.Rows.Count <> 0 Then
@@ -606,9 +642,13 @@ Public Class StockTransferForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #End Region
+
 #Region "Adding"
+
     Sub addRackColumnShelf(ByVal irackcolumnshelfid As Integer)
         Try
             If dgRackShelfColumnTo.Rows.Count <> 0 Then
@@ -649,6 +689,7 @@ Public Class StockTransferForm
             conn.Close()
         End Try
     End Sub
+
     Sub addRackColumnShelfItem(ByVal erackcolumnshelfid As Integer)
         Try
             If conn.State = ConnectionState.Closed Then conn.Open()
@@ -677,8 +718,11 @@ Public Class StockTransferForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Get IDs"
+
     Sub getInventoryLocID()
         Try
             getilid = 0
@@ -690,10 +734,11 @@ Public Class StockTransferForm
             conn.Close()
         End Try
     End Sub
+
     Sub getProdInventoryLocID(ByVal istockfrom As String)
         Try
             getpilocid = 0
-            Dim ID As String = getStringItem("SELECT pil.rowid FROM productinventorylocation pil LEFT JOIN rackshelfcolumn rsc ON pil.rackshelfcolumnid = rsc.rowid LEFT JOIN productcolorsizes pcs ON pil.productcolorsizeid = pcs.rowid LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN colors c ON pc.colorid = c.rowid LEFT JOIN products p ON pc.productid = p.rowid " & _
+            Dim ID As String = getStringItem("SELECT pil.rowid FROM productinventorylocation pil LEFT JOIN rackshelfcolumn rsc ON pil.rackshelfcolumnid = rsc.rowid LEFT JOIN productcolorsizes pcs ON pil.productcolorsizeid = pcs.rowid LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN colors c ON pc.colorid = c.rowid LEFT JOIN products p ON pc.productid = p.rowid " &
                     "WHERE COALESCE(CONCAT(COALESCE(p.productcode,''),' / ',COALESCE(c.colorname,''),' / ',COALESCE(pcs.size,''),' / ',COALESCE(pcs.seasoncode,''),' - ',COALESCE(rsc.rackno,''),' / ',COALESCE(rsc.columnno,''),' / ',COALESCE(rsc.shelfno,'')),'') = """ & istockfrom & """ AND pil.organizationid = " & Z_OrganizationID & " AND rsc.inventorylocationid = " & getilid & " AND pil.totalavailableqty - pil.totalallocatedqty > 0 ")
             getpilocid = Val(ID)
         Catch ex As Exception
@@ -702,6 +747,7 @@ Public Class StockTransferForm
             conn.Close()
         End Try
     End Sub
+
     Sub getRackColumnShelfID(ByVal irackcolumnshelf As String)
         Try
             getrscid = 0
@@ -713,6 +759,7 @@ Public Class StockTransferForm
             conn.Close()
         End Try
     End Sub
+
     Sub getProdInvLocID(ByVal irackcolumnshelfid As Integer, ByVal iproductcolorsizeid As Integer)
         Try
             getpilocid = 0
@@ -724,8 +771,11 @@ Public Class StockTransferForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #End Region
+
     Private Sub tabMain_DrawItem(sender As Object, e As DrawItemEventArgs) Handles tabMain.DrawItem
         Try
             TabControlColor(tabMain, e)
@@ -735,6 +785,7 @@ Public Class StockTransferForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbClose_Click(sender As Object, e As EventArgs) Handles pbClose.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -749,6 +800,7 @@ Public Class StockTransferForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub tsRefresh_Click(sender As Object, e As EventArgs) Handles tsRefresh.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -761,6 +813,7 @@ Public Class StockTransferForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub chkOtherInfo_CheckedChanged(sender As Object, e As EventArgs) Handles chkOtherInfo.CheckedChanged
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -776,6 +829,7 @@ Public Class StockTransferForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msNew_Click(sender As Object, e As EventArgs) Handles msNew.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -830,6 +884,7 @@ Public Class StockTransferForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub btnAddStockFrom_Click(sender As Object, e As EventArgs) Handles btnAddStockFrom.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -854,6 +909,7 @@ Public Class StockTransferForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboFrom_KeyDown(sender As Object, e As KeyEventArgs) Handles cboFrom.KeyDown
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -880,6 +936,7 @@ Public Class StockTransferForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub btnAddRackShelfColumn_Click(sender As Object, e As EventArgs) Handles btnAddRackShelfColumn.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -903,6 +960,7 @@ Public Class StockTransferForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboTo_KeyDown(sender As Object, e As KeyEventArgs) Handles cboTo.KeyDown
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -928,6 +986,7 @@ Public Class StockTransferForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgRackShelfColumnFrom_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgRackShelfColumnFrom.CellContentClick
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -947,6 +1006,7 @@ Public Class StockTransferForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgRackShelfColumnTo_CellEndEdit(sender As Object, e As DataGridViewCellEventArgs) Handles dgRackShelfColumnTo.CellEndEdit
         Try
             errProvider.Clear()
@@ -965,6 +1025,7 @@ Public Class StockTransferForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub dgRackShelfColumnTo_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgRackShelfColumnTo.CellContentClick
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -994,6 +1055,7 @@ Public Class StockTransferForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msSave_Click(sender As Object, e As EventArgs) Handles msSave.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1062,14 +1124,14 @@ Public Class StockTransferForm
                         Next
                     End If
                     getOrderNo("Stock Trans.", Me)
-                    M_I_Orders(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, DBNull.Value, CStr(globalorderno), "Stock Trans.", _
+                    M_I_Orders(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, DBNull.Value, CStr(globalorderno), "Stock Trans.",
                             dtpStockTransferDate.Value, DBNull.Value, "", txtComments.Text, txtStatus.Text, 0, txtTransferedBy.Text, DBNull.Value, DBNull.Value, DBNull.Value, "", "", "", "", Me)
                     storderid = globalorderidsp
                     If dgRackShelfColumnFrom.Rows.Count <> 0 Then
                         For a = 0 To dgRackShelfColumnFrom.Rows.Count - 1
                             getProductInventoryLocationTotals(CInt(dgRackShelfColumnFrom.Rows(a).Cells("r_rowid").Value), Me)
                             U_ProductInventoryLocationTotals(CInt(dgRackShelfColumnFrom.Rows(a).Cells("r_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, globalpiltotalavailableqty - sttotalqtytotransfer, globalpiltotalreserveqty, Me)
-                            I_ProductMovementHistory(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, storderid, DBNull.Value, DBNull.Value, CInt(dgRackShelfColumnFrom.Rows(a).Cells("r_pcsrowid").Value), _
+                            I_ProductMovementHistory(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, storderid, DBNull.Value, DBNull.Value, CInt(dgRackShelfColumnFrom.Rows(a).Cells("r_pcsrowid").Value),
                                        CInt(dgRackShelfColumnFrom.Rows(a).Cells("r_rowid").Value), DBNull.Value, globalpiltotalavailableqty, sttotalqtytotransfer, globalpiltotalavailableqty - sttotalqtytotransfer, "ST - From", "TotalAvailableQty", "", Me)
                         Next
                     End If
@@ -1083,12 +1145,12 @@ Public Class StockTransferForm
                                             If getpilocid = 0 Then
                                                 I_ProductInventoryLocation(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, CInt(dgRackShelfColumnTo.Rows(a).Cells("rsc_rowid").Value), CInt(dgRackShelfColumnFrom.Rows(b).Cells("r_pcsrowid").Value), CInt(dgRackShelfColumnTo.Rows(a).Cells("rsc_qtytransfer").Value), Me)
                                                 getnewpilocid = globalproductinventorylocationidsp
-                                                I_ProductMovementHistory(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, storderid, DBNull.Value, DBNull.Value, CInt(dgRackShelfColumnFrom.Rows(b).Cells("r_pcsrowid").Value), _
+                                                I_ProductMovementHistory(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, storderid, DBNull.Value, DBNull.Value, CInt(dgRackShelfColumnFrom.Rows(b).Cells("r_pcsrowid").Value),
                                                     getnewpilocid, DBNull.Value, 0, CInt(dgRackShelfColumnTo.Rows(a).Cells("rsc_qtytransfer").Value), CInt(dgRackShelfColumnTo.Rows(a).Cells("rsc_qtytransfer").Value), "ST - To", "TotalAvailableQty", "", Me)
                                             Else
                                                 getProductInventoryLocationTotals(getpilocid, Me)
                                                 U_ProductInventoryLocationTotals(getpilocid, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, globalpiltotalavailableqty + CInt(dgRackShelfColumnTo.Rows(a).Cells("rsc_qtytransfer").Value), globalpiltotalreserveqty, Me)
-                                                I_ProductMovementHistory(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, storderid, DBNull.Value, DBNull.Value, CInt(dgRackShelfColumnFrom.Rows(b).Cells("r_pcsrowid").Value), _
+                                                I_ProductMovementHistory(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, storderid, DBNull.Value, DBNull.Value, CInt(dgRackShelfColumnFrom.Rows(b).Cells("r_pcsrowid").Value),
                                                            getpilocid, DBNull.Value, globalpiltotalavailableqty, CInt(dgRackShelfColumnTo.Rows(a).Cells("rsc_qtytransfer").Value), globalpiltotalavailableqty + CInt(dgRackShelfColumnTo.Rows(a).Cells("rsc_qtytransfer").Value), "ST - To", "TotalAvailableQty", "", Me)
                                             End If
                                         Next
@@ -1114,6 +1176,7 @@ Public Class StockTransferForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msCancel_Click(sender As Object, e As EventArgs) Handles msCancel.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1146,6 +1209,7 @@ Public Class StockTransferForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgStockTransferList_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgStockTransferList.CellClick
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1173,6 +1237,7 @@ Public Class StockTransferForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgStockTransferList_KeyUp(sender As Object, e As KeyEventArgs) Handles dgStockTransferList.KeyUp
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1202,7 +1267,9 @@ Public Class StockTransferForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #Region "Search/Page Setup"
+
     Private Sub txtSimpleSearch_KeyDown(sender As Object, e As KeyEventArgs) Handles txtSimpleSearch.KeyDown
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1227,6 +1294,7 @@ Public Class StockTransferForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdFirst_Click(sender As Object, e As EventArgs) Handles cmdFirst.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1246,6 +1314,7 @@ Public Class StockTransferForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdPrev_Click(sender As Object, e As EventArgs) Handles cmdPrev.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1273,6 +1342,7 @@ Public Class StockTransferForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdNext_Click(sender As Object, e As EventArgs) Handles cmdNext.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1296,6 +1366,7 @@ Public Class StockTransferForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdLast_Click(sender As Object, e As EventArgs) Handles cmdLast.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1319,6 +1390,7 @@ Public Class StockTransferForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub txtPage_KeyDown(sender As Object, e As KeyEventArgs) Handles txtPage.KeyDown
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1359,8 +1431,11 @@ Public Class StockTransferForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #End Region
+
 #Region "Datagrid MouseUp"
+
     Private Sub dgRackShelfColumnTo_MouseUp(sender As Object, e As MouseEventArgs) Handles dgRackShelfColumnTo.MouseUp
         Try
             Dim hitTestinfo As DataGridView.HitTestInfo
@@ -1378,8 +1453,11 @@ Public Class StockTransferForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Datagrid Errors"
+
     Private Sub dgProductHistory_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgProductHistory.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1420,6 +1498,7 @@ Public Class StockTransferForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgStockTransferList_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgStockTransferList.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1460,6 +1539,7 @@ Public Class StockTransferForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgRackShelfColumnFrom_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgRackShelfColumnFrom.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1500,6 +1580,7 @@ Public Class StockTransferForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgRackShelfColumnTo_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgRackShelfColumnTo.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1540,5 +1621,7 @@ Public Class StockTransferForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #End Region
+
 End Class

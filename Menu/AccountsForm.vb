@@ -1,17 +1,8 @@
 ﻿Imports MySql.Data.MySqlClient
-Imports System.IO
-Imports System.Windows.Forms
-Imports CrystalDecisions.CrystalReports.Engine
-Imports System.Linq
-Imports System.Collections
-Imports System.Collections.Generic
-Imports System.Data
-Imports System.Diagnostics
-Imports System.Runtime.InteropServices
-Imports System.Text.RegularExpressions
+
 Public Class AccountsForm
     Dim manager As New sqlModule.Manager
-    Dim conn As New MySqlConnection(Manager.GetConnString)
+    Dim conn As New MySqlConnection(manager.GetConnString)
     Dim sqlcmd As MySqlCommand
     Dim sqlrd As MySqlDataReader
     Dim sqlquery As String
@@ -22,6 +13,7 @@ Public Class AccountsForm
     Dim spagenumA, spagenumB, countpagenumA, countpagenumB, numofpagesA, numofpagesB, validpagesA, validpagesB As Integer
     Dim simplesearchphraseA, simplesearchphraseB, commonphrase, pagefilter1, pagefilter2, pagefilter3A, pagefilter3B As String
     Dim cfparentcustomerid, cfdeliveryaddressid, cfcontactpersonid, cfpicklistgroupid, cfbranchid, sfdeliveryaddressid, sfcontactpersonid As Integer
+
     Private Sub AccountsForm_Load(sender As Object, e As EventArgs) Handles Me.Load
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -44,6 +36,7 @@ Public Class AccountsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub AccountsForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -57,14 +50,19 @@ Public Class AccountsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #Region "Functions"
+
     Sub callAutoPopulate()
         autopopulatecboSearch()
         autopopulateStatus(cboStatusA)
         autopopulateStatus(cboStatus)
     End Sub
+
 #Region "Clear/Enable/Visible"
+
 #Region "Customers Tab"
+
     Sub clearfieldsA()
         Try
             cueA = ""
@@ -82,6 +80,7 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearRightPageA()
         Try
             cueA = ""
@@ -96,6 +95,7 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearSearchItemsA()
         Try
             txtSimpleSearchA.Text = ""
@@ -113,6 +113,7 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearcboSearchA()
         Try
             txtPageA.Text = ""
@@ -127,6 +128,7 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearCustomerInformation()
         Try
             txtCustomerNo.Text = ""
@@ -156,6 +158,7 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Sub enableGBA(ByVal enable1 As Boolean, ByVal enable2 As Boolean, ByVal enable3 As Boolean)
         Try
             gbSearchA.Enabled = enable1
@@ -168,6 +171,7 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Sub enableANDvisibleMSA(ByVal enable1 As Boolean, ByVal enable2 As Boolean, ByVal visible1 As Boolean)
         Try
             msNewA.Enabled = enable1
@@ -179,8 +183,11 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Suppliers Tab"
+
     Sub clearfieldsB()
         Try
             cueB = ""
@@ -196,6 +203,7 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearRightPage()
         Try
             cueB = ""
@@ -206,6 +214,7 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearSearchItems()
         Try
             txtSimpleSearch.Text = ""
@@ -223,6 +232,7 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearcboSearch()
         Try
             txtPage.Text = ""
@@ -237,6 +247,7 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearSupplierInformation()
         Try
             txtSupplierNo.Text = ""
@@ -256,6 +267,7 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Sub enableGB(ByVal enable1 As Boolean, ByVal enable2 As Boolean)
         Try
             gbSearch.Enabled = enable1
@@ -267,6 +279,7 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Sub enableANDvisibleMS(ByVal enable1 As Boolean, ByVal enable2 As Boolean, ByVal visible1 As Boolean)
         Try
             msNew.Enabled = enable1
@@ -278,9 +291,13 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #End Region
+
 #Region "Click"
+
     Sub tsrefreshperformclickA()
         Try
             errProvider.Clear()
@@ -295,6 +312,7 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Sub tsrefreshperformclickB()
         Try
             errProvider.Clear()
@@ -309,8 +327,11 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Computations"
+
     Sub getPickListOrderID(ByVal iorderid As Integer, ByVal iorderitemid As Integer)
         Try
             aftotalqtydelivered = 0
@@ -323,6 +344,7 @@ Public Class AccountsForm
             MsgBox(getErrExcptn(ex, Me.Name))
         End Try
     End Sub
+
     Sub getTotalQyDelivered(ByVal ipicklistorderid As Integer)
         Try
             Dim dtGtq As New DataTable
@@ -334,6 +356,7 @@ Public Class AccountsForm
             MsgBox(getErrExcptn(ex, Me.Name))
         End Try
     End Sub
+
     Sub customerorderitemscomputations()
         Try
             afqtyordered = 0
@@ -357,8 +380,11 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Page Setup"
+
     Sub pageSetupA()
         Try
             getCountPageNumA()
@@ -379,6 +405,7 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCountPageNumA()
         Try
             countpagenumA = 0
@@ -396,6 +423,7 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Sub pageSetup1A(ByVal isearchstring As String)
         Try
             getCountPageNum1A(isearchstring)
@@ -416,6 +444,7 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCountPageNum1A(ByVal esearchstring As String)
         Try
             countpagenumA = 0
@@ -433,6 +462,7 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Sub pageSetup2A(ByVal isearchstring As String)
         Try
             getCountPageNum2A(isearchstring)
@@ -453,12 +483,13 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCountPageNum2A(ByVal ecommontring As String)
         Try
             countpagenumA = 0
             If conn.State = ConnectionState.Open Then conn.Close()
             Dim dtCid As New DataTable
-            dtCid = getDataTableForSQL("SELECT COUNT(c.rowid) FROM accounts c LEFT JOIN address ad ON c.primaryaddressid = ad.rowid " & _
+            dtCid = getDataTableForSQL("SELECT COUNT(c.rowid) FROM accounts c LEFT JOIN address ad ON c.primaryaddressid = ad.rowid " &
                             "WHERE c.organizationid = " & Z_OrganizationID & " AND c.accounttype = 'Customer' AND " & ecommontring & " ")
             If dtCid.Rows.Count <> 0 Then
                 countpagenumA = dtCid.Rows(0)(0)
@@ -471,6 +502,7 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCommonPhraseA(ByVal icommonbox As ComboBox, ByVal icommonstring As String)
         Try
             commonphrase = ""
@@ -489,6 +521,7 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Sub pageSetupB()
         Try
             getCountPageNumB()
@@ -509,6 +542,7 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCountPageNumB()
         Try
             countpagenumB = 0
@@ -526,6 +560,7 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Sub pageSetup1B(ByVal isearchstring As String)
         Try
             getCountPageNum1B(isearchstring)
@@ -546,6 +581,7 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCountPageNum1B(ByVal esearchstring As String)
         Try
             countpagenumB = 0
@@ -563,6 +599,7 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Sub pageSetup2B(ByVal isearchstring As String)
         Try
             getCountPageNum2B(isearchstring)
@@ -583,12 +620,13 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCountPageNum2B(ByVal ecommontring As String)
         Try
             countpagenumB = 0
             If conn.State = ConnectionState.Open Then conn.Close()
             Dim dtCid As New DataTable
-            dtCid = getDataTableForSQL("SELECT COUNT(c.rowid) FROM accounts c LEFT JOIN address ad ON c.primaryaddressid = ad.rowid " & _
+            dtCid = getDataTableForSQL("SELECT COUNT(c.rowid) FROM accounts c LEFT JOIN address ad ON c.primaryaddressid = ad.rowid " &
                             "WHERE c.organizationid = " & Z_OrganizationID & " AND c.accounttype = 'Supplier' AND " & ecommontring & " ")
             If dtCid.Rows.Count <> 0 Then
                 countpagenumB = dtCid.Rows(0)(0)
@@ -601,6 +639,7 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCommonPhraseB(ByVal icommonbox As ComboBox, ByVal icommonstring As String)
         Try
             commonphrase = ""
@@ -615,9 +654,13 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Display"
+
 #Region "AutoComplete"
+
     Sub autocompleteCityTown(ByVal icombobox As ComboBox)
         Try
             Dim citytown As New AutoCompleteStringCollection
@@ -638,6 +681,7 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Sub autocompleteParentCustomerA(ByVal icombobox As ComboBox)
         Try
             Dim parentcustomer As New AutoCompleteStringCollection
@@ -658,6 +702,7 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Sub autocompleteParentCustomerB(ByVal icombobox As ComboBox)
         Try
             Dim parentcustomer As New AutoCompleteStringCollection
@@ -678,6 +723,7 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Sub autocompleteProvince(ByVal icombobox As ComboBox)
         Try
             Dim province As New AutoCompleteStringCollection
@@ -698,6 +744,7 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Sub autocompletePickingGroup(ByVal icombobox As ComboBox)
         Try
             Dim groupname As New AutoCompleteStringCollection
@@ -718,8 +765,11 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "AutoPopulate"
+
     Sub autopopulatecboSearch()
         Try
             cboSearch1A.Items.Clear()
@@ -747,6 +797,7 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Sub autopopulateCityTown(ByVal icombobox As ComboBox)
         Try
             icombobox.Items.Clear()
@@ -767,6 +818,7 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Sub autopopulateParentCustomerA(ByVal icombobox As ComboBox)
         Try
             icombobox.Items.Clear()
@@ -787,6 +839,7 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Sub autopopulateParentCustomerB(ByVal icombobox As ComboBox)
         Try
             icombobox.Items.Clear()
@@ -807,6 +860,7 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Sub autopopulateProvince(ByVal icombobox As ComboBox)
         Try
             icombobox.Items.Clear()
@@ -827,6 +881,7 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Sub autopopulateStatus(ByVal icombobox As ComboBox)
         Try
             icombobox.Items.Clear()
@@ -846,6 +901,7 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Sub autopopulatePickingGroup(ByVal icombobox As ComboBox)
         Try
             icombobox.Items.Clear()
@@ -866,13 +922,16 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Datagrids"
+
     Sub displayCustomerList(ByVal istartpage As Integer)
         Try
             dgCustomerList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT c.rowid,COALESCE(c.accountno,''),COALESCE(c.companyname,''),COALESCE(CONCAT(COALESCE(pa.companyname,''),' - ',COALESCE(pa.accountno,'')),''),COALESCE(c.mainphone,'') FROM accounts c " & _
+            Dim sql1 As String = "SELECT c.rowid,COALESCE(c.accountno,''),COALESCE(c.companyname,''),COALESCE(CONCAT(COALESCE(pa.companyname,''),' - ',COALESCE(pa.accountno,'')),''),COALESCE(c.mainphone,'') FROM accounts c " &
                         "LEFT JOIN accounts pa ON c.parentaccountid = pa.rowid WHERE c.organizationid = " & Z_OrganizationID & " AND c.accounttype = 'Customer' ORDER BY c.accountno ASC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -902,12 +961,13 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Sub displaySearchPhraseA(ByVal isearchphrase As String, ByVal istartpage As Integer)
         Try
             dgCustomerList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT c.rowid,COALESCE(c.accountno,''),COALESCE(c.companyname,''),COALESCE(CONCAT(COALESCE(pa.companyname,''),' - ',COALESCE(pa.accountno,'')),''),COALESCE(c.mainphone,'') FROM accounts c " & _
-                        "LEFT JOIN accounts pa ON c.parentaccountid = pa.rowid WHERE c.organizationid = " & Z_OrganizationID & " AND c.accounttype = 'Customer' AND (c.companyname LIKE ""%" & isearchphrase & "%"" OR c.accountno LIKE ""%" & isearchphrase & "%"") " & _
+            Dim sql1 As String = "SELECT c.rowid,COALESCE(c.accountno,''),COALESCE(c.companyname,''),COALESCE(CONCAT(COALESCE(pa.companyname,''),' - ',COALESCE(pa.accountno,'')),''),COALESCE(c.mainphone,'') FROM accounts c " &
+                        "LEFT JOIN accounts pa ON c.parentaccountid = pa.rowid WHERE c.organizationid = " & Z_OrganizationID & " AND c.accounttype = 'Customer' AND (c.companyname LIKE ""%" & isearchphrase & "%"" OR c.accountno LIKE ""%" & isearchphrase & "%"") " &
                         "ORDER BY c.accountno ASC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -935,12 +995,13 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Sub displayCommonPhraseA(ByVal icommonphrase As String, ByVal istartpage As Integer)
         Try
             dgCustomerList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT c.rowid,COALESCE(c.accountno,''),COALESCE(c.companyname,''),COALESCE(CONCAT(COALESCE(pa.companyname,''),' - ',COALESCE(pa.accountno,'')),''),COALESCE(c.mainphone,'') FROM accounts c " & _
-                        "LEFT JOIN accounts pa ON c.parentaccountid = pa.rowid LEFT JOIN address ad ON c.primaryaddressid = ad.rowid WHERE c.organizationid = " & Z_OrganizationID & " AND c.accounttype = 'Customer' AND " & icommonphrase & " " & _
+            Dim sql1 As String = "SELECT c.rowid,COALESCE(c.accountno,''),COALESCE(c.companyname,''),COALESCE(CONCAT(COALESCE(pa.companyname,''),' - ',COALESCE(pa.accountno,'')),''),COALESCE(c.mainphone,'') FROM accounts c " &
+                        "LEFT JOIN accounts pa ON c.parentaccountid = pa.rowid LEFT JOIN address ad ON c.primaryaddressid = ad.rowid WHERE c.organizationid = " & Z_OrganizationID & " AND c.accounttype = 'Customer' AND " & icommonphrase & " " &
                         "ORDER BY c.accountno ASC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -968,13 +1029,14 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Sub displayCustomerInformation(ByVal icustomerid As Integer)
         Try
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT COALESCE(c.accountno,''),COALESCE(c.companyname,''),COALESCE(CONCAT(COALESCE(pa.companyname,''),' - ',COALESCE(pa.accountno,'')),''),COALESCE(c.mainphone,''),COALESCE(CONCAT(COALESCE(cp.firstname,''),' ',COALESCE(cp.middlename,''),' ',COALESCE(cp.lastname,'')),'')," & _
-                        "COALESCE(CONCAT(COALESCE(ad.streetaddress1,''),' ',COALESCE(ad.streetaddress2,''),' ',COALESCE(ad.barangay,''),' ',COALESCE(ad.citytown,''),' ',COALESCE(ad.province,''),' ',COALESCE(ad.state,''),' ',COALESCE(ad.zipcode,''),' ',COALESCE(ad.country,'')),''),COALESCE(c.faxnumber,'')," & _
-                        "COALESCE(c.altphone,''),COALESCE(c.website,''),COALESCE(c.vatregistrationno,''),COALESCE(c.comments,''),COALESCE(c.status,''),COALESCE(c.emailaddress,''),COALESCE(c.primaryaddressid,0),COALESCE(c.primarycontactid,0),COALESCE(pg.groupname,''),COALESCE(c.deliveryhours,'')," & _
-                        "COALESCE(CONCAT(COALESCE(bc.branchcode,''),' - ',COALESCE(bc.branchname,'')),'') FROM accounts c LEFT JOIN accounts pa ON c.parentaccountid = pa.rowid LEFT JOIN contacts cp ON c.primarycontactid = cp.rowid LEFT JOIN address ad ON c.primaryaddressid = ad.rowid " & _
+            Dim sql1 As String = "SELECT COALESCE(c.accountno,''),COALESCE(c.companyname,''),COALESCE(CONCAT(COALESCE(pa.companyname,''),' - ',COALESCE(pa.accountno,'')),''),COALESCE(c.mainphone,''),COALESCE(CONCAT(COALESCE(cp.firstname,''),' ',COALESCE(cp.middlename,''),' ',COALESCE(cp.lastname,'')),'')," &
+                        "COALESCE(CONCAT(COALESCE(ad.streetaddress1,''),' ',COALESCE(ad.streetaddress2,''),' ',COALESCE(ad.barangay,''),' ',COALESCE(ad.citytown,''),' ',COALESCE(ad.province,''),' ',COALESCE(ad.state,''),' ',COALESCE(ad.zipcode,''),' ',COALESCE(ad.country,'')),''),COALESCE(c.faxnumber,'')," &
+                        "COALESCE(c.altphone,''),COALESCE(c.website,''),COALESCE(c.vatregistrationno,''),COALESCE(c.comments,''),COALESCE(c.status,''),COALESCE(c.emailaddress,''),COALESCE(c.primaryaddressid,0),COALESCE(c.primarycontactid,0),COALESCE(pg.groupname,''),COALESCE(c.deliveryhours,'')," &
+                        "COALESCE(CONCAT(COALESCE(bc.branchcode,''),' - ',COALESCE(bc.branchname,'')),'') FROM accounts c LEFT JOIN accounts pa ON c.parentaccountid = pa.rowid LEFT JOIN contacts cp ON c.primarycontactid = cp.rowid LEFT JOIN address ad ON c.primaryaddressid = ad.rowid " &
                         "LEFT JOIN picklistgroup pg ON c.picklistgroupid = pg.rowid LEFT JOIN branches bc ON c.branchid = bc.rowid WHERE c.rowid = " & icustomerid & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -1007,13 +1069,14 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Sub displayCustomerOrders(ByVal iaccountid As Integer)
         Try
             dgCustomerOrders.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT co.rowid,COALESCE(co.ordernumber,''),COALESCE(co.referencenumber,''),DATE_FORMAT(co.orderdate,'%d-%b-%Y'),COALESCE(co.status,'') " & _
-                        "FROM orders co WHERE co.organizationid = " & Z_OrganizationID & " AND co.ordertype = 'CO' AND co.accountid = " & iaccountid & " AND " & _
-                        "(co.orderdate >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " & _
+            Dim sql1 As String = "SELECT co.rowid,COALESCE(co.ordernumber,''),COALESCE(co.referencenumber,''),DATE_FORMAT(co.orderdate,'%d-%b-%Y'),COALESCE(co.status,'') " &
+                        "FROM orders co WHERE co.organizationid = " & Z_OrganizationID & " AND co.ordertype = 'CO' AND co.accountid = " & iaccountid & " AND " &
+                        "(co.orderdate >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " &
                         "co.orderdate <= '" & dtpToSearch.Value.Year & "-" & dtpToSearch.Value.Month & "-" & dtpToSearch.Value.Day & "' ) GROUP BY co.rowid ORDER BY co.ordernumber DESC "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -1050,17 +1113,18 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Sub displayCustomerOrderItems(ByVal icustomerorderid As Integer)
         Try
             dgCustomerOrderItems.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT ci.rowid,COALESCE(ci.productcolorsizeid,0),COALESCE(ci.productbundleid,0),COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(b.bundlename,''),COALESCE(c.colorname,''),COALESCE(pcs.size,'')," & _
-                    "COALESCE(pcs.seasoncode,''),COALESCE(ci.unitofmeasure,''),COALESCE(ci.qtyordered,0),COALESCE(ci.srp,0.0),COALESCE(pcs.sku,''),COALESCE(b.sku,''),COALESCE(ci.itemtype,''),COALESCE(ci.remarks,''),COALESCE(ci.status,'')," & _
-                    "COALESCE(CONCAT(COALESCE(vb.firstname,''),' ',COALESCE(vb.lastname,''),' - ',COALESCE(vb.rowid,'')),''),COALESCE(DATE_FORMAT(ci.verifieddate,'%d-%b-%Y'),''),COALESCE(DATE_FORMAT(ci.packeddate,'%d-%b-%Y'),'')," & _
-                    "COALESCE(CONCAT(COALESCE(pa.firstname,''),' ',COALESCE(pa.middlename,''),' ',COALESCE(pa.lastname,''),' ',COALESCE(pa.suffix,''),' - ',COALESCE(pa.contactno,'')),''),COALESCE(DATE_FORMAT(ci.delivereddate,'%d-%b-%Y'),'')," & _
-                    "COALESCE(CONCAT(COALESCE(dr.firstname,''),' ',COALESCE(dr.middlename,''),' ',COALESCE(dr.lastname,''),' ',COALESCE(dr.suffix,''),' - ',COALESCE(dr.contactno,'')),'') FROM orderitems ci LEFT JOIN contacts pa ON ci.packedby = pa.rowid " & _
-                    "LEFT JOIN productbundles b ON ci.productbundleid = b.rowid LEFT JOIN productcolorsizes pcs ON ci.productcolorsizeid = pcs.rowid LEFT JOIN contacts dr ON ci.deliveredby = dr.rowid LEFT JOIN users vb ON ci.verifiedby = vb.rowid " & _
-                    "LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN colors c ON pc.colorid = c.rowid LEFT JOIN products p ON pc.productid = p.rowid WHERE ci.orderid = " & icustomerorderid & " AND ci.organizationid = " & Z_OrganizationID & " " & _
+            Dim sql1 As String = "SELECT ci.rowid,COALESCE(ci.productcolorsizeid,0),COALESCE(ci.productbundleid,0),COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(b.bundlename,''),COALESCE(c.colorname,''),COALESCE(pcs.size,'')," &
+                    "COALESCE(pcs.seasoncode,''),COALESCE(ci.unitofmeasure,''),COALESCE(ci.qtyordered,0),COALESCE(ci.srp,0.0),COALESCE(pcs.sku,''),COALESCE(b.sku,''),COALESCE(ci.itemtype,''),COALESCE(ci.remarks,''),COALESCE(ci.status,'')," &
+                    "COALESCE(CONCAT(COALESCE(vb.firstname,''),' ',COALESCE(vb.lastname,''),' - ',COALESCE(vb.rowid,'')),''),COALESCE(DATE_FORMAT(ci.verifieddate,'%d-%b-%Y'),''),COALESCE(DATE_FORMAT(ci.packeddate,'%d-%b-%Y'),'')," &
+                    "COALESCE(CONCAT(COALESCE(pa.firstname,''),' ',COALESCE(pa.middlename,''),' ',COALESCE(pa.lastname,''),' ',COALESCE(pa.suffix,''),' - ',COALESCE(pa.contactno,'')),''),COALESCE(DATE_FORMAT(ci.delivereddate,'%d-%b-%Y'),'')," &
+                    "COALESCE(CONCAT(COALESCE(dr.firstname,''),' ',COALESCE(dr.middlename,''),' ',COALESCE(dr.lastname,''),' ',COALESCE(dr.suffix,''),' - ',COALESCE(dr.contactno,'')),'') FROM orderitems ci LEFT JOIN contacts pa ON ci.packedby = pa.rowid " &
+                    "LEFT JOIN productbundles b ON ci.productbundleid = b.rowid LEFT JOIN productcolorsizes pcs ON ci.productcolorsizeid = pcs.rowid LEFT JOIN contacts dr ON ci.deliveredby = dr.rowid LEFT JOIN users vb ON ci.verifiedby = vb.rowid " &
+                    "LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN colors c ON pc.colorid = c.rowid LEFT JOIN products p ON pc.productid = p.rowid WHERE ci.orderid = " & icustomerorderid & " AND ci.organizationid = " & Z_OrganizationID & " " &
                     "AND ci.status != 'Inactive' AND ci.itemtype != 'BI' ORDER BY ci.rowid "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -1140,11 +1204,12 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Sub displaySupplierList(ByVal istartpage As Integer)
         Try
             dgSuppliersList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT c.rowid,COALESCE(c.accountno,''),COALESCE(c.companyname,''),COALESCE(CONCAT(COALESCE(pa.companyname,''),' - ',COALESCE(pa.accountno,'')),''),COALESCE(c.mainphone,'') FROM accounts c " & _
+            Dim sql1 As String = "SELECT c.rowid,COALESCE(c.accountno,''),COALESCE(c.companyname,''),COALESCE(CONCAT(COALESCE(pa.companyname,''),' - ',COALESCE(pa.accountno,'')),''),COALESCE(c.mainphone,'') FROM accounts c " &
                         "LEFT JOIN accounts pa ON c.parentaccountid = pa.rowid WHERE c.organizationid = " & Z_OrganizationID & " AND c.accounttype = 'Supplier' ORDER BY c.accountno ASC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -1173,12 +1238,13 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Sub displaySearchPhraseB(ByVal isearchphrase As String, ByVal istartpage As Integer)
         Try
             dgSuppliersList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT c.rowid,COALESCE(c.accountno,''),COALESCE(c.companyname,''),COALESCE(CONCAT(COALESCE(pa.companyname,''),' - ',COALESCE(pa.accountno,'')),''),COALESCE(c.mainphone,'') FROM accounts c " & _
-                        "LEFT JOIN accounts pa ON c.parentaccountid = pa.rowid WHERE c.organizationid = " & Z_OrganizationID & " AND c.accounttype = 'Supplier' AND (c.companyname LIKE '%" & isearchphrase & "%' OR c.accountno LIKE '%" & isearchphrase & "%') " & _
+            Dim sql1 As String = "SELECT c.rowid,COALESCE(c.accountno,''),COALESCE(c.companyname,''),COALESCE(CONCAT(COALESCE(pa.companyname,''),' - ',COALESCE(pa.accountno,'')),''),COALESCE(c.mainphone,'') FROM accounts c " &
+                        "LEFT JOIN accounts pa ON c.parentaccountid = pa.rowid WHERE c.organizationid = " & Z_OrganizationID & " AND c.accounttype = 'Supplier' AND (c.companyname LIKE '%" & isearchphrase & "%' OR c.accountno LIKE '%" & isearchphrase & "%') " &
                         "ORDER BY c.accountno ASC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -1205,12 +1271,13 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Sub displayCommonPhraseB(ByVal icommonphrase As String, ByVal istartpage As Integer)
         Try
             dgSuppliersList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT c.rowid,COALESCE(c.accountno,''),COALESCE(c.companyname,''),COALESCE(CONCAT(COALESCE(pa.companyname,''),' - ',COALESCE(pa.accountno,'')),''),COALESCE(c.mainphone,'') FROM accounts c " & _
-                        "LEFT JOIN accounts pa ON c.parentaccountid = pa.rowid LEFT JOIN address ad ON c.primaryaddressid = ad.rowid WHERE c.organizationid = " & Z_OrganizationID & " AND c.accounttype = 'Supplier' AND " & icommonphrase & " " & _
+            Dim sql1 As String = "SELECT c.rowid,COALESCE(c.accountno,''),COALESCE(c.companyname,''),COALESCE(CONCAT(COALESCE(pa.companyname,''),' - ',COALESCE(pa.accountno,'')),''),COALESCE(c.mainphone,'') FROM accounts c " &
+                        "LEFT JOIN accounts pa ON c.parentaccountid = pa.rowid LEFT JOIN address ad ON c.primaryaddressid = ad.rowid WHERE c.organizationid = " & Z_OrganizationID & " AND c.accounttype = 'Supplier' AND " & icommonphrase & " " &
                         "ORDER BY c.accountno ASC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -1237,12 +1304,13 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Sub displaySupplierInformation(ByVal isupplierid As Integer)
         Try
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT COALESCE(c.accountno,''),COALESCE(c.companyname,''),COALESCE(CONCAT(COALESCE(pa.companyname,''),' - ',COALESCE(pa.accountno,'')),''),COALESCE(c.mainphone,''),COALESCE(CONCAT(COALESCE(cp.firstname,''),' ',COALESCE(cp.middlename,''),' ',COALESCE(cp.lastname,'')),'')," & _
-                        "COALESCE(CONCAT(COALESCE(ad.streetaddress1,''),' ',COALESCE(ad.streetaddress2,''),' ',COALESCE(ad.barangay,''),' ',COALESCE(ad.citytown,''),' ',COALESCE(ad.province,''),' ',COALESCE(ad.state,''),' ',COALESCE(ad.zipcode,''),' ',COALESCE(ad.country,'')),'')," & _
-                        "COALESCE(c.faxnumber,''),COALESCE(c.altphone,''),COALESCE(c.website,''),COALESCE(c.vatregistrationno,''),COALESCE(c.comments,''),COALESCE(c.status,''),COALESCE(c.emailaddress,''),COALESCE(c.primaryaddressid,0),COALESCE(c.primarycontactid,0),COALESCE(pg.groupname,'') FROM accounts c " & _
+            Dim sql1 As String = "SELECT COALESCE(c.accountno,''),COALESCE(c.companyname,''),COALESCE(CONCAT(COALESCE(pa.companyname,''),' - ',COALESCE(pa.accountno,'')),''),COALESCE(c.mainphone,''),COALESCE(CONCAT(COALESCE(cp.firstname,''),' ',COALESCE(cp.middlename,''),' ',COALESCE(cp.lastname,'')),'')," &
+                        "COALESCE(CONCAT(COALESCE(ad.streetaddress1,''),' ',COALESCE(ad.streetaddress2,''),' ',COALESCE(ad.barangay,''),' ',COALESCE(ad.citytown,''),' ',COALESCE(ad.province,''),' ',COALESCE(ad.state,''),' ',COALESCE(ad.zipcode,''),' ',COALESCE(ad.country,'')),'')," &
+                        "COALESCE(c.faxnumber,''),COALESCE(c.altphone,''),COALESCE(c.website,''),COALESCE(c.vatregistrationno,''),COALESCE(c.comments,''),COALESCE(c.status,''),COALESCE(c.emailaddress,''),COALESCE(c.primaryaddressid,0),COALESCE(c.primarycontactid,0),COALESCE(pg.groupname,'') FROM accounts c " &
                         "LEFT JOIN accounts pa ON c.parentaccountid = pa.rowid LEFT JOIN contacts cp ON c.primarycontactid = cp.rowid LEFT JOIN address ad ON c.primaryaddressid = ad.rowid LEFT JOIN picklistgroup pg ON c.picklistgroupid = pg.rowid WHERE c.rowid = " & isupplierid & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -1270,8 +1338,11 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Colors"
+
     Sub colorCoding()
         Try
             If dgCustomerOrderItems.Rows.Count <> 0 Then
@@ -1292,9 +1363,13 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #End Region
+
 #End Region
+
     Private Sub tabAccounts_DrawItem(sender As Object, e As DrawItemEventArgs) Handles tabAccounts.DrawItem
         Try
             TabControlColor(tabAccounts, e)
@@ -1304,6 +1379,7 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbClose_Click(sender As Object, e As EventArgs) Handles pbClose.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1318,7 +1394,9 @@ Public Class AccountsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #Region "Customers Tab"
+
     Private Sub tabCustomersMain_DrawItem(sender As Object, e As DrawItemEventArgs) Handles tabCustomersMain.DrawItem
         Try
             TabControlColor(tabCustomersMain, e)
@@ -1328,6 +1406,7 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub txtCommentsA_Leave(sender As Object, e As EventArgs) Handles txtCommentsA.Leave
         Try
             txtCustomerName.Focus()
@@ -1337,6 +1416,7 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub tsRefreshA_Click(sender As Object, e As EventArgs) Handles tsRefreshA.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1349,6 +1429,7 @@ Public Class AccountsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msNewA_Click(sender As Object, e As EventArgs) Handles msNewA.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1391,6 +1472,7 @@ Public Class AccountsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msCancelA_Click(sender As Object, e As EventArgs) Handles msCancelA.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1422,6 +1504,7 @@ Public Class AccountsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub pbAutoAddA_MouseEnter(sender As Object, e As EventArgs) Handles pbAutoAddA.MouseEnter
         Try
             pbAutoAddA.BackColor = Color.MediumSpringGreen
@@ -1431,6 +1514,7 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbAutoAddA_MouseLeave(sender As Object, e As EventArgs) Handles pbAutoAddA.MouseLeave
         Try
             pbAutoAddA.BackColor = Color.Transparent
@@ -1440,6 +1524,7 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbAutoAddA_Click(sender As Object, e As EventArgs) Handles pbAutoAddA.Click
         Try
             myBalloon("Automatic adding of pick list group.", "Auto-Add", pbAutoAddA, -15, -65)
@@ -1449,6 +1534,7 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub dgCustomerList_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgCustomerList.CellClick
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1477,6 +1563,7 @@ Public Class AccountsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgCustomerList_KeyUp(sender As Object, e As KeyEventArgs) Handles dgCustomerList.KeyUp
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1507,6 +1594,7 @@ Public Class AccountsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dtpFromSearch_ValueChanged(sender As Object, e As EventArgs) Handles dtpFromSearch.ValueChanged
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1521,6 +1609,7 @@ Public Class AccountsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dtpToSearch_ValueChanged(sender As Object, e As EventArgs) Handles dtpToSearch.ValueChanged
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1535,6 +1624,7 @@ Public Class AccountsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgCustomerOrders_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgCustomerOrders.CellClick
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1549,6 +1639,7 @@ Public Class AccountsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgCustomerOrders_KeyUp(sender As Object, e As KeyEventArgs) Handles dgCustomerOrders.KeyUp
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1565,6 +1656,7 @@ Public Class AccountsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub pbEditDeliveryAddress_MouseEnter(sender As Object, e As EventArgs) Handles pbEditDeliveryAddress.MouseEnter
         Try
             pbEditDeliveryAddress.BackColor = Color.MediumSpringGreen
@@ -1574,6 +1666,7 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbEditDeliveryAddress_MouseLeave(sender As Object, e As EventArgs) Handles pbEditDeliveryAddress.MouseLeave
         Try
             pbEditDeliveryAddress.BackColor = Color.Transparent
@@ -1583,6 +1676,7 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbEditDeliveryAddress_Click(sender As Object, e As EventArgs) Handles pbEditDeliveryAddress.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1624,6 +1718,7 @@ Public Class AccountsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub pbEditContactPersonA_MouseEnter(sender As Object, e As EventArgs) Handles pbEditContactPersonA.MouseEnter
         Try
             pbEditContactPersonA.BackColor = Color.MediumSpringGreen
@@ -1633,6 +1728,7 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbEditContactPersonA_MouseLeave(sender As Object, e As EventArgs) Handles pbEditContactPersonA.MouseLeave
         Try
             pbEditContactPersonA.BackColor = Color.Transparent
@@ -1642,6 +1738,7 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbEditContactPersonA_Click(sender As Object, e As EventArgs) Handles pbEditContactPersonA.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1683,6 +1780,7 @@ Public Class AccountsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub pbAddBranchCodeName_MouseEnter(sender As Object, e As EventArgs) Handles pbAddBranchCodeName.MouseEnter
         Try
             pbAddBranchCodeName.BackColor = Color.MediumSpringGreen
@@ -1692,6 +1790,7 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbAddBranchCodeName_MouseLeave(sender As Object, e As EventArgs) Handles pbAddBranchCodeName.MouseLeave
         Try
             pbAddBranchCodeName.BackColor = Color.Transparent
@@ -1701,6 +1800,7 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbAddBranchCodeName_Click(sender As Object, e As EventArgs) Handles pbAddBranchCodeName.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1734,6 +1834,7 @@ Public Class AccountsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msSaveA_Click(sender As Object, e As EventArgs) Handles msSaveA.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1785,7 +1886,7 @@ Public Class AccountsForm
                     End If
                     If cueA = "New" Then
                         getAccountNo("Customer", Me)
-                        I_Accounts(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, If(cfcontactpersonid = 0, DBNull.Value, cfcontactpersonid), If(cfdeliveryaddressid = 0, DBNull.Value, cfdeliveryaddressid), If(cfparentcustomerid = 0, DBNull.Value, cfparentcustomerid), If(cfpicklistgroupid = 0, DBNull.Value, cfpicklistgroupid), _
+                        I_Accounts(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, If(cfcontactpersonid = 0, DBNull.Value, cfcontactpersonid), If(cfdeliveryaddressid = 0, DBNull.Value, cfdeliveryaddressid), If(cfparentcustomerid = 0, DBNull.Value, cfparentcustomerid), If(cfpicklistgroupid = 0, DBNull.Value, cfpicklistgroupid),
                                 If(cfbranchid = 0, DBNull.Value, cfbranchid), globalaccountno, "Customer", txtCustomerName.Text, txtCustomerName.Text, txtMainPhoneA.Text, txtAlternatePhoneA.Text, txtFaxNoA.Text, txtEmailAddressA.Text, txtTINA.Text, txtWebsiteA.Text, txtDeliveryHours.Text, txtCommentsA.Text, cboStatusA.Text, Me)
                         If CInt(txtCustomerNo.Text) <> globalaccountno Then
                             MessageBox.Show("Please take note that the Customer No. will change from " & CInt(txtCustomerNo.Text) & " to " & globalaccountno & "." & vbNewLine & "Another user used the Customer No. " & CInt(txtCustomerNo.Text) & " for its new customer", "Note:", MessageBoxButtons.OK, MessageBoxIcon.Information)
@@ -1796,7 +1897,7 @@ Public Class AccountsForm
                             tsrefreshperformclickA()
                         End If
                     ElseIf cueA = "Edit" Then
-                        U_Accounts(CInt(dgCustomerList.CurrentRow.Cells("c_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, If(cfcontactpersonid = 0, DBNull.Value, cfcontactpersonid), If(cfdeliveryaddressid = 0, DBNull.Value, cfdeliveryaddressid), If(cfparentcustomerid = 0, DBNull.Value, cfparentcustomerid), _
+                        U_Accounts(CInt(dgCustomerList.CurrentRow.Cells("c_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, If(cfcontactpersonid = 0, DBNull.Value, cfcontactpersonid), If(cfdeliveryaddressid = 0, DBNull.Value, cfdeliveryaddressid), If(cfparentcustomerid = 0, DBNull.Value, cfparentcustomerid),
                                 If(cfpicklistgroupid = 0, DBNull.Value, cfpicklistgroupid), If(cfbranchid = 0, DBNull.Value, cfbranchid), txtCustomerName.Text, txtMainPhoneA.Text, txtAlternatePhoneA.Text, txtFaxNoA.Text, txtEmailAddressA.Text, txtTINA.Text, txtWebsiteA.Text, txtDeliveryHours.Text, txtCommentsA.Text, cboStatusA.Text, Me)
                         If myModule.systemerrorfound = False Then
                             myBalloon("Successfully Updated", "Update", lblsavemsgA, -15, -65)
@@ -1812,8 +1913,11 @@ Public Class AccountsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #End Region
+
 #Region "Suppliers Tab"
+
     Private Sub tabMain_DrawItem(sender As Object, e As DrawItemEventArgs) Handles tabMain.DrawItem
         Try
             TabControlColor(tabMain, e)
@@ -1823,6 +1927,7 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub txtComments_Leave(sender As Object, e As EventArgs) Handles txtComments.Leave
         Try
             txtSupplierName.Focus()
@@ -1832,6 +1937,7 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub tsRefresh_Click(sender As Object, e As EventArgs) Handles tsRefresh.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1844,6 +1950,7 @@ Public Class AccountsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msNew_Click(sender As Object, e As EventArgs) Handles msNew.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1866,6 +1973,7 @@ Public Class AccountsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msCancel_Click(sender As Object, e As EventArgs) Handles msCancel.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1888,10 +1996,11 @@ Public Class AccountsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgSuppliersList_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgSuppliersList.CellClick
         Me.Cursor = Cursors.WaitCursor
         Try
-           If dgSuppliersList.Rows.Count <> 0 Then
+            If dgSuppliersList.Rows.Count <> 0 Then
                 cueB = "Edit"
                 errProvider.Clear()
                 clearSupplierInformation()
@@ -1908,6 +2017,7 @@ Public Class AccountsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgSuppliersList_KeyUp(sender As Object, e As KeyEventArgs) Handles dgSuppliersList.KeyUp
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1930,6 +2040,7 @@ Public Class AccountsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub pbEditContactPerson_MouseEnter(sender As Object, e As EventArgs) Handles pbEditContactPerson.MouseEnter
         Try
             pbEditContactPerson.BackColor = Color.MediumSpringGreen
@@ -1939,6 +2050,7 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbEditContactPerson_MouseLeave(sender As Object, e As EventArgs) Handles pbEditContactPerson.MouseLeave
         Try
             pbEditContactPerson.BackColor = Color.Transparent
@@ -1948,6 +2060,7 @@ Public Class AccountsForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbEditContactPerson_Click(sender As Object, e As EventArgs) Handles pbEditContactPerson.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1989,6 +2102,7 @@ Public Class AccountsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msSave_Click(sender As Object, e As EventArgs) Handles msSave.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2027,7 +2141,7 @@ Public Class AccountsForm
                     Me.Cursor = Cursors.WaitCursor
                     If cueB = "New" Then
                         getAccountNo("Supplier", Me)
-                        M_I_Accounts(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, If(sfcontactpersonid = 0, DBNull.Value, sfcontactpersonid), DBNull.Value, DBNull.Value, _
+                        M_I_Accounts(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, If(sfcontactpersonid = 0, DBNull.Value, sfcontactpersonid), DBNull.Value, DBNull.Value,
                                  DBNull.Value, globalaccountno, "Supplier", txtSupplierName.Text, txtSupplierName.Text, txtMainPhone.Text, txtAlternatePhone.Text, txtFaxNo.Text, txtEmailAddress.Text, txtTIN.Text, txtWebsite.Text, txtComments.Text, cboStatus.Text, Me)
                         If CInt(txtSupplierNo.Text) <> globalaccountno Then
                             MessageBox.Show("Please take note that the supplier No. will change from " & CInt(txtSupplierNo.Text) & " to " & globalaccountno & "." & vbNewLine & "Another user used the Supplier No. " & CInt(txtSupplierNo.Text) & " for its new supplier", "Note:", MessageBoxButtons.OK, MessageBoxIcon.Information)
@@ -2038,7 +2152,7 @@ Public Class AccountsForm
                             tsrefreshperformclickB()
                         End If
                     ElseIf cueB = "Edit" Then
-                        M_U_Accounts(CInt(dgSuppliersList.CurrentRow.Cells("s_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, If(sfcontactpersonid = 0, DBNull.Value, sfcontactpersonid), DBNull.Value, _
+                        M_U_Accounts(CInt(dgSuppliersList.CurrentRow.Cells("s_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, If(sfcontactpersonid = 0, DBNull.Value, sfcontactpersonid), DBNull.Value,
                                  DBNull.Value, DBNull.Value, txtSupplierName.Text, txtMainPhone.Text, txtAlternatePhone.Text, txtFaxNo.Text, txtEmailAddress.Text, txtTIN.Text, txtWebsite.Text, txtComments.Text, cboStatus.Text, Me)
                         If myModule.systemerrorfound = False Then
                             myBalloon("Successfully Updated", "Update", lblsavemsg, -15, -65)
@@ -2054,9 +2168,13 @@ Public Class AccountsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #End Region
+
 #Region "Search/Page Setup"
+
 #Region "Customers"
+
     Private Sub txtSimpleSearchA_KeyDown(sender As Object, e As KeyEventArgs) Handles txtSimpleSearchA.KeyDown
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2081,6 +2199,7 @@ Public Class AccountsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboSearch1A_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboSearch1A.SelectedIndexChanged
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2104,6 +2223,7 @@ Public Class AccountsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboSearch3A_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboSearch3A.SelectedIndexChanged
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2127,6 +2247,7 @@ Public Class AccountsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboSearch2A_KeyDown(sender As Object, e As KeyEventArgs) Handles cboSearch2A.KeyDown
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2171,6 +2292,7 @@ Public Class AccountsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboSearch4A_KeyDown(sender As Object, e As KeyEventArgs) Handles cboSearch4A.KeyDown
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2215,6 +2337,7 @@ Public Class AccountsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdFirstA_Click(sender As Object, e As EventArgs) Handles cmdFirstA.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2236,6 +2359,7 @@ Public Class AccountsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdPrevA_Click(sender As Object, e As EventArgs) Handles cmdPrevA.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2265,6 +2389,7 @@ Public Class AccountsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdNextA_Click(sender As Object, e As EventArgs) Handles cmdNextA.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2290,6 +2415,7 @@ Public Class AccountsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdLastA_Click(sender As Object, e As EventArgs) Handles cmdLastA.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2315,6 +2441,7 @@ Public Class AccountsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub txtPageA_KeyDown(sender As Object, e As KeyEventArgs) Handles txtPageA.KeyDown
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2357,8 +2484,11 @@ Public Class AccountsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #End Region
+
 #Region "Suppliers"
+
     Private Sub txtSimpleSearch_KeyDown(sender As Object, e As KeyEventArgs) Handles txtSimpleSearch.KeyDown
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2383,6 +2513,7 @@ Public Class AccountsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboSearch1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboSearch1.SelectedIndexChanged
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2403,6 +2534,7 @@ Public Class AccountsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboSearch3_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboSearch3.SelectedIndexChanged
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2423,6 +2555,7 @@ Public Class AccountsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboSearch2_KeyDown(sender As Object, e As KeyEventArgs) Handles cboSearch2.KeyDown
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2467,6 +2600,7 @@ Public Class AccountsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboSearch4_KeyDown(sender As Object, e As KeyEventArgs) Handles cboSearch4.KeyDown
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2511,6 +2645,7 @@ Public Class AccountsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdFirst_Click(sender As Object, e As EventArgs) Handles cmdFirst.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2532,6 +2667,7 @@ Public Class AccountsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdPrev_Click(sender As Object, e As EventArgs) Handles cmdPrev.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2561,6 +2697,7 @@ Public Class AccountsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdNext_Click(sender As Object, e As EventArgs) Handles cmdNext.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2586,6 +2723,7 @@ Public Class AccountsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdLast_Click(sender As Object, e As EventArgs) Handles cmdLast.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2611,6 +2749,7 @@ Public Class AccountsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub txtPage_KeyDown(sender As Object, e As KeyEventArgs) Handles txtPage.KeyDown
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2653,9 +2792,13 @@ Public Class AccountsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #End Region
+
 #End Region
+
 #Region "Datagrid Errors"
+
     Private Sub dgCustomerList_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgCustomerList.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2696,6 +2839,7 @@ Public Class AccountsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgCustomerOrders_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgCustomerOrders.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2736,6 +2880,7 @@ Public Class AccountsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgCustomerOrderItems_DataError(sender As Object, e As DataGridViewDataErrorEventArgs)
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2776,6 +2921,7 @@ Public Class AccountsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgSupplierList_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgSuppliersList.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2816,5 +2962,7 @@ Public Class AccountsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #End Region
+
 End Class

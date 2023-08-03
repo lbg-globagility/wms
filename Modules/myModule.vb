@@ -4,6 +4,8 @@ Imports CrystalDecisions.CrystalReports.Engine
 Imports CrystalDecisions.Shared
 Imports System.IO
 Imports System.Data.OleDb
+Imports Microsoft.Extensions.DependencyInjection
+
 Module myModule
     Dim formatcount As Integer
     Public colorconverter As New ColorConverter
@@ -36,7 +38,7 @@ Module myModule
     Public globalpicklistgroupid, globalorderitemqtyordered, globalpicklistno, globalcontactno, globalpicklistorderid As Integer
     Public globalcartonno, globalpackinglistcartonitemid, globalpackedby, globaldeliverytruckno, globaldeliverytruckid As Integer
     Public globalcontactid, globalpicklistorderitemid, globalpicklistid, globalpicklistordercount, globalpackinglistno As Integer
-    Public globalorganizationid, globalskuid, globalcolorid, globalproductcolorsizesid, globalproductcolorsid, globaluserid As Integer
+    Public globalorganizationid, globalskuid, globalSKU2id, globalcolorid, globalproductcolorsizesid, globalproductcolorsid, globaluserid As Integer
     Public globalcustomerid, globalaccountno, globalproductbundleid, globalproductbundleitemid, globalorderno, globalorderid As Integer
     Public globalbranchid, globalcombinecodingid, globalcodingid, globalcartonsizeid, globallistofvaluesid, globalorderitemid As Integer
     Public globaltotalqtyavailable, globaltotalqtyreserve, globaltotalqtydamage, globalpackinglistid, globalpackinglistcartonid As Integer
@@ -47,7 +49,11 @@ Module myModule
     Public globalcreateflg, globalupdateflg, globaldisableflg, globalreadonlyflg, globalpicklistorderitemissueflg, globalorderitemapproveflg As Char
     Public globalpackinglistcartonstatus, globalpackedcartonno, globaldeliveryhours, globallineupstatus, globallineupcartonstatus, globalorderitemtag As String
     Public globallineupnos, globalbranchname, globalbranchaddress, globalvendorname, globalorderclassdescription, globalorderpono, globalordersidrno, globalordercanceldate As String
+
+    Public MainServiceProvider As ServiceProvider
+
 #Region "Module Functions"
+
     Public Sub dbconn()
         Static once As SByte = 0
         If once = 0 Then
@@ -81,14 +87,14 @@ Module myModule
                         objReader.Dispose()
                     End If
                 Else
-                    File.AppendAllText("C:\ConnectionString\ConnectionStringDreamheartsdb.txt", _
-                                       "server=" & sys_servername & _
-                                       ";user id=" & sys_userid & _
-                                       ";password=" & sys_password & _
+                    File.AppendAllText("C:\ConnectionString\ConnectionStringDreamheartsdb.txt",
+                                       "server=" & sys_servername &
+                                       ";user id=" & sys_userid &
+                                       ";password=" & sys_password &
                                        ";database=" & sys_db & ";")
-                    globalconn.ConnectionString = "server=" & sys_servername & _
-                                            ";user id=" & sys_userid & _
-                                            ";password=" & sys_password & _
+                    globalconn.ConnectionString = "server=" & sys_servername &
+                                            ";user id=" & sys_userid &
+                                            ";password=" & sys_password &
                                             ";database=" & sys_db & ";"
                 End If
             Catch ex As Exception
@@ -96,26 +102,29 @@ Module myModule
             End Try
         End If
     End Sub
+
     Function getStrBetween(ByVal myStr As String, ByVal startIndx As Char, ByVal lastIndx As Char) As String
         Dim _mystr As String = myStr
         _mystr = _mystr.Substring(_mystr.IndexOf(startIndx) + 1)
         _mystr = _mystr.Substring(0, _mystr.IndexOf(lastIndx))
         Return _mystr
     End Function
+
     Public Function getErrExcptn(ByVal ex As Exception, Optional FormNam As String = Nothing) As String
         Dim st As StackTrace = New StackTrace(ex, True)
         Dim sf As StackFrame = st.GetFrame(st.FrameCount - 1)
         Dim op_FrmNam As String = If(FormNam = Nothing, "", FormNam & ".")
         Dim globagsystemversionnum As String = AboutForm.SystemVerNo.Text
-        Dim mystr As String = ex.Message & vbNewLine & vbNewLine & _
-                        "(System Version: " & globagsystemversionnum & ") An ERROR occured in  " & op_FrmNam & _
-                        st.GetFrame(st.FrameCount - 1).GetMethod.Name & _
+        Dim mystr As String = ex.Message & vbNewLine & vbNewLine &
+                        "(System Version: " & globagsystemversionnum & ") An ERROR occured in  " & op_FrmNam &
+                        st.GetFrame(st.FrameCount - 1).GetMethod.Name &
                         " " & sf.GetFileLineNumber()
         systemerrorfound = True
         Return mystr
     End Function
-    Sub TabControlColor(ByVal TabCntrl As TabControl, _
-                        ByVal ee As System.Windows.Forms.DrawItemEventArgs, _
+
+    Sub TabControlColor(ByVal TabCntrl As TabControl,
+                        ByVal ee As System.Windows.Forms.DrawItemEventArgs,
                         Optional formColor As Color = Nothing)
         Dim g As Graphics = ee.Graphics
         Dim tp As TabPage = TabCntrl.TabPages(ee.Index)
@@ -157,6 +166,7 @@ Module myModule
             g.DrawString(strTitle, TabCntrl.Font, br, r, sf)
         End If
     End Sub
+
     Public Sub myBalloon(Optional ToolTipStringContent As String = Nothing, Optional ToolTipStringTitle As String = Nothing, Optional objct As System.Windows.Forms.IWin32Window = Nothing, Optional x As Integer = 0, Optional y As Integer = 0, Optional dispo As SByte = 0, Optional duration As Integer = 3000)
         Try
             If dispo = 1 Then
@@ -178,41 +188,42 @@ Module myModule
             MsgBox(ex.Message & " ERR_NO 88-14 : Warn Ballon", , "Balloon Message")
         End Try
     End Sub
-    Sub GridDrawCustomHeaderColumns(ByVal dgv As DataGridView, _
-     ByVal e As DataGridViewCellPaintingEventArgs, ByVal img As Image, _
+
+    Sub GridDrawCustomHeaderColumns(ByVal dgv As DataGridView,
+     ByVal e As DataGridViewCellPaintingEventArgs, ByVal img As Image,
      ByVal Style As DGVHeaderImageAlignments)
         Dim gr As Graphics = e.Graphics
         Dim rowHeadrPaint As Graphics = e.Graphics
-        gr.FillRectangle( _
-         New SolidBrush(dgv.ColumnHeadersDefaultCellStyle.BackColor), _
+        gr.FillRectangle(
+         New SolidBrush(dgv.ColumnHeadersDefaultCellStyle.BackColor),
          e.CellBounds)
         If img IsNot Nothing Then
             Select Case Style
                 Case DGVHeaderImageAlignments.FillCell
-                    gr.DrawImage( _
-                     img, e.CellBounds.X, e.CellBounds.Y, _
+                    gr.DrawImage(
+                     img, e.CellBounds.X, e.CellBounds.Y,
                      e.CellBounds.Width, e.CellBounds.Height)
                 Case DGVHeaderImageAlignments.SingleCentered
-                    gr.DrawImage(img, _
-                     ((e.CellBounds.Width - img.Width) \ 2) + e.CellBounds.X, _
-                     ((e.CellBounds.Height - img.Height) \ 2) + e.CellBounds.Y, _
+                    gr.DrawImage(img,
+                     ((e.CellBounds.Width - img.Width) \ 2) + e.CellBounds.X,
+                     ((e.CellBounds.Height - img.Height) \ 2) + e.CellBounds.Y,
                      img.Width, img.Height)
                 Case DGVHeaderImageAlignments.SingleLeft
-                    gr.DrawImage(img, e.CellBounds.X, _
-                     ((e.CellBounds.Height - img.Height) \ 2) + e.CellBounds.Y, _
+                    gr.DrawImage(img, e.CellBounds.X,
+                     ((e.CellBounds.Height - img.Height) \ 2) + e.CellBounds.Y,
                      img.Width, img.Height)
                 Case DGVHeaderImageAlignments.SingleRight
-                    gr.DrawImage(img, _
-                     (e.CellBounds.Width - img.Width) + e.CellBounds.X, _
-                     ((e.CellBounds.Height - img.Height) \ 2) + e.CellBounds.Y, _
+                    gr.DrawImage(img,
+                     (e.CellBounds.Width - img.Width) + e.CellBounds.X,
+                     ((e.CellBounds.Height - img.Height) \ 2) + e.CellBounds.Y,
                      img.Width, img.Height)
                 Case DGVHeaderImageAlignments.Tile
 
                     Dim br As New TextureBrush(img, Drawing2D.WrapMode.Tile)
                     gr.FillRectangle(br, e.ClipBounds)
                 Case Else
-                    gr.DrawImage( _
-                     img, e.CellBounds.X, e.CellBounds.Y, _
+                    gr.DrawImage(
+                     img, e.CellBounds.X, e.CellBounds.Y,
                      e.ClipBounds.Width, e.CellBounds.Height)
             End Select
         End If
@@ -257,12 +268,13 @@ Module myModule
             Dim newFont = New System.Drawing.Font("Segoe UI", 8.75!, FontStyle.Regular)
             Dim newForeColor = Color.FromArgb(0, 0, 0)
             With dgv.ColumnHeadersDefaultCellStyle
-                gr.DrawString(e.Value.ToString, newFont, _
+                gr.DrawString(e.Value.ToString, newFont,
                  New SolidBrush(newForeColor), e.CellBounds, sf)
             End With
         End Using
         e.Handled = True
     End Sub
+
     Public Enum DGVHeaderImageAlignments As Int32
         [Default] = 0
         FillCell = 1
@@ -272,9 +284,13 @@ Module myModule
         Stretch = [Default]
         Tile = 5
     End Enum
+
 #End Region
+
 #Region "Global Functions"
+
 #Region "AUTO-COMPLETE"
+
     Sub globalautocompleteAccountName(ByVal globalicombobox As ComboBox, ByVal globaliaccounttype As String, ByVal globalicondition As String, ByVal globalformname As Object)
         Try
             Dim accountname As New AutoCompleteStringCollection
@@ -295,6 +311,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub globalautocompleteContactName(ByVal globalicombobox As ComboBox, ByVal globalicontacttype As String, ByVal globalformname As Object)
         Try
             Dim contactname As New AutoCompleteStringCollection
@@ -322,11 +339,12 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub globalautocompleteByCombination(ByVal globalicombobox As ComboBox, ByVal globalformname As Object)
         Try
             Dim combination As New AutoCompleteStringCollection
-            Dim cmd As New MySqlCommand("SELECT COALESCE(CONCAT(COALESCE(p.productcode,''),' / ',COALESCE(c.colorname,''),' / ',COALESCE(pcs.size,''),' / ',COALESCE(pcs.seasoncode,'')),'') AS 'combination' " & _
-                                "FROM productcolorsizes pcs LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN products p ON pc.productid = p.rowid LEFT JOIN colors c ON pc.colorid = c.rowid " & _
+            Dim cmd As New MySqlCommand("SELECT COALESCE(CONCAT(COALESCE(p.productcode,''),' / ',COALESCE(c.colorname,''),' / ',COALESCE(pcs.size,''),' / ',COALESCE(pcs.seasoncode,'')),'') AS 'combination' " &
+                                "FROM productcolorsizes pcs LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN products p ON pc.productid = p.rowid LEFT JOIN colors c ON pc.colorid = c.rowid " &
                                 "WHERE pcs.organizationid = " & Z_OrganizationID & " AND pcs.status = 'Active' ORDER BY p.productcode,c.colorname ", globalconn)
             Dim ds As New DataSet
             Dim da As New MySqlDataAdapter(cmd)
@@ -344,6 +362,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub globalautocompleteByProductCode(ByVal globalicombobox As ComboBox, ByVal globalformname As Object)
         Try
             Dim productcode As New AutoCompleteStringCollection
@@ -364,6 +383,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub globalautocompleteBySKU(ByVal globalicombobox As ComboBox, ByVal globalformname As Object)
         Try
             Dim mergesku As New AutoCompleteStringCollection
@@ -391,6 +411,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub globalautocompleteByBundleName(ByVal globalicombobox As ComboBox, ByVal globalformname As Object)
         Try
             Dim bundlename As New AutoCompleteStringCollection
@@ -411,6 +432,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub globalautocompleteLocationName(ByVal globalicombobox As ComboBox, ByVal globalformname As Object)
         Try
             Dim locationname As New AutoCompleteStringCollection
@@ -431,6 +453,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub globalautocompleteOrderInfoA(ByVal globalicombobox As ComboBox, ByVal globaliordertype As String, ByVal globaliorderstatus As String, ByVal globalformname As Object)
         Try
             Dim orderinfo As New AutoCompleteStringCollection
@@ -458,6 +481,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub globalautocompleteOrderInfoB(ByVal globalicombobox As ComboBox, ByVal globalformname As Object)
         Try
             Dim orderinfo As New AutoCompleteStringCollection
@@ -485,6 +509,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub globalautocompleteTruckInfo(ByVal globalicombobox As ComboBox, ByVal globalformname As Object)
         Try
             Dim truckinfo As New AutoCompleteStringCollection
@@ -505,6 +530,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub globalautocompleteShiftInfo(ByVal globalicombobox As ComboBox, ByVal globalformname As Object)
         Try
             Dim shiftinfo As New AutoCompleteStringCollection
@@ -525,10 +551,11 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub globalautocompleteTruckShiftInfo(ByVal globalicombobox As ComboBox, ByVal globalformname As Object)
         Try
             Dim truckshiftinfo As New AutoCompleteStringCollection
-            Dim cmd As New MySqlCommand("SELECT COALESCE(CONCAT(COALESCE(dt.truckname,''),' - ',COALESCE(dt.truckno,''),' / ',COALESCE(s.shiftname,'')),'') AS 'truckshiftinfo' FROM deliverytruckshifts dts " & _
+            Dim cmd As New MySqlCommand("SELECT COALESCE(CONCAT(COALESCE(dt.truckname,''),' - ',COALESCE(dt.truckno,''),' / ',COALESCE(s.shiftname,'')),'') AS 'truckshiftinfo' FROM deliverytruckshifts dts " &
                             "LEFT JOIN deliverytrucks dt ON dts.deliverytruckid = dt.rowid LEFT JOIN shifts s ON dts.shiftid = s.rowid WHERE dts.organizationid = " & Z_OrganizationID & " AND dts.`status` = 'Active' GROUP BY dts.rowid ", globalconn)
             Dim ds As New DataSet
             Dim da As New MySqlDataAdapter(cmd)
@@ -546,6 +573,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub globalautocompleteCartonNos(ByVal globalicombobox As ComboBox, ByVal globalipackinglistid As Integer, ByVal globalformname As Object)
         Try
             Dim cartonnos As New AutoCompleteStringCollection
@@ -566,6 +594,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub globalautocompleteBranchCodeName(ByVal globalicombobox As ComboBox, ByVal globalformname As Object)
         Try
             Dim branchcodename As New AutoCompleteStringCollection
@@ -593,6 +622,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub globalautocompleteVendorCodeName(ByVal globalicombobox As ComboBox, ByVal globalformname As Object)
         Try
             Dim vendorcodename As New AutoCompleteStringCollection
@@ -620,12 +650,13 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub globalautocompleteClassDescription(ByVal globalicombobox As ComboBox, ByVal globalformname As Object)
         Try
             Dim classdescription As New AutoCompleteStringCollection
-            Dim cmd1 As New MySqlCommand("SELECT COALESCE(CONCAT(COALESCE(cc.codename,''),' / ',COALESCE(c1.codeno,''),'-',COALESCE(c2.codeno,''),'-',COALESCE(c3.codeno,'')),'') AS 'codename' FROM combinecodings cc LEFT JOIN codings c1 ON cc.codingida = c1.rowid " & _
+            Dim cmd1 As New MySqlCommand("SELECT COALESCE(CONCAT(COALESCE(cc.codename,''),' / ',COALESCE(c1.codeno,''),'-',COALESCE(c2.codeno,''),'-',COALESCE(c3.codeno,'')),'') AS 'codename' FROM combinecodings cc LEFT JOIN codings c1 ON cc.codingida = c1.rowid " &
                             "LEFT JOIN codings c2 ON cc.codingidb = c2.rowid LEFT JOIN codings c3 ON cc.codingidc = c3.rowid WHERE cc.organizationid = " & Z_OrganizationID & " AND cc.status = 'Active' GROUP BY cc.rowid ", globalconn)
-            Dim cmd2 As New MySqlCommand("SELECT COALESCE(CONCAT(COALESCE(c1.codeno,''),'-',COALESCE(c2.codeno,''),'-',COALESCE(c3.codeno,''),' / ',COALESCE(cc.codename,'')),'') AS 'codings' FROM combinecodings cc LEFT JOIN codings c1 ON cc.codingida = c1.rowid " & _
+            Dim cmd2 As New MySqlCommand("SELECT COALESCE(CONCAT(COALESCE(c1.codeno,''),'-',COALESCE(c2.codeno,''),'-',COALESCE(c3.codeno,''),' / ',COALESCE(cc.codename,'')),'') AS 'codings' FROM combinecodings cc LEFT JOIN codings c1 ON cc.codingida = c1.rowid " &
                             "LEFT JOIN codings c2 ON cc.codingidb = c2.rowid LEFT JOIN codings c3 ON cc.codingidc = c3.rowid WHERE cc.organizationid = " & Z_OrganizationID & " AND cc.status = 'Active' GROUP BY cc.rowid ", globalconn)
             Dim da1 As New MySqlDataAdapter(cmd1)
             Dim da2 As New MySqlDataAdapter(cmd2)
@@ -649,6 +680,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub globalautocompleteCodings(ByVal globalicombobox As ComboBox, ByVal globalicondition As String, ByVal globalformname As Object)
         Try
             Dim codings As New AutoCompleteStringCollection
@@ -676,6 +708,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub globalautocompleteListOfValues(ByVal globalicombobox As ComboBox, ByVal globalitype As String, ByVal globalformname As Object)
         Try
             Dim displayvalue As New AutoCompleteStringCollection
@@ -696,6 +729,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub globalautocompleteSizeInfo(ByVal globalicombobox As ComboBox, ByVal globalformname As Object)
         Try
             Dim sizeinfo As New AutoCompleteStringCollection
@@ -716,6 +750,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub globalautocompleteBrandName(ByVal globalicombobox As ComboBox, ByVal globalistatuscondition As String, ByVal globalformname As Object)
         Try
             Dim brandname As New AutoCompleteStringCollection
@@ -736,6 +771,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub globalautocompleteCategory(ByVal globalicombobox As ComboBox, ByVal globalistatuscondition As String, ByVal globalformname As Object)
         Try
             Dim categoryname As New AutoCompleteStringCollection
@@ -756,8 +792,11 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "AUTO-POPULATE"
+
     Sub globalautopopulateAccountName(ByVal globalicombobox As ComboBox, ByVal globaliaccounttype As String, ByVal globalicondition As String, ByVal globalformname As Object)
         Try
             globalicombobox.Items.Clear()
@@ -777,6 +816,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub globalautopopulateContactName(ByVal globalicombobox As ComboBox, ByVal globalicontacttype As String, ByVal globalformname As Object)
         Try
             globalicombobox.Items.Clear()
@@ -796,12 +836,13 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub globalautopopulateByCombination(ByVal globalicombobox As ComboBox, ByVal globalformname As Object)
         Try
             globalicombobox.Items.Clear()
             If globalconn.State = ConnectionState.Open Then globalconn.Close()
-            Dim sql1 As String = "SELECT COALESCE(CONCAT(COALESCE(p.productcode,''),' / ',COALESCE(c.colorname,''),' / ',COALESCE(pcs.size,''),' / ',COALESCE(pcs.seasoncode,'')),'') AS 'combination' " & _
-                            "FROM productcolorsizes pcs LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN products p ON pc.productid = p.rowid LEFT JOIN colors c ON pc.colorid = c.rowid " & _
+            Dim sql1 As String = "SELECT COALESCE(CONCAT(COALESCE(p.productcode,''),' / ',COALESCE(c.colorname,''),' / ',COALESCE(pcs.size,''),' / ',COALESCE(pcs.seasoncode,'')),'') AS 'combination' " &
+                            "FROM productcolorsizes pcs LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN products p ON pc.productid = p.rowid LEFT JOIN colors c ON pc.colorid = c.rowid " &
                             "WHERE pcs.organizationid = " & Z_OrganizationID & " AND pcs.status = 'Active' ORDER BY p.productcode,c.colorname "
             If globalconn.State = ConnectionState.Closed Then globalconn.Open()
             Dim cmd1 As New MySqlCommand(sql1, globalconn)
@@ -817,6 +858,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub globalautopopulateByProductCode(ByVal globalicombobox As ComboBox, ByVal globalformname As Object)
         Try
             globalicombobox.Items.Clear()
@@ -836,6 +878,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub globalautopopulateBySKU(ByVal globalicombobox As ComboBox, ByVal globalformname As Object)
         Try
             globalicombobox.Items.Clear()
@@ -855,6 +898,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub globalautopopulateByBundleName(ByVal globalicombobox As ComboBox, ByVal globalformname As Object)
         Try
             globalicombobox.Items.Clear()
@@ -874,6 +918,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub globalautopopulateLocationName(ByVal globalicombobox As ComboBox, ByVal globalformname As Object)
         Try
             globalicombobox.Items.Clear()
@@ -893,6 +938,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub globalautopopulateOrderInfoA(ByVal globalicombobox As ComboBox, ByVal globaliordertype As String, ByVal globaliorderstatus As String, ByVal globalformname As Object)
         Try
             globalicombobox.Items.Clear()
@@ -912,6 +958,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub globalautopopulateOrderInfoB(ByVal globalicombobox As ComboBox, ByVal globalformname As Object)
         Try
             globalicombobox.Items.Clear()
@@ -931,6 +978,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub globalautopopulateTruckInfo(ByVal globalicombobox As ComboBox, ByVal globalformname As Object)
         Try
             globalicombobox.Items.Clear()
@@ -950,6 +998,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub globalautopopulateShiftInfo(ByVal globalicombobox As ComboBox, ByVal globalformname As Object)
         Try
             globalicombobox.Items.Clear()
@@ -969,11 +1018,12 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub globalautopopulateTruckShiftInfo(ByVal globalicombobox As ComboBox, ByVal globalformname As Object)
         Try
             globalicombobox.Items.Clear()
             If globalconn.State = ConnectionState.Open Then globalconn.Close()
-            Dim sql1 As String = "SELECT COALESCE(CONCAT(COALESCE(dt.truckname,''),' - ',COALESCE(dt.truckno,''),' / ',COALESCE(s.shiftname,'')),'') AS 'truckshiftinfo' FROM deliverytruckshifts dts " & _
+            Dim sql1 As String = "SELECT COALESCE(CONCAT(COALESCE(dt.truckname,''),' - ',COALESCE(dt.truckno,''),' / ',COALESCE(s.shiftname,'')),'') AS 'truckshiftinfo' FROM deliverytruckshifts dts " &
                     "LEFT JOIN deliverytrucks dt ON dts.deliverytruckid = dt.rowid LEFT JOIN shifts s ON dts.shiftid = s.rowid WHERE dts.organizationid = " & Z_OrganizationID & " AND dts.`status` = 'Active' GROUP BY dts.rowid ORDER BY dt.truckname,s.shiftname DESC "
             If globalconn.State = ConnectionState.Closed Then globalconn.Open()
             Dim cmd1 As New MySqlCommand(sql1, globalconn)
@@ -989,6 +1039,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub globalautopopulateCartonNos(ByVal globalicombobox As ComboBox, ByVal globalipackinglistid As Integer, ByVal globalformname As Object)
         Try
             globalicombobox.Items.Clear()
@@ -1008,6 +1059,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub globalautopopulateBranchCodeName(ByVal globalicombobox As ComboBox, ByVal globalformname As Object)
         Try
             globalicombobox.Items.Clear()
@@ -1027,6 +1079,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub globalautopopulateVendorCodeName(ByVal globalicombobox As ComboBox, ByVal globalformname As Object)
         Try
             globalicombobox.Items.Clear()
@@ -1046,11 +1099,12 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub globalautopopulateClassDescription(ByVal globalicombobox As ComboBox, ByVal globalformname As Object)
         Try
             globalicombobox.Items.Clear()
             If globalconn.State = ConnectionState.Open Then globalconn.Close()
-            Dim sql1 As String = "SELECT COALESCE(CONCAT(COALESCE(cc.codename,''),' / ',COALESCE(c1.codeno,''),'-',COALESCE(c2.codeno,''),'-',COALESCE(c3.codeno,'')),'') AS 'codename' FROM combinecodings cc LEFT JOIN codings c1 ON cc.codingida = c1.rowid " & _
+            Dim sql1 As String = "SELECT COALESCE(CONCAT(COALESCE(cc.codename,''),' / ',COALESCE(c1.codeno,''),'-',COALESCE(c2.codeno,''),'-',COALESCE(c3.codeno,'')),'') AS 'codename' FROM combinecodings cc LEFT JOIN codings c1 ON cc.codingida = c1.rowid " &
                             "LEFT JOIN codings c2 ON cc.codingidb = c2.rowid LEFT JOIN codings c3 ON cc.codingidc = c3.rowid WHERE cc.organizationid = " & Z_OrganizationID & " AND cc.status = 'Active' GROUP BY cc.rowid ORDER BY cc.codename "
             If globalconn.State = ConnectionState.Closed Then globalconn.Open()
             Dim cmd1 As New MySqlCommand(sql1, globalconn)
@@ -1066,6 +1120,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub globalautopopulateCodings(ByVal globalicombobox As ComboBox, ByVal globalicondition As String, ByVal globalformname As Object)
         Try
             globalicombobox.Items.Clear()
@@ -1085,6 +1140,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub globalautopopulateListOfValues(ByVal globalicombobox As ComboBox, ByVal globalitype As String, ByVal globalformname As Object)
         Try
             globalicombobox.Items.Clear()
@@ -1104,6 +1160,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub globalautopopulateSizeInfo(ByVal globalicombobox As ComboBox, ByVal globalformname As Object)
         Try
             globalicombobox.Items.Clear()
@@ -1123,6 +1180,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub globalautopopulateBrandName(ByVal globalicombobox As ComboBox, ByVal globalistatuscondition As String, ByVal globalformname As Object)
         Try
             globalicombobox.Items.Clear()
@@ -1142,6 +1200,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub globalautopopulateCategory(ByVal globalicombobox As ComboBox, ByVal globalistatuscondition As String, ByVal globalformname As Object)
         Try
             globalicombobox.Items.Clear()
@@ -1161,8 +1220,11 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "SELECT"
+
     Sub getInventorylocationIDA(ByVal globaliinventorylocationname As String, ByVal globalformname As Object)
         Try
             globalinventorylocationid = 0
@@ -1180,6 +1242,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getInventorylocationIDB(ByVal globaliinventorylocationid As Integer, ByVal globaliinventorylocationname As String, ByVal globalformname As Object)
         Try
             globalinventorylocationid = 0
@@ -1197,6 +1260,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getInventorylocationIDC(ByVal globalformname As Object)
         Try
             globalinventorylocationid = 0
@@ -1214,6 +1278,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getAddressName(ByVal globaliaddressid As Integer, ByVal globalformname As Object)
         Try
             globaladdressname = ""
@@ -1231,6 +1296,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getContactNameA(ByVal globalicontactid As Integer, ByVal globalformname As Object)
         Try
             globalcontactname = ""
@@ -1248,6 +1314,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getContactNameB(ByVal globalicontactid As Integer, ByVal globalformname As Object)
         Try
             globalcontactname = ""
@@ -1265,6 +1332,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getRackShelfColumnID(ByVal globalirackshelfcolumnname As String, ByVal globaliinventorylocationid As Integer, ByVal globalformname As Object)
         Try
             globalrackshelfcolumnid = 0
@@ -1282,11 +1350,12 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getTotalQtyAvailableA(ByVal globaliproductcolorsizeid As Integer, ByVal globalformname As Object)
         Try
             globaltotalqtyavailable = 0
             Dim dtTq As New DataTable
-            dtTq = getDataTableForSQL("SELECT COALESCE(SUM(pil.totalavailableqty),0) FROM productinventorylocation pil " & _
+            dtTq = getDataTableForSQL("SELECT COALESCE(SUM(pil.totalavailableqty),0) FROM productinventorylocation pil " &
                             "WHERE pil.organizationid = " & Z_OrganizationID & " AND pil.productcolorsizeid = " & globaliproductcolorsizeid & " ")
             If dtTq.Rows.Count <> 0 Then
                 globaltotalqtyavailable = dtTq.Rows(0)(0)
@@ -1297,12 +1366,13 @@ Module myModule
             MsgBox(getErrExcptn(ex, globalformname.Name))
         End Try
     End Sub
+
     Sub getTotalQtyAvailableB(ByVal globaliproductcolorsizeid As Integer, ByVal globaliinventorylocationid As Integer, ByVal globalformname As Object)
         Try
             globaltotalqtyavailable = 0
             If globalconn.State = ConnectionState.Open Then globalconn.Close()
             Dim dtTq As New DataTable
-            dtTq = getDataTableForSQL("SELECT COALESCE(SUM(pil.totalavailableqty),0) FROM productinventorylocation pil LEFT JOIN rackshelfcolumn rsc ON pil.rackshelfcolumnid = rsc.rowid " & _
+            dtTq = getDataTableForSQL("SELECT COALESCE(SUM(pil.totalavailableqty),0) FROM productinventorylocation pil LEFT JOIN rackshelfcolumn rsc ON pil.rackshelfcolumnid = rsc.rowid " &
                             "WHERE pil.organizationid = " & Z_OrganizationID & " AND pil.productcolorsizeid = " & globaliproductcolorsizeid & " AND rsc.inventorylocationid = " & globaliinventorylocationid & " ")
             If dtTq.Rows.Count <> 0 Then
                 globaltotalqtyavailable = dtTq.Rows(0)(0)
@@ -1315,6 +1385,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getTotalQtyAvailableC(ByVal globaliproductinventorylocationid As Integer, ByVal globalformname As Object)
         Try
             globaltotalqtyavailable = 0
@@ -1332,6 +1403,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getTotalQtyAvailableD(ByVal globalirackshelfcolumnid As Integer, ByVal globalformname As Object)
         Try
             globaltotalqtyavailable = 0
@@ -1349,11 +1421,12 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getTotalQtyAllocatedA(ByVal globaliproductcolorsizeid As Integer, ByVal globalformname As Object)
         Try
             globaltotalqtyallocated = 0
             Dim dtTq As New DataTable
-            dtTq = getDataTableForSQL("SELECT COALESCE(SUM(pil.totalallocatedqty),0) FROM productinventorylocation pil " & _
+            dtTq = getDataTableForSQL("SELECT COALESCE(SUM(pil.totalallocatedqty),0) FROM productinventorylocation pil " &
                             "WHERE pil.organizationid = " & Z_OrganizationID & " AND pil.productcolorsizeid = " & globaliproductcolorsizeid & " ")
             If dtTq.Rows.Count <> 0 Then
                 globaltotalqtyallocated = dtTq.Rows(0)(0)
@@ -1364,12 +1437,13 @@ Module myModule
             MsgBox(getErrExcptn(ex, globalformname.Name))
         End Try
     End Sub
+
     Sub getTotalQtyAllocatedB(ByVal globaliproductcolorsizeid As Integer, ByVal globaliinventorylocationid As Integer, ByVal globalformname As Object)
         Try
             globaltotalqtyallocated = 0
             If globalconn.State = ConnectionState.Open Then globalconn.Close()
             Dim dtTq As New DataTable
-            dtTq = getDataTableForSQL("SELECT COALESCE(SUM(pil.totalallocatedqty),0) FROM productinventorylocation pil LEFT JOIN rackshelfcolumn rsc ON pil.rackshelfcolumnid = rsc.rowid " & _
+            dtTq = getDataTableForSQL("SELECT COALESCE(SUM(pil.totalallocatedqty),0) FROM productinventorylocation pil LEFT JOIN rackshelfcolumn rsc ON pil.rackshelfcolumnid = rsc.rowid " &
                             "WHERE pil.organizationid = " & Z_OrganizationID & " AND pil.productcolorsizeid = " & globaliproductcolorsizeid & " AND rsc.inventorylocationid = " & globaliinventorylocationid & " ")
             If dtTq.Rows.Count <> 0 Then
                 globaltotalqtyallocated = dtTq.Rows(0)(0)
@@ -1382,6 +1456,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getTotalQtyAllocatedC(ByVal globaliproductinventorylocationid As Integer, ByVal globalformname As Object)
         Try
             globaltotalqtyallocated = 0
@@ -1399,6 +1474,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getTotalQtyOrderedA(ByVal globaliproductcolorsizeid As Integer, ByVal globaliconditionstring As String, ByVal globalformname As Object)
         Try
             globaltotalqtyordered = 0
@@ -1413,11 +1489,12 @@ Module myModule
             MsgBox(getErrExcptn(ex, globalformname.Name))
         End Try
     End Sub
+
     Sub getTotalQtyReserveA(ByVal globaliproductcolorsizeid As Integer, ByVal globalformname As Object)
         Try
             globaltotalqtyreserve = 0
             Dim dtTq As New DataTable
-            dtTq = getDataTableForSQL("SELECT COALESCE(SUM(pil.totalreserveqty),0) FROM productinventorylocation pil " & _
+            dtTq = getDataTableForSQL("SELECT COALESCE(SUM(pil.totalreserveqty),0) FROM productinventorylocation pil " &
                             "WHERE pil.organizationid = " & Z_OrganizationID & " AND pil.productcolorsizeid = " & globaliproductcolorsizeid & " ")
             If dtTq.Rows.Count <> 0 Then
                 globaltotalqtyreserve = dtTq.Rows(0)(0)
@@ -1428,12 +1505,13 @@ Module myModule
             MsgBox(getErrExcptn(ex, globalformname.Name))
         End Try
     End Sub
+
     Sub getTotalQtyReserveB(ByVal globaliproductcolorsizeid As Integer, ByVal globaliinventorylocationid As Integer, ByVal globalformname As Object)
         Try
             globaltotalqtyreserve = 0
             If globalconn.State = ConnectionState.Open Then globalconn.Close()
             Dim dtTq As New DataTable
-            dtTq = getDataTableForSQL("SELECT COALESCE(SUM(pil.totalreserveqty),0) FROM productinventorylocation pil LEFT JOIN rackshelfcolumn rsc ON pil.rackshelfcolumnid = rsc.rowid " & _
+            dtTq = getDataTableForSQL("SELECT COALESCE(SUM(pil.totalreserveqty),0) FROM productinventorylocation pil LEFT JOIN rackshelfcolumn rsc ON pil.rackshelfcolumnid = rsc.rowid " &
                             "WHERE pil.organizationid = " & Z_OrganizationID & " AND pil.productcolorsizeid = " & globaliproductcolorsizeid & " AND rsc.inventorylocationid = " & globaliinventorylocationid & " ")
             If dtTq.Rows.Count <> 0 Then
                 globaltotalqtyreserve = dtTq.Rows(0)(0)
@@ -1446,6 +1524,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getTotalQtyDamageA(ByVal globaliproductcolorsizeid As Integer, ByVal globalformname As Object)
         Try
             globaltotalqtydamage = 0
@@ -1463,6 +1542,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getProductIDA(ByVal globaliproductid As Integer, ByVal globaliproductcode As String, ByVal globalformname As Object)
         Try
             globalproductid = 0
@@ -1480,6 +1560,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getProductIDB(ByVal globaliproductcode As String, ByVal globalformname As Object)
         Try
             globalproductid = 0
@@ -1497,6 +1578,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getCategoryID(ByVal globalicategoryname As String, ByVal globalicondition As String, ByVal globalformname As Object)
         Try
             globalcategoryid = 0
@@ -1514,6 +1596,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getBrandID(ByVal globalibrandname As String, ByVal globalformname As Object)
         Try
             globalbrandid = 0
@@ -1531,6 +1614,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getCompanyIDA(ByVal globalicondition As String, ByVal globalistatuscondition As String, ByVal globalformname As Object)
         Try
             globalcompanyid = 0
@@ -1548,6 +1632,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getCompanyIDB(ByVal globalicompanyname As String, ByVal globalformname As Object)
         Try
             globalcompanyid = 0
@@ -1573,6 +1658,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getColorID(ByVal globalicolorname As String, ByVal globalformname As Object)
         Try
             globalcolorid = 0
@@ -1590,6 +1676,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getOrganizationIDA(ByVal globaliorganizationid As Integer, ByVal globaliorganizationname As String, ByVal globalformname As Object)
         Try
             globalorganizationid = 0
@@ -1607,6 +1694,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getProductColorSizesSKUA(ByVal globalisku As String, ByVal globalformname As Object)
         Try
             globalskuid = 0
@@ -1624,6 +1712,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getProductColorSizesSKUB(ByVal globaliproductcolorsizesid As Integer, ByVal globalisku As String, ByVal globalformname As Object)
         Try
             globalskuid = 0
@@ -1641,6 +1730,27 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
+    Public Sub getProductColorSizesSKU2B(globaliproductcolorsizesid As Integer,
+            globalisku2 As String,
+            globalformname As Form)
+        Try
+            globalSKU2id = 0
+            If globalconn.State = ConnectionState.Open Then globalconn.Close()
+            Dim dtGid As New DataTable
+            dtGid = getDataTableForSQL("SELECT COALESCE(rowid,0) FROM productcolorsizes WHERE rowid != " & globaliproductcolorsizesid & " AND sku2 = """ & globalisku2 & """ AND organizationid = " & Z_OrganizationID & " ")
+            If dtGid.Rows.Count <> 0 Then
+                globalSKU2id = dtGid.Rows(0)(0)
+            Else
+                globalSKU2id = 0
+            End If
+        Catch ex As Exception
+            MsgBox(getErrExcptn(ex, globalformname.Name))
+        Finally
+            globalconn.Close()
+        End Try
+    End Sub
+
     Sub getProductBundleSKUA(ByVal globalisku As String, ByVal globalformname As Object)
         Try
             globalskuid = 0
@@ -1658,6 +1768,25 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
+    Public Sub getProductBundleSKU2A(globalisku2 As String, globalformname As ProductsForm)
+        Try
+            globalSKU2id = 0
+            If globalconn.State = ConnectionState.Open Then globalconn.Close()
+            Dim dtGid As New DataTable
+            dtGid = getDataTableForSQL("SELECT COALESCE(rowid,0) FROM productbundles WHERE sku2 = """ & globalisku2 & """ AND organizationid = " & Z_OrganizationID & " ")
+            If dtGid.Rows.Count <> 0 Then
+                globalSKU2id = dtGid.Rows(0)(0)
+            Else
+                globalSKU2id = 0
+            End If
+        Catch ex As Exception
+            MsgBox(getErrExcptn(ex, globalformname.Name))
+        Finally
+            globalconn.Close()
+        End Try
+    End Sub
+
     Sub getProductBundleSKUB(ByVal globaliproductbundleid As Integer, ByVal globalisku As String, ByVal globalformname As Object)
         Try
             globalskuid = 0
@@ -1675,6 +1804,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getProductColorSizesIDA(ByVal globaliproductid As Integer, ByVal globalicolorid As Integer, ByVal globalisize As Decimal, ByVal globaliseasoncode As String, ByVal globalformname As Object)
         Try
             globalproductcolorsizesid = 0
@@ -1692,12 +1822,13 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getProductColorSizesIDB(ByVal globalicombination As String, ByVal globalformname As Object)
         Try
             globalproductcolorsizesid = 0
             If globalconn.State = ConnectionState.Open Then globalconn.Close()
             Dim dtGid As New DataTable
-            dtGid = getDataTableForSQL("SELECT COALESCE(pcs.rowid,0) FROM productcolorsizes pcs LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN products p ON pc.productid = p.rowid LEFT JOIN colors c ON pc.colorid = c.rowid " & _
+            dtGid = getDataTableForSQL("SELECT COALESCE(pcs.rowid,0) FROM productcolorsizes pcs LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN products p ON pc.productid = p.rowid LEFT JOIN colors c ON pc.colorid = c.rowid " &
                             "WHERE pcs.organizationid = " & Z_OrganizationID & " AND CONCAT(COALESCE(p.productcode,''),' / ',COALESCE(c.colorname,''),' / ',COALESCE(pcs.size,''),' / ',COALESCE(pcs.seasoncode,'')) = """ & globalicombination & """ ")
             If dtGid.Rows.Count <> 0 Then
                 globalproductcolorsizesid = dtGid.Rows(0)(0)
@@ -1710,6 +1841,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getProductColorSizesIDC(ByVal globaliproductcolorsizeid As Integer, ByVal globaliproductcolorid As Integer, ByVal globalisize As String, ByVal globaliseasoncode As String, ByVal globalformname As Object)
         Try
             globalproductcolorsizesid = 0
@@ -1727,6 +1859,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getProductColorsID(ByVal globaliproductid As Integer, ByVal globalicolorid As Integer, ByVal globalformname As Object)
         Try
             globalproductcolorsid = 0
@@ -1744,6 +1877,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getCustomerID(ByVal globalicustomername As String, ByVal globalformname As Object)
         Try
             globalcustomerid = 0
@@ -1761,6 +1895,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getAccountNo(ByVal globaliaccounttype As String, ByVal globalformname As Object)
         Try
             globalaccountno = 0
@@ -1779,6 +1914,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getProductBundleIDA(ByVal globalibundlename As String, ByVal globalformname As Object)
         Try
             globalproductbundleid = 0
@@ -1796,6 +1932,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getProductBundleIDB(ByVal globaliproductbundleid As Integer, ByVal globalibundlename As String, ByVal globalformname As Object)
         Try
             globalproductbundleid = 0
@@ -1813,6 +1950,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getProductBundleItemID(ByVal globaliproductbundleid As Integer, ByVal globaliproductcolorsizeid As Integer, ByVal globalformname As Object)
         Try
             globalproductbundleitemid = 0
@@ -1830,6 +1968,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getUserID(ByVal globaliusername As String, ByVal globalformname As Object)
         Try
             globaluserid = 0
@@ -1855,6 +1994,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getContactID(ByVal globalicontactname As String, ByVal globalicontacttype As String, ByVal globalformname As Object)
         Try
             globalcontactid = 0
@@ -1880,6 +2020,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getOrderNo(ByVal globaliordertype As String, ByVal globalformname As Object)
         Try
             globalorderno = 0
@@ -1898,6 +2039,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getReferenceNo(ByVal globaliordertype As String, ByVal globalformname As Object)
         Try
             globalreferenceno = 0
@@ -1916,6 +2058,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getOrderIDA(ByVal globaliordernumber As String, ByVal globaliordertype As String, ByVal globaliaccountid As Integer, ByVal globalistatuscondition As String, ByVal globalformname As Object)
         Try
             globalorderid = 0
@@ -1933,6 +2076,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getOrderIDB(ByVal globaliorderid As Integer, ByVal globaliordernumber As String, ByVal globaliordertype As String, ByVal globaliaccountid As Integer, ByVal globalistatuscondition As String, ByVal globalformname As Object)
         Try
             globalorderid = 0
@@ -1950,6 +2094,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getOrderIDC(ByVal globaliorderinfo As String, ByVal globaliordertype As String, ByVal globalformname As Object)
         Try
             globalorderid = 0
@@ -1975,6 +2120,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getOrderIDD(ByVal globaliorderinfo As String, ByVal globalformname As Object)
         Try
             globalpackinglistid = 0 : globalorderid = 0
@@ -1992,7 +2138,6 @@ Module myModule
                 If dtGid.Rows.Count <> 0 Then
                     globalpackinglistid = dtGid.Rows(0)(0)
                     globalorderid = dtGid.Rows(0)(1)
-
                 Else
                     globalpackinglistid = 0 : globalorderid = 0
                 End If
@@ -2003,6 +2148,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getOrderIDE(ByVal globaliordernumber As String, ByVal globaliordertype As String, ByVal globaliaccountid As Integer, ByVal globalistatuscondition As String, ByVal globalformname As Object)
         Try
             globalorderid = 0
@@ -2020,6 +2166,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getOrderIDF(ByVal globaliorderid As Integer, ByVal globaliordernumber As String, ByVal globaliordertype As String, ByVal globaliaccountid As Integer, ByVal globalistatuscondition As String, ByVal globalformname As Object)
         Try
             globalorderid = 0
@@ -2037,6 +2184,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getPickListGroupID(ByVal globalipicklistgroupname As String, ByVal globalformname As Object)
         Try
             globalpicklistgroupid = 0
@@ -2054,6 +2202,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getOrderStatus(ByVal globaliorderid As Integer, ByVal globalformname As Object)
         Try
             globalorderstatus = ""
@@ -2071,14 +2220,15 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getOrderInfo(ByVal globaliorderid As Integer, ByVal globalformname As Object)
         Try
             globalorderdate = "" : globaltargetdate = "" : globaldeliveryhours = "" : globaladdressname = "" : globalordercanceldate = ""
             globalorderclassdescription = "" : globalorderpono = "" : globalordersidrno = "" : globalbranchname = "" : globalvendorname = ""
             If globalconn.State = ConnectionState.Open Then globalconn.Close()
             Dim dtGinfo As New DataTable
-            dtGinfo = getDataTableForSQL("SELECT COALESCE(DATE_FORMAT(o.orderdate,'%d-%b-%Y'),''),COALESCE(DATE_FORMAT(o.targetdate,'%d-%b-%Y'),''),COALESCE(o.deliveryhours,''),COALESCE(o.customeraddress,''),COALESCE(DATE_FORMAT(o.enddate,'%d-%b-%Y'),''),COALESCE(o.referencenumber,'')," & _
-                    "COALESCE(o.drnumber,''),COALESCE(CONCAT(COALESCE(cc.codename,''),' / ',COALESCE(c1.codeno,''),'-',COALESCE(c2.codeno,''),'-',COALESCE(c3.codeno,'')),''),COALESCE(CONCAT(COALESCE(bc.branchcode,''),' - ',COALESCE(bc.branchname,'')),''),COALESCE(CONCAT(COALESCE(ve.companyname,''),' - ',COALESCE(ve.companycode,'')),'') " & _
+            dtGinfo = getDataTableForSQL("SELECT COALESCE(DATE_FORMAT(o.orderdate,'%d-%b-%Y'),''),COALESCE(DATE_FORMAT(o.targetdate,'%d-%b-%Y'),''),COALESCE(o.deliveryhours,''),COALESCE(o.customeraddress,''),COALESCE(DATE_FORMAT(o.enddate,'%d-%b-%Y'),''),COALESCE(o.referencenumber,'')," &
+                    "COALESCE(o.drnumber,''),COALESCE(CONCAT(COALESCE(cc.codename,''),' / ',COALESCE(c1.codeno,''),'-',COALESCE(c2.codeno,''),'-',COALESCE(c3.codeno,'')),''),COALESCE(CONCAT(COALESCE(bc.branchcode,''),' - ',COALESCE(bc.branchname,'')),''),COALESCE(CONCAT(COALESCE(ve.companyname,''),' - ',COALESCE(ve.companycode,'')),'') " &
                     "FROM orders o LEFT JOIN combinecodings cc ON o.combinecodingid = cc.rowid LEFT JOIN codings c1 ON cc.codingida = c1.rowid LEFT JOIN codings c2 ON cc.codingidb = c2.rowid LEFT JOIN codings c3 ON cc.codingidc = c3.rowid LEFT JOIN branches bc ON o.branchid = bc.rowid LEFT JOIN companies ve ON o.companyid = ve.rowid WHERE o.rowid = " & globaliorderid & " ")
             If dtGinfo.Rows.Count <> 0 Then
                 globalorderdate = dtGinfo.Rows(0)(0)
@@ -2101,6 +2251,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getOrderItemStatus(ByVal globaliorderitemid As Integer, ByVal globalformname As Object)
         Try
             globalorderitemstatus = ""
@@ -2118,6 +2269,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getOrderTotalAmount(ByVal globaliorderid As Integer, ByVal globalformname As Object)
         Try
             globalordertotalamount = 0.0
@@ -2135,6 +2287,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getOrderItemInfo(ByVal globaliorderitemid As Integer, ByVal globalformname As Object)
         Try
             globalorderitemsrp = 0.0 : globalorderitemqtyordered = 0 : globalorderitemtag = ""
@@ -2154,6 +2307,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getPickListNoA(ByVal globalformname As Object)
         Try
             globalpicklistno = 0
@@ -2172,6 +2326,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getPickListNoB(ByVal globaliorderid As Integer, ByVal globalformname As Object)
         Try
             globalpicklistno = 0
@@ -2186,6 +2341,7 @@ Module myModule
             MsgBox(getErrExcptn(ex, globalformname.Name))
         End Try
     End Sub
+
     Sub getContactNo(ByVal globalicontacttype As String, ByVal globalformname As Object)
         Try
             globalcontactno = 0
@@ -2204,6 +2360,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getPickListOrderID(ByVal globalipicklistid As Integer, ByVal globaliorderid As Integer, ByVal globaliorderitemid As Integer, ByVal globalformname As Object)
         Try
             globalpicklistorderid = 0
@@ -2221,6 +2378,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getPickListStatus(ByVal globalipicklistid As Integer, ByVal globalformname As Object)
         Try
             globalpickliststatus = ""
@@ -2238,6 +2396,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getPickListOrderStatus(ByVal globalipicklistid As Integer, ByVal globaliorderid As Integer, ByVal globaliorderitemid As Integer, ByVal globalformname As Object)
         Try
             globalpicklistorderstatus = ""
@@ -2255,6 +2414,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getPickListOrderItemID(ByVal globalipicklistorderid As Integer, ByVal globaliproductinventorylocationid As Integer, ByVal globalformname As Object)
         Try
             globalpicklistorderitemid = 0
@@ -2272,6 +2432,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getPickListOrderItemInfo(ByVal globalipicklistorderid As Integer, ByVal globaliproductinventorylocationid As Integer, ByVal globalformname As Object)
         Try
             globalpicklistorderitemissueflg = "" : globalpicklistorderitemremarks = "" : globalpicklistorderitemqtypicked = 0
@@ -2291,6 +2452,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getUserName(ByVal globaliuserid As Integer, ByVal globalformname As Object)
         Try
             globalusername = ""
@@ -2308,6 +2470,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getCountPickListOrder(ByVal globalipicklistid As Integer, ByVal globalicondition As String, ByVal globalformname As Object)
         Try
             globalpicklistordercount = 0
@@ -2325,6 +2488,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getProductInventoryLocationTotals(ByVal globaliproductinventorylocationid As Integer, ByVal globalformname As Object)
         Try
             globalpiltotalavailableqty = 0 : globalpiltotalreserveqty = 0
@@ -2340,6 +2504,7 @@ Module myModule
             MsgBox(getErrExcptn(ex, globalformname.Name))
         End Try
     End Sub
+
     Sub getPackingListNoA(ByVal globalformname As Object)
         Try
             globalpackinglistno = 0
@@ -2358,6 +2523,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getPackingListNoB(ByVal globaliorderid As Integer, ByVal globalformname As Object)
         Try
             globalpackinglistno = 0
@@ -2372,6 +2538,7 @@ Module myModule
             MsgBox(getErrExcptn(ex, globalformname.Name))
         End Try
     End Sub
+
     Sub getPackingListStatus(ByVal globalipackinglistid As Integer, ByVal globalformname As Object)
         Try
             globalpackingliststatus = ""
@@ -2389,6 +2556,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getPackingListIDA(ByVal globalipackinglistno As String, ByVal globaliorderid As Integer, ByVal globalformname As Object)
         Try
             globalpackinglistid = 0
@@ -2406,6 +2574,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getPackingListIDB(ByVal globalipackinglistid As Integer, ByVal globalipackinglistno As String, ByVal globaliorderid As Integer, ByVal globalformname As Object)
         Try
             globalpackinglistid = 0
@@ -2423,6 +2592,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getPackingListIDC(ByVal globaliorderid As Integer, ByVal globalformname As Object)
         Try
             globalpackinglistid = 0
@@ -2440,6 +2610,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getPackingListCartonIDA(ByVal globalipackinglistid As Integer, ByVal globalicartonno As String, ByVal globalistatuscondition As String, ByVal globalformname As Object)
         Try
             globalpackinglistcartonid = 0
@@ -2457,6 +2628,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getPackingListCartonIDB(ByVal globalipackinglistcartonid As Integer, ByVal globalipackinglistid As Integer, ByVal globalicartonno As String, ByVal globalistatuscondition As String, ByVal globalformname As Object)
         Try
             globalpackinglistcartonid = 0
@@ -2474,6 +2646,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getCartonNo(ByVal globalipackinglistid As Integer, ByVal globalformname As Object)
         Try
             globalcartonno = 0
@@ -2492,6 +2665,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getPackingListCartonItemID(ByVal globalipackinglistcartonid As Integer, ByVal globaliorderitemid As Integer, ByVal globalformname As Object)
         Try
             globalpackinglistcartonitemid = 0 : globalpackinglistcartonitemqtyincarton = 0 : globalpackinglistcartonitemstatus = ""
@@ -2513,6 +2687,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getPackingListCartonStatus(ByVal globalipackinglistcartonid As Integer, ByVal globalformname As Object)
         Try
             globalpackinglistcartonstatus = ""
@@ -2530,14 +2705,15 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getPackingListCartonInfo(ByVal globalipackinglistcartonid As Integer, ByVal globalformname As Object)
         Try
             globalpackedby = 0 : globalpackername = "" : globalpackeddate = "" : globalpackedcartonno = "" : globalboxsizename = ""
             globalpackedweight = 0.0 : globalpackedamount = 0.0 : globalpackedweightuom = "" : globalpackedsizeinfo = "" : globalcbm = 0.0
             If globalconn.State = ConnectionState.Open Then globalconn.Close()
             Dim dtGin As New DataTable
-            dtGin = getDataTableForSQL("SELECT COALESCE(pc.contactid,0),COALESCE(pc.cartonno,''),COALESCE(CONCAT(COALESCE(c.firstname,''),' ',COALESCE(c.middlename,''),' ',COALESCE(c.lastname,''),' ',COALESCE(c.suffix,''),' - ',COALESCE(c.contactno,'')),''),COALESCE(DATE_FORMAT(pc.packeddate,'%d-%b-%Y'),''),COALESCE(pc.`weight`,0.0)," & _
-                    "COALESCE(pc.weightuom,''),COALESCE(pc.amount,0.0),COALESCE(CONCAT(COALESCE(cs.sizename,''),' - ', COALESCE(cs.`length`,''),' ', COALESCE(cs.lengthuom,''),'/', COALESCE(cs.`width`,''),' ', COALESCE(cs.widthuom,''),'/', COALESCE(cs.`height`,''),' ', COALESCE(cs.heightuom,''),' - l/w/h'),'')," & _
+            dtGin = getDataTableForSQL("SELECT COALESCE(pc.contactid,0),COALESCE(pc.cartonno,''),COALESCE(CONCAT(COALESCE(c.firstname,''),' ',COALESCE(c.middlename,''),' ',COALESCE(c.lastname,''),' ',COALESCE(c.suffix,''),' - ',COALESCE(c.contactno,'')),''),COALESCE(DATE_FORMAT(pc.packeddate,'%d-%b-%Y'),''),COALESCE(pc.`weight`,0.0)," &
+                    "COALESCE(pc.weightuom,''),COALESCE(pc.amount,0.0),COALESCE(CONCAT(COALESCE(cs.sizename,''),' - ', COALESCE(cs.`length`,''),' ', COALESCE(cs.lengthuom,''),'/', COALESCE(cs.`width`,''),' ', COALESCE(cs.widthuom,''),'/', COALESCE(cs.`height`,''),' ', COALESCE(cs.heightuom,''),' - l/w/h'),'')," &
                     "COALESCE(cs.sizename,''),COALESCE(cs.`length`,0),COALESCE(cs.`width`,0),COALESCE(cs.`height`,0) FROM packinglistcartons pc LEFT JOIN contacts c ON pc.contactid = c.rowid LEFT JOIN cartonsizes cs ON pc.cartonsizeid = cs.rowid WHERE pc.rowid = " & globalipackinglistcartonid & " ")
             If dtGin.Rows.Count <> 0 Then
                 globalpackedby = dtGin.Rows(0)(0)
@@ -2560,6 +2736,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getPackingListCartonItemInfo(ByVal globalipackinglistcartonitemid As Integer, ByVal globalformname As Object)
         Try
             globalorderitemid = 0 : globalpackinglistcartonitemqtyincarton = 0
@@ -2578,6 +2755,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getDeliveryTruckNo(ByVal globalformname As Object)
         Try
             globaldeliverytruckno = 0
@@ -2596,6 +2774,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getDeliveryTruckIDA(ByVal globalitruckname As String, ByVal globalistatuscondition As String, ByVal globalformname As Object)
         Try
             globaldeliverytruckid = 0
@@ -2613,6 +2792,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getDeliveryTruckIDB(ByVal globalitruckname As String, ByVal globalformname As Object)
         Try
             globaldeliverytruckid = 0
@@ -2630,6 +2810,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getShiftIDA(ByVal globalishiftname As String, ByVal globalistatuscondition As String, ByVal globalformname As Object)
         Try
             globalshiftid = 0
@@ -2647,6 +2828,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getShiftIDB(ByVal globalishiftname As String, ByVal globalformname As Object)
         Try
             globalshiftid = 0
@@ -2664,6 +2846,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getDeliveryTruckShiftIDA(ByVal globalideliverytruckid As Integer, ByVal globalishiftid As Integer, ByVal globalistatuscondition As String, ByVal globalformname As Object)
         Try
             globaldeliverytruckshiftid = 0
@@ -2681,6 +2864,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getDeliveryTruckShiftIDB(ByVal globaltruckshiftinfo As String, ByVal globalistatuscondition As String, ByVal globalformname As Object)
         Try
             globaldeliverytruckshiftid = 0 : globaldeliverytruckid = 0
@@ -2699,12 +2883,13 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getAccountInfo(ByVal globaliaccountid As Integer, ByVal globalformname As Object)
         Try
             globaldeliveryhours = "" : globaladdressname = "" : globalbranchname = ""
             If globalconn.State = ConnectionState.Open Then globalconn.Close()
             Dim dtGinfo As New DataTable
-            dtGinfo = getDataTableForSQL("SELECT COALESCE(c.deliveryhours,''),CONCAT(COALESCE(ad.streetaddress1,''),' ',COALESCE(ad.streetaddress2,''),' ',COALESCE(ad.barangay,''),' ',COALESCE(ad.citytown,''),' ',COALESCE(ad.province,''),' ',COALESCE(ad.state,''),' ',COALESCE(ad.zipcode,''),' ',COALESCE(ad.country,''))," & _
+            dtGinfo = getDataTableForSQL("SELECT COALESCE(c.deliveryhours,''),CONCAT(COALESCE(ad.streetaddress1,''),' ',COALESCE(ad.streetaddress2,''),' ',COALESCE(ad.barangay,''),' ',COALESCE(ad.citytown,''),' ',COALESCE(ad.province,''),' ',COALESCE(ad.state,''),' ',COALESCE(ad.zipcode,''),' ',COALESCE(ad.country,''))," &
                             "COALESCE(CONCAT(COALESCE(bc.branchcode,''),' - ',COALESCE(bc.branchname,'')),'') FROM accounts c LEFT JOIN address ad ON c.primaryaddressid = ad.rowid LEFT JOIN branches bc ON c.branchid = bc.rowid WHERE c.rowid = " & globaliaccountid & " ")
             If dtGinfo.Rows.Count <> 0 Then
                 globaldeliveryhours = dtGinfo.Rows(0)(0)
@@ -2719,6 +2904,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getLineUpNo(ByVal globalformname As Object)
         Try
             globallineupno = 0
@@ -2737,6 +2923,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getLineUpIDA(ByVal globalideliverytruckshiftid As Integer, ByVal globaliorderid As Integer, ByVal globalilineupdate As String, ByVal globalformname As Object)
         Try
             globallineupid = 0
@@ -2754,6 +2941,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getLineUpIDB(ByVal globalilineupid As Integer, ByVal globalideliveryno As String, ByVal globalformname As Object)
         Try
             globallineupid = 0
@@ -2771,6 +2959,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getLineUpIDC(ByVal globalilineupid As Integer, ByVal globalideliverytruckshiftid As Integer, ByVal globaliorderid As Integer, ByVal globalilineupdate As String, ByVal globalformname As Object)
         Try
             globallineupid = 0
@@ -2788,6 +2977,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getLineUpStatus(ByVal globalilineupid As Integer, ByVal globalformname As Object)
         Try
             globallineupstatus = ""
@@ -2805,6 +2995,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getLineUpCartonStatus(ByVal globalilineupcartonid As Integer, ByVal globalformname As Object)
         Try
             globallineupcartonstatus = ""
@@ -2822,6 +3013,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getLineUpNos(ByVal globaliorderid As Integer, ByVal globalformname As Object)
         Try
             formatcount = 0 : globallineupnos = ""
@@ -2845,6 +3037,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getLineUpCBMID(ByVal globalideliverytruckshiftid As Integer, ByVal globalilineupdate As String, ByVal globalformname As Object)
         Try
             globallineupcbmid = 0 : globalcbm = 0.0
@@ -2863,6 +3056,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getPositionID(ByVal globalformname As Object)
         Try
             globalpositionid = 0
@@ -2877,6 +3071,7 @@ Module myModule
             MsgBox(getErrExcptn(ex, globalformname.Name))
         End Try
     End Sub
+
     Sub getPositionView(ByVal globalipositionid As Integer, ByVal globaliviewname As String, ByVal globalformname As Object)
         Try
             globalcreateflg = "" : globalupdateflg = "" : globaldisableflg = "" : globalreadonlyflg = ""
@@ -2894,6 +3089,7 @@ Module myModule
             MsgBox(getErrExcptn(ex, globalformname.Name))
         End Try
     End Sub
+
     Sub getBranchCodeIDA(ByVal globalicondition As String, ByVal globalistatuscondition As String, ByVal globalformname As Object)
         Try
             globalbranchid = 0
@@ -2911,6 +3107,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getBranchCodeIDB(ByVal globalibranchcodename As String, ByVal globalformname As Object)
         Try
             globalbranchid = 0 : globalbranchaddress = ""
@@ -2938,6 +3135,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getCombineCodingsIDA(ByVal globalicodename As String, ByVal globalistatuscondition As String, ByVal globalformname As Object)
         Try
             globalcombinecodingid = 0
@@ -2955,12 +3153,13 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getCombineCodingsIDB(ByVal globaliclassdescription As String, ByVal globalformname As Object)
         Try
             globalcombinecodingid = 0
             If globalconn.State = ConnectionState.Open Then globalconn.Close()
             Dim dtGid As New DataTable
-            dtGid = getDataTableForSQL("SELECT COALESCE(cc.rowid,0) FROM combinecodings cc LEFT JOIN codings c1 ON cc.codingida = c1.rowid LEFT JOIN codings c2 ON cc.codingidb = c2.rowid LEFT JOIN codings c3 ON cc.codingidc = c3.rowid " & _
+            dtGid = getDataTableForSQL("SELECT COALESCE(cc.rowid,0) FROM combinecodings cc LEFT JOIN codings c1 ON cc.codingida = c1.rowid LEFT JOIN codings c2 ON cc.codingidb = c2.rowid LEFT JOIN codings c3 ON cc.codingidc = c3.rowid " &
                                 "WHERE cc.organizationid = " & Z_OrganizationID & " AND COALESCE(CONCAT(COALESCE(cc.codename,''),' / ',COALESCE(c1.codeno,''),'-',COALESCE(c2.codeno,''),'-',COALESCE(c3.codeno,'')),'') = """ & globaliclassdescription & """ ")
             If dtGid.Rows.Count <> 0 Then
                 globalcombinecodingid = dtGid.Rows(0)(0)
@@ -2968,7 +3167,7 @@ Module myModule
                 globalcombinecodingid = 0
             End If
             If globalcombinecodingid = 0 Then
-                dtGid = getDataTableForSQL("SELECT COALESCE(cc.rowid,0) FROM combinecodings cc LEFT JOIN codings c1 ON cc.codingida = c1.rowid LEFT JOIN codings c2 ON cc.codingidb = c2.rowid LEFT JOIN codings c3 ON cc.codingidc = c3.rowid " & _
+                dtGid = getDataTableForSQL("SELECT COALESCE(cc.rowid,0) FROM combinecodings cc LEFT JOIN codings c1 ON cc.codingida = c1.rowid LEFT JOIN codings c2 ON cc.codingidb = c2.rowid LEFT JOIN codings c3 ON cc.codingidc = c3.rowid " &
                                 "WHERE cc.organizationid = " & Z_OrganizationID & " AND COALESCE(CONCAT(COALESCE(c1.codeno,''),'-',COALESCE(c2.codeno,''),'-',COALESCE(c3.codeno,''),' / ',COALESCE(cc.codename,'')),'') = """ & globaliclassdescription & """ ")
                 If dtGid.Rows.Count <> 0 Then
                     globalcombinecodingid = dtGid.Rows(0)(0)
@@ -2982,6 +3181,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getCodingsIDA(ByVal globalicodeno As String, ByVal globalicodetype As String, ByVal globalistatuscondition As String, ByVal globalformname As Object)
         Try
             globalcodingid = 0
@@ -2999,6 +3199,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getCodingsIDB(ByVal globalicodings As String, ByVal globalformname As Object)
         Try
             globalcodingid = 0
@@ -3024,6 +3225,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getCartonSizeIDA(ByVal globalisizename As String, ByVal globalistatuscondition As String, ByVal globalformname As Object)
         Try
             globalcartonsizeid = 0
@@ -3041,6 +3243,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getCartonSizeIDB(ByVal globalisizeinfo As String, ByVal globalformname As Object)
         Try
             globalcartonsizeid = 0
@@ -3058,6 +3261,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getListOfValuesID(ByVal globalilic As String, ByVal globalitype As String, ByVal globalformname As Object)
         Try
             globallistofvaluesid = 0
@@ -3075,6 +3279,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getCycleCountNo(ByVal globalformname As Object)
         Try
             globalcyclecountno = 0
@@ -3093,6 +3298,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getTotalQtyAppliedA(ByVal globaliorderitemid As Integer, ByVal globalformname As Object)
         Try
             globaltotalqtyapplied = 0
@@ -3110,6 +3316,7 @@ Module myModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getOrderItemIDA(ByVal globaliorderid As Integer, ByVal globaliproductcolorsizeid As Integer, ByVal globalformname As Object)
         Try
             globalorderitemid = 0
@@ -3124,6 +3331,7 @@ Module myModule
             MsgBox(getErrExcptn(ex, globalformname.Name))
         End Try
     End Sub
+
     Sub getPrintOrder(ByVal globaliprintvalue As String, ByVal globalformname As Object)
         Try
             globalprintorder = 0
@@ -3138,6 +3346,9 @@ Module myModule
             MsgBox(getErrExcptn(ex, globalformname.Name))
         End Try
     End Sub
+
 #End Region
+
 #End Region
+
 End Module

@@ -1,8 +1,5 @@
-﻿Imports System.Data.SqlClient
-Imports MySql.Data.MySqlClient
-Imports System.Configuration
-Imports System.Data
-Imports System.IO
+﻿Imports MySql.Data.MySqlClient
+
 Module mdlStoredProcedure
     Public connectionString As String = System.IO.File.ReadAllText("C:\ConnectionString\ConnectionStringDreamheartsdb.txt")
     Public connection As MySqlConnection = New MySqlConnection(connectionString)
@@ -10,33 +7,35 @@ Module mdlStoredProcedure
     Public globalcyclecountidsp, globalproductinventorylocationidsp As Integer
     Public globaladdressidsp, globalcontactidsp, globalproductcolorsidsp, globalproductcolorsizesidsp, globalorderidsp As Integer
     Public globalpicklistidsp, globalpicklistorderidsp, globalorderitemidsp, globalpackinglistcartonidsp, globallineupidsp As Integer
+
 #Region "Accounts"
-    Public Function I_Accounts(ByVal OrganizationID As Integer, _
-                          ByVal Created As DateTime, _
-                          ByVal CreatedBy As Integer, _
-                          ByVal LastUpdBy As Integer, _
-                          ByVal PrimaryContactID As Object, _
-                          ByVal PrimaryAddressID As Object, _
-                          ByVal ParentAccountID As Object, _
-                          ByVal PickListGroupID As Object, _
-                          ByVal BranchID As Object, _
-                          ByVal AccountNo As Integer, _
-                          ByVal AccountType As String, _
-                          ByVal CompanyName As String, _
-                          ByVal TradeName As String, _
-                          ByVal MainPhone As String, _
-                          ByVal AltPhone As String, _
-                          ByVal FaxNumber As String, _
-                          ByVal EmailAddress As String, _
-                          ByVal VATRegistrationNo As String, _
-                          ByVal Website As String, _
-                          ByVal DeliveryHours As String, _
-                          ByVal Comments As String, _
-                          ByVal Status As String, _
+
+    Public Function I_Accounts(ByVal OrganizationID As Integer,
+                          ByVal Created As DateTime,
+                          ByVal CreatedBy As Integer,
+                          ByVal LastUpdBy As Integer,
+                          ByVal PrimaryContactID As Object,
+                          ByVal PrimaryAddressID As Object,
+                          ByVal ParentAccountID As Object,
+                          ByVal PickListGroupID As Object,
+                          ByVal BranchID As Object,
+                          ByVal AccountNo As Integer,
+                          ByVal AccountType As String,
+                          ByVal CompanyName As String,
+                          ByVal TradeName As String,
+                          ByVal MainPhone As String,
+                          ByVal AltPhone As String,
+                          ByVal FaxNumber As String,
+                          ByVal EmailAddress As String,
+                          ByVal VATRegistrationNo As String,
+                          ByVal Website As String,
+                          ByVal DeliveryHours As String,
+                          ByVal Comments As String,
+                          ByVal Status As String,
                           ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("I_accounts", connection)
         With SQL_command
             Try
@@ -65,7 +64,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("I_Status", Status)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -74,29 +72,29 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_Accounts(ByVal RowID As Integer, _
-                   ByVal LastUpd As DateTime, _
-                   ByVal LastUpdby As Integer, _
-                   ByVal PrimaryContactID As Object, _
-                   ByVal PrimaryAddressID As Object, _
-                   ByVal ParentAccountID As Object, _
-                   ByVal PickListGroupID As Object, _
-                   ByVal BranchID As Object, _
-                   ByVal CompanyName As String, _
-                   ByVal MainPhone As String, _
-                   ByVal AltPhone As String, _
-                   ByVal FaxNumber As String, _
-                   ByVal EmailAddress As String, _
-                   ByVal VATRegistrationNo As String, _
-                   ByVal Website As String, _
-                   ByVal DeliveryHours As String, _
-                   ByVal Comments As String, _
-                   ByVal Status As String, _
+
+    Public Function U_Accounts(ByVal RowID As Integer,
+                   ByVal LastUpd As DateTime,
+                   ByVal LastUpdby As Integer,
+                   ByVal PrimaryContactID As Object,
+                   ByVal PrimaryAddressID As Object,
+                   ByVal ParentAccountID As Object,
+                   ByVal PickListGroupID As Object,
+                   ByVal BranchID As Object,
+                   ByVal CompanyName As String,
+                   ByVal MainPhone As String,
+                   ByVal AltPhone As String,
+                   ByVal FaxNumber As String,
+                   ByVal EmailAddress As String,
+                   ByVal VATRegistrationNo As String,
+                   ByVal Website As String,
+                   ByVal DeliveryHours As String,
+                   ByVal Comments As String,
+                   ByVal Status As String,
                    ByVal globalformname As Object) As Boolean
 
-
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_accounts", connection)
         With SQL_command
             Try
@@ -121,7 +119,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_Status", Status)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -130,23 +127,26 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
+
 #End Region
+
 #Region "Address"
-    Public Function I_Address(ByVal Created As DateTime, _
-                          ByVal CreatedBy As Integer, _
-                          ByVal LastUpdBy As Integer, _
-                          ByVal StreetAddress1 As String, _
-                          ByVal StreetAddress2 As String, _
-                          ByVal Barangay As String, _
-                          ByVal CityTown As String, _
-                          ByVal Province As String, _
-                          ByVal State As String, _
-                          ByVal ZipCode As String, _
-                          ByVal Country As String, _
+
+    Public Function I_Address(ByVal Created As DateTime,
+                          ByVal CreatedBy As Integer,
+                          ByVal LastUpdBy As Integer,
+                          ByVal StreetAddress1 As String,
+                          ByVal StreetAddress2 As String,
+                          ByVal Barangay As String,
+                          ByVal CityTown As String,
+                          ByVal Province As String,
+                          ByVal State As String,
+                          ByVal ZipCode As String,
+                          ByVal Country As String,
                           ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("I_address", connection)
         With SQL_command
             Try
@@ -169,7 +169,6 @@ Module mdlStoredProcedure
                 .Parameters("newAddressID").Direction = ParameterDirection.ReturnValue
                 globaldatareader = .ExecuteReader
                 globaladdressidsp = globaldatareader(0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -178,22 +177,22 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_Address(ByVal RowID As Integer, _
-                    ByVal LastUpd As DateTime, _
-                    ByVal LastUpdby As Integer, _
-                    ByVal StreetAddress1 As String, _
-                    ByVal StreetAddress2 As String, _
-                    ByVal Barangay As String, _
-                    ByVal CityTown As String, _
-                    ByVal Province As String, _
-                    ByVal State As String, _
-                    ByVal ZipCode As String, _
-                    ByVal Country As String, _
+
+    Public Function U_Address(ByVal RowID As Integer,
+                    ByVal LastUpd As DateTime,
+                    ByVal LastUpdby As Integer,
+                    ByVal StreetAddress1 As String,
+                    ByVal StreetAddress2 As String,
+                    ByVal Barangay As String,
+                    ByVal CityTown As String,
+                    ByVal Province As String,
+                    ByVal State As String,
+                    ByVal ZipCode As String,
+                    ByVal Country As String,
                     ByVal globalformname As Object) As Boolean
 
-
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_address", connection)
         With SQL_command
             Try
@@ -211,7 +210,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_Country", Country)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -220,26 +218,29 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
+
 #End Region
+
 #Region "Attachments"
-    Public Function I_Attachments(ByVal OrganizationID As Integer, _
-                     ByVal Created As DateTime, _
-                     ByVal CreatedBy As Integer, _
-                     ByVal LastUpdBy As Integer, _
+
+    Public Function I_Attachments(ByVal OrganizationID As Integer,
+                     ByVal Created As DateTime,
+                     ByVal CreatedBy As Integer,
+                     ByVal LastUpdBy As Integer,
                      ByVal AccountID As Object,
-                     ByVal OrderID As Object, _
-                     ByVal ContactID As Object, _
-                     ByVal InvoiceID As Object, _
-                     ByVal ProductID As Object, _
-                     ByVal AttachedFile As Object, _
-                     ByVal FileName As String, _
-                     ByVal FileType As String, _
-                     ByVal Remarks As String, _
-                     ByVal Status As String, _
+                     ByVal OrderID As Object,
+                     ByVal ContactID As Object,
+                     ByVal InvoiceID As Object,
+                     ByVal ProductID As Object,
+                     ByVal AttachedFile As Object,
+                     ByVal FileName As String,
+                     ByVal FileType As String,
+                     ByVal Remarks As String,
+                     ByVal Status As String,
                      ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("I_attachments", connection)
         With SQL_command
             Try
@@ -261,7 +262,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("I_Status", Status)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -270,16 +270,16 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_Attachments(ByVal RowID As Integer, _
-                        ByVal LastUpd As DateTime, _
-                        ByVal LastUpdby As Integer, _
-                        ByVal FileName As String, _
-                        ByVal Remarks As String, _
+
+    Public Function U_Attachments(ByVal RowID As Integer,
+                        ByVal LastUpd As DateTime,
+                        ByVal LastUpdby As Integer,
+                        ByVal FileName As String,
+                        ByVal Remarks As String,
                         ByVal globalformname As Object) As Boolean
 
-
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_attachments", connection)
         With SQL_command
             Try
@@ -291,7 +291,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_Remarks", Remarks)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -300,13 +299,14 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_AttachmentStatus(ByVal RowID As Integer, _
-                             ByVal LastUpd As DateTime, _
-                             ByVal LastUpdby As Integer, _
+
+    Public Function U_AttachmentStatus(ByVal RowID As Integer,
+                             ByVal LastUpd As DateTime,
+                             ByVal LastUpdby As Integer,
                              ByVal Status As String) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_attachmentstatus", connection)
         With SQL_command
             Try
@@ -317,7 +317,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_Status", Status)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(ex.Message, MsgBoxStyle.Critical, "Error")
             Finally
@@ -326,18 +325,21 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
+
 #End Region
+
 #Region "Brands"
-    Public Function I_Brands(ByVal OrganizationID As Integer, _
-                           ByVal Created As DateTime, _
-                           ByVal CreatedBy As Integer, _
-                           ByVal LastUpdBy As Integer, _
-                           ByVal BrandName As String, _
-                           ByVal Status As String, _
+
+    Public Function I_Brands(ByVal OrganizationID As Integer,
+                           ByVal Created As DateTime,
+                           ByVal CreatedBy As Integer,
+                           ByVal LastUpdBy As Integer,
+                           ByVal BrandName As String,
+                           ByVal Status As String,
                            ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("I_brands", connection)
         With SQL_command
             Try
@@ -351,7 +353,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("I_Status", Status)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -360,20 +361,23 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
+
 #End Region
+
 #Region "Branches"
-    Public Function I_Branches(ByVal OrganizationID As Integer, _
-                      ByVal Created As DateTime, _
-                      ByVal CreatedBy As Integer, _
-                      ByVal LastUpdBy As Integer, _
-                      ByVal BranchCode As String, _
-                      ByVal BranchName As String, _
-                      ByVal BranchAddress As String, _
-                      ByVal Status As String, _
+
+    Public Function I_Branches(ByVal OrganizationID As Integer,
+                      ByVal Created As DateTime,
+                      ByVal CreatedBy As Integer,
+                      ByVal LastUpdBy As Integer,
+                      ByVal BranchCode As String,
+                      ByVal BranchName As String,
+                      ByVal BranchAddress As String,
+                      ByVal Status As String,
                       ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("I_branches", connection)
         With SQL_command
             Try
@@ -389,7 +393,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("I_Status", Status)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -398,17 +401,18 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_Branches(ByVal RowID As Integer, _
-                                 ByVal LastUpd As DateTime, _
-                                 ByVal LastUpdby As Integer, _
-                                 ByVal BranchCode As String, _
-                                 ByVal BranchName As String, _
-                                 ByVal BranchAddress As String, _
-                                 ByVal Status As String, _
+
+    Public Function U_Branches(ByVal RowID As Integer,
+                                 ByVal LastUpd As DateTime,
+                                 ByVal LastUpdby As Integer,
+                                 ByVal BranchCode As String,
+                                 ByVal BranchName As String,
+                                 ByVal BranchAddress As String,
+                                 ByVal Status As String,
                                  ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_branches", connection)
         With SQL_command
             Try
@@ -422,7 +426,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_Status", Status)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -431,24 +434,27 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
+
 #End Region
+
 #Region "CartonSizes"
-    Public Function I_CartonSizes(ByVal OrganizationID As Integer, _
-                          ByVal Created As DateTime, _
-                          ByVal CreatedBy As Integer, _
-                          ByVal LastUpdBy As Integer, _
-                          ByVal SizeName As String, _
-                          ByVal Length As Decimal, _
-                          ByVal Width As Decimal, _
-                          ByVal Height As Decimal, _
-                          ByVal LengthUOM As String, _
-                          ByVal WidthUOM As String, _
-                          ByVal HeightUOM As String, _
-                          ByVal Status As String, _
+
+    Public Function I_CartonSizes(ByVal OrganizationID As Integer,
+                          ByVal Created As DateTime,
+                          ByVal CreatedBy As Integer,
+                          ByVal LastUpdBy As Integer,
+                          ByVal SizeName As String,
+                          ByVal Length As Decimal,
+                          ByVal Width As Decimal,
+                          ByVal Height As Decimal,
+                          ByVal LengthUOM As String,
+                          ByVal WidthUOM As String,
+                          ByVal HeightUOM As String,
+                          ByVal Status As String,
                           ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("I_cartonsizes", connection)
         With SQL_command
             Try
@@ -468,7 +474,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("I_Status", Status)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -477,20 +482,21 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_CartonSizes(ByVal RowID As Integer, _
-                                 ByVal LastUpd As DateTime, _
-                                 ByVal LastUpdby As Integer, _
-                                 ByVal Length As Decimal, _
-                                 ByVal Width As Decimal, _
-                                 ByVal Height As Decimal, _
-                                 ByVal LengthUOM As String, _
-                                 ByVal WidthUOM As String, _
-                                 ByVal HeightUOM As String, _
-                                 ByVal Status As String, _
+
+    Public Function U_CartonSizes(ByVal RowID As Integer,
+                                 ByVal LastUpd As DateTime,
+                                 ByVal LastUpdby As Integer,
+                                 ByVal Length As Decimal,
+                                 ByVal Width As Decimal,
+                                 ByVal Height As Decimal,
+                                 ByVal LengthUOM As String,
+                                 ByVal WidthUOM As String,
+                                 ByVal HeightUOM As String,
+                                 ByVal Status As String,
                                  ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_cartonsizes", connection)
         With SQL_command
             Try
@@ -507,7 +513,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_Status", Status)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -516,18 +521,21 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
+
 #End Region
+
 #Region "Categories"
-    Public Function I_Categories(ByVal OrganizationID As Integer, _
-                           ByVal Created As DateTime, _
-                           ByVal CreatedBy As Integer, _
-                           ByVal LastUpdBy As Integer, _
-                           ByVal CategoryName As String, _
-                           ByVal Status As String, _
+
+    Public Function I_Categories(ByVal OrganizationID As Integer,
+                           ByVal Created As DateTime,
+                           ByVal CreatedBy As Integer,
+                           ByVal LastUpdBy As Integer,
+                           ByVal CategoryName As String,
+                           ByVal Status As String,
                            ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("I_categories", connection)
         With SQL_command
             Try
@@ -541,7 +549,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("I_Status", Status)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -550,15 +557,16 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_Categories(ByVal RowID As Integer, _
-                                     ByVal LastUpd As DateTime, _
-                                     ByVal LastUpdBy As Integer, _
-                                     ByVal CategoryName As String, _
-                                     ByVal Status As String, _
+
+    Public Function U_Categories(ByVal RowID As Integer,
+                                     ByVal LastUpd As DateTime,
+                                     ByVal LastUpdBy As Integer,
+                                     ByVal CategoryName As String,
+                                     ByVal Status As String,
                                      ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_categories", connection)
         With SQL_command
             Try
@@ -570,7 +578,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_Status", Status)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -579,20 +586,23 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
+
 #End Region
+
 #Region "Codings"
-    Public Function I_Codings(ByVal OrganizationID As Integer, _
-                       ByVal Created As DateTime, _
-                       ByVal CreatedBy As Integer, _
-                       ByVal LastUpdBy As Integer, _
-                       ByVal CodeType As String, _
-                       ByVal CodeNo As String, _
-                       ByVal CodeName As String, _
-                       ByVal Status As String, _
+
+    Public Function I_Codings(ByVal OrganizationID As Integer,
+                       ByVal Created As DateTime,
+                       ByVal CreatedBy As Integer,
+                       ByVal LastUpdBy As Integer,
+                       ByVal CodeType As String,
+                       ByVal CodeNo As String,
+                       ByVal CodeName As String,
+                       ByVal Status As String,
                        ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("I_codings", connection)
         With SQL_command
             Try
@@ -608,7 +618,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("I_Status", Status)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -617,17 +626,18 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_Codings(ByVal RowID As Integer, _
-                                ByVal LastUpd As DateTime, _
-                                ByVal LastUpdby As Integer, _
-                                ByVal CodeType As String, _
-                                ByVal CodeNo As String, _
-                                ByVal CodeName As String, _
-                                ByVal Status As String, _
+
+    Public Function U_Codings(ByVal RowID As Integer,
+                                ByVal LastUpd As DateTime,
+                                ByVal LastUpdby As Integer,
+                                ByVal CodeType As String,
+                                ByVal CodeNo As String,
+                                ByVal CodeName As String,
+                                ByVal Status As String,
                                 ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_codings", connection)
         With SQL_command
             Try
@@ -641,7 +651,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_Status", Status)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -650,19 +659,22 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
+
 #End Region
+
 #Region "Colors"
-    Public Function I_Colors(ByVal OrganizationID As Integer, _
-                          ByVal Created As DateTime, _
-                          ByVal CreatedBy As Integer, _
-                          ByVal LastUpdBy As Integer, _
-                          ByVal ColorName As String, _
-                          ByVal ColorValue As String, _
-                          ByVal Status As String, _
+
+    Public Function I_Colors(ByVal OrganizationID As Integer,
+                          ByVal Created As DateTime,
+                          ByVal CreatedBy As Integer,
+                          ByVal LastUpdBy As Integer,
+                          ByVal ColorName As String,
+                          ByVal ColorValue As String,
+                          ByVal Status As String,
                           ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("I_colors", connection)
         With SQL_command
             Try
@@ -677,7 +689,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("I_Status", Status)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -686,15 +697,16 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_Colors(ByVal RowID As Integer, _
-                            ByVal LastUpd As DateTime, _
-                            ByVal LastUpdby As Integer, _
-                            ByVal ColorName As String, _
-                            ByVal ColorValue As String, _
+
+    Public Function U_Colors(ByVal RowID As Integer,
+                            ByVal LastUpd As DateTime,
+                            ByVal LastUpdby As Integer,
+                            ByVal ColorName As String,
+                            ByVal ColorValue As String,
                             ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_colors", connection)
         With SQL_command
             Try
@@ -706,7 +718,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_ColorValue", ColorValue)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -715,21 +726,24 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
+
 #End Region
+
 #Region "CombineCodings"
-    Public Function I_CombineCodings(ByVal OrganizationID As Integer, _
-                        ByVal Created As DateTime, _
-                        ByVal CreatedBy As Integer, _
-                        ByVal LastUpdBy As Integer, _
-                        ByVal CodingIDA As Object, _
-                        ByVal CodingIDB As Object, _
-                        ByVal CodingIDC As Object, _
-                        ByVal CodeName As String, _
-                        ByVal Status As String, _
+
+    Public Function I_CombineCodings(ByVal OrganizationID As Integer,
+                        ByVal Created As DateTime,
+                        ByVal CreatedBy As Integer,
+                        ByVal LastUpdBy As Integer,
+                        ByVal CodingIDA As Object,
+                        ByVal CodingIDB As Object,
+                        ByVal CodingIDC As Object,
+                        ByVal CodeName As String,
+                        ByVal Status As String,
                         ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("I_combinecodings", connection)
         With SQL_command
             Try
@@ -746,7 +760,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("I_Status", Status)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -755,18 +768,19 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_CombineCodings(ByVal RowID As Integer, _
-                            ByVal LastUpd As DateTime, _
-                            ByVal LastUpdby As Integer, _
-                            ByVal CodingIDA As Object, _
-                            ByVal CodingIDB As Object, _
-                            ByVal CodingIDC As Object, _
-                            ByVal CodeName As String, _
-                            ByVal Status As String, _
+
+    Public Function U_CombineCodings(ByVal RowID As Integer,
+                            ByVal LastUpd As DateTime,
+                            ByVal LastUpdby As Integer,
+                            ByVal CodingIDA As Object,
+                            ByVal CodingIDB As Object,
+                            ByVal CodingIDC As Object,
+                            ByVal CodeName As String,
+                            ByVal Status As String,
                             ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_combinecodings", connection)
         With SQL_command
             Try
@@ -781,7 +795,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_Status", Status)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -790,19 +803,22 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
+
 #End Region
+
 #Region "Companies"
-    Public Function I_Companies(ByVal OrganizationID As Integer, _
-                           ByVal Created As DateTime, _
-                           ByVal CreatedBy As Integer, _
-                           ByVal LastUpdBy As Integer, _
-                           ByVal CompanyCode As String, _
-                           ByVal CompanyName As String, _
-                           ByVal Status As String, _
+
+    Public Function I_Companies(ByVal OrganizationID As Integer,
+                           ByVal Created As DateTime,
+                           ByVal CreatedBy As Integer,
+                           ByVal LastUpdBy As Integer,
+                           ByVal CompanyCode As String,
+                           ByVal CompanyName As String,
+                           ByVal Status As String,
                            ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("I_companies", connection)
         With SQL_command
             Try
@@ -817,7 +833,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("I_Status", Status)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -826,16 +841,17 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_Companies(ByVal RowID As Integer, _
-                                ByVal LastUpd As DateTime, _
-                                ByVal LastUpdby As Integer, _
-                                ByVal CompanyCode As String, _
-                                ByVal CompanyName As String, _
-                                ByVal Status As String, _
+
+    Public Function U_Companies(ByVal RowID As Integer,
+                                ByVal LastUpd As DateTime,
+                                ByVal LastUpdby As Integer,
+                                ByVal CompanyCode As String,
+                                ByVal CompanyName As String,
+                                ByVal Status As String,
                                 ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_companies", connection)
         With SQL_command
             Try
@@ -848,7 +864,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_Status", Status)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -857,37 +872,40 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
+
 #End Region
+
 #Region "Contacts"
-    Public Function I_Contact(ByVal OrganizationID As Integer, _
-                        ByVal Created As DateTime, _
-                        ByVal CreatedBy As Integer, _
-                        ByVal LastUpdBy As Integer, _
-                        ByVal ContactNo As Integer, _
-                        ByVal Type As String, _
-                        ByVal Salutation As String, _
-                        ByVal FirstName As String, _
-                        ByVal MiddleName As String, _
-                        ByVal LastName As String, _
-                        ByVal Suffix As String, _
-                        ByVal MainPhone As String, _
-                        ByVal AlternatePhone As String, _
-                        ByVal Birthday As Date, _
-                        ByVal Gender As String, _
-                        ByVal CivilStatus As String, _
-                        ByVal EmailAddress As String, _
-                        ByVal TINNumber As String, _
-                        ByVal Comments As String, _
-                        ByVal Status As String, _
-                        ByVal MobilePhone As String, _
-                        ByVal WorkPhone As String, _
-                        ByVal FaxNumber As String, _
-                        ByVal JobTitle As String, _
-                        ByVal Nickname As String, _
+
+    Public Function I_Contact(ByVal OrganizationID As Integer,
+                        ByVal Created As DateTime,
+                        ByVal CreatedBy As Integer,
+                        ByVal LastUpdBy As Integer,
+                        ByVal ContactNo As Integer,
+                        ByVal Type As String,
+                        ByVal Salutation As String,
+                        ByVal FirstName As String,
+                        ByVal MiddleName As String,
+                        ByVal LastName As String,
+                        ByVal Suffix As String,
+                        ByVal MainPhone As String,
+                        ByVal AlternatePhone As String,
+                        ByVal Birthday As Date,
+                        ByVal Gender As String,
+                        ByVal CivilStatus As String,
+                        ByVal EmailAddress As String,
+                        ByVal TINNumber As String,
+                        ByVal Comments As String,
+                        ByVal Status As String,
+                        ByVal MobilePhone As String,
+                        ByVal WorkPhone As String,
+                        ByVal FaxNumber As String,
+                        ByVal JobTitle As String,
+                        ByVal Nickname As String,
                         ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("I_contact", connection)
         With SQL_command
             Try
@@ -923,7 +941,6 @@ Module mdlStoredProcedure
                 .Parameters("newContactID").Direction = ParameterDirection.ReturnValue
                 globaldatareader = .ExecuteReader
                 globalcontactidsp = globaldatareader(0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -932,32 +949,33 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_Contacts(ByVal RowID As Integer, _
-                          ByVal LastUpd As DateTime, _
-                          ByVal LastUpdBy As Integer, _
-                          ByVal Salutation As String, _
-                          ByVal FirstName As String, _
-                          ByVal MiddleName As String, _
-                          ByVal LastName As String, _
-                          ByVal Suffix As String, _
-                          ByVal MainPhone As String, _
-                          ByVal AlternatePhone As String, _
-                          ByVal Birthday As Date, _
-                          ByVal Gender As String, _
-                          ByVal CivilStatus As String, _
-                          ByVal EmailAddress As String, _
-                          ByVal TINNumber As String, _
-                          ByVal Comments As String, _
-                          ByVal MobilePhone As String, _
-                          ByVal WorkPhone As String, _
-                          ByVal FaxNumber As String, _
-                          ByVal JobTitle As String, _
-                          ByVal Nickname As String, _
-                          ByVal Status As String, _
+
+    Public Function U_Contacts(ByVal RowID As Integer,
+                          ByVal LastUpd As DateTime,
+                          ByVal LastUpdBy As Integer,
+                          ByVal Salutation As String,
+                          ByVal FirstName As String,
+                          ByVal MiddleName As String,
+                          ByVal LastName As String,
+                          ByVal Suffix As String,
+                          ByVal MainPhone As String,
+                          ByVal AlternatePhone As String,
+                          ByVal Birthday As Date,
+                          ByVal Gender As String,
+                          ByVal CivilStatus As String,
+                          ByVal EmailAddress As String,
+                          ByVal TINNumber As String,
+                          ByVal Comments As String,
+                          ByVal MobilePhone As String,
+                          ByVal WorkPhone As String,
+                          ByVal FaxNumber As String,
+                          ByVal JobTitle As String,
+                          ByVal Nickname As String,
+                          ByVal Status As String,
                           ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_contacts", connection)
         With SQL_command
             Try
@@ -986,7 +1004,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_Status", Status)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -995,21 +1012,24 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
+
 #End Region
+
 #Region "CycleCount"
-    Public Function I_CycleCount(ByVal OrganizationID As Integer, _
-                        ByVal Created As DateTime, _
-                        ByVal CreatedBy As Integer, _
-                        ByVal LastUpdBy As Integer, _
-                        ByVal BrandID As Object, _
-                        ByVal CycleCountNo As Integer, _
-                        ByVal CycleCountBy As String, _
-                        ByVal RackColumnShelf As String, _
-                        ByVal Comments As String, _
+
+    Public Function I_CycleCount(ByVal OrganizationID As Integer,
+                        ByVal Created As DateTime,
+                        ByVal CreatedBy As Integer,
+                        ByVal LastUpdBy As Integer,
+                        ByVal BrandID As Object,
+                        ByVal CycleCountNo As Integer,
+                        ByVal CycleCountBy As String,
+                        ByVal RackColumnShelf As String,
+                        ByVal Comments As String,
                         ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("I_cyclecount", connection)
         With SQL_command
             Try
@@ -1029,7 +1049,6 @@ Module mdlStoredProcedure
                 .Parameters("newCycleCountID").Direction = ParameterDirection.ReturnValue
                 globaldatareader = .ExecuteReader
                 globalcyclecountidsp = globaldatareader(0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -1038,14 +1057,15 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_CycleCount(ByVal RowID As Integer, _
-                                ByVal LastUpd As DateTime, _
-                                ByVal LastUpdby As Integer, _
-                                ByVal Comments As String, _
+
+    Public Function U_CycleCount(ByVal RowID As Integer,
+                                ByVal LastUpd As DateTime,
+                                ByVal LastUpdby As Integer,
+                                ByVal Comments As String,
                                 ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_cyclecount", connection)
         With SQL_command
             Try
@@ -1056,7 +1076,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_Comments", Comments)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -1065,28 +1084,31 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
+
 #End Region
+
 #Region "CycleCountItems"
-    Public Function I_CycleCountItems(ByVal OrganizationID As Integer, _
-                       ByVal Created As DateTime, _
-                       ByVal CreatedBy As Integer, _
-                       ByVal LastUpdBy As Integer, _
-                       ByVal CycleCountID As Integer, _
-                       ByVal ProductColorSizeID As Integer, _
-                       ByVal ProductInventoryLocationID As Integer, _
-                       ByVal CycleCount1ContactID As Object, _
-                       ByVal CycleCount2ContactID As Object, _
-                       ByVal OriginalQty As Integer, _
-                       ByVal CycleCount1Qty As Object, _
-                       ByVal CycleCount2Qty As Object, _
-                       ByVal RackNo As String, _
-                       ByVal ColumnNo As String, _
-                       ByVal ShelfNo As String, _
-                       ByVal Remarks As String, _
+
+    Public Function I_CycleCountItems(ByVal OrganizationID As Integer,
+                       ByVal Created As DateTime,
+                       ByVal CreatedBy As Integer,
+                       ByVal LastUpdBy As Integer,
+                       ByVal CycleCountID As Integer,
+                       ByVal ProductColorSizeID As Integer,
+                       ByVal ProductInventoryLocationID As Integer,
+                       ByVal CycleCount1ContactID As Object,
+                       ByVal CycleCount2ContactID As Object,
+                       ByVal OriginalQty As Integer,
+                       ByVal CycleCount1Qty As Object,
+                       ByVal CycleCount2Qty As Object,
+                       ByVal RackNo As String,
+                       ByVal ColumnNo As String,
+                       ByVal ShelfNo As String,
+                       ByVal Remarks As String,
                        ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("I_cyclecountitems", connection)
         With SQL_command
             Try
@@ -1110,7 +1132,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("I_Remarks", Remarks)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -1119,18 +1140,19 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_CycleCountItems(ByVal RowID As Integer, _
-                              ByVal LastUpd As DateTime, _
-                              ByVal LastUpdby As Integer, _
-                              ByVal CycleCount1ContactID As Object, _
-                              ByVal CycleCount2ContactID As Object, _
-                              ByVal CycleCount1Qty As Object, _
-                              ByVal CycleCount2Qty As Object, _
-                              ByVal Remarks As String, _
+
+    Public Function U_CycleCountItems(ByVal RowID As Integer,
+                              ByVal LastUpd As DateTime,
+                              ByVal LastUpdby As Integer,
+                              ByVal CycleCount1ContactID As Object,
+                              ByVal CycleCount2ContactID As Object,
+                              ByVal CycleCount1Qty As Object,
+                              ByVal CycleCount2Qty As Object,
+                              ByVal Remarks As String,
                               ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_cyclecountitems", connection)
         With SQL_command
             Try
@@ -1145,7 +1167,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_Remarks", Remarks)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -1154,23 +1175,26 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
+
 #End Region
+
 #Region "DeliveryTrucks"
-    Public Function I_DeliveryTrucks(ByVal OrganizationID As Integer, _
-                         ByVal Created As DateTime, _
-                         ByVal CreatedBy As Integer, _
-                         ByVal LastUpdBy As Integer, _
-                         ByVal TruckNo As Integer, _
-                         ByVal TruckName As String, _
-                         ByVal PlateNo As String, _
-                         ByVal BrandName As String, _
-                         ByVal MadeIn As String, _
-                         ByVal CBM As Decimal, _
-                         ByVal Status As String, _
+
+    Public Function I_DeliveryTrucks(ByVal OrganizationID As Integer,
+                         ByVal Created As DateTime,
+                         ByVal CreatedBy As Integer,
+                         ByVal LastUpdBy As Integer,
+                         ByVal TruckNo As Integer,
+                         ByVal TruckName As String,
+                         ByVal PlateNo As String,
+                         ByVal BrandName As String,
+                         ByVal MadeIn As String,
+                         ByVal CBM As Decimal,
+                         ByVal Status As String,
                          ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("I_deliverytrucks", connection)
         With SQL_command
             Try
@@ -1189,7 +1213,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("I_Status", Status)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -1198,19 +1221,20 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_DeliveryTrucks(ByVal RowID As Integer, _
-                                     ByVal LastUpd As DateTime, _
-                                     ByVal LastUpdby As Integer, _
-                                     ByVal TruckName As String, _
-                                     ByVal PlateNo As String, _
-                                     ByVal BrandName As String, _
-                                     ByVal MadeIn As String, _
-                                     ByVal CBM As Decimal, _
-                                     ByVal Status As String, _
+
+    Public Function U_DeliveryTrucks(ByVal RowID As Integer,
+                                     ByVal LastUpd As DateTime,
+                                     ByVal LastUpdby As Integer,
+                                     ByVal TruckName As String,
+                                     ByVal PlateNo As String,
+                                     ByVal BrandName As String,
+                                     ByVal MadeIn As String,
+                                     ByVal CBM As Decimal,
+                                     ByVal Status As String,
                                      ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_deliverytrucks", connection)
         With SQL_command
             Try
@@ -1227,7 +1251,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_Status", Status)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -1236,19 +1259,22 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
+
 #End Region
+
 #Region "DeliveryTruckShifts"
-    Public Function I_DeliveryTruckShifts(ByVal OrganizationID As Integer, _
-                          ByVal Created As DateTime, _
-                          ByVal CreatedBy As Integer, _
-                          ByVal LastUpdBy As Integer, _
-                          ByVal DeliveryTruckID As Integer, _
-                          ByVal ShiftID As Integer, _
-                          ByVal Status As String, _
+
+    Public Function I_DeliveryTruckShifts(ByVal OrganizationID As Integer,
+                          ByVal Created As DateTime,
+                          ByVal CreatedBy As Integer,
+                          ByVal LastUpdBy As Integer,
+                          ByVal DeliveryTruckID As Integer,
+                          ByVal ShiftID As Integer,
+                          ByVal Status As String,
                           ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("I_deliverytruckshifts", connection)
         With SQL_command
             Try
@@ -1263,7 +1289,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("I_Status", Status)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -1272,16 +1297,17 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_DeliveryTruckShift(ByVal RowID As Integer, _
-                               ByVal LastUpd As DateTime, _
-                               ByVal LastUpdBy As Integer, _
-                               ByVal DeliveryTruckID As Integer, _
-                               ByVal ShiftID As Integer, _
-                               ByVal Status As String, _
+
+    Public Function U_DeliveryTruckShift(ByVal RowID As Integer,
+                               ByVal LastUpd As DateTime,
+                               ByVal LastUpdBy As Integer,
+                               ByVal DeliveryTruckID As Integer,
+                               ByVal ShiftID As Integer,
+                               ByVal Status As String,
                                ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_deliverytruckshift", connection)
         With SQL_command
             Try
@@ -1294,7 +1320,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_Status", Status)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -1303,24 +1328,27 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
+
 #End Region
+
 #Region "InventoryLocations"
-    Public Function I_InventoryLocations(ByVal OrganizationID As Integer, _
-                                     ByVal Created As DateTime, _
-                                     ByVal CreatedBy As Integer, _
-                                     ByVal LastUpdBy As Integer, _
-                                     ByVal AddressID As Object, _
-                                     ByVal Name As String, _
-                                     ByVal Type As String, _
-                                     ByVal MainPhone As String, _
-                                     ByVal MobilePhone As String, _
-                                     ByVal FaxNumber As String, _
-                                     ByVal Status As String, _
-                                     ByVal Comments As String, _
+
+    Public Function I_InventoryLocations(ByVal OrganizationID As Integer,
+                                     ByVal Created As DateTime,
+                                     ByVal CreatedBy As Integer,
+                                     ByVal LastUpdBy As Integer,
+                                     ByVal AddressID As Object,
+                                     ByVal Name As String,
+                                     ByVal Type As String,
+                                     ByVal MainPhone As String,
+                                     ByVal MobilePhone As String,
+                                     ByVal FaxNumber As String,
+                                     ByVal Status As String,
+                                     ByVal Comments As String,
                                      ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("I_inventorylocations", connection)
         With SQL_command
             Try
@@ -1340,7 +1368,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("I_Comments", Comments)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -1349,21 +1376,21 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_InventoryLocations(ByVal RowID As Integer, _
-                                     ByVal LastUpd As DateTime, _
-                                     ByVal LastUpdby As Integer, _
-                                     ByVal AddressID As Object, _
-                                     ByVal Name As String, _
-                                     ByVal Type As String, _
-                                     ByVal MainPhone As String, _
-                                     ByVal MobilePhone As String, _
-                                     ByVal FaxNumber As String, _
-                                     ByVal Comments As String, _
+
+    Public Function U_InventoryLocations(ByVal RowID As Integer,
+                                     ByVal LastUpd As DateTime,
+                                     ByVal LastUpdby As Integer,
+                                     ByVal AddressID As Object,
+                                     ByVal Name As String,
+                                     ByVal Type As String,
+                                     ByVal MainPhone As String,
+                                     ByVal MobilePhone As String,
+                                     ByVal FaxNumber As String,
+                                     ByVal Comments As String,
                                      ByVal globalformname As Object) As Boolean
 
-
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_inventorylocations", connection)
         With SQL_command
             Try
@@ -1380,7 +1407,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_Comments", Comments)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -1389,27 +1415,30 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
+
 #End Region
+
 #Region "LineUps"
-    Public Function I_LineUps(ByVal OrganizationID As Integer, _
-                        ByVal Created As DateTime, _
-                        ByVal CreatedBy As Integer, _
-                        ByVal LastUpdBy As Integer, _
-                        ByVal ContactID As Object, _
-                        ByVal PackingListID As Integer, _
-                        ByVal DeliveryTruckShiftID As Integer, _
-                        ByVal OrderID As Integer, _
-                        ByVal LineUpDate As Date, _
-                        ByVal DeliveryHours As String, _
-                        ByVal LineUpNo As String, _
-                        ByVal DeliveryNo As String, _
-                        ByVal Status As String, _
-                        ByVal Comments As String, _
-                        ByVal DeliveryAddress As String, _
+
+    Public Function I_LineUps(ByVal OrganizationID As Integer,
+                        ByVal Created As DateTime,
+                        ByVal CreatedBy As Integer,
+                        ByVal LastUpdBy As Integer,
+                        ByVal ContactID As Object,
+                        ByVal PackingListID As Integer,
+                        ByVal DeliveryTruckShiftID As Integer,
+                        ByVal OrderID As Integer,
+                        ByVal LineUpDate As Date,
+                        ByVal DeliveryHours As String,
+                        ByVal LineUpNo As String,
+                        ByVal DeliveryNo As String,
+                        ByVal Status As String,
+                        ByVal Comments As String,
+                        ByVal DeliveryAddress As String,
                         ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("I_lineups", connection)
         With SQL_command
             Try
@@ -1436,7 +1465,6 @@ Module mdlStoredProcedure
                 .Parameters("newLineUpID").Direction = ParameterDirection.ReturnValue
                 globaldatareader = .ExecuteReader
                 globallineupidsp = globaldatareader(0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -1445,18 +1473,19 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_LineUps(ByVal RowID As Integer, _
-                                ByVal LastUpd As DateTime, _
-                                ByVal LastUpdby As Integer, _
-                                ByVal ContactID As Object, _
-                                ByVal DeliveryTruckShiftID As Integer, _
-                                ByVal LineUpDate As Date, _
-                                ByVal DeliveryNo As String, _
-                                ByVal Comments As String, _
+
+    Public Function U_LineUps(ByVal RowID As Integer,
+                                ByVal LastUpd As DateTime,
+                                ByVal LastUpdby As Integer,
+                                ByVal ContactID As Object,
+                                ByVal DeliveryTruckShiftID As Integer,
+                                ByVal LineUpDate As Date,
+                                ByVal DeliveryNo As String,
+                                ByVal Comments As String,
                                 ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_lineups", connection)
         With SQL_command
             Try
@@ -1471,7 +1500,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_Comments", Comments)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -1480,14 +1508,15 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_LineUpStatus(ByVal RowID As Integer, _
-                                  ByVal LastUpd As DateTime, _
-                                  ByVal LastUpdBy As Integer, _
-                                  ByVal Status As String, _
+
+    Public Function U_LineUpStatus(ByVal RowID As Integer,
+                                  ByVal LastUpd As DateTime,
+                                  ByVal LastUpdBy As Integer,
+                                  ByVal Status As String,
                                   ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_lineupstatus", connection)
         With SQL_command
             Try
@@ -1498,7 +1527,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_Status", Status)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -1507,20 +1535,23 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
+
 #End Region
+
 #Region "LineUpCartons"
-    Public Function I_LineUpCartons(ByVal OrganizationID As Integer, _
-                         ByVal Created As DateTime, _
-                         ByVal CreatedBy As Integer, _
-                         ByVal LastUpdBy As Integer, _
-                         ByVal PackingListCartonID As Integer, _
-                         ByVal LineUpID As Integer, _
-                         ByVal Status As String, _
-                         ByVal CBM As Decimal, _
+
+    Public Function I_LineUpCartons(ByVal OrganizationID As Integer,
+                         ByVal Created As DateTime,
+                         ByVal CreatedBy As Integer,
+                         ByVal LastUpdBy As Integer,
+                         ByVal PackingListCartonID As Integer,
+                         ByVal LineUpID As Integer,
+                         ByVal Status As String,
+                         ByVal CBM As Decimal,
                          ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("I_lineupcartons", connection)
         With SQL_command
             Try
@@ -1536,7 +1567,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("I_CBM", CBM)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -1545,14 +1575,15 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_LineUpCartonStatus(ByVal RowID As Integer, _
-                           ByVal LastUpd As DateTime, _
-                           ByVal LastUpdBy As Integer, _
-                           ByVal Status As String, _
+
+    Public Function U_LineUpCartonStatus(ByVal RowID As Integer,
+                           ByVal LastUpd As DateTime,
+                           ByVal LastUpdBy As Integer,
+                           ByVal Status As String,
                            ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_lineupcartonstatus", connection)
         With SQL_command
             Try
@@ -1563,7 +1594,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_Status", Status)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -1572,20 +1602,23 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
+
 #End Region
+
 #Region "LineUpCBM"
-    Public Function I_LineUpCBM(ByVal OrganizationID As Integer, _
-                     ByVal Created As DateTime, _
-                     ByVal CreatedBy As Integer, _
-                     ByVal LastUpdBy As Integer, _
-                     ByVal DeliveryTruckShiftID As Integer, _
-                     ByVal LineUpDate As Date, _
-                     ByVal CBM As Decimal, _
-                     ByVal Status As String, _
+
+    Public Function I_LineUpCBM(ByVal OrganizationID As Integer,
+                     ByVal Created As DateTime,
+                     ByVal CreatedBy As Integer,
+                     ByVal LastUpdBy As Integer,
+                     ByVal DeliveryTruckShiftID As Integer,
+                     ByVal LineUpDate As Date,
+                     ByVal CBM As Decimal,
+                     ByVal Status As String,
                      ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("I_lineupcbm", connection)
         With SQL_command
             Try
@@ -1601,7 +1634,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("I_Status", Status)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -1610,24 +1642,27 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
+
 #End Region
+
 #Region "ListOfValues"
-    Public Function I_ListOfValues(ByVal Created As DateTime, _
-                             ByVal CreatedBy As Integer, _
-                             ByVal LastUpdBy As Integer, _
-                             ByVal DisplayValue As String, _
-                             ByVal LIC As String, _
-                             ByVal Type As String, _
-                             ByVal ParentLIC As String, _
-                             ByVal Description As String, _
-                             ByVal Status As String, _
-                             ByVal SystemFlg As Char, _
-                             ByVal DisplayFlg As Char, _
-                             ByVal OrderBy As Object, _
+
+    Public Function I_ListOfValues(ByVal Created As DateTime,
+                             ByVal CreatedBy As Integer,
+                             ByVal LastUpdBy As Integer,
+                             ByVal DisplayValue As String,
+                             ByVal LIC As String,
+                             ByVal Type As String,
+                             ByVal ParentLIC As String,
+                             ByVal Description As String,
+                             ByVal Status As String,
+                             ByVal SystemFlg As Char,
+                             ByVal DisplayFlg As Char,
+                             ByVal OrderBy As Object,
                              ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("I_listofvalues", connection)
         With SQL_command
             Try
@@ -1647,7 +1682,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("I_OrderBy", OrderBy)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -1656,14 +1690,15 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_ListOfValueStatus(ByVal RowID As Integer, _
-                               ByVal LastUpd As DateTime, _
-                               ByVal LastUpdBy As Integer, _
-                               ByVal Status As String, _
+
+    Public Function U_ListOfValueStatus(ByVal RowID As Integer,
+                               ByVal LastUpd As DateTime,
+                               ByVal LastUpdBy As Integer,
+                               ByVal Status As String,
                                ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_listofvaluestatus", connection)
         With SQL_command
             Try
@@ -1674,7 +1709,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_Status", Status)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -1683,33 +1717,36 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
+
 #End Region
+
 #Region "Orders"
-    Public Function I_Orders(ByVal OrganizationID As Integer, _
-                          ByVal Created As DateTime, _
-                          ByVal CreatedBy As Integer, _
-                          ByVal LastUpdBy As Integer, _
-                          ByVal AccountID As Integer, _
-                          ByVal BranchID As Object, _
-                          ByVal CompanyID As Object, _
-                          ByVal CombineCodingID As Object, _
-                          ByVal OrderNumber As String, _
-                          ByVal ReferenceNumber As String, _
-                          ByVal DRNumber As String, _
-                          ByVal OrderType As String, _
-                          ByVal OrderDate As Date, _
-                          ByVal TargetDate As Date, _
-                          ByVal EndDate As Date, _
-                          ByVal CustomerName As String, _
-                          ByVal Comments As String, _
-                          ByVal Status As String, _
-                          ByVal TotalAmount As Decimal, _
-                          ByVal DeliveryHours As String, _
-                          ByVal CustomerAddress As String, _
+
+    Public Function I_Orders(ByVal OrganizationID As Integer,
+                          ByVal Created As DateTime,
+                          ByVal CreatedBy As Integer,
+                          ByVal LastUpdBy As Integer,
+                          ByVal AccountID As Integer,
+                          ByVal BranchID As Object,
+                          ByVal CompanyID As Object,
+                          ByVal CombineCodingID As Object,
+                          ByVal OrderNumber As String,
+                          ByVal ReferenceNumber As String,
+                          ByVal DRNumber As String,
+                          ByVal OrderType As String,
+                          ByVal OrderDate As Date,
+                          ByVal TargetDate As Date,
+                          ByVal EndDate As Date,
+                          ByVal CustomerName As String,
+                          ByVal Comments As String,
+                          ByVal Status As String,
+                          ByVal TotalAmount As Decimal,
+                          ByVal DeliveryHours As String,
+                          ByVal CustomerAddress As String,
                           ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("I_orders", connection)
         With SQL_command
             Try
@@ -1742,7 +1779,6 @@ Module mdlStoredProcedure
                 .Parameters("newOrdersID").Direction = ParameterDirection.ReturnValue
                 globaldatareader = .ExecuteReader
                 globalorderidsp = globaldatareader(0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -1751,27 +1787,28 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_Orders(ByVal RowID As Integer, _
-                                ByVal LastUpd As DateTime, _
-                                ByVal LastUpdBy As Integer, _
-                                ByVal AccountID As Integer, _
-                                ByVal BranchID As Object, _
-                                ByVal CompanyID As Object, _
-                                ByVal CombineCodingID As Object, _
-                                ByVal OrderNumber As String, _
-                                ByVal ReferenceNumber As String, _
-                                ByVal DRNumber As String, _
-                                ByVal OrderDate As Date, _
-                                ByVal TargetDate As Date, _
-                                ByVal EndDate As Date, _
-                                ByVal Comments As String, _
-                                ByVal TotalAmount As Decimal, _
-                                ByVal DeliveryHours As String, _
-                                ByVal CustomerAddress As String, _
+
+    Public Function U_Orders(ByVal RowID As Integer,
+                                ByVal LastUpd As DateTime,
+                                ByVal LastUpdBy As Integer,
+                                ByVal AccountID As Integer,
+                                ByVal BranchID As Object,
+                                ByVal CompanyID As Object,
+                                ByVal CombineCodingID As Object,
+                                ByVal OrderNumber As String,
+                                ByVal ReferenceNumber As String,
+                                ByVal DRNumber As String,
+                                ByVal OrderDate As Date,
+                                ByVal TargetDate As Date,
+                                ByVal EndDate As Date,
+                                ByVal Comments As String,
+                                ByVal TotalAmount As Decimal,
+                                ByVal DeliveryHours As String,
+                                ByVal CustomerAddress As String,
                                 ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_orders", connection)
         With SQL_command
             Try
@@ -1797,7 +1834,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_CustomerAddress", CustomerAddress)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -1806,14 +1842,15 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_OrderStatus(ByVal RowID As Integer, _
-                                  ByVal LastUpd As DateTime, _
-                                  ByVal LastUpdBy As Integer, _
-                                  ByVal Status As String, _
+
+    Public Function U_OrderStatus(ByVal RowID As Integer,
+                                  ByVal LastUpd As DateTime,
+                                  ByVal LastUpdBy As Integer,
+                                  ByVal Status As String,
                                   ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_orderstatus", connection)
         With SQL_command
             Try
@@ -1826,7 +1863,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_Status", Status)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -1835,14 +1871,15 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_OrderTotalAmount(ByVal RowID As Integer, _
-                                 ByVal LastUpd As DateTime, _
-                                 ByVal LastUpdBy As Integer, _
-                                 ByVal TotalAmount As Decimal, _
+
+    Public Function U_OrderTotalAmount(ByVal RowID As Integer,
+                                 ByVal LastUpd As DateTime,
+                                 ByVal LastUpdBy As Integer,
+                                 ByVal TotalAmount As Decimal,
                                  ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_ordertotalamount", connection)
         With SQL_command
             Try
@@ -1853,7 +1890,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_TotalAmount", TotalAmount)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -1862,14 +1898,15 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_OrderDateSubmitted(ByVal RowID As Integer, _
-                                     ByVal LastUpd As DateTime, _
-                                     ByVal LastUpdBy As Integer, _
-                                     ByVal DateSubmitted As Date, _
+
+    Public Function U_OrderDateSubmitted(ByVal RowID As Integer,
+                                     ByVal LastUpd As DateTime,
+                                     ByVal LastUpdBy As Integer,
+                                     ByVal DateSubmitted As Date,
                                      ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_orderdatesubmitted", connection)
         With SQL_command
             Try
@@ -1882,7 +1919,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_DateSubmitted", DateSubmitted)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -1891,14 +1927,15 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_OrderDRNumber(ByVal RowID As Integer, _
-                                  ByVal LastUpd As DateTime, _
-                                  ByVal LastUpdBy As Integer, _
-                                  ByVal DRNumber As String, _
+
+    Public Function U_OrderDRNumber(ByVal RowID As Integer,
+                                  ByVal LastUpd As DateTime,
+                                  ByVal LastUpdBy As Integer,
+                                  ByVal DRNumber As String,
                                   ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_orderdrnumber", connection)
         With SQL_command
             Try
@@ -1909,7 +1946,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_DRNumber", DRNumber)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -1918,31 +1954,34 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
+
 #End Region
+
 #Region "OrderItems"
-    Public Function I_OrderItems(ByVal OrganizationID As Integer, _
-                          ByVal Created As DateTime, _
-                          ByVal CreatedBy As Integer, _
-                          ByVal LastUpdBy As Integer, _
-                          ByVal AccountID As Integer, _
-                          ByVal OrderID As Integer, _
-                          ByVal ProductColorSizeID As Object, _
-                          ByVal ProductBundleID As Object, _
-                          ByVal OrderItemID As Object, _
-                          ByVal QtyOrdered As Integer, _
-                          ByVal QtyAvailable As Integer, _
-                          ByVal ItemType As String, _
-                          ByVal ItemCode As String, _
-                          ByVal SKU As String, _
-                          ByVal UnitOfMeasure As String, _
-                          ByVal Remarks As String, _
-                          ByVal SRP As Decimal, _
-                          ByVal Status As String, _
-                          ByVal Tags As String, _
+
+    Public Function I_OrderItems(ByVal OrganizationID As Integer,
+                          ByVal Created As DateTime,
+                          ByVal CreatedBy As Integer,
+                          ByVal LastUpdBy As Integer,
+                          ByVal AccountID As Integer,
+                          ByVal OrderID As Integer,
+                          ByVal ProductColorSizeID As Object,
+                          ByVal ProductBundleID As Object,
+                          ByVal OrderItemID As Object,
+                          ByVal QtyOrdered As Integer,
+                          ByVal QtyAvailable As Integer,
+                          ByVal ItemType As String,
+                          ByVal ItemCode As String,
+                          ByVal SKU As String,
+                          ByVal UnitOfMeasure As String,
+                          ByVal Remarks As String,
+                          ByVal SRP As Decimal,
+                          ByVal Status As String,
+                          ByVal Tags As String,
                           ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("I_orderitems", connection)
         With SQL_command
             Try
@@ -1973,7 +2012,6 @@ Module mdlStoredProcedure
                 .Parameters("newOrderItemID").Direction = ParameterDirection.ReturnValue
                 globaldatareader = .ExecuteReader
                 globalorderitemidsp = globaldatareader(0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -1982,20 +2020,21 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_OrderItems(ByVal RowID As Integer, _
-                              ByVal LastUpd As DateTime, _
-                              ByVal LastUpdBy As Integer, _
-                              ByVal AccountID As Integer, _
-                              ByVal QtyOrdered As Integer, _
-                              ByVal SRP As Decimal, _
-                              ByVal SKU As String, _
-                              ByVal UnitOfMeasure As String, _
-                              ByVal Remarks As String, _
-                              ByVal Tags As String, _
+
+    Public Function U_OrderItems(ByVal RowID As Integer,
+                              ByVal LastUpd As DateTime,
+                              ByVal LastUpdBy As Integer,
+                              ByVal AccountID As Integer,
+                              ByVal QtyOrdered As Integer,
+                              ByVal SRP As Decimal,
+                              ByVal SKU As String,
+                              ByVal UnitOfMeasure As String,
+                              ByVal Remarks As String,
+                              ByVal Tags As String,
                               ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_orderitems", connection)
         With SQL_command
             Try
@@ -2012,7 +2051,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_Tags", Tags)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -2021,14 +2059,15 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_OrderItemStatus(ByVal RowID As Integer, _
-                             ByVal LastUpd As DateTime, _
-                             ByVal LastUpdBy As Integer, _
-                             ByVal Status As String, _
+
+    Public Function U_OrderItemStatus(ByVal RowID As Integer,
+                             ByVal LastUpd As DateTime,
+                             ByVal LastUpdBy As Integer,
+                             ByVal Status As String,
                              ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_orderitemstatus", connection)
         With SQL_command
             Try
@@ -2039,7 +2078,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_Status", Status)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -2048,14 +2086,15 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_OrderItemQtyOrdered(ByVal RowID As Integer, _
-                              ByVal LastUpd As DateTime, _
-                              ByVal LastUpdBy As Integer, _
-                              ByVal QtyOrdered As Integer, _
+
+    Public Function U_OrderItemQtyOrdered(ByVal RowID As Integer,
+                              ByVal LastUpd As DateTime,
+                              ByVal LastUpdBy As Integer,
+                              ByVal QtyOrdered As Integer,
                               ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_orderitemqtyqrdered", connection)
         With SQL_command
             Try
@@ -2067,7 +2106,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_QtyOrdered", QtyOrdered)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -2076,14 +2114,15 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_OrderItemAccountID(ByVal RowID As Integer, _
-                          ByVal LastUpd As DateTime, _
-                          ByVal LastUpdBy As Integer, _
-                          ByVal AccountID As Integer, _
+
+    Public Function U_OrderItemAccountID(ByVal RowID As Integer,
+                          ByVal LastUpd As DateTime,
+                          ByVal LastUpdBy As Integer,
+                          ByVal AccountID As Integer,
                           ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_orderitemaccountid", connection)
         With SQL_command
             Try
@@ -2094,7 +2133,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_AccountID", AccountID)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -2103,14 +2141,15 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_OrderItemTags(ByVal RowID As Integer, _
-                         ByVal LastUpd As DateTime, _
-                         ByVal LastUpdBy As Integer, _
-                         ByVal Tags As String, _
+
+    Public Function U_OrderItemTags(ByVal RowID As Integer,
+                         ByVal LastUpd As DateTime,
+                         ByVal LastUpdBy As Integer,
+                         ByVal Tags As String,
                          ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_orderitemtags", connection)
         With SQL_command
             Try
@@ -2121,7 +2160,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_Tags", Tags)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -2130,16 +2168,17 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_OrderItemVerification(ByVal RowID As Integer, _
-                          ByVal LastUpd As DateTime, _
-                          ByVal LastUpdBy As Integer, _
-                          ByVal Status As String, _
-                          ByVal VerifiedBy As Object, _
-                          ByVal VerifiedDate As Date, _
+
+    Public Function U_OrderItemVerification(ByVal RowID As Integer,
+                          ByVal LastUpd As DateTime,
+                          ByVal LastUpdBy As Integer,
+                          ByVal Status As String,
+                          ByVal VerifiedBy As Object,
+                          ByVal VerifiedDate As Date,
                           ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_orderitemverification", connection)
         With SQL_command
             Try
@@ -2152,7 +2191,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_VerifiedDate", VerifiedDate)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -2161,16 +2199,17 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_OrderItemPacking(ByVal RowID As Integer, _
-                        ByVal LastUpd As DateTime, _
-                        ByVal LastUpdBy As Integer, _
-                        ByVal Status As String, _
-                        ByVal PackedBy As Object, _
-                        ByVal PackedDate As Date, _
+
+    Public Function U_OrderItemPacking(ByVal RowID As Integer,
+                        ByVal LastUpd As DateTime,
+                        ByVal LastUpdBy As Integer,
+                        ByVal Status As String,
+                        ByVal PackedBy As Object,
+                        ByVal PackedDate As Date,
                         ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_orderitempacking", connection)
         With SQL_command
             Try
@@ -2183,7 +2222,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_PackedDate", PackedDate)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -2192,16 +2230,17 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_OrderItemDelivery(ByVal RowID As Integer, _
-                       ByVal LastUpd As DateTime, _
-                       ByVal LastUpdBy As Integer, _
-                       ByVal Status As String, _
-                       ByVal DeliveredBy As Object, _
-                       ByVal DeliveredDate As Date, _
+
+    Public Function U_OrderItemDelivery(ByVal RowID As Integer,
+                       ByVal LastUpd As DateTime,
+                       ByVal LastUpdBy As Integer,
+                       ByVal Status As String,
+                       ByVal DeliveredBy As Object,
+                       ByVal DeliveredDate As Date,
                        ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_orderitemdelivery", connection)
         With SQL_command
             Try
@@ -2214,7 +2253,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_DeliveredDate", DeliveredDate)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -2223,30 +2261,33 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
+
 #End Region
+
 #Region "Organizations"
-    Public Function U_Organizations(ByVal RowID As Integer, _
-                               ByVal LastUpd As DateTime, _
-                               ByVal LastUpdBy As Integer, _
-                               ByVal PrimaryAddressID As Object, _
-                               ByVal PremiseAddressID As Object, _
-                               ByVal PrimaryContactID As Object, _
-                               ByVal Name As String, _
-                               ByVal TradeName As String, _
-                               ByVal MainPhone As String, _
-                               ByVal AltPhone As String, _
-                               ByVal FaxNumber As String, _
-                               ByVal EmailAddress As String, _
-                               ByVal AltEmailAddress As String, _
-                               ByVal TINNo As String, _
-                               ByVal Website As String, _
-                               ByVal OrganizationType As String, _
-                               ByVal Comments As String, _
-                               ByVal Image As Object, _
+
+    Public Function U_Organizations(ByVal RowID As Integer,
+                               ByVal LastUpd As DateTime,
+                               ByVal LastUpdBy As Integer,
+                               ByVal PrimaryAddressID As Object,
+                               ByVal PremiseAddressID As Object,
+                               ByVal PrimaryContactID As Object,
+                               ByVal Name As String,
+                               ByVal TradeName As String,
+                               ByVal MainPhone As String,
+                               ByVal AltPhone As String,
+                               ByVal FaxNumber As String,
+                               ByVal EmailAddress As String,
+                               ByVal AltEmailAddress As String,
+                               ByVal TINNo As String,
+                               ByVal Website As String,
+                               ByVal OrganizationType As String,
+                               ByVal Comments As String,
+                               ByVal Image As Object,
                                ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_organizations", connection)
         With SQL_command
             Try
@@ -2272,7 +2313,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_Image", Image)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -2281,14 +2321,15 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_OrganizationImage(ByVal RowID As Integer, _
-                                  ByVal LastUpd As DateTime, _
-                                  ByVal LastUpdby As Integer, _
-                                  ByVal Image As Object, _
+
+    Public Function U_OrganizationImage(ByVal RowID As Integer,
+                                  ByVal LastUpd As DateTime,
+                                  ByVal LastUpdby As Integer,
+                                  ByVal Image As Object,
                                   ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_organizationimage", connection)
         With SQL_command
             Try
@@ -2299,7 +2340,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_Image", Image)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -2308,21 +2348,24 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
+
 #End Region
+
 #Region "PackingList"
-    Public Function I_PackingList(ByVal OrganizationID As Integer, _
-                                   ByVal Created As DateTime, _
-                                   ByVal CreatedBy As Integer, _
-                                   ByVal LastUpdBy As Integer, _
-                                   ByVal OrderID As Integer, _
-                                   ByVal PackingListNo As String, _
-                                   ByVal PackingListDate As Date, _
-                                   ByVal Status As String, _
-                                   ByVal Comments As String, _
+
+    Public Function I_PackingList(ByVal OrganizationID As Integer,
+                                   ByVal Created As DateTime,
+                                   ByVal CreatedBy As Integer,
+                                   ByVal LastUpdBy As Integer,
+                                   ByVal OrderID As Integer,
+                                   ByVal PackingListNo As String,
+                                   ByVal PackingListDate As Date,
+                                   ByVal Status As String,
+                                   ByVal Comments As String,
                                    ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("I_packinglist", connection)
         With SQL_command
             Try
@@ -2339,7 +2382,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("I_Comments", Comments)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -2348,15 +2390,16 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_PackingList(ByVal RowID As Integer, _
-                               ByVal LastUpd As DateTime, _
-                               ByVal LastUpdBy As Integer, _
-                               ByVal PackingListNo As String, _
-                               ByVal Comments As String, _
+
+    Public Function U_PackingList(ByVal RowID As Integer,
+                               ByVal LastUpd As DateTime,
+                               ByVal LastUpdBy As Integer,
+                               ByVal PackingListNo As String,
+                               ByVal Comments As String,
                                ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_packinglist", connection)
         With SQL_command
             Try
@@ -2368,7 +2411,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_Comments", Comments)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -2377,14 +2419,15 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_PackingListStatus(ByVal RowID As Integer, _
-                              ByVal LastUpd As DateTime, _
-                              ByVal LastUpdBy As Integer, _
-                              ByVal Status As String, _
+
+    Public Function U_PackingListStatus(ByVal RowID As Integer,
+                              ByVal LastUpd As DateTime,
+                              ByVal LastUpdBy As Integer,
+                              ByVal Status As String,
                               ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_packingliststatus", connection)
         With SQL_command
             Try
@@ -2395,7 +2438,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_Status", Status)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -2404,25 +2446,28 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
+
 #End Region
+
 #Region "PackingListCartons"
-    Public Function I_PackingListCartons(ByVal OrganizationID As Integer, _
-                                    ByVal Created As DateTime, _
-                                    ByVal CreatedBy As Integer, _
-                                    ByVal LastUpdBy As Integer, _
-                                    ByVal ContactID As Object, _
-                                    ByVal CartonSizeID As Object, _
-                                    ByVal PackingListID As Integer, _
-                                    ByVal CartonNo As String, _
-                                    ByVal PackedDate As Date, _
-                                    ByVal WeightUOM As String, _
-                                    ByVal Weight As Decimal, _
-                                    ByVal Amount As Decimal, _
-                                    ByVal Status As String, _
+
+    Public Function I_PackingListCartons(ByVal OrganizationID As Integer,
+                                    ByVal Created As DateTime,
+                                    ByVal CreatedBy As Integer,
+                                    ByVal LastUpdBy As Integer,
+                                    ByVal ContactID As Object,
+                                    ByVal CartonSizeID As Object,
+                                    ByVal PackingListID As Integer,
+                                    ByVal CartonNo As String,
+                                    ByVal PackedDate As Date,
+                                    ByVal WeightUOM As String,
+                                    ByVal Weight As Decimal,
+                                    ByVal Amount As Decimal,
+                                    ByVal Status As String,
                                     ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("I_packinglistcartons", connection)
         With SQL_command
             Try
@@ -2447,7 +2492,6 @@ Module mdlStoredProcedure
                 .Parameters("newPackingListCartonID").Direction = ParameterDirection.ReturnValue
                 globaldatareader = .ExecuteReader
                 globalpackinglistcartonidsp = globaldatareader(0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -2456,20 +2500,21 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_PackingListCartons(ByVal RowID As Integer, _
-                                ByVal LastUpd As DateTime, _
-                                ByVal LastUpdBy As Integer, _
-                                ByVal ContactID As Object, _
-                                ByVal CartonSizeID As Object, _
-                                ByVal CartonNo As String, _
-                                ByVal PackedDate As Date, _
-                                ByVal WeightUOM As String, _
-                                ByVal Weight As Decimal, _
-                                ByVal Amount As Decimal, _
+
+    Public Function U_PackingListCartons(ByVal RowID As Integer,
+                                ByVal LastUpd As DateTime,
+                                ByVal LastUpdBy As Integer,
+                                ByVal ContactID As Object,
+                                ByVal CartonSizeID As Object,
+                                ByVal CartonNo As String,
+                                ByVal PackedDate As Date,
+                                ByVal WeightUOM As String,
+                                ByVal Weight As Decimal,
+                                ByVal Amount As Decimal,
                                 ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_packinglistcartons", connection)
         With SQL_command
             Try
@@ -2486,7 +2531,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_Amount", Amount)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -2495,14 +2539,15 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_PackingListCartonStatus(ByVal RowID As Integer, _
-                               ByVal LastUpd As DateTime, _
-                               ByVal LastUpdBy As Integer, _
-                               ByVal Status As String, _
+
+    Public Function U_PackingListCartonStatus(ByVal RowID As Integer,
+                               ByVal LastUpd As DateTime,
+                               ByVal LastUpdBy As Integer,
+                               ByVal Status As String,
                                ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_packinglistcartonstatus", connection)
         With SQL_command
             Try
@@ -2513,7 +2558,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_Status", Status)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -2522,20 +2566,23 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
+
 #End Region
+
 #Region "PackingListCartonItems"
-    Public Function I_PackingListCartonItems(ByVal OrganizationID As Integer, _
-                                   ByVal Created As DateTime, _
-                                   ByVal CreatedBy As Integer, _
-                                   ByVal LastUpdBy As Integer, _
-                                   ByVal PackingListCartonID As Integer, _
-                                   ByVal OrderItemID As Integer, _
-                                   ByVal QtyInCarton As Integer, _
-                                   ByVal Status As String, _
+
+    Public Function I_PackingListCartonItems(ByVal OrganizationID As Integer,
+                                   ByVal Created As DateTime,
+                                   ByVal CreatedBy As Integer,
+                                   ByVal LastUpdBy As Integer,
+                                   ByVal PackingListCartonID As Integer,
+                                   ByVal OrderItemID As Integer,
+                                   ByVal QtyInCarton As Integer,
+                                   ByVal Status As String,
                                    ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("I_packinglistcartonitems", connection)
         With SQL_command
             Try
@@ -2551,7 +2598,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("I_Status", Status)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -2560,14 +2606,15 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_PackingListCartonItems(ByVal RowID As Integer, _
-                           ByVal LastUpd As DateTime, _
-                           ByVal LastUpdBy As Integer, _
-                           ByVal QtyInCarton As Integer, _
+
+    Public Function U_PackingListCartonItems(ByVal RowID As Integer,
+                           ByVal LastUpd As DateTime,
+                           ByVal LastUpdBy As Integer,
+                           ByVal QtyInCarton As Integer,
                            ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_packinglistcartonitems", connection)
         With SQL_command
             Try
@@ -2578,7 +2625,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_QtyInCarton", QtyInCarton)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -2587,14 +2633,15 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_PackingListCartonItemStatus(ByVal RowID As Integer, _
-                           ByVal LastUpd As DateTime, _
-                           ByVal LastUpdBy As Integer, _
-                           ByVal Status As String, _
+
+    Public Function U_PackingListCartonItemStatus(ByVal RowID As Integer,
+                           ByVal LastUpd As DateTime,
+                           ByVal LastUpdBy As Integer,
+                           ByVal Status As String,
                            ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_packinglistcartonitemstatus", connection)
         With SQL_command
             Try
@@ -2605,7 +2652,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_Status", Status)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -2614,21 +2660,24 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
+
 #End Region
+
 #Region "PickList"
-    Public Function I_PickList(ByVal OrganizationID As Integer, _
-                          ByVal Created As DateTime, _
-                          ByVal CreatedBy As Integer, _
-                          ByVal LastUpdBy As Integer, _
-                          ByVal InventoryLocationID As Integer, _
-                          ByVal PickListNo As String, _
-                          ByVal PickListDate As Date, _
-                          ByVal Status As String, _
-                          ByVal Comments As String, _
+
+    Public Function I_PickList(ByVal OrganizationID As Integer,
+                          ByVal Created As DateTime,
+                          ByVal CreatedBy As Integer,
+                          ByVal LastUpdBy As Integer,
+                          ByVal InventoryLocationID As Integer,
+                          ByVal PickListNo As String,
+                          ByVal PickListDate As Date,
+                          ByVal Status As String,
+                          ByVal Comments As String,
                           ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("I_picklist", connection)
         With SQL_command
             Try
@@ -2649,7 +2698,6 @@ Module mdlStoredProcedure
                 .Parameters("newPickListID").Direction = ParameterDirection.ReturnValue
                 globaldatareader = .ExecuteReader
                 globalpicklistidsp = globaldatareader(0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -2658,17 +2706,18 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_PickList(ByVal RowID As Integer, _
-                            ByVal LastUpd As DateTime, _
-                            ByVal LastUpdBy As Integer, _
-                            ByVal InventoryLocationID As Object, _
-                            ByVal ContactID As Object, _
-                            ByVal Comments As String, _
-                            ByVal Status As String, _
+
+    Public Function U_PickList(ByVal RowID As Integer,
+                            ByVal LastUpd As DateTime,
+                            ByVal LastUpdBy As Integer,
+                            ByVal InventoryLocationID As Object,
+                            ByVal ContactID As Object,
+                            ByVal Comments As String,
+                            ByVal Status As String,
                             ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_picklist", connection)
         With SQL_command
             Try
@@ -2682,7 +2731,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_Status", Status)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -2691,14 +2739,15 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_PickListStatus(ByVal RowID As Integer, _
-                           ByVal LastUpd As DateTime, _
-                           ByVal LastUpdBy As Integer, _
-                           ByVal Status As String, _
+
+    Public Function U_PickListStatus(ByVal RowID As Integer,
+                           ByVal LastUpd As DateTime,
+                           ByVal LastUpdBy As Integer,
+                           ByVal Status As String,
                            ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_pickliststatus", connection)
         With SQL_command
             Try
@@ -2709,7 +2758,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_Status", Status)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -2718,14 +2766,15 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_PickListCompletedDate(ByVal RowID As Integer, _
-                           ByVal LastUpd As DateTime, _
-                           ByVal LastUpdBy As Integer, _
-                           ByVal CompletedDate As Date, _
+
+    Public Function U_PickListCompletedDate(ByVal RowID As Integer,
+                           ByVal LastUpd As DateTime,
+                           ByVal LastUpdBy As Integer,
+                           ByVal CompletedDate As Date,
                            ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_picklistcompleteddate", connection)
         With SQL_command
             Try
@@ -2736,7 +2785,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_CompletedDate", CompletedDate)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -2745,14 +2793,15 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_PickListComments(ByVal RowID As Integer, _
-                              ByVal LastUpd As DateTime, _
-                              ByVal LastUpdBy As Integer, _
-                              ByVal Comments As String, _
+
+    Public Function U_PickListComments(ByVal RowID As Integer,
+                              ByVal LastUpd As DateTime,
+                              ByVal LastUpdBy As Integer,
+                              ByVal Comments As String,
                               ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_picklistcomments", connection)
         With SQL_command
             Try
@@ -2763,7 +2812,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_Comments", Comments)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -2772,21 +2820,24 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
+
 #End Region
+
 #Region "PickListOrders"
-    Public Function I_PickListOrders(ByVal OrganizationID As Integer, _
-                         ByVal Created As DateTime, _
-                         ByVal CreatedBy As Integer, _
-                         ByVal LastUpdBy As Integer, _
-                         ByVal PickListID As Integer, _
-                         ByVal OrderID As Integer, _
-                         ByVal OrderItemID As Integer, _
-                         ByVal ModifiedFlg As Char, _
-                         ByVal Status As String, _
+
+    Public Function I_PickListOrders(ByVal OrganizationID As Integer,
+                         ByVal Created As DateTime,
+                         ByVal CreatedBy As Integer,
+                         ByVal LastUpdBy As Integer,
+                         ByVal PickListID As Integer,
+                         ByVal OrderID As Integer,
+                         ByVal OrderItemID As Integer,
+                         ByVal ModifiedFlg As Char,
+                         ByVal Status As String,
                          ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("I_picklistorders", connection)
         With SQL_command
             Try
@@ -2807,7 +2858,6 @@ Module mdlStoredProcedure
                 .Parameters("newPickListOrderID").Direction = ParameterDirection.ReturnValue
                 globaldatareader = .ExecuteReader
                 globalpicklistorderidsp = globaldatareader(0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -2816,14 +2866,15 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_PickListOrderStatus(ByVal RowID As Integer, _
-                               ByVal LastUpd As DateTime, _
-                               ByVal LastUpdBy As Integer, _
-                               ByVal Status As String, _
+
+    Public Function U_PickListOrderStatus(ByVal RowID As Integer,
+                               ByVal LastUpd As DateTime,
+                               ByVal LastUpdBy As Integer,
+                               ByVal Status As String,
                                ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_picklistorderstatus", connection)
         With SQL_command
             Try
@@ -2834,7 +2885,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_Status", Status)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -2843,14 +2893,15 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_PickListOrderModifiedFlg(ByVal RowID As Integer, _
-                             ByVal LastUpd As DateTime, _
-                             ByVal LastUpdBy As Integer, _
-                             ByVal ModifiedFlg As Char, _
+
+    Public Function U_PickListOrderModifiedFlg(ByVal RowID As Integer,
+                             ByVal LastUpd As DateTime,
+                             ByVal LastUpdBy As Integer,
+                             ByVal ModifiedFlg As Char,
                              ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_picklistordermodifiedflg", connection)
         With SQL_command
             Try
@@ -2861,7 +2912,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_ModifiedFlg", ModifiedFlg)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -2870,23 +2920,26 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
+
 #End Region
+
 #Region "PickListOrderItems"
-    Public Function I_PickListOrderItems(ByVal OrganizationID As Integer, _
-                        ByVal Created As DateTime, _
-                        ByVal CreatedBy As Integer, _
-                        ByVal LastUpdBy As Integer, _
-                        ByVal PickListOrderID As Integer, _
-                        ByVal ProductInventoryLocationID As Integer, _
-                        ByVal QtyPicked As Integer, _
-                        ByVal QtyAvailable As Integer, _
-                        ByVal IssueFlg As Char, _
-                        ByVal Status As String, _
-                        ByVal Remarks As String, _
+
+    Public Function I_PickListOrderItems(ByVal OrganizationID As Integer,
+                        ByVal Created As DateTime,
+                        ByVal CreatedBy As Integer,
+                        ByVal LastUpdBy As Integer,
+                        ByVal PickListOrderID As Integer,
+                        ByVal ProductInventoryLocationID As Integer,
+                        ByVal QtyPicked As Integer,
+                        ByVal QtyAvailable As Integer,
+                        ByVal IssueFlg As Char,
+                        ByVal Status As String,
+                        ByVal Remarks As String,
                         ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("I_picklistorderitems", connection)
         With SQL_command
             Try
@@ -2905,7 +2958,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("I_Remarks", Remarks)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -2914,17 +2966,18 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_PickListOrderItems(ByVal RowID As Integer, _
-                                 ByVal LastUpd As DateTime, _
-                                 ByVal LastUpdBy As Integer, _
-                                 ByVal QtyPicked As Integer, _
-                                 ByVal QtyAvailable As Integer, _
-                                 ByVal IssueFlg As Char, _
-                                 ByVal Remarks As String, _
+
+    Public Function U_PickListOrderItems(ByVal RowID As Integer,
+                                 ByVal LastUpd As DateTime,
+                                 ByVal LastUpdBy As Integer,
+                                 ByVal QtyPicked As Integer,
+                                 ByVal QtyAvailable As Integer,
+                                 ByVal IssueFlg As Char,
+                                 ByVal Remarks As String,
                                  ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_picklistorderitems", connection)
         With SQL_command
             Try
@@ -2938,7 +2991,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_Remarks", Remarks)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -2947,14 +2999,15 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_PickListOrderItemStatus(ByVal RowID As Integer, _
-                                ByVal LastUpd As DateTime, _
-                                ByVal LastUpdBy As Integer, _
-                                ByVal Status As String, _
+
+    Public Function U_PickListOrderItemStatus(ByVal RowID As Integer,
+                                ByVal LastUpd As DateTime,
+                                ByVal LastUpdBy As Integer,
+                                ByVal Status As String,
                                 ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_picklistorderitemstatus", connection)
         With SQL_command
             Try
@@ -2965,7 +3018,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_Status", Status)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -2974,14 +3026,15 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_PickListOrderItemQtyDelivered(ByVal RowID As Integer, _
-                                   ByVal LastUpd As DateTime, _
-                                   ByVal LastUpdBy As Integer, _
-                                   ByVal QtyDelivered As Integer, _
+
+    Public Function U_PickListOrderItemQtyDelivered(ByVal RowID As Integer,
+                                   ByVal LastUpd As DateTime,
+                                   ByVal LastUpdBy As Integer,
+                                   ByVal QtyDelivered As Integer,
                                    ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_picklistorderitemqtydelivered", connection)
         With SQL_command
             Try
@@ -2992,7 +3045,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_QtyDelivered", QtyDelivered)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -3001,18 +3053,21 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
+
 #End Region
+
 #Region "PickListGroup"
-    Public Function I_PickListGroup(ByVal OrganizationID As Integer, _
-                          ByVal Created As DateTime, _
-                          ByVal CreatedBy As Integer, _
-                          ByVal LastUpdBy As Integer, _
-                          ByVal GroupName As String, _
-                          ByVal Status As String, _
+
+    Public Function I_PickListGroup(ByVal OrganizationID As Integer,
+                          ByVal Created As DateTime,
+                          ByVal CreatedBy As Integer,
+                          ByVal LastUpdBy As Integer,
+                          ByVal GroupName As String,
+                          ByVal Status As String,
                           ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("I_picklistgroup", connection)
         With SQL_command
             Try
@@ -3026,7 +3081,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("I_Status", Status)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -3035,28 +3089,31 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
+
 #End Region
+
 #Region "Products"
-    Public Function I_Products(ByVal OrganizationID As Integer, _
-                               ByVal Created As DateTime, _
-                               ByVal CreatedBy As Integer, _
-                               ByVal LastUpdBy As Integer, _
-                               ByVal CategoryID As Object, _
-                               ByVal BrandID As Object, _
-                               ByVal CompanyID As Object, _
-                               ByVal ProductCode As String, _
-                               ByVal ProductName As String, _
-                               ByVal BrandName As String, _
-                               ByVal Category As String, _
-                               ByVal Company As String, _
-                               ByVal UnitOfMeasure As String, _
-                               ByVal Description As String, _
-                               ByVal UnitPrice As Decimal, _
-                               ByVal Status As String, _
+
+    Public Function I_Products(ByVal OrganizationID As Integer,
+                               ByVal Created As DateTime,
+                               ByVal CreatedBy As Integer,
+                               ByVal LastUpdBy As Integer,
+                               ByVal CategoryID As Object,
+                               ByVal BrandID As Object,
+                               ByVal CompanyID As Object,
+                               ByVal ProductCode As String,
+                               ByVal ProductName As String,
+                               ByVal BrandName As String,
+                               ByVal Category As String,
+                               ByVal Company As String,
+                               ByVal UnitOfMeasure As String,
+                               ByVal Description As String,
+                               ByVal UnitPrice As Decimal,
+                               ByVal Status As String,
                                ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("I_products", connection)
         With SQL_command
             Try
@@ -3080,7 +3137,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("I_Status", Status)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -3089,26 +3145,26 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_Products(ByVal RowID As Integer, _
-                            ByVal LastUpd As DateTime, _
-                            ByVal LastUpdby As Integer, _
-                            ByVal CategoryID As Object, _
-                            ByVal BrandID As Object, _
-                            ByVal CompanyID As Object, _
-                            ByVal ProductCode As String, _
-                            ByVal ProductName As String, _
-                            ByVal UnitOfMeasure As String, _
-                            ByVal BrandName As String, _
-                            ByVal Category As String, _
-                            ByVal Company As String, _
-                            ByVal Description As String, _
-                            ByVal UnitPrice As Decimal, _
-                            ByVal Image As Object, _
+
+    Public Function U_Products(ByVal RowID As Integer,
+                            ByVal LastUpd As DateTime,
+                            ByVal LastUpdby As Integer,
+                            ByVal CategoryID As Object,
+                            ByVal BrandID As Object,
+                            ByVal CompanyID As Object,
+                            ByVal ProductCode As String,
+                            ByVal ProductName As String,
+                            ByVal UnitOfMeasure As String,
+                            ByVal BrandName As String,
+                            ByVal Category As String,
+                            ByVal Company As String,
+                            ByVal Description As String,
+                            ByVal UnitPrice As Decimal,
+                            ByVal Image As Object,
                             ByVal globalformname As Object) As Boolean
 
-
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_products", connection)
         With SQL_command
             Try
@@ -3130,7 +3186,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_Image", Image)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -3139,14 +3194,15 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_ProductImage(ByVal RowID As Integer, _
-                                     ByVal LastUpd As DateTime, _
-                                     ByVal LastUpdby As Integer, _
-                                     ByVal Image As Object, _
+
+    Public Function U_ProductImage(ByVal RowID As Integer,
+                                     ByVal LastUpd As DateTime,
+                                     ByVal LastUpdby As Integer,
+                                     ByVal Image As Object,
                                      ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_productimage", connection)
         With SQL_command
             Try
@@ -3157,7 +3213,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_Image", Image)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -3166,19 +3221,22 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
+
 #End Region
+
 #Region "ProductColors"
-    Public Function I_ProductColors(ByVal OrganizationID As Integer, _
-                           ByVal Created As DateTime, _
-                           ByVal CreatedBy As Integer, _
-                           ByVal LastUpdBy As Integer, _
-                           ByVal ProductID As Integer, _
-                           ByVal ColorID As Integer, _
-                           ByVal Status As String, _
+
+    Public Function I_ProductColors(ByVal OrganizationID As Integer,
+                           ByVal Created As DateTime,
+                           ByVal CreatedBy As Integer,
+                           ByVal LastUpdBy As Integer,
+                           ByVal ProductID As Integer,
+                           ByVal ColorID As Integer,
+                           ByVal Status As String,
                            ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("I_productcolors", connection)
         With SQL_command
             Try
@@ -3197,7 +3255,6 @@ Module mdlStoredProcedure
                 .Parameters("newProductColorsID").Direction = ParameterDirection.ReturnValue
                 globaldatareader = .ExecuteReader
                 globalproductcolorsidsp = globaldatareader(0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -3206,21 +3263,24 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
+
 #End Region
+
 #Region "ProductColorSizes"
-    Public Function I_ProductColorSizes(ByVal OrganizationID As Integer, _
-                          ByVal Created As DateTime, _
-                          ByVal CreatedBy As Integer, _
-                          ByVal LastUpdBy As Integer, _
-                          ByVal ProductColorID As Integer, _
-                          ByVal Size As Decimal, _
-                          ByVal SeasonCode As String, _
-                          ByVal SKU As String, _
-                          ByVal Status As String, _
+
+    Public Function I_ProductColorSizes(ByVal OrganizationID As Integer,
+                          ByVal Created As DateTime,
+                          ByVal CreatedBy As Integer,
+                          ByVal LastUpdBy As Integer,
+                          ByVal ProductColorID As Integer,
+                          ByVal Size As Decimal,
+                          ByVal SeasonCode As String,
+                          ByVal SKU As String,
+                          ByVal Status As String,
                           ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("I_productcolorsizes", connection)
         With SQL_command
             Try
@@ -3241,7 +3301,6 @@ Module mdlStoredProcedure
                 .Parameters("newProductColorSizesID").Direction = ParameterDirection.ReturnValue
                 globaldatareader = .ExecuteReader
                 globalproductcolorsizesidsp = globaldatareader(0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -3250,14 +3309,15 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_ProductColorSizeStatus(ByVal RowID As Integer, _
-                                    ByVal LastUpd As DateTime, _
-                                    ByVal LastUpdby As Integer, _
-                                    ByVal Status As String, _
+
+    Public Function U_ProductColorSizeStatus(ByVal RowID As Integer,
+                                    ByVal LastUpd As DateTime,
+                                    ByVal LastUpdby As Integer,
+                                    ByVal Status As String,
                                     ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_productcolorsizestatus", connection)
         With SQL_command
             Try
@@ -3270,7 +3330,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_Status", Status)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -3279,14 +3338,15 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_ProductColorSizeSKU(ByVal RowID As Integer, _
-                                    ByVal LastUpd As DateTime, _
-                                    ByVal LastUpdby As Integer, _
-                                    ByVal SKU As String, _
+
+    Public Function U_ProductColorSizeSKU(ByVal RowID As Integer,
+                                    ByVal LastUpd As DateTime,
+                                    ByVal LastUpdby As Integer,
+                                    ByVal SKU As String,
                                     ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_productcolorsizesku", connection)
         With SQL_command
             Try
@@ -3299,7 +3359,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_SKU", SKU)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -3308,14 +3367,40 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_ProductColorSizeSeasonCode(ByVal RowID As Integer, _
-                                   ByVal LastUpd As DateTime, _
-                                   ByVal LastUpdby As Integer, _
-                                   ByVal SeasonCode As String, _
+
+    Public Async Function U_ProductColorSizeSKU2(RowID As Integer,
+        LastUpd As DateTime,
+        LastUpdby As Integer,
+        SKU2 As String,
+        globalformname As Form) As Task(Of Integer)
+
+        Dim queryText = "UPDATE productcolorsizes SET
+            LastUpd = CURRENT_TIMESTAMP(),
+            LastUpdBy = @userId,
+            SKU2 = @sku2
+            WHERE RowID = @rowId;"
+        Using connection As New MySqlConnection(connectionString:=connectionString),
+            command As New MySqlCommand(commandText:=queryText, connection:=connection)
+
+            With command.Parameters
+                .AddWithValue("@userId", LastUpdby)
+                .AddWithValue("@sku2", SKU2)
+                .AddWithValue("@rowId", RowID)
+            End With
+
+            Await connection.OpenAsync()
+            Return Await command.ExecuteNonQueryAsync()
+        End Using
+    End Function
+
+    Public Function U_ProductColorSizeSeasonCode(ByVal RowID As Integer,
+                                   ByVal LastUpd As DateTime,
+                                   ByVal LastUpdby As Integer,
+                                   ByVal SeasonCode As String,
                                    ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_productcolorsizeseasoncode", connection)
         With SQL_command
             Try
@@ -3328,7 +3413,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_SeasonCode", SeasonCode)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -3337,15 +3421,16 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_ProductColorSizeSoldInfo(ByVal RowID As Integer, _
-                                         ByVal LastUpd As DateTime, _
-                                         ByVal LastUpdby As Integer, _
-                                         ByVal LastSoldCount As Integer, _
-                                         ByVal LastSoldDate As Date, _
+
+    Public Function U_ProductColorSizeSoldInfo(ByVal RowID As Integer,
+                                         ByVal LastUpd As DateTime,
+                                         ByVal LastUpdby As Integer,
+                                         ByVal LastSoldCount As Integer,
+                                         ByVal LastSoldDate As Date,
                                          ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_productcolorsizesoldinfo", connection)
         With SQL_command
             Try
@@ -3359,7 +3444,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_LastSoldDate", LastSoldDate)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -3368,14 +3452,15 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_ProductColorSizeTotalDamageQty(ByVal RowID As Integer, _
-                                    ByVal LastUpd As DateTime, _
-                                    ByVal LastUpdby As Integer, _
-                                    ByVal TotalDamageQty As Integer, _
+
+    Public Function U_ProductColorSizeTotalDamageQty(ByVal RowID As Integer,
+                                    ByVal LastUpd As DateTime,
+                                    ByVal LastUpdby As Integer,
+                                    ByVal TotalDamageQty As Integer,
                                     ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_productcolorsizetotaldamageqty", connection)
         With SQL_command
             Try
@@ -3388,7 +3473,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_TotalDamageQty", TotalDamageQty)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -3397,25 +3481,28 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
+
 #End Region
+
 #Region "ProductBundles"
-    Public Function I_ProductBundles(ByVal OrganizationID As Integer, _
-                                   ByVal Created As DateTime, _
-                                   ByVal CreatedBy As Integer, _
-                                   ByVal LastUpdBy As Integer, _
-                                   ByVal CategoryID As Object, _
-                                   ByVal BrandID As Object, _
-                                   ByVal CompanyID As Object, _
-                                   ByVal BundleName As String, _
-                                   ByVal SKU As String, _
-                                   ByVal UnitOfMeasure As String, _
-                                   ByVal Description As String, _
-                                   ByVal Status As String, _
-                                   ByVal SRP As Decimal, _
+
+    Public Function I_ProductBundles(ByVal OrganizationID As Integer,
+                                   ByVal Created As DateTime,
+                                   ByVal CreatedBy As Integer,
+                                   ByVal LastUpdBy As Integer,
+                                   ByVal CategoryID As Object,
+                                   ByVal BrandID As Object,
+                                   ByVal CompanyID As Object,
+                                   ByVal BundleName As String,
+                                   ByVal SKU As String,
+                                   ByVal UnitOfMeasure As String,
+                                   ByVal Description As String,
+                                   ByVal Status As String,
+                                   ByVal SRP As Decimal,
                                    ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("I_productbundles", connection)
         With SQL_command
             Try
@@ -3436,7 +3523,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("I_SRP", SRP)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -3445,22 +3531,23 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_ProductBundles(ByVal RowID As Integer, _
-                                    ByVal LastUpd As DateTime, _
-                                    ByVal LastUpdby As Integer, _
-                                    ByVal CategoryID As Object, _
-                                    ByVal BrandID As Object, _
-                                    ByVal CompanyID As Object, _
-                                    ByVal BundleName As String, _
-                                    ByVal SKU As String, _
-                                    ByVal UnitOfMeasure As String, _
-                                    ByVal Description As String, _
-                                    ByVal Status As String, _
-                                    ByVal SRP As Decimal, _
+
+    Public Function U_ProductBundles(ByVal RowID As Integer,
+                                    ByVal LastUpd As DateTime,
+                                    ByVal LastUpdby As Integer,
+                                    ByVal CategoryID As Object,
+                                    ByVal BrandID As Object,
+                                    ByVal CompanyID As Object,
+                                    ByVal BundleName As String,
+                                    ByVal SKU As String,
+                                    ByVal UnitOfMeasure As String,
+                                    ByVal Description As String,
+                                    ByVal Status As String,
+                                    ByVal SRP As Decimal,
                                     ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_productbundles", connection)
         With SQL_command
             Try
@@ -3479,7 +3566,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_SRP", SRP)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -3488,20 +3574,23 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
+
 #End Region
+
 #Region "ProductBundleItems"
-    Public Function I_ProductBundleItems(ByVal OrganizationID As Integer, _
-                         ByVal Created As DateTime, _
-                         ByVal CreatedBy As Integer, _
-                         ByVal LastUpdBy As Integer, _
-                         ByVal ProductBundleID As Integer, _
-                         ByVal ProductColorSizeID As Integer, _
-                         ByVal QtyAvailable As Integer, _
-                         ByVal Status As String, _
+
+    Public Function I_ProductBundleItems(ByVal OrganizationID As Integer,
+                         ByVal Created As DateTime,
+                         ByVal CreatedBy As Integer,
+                         ByVal LastUpdBy As Integer,
+                         ByVal ProductBundleID As Integer,
+                         ByVal ProductColorSizeID As Integer,
+                         ByVal QtyAvailable As Integer,
+                         ByVal Status As String,
                          ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("I_productbundleitems", connection)
         With SQL_command
             Try
@@ -3517,7 +3606,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("I_Status", Status)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -3526,15 +3614,16 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_ProductBundleItems(ByVal RowID As Integer, _
-                            ByVal LastUpd As DateTime, _
-                            ByVal LastUpdBy As Integer, _
-                            ByVal QtyAvailable As Integer, _
-                            ByVal Status As String, _
+
+    Public Function U_ProductBundleItems(ByVal RowID As Integer,
+                            ByVal LastUpd As DateTime,
+                            ByVal LastUpdBy As Integer,
+                            ByVal QtyAvailable As Integer,
+                            ByVal Status As String,
                             ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_productbundleitems", connection)
         With SQL_command
             Try
@@ -3546,7 +3635,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_Status", Status)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -3555,19 +3643,22 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
+
 #End Region
+
 #Region "ProductInventoryLocation"
-    Public Function I_ProductInventoryLocation(ByVal OrganizationID As Integer, _
-                        ByVal Created As DateTime, _
-                        ByVal CreatedBy As Integer, _
-                        ByVal LastUpdBy As Integer, _
-                        ByVal RackShelfColumnID As Integer, _
-                        ByVal ProductColorSizeID As Integer, _
-                        ByVal TotalAvailableQty As Integer, _
+
+    Public Function I_ProductInventoryLocation(ByVal OrganizationID As Integer,
+                        ByVal Created As DateTime,
+                        ByVal CreatedBy As Integer,
+                        ByVal LastUpdBy As Integer,
+                        ByVal RackShelfColumnID As Integer,
+                        ByVal ProductColorSizeID As Integer,
+                        ByVal TotalAvailableQty As Integer,
                         ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("I_productinventorylocation", connection)
         With SQL_command
             Try
@@ -3586,7 +3677,6 @@ Module mdlStoredProcedure
                 .Parameters("newProductInventoryLocationID").Direction = ParameterDirection.ReturnValue
                 globaldatareader = .ExecuteReader
                 globalproductinventorylocationidsp = globaldatareader(0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -3595,15 +3685,16 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_ProductInventoryLocationTotals(ByVal RowID As Integer, _
-                           ByVal LastUpd As DateTime, _
-                           ByVal LastUpdBy As Integer, _
-                           ByVal TotalAvailableQty As Integer, _
-                           ByVal TotalReserveQty As Integer, _
+
+    Public Function U_ProductInventoryLocationTotals(ByVal RowID As Integer,
+                           ByVal LastUpd As DateTime,
+                           ByVal LastUpdBy As Integer,
+                           ByVal TotalAvailableQty As Integer,
+                           ByVal TotalReserveQty As Integer,
                            ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_productinventorylocationtotals", connection)
         With SQL_command
             Try
@@ -3615,7 +3706,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_TotalReserveQty", TotalReserveQty)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -3624,14 +3714,15 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_ProductInventoryLocationQtyAllocated(ByVal RowID As Integer, _
-                          ByVal LastUpd As DateTime, _
-                          ByVal LastUpdBy As Integer, _
-                          ByVal TotalAllocatedQty As Integer, _
+
+    Public Function U_ProductInventoryLocationQtyAllocated(ByVal RowID As Integer,
+                          ByVal LastUpd As DateTime,
+                          ByVal LastUpdBy As Integer,
+                          ByVal TotalAllocatedQty As Integer,
                           ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_productinventorylocationqtyallocated", connection)
         With SQL_command
             Try
@@ -3642,7 +3733,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_TotalAllocatedQty", TotalAllocatedQty)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -3651,28 +3741,31 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
+
 #End Region
+
 #Region "ProductMovementHistory"
-    Public Function I_ProductMovementHistory(ByVal OrganizationID As Integer, _
-                       ByVal Created As DateTime, _
-                       ByVal CreatedBy As Integer, _
-                       ByVal LastUpdBy As Integer, _
-                       ByVal OrderID As Object, _
-                       ByVal LineUpID As Object, _
-                       ByVal PickListID As Object, _
-                       ByVal ProductColorSizeID As Object, _
-                       ByVal ProductInventoryLocationIDA As Object, _
-                       ByVal ProductInventoryLocationIDB As Object, _
-                       ByVal CurrentQty As Integer, _
-                       ByVal QtyToApply As Integer, _
-                       ByVal NewQty As Integer, _
-                       ByVal TransactionType As String, _
-                       ByVal ColumnName As String, _
-                       ByVal Comments As String, _
+
+    Public Function I_ProductMovementHistory(ByVal OrganizationID As Integer,
+                       ByVal Created As DateTime,
+                       ByVal CreatedBy As Integer,
+                       ByVal LastUpdBy As Integer,
+                       ByVal OrderID As Object,
+                       ByVal LineUpID As Object,
+                       ByVal PickListID As Object,
+                       ByVal ProductColorSizeID As Object,
+                       ByVal ProductInventoryLocationIDA As Object,
+                       ByVal ProductInventoryLocationIDB As Object,
+                       ByVal CurrentQty As Integer,
+                       ByVal QtyToApply As Integer,
+                       ByVal NewQty As Integer,
+                       ByVal TransactionType As String,
+                       ByVal ColumnName As String,
+                       ByVal Comments As String,
                        ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("I_productmovementhistory", connection)
         With SQL_command
             Try
@@ -3696,7 +3789,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("I_Comments", Comments)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -3705,23 +3797,26 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
+
 #End Region
+
 #Region "RackShelfColumn"
-    Public Function I_RackShelfColumn(ByVal OrganizationID As Integer, _
-                                ByVal Created As DateTime, _
-                                ByVal CreatedBy As Integer, _
-                                ByVal LastUpdBy As Integer, _
+
+    Public Function I_RackShelfColumn(ByVal OrganizationID As Integer,
+                                ByVal Created As DateTime,
+                                ByVal CreatedBy As Integer,
+                                ByVal LastUpdBy As Integer,
                                 ByVal InventoryLocationID As Integer,
-                                ByVal RackNo As String, _
-                                ByVal ShelfNo As String, _
-                                ByVal ColumnNo As String, _
-                                ByVal PickOrderNo As Integer, _
-                                ByVal Remarks As String, _
-                                ByVal Status As String, _
+                                ByVal RackNo As String,
+                                ByVal ShelfNo As String,
+                                ByVal ColumnNo As String,
+                                ByVal PickOrderNo As Integer,
+                                ByVal Remarks As String,
+                                ByVal Status As String,
                                 ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("I_rackshelfcolumn", connection)
         With SQL_command
             Try
@@ -3740,7 +3835,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("I_Status", Status)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -3749,19 +3843,19 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_RackShelfColumn(ByVal RowID As Integer, _
-                        ByVal LastUpd As DateTime, _
-                        ByVal LastUpdby As Integer, _
-                        ByVal RackNo As String, _
-                        ByVal ShelfNo As String, _
-                        ByVal ColumnNo As String, _
-                        ByVal PickOrderNo As Integer, _
-                        ByVal Remarks As String, _
+
+    Public Function U_RackShelfColumn(ByVal RowID As Integer,
+                        ByVal LastUpd As DateTime,
+                        ByVal LastUpdby As Integer,
+                        ByVal RackNo As String,
+                        ByVal ShelfNo As String,
+                        ByVal ColumnNo As String,
+                        ByVal PickOrderNo As Integer,
+                        ByVal Remarks As String,
                         ByVal globalformname As Object) As Boolean
 
-
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_rackshelfcolumn", connection)
         With SQL_command
             Try
@@ -3776,7 +3870,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_Remarks", Remarks)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -3785,20 +3878,23 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
+
 #End Region
+
 #Region "Shifts"
-    Public Function I_Shifts(ByVal OrganizationID As Integer, _
-                       ByVal Created As DateTime, _
-                       ByVal CreatedBy As Integer, _
-                       ByVal LastUpdBy As Integer, _
-                       ByVal ShiftName As String, _
-                       ByVal TimeFrom As DateTime, _
-                       ByVal TimeTo As DateTime, _
-                       ByVal Status As String, _
+
+    Public Function I_Shifts(ByVal OrganizationID As Integer,
+                       ByVal Created As DateTime,
+                       ByVal CreatedBy As Integer,
+                       ByVal LastUpdBy As Integer,
+                       ByVal ShiftName As String,
+                       ByVal TimeFrom As DateTime,
+                       ByVal TimeTo As DateTime,
+                       ByVal Status As String,
                        ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("I_shifts", connection)
         With SQL_command
             Try
@@ -3814,7 +3910,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("I_Status", Status)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -3823,17 +3918,18 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_Shifts(ByVal RowID As Integer, _
-                                ByVal LastUpd As DateTime, _
-                                ByVal LastUpdby As Integer, _
-                                ByVal ShiftName As String, _
-                                ByVal TimeFrom As DateTime, _
-                                ByVal TimeTo As DateTime, _
-                                ByVal Status As String, _
+
+    Public Function U_Shifts(ByVal RowID As Integer,
+                                ByVal LastUpd As DateTime,
+                                ByVal LastUpdby As Integer,
+                                ByVal ShiftName As String,
+                                ByVal TimeFrom As DateTime,
+                                ByVal TimeTo As DateTime,
+                                ByVal Status As String,
                                 ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_shifts", connection)
         With SQL_command
             Try
@@ -3847,7 +3943,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_Status", Status)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -3856,26 +3951,29 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
+
 #End Region
+
 #Region "Users"
-    Public Function I_Users(ByVal OrganizationID As Integer, _
-                        ByVal Created As DateTime, _
-                        ByVal CreatedBy As Integer, _
-                        ByVal LastUpd As DateTime, _
-                        ByVal LastUpdBy As Integer, _
-                        ByVal UserID As String, _
-                        ByVal Password As String, _
-                        ByVal PositionID As Object, _
-                        ByVal FirstName As String, _
-                        ByVal MiddleName As String, _
-                        ByVal LastName As String, _
-                        ByVal EmailAddress As String, _
-                        ByVal Status As String, _
-                        ByVal Comments As String, _
+
+    Public Function I_Users(ByVal OrganizationID As Integer,
+                        ByVal Created As DateTime,
+                        ByVal CreatedBy As Integer,
+                        ByVal LastUpd As DateTime,
+                        ByVal LastUpdBy As Integer,
+                        ByVal UserID As String,
+                        ByVal Password As String,
+                        ByVal PositionID As Object,
+                        ByVal FirstName As String,
+                        ByVal MiddleName As String,
+                        ByVal LastName As String,
+                        ByVal EmailAddress As String,
+                        ByVal Status As String,
+                        ByVal Comments As String,
                         ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("I_users", connection)
         With SQL_command
             Try
@@ -3897,7 +3995,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("I_Comments", Comments)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -3906,22 +4003,23 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
-    Public Function U_Users(ByVal RowID As Integer, _
-                        ByVal LastUpd As DateTime, _
-                        ByVal LastUpdBy As Integer, _
-                        ByVal UserID As String, _
-                        ByVal Password As String, _
-                        ByVal PositionID As Object, _
-                        ByVal FirstName As String, _
-                        ByVal MiddleName As String, _
-                        ByVal LastName As String, _
-                        ByVal EmailAddress As String, _
-                        ByVal Status As String, _
-                        ByVal Comments As String, _
+
+    Public Function U_Users(ByVal RowID As Integer,
+                        ByVal LastUpd As DateTime,
+                        ByVal LastUpdBy As Integer,
+                        ByVal UserID As String,
+                        ByVal Password As String,
+                        ByVal PositionID As Object,
+                        ByVal FirstName As String,
+                        ByVal MiddleName As String,
+                        ByVal LastName As String,
+                        ByVal EmailAddress As String,
+                        ByVal Status As String,
+                        ByVal Comments As String,
                         ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_users", connection)
         With SQL_command
             Try
@@ -3941,7 +4039,6 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_Comments", Comments)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -3950,5 +4047,7 @@ Module mdlStoredProcedure
         End With
         Return F_return
     End Function
+
 #End Region
+
 End Module

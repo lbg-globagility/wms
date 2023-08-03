@@ -1,16 +1,6 @@
-﻿Imports MySql.Data.MySqlClient
-Imports System.IO
-Imports System.Windows.Forms
-Imports CrystalDecisions.CrystalReports.Engine
-Imports System.Linq
-Imports System.Collections
-Imports System.Collections.Generic
-Imports System.Data
-Imports System.Diagnostics
-Imports System.Runtime.InteropServices
-Imports System.Text.RegularExpressions
-Imports System.ComponentModel
-Imports System.Data.OleDb
+﻿Imports System.IO
+Imports MySql.Data.MySqlClient
+
 Public Class ProductsForm
     Dim manager As New sqlModule.Manager
     Dim conn As New MySqlConnection(manager.GetConnString)
@@ -27,9 +17,10 @@ Public Class ProductsForm
     Dim cueA, cueB, searchmode As String
     Dim spagenum, countpagenum, numofpages, validpages As Integer
     Dim pageequation1, pageequation2, pageequation3, additionalpage As Decimal
-    Dim pfproductid, pfcategoryid, pfbrandid, pfcompanyid, pfskuid, pfproductcolorsizeid As Integer
+    Dim pfproductid, pfcategoryid, pfbrandid, pfcompanyid, pfskuid, pfSKU2id, pfproductcolorsizeid As Integer
     Dim pftotalqtyavailable, pftotalqtyallocated, pftotalqtyreserve As Integer
     Dim simplesearchphrase, commonphrase, pagefilter1, pagefilter2, pagefilter3 As String
+
     Private Sub ProductManagementForm_Load(sender As Object, e As EventArgs) Handles Me.Load
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -47,6 +38,7 @@ Public Class ProductsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub ProductManagementForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -62,13 +54,16 @@ Public Class ProductsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #Region "Functions"
+
     Sub callAutoCompleteFunctions()
         autocompleteBrandName(cboBrandName, "AND b.`status` = 'Active'")
         autocompleteCategory(cboCategory, "AND c.`status` = 'Active'")
         autocompleteCompany(cboCompany, "AND c.`status` = 'Active'")
         globalautocompleteListOfValues(cboUnitOfMeasure, "Unit Of Measure", Me)
     End Sub
+
     Sub callAutoPopulateFunctions()
         autopopulatecboSearch()
         autopopulateBrandName(cboBrandName, "AND b.`status` = 'Active'")
@@ -76,7 +71,9 @@ Public Class ProductsForm
         autopopulateCompany(cboCompany, "AND c.`status` = 'Active'")
         globalautopopulateListOfValues(cboUnitOfMeasure, "Unit Of Measure", Me)
     End Sub
+
 #Region "Clear/Enable/Visible"
+
     Sub clearfields()
         Try
             cueA = ""
@@ -97,6 +94,7 @@ Public Class ProductsForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearRightPage()
         Try
             cueA = ""
@@ -114,6 +112,7 @@ Public Class ProductsForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearSearchItems()
         Try
             txtSimpleSearch.Text = ""
@@ -131,6 +130,7 @@ Public Class ProductsForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearcboSearch()
         Try
             txtPage.Text = ""
@@ -145,6 +145,7 @@ Public Class ProductsForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearProductInformation()
         Try
             txtProductCode.Text = ""
@@ -164,6 +165,7 @@ Public Class ProductsForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearImage()
         Try
             txtImagePath.Clear()
@@ -174,12 +176,14 @@ Public Class ProductsForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearProductSubInfo()
         Try
             txtSumQtyAvailable.Text = ""
             txtSumQtyAllocated.Text = ""
             txtSumQtyReserve.Text = ""
             txtSKU.Text = ""
+            txtSKU2.Text = ""
             txtEditSeasonCode.Text = ""
             txtLastShipmentDate.Text = ""
             txtLastSoldDate.Text = ""
@@ -189,6 +193,7 @@ Public Class ProductsForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearTags()
         Try
             txtColor.Text = ""
@@ -201,6 +206,7 @@ Public Class ProductsForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearDataGrids()
         Try
             dgProductColors.Rows.Clear()
@@ -213,6 +219,7 @@ Public Class ProductsForm
             conn.Close()
         End Try
     End Sub
+
     Sub enableGB(ByVal enable1 As Boolean, ByVal enable2 As Boolean, ByVal enable3 As Boolean)
         Try
             gbSearch.Enabled = enable1
@@ -229,6 +236,7 @@ Public Class ProductsForm
             conn.Close()
         End Try
     End Sub
+
     Sub enableANDvisibleMS(ByVal enable1 As Boolean)
         Try
             msSave.Enabled = enable1
@@ -238,8 +246,11 @@ Public Class ProductsForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Click"
+
     Sub tsrefreshperformclick()
         Try
             errProvider.Clear()
@@ -255,8 +266,11 @@ Public Class ProductsForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Computations"
+
     Sub totalcomputation()
         Try
             pftotalqtyavailable = 0 : pftotalqtyallocated = 0 : pftotalqtyreserve = 0
@@ -282,8 +296,11 @@ Public Class ProductsForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Page Setup"
+
     Sub pageSetup()
         Try
             getCountPageNum()
@@ -304,6 +321,7 @@ Public Class ProductsForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCountPageNum()
         Try
             countpagenum = 0
@@ -321,6 +339,7 @@ Public Class ProductsForm
             conn.Close()
         End Try
     End Sub
+
     Sub pageSetup1(ByVal isearchstring As String)
         Try
             getCountPageNum1(isearchstring)
@@ -341,12 +360,13 @@ Public Class ProductsForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCountPageNum1(ByVal esearchstring As String)
         Try
             countpagenum = 0
             If conn.State = ConnectionState.Open Then conn.Close()
             Dim dtCid As New DataTable
-            dtCid = getDataTableForSQL("SELECT COUNT(p.rowid) FROM products p LEFT JOIN brands b ON p.brandid = b.rowid LEFT JOIN categories ct ON p.categoryid = ct.rowid LEFT JOIN companies cm ON p.companyid = cm.rowid WHERE p.organizationid = " & Z_OrganizationID & " AND " & _
+            dtCid = getDataTableForSQL("SELECT COUNT(p.rowid) FROM products p LEFT JOIN brands b ON p.brandid = b.rowid LEFT JOIN categories ct ON p.categoryid = ct.rowid LEFT JOIN companies cm ON p.companyid = cm.rowid WHERE p.organizationid = " & Z_OrganizationID & " AND " &
                             "(p.productcode LIKE ""%" & esearchstring & "%"" OR b.brandname LIKE ""%" & esearchstring & "%"" OR ct.categoryname LIKE ""%" & esearchstring & "%"" OR cm.companyname LIKE ""%" & esearchstring & "%"")")
             If dtCid.Rows.Count <> 0 Then
                 countpagenum = dtCid.Rows(0)(0)
@@ -359,6 +379,7 @@ Public Class ProductsForm
             conn.Close()
         End Try
     End Sub
+
     Sub pageSetup2(ByVal isearchstring As String)
         Try
             getCountPageNum2(isearchstring)
@@ -379,12 +400,13 @@ Public Class ProductsForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCountPageNum2(ByVal ecommontring As String)
         Try
             countpagenum = 0
             If conn.State = ConnectionState.Open Then conn.Close()
             Dim dtCid As New DataTable
-            dtCid = getDataTableForSQL("SELECT COUNT(p.rowid) FROM products p LEFT JOIN brands b ON p.brandid = b.rowid LEFT JOIN categories ct ON p.categoryid = ct.rowid " & _
+            dtCid = getDataTableForSQL("SELECT COUNT(p.rowid) FROM products p LEFT JOIN brands b ON p.brandid = b.rowid LEFT JOIN categories ct ON p.categoryid = ct.rowid " &
                             "LEFT JOIN companies cm ON p.companyid = cm.rowid WHERE p.organizationid = " & Z_OrganizationID & " AND " & ecommontring & " ")
             If dtCid.Rows.Count <> 0 Then
                 countpagenum = dtCid.Rows(0)(0)
@@ -397,6 +419,7 @@ Public Class ProductsForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCommonPhrase(ByVal icommonbox As ComboBox, ByVal icommonstring As String)
         Try
             commonphrase = ""
@@ -413,9 +436,13 @@ Public Class ProductsForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Display"
+
 #Region "AutoComplete"
+
     Sub autocompleteBrandName(ByVal icombobox As ComboBox, ByVal istatuscondition As String)
         Try
             Dim brandname As New AutoCompleteStringCollection
@@ -436,6 +463,7 @@ Public Class ProductsForm
             conn.Close()
         End Try
     End Sub
+
     Sub autocompleteCategory(ByVal icombobox As ComboBox, ByVal istatuscondition As String)
         Try
             Dim categoryname As New AutoCompleteStringCollection
@@ -456,6 +484,7 @@ Public Class ProductsForm
             conn.Close()
         End Try
     End Sub
+
     Sub autocompleteCompany(ByVal icombobox As ComboBox, ByVal istatuscondition As String)
         Try
             Dim companyname As New AutoCompleteStringCollection
@@ -476,8 +505,11 @@ Public Class ProductsForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "AutoPopulate"
+
     Sub autopopulatecboSearch()
         Try
             cboSearch1.Items.Clear()
@@ -496,6 +528,7 @@ Public Class ProductsForm
             conn.Close()
         End Try
     End Sub
+
     Sub autopopulateBrandName(ByVal icombobox As ComboBox, ByVal istatuscondition As String)
         Try
             icombobox.Items.Clear()
@@ -516,6 +549,7 @@ Public Class ProductsForm
             conn.Close()
         End Try
     End Sub
+
     Sub autopopulateCategory(ByVal icombobox As ComboBox, ByVal istatuscondition As String)
         Try
             icombobox.Items.Clear()
@@ -536,6 +570,7 @@ Public Class ProductsForm
             conn.Close()
         End Try
     End Sub
+
     Sub autopopulateCompany(ByVal icombobox As ComboBox, ByVal istatuscondition As String)
         Try
             icombobox.Items.Clear()
@@ -556,14 +591,17 @@ Public Class ProductsForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Datagrids/Information"
+
     Sub displayProductList(ByVal istartpage As Integer)
         Try
             dgProductList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT p.rowid,COALESCE(p.productcode,''),COALESCE(b.brandname,''),COALESCE(ct.categoryname,''),COALESCE(cm.companyname,'') FROM products p " & _
-                        "LEFT JOIN brands b ON p.brandid = b.rowid LEFT JOIN categories ct ON p.categoryid = ct.rowid LEFT JOIN companies cm ON p.companyid = cm.rowid " & _
+            Dim sql1 As String = "SELECT p.rowid,COALESCE(p.productcode,''),COALESCE(b.brandname,''),COALESCE(ct.categoryname,''),COALESCE(cm.companyname,'') FROM products p " &
+                        "LEFT JOIN brands b ON p.brandid = b.rowid LEFT JOIN categories ct ON p.categoryid = ct.rowid LEFT JOIN companies cm ON p.companyid = cm.rowid " &
                         "WHERE p.organizationid = " & Z_OrganizationID & " ORDER BY p.productcode ASC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -602,13 +640,14 @@ Public Class ProductsForm
             conn.Close()
         End Try
     End Sub
+
     Sub displaySearchPhrase(ByVal isearchphrase As String, ByVal istartpage As Integer)
         Try
             dgProductList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT p.rowid,COALESCE(p.productcode,''),COALESCE(b.brandname,''),COALESCE(ct.categoryname,''),COALESCE(cm.companyname,'') FROM products p " & _
-                        "LEFT JOIN brands b ON p.brandid = b.rowid LEFT JOIN categories ct ON p.categoryid = ct.rowid LEFT JOIN companies cm ON p.companyid = cm.rowid WHERE p.organizationid = " & Z_OrganizationID & " AND " & _
-                        "(p.productcode LIKE ""%" & isearchphrase & "%"" OR b.brandname LIKE ""%" & isearchphrase & "%"" OR ct.categoryname LIKE ""%" & isearchphrase & "%"" OR cm.companyname LIKE ""%" & isearchphrase & "%"") " & _
+            Dim sql1 As String = "SELECT p.rowid,COALESCE(p.productcode,''),COALESCE(b.brandname,''),COALESCE(ct.categoryname,''),COALESCE(cm.companyname,'') FROM products p " &
+                        "LEFT JOIN brands b ON p.brandid = b.rowid LEFT JOIN categories ct ON p.categoryid = ct.rowid LEFT JOIN companies cm ON p.companyid = cm.rowid WHERE p.organizationid = " & Z_OrganizationID & " AND " &
+                        "(p.productcode LIKE ""%" & isearchphrase & "%"" OR b.brandname LIKE ""%" & isearchphrase & "%"" OR ct.categoryname LIKE ""%" & isearchphrase & "%"" OR cm.companyname LIKE ""%" & isearchphrase & "%"") " &
                         "ORDER BY p.productcode ASC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -647,12 +686,13 @@ Public Class ProductsForm
             conn.Close()
         End Try
     End Sub
+
     Sub displayCommonPhrase(ByVal icommonphrase As String, ByVal istartpage As Integer)
         Try
             dgProductList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT p.rowid,COALESCE(p.productcode,''),COALESCE(b.brandname,''),COALESCE(ct.categoryname,''),COALESCE(cm.companyname,'') FROM products p " & _
-                        "LEFT JOIN brands b ON p.brandid = b.rowid LEFT JOIN categories ct ON p.categoryid = ct.rowid LEFT JOIN companies cm ON p.companyid = cm.rowid " & _
+            Dim sql1 As String = "SELECT p.rowid,COALESCE(p.productcode,''),COALESCE(b.brandname,''),COALESCE(ct.categoryname,''),COALESCE(cm.companyname,'') FROM products p " &
+                        "LEFT JOIN brands b ON p.brandid = b.rowid LEFT JOIN categories ct ON p.categoryid = ct.rowid LEFT JOIN companies cm ON p.companyid = cm.rowid " &
                         "WHERE p.organizationid = " & Z_OrganizationID & " AND " & icommonphrase & " ORDER BY p.productcode ASC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -691,12 +731,13 @@ Public Class ProductsForm
             conn.Close()
         End Try
     End Sub
+
     Sub displayProductInformation(ByVal iproductid As Integer)
         Try
             productimage = Nothing
             If conn1.State = ConnectionState.Closed Then conn1.Open()
-            Dim sql1 As String = "SELECT COALESCE(p.productcode,''),COALESCE(b.brandname,''),COALESCE(ct.categoryname,''),COALESCE(cm.companyname,''),COALESCE(p.unitprice,0.0)," & _
-                        "COALESCE(p.unitofmeasure,''),COALESCE(p.description,''),p.image FROM products p LEFT JOIN brands b ON p.brandid = b.rowid " & _
+            Dim sql1 As String = "SELECT COALESCE(p.productcode,''),COALESCE(b.brandname,''),COALESCE(ct.categoryname,''),COALESCE(cm.companyname,''),COALESCE(p.unitprice,0.0)," &
+                        "COALESCE(p.unitofmeasure,''),COALESCE(p.description,''),p.image FROM products p LEFT JOIN brands b ON p.brandid = b.rowid " &
                         "LEFT JOIN categories ct ON p.categoryid = ct.rowid LEFT JOIN companies cm ON p.companyid = cm.rowid WHERE p.rowid = " & iproductid & " "
             Dim cmd1 As New MySqlCommand(sql1, conn1)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -724,11 +765,12 @@ Public Class ProductsForm
             conn1.Close()
         End Try
     End Sub
+
     Sub displayProductColors(ByVal iproductid As Integer)
         Try
             dgProductColors.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT pc.rowid,COALESCE(c.colorvalue,''),COALESCE(c.colorname,'') FROM productcolors pc LEFT JOIN colors c ON pc.colorid = c.rowid " & _
+            Dim sql1 As String = "SELECT pc.rowid,COALESCE(c.colorvalue,''),COALESCE(c.colorname,'') FROM productcolors pc LEFT JOIN colors c ON pc.colorid = c.rowid " &
                             "WHERE pc.organizationid = " & Z_OrganizationID & " AND pc.productid = " & iproductid & " ORDER BY c.colorname ASC "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -758,6 +800,7 @@ Public Class ProductsForm
             conn.Close()
         End Try
     End Sub
+
     Sub displayProductSizes(ByVal iproductcolorid As Integer)
         Try
             dgProductSizes.Rows.Clear()
@@ -802,12 +845,13 @@ Public Class ProductsForm
             conn1.Close()
         End Try
     End Sub
+
     Sub displayInventoryLocations(ByVal iproductcolorsizeid As Integer)
         Try
             dgInventoryLocations.Rows.Clear()
             If conn1.State = ConnectionState.Closed Then conn1.Open()
-            Dim sql1 As String = "SELECT COALESCE(rsc.inventorylocationid,0),COALESCE(il.name,''),COALESCE(il.type,'') FROM productinventorylocation pil " & _
-                            "LEFT JOIN rackshelfcolumn rsc ON pil.rackshelfcolumnid = rsc.rowid LEFT JOIN inventorylocations il ON rsc.inventorylocationid = il.rowid " & _
+            Dim sql1 As String = "SELECT COALESCE(rsc.inventorylocationid,0),COALESCE(il.name,''),COALESCE(il.type,'') FROM productinventorylocation pil " &
+                            "LEFT JOIN rackshelfcolumn rsc ON pil.rackshelfcolumnid = rsc.rowid LEFT JOIN inventorylocations il ON rsc.inventorylocationid = il.rowid " &
                             "WHERE pil.organizationid = " & Z_OrganizationID & " AND pil.productcolorsizeid = " & iproductcolorsizeid & " GROUP BY il.name ORDER BY il.rowid "
             Dim cmd1 As New MySqlCommand(sql1, conn1)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -848,12 +892,13 @@ Public Class ProductsForm
             conn1.Close()
         End Try
     End Sub
+
     Sub displayRackShelfColumn(ByVal iproductcolorsizeid As Integer, ByVal iinventorylocationid As Integer)
         Try
             dgRackShelfColumn.Rows.Clear()
             If conn1.State = ConnectionState.Closed Then conn1.Open()
-            Dim sql1 As String = "SELECT pil.rowid,COALESCE(rsc.rackno,''),COALESCE(rsc.shelfno,''),COALESCE(rsc.columnno,''),COALESCE(pil.totalavailableqty,0),COALESCE(pil.totalreserveqty,0)," & _
-                            "COALESCE(pil.totaldamageqty,0),COALESCE(pil.totalallocatedqty,0) FROM productinventorylocation pil LEFT JOIN rackshelfcolumn rsc ON pil.rackshelfcolumnid = rsc.rowid " & _
+            Dim sql1 As String = "SELECT pil.rowid,COALESCE(rsc.rackno,''),COALESCE(rsc.shelfno,''),COALESCE(rsc.columnno,''),COALESCE(pil.totalavailableqty,0),COALESCE(pil.totalreserveqty,0)," &
+                            "COALESCE(pil.totaldamageqty,0),COALESCE(pil.totalallocatedqty,0) FROM productinventorylocation pil LEFT JOIN rackshelfcolumn rsc ON pil.rackshelfcolumnid = rsc.rowid " &
                             "WHERE pil.organizationid = " & Z_OrganizationID & " AND pil.productcolorsizeid = " & iproductcolorsizeid & "  AND rsc.inventorylocationid = " & iinventorylocationid & " ORDER BY rsc.pickorderno ASC "
             Dim cmd1 As New MySqlCommand(sql1, conn1)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -895,21 +940,24 @@ Public Class ProductsForm
             conn1.Close()
         End Try
     End Sub
+
     Sub displayProductColorSizesInformation(ByVal iproductcolorsizesid As Integer)
         Try
             If conn1.State = ConnectionState.Open Then conn1.Close()
             Dim dtPcs As New DataTable
-            dtPcs = getDataTableForSQL("SELECT COALESCE(pcs.sku,''),COALESCE(DATE_FORMAT(pcs.lastshipmentdate,'%d-%b-%Y'),''),COALESCE(DATE_FORMAT(pcs.lastsolddate,'%d-%b-%Y'),''),COALESCE(pcs.seasoncode,'') FROM productcolorsizes pcs WHERE pcs.rowid = " & iproductcolorsizesid & " ")
+            dtPcs = getDataTableForSQL("SELECT COALESCE(pcs.sku,''),COALESCE(DATE_FORMAT(pcs.lastshipmentdate,'%d-%b-%Y'),''),COALESCE(DATE_FORMAT(pcs.lastsolddate,'%d-%b-%Y'),''),COALESCE(pcs.seasoncode,''),IFNULL(pcs.sku2,'') `sku2` FROM productcolorsizes pcs WHERE pcs.rowid = " & iproductcolorsizesid & " ")
             If dtPcs.Rows.Count <> 0 Then
                 txtSKU.Text = dtPcs.Rows(0)(0)
                 txtLastShipmentDate.Text = dtPcs.Rows(0)(1)
                 txtLastSoldDate.Text = dtPcs.Rows(0)(2)
                 txtEditSeasonCode.Text = dtPcs.Rows(0)(3)
+                txtSKU2.Text = dtPcs.Rows(0)(4)
             Else
                 txtSKU.Text = ""
                 txtLastShipmentDate.Text = ""
                 txtLastSoldDate.Text = ""
                 txtEditSeasonCode.Text = ""
+                txtSKU2.Text = String.Empty
             End If
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
@@ -917,8 +965,11 @@ Public Class ProductsForm
             conn1.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Colors"
+
     Sub colorCoding()
         Try
             If dgProductColors.Rows.Count <> 0 Then
@@ -935,9 +986,13 @@ Public Class ProductsForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #End Region
+
 #Region "Image"
+
     Sub downloadImage()
         Try
             Dim ctr As Integer = 0
@@ -983,8 +1038,11 @@ Public Class ProductsForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #End Region
+
     Private Sub tabMain_DrawItem(sender As Object, e As DrawItemEventArgs) Handles tabMain.DrawItem
         Try
             TabControlColor(tabMain, e)
@@ -994,6 +1052,7 @@ Public Class ProductsForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbClose_Click(sender As Object, e As EventArgs) Handles pbClose.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1008,6 +1067,7 @@ Public Class ProductsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub txtDescription_Leave(sender As Object, e As EventArgs) Handles txtDescription.Leave
         Try
             txtProductCode.Focus()
@@ -1017,6 +1077,7 @@ Public Class ProductsForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub btnDownloadImage_Leave(sender As Object, e As EventArgs) Handles btnDownloadImage.Leave
         Try
             btnChangeImage.Focus()
@@ -1026,6 +1087,7 @@ Public Class ProductsForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub tsRefresh_Click(sender As Object, e As EventArgs) Handles tsRefresh.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1038,6 +1100,7 @@ Public Class ProductsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub tsColors_Click(sender As Object, e As EventArgs) Handles tsColors.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1072,6 +1135,7 @@ Public Class ProductsForm
                     displayProductColors(CInt(dgProductList.CurrentRow.Cells("p_rowid").Value))
                     txtSKU.ReadOnly = legit : txtEditSeasonCode.ReadOnly = legit
                     txtProductCode.Focus()
+                    txtSKU2.ReadOnly = legit
                 End If
             End If
         Catch ex As Exception
@@ -1081,6 +1145,7 @@ Public Class ProductsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub pbAutoAddA_MouseEnter(sender As Object, e As EventArgs) Handles pbAutoAddA.MouseEnter
         Try
             pbAutoAddA.BackColor = Color.MediumSpringGreen
@@ -1090,6 +1155,7 @@ Public Class ProductsForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbAutoAddA_MouseLeave(sender As Object, e As EventArgs) Handles pbAutoAddA.MouseLeave
         Try
             pbAutoAddA.BackColor = Color.Transparent
@@ -1099,6 +1165,7 @@ Public Class ProductsForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbAutoAddA_Click(sender As Object, e As EventArgs) Handles pbAutoAddA.Click
         Try
             myBalloon("Automatic adding of brand name.", "Auto-Add", pbAutoAddA, -15, -65)
@@ -1108,6 +1175,7 @@ Public Class ProductsForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbAutoAddB_MouseEnter(sender As Object, e As EventArgs) Handles pbAutoAddB.MouseEnter
         Try
             pbAutoAddB.BackColor = Color.MediumSpringGreen
@@ -1117,6 +1185,7 @@ Public Class ProductsForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbAutoAddB_MouseLeave(sender As Object, e As EventArgs) Handles pbAutoAddB.MouseLeave
         Try
             pbAutoAddB.BackColor = Color.Transparent
@@ -1126,6 +1195,7 @@ Public Class ProductsForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbAutoAddB_Click(sender As Object, e As EventArgs) Handles pbAutoAddB.Click
         Try
             myBalloon("Automatic adding of category.", "Auto-Add", pbAutoAddB, -15, -65)
@@ -1135,6 +1205,7 @@ Public Class ProductsForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbAutoAddC_MouseEnter(sender As Object, e As EventArgs) Handles pbAutoAddC.MouseEnter
         Try
             pbAutoAddC.BackColor = Color.MediumSpringGreen
@@ -1144,6 +1215,7 @@ Public Class ProductsForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbAutoAddC_MouseLeave(sender As Object, e As EventArgs) Handles pbAutoAddC.MouseLeave
         Try
             pbAutoAddC.BackColor = Color.Transparent
@@ -1153,6 +1225,7 @@ Public Class ProductsForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbAutoAddC_Click(sender As Object, e As EventArgs) Handles pbAutoAddC.Click
         Try
             myBalloon("Automatic adding of vendor name.", "Auto-Add", pbAutoAddC, -15, -65)
@@ -1162,6 +1235,7 @@ Public Class ProductsForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbAutoAddD_MouseEnter(sender As Object, e As EventArgs) Handles pbAutoAddD.MouseEnter
         Try
             pbAutoAddD.BackColor = Color.MediumSpringGreen
@@ -1171,6 +1245,7 @@ Public Class ProductsForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbAutoAddD_MouseLeave(sender As Object, e As EventArgs) Handles pbAutoAddD.MouseLeave
         Try
             pbAutoAddD.BackColor = Color.Transparent
@@ -1180,6 +1255,7 @@ Public Class ProductsForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbAutoAddD_Click(sender As Object, e As EventArgs) Handles pbAutoAddD.Click
         Try
             myBalloon("Automatic adding of unit of measure.", "Auto-Add", pbAutoAddD, -15, -65)
@@ -1189,6 +1265,7 @@ Public Class ProductsForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub dgProductList_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgProductList.CellClick
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1207,6 +1284,7 @@ Public Class ProductsForm
                 displayProductColors(CInt(dgProductList.CurrentRow.Cells("p_rowid").Value))
                 txtSKU.ReadOnly = legit : txtEditSeasonCode.ReadOnly = legit
                 txtProductCode.Focus()
+                txtSKU2.ReadOnly = legit
             End If
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
@@ -1215,6 +1293,7 @@ Public Class ProductsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgProductList_KeyUp(sender As Object, e As KeyEventArgs) Handles dgProductList.KeyUp
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1234,6 +1313,7 @@ Public Class ProductsForm
                     displayProductColors(CInt(dgProductList.CurrentRow.Cells("p_rowid").Value))
                     txtSKU.ReadOnly = legit : txtEditSeasonCode.ReadOnly = legit
                     txtProductCode.Focus()
+                    txtSKU2.ReadOnly = legit
                 End If
             End If
         Catch ex As Exception
@@ -1243,6 +1323,7 @@ Public Class ProductsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgProductColors_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgProductColors.CellClick
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1258,6 +1339,7 @@ Public Class ProductsForm
                 txtSize.Text = ""
                 txtSeasonCode.Text = ""
                 txtLocation.Text = ""
+                txtSKU2.ReadOnly = legit
             End If
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
@@ -1266,6 +1348,7 @@ Public Class ProductsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgProductColors_KeyUp(sender As Object, e As KeyEventArgs) Handles dgProductColors.KeyUp
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1282,6 +1365,7 @@ Public Class ProductsForm
                     txtSize.Text = ""
                     txtSeasonCode.Text = ""
                     txtLocation.Text = ""
+                    txtSKU2.ReadOnly = legit
                 End If
             End If
         Catch ex As Exception
@@ -1291,6 +1375,7 @@ Public Class ProductsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgProductSizes_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgProductSizes.CellClick
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1301,6 +1386,7 @@ Public Class ProductsForm
                 displayInventoryLocations(CInt(dgProductSizes.CurrentRow.Cells("s_rowid").Value))
                 txtSize.Text = dgProductSizes.CurrentRow.Cells("s_sizes").Value
                 txtSeasonCode.Text = dgProductSizes.CurrentRow.Cells("s_seasoncode").Value
+                txtSKU2.ReadOnly = fraud
                 If dgInventoryLocations.Rows.Count <> 0 Then
                     For c = 0 To dgInventoryLocations.Rows.Count - 1
                         displayRackShelfColumn(CInt(dgProductSizes.CurrentRow.Cells("s_rowid").Value), CInt(dgInventoryLocations.Rows(c).Cells("il_rowid").Value))
@@ -1318,6 +1404,7 @@ Public Class ProductsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgProductSizes_KeyUp(sender As Object, e As KeyEventArgs) Handles dgProductSizes.KeyUp
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1329,6 +1416,7 @@ Public Class ProductsForm
                     displayInventoryLocations(CInt(dgProductSizes.CurrentRow.Cells("s_rowid").Value))
                     txtSize.Text = dgProductSizes.CurrentRow.Cells("s_sizes").Value
                     txtSeasonCode.Text = dgProductSizes.CurrentRow.Cells("s_seasoncode").Value
+                    txtSKU2.ReadOnly = fraud
                     If dgInventoryLocations.Rows.Count <> 0 Then
                         For c = 0 To dgInventoryLocations.Rows.Count - 1
                             displayRackShelfColumn(CInt(dgProductSizes.CurrentRow.Cells("s_rowid").Value), CInt(dgInventoryLocations.Rows(c).Cells("il_rowid").Value))
@@ -1347,6 +1435,7 @@ Public Class ProductsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgInventoryLocations_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgInventoryLocations.CellClick
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1366,6 +1455,7 @@ Public Class ProductsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgInventoryLocations_KeyUp(sender As Object, e As KeyEventArgs) Handles dgInventoryLocations.KeyUp
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1387,6 +1477,7 @@ Public Class ProductsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub btnChangeImage_Click(sender As Object, e As EventArgs) Handles btnChangeImage.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1422,6 +1513,7 @@ Public Class ProductsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub btnDeleteImage_Click(sender As Object, e As EventArgs) Handles btnDeleteImage.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1467,6 +1559,7 @@ Public Class ProductsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub btnDownloadImage_Click(sender As Object, e As EventArgs) Handles btnDownloadImage.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1511,6 +1604,7 @@ Public Class ProductsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub txtProductCode_Leave(sender As Object, e As EventArgs) Handles txtProductCode.Leave
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1532,6 +1626,7 @@ Public Class ProductsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     'Private Sub txtProductCode_TextChanged(sender As Object, e As EventArgs) Handles txtProductCode.TextChanged
     '    Me.Cursor = Cursors.WaitCursor
     '    Try
@@ -1583,36 +1678,38 @@ Public Class ProductsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
-    'Private Sub txtSKU_TextChanged(sender As Object, e As EventArgs) Handles txtSKU.TextChanged
-    '    Me.Cursor = Cursors.WaitCursor
-    '    Try
-    '        errProvider.Clear()
-    '        If cueB = "Edit" Then
-    '            If dgProductSizes.Rows.Count <> 0 Then
-    '                If LTrim(txtSKU.Text) <> "" Then
-    '                    getProductColorSizesSKUB(CInt(dgProductSizes.CurrentRow.Cells("s_rowid").Value), txtSKU.Text, Me)
-    '                    pfskuid = globalskuid
-    '                    If pfskuid <> 0 Then
-    '                        errProvider.SetError(lblSKU, "SKU has been created already, please type a new one.")
-    '                        txtSKU.Focus()
-    '                    Else
-    '                        getProductBundleSKUA(txtSKU.Text, Me)
-    '                        pfskuid = globalskuid
-    '                        If pfskuid <> 0 Then
-    '                            errProvider.SetError(lblSKU, "SKU has been created already, please type a new one.")
-    '                            txtSKU.Focus()
-    '                        End If
-    '                    End If
-    '                End If
-    '            End If
-    '        End If
-    '    Catch ex As Exception
-    '        MsgBox(getErrExcptn(ex, Me.Name))
-    '    Finally
-    '        conn.Close()
-    '    End Try
-    '    Me.Cursor = Cursors.Default
-    'End Sub
+
+    Private Sub txtSKU2_Leave(sender As Object, e As EventArgs) Handles txtSKU2.Leave
+        Me.Cursor = Cursors.WaitCursor
+        Try
+            errProvider.Clear()
+            If cueB = "Edit" Then
+                If dgProductSizes.Rows.Count <> 0 Then
+                    If LTrim(txtSKU2.Text) <> "" Then
+                        getProductColorSizesSKU2B(CInt(dgProductSizes.CurrentRow.Cells("s_rowid").Value), txtSKU2.Text, Me)
+                        pfSKU2id = globalSKU2id
+                        If pfSKU2id <> 0 Then
+                            errProvider.SetError(lblSKU2, "SKU2 has been created already, please type a new one.")
+                            txtSKU2.Focus()
+                        Else
+                            getProductBundleSKU2A(txtSKU2.Text, Me)
+                            pfSKU2id = globalSKU2id
+                            If pfSKU2id <> 0 Then
+                                errProvider.SetError(lblSKU2, "SKU2 has been created already, please type a new one.")
+                                txtSKU2.Focus()
+                            End If
+                        End If
+                    End If
+                End If
+            End If
+        Catch ex As Exception
+            MsgBox(getErrExcptn(ex, Me.Name))
+        Finally
+            conn.Close()
+        End Try
+        Me.Cursor = Cursors.Default
+    End Sub
+
     Private Sub txtEditSeasonCode_Leave(sender As Object, e As EventArgs) Handles txtEditSeasonCode.Leave
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1638,6 +1735,7 @@ Public Class ProductsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     'Private Sub txtEditSeasonCode_TextChanged(sender As Object, e As EventArgs) Handles txtEditSeasonCode.TextChanged
     '    Me.Cursor = Cursors.WaitCursor
     '    Try
@@ -1663,7 +1761,7 @@ Public Class ProductsForm
     '    End Try
     '    Me.Cursor = Cursors.Default
     'End Sub
-    Private Sub msSave_Click(sender As Object, e As EventArgs) Handles msSave.Click
+    Private Async Sub msSave_Click(sender As Object, e As EventArgs) Handles msSave.Click
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
@@ -1703,6 +1801,23 @@ Public Class ProductsForm
                             If pfskuid <> 0 Then
                                 errProvider.SetError(lblSKU, "SKU has been created already, please type a new one.")
                                 txtSKU.Focus()
+                                Exit Try
+                            End If
+                        End If
+                    End If
+                    If LTrim(txtSKU2.Text) <> "" Then
+                        getProductColorSizesSKU2B(globaliproductcolorsizesid:=CInt(dgProductSizes.CurrentRow.Cells("s_rowid").Value), globalisku2:=txtSKU2.Text, globalformname:=Me)
+                        pfSKU2id = globalSKU2id
+                        If pfSKU2id <> 0 Then
+                            errProvider.SetError(lblSKU2, "SKU2 has been created already, please type a new one.")
+                            txtSKU2.Focus()
+                            Exit Try
+                        Else
+                            getProductBundleSKU2A(globalisku2:=txtSKU2.Text, globalformname:=Me)
+                            pfSKU2id = globalSKU2id
+                            If pfSKU2id <> 0 Then
+                                errProvider.SetError(lblSKU2, "SKU2 has been created already, please type a new one.")
+                                txtSKU2.Focus()
                                 Exit Try
                             End If
                         End If
@@ -1780,7 +1895,7 @@ Public Class ProductsForm
                     End If
                     getProductIDA(CInt(dgProductList.CurrentRow.Cells("p_rowid").Value), txtProductCode.Text, Me)
                     If pfproductid = 0 Then
-                        U_Products(CInt(dgProductList.CurrentRow.Cells("p_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, If(pfcategoryid = 0, DBNull.Value, pfcategoryid), If(pfbrandid = 0, DBNull.Value, pfbrandid), If(pfcompanyid = 0, DBNull.Value, pfcompanyid), _
+                        U_Products(CInt(dgProductList.CurrentRow.Cells("p_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, If(pfcategoryid = 0, DBNull.Value, pfcategoryid), If(pfbrandid = 0, DBNull.Value, pfbrandid), If(pfcompanyid = 0, DBNull.Value, pfcompanyid),
                          txtProductCode.Text, txtProductCode.Text, cboUnitOfMeasure.Text, cboBrandName.Text, cboCategory.Text, cboCompany.Text, txtDescription.Text, If(IsNumeric(txtSRP.Text), CDec(txtSRP.Text), 0.0), If(txtImagePath.Text <> "", ImageData, DBNull.Value), Me)
                     End If
                     If myModule.systemerrorfound = True Then
@@ -1800,6 +1915,19 @@ Public Class ProductsForm
                                 End If
                             Else
                                 U_ProductColorSizeSKU(CInt(dgProductSizes.CurrentRow.Cells("s_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, "", Me)
+                            End If
+                            If LTrim(txtSKU2.Text) <> "" Then
+                                getProductColorSizesSKU2B(CInt(dgProductSizes.CurrentRow.Cells("s_rowid").Value), txtSKU2.Text, Me)
+                                pfSKU2id = globalSKU2id
+                                If pfSKU2id = 0 Then
+                                    getProductBundleSKU2A(txtSKU2.Text, Me)
+                                    pfSKU2id = globalSKU2id
+                                    If pfSKU2id = 0 Then
+                                        Await U_ProductColorSizeSKU2(RowID:=CInt(dgProductSizes.CurrentRow.Cells("s_rowid").Value), LastUpd:=Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), LastUpdby:=Z_UserID, SKU2:=txtSKU2.Text, globalformname:=Me)
+                                    End If
+                                End If
+                            Else
+                                Await U_ProductColorSizeSKU2(RowID:=CInt(dgProductSizes.CurrentRow.Cells("s_rowid").Value), LastUpd:=Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), LastUpdby:=Z_UserID, SKU2:=String.Empty, globalformname:=Me)
                             End If
                             If LTrim(txtEditSeasonCode.Text) <> "" Then
                                 getProductColorSizesIDC(CInt(dgProductSizes.CurrentRow.Cells("s_rowid").Value), CInt(dgProductColors.CurrentRow.Cells("c_rowid").Value), CStr(dgProductSizes.CurrentRow.Cells("s_sizes").Value), txtEditSeasonCode.Text, Me)
@@ -1838,6 +1966,7 @@ Public Class ProductsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub tsImport_Click(sender As Object, e As EventArgs) Handles tsImport.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1874,7 +2003,9 @@ Public Class ProductsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #Region "Search/Page Setup"
+
     Private Sub txtSimpleSearch_KeyDown(sender As Object, e As KeyEventArgs) Handles txtSimpleSearch.KeyDown
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1899,6 +2030,7 @@ Public Class ProductsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboSearch1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboSearch1.SelectedIndexChanged
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1922,6 +2054,7 @@ Public Class ProductsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboSearch3_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboSearch3.SelectedIndexChanged
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1945,6 +2078,7 @@ Public Class ProductsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboSearch2_KeyDown(sender As Object, e As KeyEventArgs) Handles cboSearch2.KeyDown
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1989,6 +2123,7 @@ Public Class ProductsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboSearch4_KeyDown(sender As Object, e As KeyEventArgs) Handles cboSearch4.KeyDown
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2033,6 +2168,7 @@ Public Class ProductsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdFirst_Click(sender As Object, e As EventArgs) Handles cmdFirst.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2054,6 +2190,7 @@ Public Class ProductsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdPrev_Click(sender As Object, e As EventArgs) Handles cmdPrev.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2083,6 +2220,7 @@ Public Class ProductsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdNext_Click(sender As Object, e As EventArgs) Handles cmdNext.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2108,6 +2246,7 @@ Public Class ProductsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdLast_Click(sender As Object, e As EventArgs) Handles cmdLast.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2133,6 +2272,7 @@ Public Class ProductsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub txtPage_KeyDown(sender As Object, e As KeyEventArgs) Handles txtPage.KeyDown
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2176,8 +2316,11 @@ Public Class ProductsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #End Region
+
 #Region "Datagrid Errors"
+
     Private Sub dgProductList_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgProductList.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2218,6 +2361,7 @@ Public Class ProductsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgProductColors_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgProductColors.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2258,6 +2402,7 @@ Public Class ProductsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgProductSizes_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgProductSizes.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2298,6 +2443,7 @@ Public Class ProductsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgInventoryLocations_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgInventoryLocations.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2338,6 +2484,7 @@ Public Class ProductsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgRackShelfColumn_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgRackShelfColumn.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2378,5 +2525,7 @@ Public Class ProductsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #End Region
+
 End Class

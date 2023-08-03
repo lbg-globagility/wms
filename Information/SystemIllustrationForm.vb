@@ -1,10 +1,9 @@
 ﻿Imports MySql.Data.MySqlClient
-Imports System.IO
-Imports System.Windows.Forms
-Imports System.Data
+
 Public Class SystemIllustrationForm
     Dim manager As New sqlModule.Manager
-    Dim conn As New MySqlConnection(Manager.GetConnString)
+    Dim conn As New MySqlConnection(manager.GetConnString)
+
     Private Sub pbClose_Click(sender As Object, e As EventArgs) Handles pbClose.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -17,4 +16,5 @@ Public Class SystemIllustrationForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 End Class
