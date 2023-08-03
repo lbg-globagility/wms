@@ -5,3 +5,9 @@ obj/Debug
 packages/MySql.Data.6.9.12
 packages/Spire.Barcode.7.2.0
 packages
+System.Infrastructure/obj/project.nuget.cache
+System.Infrastructure/obj/Debug
+System.Infrastructure/bin/Debug
+System.Core/obj/project.nuget.cache
+System.Core/obj/Debug
+System.Core/bin/Debug
