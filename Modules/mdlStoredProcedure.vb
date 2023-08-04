@@ -3369,7 +3369,7 @@ Module mdlStoredProcedure
     End Function
 
     Public Async Function U_ProductColorSizeSKU2(RowID As Integer,
-        LastUpd As DateTime,
+        LastUpd As Date,
         LastUpdby As Integer,
         SKU2 As String,
         globalformname As Form) As Task(Of Integer)
