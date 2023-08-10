@@ -4,7 +4,7 @@ using WarehouseManagementSystem.Core.Entities.Base;
 namespace WarehouseManagementSystem.Core.Entities
 {
     [Table("productbundles")]
-    public class ProductBundle : OrganizationalEntity
+    public class ProductBundle : AuditableEntity
     {
         public int? BrandID { get; set; }
         public int? CategoryID { get; set; }

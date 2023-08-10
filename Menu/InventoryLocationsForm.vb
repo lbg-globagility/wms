@@ -1,4 +1,8 @@
-﻿Imports MySql.Data.MySqlClient
+﻿Option Strict On
+
+Imports Microsoft.Extensions.DependencyInjection
+Imports MySql.Data.MySqlClient
+Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
 
 Public Class InventoryLocationsForm
     Dim manager As New sqlModule.Manager
@@ -264,7 +268,9 @@ Public Class InventoryLocationsForm
                     If cue = "New" Then
                         rowscount = dgRackShelfColumn.Rows.Count - 1
                         For i = 0 To dgRackShelfColumn.Rows.Count - 1
-                            If "" & dgRackShelfColumn.Rows(i).Cells("rsc_rack").Value & "" & dgRackShelfColumn.Rows(i).Cells("rsc_shelf").Value & "" & dgRackShelfColumn.Rows(i).Cells("rsc_column").Value & "" = "" & cboRack.Text & "" & cboShelf.Text & "" & cboColumn.Text & "" Then
+                            Dim rackShelfColumnConcat = String.Concat({dgRackShelfColumn.Rows(i).Cells("rsc_rack").Value, dgRackShelfColumn.Rows(i).Cells("rsc_shelf").Value, dgRackShelfColumn.Rows(i).Cells("rsc_column").Value})
+
+                            If rackShelfColumnConcat = "" & cboRack.Text & "" & cboShelf.Text & "" & cboColumn.Text & "" Then
                                 errProvider.SetError(btnAddRSC, "The rack,column, and shelf is in the list already.")
                                 cboRack.Focus()
                                 Exit Try
@@ -272,7 +278,7 @@ Public Class InventoryLocationsForm
                                 addRackShelfColumnRow()
                                 For a = 0 To dgRackShelfColumn.Rows.Count - 1
                                     dgRackShelfColumn.CurrentRow.Selected = fraud
-                                    If "" & dgRackShelfColumn.Rows(a).Cells("rsc_rack").Value & "" & dgRackShelfColumn.Rows(a).Cells("rsc_shelf").Value & "" & dgRackShelfColumn.Rows(a).Cells("rsc_column").Value & "" = "" & cboRack.Text & "" & cboShelf.Text & "" & cboColumn.Text & "" Then
+                                    If String.Concat({dgRackShelfColumn.Rows(a).Cells("rsc_rack").Value, dgRackShelfColumn.Rows(a).Cells("rsc_shelf").Value, dgRackShelfColumn.Rows(a).Cells("rsc_column").Value}) = "" & cboRack.Text & "" & cboShelf.Text & "" & cboColumn.Text & "" Then
                                         dgRackShelfColumn.Rows(dgRackShelfColumn.Rows.Count - 1).Selected = legit
                                         dgRackShelfColumn.FirstDisplayedScrollingRowIndex = dgRackShelfColumn.RowCount - 1
                                         Exit For
@@ -296,7 +302,7 @@ Public Class InventoryLocationsForm
                         Else
                             rowscount = dgRackShelfColumn.Rows.Count - 1
                             For i = 0 To dgRackShelfColumn.Rows.Count - 1
-                                If "" & dgRackShelfColumn.Rows(i).Cells("rsc_rack").Value & "" & dgRackShelfColumn.Rows(i).Cells("rsc_shelf").Value & "" & dgRackShelfColumn.Rows(i).Cells("rsc_column").Value & "" = "" & cboRack.Text & "" & cboShelf.Text & "" & cboColumn.Text & "" Then
+                                If String.Concat({dgRackShelfColumn.Rows(i).Cells("rsc_rack").Value, dgRackShelfColumn.Rows(i).Cells("rsc_shelf").Value, dgRackShelfColumn.Rows(i).Cells("rsc_column").Value}) = "" & cboRack.Text & "" & cboShelf.Text & "" & cboColumn.Text & "" Then
                                     errProvider.SetError(btnAddRSC, "The rack,column, and shelf is in the list already.")
                                     cboRack.Focus()
                                     Exit Try
@@ -315,7 +321,7 @@ Public Class InventoryLocationsForm
                                     addRackShelfColumnRow()
                                     For a = 0 To dgRackShelfColumn.Rows.Count - 1
                                         dgRackShelfColumn.CurrentRow.Selected = fraud
-                                        If "" & dgRackShelfColumn.Rows(a).Cells("rsc_rack").Value & "" & dgRackShelfColumn.Rows(a).Cells("rsc_shelf").Value & "" & dgRackShelfColumn.Rows(a).Cells("rsc_column").Value & "" = "" & cboRack.Text & "" & cboShelf.Text & "" & cboColumn.Text & "" Then
+                                        If String.Concat({dgRackShelfColumn.Rows(a).Cells("rsc_rack").Value, dgRackShelfColumn.Rows(a).Cells("rsc_shelf").Value, dgRackShelfColumn.Rows(a).Cells("rsc_column").Value}) = "" & cboRack.Text & "" & cboShelf.Text & "" & cboColumn.Text & "" Then
                                             dgRackShelfColumn.Rows(dgRackShelfColumn.Rows.Count - 1).Selected = legit
                                             dgRackShelfColumn.FirstDisplayedScrollingRowIndex = dgRackShelfColumn.RowCount - 1
                                             Exit For
@@ -323,7 +329,7 @@ Public Class InventoryLocationsForm
                                     Next
                                     cleargbAddRSC() : cboRack.Focus()
                                     For a As Integer = 0 To dgRackShelfColumn.Rows.Count - 1
-                                        If dgRackShelfColumn.Rows(a).Cells("rsc_seqno").Value = neutralpage Then
+                                        If CInt(dgRackShelfColumn.Rows(a).Cells("rsc_seqno").Value) = neutralpage Then
                                             itemno = startingpage
                                         Else
                                             itemno = CInt(dgRackShelfColumn.Rows(a).Cells("rsc_seqno").Value)
@@ -343,7 +349,7 @@ Public Class InventoryLocationsForm
                     addRackShelfColumnRow()
                     For a = 0 To dgRackShelfColumn.Rows.Count - 1
                         dgRackShelfColumn.CurrentRow.Selected = fraud
-                        If "" & dgRackShelfColumn.Rows(a).Cells("rsc_rack").Value & "" & dgRackShelfColumn.Rows(a).Cells("rsc_shelf").Value & "" & dgRackShelfColumn.Rows(a).Cells("rsc_column").Value & "" = "" & cboRack.Text & "" & cboShelf.Text & "" & cboColumn.Text & "" Then
+                        If String.Concat({dgRackShelfColumn.Rows(a).Cells("rsc_rack").Value, dgRackShelfColumn.Rows(a).Cells("rsc_shelf").Value, dgRackShelfColumn.Rows(a).Cells("rsc_column").Value}) = "" & cboRack.Text & "" & cboShelf.Text & "" & cboColumn.Text & "" Then
                             dgRackShelfColumn.Rows(dgRackShelfColumn.Rows.Count - 1).Selected = legit
                             dgRackShelfColumn.FirstDisplayedScrollingRowIndex = dgRackShelfColumn.RowCount - 1
                             Exit For
@@ -414,11 +420,11 @@ Public Class InventoryLocationsForm
             If countpagenum < pagedivisor Then
                 validpages = startingpage
             Else
-                additionalpage = countpagenum / pagedivisor
+                additionalpage = CDec(countpagenum / pagedivisor)
                 If additionalpage = Int(additionalpage) Then
-                    validpages = countpagenum / pagedivisor
+                    validpages = CInt(countpagenum / pagedivisor)
                 Else
-                    validpages = countpagenum / pagedivisor
+                    validpages = CInt(countpagenum / pagedivisor)
                     validpages = validpages + startingpage
                 End If
             End If
@@ -434,9 +440,9 @@ Public Class InventoryLocationsForm
             countpagenum = 0
             If conn.State = ConnectionState.Open Then conn.Close()
             Dim dtCid As New DataTable
-            dtCid = getDataTableForSQL("SELECT COUNT(il.rowid) FROM inventorylocations il WHERE il.organizationid = " & Z_OrganizationID & " ")
+            dtCid = CType(getDataTableForSQL(COMMD:=$"SELECT COUNT(il.rowid) FROM inventorylocations il WHERE il.organizationid = {Z_OrganizationID}"), DataTable)
             If dtCid.Rows.Count <> 0 Then
-                countpagenum = dtCid.Rows(0)(0)
+                countpagenum = CInt(dtCid.Rows(0)(0))
             Else
                 countpagenum = 0
             End If
@@ -453,11 +459,11 @@ Public Class InventoryLocationsForm
             If countpagenum < pagedivisor Then
                 validpages = startingpage
             Else
-                additionalpage = countpagenum / pagedivisor
+                additionalpage = CDec(countpagenum / pagedivisor)
                 If additionalpage = Int(additionalpage) Then
-                    validpages = countpagenum / pagedivisor
+                    validpages = CInt(countpagenum / pagedivisor)
                 Else
-                    validpages = countpagenum / pagedivisor
+                    validpages = CInt(countpagenum / pagedivisor)
                     validpages = validpages + startingpage
                 End If
             End If
@@ -473,10 +479,9 @@ Public Class InventoryLocationsForm
             countpagenum = 0
             If conn.State = ConnectionState.Open Then conn.Close()
             Dim dtCid As New DataTable
-            dtCid = getDataTableForSQL("SELECT COUNT(il.rowid) FROM inventorylocations il LEFT JOIN rackshelfcolumn rsc ON il.rowid = rsc.inventorylocationid " &
-                        "WHERE il.organizationid = " & Z_OrganizationID & " AND (il.name LIKE ""%" & esearchstring & "%"" OR il.type LIKE ""%" & esearchstring & "%"" OR rsc.rackno LIKE ""%" & esearchstring & "%"" OR rsc.shelfno LIKE ""%" & esearchstring & "%"" OR rsc.columnno LIKE ""%" & esearchstring & "%"")")
+            dtCid = CType(getDataTableForSQL($"SELECT COUNT(il.rowid) FROM inventorylocations il LEFT JOIN rackshelfcolumn rsc ON il.rowid = rsc.inventorylocationid  WHERE il.organizationid = {Z_OrganizationID} AND (il.name LIKE ""%{esearchstring}%"" OR il.type LIKE ""%{esearchstring}%"" OR rsc.rackno LIKE ""%{esearchstring}%"" OR rsc.shelfno LIKE ""%{esearchstring}%"" OR rsc.columnno LIKE ""%{esearchstring}%"")"), DataTable)
             If dtCid.Rows.Count <> 0 Then
-                countpagenum = dtCid.Rows(0)(0)
+                countpagenum = CInt(dtCid.Rows(0)(0))
             Else
                 countpagenum = 0
             End If
@@ -493,11 +498,11 @@ Public Class InventoryLocationsForm
             If countpagenum < pagedivisor Then
                 validpages = startingpage
             Else
-                additionalpage = countpagenum / pagedivisor
+                additionalpage = CDec(countpagenum / pagedivisor)
                 If additionalpage = Int(additionalpage) Then
-                    validpages = countpagenum / pagedivisor
+                    validpages = CInt(countpagenum / pagedivisor)
                 Else
-                    validpages = countpagenum / pagedivisor
+                    validpages = CInt(countpagenum / pagedivisor)
                     validpages = validpages + startingpage
                 End If
             End If
@@ -513,9 +518,9 @@ Public Class InventoryLocationsForm
             countpagenum = 0
             If conn.State = ConnectionState.Open Then conn.Close()
             Dim dtCid As New DataTable
-            dtCid = getDataTableForSQL("SELECT COUNT(il.rowid) FROM inventorylocations il LEFT JOIN rackshelfcolumn rsc ON il.rowid = rsc.inventorylocationid WHERE il.organizationid = " & Z_OrganizationID & " AND " & ecommontring & " ")
+            dtCid = CType(getDataTableForSQL($"SELECT COUNT(il.rowid) FROM inventorylocations il LEFT JOIN rackshelfcolumn rsc ON il.rowid = rsc.inventorylocationid WHERE il.organizationid = {Z_OrganizationID} AND {ecommontring} "), DataTable)
             If dtCid.Rows.Count <> 0 Then
-                countpagenum = dtCid.Rows(0)(0)
+                countpagenum = CInt(dtCid.Rows(0)(0))
             Else
                 countpagenum = 0
             End If
@@ -551,11 +556,11 @@ Public Class InventoryLocationsForm
             If rcscountpagenum < pagedivisor Then
                 rcsvalidpages = startingpage
             Else
-                additionalpage = rcscountpagenum / pagedivisor
+                additionalpage = CDec(rcscountpagenum / pagedivisor)
                 If additionalpage = Int(additionalpage) Then
-                    rcsvalidpages = rcscountpagenum / pagedivisor
+                    rcsvalidpages = CInt(rcscountpagenum / pagedivisor)
                 Else
-                    rcsvalidpages = rcscountpagenum / pagedivisor
+                    rcsvalidpages = CInt(rcscountpagenum / pagedivisor)
                     rcsvalidpages = rcsvalidpages + startingpage
                 End If
             End If
@@ -571,9 +576,9 @@ Public Class InventoryLocationsForm
             rcscountpagenum = 0
             If conn.State = ConnectionState.Open Then conn.Close()
             Dim dtCid As New DataTable
-            dtCid = getDataTableForSQL("SELECT COALESCE(COUNT(rcs.rowid),0) FROM rackshelfcolumn rcs WHERE rcs.organizationid = " & Z_OrganizationID & " AND rcs.inventorylocationid = " & einventorylocationid & " ")
+            dtCid = CType(getDataTableForSQL($"SELECT COALESCE(COUNT(rcs.rowid),0) FROM rackshelfcolumn rcs WHERE rcs.organizationid = {Z_OrganizationID} AND rcs.inventorylocationid = {einventorylocationid} "), DataTable)
             If dtCid.Rows.Count <> 0 Then
-                rcscountpagenum = dtCid.Rows(0)(0)
+                rcscountpagenum = CInt(dtCid.Rows(0)(0))
             Else
                 rcscountpagenum = 0
             End If
@@ -944,14 +949,14 @@ Public Class InventoryLocationsForm
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             While reader1.Read()
                 If reader1.HasRows Then
-                    txtLocationName.Text = reader1(0)
-                    cboLocationType.Text = reader1(1)
-                    txtMainPhone.Text = reader1(2)
-                    txtAddress.Text = reader1(7)
-                    txtAlternatePhone.Text = reader1(3)
-                    txtFaxNo.Text = reader1(4)
-                    txtComments.Text = reader1(5)
-                    iladdressid = reader1(6)
+                    txtLocationName.Text = CStr(If(reader1(0) Is Nothing, String.Empty, reader1(0)))
+                    cboLocationType.Text = CStr(If(reader1(1) Is Nothing, String.Empty, reader1(1)))
+                    txtMainPhone.Text = CStr(If(reader1(2) Is Nothing, String.Empty, reader1(2)))
+                    txtAddress.Text = CStr(If(reader1(7) Is Nothing, String.Empty, reader1(7)))
+                    txtAlternatePhone.Text = CStr(If(reader1(3) Is Nothing, String.Empty, reader1(3)))
+                    txtFaxNo.Text = CStr(If(reader1(4) Is Nothing, String.Empty, reader1(4)))
+                    txtComments.Text = CStr(If(reader1(5) Is Nothing, String.Empty, reader1(5)))
+                    iladdressid = CInt(If(reader1(6) Is Nothing, New Integer(), reader1(6)))
                 End If
             End While
             reader1.Close()
@@ -1069,7 +1074,7 @@ Public Class InventoryLocationsForm
             If dgProducts.Rows.Count <> 0 Then
                 For i As Integer = 0 To dgProducts.Rows.Count - 1
                     If CStr(dgProducts.Rows(i).Cells("p_colorvalue").Value) <> "" Then
-                        readcolor = colorconverter.ConvertFromString(CStr(dgProducts.Rows(i).Cells("p_colorvalue").Value))
+                        readcolor = CType(colorconverter.ConvertFromString(CStr(dgProducts.Rows(i).Cells("p_colorvalue").Value)), Color)
                         dgProducts.Rows(i).Cells("p_color").Style.BackColor = readcolor
                     End If
                 Next
@@ -1706,7 +1711,7 @@ Public Class InventoryLocationsForm
             If dgRackShelfColumn.Rows.Count <> 0 Then
                 If cue = "Edit" Then
                     If IsNumeric(dgRackShelfColumn.CurrentRow.Cells("rsc_rowid").Value) Then
-                        If dgRackShelfColumn.CurrentRow.Cells("rsc_rowid").Value <> 0 Then
+                        If CInt(dgRackShelfColumn.CurrentRow.Cells("rsc_rowid").Value) <> 0 Then
                             displayProducts(CInt(dgRackShelfColumn.CurrentRow.Cells("rsc_rowid").Value))
                             colorCoding() : totalcomputation()
                         Else
@@ -1738,7 +1743,7 @@ Public Class InventoryLocationsForm
                 If e.KeyCode = Keys.Up Or e.KeyCode = Keys.Down Or e.KeyCode = Keys.PageUp Or e.KeyCode = Keys.PageDown Or e.KeyCode = Keys.Enter Or e.KeyCode = Keys.Tab Then
                     If cue = "Edit" Then
                         If IsNumeric(dgRackShelfColumn.CurrentRow.Cells("rsc_rowid").Value) Then
-                            If dgRackShelfColumn.CurrentRow.Cells("rsc_rowid").Value <> 0 Then
+                            If CInt(dgRackShelfColumn.CurrentRow.Cells("rsc_rowid").Value) <> 0 Then
                                 displayProducts(CInt(dgRackShelfColumn.CurrentRow.Cells("rsc_rowid").Value))
                                 colorCoding() : totalcomputation()
                             Else
@@ -1769,7 +1774,7 @@ Public Class InventoryLocationsForm
             If dgRackShelfColumn.Rows.Count <> 0 Then
                 If e.ColumnIndex = dgRackShelfColumn.Columns("rsc_option").Index Then
                     If IsNumeric(dgRackShelfColumn.CurrentRow.Cells("rsc_rowid").Value) Then
-                        If dgRackShelfColumn.CurrentRow.Cells("rsc_rowid").Value = 0 Then
+                        If CInt(dgRackShelfColumn.CurrentRow.Cells("rsc_rowid").Value) = 0 Then
                             cmsEdit.Visible = fraud
                             cmsDelete.Visible = legit
                         Else
@@ -1813,7 +1818,7 @@ Public Class InventoryLocationsForm
         Try
             If dgRackShelfColumn.Rows.Count <> 0 Then
                 If IsNumeric(dgRackShelfColumn.CurrentRow.Cells("rsc_rowid").Value) Then
-                    If dgRackShelfColumn.CurrentRow.Cells("rsc_rowid").Value = 0 Then
+                    If CInt(dgRackShelfColumn.CurrentRow.Cells("rsc_rowid").Value) = 0 Then
                         If dgRackShelfColumn.SelectedRows.Count > 0 Then
                             dgRackShelfColumn.Rows.Remove(dgRackShelfColumn.SelectedRows(0))
                         End If
@@ -1826,10 +1831,10 @@ Public Class InventoryLocationsForm
                     End If
                 End If
                 For a As Integer = 0 To dgRackShelfColumn.Rows.Count - 1
-                    If dgRackShelfColumn.Rows(a).Cells("rsc_seqno").Value = neutralpage Then
+                    If CInt(dgRackShelfColumn.Rows(a).Cells("rsc_seqno").Value) = neutralpage Then
                         itemno = startingpage
                     Else
-                        itemno = dgRackShelfColumn.Rows(a).Cells("rsc_seqno").Value
+                        itemno = CInt(dgRackShelfColumn.Rows(a).Cells("rsc_seqno").Value)
                     End If
                     Exit For
                 Next
@@ -1899,11 +1904,12 @@ Public Class InventoryLocationsForm
         Me.Cursor = Cursors.Default
     End Sub
 
-    Private Sub msSave_Click(sender As Object, e As EventArgs) Handles msSave.Click
+    Private Async Sub msSave_Click(sender As Object, e As EventArgs) Handles msSave.Click
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
-            dgRackShelfColumn.CommitEdit(legit) : dgRackShelfColumn.ClearSelection() : dgRackShelfColumn.CurrentCell = Nothing
+            'dgRackShelfColumn.CommitEdit(legit)
+            dgRackShelfColumn.CommitEdit(Nothing) : dgRackShelfColumn.ClearSelection() : dgRackShelfColumn.CurrentCell = Nothing
             getPositionID(Me)
             If globalpositionid <> 0 Then
                 getPositionView(globalpositionid, "Inventory Locations", Me)
@@ -1953,7 +1959,7 @@ Public Class InventoryLocationsForm
                             txtLocationName.Focus()
                             Exit Try
                         End If
-                        I_InventoryLocations(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, If(iladdressid = 0, DBNull.Value, iladdressid), txtLocationName.Text, cboLocationType.Text,
+                        I_InventoryLocations(Z_OrganizationID, Date.Now, Z_UserID, Z_UserID, If(iladdressid = 0, New Integer?, iladdressid), txtLocationName.Text, cboLocationType.Text,
                                     txtMainPhone.Text, txtAlternatePhone.Text, txtFaxNo.Text, "Active", txtComments.Text, Me)
                         If myModule.systemerrorfound = False Then
                             If dgRackShelfColumn.Rows.Count <> 0 Then
@@ -1961,7 +1967,7 @@ Public Class InventoryLocationsForm
                                 ilinventorylocationid = globalinventorylocationid
                                 For a = 0 To dgRackShelfColumn.Rows.Count - 1
                                     If myModule.systemerrorfound = False Then
-                                        I_RackShelfColumn(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, ilinventorylocationid, CStr(dgRackShelfColumn.Rows(a).Cells("rsc_rack").Value), CStr(dgRackShelfColumn.Rows(a).Cells("rsc_shelf").Value),
+                                        I_RackShelfColumn(Z_OrganizationID, Date.Now, Z_UserID, Z_UserID, ilinventorylocationid, CStr(dgRackShelfColumn.Rows(a).Cells("rsc_rack").Value), CStr(dgRackShelfColumn.Rows(a).Cells("rsc_shelf").Value),
                                              CStr(dgRackShelfColumn.Rows(a).Cells("rsc_column").Value), CInt(dgRackShelfColumn.Rows(a).Cells("rsc_pickorderno").Value), CStr(dgRackShelfColumn.Rows(a).Cells("rsc_remarks").Value), "Active", Me)
                                     Else
                                         Exit Try
@@ -1970,6 +1976,24 @@ Public Class InventoryLocationsForm
                             End If
                         End If
                         If myModule.systemerrorfound = False Then
+                            Me.Cursor = Cursors.Default
+
+                            Await Task.
+                                Run(Async Function()
+                                        Dim inventoryLocationDataService = MainServiceProvider.GetRequiredService(Of IInventoryLocationDataService)
+
+                                        Await inventoryLocationDataService.PopulateWithProductColorSizesAsync(
+                                            inventoryLocationName:=txtLocationName.Text.Trim,
+                                            userId:=Z_UserID)
+
+                                        MessageBox.Show(text:="New inventory location created successfully!",
+                                            caption:="Success — created inventory location",
+                                            buttons:=MessageBoxButtons.OK,
+                                            icon:=MessageBoxIcon.Information)
+
+                                        Return Task.FromResult(False)
+                                    End Function)
+
                             myBalloon("Successfully Save", "Save", lblsavemsg, -15, -65)
                         End If
                     ElseIf cue = "Edit" Then
@@ -1982,17 +2006,17 @@ Public Class InventoryLocationsForm
                             txtLocationName.Focus()
                             Exit Try
                         End If
-                        U_InventoryLocations(CInt(dgInventoryLocationList.CurrentRow.Cells("il_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, If(iladdressid = 0, DBNull.Value, iladdressid), txtLocationName.Text, cboLocationType.Text,
+                        U_InventoryLocations(CInt(dgInventoryLocationList.CurrentRow.Cells("il_rowid").Value), Date.Now, Z_UserID, iladdressid, txtLocationName.Text, cboLocationType.Text,
                                     txtMainPhone.Text, txtAlternatePhone.Text, txtFaxNo.Text, txtComments.Text, Me)
                         If myModule.systemerrorfound = False Then
                             If dgRackShelfColumn.Rows.Count <> 0 Then
                                 For a = 0 To dgRackShelfColumn.Rows.Count - 1
                                     If myModule.systemerrorfound = False Then
                                         If CStr(dgRackShelfColumn.Rows(a).Cells("rsc_rowid").Value) = "" Then
-                                            getRackShelfColumnID("" & dgRackShelfColumn.Rows(a).Cells("rsc_rack").Value & "" & dgRackShelfColumn.Rows(a).Cells("rsc_shelf").Value & "" & dgRackShelfColumn.Rows(a).Cells("rsc_column").Value & "", CInt(dgInventoryLocationList.CurrentRow.Cells("il_rowid").Value), Me)
+                                            getRackShelfColumnID(String.Concat({dgRackShelfColumn.Rows(a).Cells("rsc_rack").Value, dgRackShelfColumn.Rows(a).Cells("rsc_shelf").Value, dgRackShelfColumn.Rows(a).Cells("rsc_column").Value}), CInt(dgInventoryLocationList.CurrentRow.Cells("il_rowid").Value), Me)
                                             ilrackshelfcolumnid = globalrackshelfcolumnid
                                             If ilrackshelfcolumnid = 0 Then
-                                                I_RackShelfColumn(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, CInt(dgInventoryLocationList.CurrentRow.Cells("il_rowid").Value), CStr(dgRackShelfColumn.Rows(a).Cells("rsc_rack").Value),
+                                                I_RackShelfColumn(Z_OrganizationID, Date.Now, Z_UserID, Z_UserID, CInt(dgInventoryLocationList.CurrentRow.Cells("il_rowid").Value), CStr(dgRackShelfColumn.Rows(a).Cells("rsc_rack").Value),
                                                     CStr(dgRackShelfColumn.Rows(a).Cells("rsc_shelf").Value), CStr(dgRackShelfColumn.Rows(a).Cells("rsc_column").Value), CInt(dgRackShelfColumn.Rows(a).Cells("rsc_pickorderno").Value), CStr(dgRackShelfColumn.Rows(a).Cells("rsc_remarks").Value), "Active", Me)
                                             End If
                                         End If
@@ -2310,13 +2334,14 @@ Public Class InventoryLocationsForm
                             spagenum = neutralpage
                         Else
                             pageequation1 = CInt(txtPage.Text) * pagedivisor
-                            pageequation2 = ((CInt(txtPage.Text) / validpages) * countpagenum)
+                            pageequation2 = CDec((CInt(txtPage.Text) / validpages * countpagenum))
                             If pageequation1 < pageequation2 Then
-                                pageequation3 = ((CInt(txtPage.Text) / validpages) * countpagenum) - (pageequation2 - pageequation1)
+                                pageequation3 = CDec((CInt(txtPage.Text) / validpages * countpagenum) - (pageequation2 - pageequation1))
                             Else
-                                pageequation3 = (CInt(txtPage.Text) / validpages) * countpagenum
+                                pageequation3 =
+                                    CDec(CInt(txtPage.Text) / validpages * countpagenum)
                             End If
-                            spagenum = pageequation3 - pagedivisor
+                            spagenum = CInt(pageequation3 - pagedivisor)
                         End If
                         numofpages = CInt(txtPage.Text)
                         If searchmode = "Basic" Then

@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using WarehouseManagementSystem.Core.Entities.Base;
 
 namespace WarehouseManagementSystem.Core.Entities
 {
     [Table("products")]
-    public class Product : OrganizationalEntity
+    public partial class Product : AuditableEntity
     {
         public int? CategoryID { get; set; }
         public int? BrandID { get; set; }
@@ -32,5 +33,10 @@ namespace WarehouseManagementSystem.Core.Entities
         public DateTime LastPurchaseDate { get; set; }
         public DateTime LastSoldDate { get; set; }
         //public longblob? Image { get; set; }
+    }
+
+    public partial class Product
+    {
+        public virtual ICollection<ProductColor> ProductColors { get; set; }
     }
 }

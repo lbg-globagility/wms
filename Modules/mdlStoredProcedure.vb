@@ -1337,7 +1337,7 @@ Module mdlStoredProcedure
                                      ByVal Created As DateTime,
                                      ByVal CreatedBy As Integer,
                                      ByVal LastUpdBy As Integer,
-                                     ByVal AddressID As Object,
+                                     ByVal AddressID As Integer?,
                                      ByVal Name As String,
                                      ByVal Type As String,
                                      ByVal MainPhone As String,
@@ -1358,7 +1358,7 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("I_Created", Created)
                 .Parameters.AddWithValue("I_CreatedBy", CreatedBy)
                 .Parameters.AddWithValue("I_LastUpdBy", LastUpdBy)
-                .Parameters.AddWithValue("I_AddressID", AddressID)
+                .Parameters.AddWithValue("I_AddressID", If(AddressID.HasValue AndAlso AddressID.Value > 0, AddressID.Value, DBNull.Value))
                 .Parameters.AddWithValue("I_Name", Name)
                 .Parameters.AddWithValue("I_Type", Type)
                 .Parameters.AddWithValue("I_MainPhone", MainPhone)
@@ -1380,7 +1380,7 @@ Module mdlStoredProcedure
     Public Function U_InventoryLocations(ByVal RowID As Integer,
                                      ByVal LastUpd As DateTime,
                                      ByVal LastUpdby As Integer,
-                                     ByVal AddressID As Object,
+                                     ByVal AddressID As Integer?,
                                      ByVal Name As String,
                                      ByVal Type As String,
                                      ByVal MainPhone As String,
@@ -1398,7 +1398,7 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_RowID", RowID)
                 .Parameters.AddWithValue("U_LastUpd", LastUpd)
                 .Parameters.AddWithValue("U_LastUpdBy", LastUpdby)
-                .Parameters.AddWithValue("U_AddressID", AddressID)
+                .Parameters.AddWithValue("U_AddressID", If(AddressID.HasValue AndAlso AddressID.Value > 0, AddressID.Value, DBNull.Value))
                 .Parameters.AddWithValue("U_Name", Name)
                 .Parameters.AddWithValue("U_Type", Type)
                 .Parameters.AddWithValue("U_MainPhone", MainPhone)

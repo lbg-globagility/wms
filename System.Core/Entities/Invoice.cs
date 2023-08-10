@@ -5,7 +5,7 @@ using WarehouseManagementSystem.Core.Entities.Base;
 namespace WarehouseManagementSystem.Core.Entities
 {
     [Table("invoice")]
-    public class Invoice : OrganizationalEntity
+    public class Invoice : AuditableEntity
     {
         public int? InvoiceNo { get; set; }
         public DateTime? InvoiceDate { get; set; }

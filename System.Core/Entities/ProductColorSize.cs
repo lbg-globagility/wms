@@ -1,13 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using WarehouseManagementSystem.Core.Entities.Base;
 
 namespace WarehouseManagementSystem.Core.Entities
 {
     [Table("productcolorsizes")]
-    public class ProductColorSize : OrganizationalEntity
+    public partial class ProductColorSize : AuditableEntity
     {
+        ////[ForeignKey("ProductColor")]
         public int ProductColorID { get; set; }
+
         public decimal Size { get; set; }
         public int? TotalAvailableQty { get; set; }
         public int? TotalDamageQty { get; set; }
@@ -20,5 +23,12 @@ namespace WarehouseManagementSystem.Core.Entities
         public string Status { get; set; }
         public string BarCode { get; set; }
         public string Type { get; set; }
+    }
+
+    public partial class ProductColorSize
+    {
+        public virtual ProductColor ProductColor { get; set; }
+
+        public virtual ICollection<ProductInventoryLocation> ProductInventoryLocations { get; set; }
     }
 }

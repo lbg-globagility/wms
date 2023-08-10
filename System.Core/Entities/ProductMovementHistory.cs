@@ -4,7 +4,7 @@ using WarehouseManagementSystem.Core.Entities.Base;
 namespace WarehouseManagementSystem.Core.Entities
 {
     [Table("productmovementhistory")]
-    public class ProductMovementHistory : OrganizationalEntity
+    public class ProductMovementHistory : AuditableEntity
     {
         public int? OrderID { get; set; }
         public int? LineUpID { get; set; }

@@ -4,7 +4,7 @@ using WarehouseManagementSystem.Core.Entities.Base;
 namespace WarehouseManagementSystem.Core.Entities
 {
     [Table("picklistorderitems")]
-    public class PickListOrderItem : OrganizationalEntity
+    public class PickListOrderItem : AuditableEntity
     {
         public int PickListOrderID { get; set; }
         public int ProductInventoryLocationID { get; set; }

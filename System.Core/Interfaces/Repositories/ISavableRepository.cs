@@ -20,6 +20,8 @@ namespace WarehouseManagementSystem.Core.Interfaces.Repositories
 
         Task<ICollection<T>> GetManyByIdsAsync(int[] ids);
 
+        Task<ICollection<T>> GetManyByOrganizationIdsAsync(int organizationId);
+
         Task SaveAsync(T entity);
 
         Task SaveManyAsync(List<T> added = null, List<T> updated = null, List<T> deleted = null);

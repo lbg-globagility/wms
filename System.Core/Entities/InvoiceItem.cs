@@ -5,7 +5,7 @@ using WarehouseManagementSystem.Core.Entities.Base;
 namespace WarehouseManagementSystem.Core.Entities
 {
     [Table("invoiceitems")]
-    public class InvoiceItem : OrganizationalEntity
+    public class InvoiceItem : AuditableEntity
     {
         public string ItemCode { get; set; }
         public string ItemDescription { get; set; }

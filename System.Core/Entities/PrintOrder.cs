@@ -4,7 +4,7 @@ using WarehouseManagementSystem.Core.Entities.Base;
 namespace WarehouseManagementSystem.Core.Entities
 {
     [Table("printorder")]
-    public class PrintOrder : OrganizationalEntity
+    public class PrintOrder : AuditableEntity
     {
         public string PrintValue { get; set; }
 

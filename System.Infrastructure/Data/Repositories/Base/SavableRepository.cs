@@ -7,7 +7,7 @@ using WarehouseManagementSystem.Core.Interfaces.Repositories;
 
 namespace WarehouseManagementSystem.Infrastructure.Data.Repositories.Base
 {
-    public abstract class SavableRepository<T> : BaseRepository, ISavableRepository<T> where T : BaseEntity
+    public abstract class SavableRepository<T> : BaseRepository, ISavableRepository<T> where T : AuditableEntity
     {
         protected readonly SystemContext _context;
 
@@ -89,7 +89,9 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories.Base
             {
                 added.ForEach(entity =>
                 {
-                    _context.Entry(entity).State = EntityState.Added;
+                    if (entity.IsNewEntity) _context.Set<T>().Add(entity);
+                    //_context.Entry(entity).State = EntityState.Added;
+
                     DetachNavigationProperties(entity);
                 });
             }
@@ -141,6 +143,14 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories.Base
             _context.RemoveRange(entities);
 
             await _context.SaveChangesAsync();
+        }
+
+        public virtual async Task<ICollection<T>> GetManyByOrganizationIdsAsync(int organizationId)
+        {
+            return await _context.Set<T>()
+                .AsNoTracking()
+                .Where(x => x.OrganizationID == organizationId)
+                .ToListAsync();
         }
     }
 }

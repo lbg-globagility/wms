@@ -5,7 +5,7 @@ using WarehouseManagementSystem.Core.Entities.Base;
 namespace WarehouseManagementSystem.Core.Entities
 {
     [Table("productshipmenthistory")]
-    public class ProductShipmentHistory : OrganizationalEntity
+    public class ProductShipmentHistory : AuditableEntity
     {
         public int? ShipmentCount { get; set; }
         public DateTime? ShipmentDate { get; set; }

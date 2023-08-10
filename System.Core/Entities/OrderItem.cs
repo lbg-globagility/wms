@@ -5,11 +5,11 @@ using WarehouseManagementSystem.Core.Entities.Base;
 namespace WarehouseManagementSystem.Core.Entities
 {
     [Table("orderitems")]
-    public class OrderItem : OrganizationalEntity
+    public class OrderItem : AuditableEntity
     {
         public int? AccountID { get; set; }
 
-        [ForeignKey("Order")]
+        //[ForeignKey("Order")]
         public int OrderID { get; set; }
 
         public int? ProductColorSizeID { get; set; }

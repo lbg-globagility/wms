@@ -5,10 +5,14 @@ using WarehouseManagementSystem.Core.Entities.Base;
 namespace WarehouseManagementSystem.Core.Entities
 {
     [Table("productinventorylocation")]
-    public class ProductInventoryLocation : OrganizationalEntity
+    public partial class ProductInventoryLocation : AuditableEntity
     {
-        public int RackShelfColumnID { get; set; }
+        ////[ForeignKey("RackShelfColumn")]
+        public int? RackShelfColumnID { get; set; }
+
+        ////[ForeignKey("ProductColorSize")]
         public int ProductColorSizeID { get; set; }
+
         public int? TotalAvailableQty { get; set; }
         public int? TotalAllocatedQty { get; set; }
         public int? TotalReserveQty { get; set; }
@@ -19,5 +23,30 @@ namespace WarehouseManagementSystem.Core.Entities
         public int? RunningTotalQty { get; set; }
         public decimal? UnitPrice { get; set; }
         public DateTime? LastInventoryCount { get; set; }
+    }
+
+    public partial class ProductInventoryLocation
+    {
+        private ProductInventoryLocation()
+        {
+        }
+
+        public ProductInventoryLocation(int organizationId,
+            int userId,
+            int productColorSizeId)
+        {
+            OrganizationID = organizationId;
+            CreatedBy = userId;
+            ProductColorSizeID = productColorSizeId;
+        }
+
+        public virtual ProductColorSize ProductColorSize { get; set; }
+        public virtual RackShelfColumn RackShelfColumn { get; set; }
+
+        public static ProductInventoryLocation NewProductInventoryLocation(int organizationId,
+            int userId,
+            int productColorSizeId) => new ProductInventoryLocation(organizationId: organizationId,
+                userId: userId,
+                productColorSizeId: productColorSizeId);
     }
 }

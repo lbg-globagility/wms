@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WarehouseManagementSystem.Core.Entities.Base
 {
-    public abstract class AuditableEntity : BaseEntity
+    public abstract class AuditableEntity : OrganizationalEntity
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public DateTime Created { get; private set; }

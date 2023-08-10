@@ -5,7 +5,11 @@ Imports Microsoft.Extensions.DependencyInjection
 Imports Microsoft.Extensions.Logging
 Imports Microsoft.Extensions.Logging.Console
 Imports WarehouseManagementSystem.Core.Interfaces
+Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
+Imports WarehouseManagementSystem.Core.Interfaces.Repositories
 Imports WarehouseManagementSystem.Infrastructure.Data
+Imports WarehouseManagementSystem.Infrastructure.Data.Repositories
+Imports WarehouseManagementSystem.Infrastructure.Data.Services
 
 Public Class DependencyInjectionHelper
 
@@ -26,6 +30,17 @@ Public Class DependencyInjectionHelper
 
         With services
             .AddTransient(Of ISystemOwnerService, SystemOwnerService)
+            .AddTransient(Of IInventoryLocationDataService, InventoryLocationDataService)
+            .AddTransient(Of IProductInventoryLocationDataService, ProductInventoryLocationDataService)
+
+            .AddTransient(Of IInventoryLocationRepository, InventoryLocationRepository)
+            .AddTransient(Of IProductColorSizeRepository, ProductColorSizeRepository)
+            .AddTransient(Of IProductInventoryLocationRepository, ProductInventoryLocationRepository)
+            .AddTransient(Of IProductRepository, ProductRepository)
+            .AddTransient(Of IRackShelfColumnRepository, RackShelfColumnRepository)
+            .AddTransient(Of IUserActivityRepository, UserActivityRepository)
+
+            .AddTransient(Of IPolicyHelper, PolicyHelper)
         End With
     End Sub
 

@@ -1,10 +1,6 @@
-﻿Imports MySql.Data.MySqlClient
-Imports MySql.Data
-Imports CrystalDecisions.CrystalReports.Engine
-Imports CrystalDecisions.Shared
-Imports System.IO
-Imports System.Data.OleDb
+﻿Imports System.IO
 Imports Microsoft.Extensions.DependencyInjection
+Imports MySql.Data.MySqlClient
 
 Module myModule
     Dim formatcount As Integer

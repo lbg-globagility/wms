@@ -1,0 +1,64 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using WarehouseManagementSystem.Core.Entities.Base;
+using WarehouseManagementSystem.Core.Enums;
+
+namespace WarehouseManagementSystem.Core.Entities
+{
+    [Table("rackshelfcolumn")]
+    public partial class RackShelfColumn : AuditableEntity
+    {
+        ////[ForeignKey("InventoryLocation")]
+        public int InventoryLocationID { get; set; }
+
+        public string RackNo { get; set; }
+        public string ShelfNo { get; set; }
+        public string ColumnNo { get; set; }
+        public string Remarks { get; set; }
+        public RackShelfColumnStatus Status { get; set; }
+        public int? PickOrderNo { get; set; }
+        public int? AvailableQty { get; set; }
+        public int? DistributedQty { get; set; }
+        public int? ReservedQty { get; set; }
+        public int? DamagedQty { get; set; }
+        public int? InRepairQty { get; set; }
+        public int? SupplierProblemQty { get; set; }
+        public DateTime? LastShippedToLocDate { get; set; }
+        public DateTime? LastCycleCountDate { get; set; }
+    }
+
+    public partial class RackShelfColumn
+    {
+        private RackShelfColumn()
+        {
+        }
+
+        public RackShelfColumn(int organizationId,
+            int userId,
+            int inventoryLocationId)
+        {
+            OrganizationID = organizationId;
+            CreatedBy = userId;
+            InventoryLocationID = inventoryLocationId;
+            Status = RackShelfColumnStatus.Active;
+        }
+
+        public virtual InventoryLocation InventoryLocation { get; set; }
+        public virtual ICollection<ProductInventoryLocation> ProductInventoryLocations { get; set; }
+
+        public static RackShelfColumn NewRackShelfColumn(int organizationId,
+            int userId,
+            int inventoryLocationId) => new RackShelfColumn(organizationId: organizationId,
+                userId: userId,
+                inventoryLocationId: inventoryLocationId);
+
+        public void AddProductInventoryLocation(List<ProductInventoryLocation> productInventoryLocations)
+        {
+            if (ProductInventoryLocations == null) ProductInventoryLocations = new List<ProductInventoryLocation>();
+
+            foreach (var productInventoryLocation in productInventoryLocations)
+                ProductInventoryLocations.Add(productInventoryLocation);
+        }
+    }
+}

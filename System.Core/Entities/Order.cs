@@ -6,7 +6,7 @@ using WarehouseManagementSystem.Core.Entities.Base;
 namespace WarehouseManagementSystem.Core.Entities
 {
     [Table("orders")]
-    public class Order : OrganizationalEntity
+    public class Order : AuditableEntity
     {
         public int? RelatedOrderID { get; set; }
         public int? InventoryLocationID { get; set; }
