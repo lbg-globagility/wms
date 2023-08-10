@@ -1,0 +1,30 @@
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET NAMES utf8 */;
+/*!50503 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+DROP TABLE IF EXISTS `useractivityitem`;
+CREATE TABLE IF NOT EXISTS `useractivityitem` (
+  `RowID` int(11) NOT NULL AUTO_INCREMENT,
+  `UserActivityId` int(11) NOT NULL,
+  `EntityId` int(11) NOT NULL COMMENT 'The RowID of the created/updated/delete Id',
+  `ChangedUserId` int(11) DEFAULT NULL COMMENT 'If the activity involves modifying a user, set this to the Id of the User',
+  `Description` varchar(2000) NOT NULL,
+  `Created` datetime NOT NULL DEFAULT current_timestamp(),
+  `LastUpd` datetime DEFAULT NULL ON UPDATE current_timestamp(),
+  PRIMARY KEY (`RowID`),
+  KEY `FK_useractivityitem_useractivity_UserActivityId` (`UserActivityId`),
+  KEY `FK_useractivityitem_aspnetusers_ChangedUserId` (`ChangedUserId`),
+  CONSTRAINT `FK_useractivityitem_aspnetusers_ChangedUserId` FOREIGN KEY (`ChangedUserId`) REFERENCES `aspnetusers` (`Id`),
+  CONSTRAINT `FK_useractivityitem_useractivity_UserActivityId` FOREIGN KEY (`UserActivityId`) REFERENCES `useractivity` (`RowID`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='EntityId = RowID of the changed record\r\nChangedEmployeeId = If the activity involves an employee, set this to the RowID of the Employee\r\nChangedUserId = If the activity involves modifying a user, set this to the Id of the User (for example, changing the email of user)';
+
+/*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
+/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
+/*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;
