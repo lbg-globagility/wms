@@ -90,7 +90,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories.Base
                 added.ForEach(entity =>
                 {
                     if (entity.IsNewEntity) _context.Set<T>().Add(entity);
-                    //_context.Entry(entity).State = EntityState.Added;
+                    else _context.Entry(entity).State = EntityState.Added;
 
                     DetachNavigationProperties(entity);
                 });
