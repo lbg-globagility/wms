@@ -48,6 +48,15 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
             await PopulateWithProductColorSizesAsync(inventoryLocation: inventoryLocation, userId: userId);
         }
 
+        public async Task PopulateWithProductColorSizesAsync(int inventoryLocationId, int userId)
+        {
+            var inventoryLocation = await _inventoryLocationRepository.GetByIdAsync(inventoryLocationId);
+
+            if (inventoryLocation == null) return;
+
+            await PopulateWithProductColorSizesAsync(inventoryLocation: inventoryLocation, userId: userId);
+        }
+
         private async Task PopulateWithProductColorSizesAsync(InventoryLocation inventoryLocation, int userId)
         {
             var organizationId = inventoryLocation.OrganizationID.Value;
@@ -74,38 +83,6 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
                 nonExistentProductColorSizes: nonExistentProductColorSizes);
 
             await _rackShelfColumnRepository.SaveManyAsync(added: inventoryLocation.RackShelfColumns.ToList());
-        }
-
-        public async Task PopulateWithProductColorSizesAsync(int inventoryLocationId, int userId)
-        {
-            if (inventoryLocationId <= 0) return;
-
-            var inventoryLocation = await _inventoryLocationRepository.GetByIdAsync(inventoryLocationId);
-
-            var organizationId = inventoryLocation.OrganizationID.Value;
-
-            var allProductColorSizes = await _productColorSizeRepository.GetManyByOrganizationIdsAsync(organizationId);
-
-            var inventoryLocationProductColorSizes = await _productInventoryLocationRepository.GetProductColorSizesByInventoryLocationIdAsync(inventoryLocationId);
-            var inventoryLocationProductColorSizeIds = inventoryLocationProductColorSizes
-                .Select(t => t.ProductColorSizeID)
-                .ToArray();
-
-            var addedProductInventoryLocation = new List<ProductInventoryLocation>();
-
-            var addedRackShelfColumn = new List<RackShelfColumn>();
-
-            var nonExistentProductColorSizes = allProductColorSizes
-                .Where(t => !inventoryLocationProductColorSizeIds.Contains(t.RowID.Value))
-                .OrderByDescending(t => t.TotalAvailableQty)
-                .Take(1000)
-                .ToList();
-
-            inventoryLocation.PopulateWithRackShelfColumns(organizationId: organizationId,
-                userId: userId,
-                nonExistentProductColorSizes: nonExistentProductColorSizes);
-
-            await SaveAsync(entity: inventoryLocation, userId: userId);
         }
     }
 }

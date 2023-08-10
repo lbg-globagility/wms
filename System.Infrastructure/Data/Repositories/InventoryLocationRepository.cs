@@ -17,5 +17,11 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
                 .ThenInclude(r => r.ProductInventoryLocations)
             .AsNoTracking()
             .FirstOrDefaultAsync(t => t.Name == name);
+
+        public override async Task<InventoryLocation> GetByIdAsync(int id) => await _context.InventoryLocations
+            .Include(i => i.RackShelfColumns)
+                .ThenInclude(r => r.ProductInventoryLocations)
+            .AsNoTracking()
+            .FirstOrDefaultAsync(t => t.RowID == id);
     }
 }
