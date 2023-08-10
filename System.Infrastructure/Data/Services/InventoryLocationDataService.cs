@@ -63,10 +63,10 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
 
             var addedRackShelfColumn = new List<RackShelfColumn>();
 
-            var nonExistentProductColorSizes = allProductColorSizes
+            var nonExistentProductColorSizes = allProductColorSizes.ToList();
+
+            if (inventoryLocationProductColorSizeIds.Any()) allProductColorSizes
                 .Where(t => !inventoryLocationProductColorSizeIds.Contains(t.RowID.Value))
-                .OrderByDescending(t => t.TotalAvailableQty)
-                .Take(1000)
                 .ToList();
 
             inventoryLocation.PopulateWithRackShelfColumns(organizationId: organizationId,
