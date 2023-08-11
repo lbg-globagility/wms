@@ -11,3 +11,6 @@ System.Infrastructure/bin/Debug
 System.Core/obj/project.nuget.cache
 System.Core/obj/Debug
 System.Core/bin/Debug
+System.Utilities/bin/Debug
+System.Utilities/obj/Debug
+System.Utilities/obj
