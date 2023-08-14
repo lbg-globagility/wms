@@ -53,7 +53,7 @@ namespace WarehouseManagementSystem.Core.Entities
                 userId: userId,
                 inventoryLocationId: inventoryLocationId);
 
-        public void AddProductInventoryLocation(List<ProductInventoryLocation> productInventoryLocations)
+        public void AddProductInventoryLocations(List<ProductInventoryLocation> productInventoryLocations)
         {
             if (ProductInventoryLocations == null) ProductInventoryLocations = new List<ProductInventoryLocation>();
 

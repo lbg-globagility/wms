@@ -1,19 +1,9 @@
-﻿Imports MySql.Data.MySqlClient
-Imports System.IO
-Imports System.Windows.Forms
-Imports CrystalDecisions.CrystalReports.Engine
-Imports System.Linq
-Imports System.Collections
-Imports System.Collections.Generic
-Imports System.Data
-Imports System.Diagnostics
-Imports System.Runtime.InteropServices
-Imports System.Text.RegularExpressions
-Imports System.ComponentModel
-Imports System.Data.OleDb
+﻿Imports System.Data.OleDb
+Imports MySql.Data.MySqlClient
+
 Public Class ImportProductsForm
     Dim manager As New sqlModule.Manager
-    Dim conn As New MySqlConnection(Manager.GetConnString)
+    Dim conn As New MySqlConnection(manager.GetConnString)
     Dim sqlcmd As MySqlCommand
     Dim sqlrd As MySqlDataReader
     Dim dtExcelData As DataTable
@@ -24,6 +14,7 @@ Public Class ImportProductsForm
     Dim ipfproductid, ipfcolorid, ipfbrandid, ipfcategoryid, ipfcompanyid, ipfproductcolorsizesid, ipfskuid As Integer
     Dim ipfproductcode, ipfbrandname, ipfcategoryname, ipfcompanyname, ipfsrp, ipfunitofmeasure, ipfdescription, ipfcolors, ipfsize, ipfsku As String
     Public ipfexcelfilepath As String
+
     Private Sub ImportProductsForm_Load(sender As Object, e As EventArgs) Handles Me.Load
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -38,6 +29,7 @@ Public Class ImportProductsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub ImportProductsForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
         Try
             PrimaryForm.MainLoadingBar.Visible = fraud
@@ -47,7 +39,9 @@ Public Class ImportProductsForm
             conn.Close()
         End Try
     End Sub
+
 #Region "Functions"
+
     Sub ImportExcelFile(ByVal iexcelfilepath As String)
         Try
             dtExcelData = New DataTable
@@ -186,7 +180,7 @@ Public Class ImportProductsForm
                                     Else
                                         ipfdescription = ""
                                     End If
-                                    I_Products(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, If(ipfcategoryid = 0, DBNull.Value, ipfcategoryid), If(ipfbrandid = 0, DBNull.Value, ipfbrandid), If(ipfcompanyid = 0, DBNull.Value, ipfcompanyid), _
+                                    I_Products(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, If(ipfcategoryid = 0, DBNull.Value, ipfcategoryid), If(ipfbrandid = 0, DBNull.Value, ipfbrandid), If(ipfcompanyid = 0, DBNull.Value, ipfcompanyid),
                                             CStr(dtExcelData.Rows(i)(0)), CStr(dtExcelData.Rows(i)(0)), ipfbrandname, ipfcategoryname, ipfcompanyname, ipfunitofmeasure, ipfdescription, ipfproductsrp, "Active", Me)
                                     getProductIDB(CStr(dtExcelData.Rows(i)(0)), Me)
                                     ipfproductid = globalproductid
@@ -346,6 +340,7 @@ Public Class ImportProductsForm
             dtExcelData = Nothing
         End Try
     End Sub
+
     Function ReadExcelFile(ByVal eexcelfilepath As String)
         Dim da As New OleDbDataAdapter
         Dim dt As New DataTable
@@ -371,6 +366,7 @@ Public Class ImportProductsForm
         End Try
         Return dt
     End Function
+
     Sub addImportProducts()
         Try
             dgImportProducts.Rows.Add()
@@ -405,8 +401,11 @@ Public Class ImportProductsForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Datagrid Errors"
+
     Private Sub dgImportProducts_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgImportProducts.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -447,5 +446,7 @@ Public Class ImportProductsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #End Region
+
 End Class

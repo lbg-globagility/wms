@@ -1976,22 +1976,21 @@ Public Class InventoryLocationsForm
                             End If
                         End If
                         If myModule.systemerrorfound = False Then
-                            Me.Cursor = Cursors.Default
-
                             Await Task.
                                 Run(Async Function()
-                                        Dim inventoryLocationDataService = MainServiceProvider.GetRequiredService(Of IInventoryLocationDataService)
+                                        Await FunctionUtils.TryCatchFunctionAsync("New Inventory Location",
+                                            Async Function()
+                                                Dim inventoryLocationDataService = MainServiceProvider.GetRequiredService(Of IInventoryLocationDataService)
 
-                                        Await inventoryLocationDataService.PopulateWithProductColorSizesAsync(
-                                            inventoryLocationName:=txtLocationName.Text.Trim,
-                                            userId:=Z_UserID)
+                                                Await inventoryLocationDataService.PopulateWithProductColorSizesAsync(
+                                                    inventoryLocationName:=txtLocationName.Text.Trim,
+                                                    userId:=Z_UserID)
 
-                                        MessageBox.Show(text:="New inventory location created successfully!",
-                                            caption:="Success — created inventory location",
-                                            buttons:=MessageBoxButtons.OK,
-                                            icon:=MessageBoxIcon.Information)
-
-                                        Return Task.FromResult(False)
+                                                MessageBox.Show(text:="New inventory location created successfully!",
+                                                    caption:="Success — created inventory location",
+                                                    buttons:=MessageBoxButtons.OK,
+                                                    icon:=MessageBoxIcon.Information)
+                                            End Function)
                                     End Function)
 
                             myBalloon("Successfully Save", "Save", lblsavemsg, -15, -65)

@@ -61,4 +61,30 @@ Public Class FunctionUtils
         End If
     End Sub
 
+    Public Shared Function TryCatchExcelParserReadFunction(
+            action As Action,
+            Optional messageTitle As String = "WorkSheet Parsing Error") As Boolean
+
+        Try
+
+            action()
+
+            Return True
+        Catch ex As WorkSheetRowParseValueException
+
+            MessageBoxHelper.ErrorMessage(ex.Message, messageTitle)
+        Catch ex As ExcelException
+
+            MessageBoxHelper.ErrorMessage(ex.Message, messageTitle)
+        Catch ex As Exception
+            Debugger.Break()
+
+            MessageBoxHelper.DefaultErrorMessage(messageTitle, ex)
+
+        End Try
+
+        Return False
+
+    End Function
+
 End Class

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using System.Threading.Tasks;
 using WarehouseManagementSystem.Core.Entities;
 using WarehouseManagementSystem.Core.Interfaces.Repositories;
@@ -12,11 +13,21 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
         {
         }
 
-        public async Task<InventoryLocation> GetByNameAsync(string name) => await _context.InventoryLocations
-            .Include(i => i.RackShelfColumns)
-                .ThenInclude(r => r.ProductInventoryLocations)
-            .AsNoTracking()
-            .FirstOrDefaultAsync(t => t.Name == name);
+        public Task<InventoryLocation> GetByNameAsync(string name)
+        {
+            var query = _context.InventoryLocations
+                .Include(i => i.RackShelfColumns)
+                    .ThenInclude(r => r.ProductInventoryLocations)
+                .AsNoTracking()
+                .AsQueryable();
+
+            var nameToLower = name.ToLower();
+
+            return Task.FromResult(
+                query
+                .AsEnumerable()
+                .FirstOrDefault(t => t.Name.ToLower() == nameToLower));
+        }
 
         public override async Task<InventoryLocation> GetByIdAsync(int id) => await _context.InventoryLocations
             .Include(i => i.RackShelfColumns)

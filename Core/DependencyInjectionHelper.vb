@@ -6,10 +6,12 @@ Imports Microsoft.Extensions.Logging
 Imports Microsoft.Extensions.Logging.Console
 Imports WarehouseManagementSystem.Core.Interfaces
 Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
+Imports WarehouseManagementSystem.Core.Interfaces.Excel
 Imports WarehouseManagementSystem.Core.Interfaces.Repositories
 Imports WarehouseManagementSystem.Infrastructure.Data
 Imports WarehouseManagementSystem.Infrastructure.Data.Repositories
 Imports WarehouseManagementSystem.Infrastructure.Data.Services
+Imports WarehouseManagementSystem.Infrastructure.Excel
 
 Public Class DependencyInjectionHelper
 
@@ -29,10 +31,15 @@ Public Class DependencyInjectionHelper
             ServiceLifetime.Transient)
 
         With services
-            .AddTransient(Of ISystemOwnerService, SystemOwnerService)
+            .AddTransient(Of ICategoryDataService, CategoryDataService)
+            .AddTransient(Of IColorDataService, ColorDataService)
             .AddTransient(Of IInventoryLocationDataService, InventoryLocationDataService)
+            .AddTransient(Of IProductDataService, ProductDataService)
             .AddTransient(Of IProductInventoryLocationDataService, ProductInventoryLocationDataService)
+            .AddTransient(Of ISystemOwnerService, SystemOwnerService)
 
+            .AddTransient(Of ICategoryRepository, CategoryRepository)
+            .AddTransient(Of IColorRepository, ColorRepository)
             .AddTransient(Of IInventoryLocationRepository, InventoryLocationRepository)
             .AddTransient(Of IProductColorSizeRepository, ProductColorSizeRepository)
             .AddTransient(Of IProductInventoryLocationRepository, ProductInventoryLocationRepository)
@@ -41,6 +48,8 @@ Public Class DependencyInjectionHelper
             .AddTransient(Of IUserActivityRepository, UserActivityRepository)
 
             .AddTransient(Of IPolicyHelper, PolicyHelper)
+
+            .AddTransient(GetType(IExcelParser(Of)), GetType(ExcelParser(Of)))
         End With
     End Sub
 

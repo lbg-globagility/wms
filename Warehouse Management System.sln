@@ -5,9 +5,11 @@ VisualStudioVersion = 16.0.33423.256
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Warehouse Management System", "Warehouse Management System.vbproj", "{E8476CF7-A457-4776-BDA9-A1138977D015}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WarehouseManagementSystem.Core", "System.Core\WarehouseManagementSystem.Core.csproj", "{AA5AA6CB-3318-4498-92BD-914ED28CFA0E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WarehouseManagementSystem.Core", "System.Core\WarehouseManagementSystem.Core.csproj", "{AA5AA6CB-3318-4498-92BD-914ED28CFA0E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WarehouseManagementSystem.Infrastructure", "System.Infrastructure\WarehouseManagementSystem.Infrastructure.csproj", "{DFB283D2-27F3-429C-9F9B-C9DAD02EFCA7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WarehouseManagementSystem.Infrastructure", "System.Infrastructure\WarehouseManagementSystem.Infrastructure.csproj", "{DFB283D2-27F3-429C-9F9B-C9DAD02EFCA7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WarehouseManagementSystem.Utilities", "System.Utilities\WarehouseManagementSystem.Utilities.csproj", "{B063AC08-F34A-44CD-B57B-5544EF459036}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{DFB283D2-27F3-429C-9F9B-C9DAD02EFCA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DFB283D2-27F3-429C-9F9B-C9DAD02EFCA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DFB283D2-27F3-429C-9F9B-C9DAD02EFCA7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B063AC08-F34A-44CD-B57B-5544EF459036}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B063AC08-F34A-44CD-B57B-5544EF459036}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B063AC08-F34A-44CD-B57B-5544EF459036}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B063AC08-F34A-44CD-B57B-5544EF459036}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

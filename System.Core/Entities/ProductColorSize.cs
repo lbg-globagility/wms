@@ -27,8 +27,35 @@ namespace WarehouseManagementSystem.Core.Entities
 
     public partial class ProductColorSize
     {
+        private ProductColorSize()
+        {
+        }
+
+        public ProductColorSize(int organizationId,
+            int userId,
+            decimal size,
+            string sku,
+            string sku2)
+        {
+            OrganizationID = organizationId;
+            CreatedBy = userId;
+            Size = size;
+            SKU = sku;
+            SKU2 = sku2;
+        }
+
         public virtual ProductColor ProductColor { get; set; }
 
         public virtual ICollection<ProductInventoryLocation> ProductInventoryLocations { get; set; }
+
+        public static ProductColorSize NewProductColorSize(int organizationId,
+            int userId,
+            decimal size,
+            string sku,
+            string sku2) => new ProductColorSize(organizationId: organizationId,
+                userId: userId,
+                size: size,
+                sku: sku,
+                sku2: sku2);
     }
 }

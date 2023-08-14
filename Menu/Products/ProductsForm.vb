@@ -1968,6 +1968,13 @@ Public Class ProductsForm
     End Sub
 
     Private Sub tsImport_Click(sender As Object, e As EventArgs) Handles tsImport.Click
+        Dim form = New ImportProductForm()
+        If form.ShowDialog = DialogResult.OK Then
+
+        End If
+
+        Return
+
         Me.Cursor = Cursors.WaitCursor
         Try
             getPositionID(Me)

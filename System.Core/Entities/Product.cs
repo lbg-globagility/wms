@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using WarehouseManagementSystem.Core.Entities.Base;
 
 namespace WarehouseManagementSystem.Core.Entities
@@ -14,7 +15,10 @@ namespace WarehouseManagementSystem.Core.Entities
         public string ProductCode { get; set; }
         public string ProductName { get; set; }
         public string BrandName { get; set; }
-        public string Category { get; set; }
+
+        [Column("Category")]
+        public string CategoryText { get; set; }
+
         public string Company { get; set; }
         public string UnitOfMeasure { get; set; }
         public string Description { get; set; }
@@ -37,6 +41,30 @@ namespace WarehouseManagementSystem.Core.Entities
 
     public partial class Product
     {
+        private Product()
+        {
+        }
+
+        public Product(int organizationId,
+            int userId,
+            string productCode)
+        {
+            OrganizationID = organizationId;
+            CreatedBy = userId;
+            ProductCode = productCode;
+            ProductName = productCode;
+        }
+
+        public virtual Category Category { get; set; }
+
         public virtual ICollection<ProductColor> ProductColors { get; set; }
+
+        public static Product NewProduct(int organizationId,
+            int userId,
+            string productCode) => new Product(organizationId: organizationId,
+                userId: userId,
+                productCode: productCode);
+
+        public bool HasColorAndSize(string colorName, decimal size) => ProductColors == null ? false : ProductColors?.Any(t => t.HasColorAndSize(colorName, size)) ?? false;
     }
 }

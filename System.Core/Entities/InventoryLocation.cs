@@ -51,7 +51,7 @@ namespace WarehouseManagementSystem.Core.Entities
 
                     var newRackShelfColumn = RackShelfColumn.NewRackShelfColumn(organizationId: organizationId, userId: userId, inventoryLocationId: RowID.Value);
 
-                    newRackShelfColumn.AddProductInventoryLocation(productInventoryLocations: new List<ProductInventoryLocation>() { newProductInventoryLocation });
+                    newRackShelfColumn.AddProductInventoryLocations(productInventoryLocations: new List<ProductInventoryLocation>() { newProductInventoryLocation });
 
                     newRackShelfColumns.Add(newRackShelfColumn);
                 }
@@ -68,7 +68,7 @@ namespace WarehouseManagementSystem.Core.Entities
                         userId: userId,
                         productColorSizeId: nonExistentProductColorSize.RowID.Value);
 
-                    newRackShelfColumn.AddProductInventoryLocation(productInventoryLocations: new List<ProductInventoryLocation>() { newProductInventoryLocation });
+                    newRackShelfColumn.AddProductInventoryLocations(productInventoryLocations: new List<ProductInventoryLocation>() { newProductInventoryLocation });
                 }
             }
 

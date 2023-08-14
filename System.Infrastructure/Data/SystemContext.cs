@@ -13,6 +13,8 @@ namespace WarehouseManagementSystem.Infrastructure.Data
         }
 
         internal virtual DbSet<Agent> Agents { get; set; }
+        internal virtual DbSet<Category> Categories { get; set; }
+        internal virtual DbSet<Color> Colors { get; set; }
         internal virtual DbSet<Helper> Helpers { get; set; }
         internal virtual DbSet<InventoryLocation> InventoryLocations { get; set; }
         internal virtual DbSet<Invoice> Invoices { get; set; }
@@ -39,9 +41,23 @@ namespace WarehouseManagementSystem.Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Order>()
-                .HasMany(x => x.OrderItems)
-                .WithOne(x => x.Order);
+            modelBuilder.Entity<Category>(t =>
+            {
+                t.Property(x => x.Status)
+                    .HasConversion(new EnumToStringConverter<CategoryStatus>());
+
+                t.HasMany(x => x.Products)
+                    .WithOne(x => x.Category);
+            });
+
+            modelBuilder.Entity<Color>(t =>
+            {
+                t.HasMany(x => x.ProductColors)
+                    .WithOne(x => x.Color);
+
+                t.Property(x => x.Status)
+                    .HasConversion(new EnumToStringConverter<ColorStatus>());
+            });
 
             modelBuilder.Entity<InventoryLocation>(t =>
             {
@@ -52,17 +68,32 @@ namespace WarehouseManagementSystem.Infrastructure.Data
                     .WithOne(x => x.InventoryLocation);
             });
 
-            modelBuilder.Entity<Product>()
-                .HasMany(x => x.ProductColors)
-                .WithOne(x => x.Product);
+            modelBuilder.Entity<Order>()
+                .HasMany(x => x.OrderItems)
+                .WithOne(x => x.Order);
+
+            modelBuilder.Entity<Product>(t =>
+            {
+                t.HasMany(x => x.ProductColors)
+                    .WithOne(x => x.Product);
+
+                t.HasOne(x => x.Category)
+                    .WithMany(x => x.Products);
+            });
 
             modelBuilder.Entity<ProductColor>(t =>
             {
+                t.HasOne(x => x.Color)
+                    .WithMany(x => x.ProductColors);
+
                 t.HasMany(x => x.ProductColorSizes)
                     .WithOne(x => x.ProductColor);
 
                 t.HasOne(x => x.Product)
                     .WithMany(x => x.ProductColors);
+
+                t.Property(x => x.Status)
+                    .HasConversion(new EnumToStringConverter<ProductColorStatus>());
             });
 
             modelBuilder.Entity<ProductColorSize>(t =>

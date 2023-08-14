@@ -5,11 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="EPPlus" Version="4.5.3.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\System.Core\WarehouseManagementSystem.Core.csproj" />
+    <ProjectReference Include="..\System.Utilities\WarehouseManagementSystem.Utilities.csproj" />
   </ItemGroup>
 
 </Project>
