@@ -2,6 +2,7 @@
 
 Imports System.IO
 Imports WarehouseManagementSystem.Core.Helpers
+Imports WarehouseManagementSystem.Desktop.Helpers
 
 Public Class ExcelHelper
 

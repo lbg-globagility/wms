@@ -3,6 +3,7 @@
 Imports Microsoft.Extensions.DependencyInjection
 Imports MySql.Data.MySqlClient
 Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
+Imports WarehouseManagementSystem.Desktop.Utilities
 
 Public Class InventoryLocationsForm
     Dim manager As New sqlModule.Manager

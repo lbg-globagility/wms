@@ -1,47 +1,51 @@
-﻿Public Class OpenFileDialogImportHelper
+﻿Option Strict On
 
-    Public Shared Function BrowseFile() As BrowseFileOutPut
+Namespace Global.WarehouseManagementSystem.Desktop.Helpers
+    Public Class OpenFileDialogImportHelper
 
-        Dim browsedFile = New OpenFileDialog With {
-            .Filter = "Microsoft Excel Workbook Documents 2007-13 (*.xlsx)|*.xlsx|" &
-                  "Microsoft Excel Documents 97-2003 (*.xls)|*.xls"
-        }
+        Public Shared Function BrowseFile() As BrowseFileOutPut
 
-        If browsedFile.ShowDialog() = DialogResult.OK Then
+            Dim browsedFile = New OpenFileDialog With {
+                .Filter = "Microsoft Excel Workbook Documents 2007-13 (*.xlsx)|*.xlsx|" &
+                      "Microsoft Excel Documents 97-2003 (*.xls)|*.xls"
+            }
 
-            Return BrowseFileOutPut.Success(browsedFile.FileName)
-        Else
+            If browsedFile.ShowDialog() = DialogResult.OK Then
 
-            Return BrowseFileOutPut.Failed()
+                Return BrowseFileOutPut.Success(browsedFile.FileName)
+            Else
 
-        End If
+                Return BrowseFileOutPut.Failed()
 
-    End Function
-
-    Public Class BrowseFileOutPut
-
-        Property IsSuccess As Boolean
-        Property FileName As String
-
-        Public Shared Function Success(fileName As String) As BrowseFileOutPut
-
-            Return New BrowseFileOutPut(True, fileName)
+            End If
 
         End Function
 
-        Public Shared Function Failed() As BrowseFileOutPut
+        Public Class BrowseFileOutPut
 
-            Return New BrowseFileOutPut(False, Nothing)
+            Property IsSuccess As Boolean
+            Property FileName As String
 
-        End Function
+            Public Shared Function Success(fileName As String) As BrowseFileOutPut
 
-        Private Sub New(isSuccess As Boolean, fileName As String)
+                Return New BrowseFileOutPut(True, fileName)
 
-            Me.IsSuccess = isSuccess
-            Me.FileName = fileName
+            End Function
 
-        End Sub
+            Public Shared Function Failed() As BrowseFileOutPut
+
+                Return New BrowseFileOutPut(False, Nothing)
+
+            End Function
+
+            Private Sub New(isSuccess As Boolean, fileName As String)
+
+                Me.IsSuccess = isSuccess
+                Me.FileName = fileName
+
+            End Sub
+
+        End Class
 
     End Class
-
-End Class
+End Namespace

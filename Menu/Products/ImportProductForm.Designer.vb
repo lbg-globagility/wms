@@ -103,7 +103,7 @@ Partial Class ImportProductForm
         Me.DataGridViewTextBoxColumn33 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DataGridViewTextBoxColumn34 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.AlreadyExistsTabControl = New System.Windows.Forms.TabPage()
-        Me.DataGridViewX1 = New DevComponents.DotNetBar.Controls.DataGridViewX()
+        Me.AlreadyExistRecordsGrid = New DevComponents.DotNetBar.Controls.DataGridViewX()
         Me.DataGridViewTextBoxColumn35 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DataGridViewTextBoxColumn36 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DataGridViewTextBoxColumn37 = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -121,7 +121,7 @@ Partial Class ImportProductForm
         Me.ErrorsTabControl.SuspendLayout()
         CType(Me.RejectedRecordsGrid, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.AlreadyExistsTabControl.SuspendLayout()
-        CType(Me.DataGridViewX1, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.AlreadyExistRecordsGrid, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'DataGridViewTextBoxColumn1
@@ -650,7 +650,7 @@ Partial Class ImportProductForm
         '
         'AlreadyExistsTabControl
         '
-        Me.AlreadyExistsTabControl.Controls.Add(Me.DataGridViewX1)
+        Me.AlreadyExistsTabControl.Controls.Add(Me.AlreadyExistRecordsGrid)
         Me.AlreadyExistsTabControl.Location = New System.Drawing.Point(4, 22)
         Me.AlreadyExistsTabControl.Name = "AlreadyExistsTabControl"
         Me.AlreadyExistsTabControl.Padding = New System.Windows.Forms.Padding(3)
@@ -659,12 +659,12 @@ Partial Class ImportProductForm
         Me.AlreadyExistsTabControl.Text = "Already Exists"
         Me.AlreadyExistsTabControl.UseVisualStyleBackColor = True
         '
-        'DataGridViewX1
+        'AlreadyExistRecordsGrid
         '
-        Me.DataGridViewX1.AllowUserToAddRows = False
-        Me.DataGridViewX1.AllowUserToDeleteRows = False
-        Me.DataGridViewX1.BackgroundColor = System.Drawing.Color.White
-        Me.DataGridViewX1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.DataGridViewTextBoxColumn35, Me.DataGridViewTextBoxColumn36, Me.DataGridViewTextBoxColumn37, Me.DataGridViewTextBoxColumn38, Me.DataGridViewTextBoxColumn39, Me.DataGridViewTextBoxColumn40, Me.DataGridViewTextBoxColumn41, Me.DataGridViewTextBoxColumn42, Me.DataGridViewTextBoxColumn43, Me.DataGridViewTextBoxColumn44, Me.DataGridViewTextBoxColumn45})
+        Me.AlreadyExistRecordsGrid.AllowUserToAddRows = False
+        Me.AlreadyExistRecordsGrid.AllowUserToDeleteRows = False
+        Me.AlreadyExistRecordsGrid.BackgroundColor = System.Drawing.Color.White
+        Me.AlreadyExistRecordsGrid.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.DataGridViewTextBoxColumn35, Me.DataGridViewTextBoxColumn36, Me.DataGridViewTextBoxColumn37, Me.DataGridViewTextBoxColumn38, Me.DataGridViewTextBoxColumn39, Me.DataGridViewTextBoxColumn40, Me.DataGridViewTextBoxColumn41, Me.DataGridViewTextBoxColumn42, Me.DataGridViewTextBoxColumn43, Me.DataGridViewTextBoxColumn44, Me.DataGridViewTextBoxColumn45})
         DataGridViewCellStyle23.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
         DataGridViewCellStyle23.BackColor = System.Drawing.SystemColors.Window
         DataGridViewCellStyle23.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -672,14 +672,14 @@ Partial Class ImportProductForm
         DataGridViewCellStyle23.SelectionBackColor = System.Drawing.SystemColors.Highlight
         DataGridViewCellStyle23.SelectionForeColor = System.Drawing.SystemColors.ControlText
         DataGridViewCellStyle23.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.DataGridViewX1.DefaultCellStyle = DataGridViewCellStyle23
-        Me.DataGridViewX1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.DataGridViewX1.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
-        Me.DataGridViewX1.Location = New System.Drawing.Point(3, 3)
-        Me.DataGridViewX1.Name = "DataGridViewX1"
-        Me.DataGridViewX1.ReadOnly = True
-        Me.DataGridViewX1.Size = New System.Drawing.Size(786, 418)
-        Me.DataGridViewX1.TabIndex = 1
+        Me.AlreadyExistRecordsGrid.DefaultCellStyle = DataGridViewCellStyle23
+        Me.AlreadyExistRecordsGrid.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.AlreadyExistRecordsGrid.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
+        Me.AlreadyExistRecordsGrid.Location = New System.Drawing.Point(3, 3)
+        Me.AlreadyExistRecordsGrid.Name = "AlreadyExistRecordsGrid"
+        Me.AlreadyExistRecordsGrid.ReadOnly = True
+        Me.AlreadyExistRecordsGrid.Size = New System.Drawing.Size(786, 418)
+        Me.AlreadyExistRecordsGrid.TabIndex = 1
         '
         'DataGridViewTextBoxColumn35
         '
@@ -781,7 +781,7 @@ Partial Class ImportProductForm
         Me.ErrorsTabControl.ResumeLayout(False)
         CType(Me.RejectedRecordsGrid, System.ComponentModel.ISupportInitialize).EndInit()
         Me.AlreadyExistsTabControl.ResumeLayout(False)
-        CType(Me.DataGridViewX1, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.AlreadyExistRecordsGrid, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -844,7 +844,7 @@ Partial Class ImportProductForm
     Friend WithEvents DataGridViewTextBoxColumn33 As DataGridViewTextBoxColumn
     Friend WithEvents DataGridViewTextBoxColumn34 As DataGridViewTextBoxColumn
     Friend WithEvents AlreadyExistsTabControl As TabPage
-    Friend WithEvents DataGridViewX1 As DevComponents.DotNetBar.Controls.DataGridViewX
+    Friend WithEvents AlreadyExistRecordsGrid As DevComponents.DotNetBar.Controls.DataGridViewX
     Friend WithEvents DataGridViewTextBoxColumn35 As DataGridViewTextBoxColumn
     Friend WithEvents DataGridViewTextBoxColumn36 As DataGridViewTextBoxColumn
     Friend WithEvents DataGridViewTextBoxColumn37 As DataGridViewTextBoxColumn

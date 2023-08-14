@@ -267,7 +267,10 @@
     <Compile Include="Core\Utilities\Excel\ExcelService.vb" />
     <Compile Include="Core\Utilities\Excel\ExcelWriter.vb" />
     <Compile Include="Core\Utilities\FunctionUtils.vb" />
+    <Compile Include="Core\Utilities\Helper\DownloadTemplateHelper.vb" />
     <Compile Include="Core\Utilities\Helper\OpenFileDialogImportHelper.vb" />
+    <Compile Include="Core\Utilities\Helper\SaveFileDialogHelper.vb" />
+    <Compile Include="Core\Utilities\Helper\TemplatesHelper.vb" />
     <Compile Include="Core\Utilities\MessageBoxHelper.vb" />
     <Compile Include="General\DummyForm.Designer.vb">
       <DependentUpon>DummyForm.vb</DependentUpon>
@@ -359,6 +362,7 @@
     <Compile Include="Menu\Products\ImportProductForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Menu\Products\ProductImportation.vb" />
     <Compile Include="Menu\Products\ProductsForm.Designer.vb">
       <DependentUpon>ProductsForm.vb</DependentUpon>
     </Compile>

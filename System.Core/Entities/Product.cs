@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using WarehouseManagementSystem.Core.Entities.Base;
+using WarehouseManagementSystem.Core.Enums;
 
 namespace WarehouseManagementSystem.Core.Entities
 {
@@ -22,7 +23,7 @@ namespace WarehouseManagementSystem.Core.Entities
         public string Company { get; set; }
         public string UnitOfMeasure { get; set; }
         public string Description { get; set; }
-        public string Status { get; set; }
+        public ProductStatus Status { get; set; }
         public string SKU { get; set; }
         public string SKU2 { get; set; }
         public string BarCode { get; set; }
@@ -33,9 +34,9 @@ namespace WarehouseManagementSystem.Core.Entities
         public int? LastSoldCount { get; set; }
         public int? LastArrivedQty { get; set; }
         public int? TotalShipmentCount { get; set; }
-        public DateTime LastRcvdFromShipmentDate { get; set; }
-        public DateTime LastPurchaseDate { get; set; }
-        public DateTime LastSoldDate { get; set; }
+        public DateTime? LastRcvdFromShipmentDate { get; set; }
+        public DateTime? LastPurchaseDate { get; set; }
+        public DateTime? LastSoldDate { get; set; }
         //public longblob? Image { get; set; }
     }
 
@@ -47,12 +48,16 @@ namespace WarehouseManagementSystem.Core.Entities
 
         public Product(int organizationId,
             int userId,
-            string productCode)
+            int categoryId,
+            string productCode,
+            string description)
         {
             OrganizationID = organizationId;
             CreatedBy = userId;
+            CategoryID = categoryId;
             ProductCode = productCode;
             ProductName = productCode;
+            Description = description;
         }
 
         public virtual Category Category { get; set; }
@@ -61,9 +66,13 @@ namespace WarehouseManagementSystem.Core.Entities
 
         public static Product NewProduct(int organizationId,
             int userId,
-            string productCode) => new Product(organizationId: organizationId,
+            int categoryId,
+            string productCode,
+            string description) => new Product(organizationId: organizationId,
+                categoryId: categoryId,
                 userId: userId,
-                productCode: productCode);
+                productCode: productCode,
+                description: description);
 
         public bool HasColorAndSize(string colorName, decimal size) => ProductColors == null ? false : ProductColors?.Any(t => t.HasColorAndSize(colorName, size)) ?? false;
     }

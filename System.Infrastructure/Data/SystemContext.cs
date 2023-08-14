@@ -79,6 +79,9 @@ namespace WarehouseManagementSystem.Infrastructure.Data
 
                 t.HasOne(x => x.Category)
                     .WithMany(x => x.Products);
+
+                t.Property(x => x.Status)
+                    .HasConversion(new EnumToStringConverter<ProductStatus>());
             });
 
             modelBuilder.Entity<ProductColor>(t =>

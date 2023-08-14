@@ -35,13 +35,15 @@ namespace WarehouseManagementSystem.Core.Entities
             int userId,
             decimal size,
             string sku,
-            string sku2)
+            string sku2,
+            string seasonCode)
         {
             OrganizationID = organizationId;
             CreatedBy = userId;
             Size = size;
             SKU = sku;
             SKU2 = sku2;
+            SeasonCode = seasonCode;
         }
 
         public virtual ProductColor ProductColor { get; set; }
@@ -52,10 +54,12 @@ namespace WarehouseManagementSystem.Core.Entities
             int userId,
             decimal size,
             string sku,
-            string sku2) => new ProductColorSize(organizationId: organizationId,
+            string sku2,
+            string seasonCode) => new ProductColorSize(organizationId: organizationId,
                 userId: userId,
                 size: size,
                 sku: sku,
-                sku2: sku2);
+                sku2: sku2,
+                seasonCode: seasonCode);
     }
 }

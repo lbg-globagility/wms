@@ -3,6 +3,8 @@
 Imports Microsoft.Extensions.DependencyInjection
 Imports WarehouseManagementSystem.Core.Entities
 Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
+Imports WarehouseManagementSystem.Desktop.Helpers
+Imports WarehouseManagementSystem.Desktop.Utilities
 Imports WarehouseManagementSystem.Infrastructure.Excel.Import
 
 Public Class ImportProductForm
@@ -83,10 +85,11 @@ Public Class ImportProductForm
 
         ValidRecordsGrid.DataSource = validParse
         RejectedRecordsGrid.DataSource = invalidParse
+        AlreadyExistRecordsGrid.DataSource = alreadyExistsParse
     End Sub
 
     Private Sub btnDownloadTemplate_Click(sender As Object, e As EventArgs) Handles btnDownloadTemplate.Click
-
+        DownloadTemplateHelper.DownloadExcel(excelTemplate:=ExcelTemplates.Product)
     End Sub
 
     Private Async Sub SaveButton_Click(sender As Object, e As EventArgs) Handles SaveButton.Click
@@ -97,74 +100,18 @@ Public Class ImportProductForm
 
         If Not productRowRecords.Any() Then Return
 
+        Dim productImportation = New ProductImportation(productRowRecords:=productRowRecords)
+
         Await FunctionUtils.TryCatchFunctionAsync("Import Product(s)",
             Async Function()
-                Dim colorDataService = MainServiceProvider.GetRequiredService(Of IColorDataService)
-                Dim groupByColorList = productRowRecords.
-                    GroupBy(Function(t) t.Colors).
-                    ToArray()
-                Dim colorNames = groupByColorList.
-                    Select(Function(s) s.Key).
-                    ToArray()
-                Dim colors = Await colorDataService.GetManyOrCreateManyAsync(organizationId:=Z_OrganizationID,
-                    userId:=Z_UserID,
-                    names:=colorNames)
-
-                Dim categoryDataService = MainServiceProvider.GetRequiredService(Of ICategoryDataService)
-                Dim groupByProductCategoryList = productRowRecords.
-                    GroupBy(Function(t) t.Category).
-                    ToList()
-                Dim categoryNames = groupByProductCategoryList.
-                    Select(Function(s) s.Key).
-                    ToArray()
-                Dim categories = Await categoryDataService.GetManyOrCreateManyAsync(organizationId:=Z_OrganizationID,
-                    userId:=Z_UserID,
-                    names:=categoryNames)
-
-                Dim productCodes = productRowRecords.
-                    GroupBy(Function(t) t.ProductCode).
-                    Select(Function(s) s.Key).
-                    ToArray()
-
-                Dim productDataService = MainServiceProvider.GetRequiredService(Of IProductDataService)
-                Dim products = Await productDataService.GetManyByProductCodesAsync(organizationId:=Z_OrganizationID,
-            productCodes:=productCodes)
-
-                For Each colorItem In groupByColorList
-                    Dim colorName = colorItem.Key
-                    Dim color = colors.FirstOrDefault(Function(c) c.ColorName = colorName)
-
-                    Dim newProductColor = ProductColor.NewProductColor(organizationId:=Z_OrganizationID,
-                        userId:=Z_UserID,
-                        colorId:=color.RowID.Value,
-                        productId:=0)
-
-                    Dim productColorSizes = colorItem.
-                        GroupBy(Function(t) t.Style).
-                        ToList()
-                    For Each productColorSizeItem In productColorSizes
-                        Dim product = products.
-                            FirstOrDefault(Function(p) p.ProductCode.ToLower() = productColorSizeItem.FirstOrDefault().ProductCode.ToLower())
-                        If product Is Nothing Then Continue For
-
-                        newProductColor.ProductID = product.RowID.Value
-
-                        Dim newProductColorSize = ProductColorSize.NewProductColorSize(organizationId:=Z_OrganizationID,
-                            userId:=Z_UserID,
-                            size:=CDec(productColorSizeItem.Key),
-                            sku:=productColorSizeItem.FirstOrDefault().SKU,
-                            sku2:=productColorSizeItem.FirstOrDefault().SKU2)
-
-                        newProductColor.AddProductColorSizes(productColorSizes:=New List(Of ProductColorSize) From {newProductColorSize})
-                    Next
-
-                    color.AddProductColors(New List(Of ProductColor) From {newProductColor})
-                Next
+                Await productImportation.SaveAsync()
 
                 MessageBox.Show(text:="Product(s) imported successfully!",
                     caption:="Success — import product(s)",
                     buttons:=MessageBoxButtons.OK,
                     icon:=MessageBoxIcon.Information)
+
+                Me.DialogResult = DialogResult.OK
             End Function)
     End Sub
 
