@@ -1,7 +1,6 @@
 ﻿Option Strict On
 
 Imports Microsoft.Extensions.DependencyInjection
-Imports WarehouseManagementSystem.Core.Entities
 Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
 Imports WarehouseManagementSystem.Desktop.Helpers
 Imports WarehouseManagementSystem.Desktop.Utilities
