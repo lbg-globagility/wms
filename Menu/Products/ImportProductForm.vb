@@ -101,16 +101,15 @@ Public Class ImportProductForm
 
         Dim productImportation = New ProductImportation(productRowRecords:=productRowRecords)
 
+        SaveButton.Enabled = False
+
         Await FunctionUtils.TryCatchFunctionAsync("Import Product(s)",
             Async Function()
                 Await productImportation.SaveAsync()
 
-                MessageBox.Show(text:="Product(s) imported successfully!",
-                    caption:="Success — import product(s)",
-                    buttons:=MessageBoxButtons.OK,
-                    icon:=MessageBoxIcon.Information)
-
                 Me.DialogResult = DialogResult.OK
+
+                SaveButton.Enabled = True
             End Function)
     End Sub
 

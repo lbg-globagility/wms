@@ -38,6 +38,14 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
             _rackShelfColumnRepository = rackShelfColumnRepository;
         }
 
+        public async Task PopulateAllInventoryLocationWithProductColorSizesAsync(int organizationId, int userId, string[] productCodes)
+        {
+            var inventoryLocations = await _inventoryLocationRepository.GetAllByOrganizationIdAsync(organizationId: organizationId);
+
+            foreach (var inventoryLocation in inventoryLocations)
+                await PopulateWithProductColorSizesAsync(inventoryLocation: inventoryLocation, userId: userId);
+        }
+
         public async Task PopulateWithProductColorSizesAsync(string inventoryLocationName, int userId)
         {
             var inventoryLocation = await _inventoryLocationRepository.GetByNameAsync(inventoryLocationName);

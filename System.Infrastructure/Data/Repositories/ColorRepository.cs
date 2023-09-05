@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using WarehouseManagementSystem.Core.Entities;
 using WarehouseManagementSystem.Core.Interfaces.Repositories;
 using WarehouseManagementSystem.Infrastructure.Data.Repositories.Base;
+using WarehouseManagementSystem.Utilities.Extensions;
 
 namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
 {
@@ -20,12 +21,10 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
                 .AsNoTracking()
                 .AsQueryable();
 
-            var nameToLower = name.ToLower();
-
             return Task.FromResult(
                 query
                 .AsEnumerable()
-                .FirstOrDefault(t => t.OrganizationID == organizationId && t.ColorName.ToLower() == nameToLower));
+                .FirstOrDefault(t => t.OrganizationID == organizationId && t.ColorName.IsEqualTo(name)));
         }
 
         public Task<List<Color>> GetByNamesAsync(int organizationId, string[] names)
@@ -37,6 +36,8 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
             var namesToLower = names
                 .Select(s => s.ToLower())
                 .ToArray();
+
+            bool isContains(string input) => namesToLower.Any(t => t.IsEqualTo(input));
 
             return Task.FromResult(
                 query

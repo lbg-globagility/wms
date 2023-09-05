@@ -5,6 +5,7 @@ Imports WarehouseManagementSystem.Core.Entities
 Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
 Imports WarehouseManagementSystem.Desktop.Utilities
 Imports WarehouseManagementSystem.Infrastructure.Excel.Import
+Imports WarehouseManagementSystem.Utilities.Extensions
 
 Public Class ProductImportation
     Private ReadOnly _productRowRecords As List(Of ProductRowRecord)
@@ -22,10 +23,10 @@ Public Class ProductImportation
             Async Function()
                 Dim colorDataService = MainServiceProvider.GetRequiredService(Of IColorDataService)
                 Dim groupByColorList = _productRowRecords.
-                    GroupBy(Function(t) t.Colors).
+                    GroupBy(Function(t) t.Colors.Trim()).
                     ToArray()
                 Dim colorNames = groupByColorList.
-                    Select(Function(s) s.Key).
+                    Select(Function(s) s.Key.Trim()).
                     ToArray()
                 Dim colors = Await colorDataService.GetManyOrCreateManyAsync(organizationId:=Z_OrganizationID,
                     userId:=Z_UserID,
@@ -33,29 +34,29 @@ Public Class ProductImportation
 
                 Dim categoryDataService = MainServiceProvider.GetRequiredService(Of ICategoryDataService)
                 Dim groupByProductCategoryList = _productRowRecords.
-                    GroupBy(Function(t) t.Category).
+                    GroupBy(Function(t) t.Category.Trim()).
                     ToList()
                 Dim categoryNames = groupByProductCategoryList.
-                    Select(Function(s) s.Key).
+                    Select(Function(s) s.Key.Trim()).
                     ToArray()
                 Dim categories = Await categoryDataService.GetManyOrCreateManyAsync(organizationId:=Z_OrganizationID,
                     userId:=Z_UserID,
                     names:=categoryNames)
 
                 Dim productCodes = _productRowRecords.
-                    GroupBy(Function(t) t.ProductCode).
-                    Select(Function(s) s.Key).
+                    GroupBy(Function(t) t.ProductCode.Trim()).
+                    Select(Function(s) s.Key.Trim()).
                     ToArray()
 
                 Dim productDataService = MainServiceProvider.GetRequiredService(Of IProductDataService)
                 Dim products = Await productDataService.GetManyByProductCodesAsync(organizationId:=Z_OrganizationID,
-            productCodes:=productCodes)
+                    productCodes:=productCodes)
 
                 Dim newProductColors = New List(Of ProductColor)
 
                 For Each colorItem In groupByColorList
                     Dim colorName = colorItem.Key
-                    Dim color = colors.FirstOrDefault(Function(c) c.ColorName = colorName)
+                    Dim color = colors.FirstOrDefault(Function(c) c.ColorName.IsEqualTo(colorName))
 
                     Dim groupByProductList = colorItem.
                         GroupBy(Function(c) c.ProductCode).
@@ -99,6 +100,20 @@ Public Class ProductImportation
 
                 Dim productColorDataService = MainServiceProvider.GetRequiredService(Of IProductColorDataService)
                 Await productColorDataService.SaveManyAsync(entities:=newProductColors, userId:=Z_UserID)
+
+                Dim inventoryLocationDataService = MainServiceProvider.GetRequiredService(Of IInventoryLocationDataService)
+
+                Await inventoryLocationDataService.PopulateAllInventoryLocationWithProductColorSizesAsync(
+                    organizationId:=Z_OrganizationID,
+                    userId:=Z_UserID,
+                    productCodes:=productCodes)
+
+                MessageBox.Show(text:="Product(s) imported successfully!",
+                    caption:="Success — import product(s)",
+                    buttons:=MessageBoxButtons.OK,
+                    icon:=MessageBoxIcon.Information)
+
             End Function)
     End Function
+
 End Class

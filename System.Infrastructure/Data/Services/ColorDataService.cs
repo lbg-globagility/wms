@@ -6,6 +6,7 @@ using WarehouseManagementSystem.Core.Interfaces;
 using WarehouseManagementSystem.Core.Interfaces.DomainServices;
 using WarehouseManagementSystem.Core.Interfaces.Repositories;
 using WarehouseManagementSystem.Infrastructure.Data.Services.Base;
+using WarehouseManagementSystem.Utilities.Extensions;
 
 namespace WarehouseManagementSystem.Infrastructure.Data.Services
 {
@@ -35,7 +36,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
 
             foreach (var name in names)
             {
-                var color = colors.FirstOrDefault(t => t.ColorName.ToLower() == name.ToLower());
+                var color = colors.FirstOrDefault(t => t.ColorName.IsEqualTo(name));
                 if (color == null) color = await GetOrCreateAsync(organizationId: organizationId, userId: userId, name: name);
 
                 result.Add(color);

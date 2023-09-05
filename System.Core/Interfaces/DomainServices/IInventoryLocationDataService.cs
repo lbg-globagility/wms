@@ -9,5 +9,7 @@ namespace WarehouseManagementSystem.Core.Interfaces.DomainServices
         Task PopulateWithProductColorSizesAsync(string inventoryLocationName, int userId);
 
         Task PopulateWithProductColorSizesAsync(int inventoryLocationId, int userId);
+
+        Task PopulateAllInventoryLocationWithProductColorSizesAsync(int organizationId, int userId, string[] productCodes);
     }
 }

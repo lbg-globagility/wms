@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WarehouseManagementSystem.Core.Entities;
@@ -34,5 +35,12 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
                 .ThenInclude(r => r.ProductInventoryLocations)
             .AsNoTracking()
             .FirstOrDefaultAsync(t => t.RowID == id);
+
+        public async Task<List<InventoryLocation>> GetAllByOrganizationIdAsync(int organizationId) => await _context.InventoryLocations
+            .Include(i => i.RackShelfColumns)
+                .ThenInclude(r => r.ProductInventoryLocations)
+            .AsNoTracking()
+            .Where(i => i.OrganizationID == organizationId)
+            .ToListAsync();
     }
 }

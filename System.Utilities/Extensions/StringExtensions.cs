@@ -87,5 +87,7 @@ namespace WarehouseManagementSystem.Utilities.Extensions
 
             return input;
         }
+
+        public static bool IsEqualTo(this string input, string comparableText) => String.Compare(input, comparableText) == 0;
     }
 }
