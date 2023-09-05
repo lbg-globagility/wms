@@ -35,10 +35,10 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
 
             foreach (var name in names)
             {
-                var category = colors.FirstOrDefault(t => t.ColorName.ToLower() == name.ToLower());
-                if (category == null) category = await GetOrCreateAsync(organizationId: organizationId, userId: userId, name: name);
+                var color = colors.FirstOrDefault(t => t.ColorName.ToLower() == name.ToLower());
+                if (color == null) color = await GetOrCreateAsync(organizationId: organizationId, userId: userId, name: name);
 
-                result.Add(category);
+                result.Add(color);
             }
 
             return result;
