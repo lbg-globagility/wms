@@ -15,6 +15,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data
         internal virtual DbSet<Agent> Agents { get; set; }
         internal virtual DbSet<Category> Categories { get; set; }
         internal virtual DbSet<Color> Colors { get; set; }
+        internal virtual DbSet<Contact> Contacts { get; set; }
         internal virtual DbSet<Helper> Helpers { get; set; }
         internal virtual DbSet<InventoryLocation> InventoryLocations { get; set; }
         internal virtual DbSet<Invoice> Invoices { get; set; }
@@ -124,6 +125,12 @@ namespace WarehouseManagementSystem.Infrastructure.Data
 
                 t.Property(x => x.Status)
                     .HasConversion(new EnumToStringConverter<RackShelfColumnStatus>());
+            });
+
+            modelBuilder.Entity<Contact>(t =>
+            {
+                t.Property(x => x.Type)
+                    .HasConversion(new EnumToStringConverter<ContactType>());
             });
         }
     }
