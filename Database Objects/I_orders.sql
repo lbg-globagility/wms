@@ -9,7 +9,30 @@
 
 DROP FUNCTION IF EXISTS `I_orders`;
 DELIMITER //
-CREATE FUNCTION `I_orders`(`I_OrganizationID` INT(11), `I_Created` DATETIME, `I_CreatedBy` INT(11), `I_LastUpdBy` INT(11), `I_AccountID` INT(11), `I_BranchID` INT(11), `I_CompanyID` INT(11), `I_CombineCodingID` INT(11), `I_OrderNumber` VARCHAR(50), `I_ReferenceNumber` VARCHAR(50), `I_DRNumber` VARCHAR(50), `I_OrderType` VARCHAR(50), `I_OrderDate` DATE, `I_TargetDate` DATE, `I_EndDate` DATE, `I_CustomerName` VARCHAR(100), `I_Comments` VARCHAR(100), `I_Status` VARCHAR(50), `I_TotalAmount` DECIMAL(10,2), `I_DeliveryHours` VARCHAR(100), `I_CustomerAddress` VARCHAR(150)) RETURNS int(10)
+CREATE FUNCTION `I_orders`(
+	`I_OrganizationID` INT(11),
+	`I_Created` DATETIME,
+	`I_CreatedBy` INT(11),
+	`I_LastUpdBy` INT(11),
+	`I_AccountID` INT(11),
+	`I_BranchID` INT(11),
+	`I_CompanyID` INT(11),
+	`I_CombineCodingID` INT(11),
+	`I_OrderNumber` VARCHAR(50),
+	`I_ReferenceNumber` VARCHAR(50),
+	`I_DRNumber` VARCHAR(50),
+	`I_OrderType` VARCHAR(50),
+	`I_OrderDate` DATE,
+	`I_TargetDate` DATE,
+	`I_EndDate` DATE,
+	`I_CustomerName` VARCHAR(100),
+	`I_Comments` VARCHAR(100),
+	`I_Status` VARCHAR(50),
+	`I_TotalAmount` DECIMAL(10,2),
+	`I_DeliveryHours` VARCHAR(100),
+	`I_CustomerAddress` VARCHAR(150),
+	`I_InventoryLocationID` INT
+) RETURNS int(10)
 BEGIN
 
 DECLARE newOrdersID INT(11);
@@ -36,7 +59,8 @@ INSERT INTO orders
 	`Status`,
 	TotalAmount,
 	DeliveryHours,
-	CustomerAddress
+	CustomerAddress,
+	InventoryLocationID
 )
 VALUES
 (
@@ -60,7 +84,8 @@ VALUES
 	I_Status,
 	I_TotalAmount,
 	I_DeliveryHours,
-	I_CustomerAddress
+	I_CustomerAddress,
+	I_InventoryLocationID
 );
 
 SELECT @@Identity AS ID INTO newOrdersID;
