@@ -23,12 +23,20 @@ namespace WarehouseManagementSystem.Core.Entities
 
     public partial class InventoryLocation
     {
-        public bool IsMain => Type == InventoryLocationType.Main;
-        public bool IsNotMain => !IsMain && (IsBranch || IsOthers || IsSub);
+        private InventoryLocation()
+        {
+        }
 
-        public bool IsBranch => Type == InventoryLocationType.Branch;
-        public bool IsOthers => Type == InventoryLocationType.Others;
-        public bool IsSub => Type == InventoryLocationType.Sub;
+        public bool IsMainWarehouse => Type == InventoryLocationType.Main;
+        public bool IsNotMain => !IsMainWarehouse && (IsClassBWarehouse || IsSampleWarehouse || IsDamageWarehouse);
+
+        //public bool IsBranch => Type == InventoryLocationType.Branch;
+        //public bool IsOthers => Type == InventoryLocationType.Others;
+        //public bool IsSub => Type == InventoryLocationType.Sub;
+        public bool IsClassBWarehouse => Type == InventoryLocationType.ClassB;
+
+        public bool IsSampleWarehouse => Type == InventoryLocationType.Sample;
+        public bool IsDamageWarehouse => Type == InventoryLocationType.Damage;
 
         //public virtual RackShelfColumn RackShelfColumn { get; set; }
         public virtual ICollection<RackShelfColumn> RackShelfColumns { get; set; }
@@ -41,7 +49,7 @@ namespace WarehouseManagementSystem.Core.Entities
 
             var newRackShelfColumns = new List<RackShelfColumn>();
 
-            if (IsMain)
+            if (IsMainWarehouse)
             {
                 foreach (var nonExistentProductColorSize in nonExistentProductColorSizes)
                 {
@@ -75,5 +83,20 @@ namespace WarehouseManagementSystem.Core.Entities
             if (RackShelfColumns == null) RackShelfColumns = new List<RackShelfColumn>();
             RackShelfColumns = newRackShelfColumns;
         }
+
+        public InventoryLocation(int organizationId,
+            string name,
+            InventoryLocationType type)
+        {
+            OrganizationID = organizationId;
+            Name = name;
+            Type = type;
+        }
+
+        public static InventoryLocation NewInventoryLocation(int organizationId,
+            string name,
+            InventoryLocationType type) => new InventoryLocation(organizationId: organizationId,
+                name: name,
+                type: type);
     }
 }
