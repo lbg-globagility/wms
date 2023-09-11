@@ -3,8 +3,8 @@
     public enum InventoryLocationType
     {
         Main,
-        Branch,
-        Others,
-        Sub
+        ClassB,
+        Sample,
+        Damage
     }
 }
