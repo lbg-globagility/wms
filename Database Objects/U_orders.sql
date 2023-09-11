@@ -9,7 +9,26 @@
 
 DROP PROCEDURE IF EXISTS `U_orders`;
 DELIMITER //
-CREATE PROCEDURE `U_orders`(IN `U_RowID` INT(11), IN `U_LastUpd` DATETIME, IN `U_LastUpdBy` INT(11), IN `U_AccountID` INT(11), IN `U_BranchID` INT(11), IN `U_CompanyID` INT(11), IN `U_CombineCodingID` INT(11), IN `U_OrderNumber` VARCHAR(50), IN `U_ReferenceNumber` VARCHAR(50), IN `U_DRNumber` VARCHAR(50), IN `U_OrderDate` DATE, IN `U_TargetDate` DATE, IN `U_EndDate` DATE, IN `U_Comments` VARCHAR(100), IN `U_TotalAmount` DECIMAL(10,2), IN `U_DeliveryHours` VARCHAR(100), IN `U_CustomerAddress` VARCHAR(150))
+CREATE PROCEDURE `U_orders`(
+	IN `U_RowID` INT(11),
+	IN `U_LastUpd` DATETIME,
+	IN `U_LastUpdBy` INT(11),
+	IN `U_AccountID` INT(11),
+	IN `U_BranchID` INT(11),
+	IN `U_CompanyID` INT(11),
+	IN `U_CombineCodingID` INT(11),
+	IN `U_OrderNumber` VARCHAR(50),
+	IN `U_ReferenceNumber` VARCHAR(50),
+	IN `U_DRNumber` VARCHAR(50),
+	IN `U_OrderDate` DATE,
+	IN `U_TargetDate` DATE,
+	IN `U_EndDate` DATE,
+	IN `U_Comments` VARCHAR(100),
+	IN `U_TotalAmount` DECIMAL(10,2),
+	IN `U_DeliveryHours` VARCHAR(100),
+	IN `U_CustomerAddress` VARCHAR(150),
+	IN `U_InventoryLocationID` INT
+)
 BEGIN
 UPDATE orders SET
 	LastUpd = U_LastUpd,
@@ -27,7 +46,8 @@ UPDATE orders SET
 	Comments = U_Comments,
 	TotalAmount = U_TotalAmount,
 	DeliveryHours = U_DeliveryHours,
-	CustomerAddress = U_CustomerAddress
+	CustomerAddress = U_CustomerAddress,
+	InventoryLocationID = U_InventoryLocationID
 WHERE RowID = U_RowID;
 END//
 DELIMITER ;
