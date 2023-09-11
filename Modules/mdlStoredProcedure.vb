@@ -1,4 +1,5 @@
 ﻿Imports MySql.Data.MySqlClient
+Imports WarehouseManagementSystem.Core.Entities
 
 Module mdlStoredProcedure
     Public connectionString As String = System.IO.File.ReadAllText("C:\ConnectionString\ConnectionStringDreamheartsdb.txt")
@@ -1743,7 +1744,8 @@ Module mdlStoredProcedure
                           ByVal TotalAmount As Decimal,
                           ByVal DeliveryHours As String,
                           ByVal CustomerAddress As String,
-                          ByVal globalformname As Object) As Boolean
+                          ByVal globalformname As Object,
+                          Optional InventoryLocationId As Integer? = Nothing) As Boolean
 
         Dim F_return As Boolean = False
         Dim SQL_command As MySqlCommand =
@@ -1776,6 +1778,7 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("I_TotalAmount", TotalAmount)
                 .Parameters.AddWithValue("I_DeliveryHours", DeliveryHours)
                 .Parameters.AddWithValue("I_CustomerAddress", CustomerAddress)
+                .Parameters.AddWithValue("I_InventoryLocationID", If(InventoryLocationId Is Nothing, DBNull.Value, InventoryLocationId))
                 .Parameters("newOrdersID").Direction = ParameterDirection.ReturnValue
                 globaldatareader = .ExecuteReader
                 globalorderidsp = globaldatareader(0)
@@ -1805,7 +1808,8 @@ Module mdlStoredProcedure
                                 ByVal TotalAmount As Decimal,
                                 ByVal DeliveryHours As String,
                                 ByVal CustomerAddress As String,
-                                ByVal globalformname As Object) As Boolean
+                                ByVal globalformname As Object,
+                                Optional InventoryLocationId As Integer? = Nothing) As Boolean
 
         Dim F_return As Boolean = False
         Dim SQL_command As MySqlCommand =
@@ -1832,6 +1836,7 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_TotalAmount", TotalAmount)
                 .Parameters.AddWithValue("U_DeliveryHours", DeliveryHours)
                 .Parameters.AddWithValue("U_CustomerAddress", CustomerAddress)
+                .Parameters.AddWithValue("U_InventoryLocationID", If(InventoryLocationId Is Nothing, DBNull.Value, InventoryLocationId))
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
             Catch ex As Exception
