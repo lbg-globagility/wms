@@ -101,7 +101,7 @@ Public Class ImportProductForm
 
         Dim productImportation = New ProductImportation(productRowRecords:=productRowRecords)
 
-        SaveButton.Enabled = False
+        Panel1.Enabled = False
 
         Await FunctionUtils.TryCatchFunctionAsync("Import Product(s)",
             Async Function()
@@ -109,12 +109,16 @@ Public Class ImportProductForm
 
                 Me.DialogResult = DialogResult.OK
 
-                SaveButton.Enabled = True
+                Panel1.Enabled = True
             End Function)
     End Sub
 
     Private Sub CancelDialogButton_Click(sender As Object, e As EventArgs) Handles CancelDialogButton.Click
         Me.DialogResult = DialogResult.Cancel
+    End Sub
+
+    Private Sub ImportProductForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
+        e.Cancel = Not Panel1.Enabled
     End Sub
 
 End Class

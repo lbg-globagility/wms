@@ -115,6 +115,7 @@ Partial Class ImportProductForm
         Me.DataGridViewTextBoxColumn43 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DataGridViewTextBoxColumn44 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DataGridViewTextBoxColumn45 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Panel1 = New System.Windows.Forms.Panel()
         CType(Me.ValidRecordsGrid, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ParsedTabControl.SuspendLayout()
         Me.TabControl1.SuspendLayout()
@@ -122,6 +123,7 @@ Partial Class ImportProductForm
         CType(Me.RejectedRecordsGrid, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.AlreadyExistsTabControl.SuspendLayout()
         CType(Me.AlreadyExistRecordsGrid, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
         '
         'DataGridViewTextBoxColumn1
@@ -330,9 +332,6 @@ Partial Class ImportProductForm
         '
         Me.ValidRecordsGrid.AllowUserToAddRows = False
         Me.ValidRecordsGrid.AllowUserToDeleteRows = False
-        Me.ValidRecordsGrid.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ValidRecordsGrid.BackgroundColor = System.Drawing.Color.White
         Me.ValidRecordsGrid.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column3, Me.Column1, Me.Column6, Me.Column2, Me.Column8, Me.Column9, Me.Column7, Me.Column10, Me.Column11, Me.Column12, Me.Column13})
         DataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
@@ -343,11 +342,12 @@ Partial Class ImportProductForm
         DataGridViewCellStyle17.SelectionForeColor = System.Drawing.SystemColors.ControlText
         DataGridViewCellStyle17.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
         Me.ValidRecordsGrid.DefaultCellStyle = DataGridViewCellStyle17
+        Me.ValidRecordsGrid.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ValidRecordsGrid.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
         Me.ValidRecordsGrid.Location = New System.Drawing.Point(3, 24)
         Me.ValidRecordsGrid.Name = "ValidRecordsGrid"
         Me.ValidRecordsGrid.ReadOnly = True
-        Me.ValidRecordsGrid.Size = New System.Drawing.Size(786, 354)
+        Me.ValidRecordsGrid.Size = New System.Drawing.Size(786, 339)
         Me.ValidRecordsGrid.TabIndex = 0
         '
         'Column3
@@ -433,12 +433,9 @@ Partial Class ImportProductForm
         '
         'ParsedTabControl
         '
-        Me.ParsedTabControl.Controls.Add(Me.btnDownloadTemplate)
-        Me.ParsedTabControl.Controls.Add(Me.CancelDialogButton)
-        Me.ParsedTabControl.Controls.Add(Me.SaveButton)
         Me.ParsedTabControl.Controls.Add(Me.ValidRecordsGrid)
+        Me.ParsedTabControl.Controls.Add(Me.Panel1)
         Me.ParsedTabControl.Controls.Add(Me.lblStatus)
-        Me.ParsedTabControl.Controls.Add(Me.BrowseButton)
         Me.ParsedTabControl.Location = New System.Drawing.Point(4, 22)
         Me.ParsedTabControl.Name = "ParsedTabControl"
         Me.ParsedTabControl.Padding = New System.Windows.Forms.Padding(3)
@@ -449,8 +446,7 @@ Partial Class ImportProductForm
         '
         'btnDownloadTemplate
         '
-        Me.btnDownloadTemplate.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.btnDownloadTemplate.Location = New System.Drawing.Point(113, 384)
+        Me.btnDownloadTemplate.Location = New System.Drawing.Point(107, 14)
         Me.btnDownloadTemplate.Name = "btnDownloadTemplate"
         Me.btnDownloadTemplate.Size = New System.Drawing.Size(119, 32)
         Me.btnDownloadTemplate.TabIndex = 20
@@ -459,8 +455,7 @@ Partial Class ImportProductForm
         '
         'CancelDialogButton
         '
-        Me.CancelDialogButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.CancelDialogButton.Location = New System.Drawing.Point(686, 384)
+        Me.CancelDialogButton.Location = New System.Drawing.Point(685, 14)
         Me.CancelDialogButton.Name = "CancelDialogButton"
         Me.CancelDialogButton.Size = New System.Drawing.Size(96, 32)
         Me.CancelDialogButton.TabIndex = 19
@@ -469,9 +464,8 @@ Partial Class ImportProductForm
         '
         'SaveButton
         '
-        Me.SaveButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.SaveButton.Enabled = False
-        Me.SaveButton.Location = New System.Drawing.Point(581, 384)
+        Me.SaveButton.Location = New System.Drawing.Point(583, 14)
         Me.SaveButton.Name = "SaveButton"
         Me.SaveButton.Size = New System.Drawing.Size(96, 32)
         Me.SaveButton.TabIndex = 18
@@ -493,8 +487,7 @@ Partial Class ImportProductForm
         '
         'BrowseButton
         '
-        Me.BrowseButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.BrowseButton.Location = New System.Drawing.Point(8, 384)
+        Me.BrowseButton.Location = New System.Drawing.Point(5, 14)
         Me.BrowseButton.Name = "BrowseButton"
         Me.BrowseButton.Size = New System.Drawing.Size(96, 32)
         Me.BrowseButton.TabIndex = 17
@@ -762,6 +755,18 @@ Partial Class ImportProductForm
         Me.DataGridViewTextBoxColumn45.Name = "DataGridViewTextBoxColumn45"
         Me.DataGridViewTextBoxColumn45.ReadOnly = True
         '
+        'Panel1
+        '
+        Me.Panel1.Controls.Add(Me.BrowseButton)
+        Me.Panel1.Controls.Add(Me.btnDownloadTemplate)
+        Me.Panel1.Controls.Add(Me.SaveButton)
+        Me.Panel1.Controls.Add(Me.CancelDialogButton)
+        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.Panel1.Location = New System.Drawing.Point(3, 363)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(786, 58)
+        Me.Panel1.TabIndex = 21
+        '
         'ImportProductForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -782,6 +787,7 @@ Partial Class ImportProductForm
         CType(Me.RejectedRecordsGrid, System.ComponentModel.ISupportInitialize).EndInit()
         Me.AlreadyExistsTabControl.ResumeLayout(False)
         CType(Me.AlreadyExistRecordsGrid, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.Panel1.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -856,4 +862,5 @@ Partial Class ImportProductForm
     Friend WithEvents DataGridViewTextBoxColumn43 As DataGridViewTextBoxColumn
     Friend WithEvents DataGridViewTextBoxColumn44 As DataGridViewTextBoxColumn
     Friend WithEvents DataGridViewTextBoxColumn45 As DataGridViewTextBoxColumn
+    Friend WithEvents Panel1 As Panel
 End Class
