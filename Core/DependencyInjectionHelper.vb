@@ -41,6 +41,7 @@ Public Class DependencyInjectionHelper
 
             .AddTransient(Of ICategoryRepository, CategoryRepository)
             .AddTransient(Of IColorRepository, ColorRepository)
+            .AddTransient(Of IContactRepository, ContactRepository)
             .AddTransient(Of IInventoryLocationRepository, InventoryLocationRepository)
             .AddTransient(Of IProductColorRepository, ProductColorRepository)
             .AddTransient(Of IProductColorSizeRepository, ProductColorSizeRepository)
