@@ -127,6 +127,15 @@ namespace WarehouseManagementSystem.Infrastructure.Data
                     .HasConversion(new EnumToStringConverter<RackShelfColumnStatus>());
             });
 
+            modelBuilder.Entity<SystemOwner>(t =>
+            {
+                var converter = new ValueConverter<bool, string>(convertToProviderExpression: b => b ? "1" : "0",
+                    convertFromProviderExpression: s => s == "1" ? true : false);
+
+                t.Property(x => x.IsCurrentOwner)
+                    .HasConversion(converter);
+            });
+
             modelBuilder.Entity<Contact>(t =>
             {
                 t.Property(x => x.Type)

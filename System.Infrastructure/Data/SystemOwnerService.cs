@@ -31,7 +31,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data
         {
             return _context.SystemOwners
                 .AsNoTracking()
-                .Where(x => x.IsCurrentOwner == "1")
+                .Where(x => x.IsCurrentOwner)
                 .Select(x => x.Name);
         }
 
@@ -39,8 +39,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data
         {
             return await _context.SystemOwners
                 .AsNoTracking()
-                .Where(x => x.IsCurrentOwner == "1")
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(x => x.IsCurrentOwner);
         }
     }
 }
