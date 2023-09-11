@@ -192,6 +192,8 @@ Partial Class CustomerOrdersForm
         Me.ci_option = New System.Windows.Forms.DataGridViewButtonColumn()
         Me.Label15 = New System.Windows.Forms.Label()
         Me.gbCustomerOrderInformation = New System.Windows.Forms.GroupBox()
+        Me.cboInventoryLocation = New System.Windows.Forms.ComboBox()
+        Me.Label33 = New System.Windows.Forms.Label()
         Me.pbAddClassDescription = New System.Windows.Forms.PictureBox()
         Me.cboClassDescription = New System.Windows.Forms.ComboBox()
         Me.Label31 = New System.Windows.Forms.Label()
@@ -235,6 +237,7 @@ Partial Class CustomerOrdersForm
         Me.Label52 = New System.Windows.Forms.Label()
         Me.Label55 = New System.Windows.Forms.Label()
         Me.Label9 = New System.Windows.Forms.Label()
+        Me.Label34 = New System.Windows.Forms.Label()
         Me.msMenu = New System.Windows.Forms.MenuStrip()
         Me.msNew = New System.Windows.Forms.ToolStripMenuItem()
         Me.msSave = New System.Windows.Forms.ToolStripMenuItem()
@@ -714,6 +717,7 @@ Partial Class CustomerOrdersForm
         '
         Me.SplitContainer1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.SplitContainer1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SplitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1
         Me.SplitContainer1.IsSplitterFixed = True
         Me.SplitContainer1.Location = New System.Drawing.Point(0, 28)
         Me.SplitContainer1.Name = "SplitContainer1"
@@ -1054,7 +1058,7 @@ Partial Class CustomerOrdersForm
         Me.gbAddProducts.Controls.Add(Me.dgProductColorSizes)
         Me.gbAddProducts.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.gbAddProducts.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.gbAddProducts.Location = New System.Drawing.Point(6, 205)
+        Me.gbAddProducts.Location = New System.Drawing.Point(6, 244)
         Me.gbAddProducts.Name = "gbAddProducts"
         Me.gbAddProducts.Size = New System.Drawing.Size(815, 210)
         Me.gbAddProducts.TabIndex = 4
@@ -1448,7 +1452,7 @@ Partial Class CustomerOrdersForm
         Me.gbCustomerOrderItems.Controls.Add(Me.Label15)
         Me.gbCustomerOrderItems.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.gbCustomerOrderItems.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.gbCustomerOrderItems.Location = New System.Drawing.Point(6, 420)
+        Me.gbCustomerOrderItems.Location = New System.Drawing.Point(6, 459)
         Me.gbCustomerOrderItems.Name = "gbCustomerOrderItems"
         Me.gbCustomerOrderItems.Size = New System.Drawing.Size(815, 260)
         Me.gbCustomerOrderItems.TabIndex = 5
@@ -1787,6 +1791,8 @@ Partial Class CustomerOrdersForm
         '
         'gbCustomerOrderInformation
         '
+        Me.gbCustomerOrderInformation.Controls.Add(Me.cboInventoryLocation)
+        Me.gbCustomerOrderInformation.Controls.Add(Me.Label33)
         Me.gbCustomerOrderInformation.Controls.Add(Me.pbAddClassDescription)
         Me.gbCustomerOrderInformation.Controls.Add(Me.cboClassDescription)
         Me.gbCustomerOrderInformation.Controls.Add(Me.Label31)
@@ -1830,20 +1836,41 @@ Partial Class CustomerOrdersForm
         Me.gbCustomerOrderInformation.Controls.Add(Me.Label52)
         Me.gbCustomerOrderInformation.Controls.Add(Me.Label55)
         Me.gbCustomerOrderInformation.Controls.Add(Me.Label9)
+        Me.gbCustomerOrderInformation.Controls.Add(Me.Label34)
         Me.gbCustomerOrderInformation.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.gbCustomerOrderInformation.ForeColor = System.Drawing.SystemColors.ControlText
         Me.gbCustomerOrderInformation.Location = New System.Drawing.Point(6, 5)
         Me.gbCustomerOrderInformation.Name = "gbCustomerOrderInformation"
-        Me.gbCustomerOrderInformation.Size = New System.Drawing.Size(815, 195)
+        Me.gbCustomerOrderInformation.Size = New System.Drawing.Size(815, 234)
         Me.gbCustomerOrderInformation.TabIndex = 3
         Me.gbCustomerOrderInformation.TabStop = False
+        '
+        'cboInventoryLocation
+        '
+        Me.cboInventoryLocation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cboInventoryLocation.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cboInventoryLocation.FormattingEnabled = True
+        Me.cboInventoryLocation.Location = New System.Drawing.Point(124, 75)
+        Me.cboInventoryLocation.Name = "cboInventoryLocation"
+        Me.cboInventoryLocation.Size = New System.Drawing.Size(288, 23)
+        Me.cboInventoryLocation.TabIndex = 459
+        '
+        'Label33
+        '
+        Me.Label33.AutoSize = True
+        Me.Label33.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label33.Location = New System.Drawing.Point(6, 79)
+        Me.Label33.Name = "Label33"
+        Me.Label33.Size = New System.Drawing.Size(108, 15)
+        Me.Label33.TabIndex = 458
+        Me.Label33.Text = "Inventory Location:"
         '
         'pbAddClassDescription
         '
         Me.pbAddClassDescription.BackColor = System.Drawing.Color.Transparent
         Me.pbAddClassDescription.Cursor = System.Windows.Forms.Cursors.Hand
         Me.pbAddClassDescription.Image = CType(resources.GetObject("pbAddClassDescription.Image"), System.Drawing.Image)
-        Me.pbAddClassDescription.Location = New System.Drawing.Point(795, 78)
+        Me.pbAddClassDescription.Location = New System.Drawing.Point(795, 106)
         Me.pbAddClassDescription.Name = "pbAddClassDescription"
         Me.pbAddClassDescription.Size = New System.Drawing.Size(14, 18)
         Me.pbAddClassDescription.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
@@ -1855,7 +1882,7 @@ Partial Class CustomerOrdersForm
         '
         Me.cboClassDescription.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cboClassDescription.FormattingEnabled = True
-        Me.cboClassDescription.Location = New System.Drawing.Point(508, 75)
+        Me.cboClassDescription.Location = New System.Drawing.Point(508, 103)
         Me.cboClassDescription.Name = "cboClassDescription"
         Me.cboClassDescription.Size = New System.Drawing.Size(285, 23)
         Me.cboClassDescription.TabIndex = 32
@@ -1864,7 +1891,7 @@ Partial Class CustomerOrdersForm
         '
         Me.Label31.AutoSize = True
         Me.Label31.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label31.Location = New System.Drawing.Point(402, 78)
+        Me.Label31.Location = New System.Drawing.Point(402, 106)
         Me.Label31.Name = "Label31"
         Me.Label31.Size = New System.Drawing.Size(105, 15)
         Me.Label31.TabIndex = 456
@@ -1875,7 +1902,7 @@ Partial Class CustomerOrdersForm
         Me.pbAddBranchCodeName.BackColor = System.Drawing.Color.Transparent
         Me.pbAddBranchCodeName.Cursor = System.Windows.Forms.Cursors.Hand
         Me.pbAddBranchCodeName.Image = CType(resources.GetObject("pbAddBranchCodeName.Image"), System.Drawing.Image)
-        Me.pbAddBranchCodeName.Location = New System.Drawing.Point(367, 134)
+        Me.pbAddBranchCodeName.Location = New System.Drawing.Point(367, 162)
         Me.pbAddBranchCodeName.Name = "pbAddBranchCodeName"
         Me.pbAddBranchCodeName.Size = New System.Drawing.Size(14, 18)
         Me.pbAddBranchCodeName.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
@@ -1888,7 +1915,7 @@ Partial Class CustomerOrdersForm
         Me.cboBranchCodeNameInfo.BackColor = System.Drawing.SystemColors.Window
         Me.cboBranchCodeNameInfo.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cboBranchCodeNameInfo.FormattingEnabled = True
-        Me.cboBranchCodeNameInfo.Location = New System.Drawing.Point(156, 131)
+        Me.cboBranchCodeNameInfo.Location = New System.Drawing.Point(156, 159)
         Me.cboBranchCodeNameInfo.Name = "cboBranchCodeNameInfo"
         Me.cboBranchCodeNameInfo.Size = New System.Drawing.Size(208, 23)
         Me.cboBranchCodeNameInfo.TabIndex = 30
@@ -1897,7 +1924,7 @@ Partial Class CustomerOrdersForm
         '
         Me.Label41.AutoSize = True
         Me.Label41.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label41.Location = New System.Drawing.Point(6, 135)
+        Me.Label41.Location = New System.Drawing.Point(6, 163)
         Me.Label41.Name = "Label41"
         Me.Label41.Size = New System.Drawing.Size(147, 15)
         Me.Label41.TabIndex = 453
@@ -1908,7 +1935,7 @@ Partial Class CustomerOrdersForm
         Me.pbAddVendorCodeName.BackColor = System.Drawing.Color.Transparent
         Me.pbAddVendorCodeName.Cursor = System.Windows.Forms.Cursors.Hand
         Me.pbAddVendorCodeName.Image = CType(resources.GetObject("pbAddVendorCodeName.Image"), System.Drawing.Image)
-        Me.pbAddVendorCodeName.Location = New System.Drawing.Point(367, 163)
+        Me.pbAddVendorCodeName.Location = New System.Drawing.Point(367, 191)
         Me.pbAddVendorCodeName.Name = "pbAddVendorCodeName"
         Me.pbAddVendorCodeName.Size = New System.Drawing.Size(14, 18)
         Me.pbAddVendorCodeName.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
@@ -1920,7 +1947,7 @@ Partial Class CustomerOrdersForm
         '
         Me.cboVendorCodeNameInfo.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cboVendorCodeNameInfo.FormattingEnabled = True
-        Me.cboVendorCodeNameInfo.Location = New System.Drawing.Point(156, 160)
+        Me.cboVendorCodeNameInfo.Location = New System.Drawing.Point(156, 188)
         Me.cboVendorCodeNameInfo.Name = "cboVendorCodeNameInfo"
         Me.cboVendorCodeNameInfo.Size = New System.Drawing.Size(208, 23)
         Me.cboVendorCodeNameInfo.TabIndex = 31
@@ -1929,7 +1956,7 @@ Partial Class CustomerOrdersForm
         '
         Me.Label29.AutoSize = True
         Me.Label29.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label29.Location = New System.Drawing.Point(6, 164)
+        Me.Label29.Location = New System.Drawing.Point(6, 192)
         Me.Label29.Name = "Label29"
         Me.Label29.Size = New System.Drawing.Size(147, 15)
         Me.Label29.TabIndex = 450
@@ -2042,7 +2069,7 @@ Partial Class CustomerOrdersForm
         'txtDeliveryAddress
         '
         Me.txtDeliveryAddress.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtDeliveryAddress.Location = New System.Drawing.Point(111, 104)
+        Me.txtDeliveryAddress.Location = New System.Drawing.Point(111, 132)
         Me.txtDeliveryAddress.Name = "txtDeliveryAddress"
         Me.txtDeliveryAddress.Size = New System.Drawing.Size(270, 21)
         Me.txtDeliveryAddress.TabIndex = 29
@@ -2051,7 +2078,7 @@ Partial Class CustomerOrdersForm
         '
         Me.Label19.AutoSize = True
         Me.Label19.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label19.Location = New System.Drawing.Point(6, 108)
+        Me.Label19.Location = New System.Drawing.Point(6, 136)
         Me.Label19.Name = "Label19"
         Me.Label19.Size = New System.Drawing.Size(100, 15)
         Me.Label19.TabIndex = 438
@@ -2060,7 +2087,7 @@ Partial Class CustomerOrdersForm
         'txtDeliveryHours
         '
         Me.txtDeliveryHours.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtDeliveryHours.Location = New System.Drawing.Point(405, 118)
+        Me.txtDeliveryHours.Location = New System.Drawing.Point(405, 146)
         Me.txtDeliveryHours.Multiline = True
         Me.txtDeliveryHours.Name = "txtDeliveryHours"
         Me.txtDeliveryHours.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
@@ -2071,7 +2098,7 @@ Partial Class CustomerOrdersForm
         '
         Me.Label10.AutoSize = True
         Me.Label10.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label10.Location = New System.Drawing.Point(455, 100)
+        Me.Label10.Location = New System.Drawing.Point(455, 128)
         Me.Label10.Name = "Label10"
         Me.Label10.Size = New System.Drawing.Size(89, 15)
         Me.Label10.TabIndex = 436
@@ -2082,7 +2109,7 @@ Partial Class CustomerOrdersForm
         Me.pbAddCustomer.BackColor = System.Drawing.Color.Transparent
         Me.pbAddCustomer.Cursor = System.Windows.Forms.Cursors.Hand
         Me.pbAddCustomer.Image = CType(resources.GetObject("pbAddCustomer.Image"), System.Drawing.Image)
-        Me.pbAddCustomer.Location = New System.Drawing.Point(367, 78)
+        Me.pbAddCustomer.Location = New System.Drawing.Point(367, 106)
         Me.pbAddCustomer.Name = "pbAddCustomer"
         Me.pbAddCustomer.Size = New System.Drawing.Size(14, 18)
         Me.pbAddCustomer.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
@@ -2093,7 +2120,7 @@ Partial Class CustomerOrdersForm
         'txtComments
         '
         Me.txtComments.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtComments.Location = New System.Drawing.Point(598, 118)
+        Me.txtComments.Location = New System.Drawing.Point(598, 146)
         Me.txtComments.Multiline = True
         Me.txtComments.Name = "txtComments"
         Me.txtComments.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
@@ -2104,7 +2131,7 @@ Partial Class CustomerOrdersForm
         '
         Me.Label25.AutoSize = True
         Me.Label25.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label25.Location = New System.Drawing.Point(674, 100)
+        Me.Label25.Location = New System.Drawing.Point(674, 128)
         Me.Label25.Name = "Label25"
         Me.Label25.Size = New System.Drawing.Size(70, 15)
         Me.Label25.TabIndex = 434
@@ -2113,7 +2140,7 @@ Partial Class CustomerOrdersForm
         'txtPickListNo
         '
         Me.txtPickListNo.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtPickListNo.Location = New System.Drawing.Point(482, 164)
+        Me.txtPickListNo.Location = New System.Drawing.Point(482, 192)
         Me.txtPickListNo.Name = "txtPickListNo"
         Me.txtPickListNo.ReadOnly = True
         Me.txtPickListNo.Size = New System.Drawing.Size(110, 21)
@@ -2123,7 +2150,7 @@ Partial Class CustomerOrdersForm
         '
         Me.Label24.AutoSize = True
         Me.Label24.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label24.Location = New System.Drawing.Point(402, 168)
+        Me.Label24.Location = New System.Drawing.Point(402, 196)
         Me.Label24.Name = "Label24"
         Me.Label24.Size = New System.Drawing.Size(77, 15)
         Me.Label24.TabIndex = 432
@@ -2155,7 +2182,7 @@ Partial Class CustomerOrdersForm
         'txtLineUpNos
         '
         Me.txtLineUpNos.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtLineUpNos.Location = New System.Drawing.Point(689, 165)
+        Me.txtLineUpNos.Location = New System.Drawing.Point(689, 193)
         Me.txtLineUpNos.Name = "txtLineUpNos"
         Me.txtLineUpNos.ReadOnly = True
         Me.txtLineUpNos.Size = New System.Drawing.Size(120, 21)
@@ -2165,7 +2192,7 @@ Partial Class CustomerOrdersForm
         '
         Me.Label11.AutoSize = True
         Me.Label11.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label11.Location = New System.Drawing.Point(598, 168)
+        Me.Label11.Location = New System.Drawing.Point(598, 196)
         Me.Label11.Name = "Label11"
         Me.Label11.Size = New System.Drawing.Size(90, 15)
         Me.Label11.TabIndex = 428
@@ -2207,7 +2234,7 @@ Partial Class CustomerOrdersForm
         '
         Me.cboCustomerName.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cboCustomerName.FormattingEnabled = True
-        Me.cboCustomerName.Location = New System.Drawing.Point(124, 75)
+        Me.cboCustomerName.Location = New System.Drawing.Point(124, 103)
         Me.cboCustomerName.Name = "cboCustomerName"
         Me.cboCustomerName.Size = New System.Drawing.Size(240, 23)
         Me.cboCustomerName.TabIndex = 28
@@ -2216,7 +2243,7 @@ Partial Class CustomerOrdersForm
         '
         Me.Label14.AutoSize = True
         Me.Label14.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label14.Location = New System.Drawing.Point(6, 78)
+        Me.Label14.Location = New System.Drawing.Point(6, 106)
         Me.Label14.Name = "Label14"
         Me.Label14.Size = New System.Drawing.Size(100, 15)
         Me.Label14.TabIndex = 420
@@ -2279,11 +2306,22 @@ Partial Class CustomerOrdersForm
         Me.Label9.AutoSize = True
         Me.Label9.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label9.ForeColor = System.Drawing.Color.Red
-        Me.Label9.Location = New System.Drawing.Point(107, 75)
+        Me.Label9.Location = New System.Drawing.Point(107, 103)
         Me.Label9.Name = "Label9"
         Me.Label9.Size = New System.Drawing.Size(16, 20)
         Me.Label9.TabIndex = 425
         Me.Label9.Text = "*"
+        '
+        'Label34
+        '
+        Me.Label34.AutoSize = True
+        Me.Label34.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label34.ForeColor = System.Drawing.Color.Red
+        Me.Label34.Location = New System.Drawing.Point(109, 75)
+        Me.Label34.Name = "Label34"
+        Me.Label34.Size = New System.Drawing.Size(16, 20)
+        Me.Label34.TabIndex = 460
+        Me.Label34.Text = "*"
         '
         'msMenu
         '
@@ -2340,7 +2378,7 @@ Partial Class CustomerOrdersForm
         '
         Me.msSubmit.Image = CType(resources.GetObject("msSubmit.Image"), System.Drawing.Image)
         Me.msSubmit.Name = "msSubmit"
-        Me.msSubmit.Size = New System.Drawing.Size(173, 21)
+        Me.msSubmit.Size = New System.Drawing.Size(171, 21)
         Me.msSubmit.Text = "Submit To &Warehouse"
         '
         'lblsavemsg
@@ -2647,4 +2685,7 @@ Partial Class CustomerOrdersForm
     Friend WithEvents ci_deliveredby As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents ci_delivereddate As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents ci_option As System.Windows.Forms.DataGridViewButtonColumn
+    Friend WithEvents cboInventoryLocation As ComboBox
+    Friend WithEvents Label33 As Label
+    Friend WithEvents Label34 As Label
 End Class

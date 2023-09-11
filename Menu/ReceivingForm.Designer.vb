@@ -149,6 +149,8 @@ Partial Class ReceivingForm
         Me.cmsOptionsA = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.msCustomer = New System.Windows.Forms.ToolStripMenuItem()
         Me.msSupplier = New System.Windows.Forms.ToolStripMenuItem()
+        Me.Label11 = New System.Windows.Forms.Label()
+        Me.ComboBox1 = New System.Windows.Forms.ComboBox()
         Me.tabDetails.SuspendLayout()
         Me.gbReceivingItems.SuspendLayout()
         CType(Me.dgReceivingItems, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -202,7 +204,7 @@ Partial Class ReceivingForm
         Me.gbReceivingItems.Controls.Add(Me.Label15)
         Me.gbReceivingItems.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.gbReceivingItems.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.gbReceivingItems.Location = New System.Drawing.Point(6, 155)
+        Me.gbReceivingItems.Location = New System.Drawing.Point(6, 191)
         Me.gbReceivingItems.Name = "gbReceivingItems"
         Me.gbReceivingItems.Size = New System.Drawing.Size(800, 410)
         Me.gbReceivingItems.TabIndex = 4
@@ -513,6 +515,8 @@ Partial Class ReceivingForm
         '
         'gbReceivingInformation
         '
+        Me.gbReceivingInformation.Controls.Add(Me.ComboBox1)
+        Me.gbReceivingInformation.Controls.Add(Me.Label11)
         Me.gbReceivingInformation.Controls.Add(Me.dtpTimeArrived)
         Me.gbReceivingInformation.Controls.Add(Me.txtBrands)
         Me.gbReceivingInformation.Controls.Add(Me.Label22)
@@ -548,7 +552,7 @@ Partial Class ReceivingForm
         Me.gbReceivingInformation.ForeColor = System.Drawing.SystemColors.ControlText
         Me.gbReceivingInformation.Location = New System.Drawing.Point(6, 5)
         Me.gbReceivingInformation.Name = "gbReceivingInformation"
-        Me.gbReceivingInformation.Size = New System.Drawing.Size(800, 145)
+        Me.gbReceivingInformation.Size = New System.Drawing.Size(800, 180)
         Me.gbReceivingInformation.TabIndex = 3
         Me.gbReceivingInformation.TabStop = False
         '
@@ -1401,6 +1405,23 @@ Partial Class ReceivingForm
         Me.msSupplier.Size = New System.Drawing.Size(126, 22)
         Me.msSupplier.Text = "Supplier"
         '
+        'Label11
+        '
+        Me.Label11.AutoSize = True
+        Me.Label11.Location = New System.Drawing.Point(12, 147)
+        Me.Label11.Name = "Label11"
+        Me.Label11.Size = New System.Drawing.Size(38, 13)
+        Me.Label11.TabIndex = 460
+        Me.Label11.Text = "Agent:"
+        '
+        'ComboBox1
+        '
+        Me.ComboBox1.FormattingEnabled = True
+        Me.ComboBox1.Location = New System.Drawing.Point(80, 146)
+        Me.ComboBox1.Name = "ComboBox1"
+        Me.ComboBox1.Size = New System.Drawing.Size(121, 21)
+        Me.ComboBox1.TabIndex = 461
+        '
         'ReceivingForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -1569,4 +1590,6 @@ Partial Class ReceivingForm
     Friend WithEvents rr_suppliername As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents rr_status As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents rr_rrtype As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents ComboBox1 As ComboBox
+    Friend WithEvents Label11 As Label
 End Class

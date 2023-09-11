@@ -1,4 +1,6 @@
-﻿Imports MySql.Data.MySqlClient
+﻿Imports Microsoft.Extensions.DependencyInjection
+Imports MySql.Data.MySqlClient
+Imports WarehouseManagementSystem.Core.Interfaces.Repositories
 
 Public Class CustomerOrdersForm
     Dim manager As New sqlModule.Manager
@@ -20,7 +22,7 @@ Public Class CustomerOrdersForm
     Dim cototalqtyordered, coqtyordered, coitotalqtyordered, coiqtyordered, cototalqtydelivered, cototalqtypicked As Integer
     Dim cocustomerid, coorderid, coproductcolorsizesid, coproductid, coproductbundleid, coorderitemid, cobranchid, covendorid, cocombinecodingid As Integer
 
-    Private Sub CustomerOrdersForm_Load(sender As Object, e As EventArgs) Handles Me.Load
+    Private Async Sub CustomerOrdersForm_Load(sender As Object, e As EventArgs) Handles Me.Load
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
@@ -36,6 +38,8 @@ Public Class CustomerOrdersForm
             conn.Close()
         End Try
         Me.Cursor = Cursors.Default
+
+        Await LoadInventoryLocations()
     End Sub
 
     Private Sub CustomerOrdersForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
@@ -903,6 +907,17 @@ Public Class CustomerOrdersForm
         End Try
     End Sub
 
+    Private Async Function LoadInventoryLocations() As Task
+        Dim inventoryLocationRepository = MainServiceProvider.GetRequiredService(Of IInventoryLocationRepository)
+        Dim inventoryLocations = Await inventoryLocationRepository.GetAllByOrganizationIdAsync(Z_OrganizationID)
+        Dim dataSource = New List(Of WarehouseManagementSystem.Core.Entities.InventoryLocation) From {WarehouseManagementSystem.Core.Entities.InventoryLocation.NewInventoryLocation(organizationId:=Z_OrganizationID, name:=String.Empty, type:=WarehouseManagementSystem.Core.Enums.InventoryLocationType.Damage)}
+        dataSource.AddRange(inventoryLocations)
+
+        cboInventoryLocation.ValueMember = "RowID"
+        cboInventoryLocation.DisplayMember = "Name"
+        cboInventoryLocation.DataSource = dataSource
+    End Function
+
 #End Region
 
 #Region "Datagrids"
@@ -1064,7 +1079,7 @@ Public Class CustomerOrdersForm
             Dim sql1 As String = "SELECT COALESCE(co.ordernumber,''),COALESCE(co.referencenumber,''),COALESCE(co.drnumber,''),COALESCE(co.status,''),COALESCE(DATE_FORMAT(co.orderdate,'%d-%b-%Y'),''),COALESCE(DATE_FORMAT(co.targetdate,'%d-%b-%Y'),''),COALESCE(DATE_FORMAT(co.enddate,'%d-%b-%Y'),'')," &
                         "COALESCE(DATE_FORMAT(co.datesubmitted,'%d-%b-%Y'),''),COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),''),COALESCE(co.customeraddress,''),COALESCE(CONCAT(COALESCE(bc.branchcode,''),' - ',COALESCE(bc.branchname,'')),'')," &
                         "COALESCE(CONCAT(COALESCE(ve.companyname,''),' - ',COALESCE(ve.companycode,'')),''),COALESCE(CONCAT(COALESCE(cc.codename,''),' / ',COALESCE(c1.codeno,''),'-',COALESCE(c2.codeno,''),'-',COALESCE(c3.codeno,'')),''),COALESCE(co.deliveryhours,'')," &
-                        "COALESCE(co.comments,'') FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid LEFT JOIN branches bc ON co.branchid = bc.rowid LEFT JOIN companies ve ON co.companyid = ve.rowid LEFT JOIN combinecodings cc ON co.combinecodingid = cc.rowid " &
+                        "COALESCE(co.comments,''), InventoryLocationID FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid LEFT JOIN branches bc ON co.branchid = bc.rowid LEFT JOIN companies ve ON co.companyid = ve.rowid LEFT JOIN combinecodings cc ON co.combinecodingid = cc.rowid " &
                         "LEFT JOIN codings c1 ON cc.codingida = c1.rowid LEFT JOIN codings c2 ON cc.codingidb = c2.rowid LEFT JOIN codings c3 ON cc.codingidc = c3.rowid WHERE co.rowid = " & icustomerorderid & " "
             Dim cmd1 As New MySqlCommand(sql1, conn1)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -1093,6 +1108,7 @@ Public Class CustomerOrdersForm
                     End If
                     getLineUpNos(icustomerorderid, Me)
                     txtLineUpNos.Text = globallineupnos
+                    cboInventoryLocation.SelectedValue = reader1(15)
                 End If
             End While
             reader1.Close()
@@ -2277,6 +2293,10 @@ Public Class CustomerOrdersForm
             conn.Close()
         End Try
         Me.Cursor = Cursors.Default
+    End Sub
+
+    Private Sub dgCustomerOrderList_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgCustomerOrderList.CellContentClick
+
     End Sub
 
     Private Sub dgCustomerOrderList_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgCustomerOrderList.CellClick
@@ -3479,7 +3499,7 @@ Public Class CustomerOrdersForm
                     'End If
                     getOrderNo("CO", Me)
                     I_Orders(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, cocustomerid, If(cobranchid = 0, DBNull.Value, cobranchid), If(covendorid = 0, DBNull.Value, covendorid), If(cocombinecodingid = 0, DBNull.Value, cocombinecodingid),
-                            CStr(globalorderno), txtPONo.Text, txtSIDRNo.Text, "CO", dtpCustomerOrderDate.Value, dtpDeliveryDate.Value, dtpEndDate.Value, cboCustomerName.Text, txtComments.Text, txtStatus.Text, Math.Round(coitotalprice, 2), txtDeliveryHours.Text, txtDeliveryAddress.Text, Me)
+                            CStr(globalorderno), txtPONo.Text, txtSIDRNo.Text, "CO", dtpCustomerOrderDate.Value, dtpDeliveryDate.Value, dtpEndDate.Value, cboCustomerName.Text, txtComments.Text, txtStatus.Text, Math.Round(coitotalprice, 2), txtDeliveryHours.Text, txtDeliveryAddress.Text, Me, cboInventoryLocation.SelectedValue)
                     coorderid = globalorderidsp
                     If dgCustomerOrderItems.Rows.Count <> 0 Then
                         For a = 0 To dgCustomerOrderItems.Rows.Count - 1
@@ -3552,7 +3572,7 @@ Public Class CustomerOrdersForm
                         '    End If
                         'End If
                         U_Orders(CInt(dgCustomerOrderList.CurrentRow.Cells("co_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, cocustomerid, If(cobranchid = 0, DBNull.Value, cobranchid), If(covendorid = 0, DBNull.Value, covendorid), If(cocombinecodingid = 0, DBNull.Value, cocombinecodingid),
-                             txtCustomerOrderNo.Text, txtPONo.Text, txtSIDRNo.Text, dtpCustomerOrderDate.Value, dtpDeliveryDate.Value, dtpEndDate.Value, txtComments.Text, Math.Round(coitotalprice, 2), txtDeliveryHours.Text, txtDeliveryAddress.Text, Me)
+                             txtCustomerOrderNo.Text, txtPONo.Text, txtSIDRNo.Text, dtpCustomerOrderDate.Value, dtpDeliveryDate.Value, dtpEndDate.Value, txtComments.Text, Math.Round(coitotalprice, 2), txtDeliveryHours.Text, txtDeliveryAddress.Text, Me, cboInventoryLocation.SelectedValue)
                         If dgCustomerOrderItems.Rows.Count <> 0 Then
                             For a = 0 To dgCustomerOrderItems.Rows.Count - 1
                                 If myModule.systemerrorfound = False Then
@@ -4102,6 +4122,10 @@ Public Class CustomerOrdersForm
         Finally
             conn.Close()
         End Try
+    End Sub
+
+    Private Sub cboInventoryLocation_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboInventoryLocation.SelectedIndexChanged
+
     End Sub
 
     Private Sub pbAddBranchCodeName_MouseLeave(sender As Object, e As EventArgs) Handles pbAddBranchCodeName.MouseLeave

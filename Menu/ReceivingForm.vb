@@ -1,4 +1,6 @@
-﻿Imports MySql.Data.MySqlClient
+﻿Imports Microsoft.Extensions.DependencyInjection
+Imports MySql.Data.MySqlClient
+Imports WarehouseManagementSystem.Core.Interfaces
 
 Public Class ReceivingForm
     Dim manager As New sqlModule.Manager
@@ -255,8 +257,12 @@ Public Class ReceivingForm
         End Try
     End Sub
 
-    Sub viewHideReceivingItems(ByVal visible1 As Boolean)
+    Private Async Sub viewHideReceivingItems(ByVal visible1 As Boolean)
         ci_approved.Visible = visible1
+
+        'Dim systemOwnerService = MainServiceProvider.GetRequiredService(Of ISystemOwnerService)
+        'Dim currentSystemOwner = Await systemOwnerService.GetCurrentSystemOwnerEntityAsync()
+        'ci_qtyordered.Visible = Not currentSystemOwner.IsThurston
         ci_qtyordered.Visible = visible1
     End Sub
 
