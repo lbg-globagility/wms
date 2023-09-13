@@ -1,0 +1,4 @@
+UPDATE orders o
+SET o.OrderType='SA'
+WHERE o.OrderType='Stock Adj.'
+;

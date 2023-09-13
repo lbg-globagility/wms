@@ -1,4 +1,5 @@
 ﻿Imports MySql.Data.MySqlClient
+Imports WarehouseManagementSystem.Core.Enums
 
 Public Class StockTransferForm
     Dim manager As New sqlModule.Manager
@@ -511,7 +512,7 @@ Public Class StockTransferForm
                     dgRackShelfColumnFrom.Item(r_column.Index, n).Value = reader1(10)
                     dgRackShelfColumnFrom.Item(r_shelf.Index, n).Value = reader1(11)
                     dgRackShelfColumnFrom.Item(r_qtyavailable.Index, n).Value = CInt(reader1(12))
-                    getTotalQtyOrderedA(CInt(reader1(1)), "AND oi.`status` = 'New' AND o.`status` = 'Submitted To Warehouse' AND o.ordertype = 'CO'", Me)
+                    getTotalQtyOrderedA(CInt(reader1(1)), $"AND oi.`status` = 'New' AND o.`status` = 'Submitted To Warehouse' AND o.ordertype = '{OrderType.CO.ToString()}'", Me)
                     dgRackShelfColumnFrom.Item(r_qtyallocated.Index, n).Value = CInt(reader1(13)) + globaltotalqtyordered
                     dgRackShelfColumnFrom.Item(r_qtystock.Index, n).Value = CInt(reader1(12)) - (CInt(reader1(13)) + globaltotalqtyordered)
                     n = n + 1

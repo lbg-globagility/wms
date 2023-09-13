@@ -1,4 +1,5 @@
 ﻿Imports MySql.Data.MySqlClient
+Imports WarehouseManagementSystem.Core.Enums
 
 Public Class PrimaryForm
     Dim manager As New sqlModule.Manager
@@ -134,7 +135,7 @@ Public Class PrimaryForm
                         "COALESCE(DATE_FORMAT(co.enddate,'%d-%b-%Y'),''),COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),''),COALESCE(CONCAT(COALESCE(cb.firstname,''),' ',COALESCE(cb.lastname,''),' - ',COALESCE(cb.rowid,'')),'')," &
                         "COALESCE(CONCAT(COALESCE(bc.branchcode,''),' - ',COALESCE(bc.branchname,'')),''),COALESCE(CONCAT(COALESCE(ve.companycode,''),' - ',COALESCE(ve.companyname,'')),''),COALESCE(CONCAT(COALESCE(cc.codename,''),' / ',COALESCE(c1.codeno,''),'-',COALESCE(c2.codeno,''),'-',COALESCE(c3.codeno,'')),'') " &
                         "FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid LEFT JOIN users cb ON co.createdby = cb.rowid LEFT JOIN branches bc ON co.branchid = bc.rowid LEFT JOIN companies ve ON co.companyid = ve.rowid LEFT JOIN combinecodings cc ON co.combinecodingid = cc.rowid " &
-                        "LEFT JOIN codings c1 ON cc.codingida = c1.rowid LEFT JOIN codings c2 ON cc.codingidb = c2.rowid LEFT JOIN codings c3 ON cc.codingidc = c3.rowid WHERE co.organizationid = " & Z_OrganizationID & " AND co.ordertype = 'CO' AND co.`status` = 'New' ORDER BY co.ordernumber DESC "
+                        "LEFT JOIN codings c1 ON cc.codingida = c1.rowid LEFT JOIN codings c2 ON cc.codingidb = c2.rowid LEFT JOIN codings c3 ON cc.codingidc = c3.rowid WHERE co.organizationid = " & Z_OrganizationID & $" AND co.ordertype = '{OrderType.CO.ToString()}' AND co.`status` = 'New' ORDER BY co.ordernumber DESC "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             Dim n As Integer = 0
@@ -185,7 +186,7 @@ Public Class PrimaryForm
                         "COALESCE(DATE_FORMAT(co.datesubmitted,'%d-%b-%Y'),''),COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),''),COALESCE(CONCAT(COALESCE(cb.firstname,''),' ',COALESCE(cb.lastname,''),' - ',COALESCE(cb.rowid,'')),'')," &
                         "COALESCE(CONCAT(COALESCE(bc.branchcode,''),' - ',COALESCE(bc.branchname,'')),''),COALESCE(CONCAT(COALESCE(ve.companycode,''),' - ',COALESCE(ve.companyname,'')),''),COALESCE(CONCAT(COALESCE(cc.codename,''),' / ',COALESCE(c1.codeno,''),'-',COALESCE(c2.codeno,''),'-',COALESCE(c3.codeno,'')),'') " &
                         "FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid LEFT JOIN users cb ON co.createdby = cb.rowid LEFT JOIN branches bc ON co.branchid = bc.rowid LEFT JOIN companies ve ON co.companyid = ve.rowid LEFT JOIN combinecodings cc ON co.combinecodingid = cc.rowid " &
-                        "LEFT JOIN codings c1 ON cc.codingida = c1.rowid LEFT JOIN codings c2 ON cc.codingidb = c2.rowid LEFT JOIN codings c3 ON cc.codingidc = c3.rowid WHERE co.organizationid = " & Z_OrganizationID & " AND co.ordertype = 'CO' AND co.`status` = 'Submitted To Warehouse' ORDER BY co.ordernumber DESC "
+                        "LEFT JOIN codings c1 ON cc.codingida = c1.rowid LEFT JOIN codings c2 ON cc.codingidb = c2.rowid LEFT JOIN codings c3 ON cc.codingidc = c3.rowid WHERE co.organizationid = " & Z_OrganizationID & $" AND co.ordertype = '{OrderType.CO.ToString()}' AND co.`status` = 'Submitted To Warehouse' ORDER BY co.ordernumber DESC "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             Dim n As Integer = 0
@@ -238,7 +239,7 @@ Public Class PrimaryForm
                         "COALESCE(DATE_FORMAT(co.datesubmitted,'%d-%b-%Y'),''),COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),''),COALESCE(CONCAT(COALESCE(cb.firstname,''),' ',COALESCE(cb.lastname,''),' - ',COALESCE(cb.rowid,'')),'')," &
                         "COALESCE(CONCAT(COALESCE(bc.branchcode,''),' - ',COALESCE(bc.branchname,'')),''),COALESCE(CONCAT(COALESCE(ve.companycode,''),' - ',COALESCE(ve.companyname,'')),''),COALESCE(CONCAT(COALESCE(cc.codename,''),' / ',COALESCE(c1.codeno,''),'-',COALESCE(c2.codeno,''),'-',COALESCE(c3.codeno,'')),'') " &
                         "FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid LEFT JOIN users cb ON co.createdby = cb.rowid LEFT JOIN branches bc ON co.branchid = bc.rowid LEFT JOIN companies ve ON co.companyid = ve.rowid LEFT JOIN combinecodings cc ON co.combinecodingid = cc.rowid " &
-                        "LEFT JOIN codings c1 ON cc.codingida = c1.rowid LEFT JOIN codings c2 ON cc.codingidb = c2.rowid LEFT JOIN codings c3 ON cc.codingidc = c3.rowid WHERE co.organizationid = " & Z_OrganizationID & " AND co.ordertype = 'CO' AND co.`status` = 'Pick Listed' ORDER BY co.ordernumber DESC "
+                        "LEFT JOIN codings c1 ON cc.codingida = c1.rowid LEFT JOIN codings c2 ON cc.codingidb = c2.rowid LEFT JOIN codings c3 ON cc.codingidc = c3.rowid WHERE co.organizationid = " & Z_OrganizationID & $" AND co.ordertype = '{OrderType.CO.ToString()}' AND co.`status` = 'Pick Listed' ORDER BY co.ordernumber DESC "
             Dim cmd1 As New MySqlCommand(sql1, conn1)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             Dim n As Integer = 0
@@ -294,7 +295,7 @@ Public Class PrimaryForm
                         "COALESCE(DATE_FORMAT(co.enddate,'%d-%b-%Y'),''),COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),''),COALESCE(CONCAT(COALESCE(cb.firstname,''),' ',COALESCE(cb.lastname,''),' - ',COALESCE(cb.rowid,'')),'')," &
                         "COALESCE(CONCAT(COALESCE(bc.branchcode,''),' - ',COALESCE(bc.branchname,'')),''),COALESCE(CONCAT(COALESCE(ve.companycode,''),' - ',COALESCE(ve.companyname,'')),''),COALESCE(CONCAT(COALESCE(cc.codename,''),' / ',COALESCE(c1.codeno,''),'-',COALESCE(c2.codeno,''),'-',COALESCE(c3.codeno,'')),'') " &
                         "FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid LEFT JOIN users cb ON co.createdby = cb.rowid LEFT JOIN branches bc ON co.branchid = bc.rowid LEFT JOIN companies ve ON co.companyid = ve.rowid LEFT JOIN combinecodings cc ON co.combinecodingid = cc.rowid " &
-                        "LEFT JOIN codings c1 ON cc.codingida = c1.rowid LEFT JOIN codings c2 ON cc.codingidb = c2.rowid LEFT JOIN codings c3 ON cc.codingidc = c3.rowid WHERE co.organizationid = " & Z_OrganizationID & " AND co.ordertype = 'CO' AND co.`status` = 'For Packing' ORDER BY co.ordernumber DESC "
+                        "LEFT JOIN codings c1 ON cc.codingida = c1.rowid LEFT JOIN codings c2 ON cc.codingidb = c2.rowid LEFT JOIN codings c3 ON cc.codingidc = c3.rowid WHERE co.organizationid = " & Z_OrganizationID & $" AND co.ordertype = '{OrderType.CO.ToString()}' AND co.`status` = 'For Packing' ORDER BY co.ordernumber DESC "
             Dim cmd1 As New MySqlCommand(sql1, conn1)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             Dim n As Integer = 0
@@ -348,7 +349,7 @@ Public Class PrimaryForm
                         "COALESCE(DATE_FORMAT(co.enddate,'%d-%b-%Y'),''),COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),''),COALESCE(CONCAT(COALESCE(cb.firstname,''),' ',COALESCE(cb.lastname,''),' - ',COALESCE(cb.rowid,'')),'')," &
                         "COALESCE(CONCAT(COALESCE(bc.branchcode,''),' - ',COALESCE(bc.branchname,'')),''),COALESCE(CONCAT(COALESCE(ve.companycode,''),' - ',COALESCE(ve.companyname,'')),''),COALESCE(CONCAT(COALESCE(cc.codename,''),' / ',COALESCE(c1.codeno,''),'-',COALESCE(c2.codeno,''),'-',COALESCE(c3.codeno,'')),'') " &
                         "FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid LEFT JOIN users cb ON co.createdby = cb.rowid LEFT JOIN branches bc ON co.branchid = bc.rowid LEFT JOIN companies ve ON co.companyid = ve.rowid LEFT JOIN combinecodings cc ON co.combinecodingid = cc.rowid " &
-                        "LEFT JOIN codings c1 ON cc.codingida = c1.rowid LEFT JOIN codings c2 ON cc.codingidb = c2.rowid LEFT JOIN codings c3 ON cc.codingidc = c3.rowid WHERE co.organizationid = " & Z_OrganizationID & " AND co.ordertype = 'CO' AND co.`status` = 'Packing' ORDER BY co.ordernumber DESC "
+                        "LEFT JOIN codings c1 ON cc.codingida = c1.rowid LEFT JOIN codings c2 ON cc.codingidb = c2.rowid LEFT JOIN codings c3 ON cc.codingidc = c3.rowid WHERE co.organizationid = " & Z_OrganizationID & $" AND co.ordertype = '{OrderType.CO.ToString()}' AND co.`status` = 'Packing' ORDER BY co.ordernumber DESC "
             Dim cmd1 As New MySqlCommand(sql1, conn1)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             Dim n As Integer = 0
@@ -404,7 +405,7 @@ Public Class PrimaryForm
                         "COALESCE(DATE_FORMAT(co.enddate,'%d-%b-%Y'),''),COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),''),COALESCE(CONCAT(COALESCE(cb.firstname,''),' ',COALESCE(cb.lastname,''),' - ',COALESCE(cb.rowid,'')),'')," &
                         "COALESCE(CONCAT(COALESCE(bc.branchcode,''),' - ',COALESCE(bc.branchname,'')),''),COALESCE(CONCAT(COALESCE(ve.companycode,''),' - ',COALESCE(ve.companyname,'')),''),COALESCE(CONCAT(COALESCE(cc.codename,''),' / ',COALESCE(c1.codeno,''),'-',COALESCE(c2.codeno,''),'-',COALESCE(c3.codeno,'')),'') " &
                         "FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid LEFT JOIN users cb ON co.createdby = cb.rowid LEFT JOIN branches bc ON co.branchid = bc.rowid LEFT JOIN companies ve ON co.companyid = ve.rowid LEFT JOIN combinecodings cc ON co.combinecodingid = cc.rowid " &
-                        "LEFT JOIN codings c1 ON cc.codingida = c1.rowid LEFT JOIN codings c2 ON cc.codingidb = c2.rowid LEFT JOIN codings c3 ON cc.codingidc = c3.rowid WHERE co.organizationid = " & Z_OrganizationID & " AND co.ordertype = 'CO' AND co.`status` = 'Lined Up' ORDER BY co.ordernumber DESC "
+                        "LEFT JOIN codings c1 ON cc.codingida = c1.rowid LEFT JOIN codings c2 ON cc.codingidb = c2.rowid LEFT JOIN codings c3 ON cc.codingidc = c3.rowid WHERE co.organizationid = " & Z_OrganizationID & $" AND co.ordertype = '{OrderType.CO.ToString()}' AND co.`status` = 'Lined Up' ORDER BY co.ordernumber DESC "
             Dim cmd1 As New MySqlCommand(sql1, conn1)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             Dim n As Integer = 0

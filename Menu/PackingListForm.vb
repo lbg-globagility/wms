@@ -1,5 +1,6 @@
 ﻿Imports MySql.Data.MySqlClient
 Imports Spire.Barcode
+Imports WarehouseManagementSystem.Core.Enums
 
 Public Class PackingListForm
     Dim manager As New sqlModule.Manager
@@ -1630,8 +1631,8 @@ Public Class PackingListForm
             txtPackingListNo.Text = CStr(globalpackinglistno)
             txtStatus.Text = "New"
             txtPackingListDate.Text = Date.Now.ToString("dd-MMM-yyyy")
-            globalautocompleteOrderInfoA(cboCustomerOrderInfo, "CO", "For Packing", Me)
-            globalautopopulateOrderInfoA(cboCustomerOrderInfo, "CO", "For Packing", Me)
+            globalautocompleteOrderInfoA(cboCustomerOrderInfo, globaliordertype:=OrderType.CO.ToString(), "For Packing", Me)
+            globalautopopulateOrderInfoA(cboCustomerOrderInfo, globaliordertype:=OrderType.CO.ToString(), "For Packing", Me)
             cboCustomerOrderInfo.Enabled = legit
             txtPackingListNo.Focus()
         Catch ex As Exception
@@ -1656,7 +1657,7 @@ Public Class PackingListForm
                 visibleCustomerOrderItems(fraud)
                 dgPackingList.CurrentRow.Selected = True
                 displayPackingListInformation(CInt(dgPackingList.CurrentRow.Cells("pal_rowid").Value))
-                getOrderIDC(cboCustomerOrderInfo.Text, "CO", Me)
+                getOrderIDC(cboCustomerOrderInfo.Text, globaliordertype:=OrderType.CO.ToString(), Me)
                 palorderid = globalorderid
                 getOrderInfo(palorderid, Me)
                 txtPONo.Text = globalorderpono
@@ -1706,7 +1707,7 @@ Public Class PackingListForm
                 visibleCustomerOrderItems(fraud)
                 dgPackingList.CurrentRow.Selected = True
                 displayPackingListInformation(CInt(dgPackingList.CurrentRow.Cells("pal_rowid").Value))
-                getOrderIDC(cboCustomerOrderInfo.Text, "CO", Me)
+                getOrderIDC(cboCustomerOrderInfo.Text, globaliordertype:=OrderType.CO.ToString(), Me)
                 palorderid = globalorderid
                 getOrderInfo(palorderid, Me)
                 txtPONo.Text = globalorderpono
@@ -1755,7 +1756,7 @@ Public Class PackingListForm
                     visibleCustomerOrderItems(fraud)
                     dgPackingList.CurrentRow.Selected = True
                     displayPackingListInformation(CInt(dgPackingList.CurrentRow.Cells("pal_rowid").Value))
-                    getOrderIDC(cboCustomerOrderInfo.Text, "CO", Me)
+                    getOrderIDC(cboCustomerOrderInfo.Text, globaliordertype:=OrderType.CO.ToString(), Me)
                     palorderid = globalorderid
                     getOrderInfo(palorderid, Me)
                     txtPONo.Text = globalorderpono
@@ -1796,7 +1797,7 @@ Public Class PackingListForm
             errProvider.Clear()
             If cue = "New" Then
                 If LTrim(cboCustomerOrderInfo.Text) <> "" Then
-                    getOrderIDC(cboCustomerOrderInfo.Text, "CO", Me)
+                    getOrderIDC(cboCustomerOrderInfo.Text, globaliordertype:=OrderType.CO.ToString(), Me)
                     palorderid = globalorderid
                     If LTrim(txtPackingListNo.Text) <> "" Then
                         If palorderid = 0 Then
@@ -1813,7 +1814,7 @@ Public Class PackingListForm
             ElseIf cue = "Edit" Then
                 If dgPackingList.Rows.Count <> 0 Then
                     If LTrim(cboCustomerOrderInfo.Text) <> "" Then
-                        getOrderIDC(cboCustomerOrderInfo.Text, "CO", Me)
+                        getOrderIDC(cboCustomerOrderInfo.Text, globaliordertype:=OrderType.CO.ToString(), Me)
                         palorderid = globalorderid
                         If LTrim(txtPackingListNo.Text) <> "" Then
                             If palorderid = 0 Then
@@ -1890,7 +1891,7 @@ Public Class PackingListForm
             errProvider.Clear()
             If cue = "New" Then
                 If LTrim(cboCustomerOrderInfo.Text) <> "" Then
-                    getOrderIDC(cboCustomerOrderInfo.Text, "CO", Me)
+                    getOrderIDC(cboCustomerOrderInfo.Text, globaliordertype:=OrderType.CO.ToString(), Me)
                     palorderid = globalorderid
                     If palorderid <> 0 Then
                         getOrderInfo(palorderid, Me)
@@ -1920,7 +1921,7 @@ Public Class PackingListForm
             ElseIf cue = "Edit" Then
                 If dgPackingList.Rows.Count <> 0 Then
                     If LTrim(cboCustomerOrderInfo.Text) <> "" Then
-                        getOrderIDC(cboCustomerOrderInfo.Text, "CO", Me)
+                        getOrderIDC(cboCustomerOrderInfo.Text, globaliordertype:=OrderType.CO.ToString(), Me)
                         palorderid = globalorderid
                         If LTrim(txtPackingListNo.Text) <> "" Then
                             If palorderid = 0 Then
@@ -2175,7 +2176,7 @@ Public Class PackingListForm
         Me.Cursor = Cursors.WaitCursor
         Try
             If dgPackingList.Rows.Count <> 0 Then
-                getOrderIDC(cboCustomerOrderInfo.Text, "CO", Me)
+                getOrderIDC(cboCustomerOrderInfo.Text, globaliordertype:=OrderType.CO.ToString(), Me)
                 palorderid = globalorderid
                 packinglistcomputations(palorderid, CInt(dgPackingList.CurrentRow.Cells("pal_rowid").Value))
             End If
@@ -2211,7 +2212,7 @@ Public Class PackingListForm
                 Exit Try
             End If
             If dgPackingList.Rows.Count <> 0 Then
-                getOrderIDC(cboCustomerOrderInfo.Text, "CO", Me)
+                getOrderIDC(cboCustomerOrderInfo.Text, globaliordertype:=OrderType.CO.ToString(), Me)
                 palorderid = globalorderid
                 If palorderid = 0 Then
                     MessageBox.Show("System cannot find the customer order.", "Adding", MessageBoxButtons.OK, MessageBoxIcon.Information)
@@ -2294,7 +2295,7 @@ Public Class PackingListForm
         Try
             If dgCartons.Rows.Count <> 0 Then
                 displayPackingListCartonItems(CInt(dgCartons.CurrentRow.Cells("ca_rowid").Value))
-                getOrderIDC(cboCustomerOrderInfo.Text, "CO", Me)
+                getOrderIDC(cboCustomerOrderInfo.Text, globaliordertype:=OrderType.CO.ToString(), Me)
                 palorderid = globalorderid
                 colorCoding() : packinglistcomputations(palorderid, CInt(dgPackingList.CurrentRow.Cells("pal_rowid").Value))
             End If
@@ -2312,7 +2313,7 @@ Public Class PackingListForm
             If dgCartons.Rows.Count <> 0 Then
                 If e.KeyCode = Keys.Up Or e.KeyCode = Keys.Down Or e.KeyCode = Keys.PageUp Or e.KeyCode = Keys.PageDown Or e.KeyCode = Keys.Enter Or e.KeyCode = Keys.Tab Then
                     displayPackingListCartonItems(CInt(dgCartons.CurrentRow.Cells("ca_rowid").Value))
-                    getOrderIDC(cboCustomerOrderInfo.Text, "CO", Me)
+                    getOrderIDC(cboCustomerOrderInfo.Text, globaliordertype:=OrderType.CO.ToString(), Me)
                     palorderid = globalorderid
                     colorCoding() : packinglistcomputations(palorderid, CInt(dgPackingList.CurrentRow.Cells("pal_rowid").Value))
                 End If
@@ -2371,7 +2372,7 @@ Public Class PackingListForm
                 Exit Try
             End If
             If dgPackingList.Rows.Count <> 0 Then
-                getOrderIDC(cboCustomerOrderInfo.Text, "CO", Me)
+                getOrderIDC(cboCustomerOrderInfo.Text, globaliordertype:=OrderType.CO.ToString(), Me)
                 palorderid = globalorderid
                 If palorderid = 0 Then
                     MessageBox.Show("System cannot find the customer order.", "Adding", MessageBoxButtons.OK, MessageBoxIcon.Information)
@@ -2479,7 +2480,7 @@ Public Class PackingListForm
             End If
             If cue = "New" Then
                 If LTrim(cboCustomerOrderInfo.Text) <> "" Then
-                    getOrderIDC(cboCustomerOrderInfo.Text, "CO", Me)
+                    getOrderIDC(cboCustomerOrderInfo.Text, globaliordertype:=OrderType.CO.ToString(), Me)
                     palorderid = globalorderid
                     If palorderid = 0 Then
                         errProvider.SetError(cboCustomerOrderInfo, "Please choose or enter the customer order info.")
@@ -2517,7 +2518,7 @@ Public Class PackingListForm
                 End If
                 If dgPackingList.Rows.Count <> 0 Then
                     If LTrim(cboCustomerOrderInfo.Text) <> "" Then
-                        getOrderIDC(cboCustomerOrderInfo.Text, "CO", Me)
+                        getOrderIDC(cboCustomerOrderInfo.Text, globaliordertype:=OrderType.CO.ToString(), Me)
                         palorderid = globalorderid
                         If LTrim(txtPackingListNo.Text) <> "" Then
                             If palorderid = 0 Then
@@ -2554,7 +2555,7 @@ Public Class PackingListForm
             If MessageBox.Show("Would you like to save the changes in this page?", "Saving", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
                 Me.Cursor = Cursors.WaitCursor
                 If cue = "New" Then
-                    getOrderIDC(cboCustomerOrderInfo.Text, "CO", Me)
+                    getOrderIDC(cboCustomerOrderInfo.Text, globaliordertype:=OrderType.CO.ToString(), Me)
                     palorderid = globalorderid
                     If palorderid = 0 Then
                         errProvider.SetError(cboCustomerOrderInfo, "Please choose or enter the customer order info.")
@@ -2581,7 +2582,7 @@ Public Class PackingListForm
                     End If
                 ElseIf cue = "Edit" Then
                     If dgPackingList.Rows.Count <> 0 Then
-                        getOrderIDC(cboCustomerOrderInfo.Text, "CO", Me)
+                        getOrderIDC(cboCustomerOrderInfo.Text, globaliordertype:=OrderType.CO.ToString(), Me)
                         palorderid = globalorderid
                         If palorderid = 0 Then
                             errProvider.SetError(cboCustomerOrderInfo, "System cannot find the customer order.")
@@ -2721,7 +2722,7 @@ Public Class PackingListForm
                                     End If
                                     If myModule.systemerrorfound = False Then
                                         U_PackingListCartonItemStatus(CInt(dgCartonItems.CurrentRow.Cells("cai_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, "Inactive", Me)
-                                        dgCartonItems.Rows.Clear() : getOrderIDC(cboCustomerOrderInfo.Text, "CO", Me) : palorderid = globalorderid
+                                        dgCartonItems.Rows.Clear() : getOrderIDC(cboCustomerOrderInfo.Text, globaliordertype:=OrderType.CO.ToString(), Me) : palorderid = globalorderid
                                         displayCustomerOrderItems(palorderid, CInt(dgPackingList.CurrentRow.Cells("pal_rowid").Value))
                                         displayPackingListCartons(CInt(dgPackingList.CurrentRow.Cells("pal_rowid").Value))
                                         colorCoding() : packinglistcomputations(palorderid, CInt(dgPackingList.CurrentRow.Cells("pal_rowid").Value))
@@ -2774,7 +2775,7 @@ Public Class PackingListForm
             End If
             If dgPackingList.Rows.Count <> 0 Then
                 If LTrim(cboCustomerOrderInfo.Text) <> "" Then
-                    getOrderIDC(cboCustomerOrderInfo.Text, "CO", Me)
+                    getOrderIDC(cboCustomerOrderInfo.Text, globaliordertype:=OrderType.CO.ToString(), Me)
                     palorderid = globalorderid
                     If LTrim(txtPackingListNo.Text) <> "" Then
                         If palorderid = 0 Then
@@ -2809,7 +2810,7 @@ Public Class PackingListForm
             If MessageBox.Show("NOTE: Once you cancelled this packing list, you cannot open this packing list again." & vbNewLine & "" & vbNewLine & "Do you want to proceed cancelling this packing list?", "Cancelling", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
                 Me.Cursor = Cursors.WaitCursor
                 If dgPackingList.Rows.Count <> 0 Then
-                    getOrderIDC(cboCustomerOrderInfo.Text, "CO", Me)
+                    getOrderIDC(cboCustomerOrderInfo.Text, globaliordertype:=OrderType.CO.ToString(), Me)
                     palorderid = globalorderid
                     If palorderid = 0 Then
                         errProvider.SetError(cboCustomerOrderInfo, "System cannot find the customer order.")

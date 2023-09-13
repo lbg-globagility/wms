@@ -1,4 +1,5 @@
 ﻿Imports MySql.Data.MySqlClient
+Imports WarehouseManagementSystem.Core.Enums
 
 Public Class AccountsForm
     Dim manager As New sqlModule.Manager
@@ -1075,7 +1076,7 @@ Public Class AccountsForm
             dgCustomerOrders.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
             Dim sql1 As String = "SELECT co.rowid,COALESCE(co.ordernumber,''),COALESCE(co.referencenumber,''),DATE_FORMAT(co.orderdate,'%d-%b-%Y'),COALESCE(co.status,'') " &
-                        "FROM orders co WHERE co.organizationid = " & Z_OrganizationID & " AND co.ordertype = 'CO' AND co.accountid = " & iaccountid & " AND " &
+                        "FROM orders co WHERE co.organizationid = " & Z_OrganizationID & $" AND co.ordertype = '{OrderType.CO.ToString()}' AND co.accountid = " & iaccountid & " AND " &
                         "(co.orderdate >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " &
                         "co.orderdate <= '" & dtpToSearch.Value.Year & "-" & dtpToSearch.Value.Month & "-" & dtpToSearch.Value.Day & "' ) GROUP BY co.rowid ORDER BY co.ordernumber DESC "
             Dim cmd1 As New MySqlCommand(sql1, conn)

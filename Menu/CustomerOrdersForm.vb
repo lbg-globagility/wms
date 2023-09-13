@@ -1,5 +1,6 @@
 ﻿Imports Microsoft.Extensions.DependencyInjection
 Imports MySql.Data.MySqlClient
+Imports WarehouseManagementSystem.Core.Enums
 Imports WarehouseManagementSystem.Core.Interfaces.Repositories
 
 Public Class CustomerOrdersForm
@@ -606,7 +607,7 @@ Public Class CustomerOrdersForm
             countpagenum = 0
             If conn.State = ConnectionState.Open Then conn.Close()
             Dim dtCid As New DataTable
-            dtCid = getDataTableForSQL("SELECT COALESCE(COUNT(co.rowid),0) FROM orders co WHERE co.organizationid = " & Z_OrganizationID & " AND co.ordertype = 'CO' ")
+            dtCid = getDataTableForSQL("SELECT COALESCE(COUNT(co.rowid),0) FROM orders co WHERE co.organizationid = " & Z_OrganizationID & $" AND co.ordertype = '{OrderType.CO.ToString()}' ")
             If dtCid.Rows.Count <> 0 Then
                 countpagenum = dtCid.Rows(0)(0)
             Else
@@ -645,7 +646,7 @@ Public Class CustomerOrdersForm
             countpagenum = 0
             If conn.State = ConnectionState.Open Then conn.Close()
             Dim dtCid As New DataTable
-            dtCid = getDataTableForSQL("SELECT COALESCE(COUNT(co.rowid),0) FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid WHERE co.organizationid = " & Z_OrganizationID & " AND co.ordertype = 'CO' " &
+            dtCid = getDataTableForSQL("SELECT COALESCE(COUNT(co.rowid),0) FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid WHERE co.organizationid = " & Z_OrganizationID & $" AND co.ordertype = '{OrderType.CO.ToString()}' " &
                             "AND (co.ordernumber LIKE ""%" & esearchstring & "%"" OR co.referencenumber LIKE ""%" & esearchstring & "%"" OR co.status LIKE ""%" & esearchstring & "%"" OR cu.companyname LIKE ""%" & esearchstring & "%"") ")
             If dtCid.Rows.Count <> 0 Then
                 countpagenum = dtCid.Rows(0)(0)
@@ -685,7 +686,7 @@ Public Class CustomerOrdersForm
             countpagenum = 0
             If conn.State = ConnectionState.Open Then conn.Close()
             Dim dtCid As New DataTable
-            dtCid = getDataTableForSQL("SELECT COALESCE(COUNT(co.rowid),0) FROM orders co WHERE co.organizationid = " & Z_OrganizationID & " AND co.ordertype = 'CO' AND " &
+            dtCid = getDataTableForSQL("SELECT COALESCE(COUNT(co.rowid),0) FROM orders co WHERE co.organizationid = " & Z_OrganizationID & $" AND co.ordertype = '{OrderType.CO.ToString()}' AND " &
                             "(" & edatesearch & " >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " &
                             "" & edatesearch & " <= '" & dtpToSearch.Value.Year & "-" & dtpToSearch.Value.Month & "-" & dtpToSearch.Value.Day & "' ) ")
             If dtCid.Rows.Count <> 0 Then
@@ -726,7 +727,7 @@ Public Class CustomerOrdersForm
             countpagenum = 0
             If conn.State = ConnectionState.Open Then conn.Close()
             Dim dtCid As New DataTable
-            dtCid = getDataTableForSQL("SELECT COALESCE(COUNT(co.rowid),0) FROM orders co WHERE co.organizationid = " & Z_OrganizationID & " AND co.ordertype = 'CO' AND " & ecommonstring & " " & edatesearch & " ")
+            dtCid = getDataTableForSQL("SELECT COALESCE(COUNT(co.rowid),0) FROM orders co WHERE co.organizationid = " & Z_OrganizationID & $" AND co.ordertype = '{OrderType.CO.ToString()}' AND " & ecommonstring & " " & edatesearch & " ")
             If dtCid.Rows.Count <> 0 Then
                 countpagenum = dtCid.Rows(0)(0)
             Else
@@ -765,7 +766,7 @@ Public Class CustomerOrdersForm
     Sub autocompleteCustomerName(ByVal icombobox As ComboBox)
         Try
             Dim customername As New AutoCompleteStringCollection
-            Dim cmd As New MySqlCommand("SELECT COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),'') AS 'customername' FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid WHERE co.organizationid = " & Z_OrganizationID & " AND co.ordertype = 'CO' GROUP BY cu.rowid ORDER BY cu.companyname ", conn)
+            Dim cmd As New MySqlCommand("SELECT COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),'') AS 'customername' FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid WHERE co.organizationid = " & Z_OrganizationID & $" AND co.ordertype = '{OrderType.CO.ToString()}' GROUP BY cu.rowid ORDER BY cu.companyname ", conn)
             Dim ds As New DataSet
             Dim da As New MySqlDataAdapter(cmd)
             da.Fill(ds, "list")
@@ -786,7 +787,7 @@ Public Class CustomerOrdersForm
     Sub autocompleteStatus(ByVal icombobox As ComboBox)
         Try
             Dim costatus As New AutoCompleteStringCollection
-            Dim cmd As New MySqlCommand("SELECT COALESCE(co.status,'') AS 'costatus' FROM orders co WHERE co.organizationid = " & Z_OrganizationID & " AND co.ordertype = 'CO' GROUP BY co.status ORDER BY co.status ", conn)
+            Dim cmd As New MySqlCommand("SELECT COALESCE(co.status,'') AS 'costatus' FROM orders co WHERE co.organizationid = " & Z_OrganizationID & $" AND co.ordertype = '{OrderType.CO.ToString()}' GROUP BY co.status ORDER BY co.status ", conn)
             Dim ds As New DataSet
             Dim da As New MySqlDataAdapter(cmd)
             da.Fill(ds, "list")
@@ -848,7 +849,7 @@ Public Class CustomerOrdersForm
         Try
             icombobox.Items.Clear()
             If conn.State = ConnectionState.Open Then conn.Close()
-            Dim sql1 As String = "SELECT COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),'') AS 'customername' FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid WHERE co.organizationid = " & Z_OrganizationID & " AND co.ordertype = 'CO' GROUP BY cu.accountno ORDER BY cu.companyname "
+            Dim sql1 As String = "SELECT COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),'') AS 'customername' FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid WHERE co.organizationid = " & Z_OrganizationID & $" AND co.ordertype = '{OrderType.CO.ToString()}' GROUP BY cu.accountno ORDER BY cu.companyname "
             If conn.State = ConnectionState.Closed Then conn.Open()
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader()
@@ -869,7 +870,7 @@ Public Class CustomerOrdersForm
         Try
             icombobox.Items.Clear()
             If conn.State = ConnectionState.Open Then conn.Close()
-            Dim sql1 As String = "SELECT COALESCE(co.status,'') AS 'costatus' FROM orders co WHERE co.organizationid = " & Z_OrganizationID & " AND co.ordertype = 'CO' GROUP BY co.status ORDER BY co.status "
+            Dim sql1 As String = "SELECT COALESCE(co.status,'') AS 'costatus' FROM orders co WHERE co.organizationid = " & Z_OrganizationID & $" AND co.ordertype = '{OrderType.CO.ToString()}' GROUP BY co.status ORDER BY co.status "
             If conn.State = ConnectionState.Closed Then conn.Open()
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader()
@@ -927,7 +928,7 @@ Public Class CustomerOrdersForm
             dgCustomerOrderList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
             Dim sql1 As String = "SELECT co.rowid,COALESCE(co.ordernumber,''),DATE_FORMAT(co.orderdate,'%d-%b-%Y'),COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),'')," &
-                        "COALESCE(co.status,''),COALESCE(co.referencenumber,'') FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid WHERE co.organizationid = " & Z_OrganizationID & " AND co.ordertype = 'CO' " &
+                        "COALESCE(co.status,''),COALESCE(co.referencenumber,'') FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid WHERE co.organizationid = " & Z_OrganizationID & $" AND co.ordertype = '{OrderType.CO.ToString()}' " &
                         "ORDER BY co.ordernumber DESC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -964,7 +965,7 @@ Public Class CustomerOrdersForm
             dgCustomerOrderList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
             Dim sql1 As String = "SELECT co.rowid,COALESCE(co.ordernumber,''),DATE_FORMAT(co.orderdate,'%d-%b-%Y'),COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),'')," &
-                        "COALESCE(co.status,''),COALESCE(co.referencenumber,'') FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid WHERE co.organizationid = " & Z_OrganizationID & " AND co.ordertype = 'CO' AND " &
+                        "COALESCE(co.status,''),COALESCE(co.referencenumber,'') FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid WHERE co.organizationid = " & Z_OrganizationID & $" AND co.ordertype = '{OrderType.CO.ToString()}' AND " &
                         "(co.ordernumber LIKE ""%" & isearchphrase & "%"" OR co.referencenumber LIKE ""%" & isearchphrase & "%"" OR co.status LIKE ""%" & isearchphrase & "%"" OR cu.companyname LIKE ""%" & isearchphrase & "%"") " &
                         "ORDER BY co.ordernumber DESC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
@@ -1002,7 +1003,7 @@ Public Class CustomerOrdersForm
             dgCustomerOrderList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
             Dim sql1 As String = "SELECT co.rowid,COALESCE(co.ordernumber,''),DATE_FORMAT(co.orderdate,'%d-%b-%Y'),COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),'')," &
-                        "COALESCE(co.status,''),COALESCE(co.referencenumber,'') FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid WHERE co.organizationid = " & Z_OrganizationID & " AND co.ordertype = 'CO' AND " &
+                        "COALESCE(co.status,''),COALESCE(co.referencenumber,'') FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid WHERE co.organizationid = " & Z_OrganizationID & $" AND co.ordertype = '{OrderType.CO.ToString()}' AND " &
                         "(" & idatesearch & " >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " &
                         "" & idatesearch & " <= '" & dtpToSearch.Value.Year & "-" & dtpToSearch.Value.Month & "-" & dtpToSearch.Value.Day & "' ) " &
                         "GROUP BY co.rowid ORDER BY co.ordernumber DESC LIMIT " & istartpage & "," & pagedivisor & " "
@@ -1042,7 +1043,7 @@ Public Class CustomerOrdersForm
             If conn.State = ConnectionState.Closed Then conn.Open()
             Dim sql1 As String = "SELECT co.rowid,COALESCE(co.ordernumber,''),DATE_FORMAT(co.orderdate,'%d-%b-%Y'),COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),'')," &
                         "COALESCE(co.status,''),COALESCE(co.referencenumber,'') FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid WHERE co.organizationid = " & Z_OrganizationID & " " &
-                        "AND co.ordertype = 'CO' AND " & icommonphrase & " " & idatesearch & " ORDER BY co.ordernumber DESC LIMIT " & istartpage & "," & pagedivisor & " "
+                        $"AND co.ordertype = '{OrderType.CO.ToString()}' AND " & icommonphrase & " " & idatesearch & " ORDER BY co.ordernumber DESC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             Dim n As Integer = 0
@@ -1242,7 +1243,7 @@ Public Class CustomerOrdersForm
                     dgProductColorSizes.Item(pcs_sku.Index, n).Value = reader1(6)
                     dgProductColorSizes.Item(pcs_srp.Index, n).Value = CDec(reader1(7))
                     dgProductColorSizes.Item(pcs_qtyavailable.Index, n).Value = CDec(reader1(8))
-                    getTotalQtyOrderedA(CInt(reader1(0)), "AND oi.`status` = 'New' AND o.`status` = 'Submitted To Warehouse' AND o.ordertype = 'CO'", Me)
+                    getTotalQtyOrderedA(CInt(reader1(0)), $"AND oi.`status` = 'New' AND o.`status` = 'Submitted To Warehouse' AND o.ordertype = '{OrderType.CO.ToString()}'", Me)
                     dgProductColorSizes.Item(pcs_qtyallocated.Index, n).Value = CDec(reader1(9)) + globaltotalqtyordered
                     dgProductColorSizes.Item(pcs_qtyreserve.Index, n).Value = CDec(reader1(10))
                     dgProductColorSizes.Item(pcs_qtyorderable.Index, n).Value = CDec(reader1(8)) - (CDec(reader1(9)) + globaltotalqtyordered)
@@ -1331,7 +1332,7 @@ Public Class CustomerOrdersForm
                     dgProductSizes.Item(s_totalprice.Index, n).Value = ""
                     dgProductSizes.Item(s_sku.Index, n).Value = reader1(6)
                     dgProductSizes.Item(s_qtyavailable.Index, n).Value = CDec(reader1(8))
-                    getTotalQtyOrderedA(CInt(reader1(0)), "AND oi.`status` = 'New' AND o.`status` = 'Submitted To Warehouse' AND o.ordertype = 'CO'", Me)
+                    getTotalQtyOrderedA(CInt(reader1(0)), $"AND oi.`status` = 'New' AND o.`status` = 'Submitted To Warehouse' AND o.ordertype = '{OrderType.CO.ToString()}'", Me)
                     dgProductSizes.Item(s_qtyallocated.Index, n).Value = CDec(reader1(9)) + globaltotalqtyordered
                     dgProductSizes.Item(s_qtyreserve.Index, n).Value = CDec(reader1(10))
                     dgProductSizes.Item(s_qtyorderable.Index, n).Value = CDec(reader1(8)) - (CDec(reader1(9)) + globaltotalqtyordered)
@@ -1389,7 +1390,7 @@ Public Class CustomerOrdersForm
                     dgBundleItems.Item(bi_totalqty.Index, n).Value = ""
                     txtBundleSRP.Text = CDec(reader1(9))
                     dgBundleItems.Item(bi_qtyavailable.Index, n).Value = CDec(reader1(10))
-                    getTotalQtyOrderedA(CInt(reader1(1)), "AND oi.`status` = 'New' AND o.`status` = 'Submitted To Warehouse' AND o.ordertype = 'CO'", Me)
+                    getTotalQtyOrderedA(CInt(reader1(1)), $"AND oi.`status` = 'New' AND o.`status` = 'Submitted To Warehouse' AND o.ordertype = '{OrderType.CO.ToString()}'", Me)
                     dgBundleItems.Item(bi_qtyallocated.Index, n).Value = CDec(reader1(11)) + globaltotalqtyordered
                     dgBundleItems.Item(bi_qtyreserve.Index, n).Value = CDec(reader1(12))
                     dgBundleItems.Item(bi_qtyorderable.Index, n).Value = CDec(reader1(10)) - (CDec(reader1(11)) + globaltotalqtyordered)
@@ -2012,9 +2013,9 @@ Public Class CustomerOrdersForm
                         "COALESCE(co.comments,''),COALESCE(co.totalamount,0),COALESCE(co.deliveryhours,''),COALESCE(co.customeraddress,''),COALESCE(co.branchid,0),COALESCE(co.companyid,0)," &
                         "COALESCE(co.combinecodingid,0),DATE_FORMAT(co.enddate,'%d-%b-%Y') FROM orders co WHERE co.rowid = " & icustomerorderid & " ")
             If dtDco.Rows.Count <> 0 Then
-                getOrderNo("CO", Me)
+                getOrderNo(globaliordertype:=OrderType.CO.ToString(), Me)
                 I_Orders(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, CInt(dtDco.Rows(0)(0)), If(CInt(dtDco.Rows(0)(9)) = 0, DBNull.Value, CInt(dtDco.Rows(0)(9))), If(CInt(dtDco.Rows(0)(10)) = 0, DBNull.Value, CInt(dtDco.Rows(0)(10))),
-                    If(CInt(dtDco.Rows(0)(11)) = 0, DBNull.Value, CInt(dtDco.Rows(0)(11))), CStr(globalorderno), "", "", "CO", dtDco.Rows(0)(2), dtDco.Rows(0)(3), dtDco.Rows(0)(12), dtDco.Rows(0)(4), dtDco.Rows(0)(5), "New", CDec(dtDco.Rows(0)(6)), CStr(dtDco.Rows(0)(7)), CStr(dtDco.Rows(0)(8)), Me)
+                    If(CInt(dtDco.Rows(0)(11)) = 0, DBNull.Value, CInt(dtDco.Rows(0)(11))), CStr(globalorderno), "", "", OrderType:=OrderType.CO.ToString(), dtDco.Rows(0)(2), dtDco.Rows(0)(3), dtDco.Rows(0)(12), dtDco.Rows(0)(4), dtDco.Rows(0)(5), "New", CDec(dtDco.Rows(0)(6)), CStr(dtDco.Rows(0)(7)), CStr(dtDco.Rows(0)(8)), Me)
                 coorderid = globalorderidsp
             End If
         Catch ex As Exception
@@ -2079,7 +2080,7 @@ Public Class CustomerOrdersForm
                     If myModule.systemerrorfound = False Then
                         getTotalQtyAvailableA(CInt(reader1(1)), Me)
                         getTotalQtyAllocatedA(CInt(reader1(1)), Me)
-                        getTotalQtyOrderedA(CInt(reader1(1)), "AND oi.`status` = 'New' AND o.`status` = 'Submitted To Warehouse' AND o.ordertype = 'CO'", Me)
+                        getTotalQtyOrderedA(CInt(reader1(1)), $"AND oi.`status` = 'New' AND o.`status` = 'Submitted To Warehouse' AND o.ordertype = '{OrderType.CO.ToString()}'", Me)
                         If globaltotalqtyavailable - (globaltotalqtyallocated + globaltotalqtyordered) < CInt(reader1(2)) * iqtyordered Then
                             coincompleteqtyavailablecue = legit
                             Exit Try
@@ -2106,7 +2107,7 @@ Public Class CustomerOrdersForm
                     If myModule.systemerrorfound = False Then
                         getTotalQtyAvailableA(CInt(reader1(1)), Me)
                         getTotalQtyAllocatedA(CInt(reader1(1)), Me)
-                        getTotalQtyOrderedA(CInt(reader1(1)), "AND oi.`status` = 'New' AND o.`status` = 'Submitted To Warehouse' AND o.ordertype = 'CO'", Me)
+                        getTotalQtyOrderedA(CInt(reader1(1)), $"AND oi.`status` = 'New' AND o.`status` = 'Submitted To Warehouse' AND o.ordertype = '{OrderType.CO.ToString()}'", Me)
                         If globaltotalqtyavailable - (globaltotalqtyallocated + globaltotalqtyordered) < Math.Round(CInt(reader1(2)) / iqtyorderedbefore, 2) * iqtyorderedafter Then
                             coincompleteqtyavailablecue = legit
                             Exit Try
@@ -2237,8 +2238,8 @@ Public Class CustomerOrdersForm
             If dgCustomerOrderList.Rows.Count <> 0 Then
                 dgCustomerOrderList.CurrentRow.Selected = False
             End If
-            getOrderNo("CO", Me)
-            getReferenceNo("CO", Me)
+            getOrderNo(globaliordertype:=OrderType.CO.ToString(), Me)
+            getReferenceNo(globaliordertype:=OrderType.CO.ToString(), Me)
             txtCustomerOrderNo.Text = CStr(globalorderno)
             txtPONo.Text = CStr(globalreferenceno)
             txtStatus.Text = "New"
@@ -3497,9 +3498,9 @@ Public Class CustomerOrdersForm
                     '        Exit Try
                     '    End If
                     'End If
-                    getOrderNo("CO", Me)
+                    getOrderNo(globaliordertype:=OrderType.CO.ToString(), Me)
                     I_Orders(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, cocustomerid, If(cobranchid = 0, DBNull.Value, cobranchid), If(covendorid = 0, DBNull.Value, covendorid), If(cocombinecodingid = 0, DBNull.Value, cocombinecodingid),
-                            CStr(globalorderno), txtPONo.Text, txtSIDRNo.Text, "CO", dtpCustomerOrderDate.Value, dtpDeliveryDate.Value, dtpEndDate.Value, cboCustomerName.Text, txtComments.Text, txtStatus.Text, Math.Round(coitotalprice, 2), txtDeliveryHours.Text, txtDeliveryAddress.Text, Me, cboInventoryLocation.SelectedValue)
+                            CStr(globalorderno), txtPONo.Text, txtSIDRNo.Text, OrderType:=OrderType.CO.ToString(), dtpCustomerOrderDate.Value, dtpDeliveryDate.Value, dtpEndDate.Value, cboCustomerName.Text, txtComments.Text, txtStatus.Text, Math.Round(coitotalprice, 2), txtDeliveryHours.Text, txtDeliveryAddress.Text, Me, cboInventoryLocation.SelectedValue)
                     coorderid = globalorderidsp
                     If dgCustomerOrderItems.Rows.Count <> 0 Then
                         For a = 0 To dgCustomerOrderItems.Rows.Count - 1
@@ -3776,7 +3777,7 @@ Public Class CustomerOrdersForm
                         If CInt(dgCustomerOrderItems.Rows(a).Cells("ci_pcsrowid").Value) <> 0 Then
                             getTotalQtyAvailableA(CInt(dgCustomerOrderItems.Rows(a).Cells("ci_pcsrowid").Value), Me)
                             getTotalQtyAllocatedA(CInt(dgCustomerOrderItems.Rows(a).Cells("ci_pcsrowid").Value), Me)
-                            getTotalQtyOrderedA(CInt(dgCustomerOrderItems.Rows(a).Cells("ci_pcsrowid").Value), "AND oi.`status` = 'New' AND o.`status` = 'Submitted To Warehouse' AND o.ordertype = 'CO'", Me)
+                            getTotalQtyOrderedA(CInt(dgCustomerOrderItems.Rows(a).Cells("ci_pcsrowid").Value), $"AND oi.`status` = 'New' AND o.`status` = 'Submitted To Warehouse' AND o.ordertype = '{OrderType.CO.ToString()}'", Me)
                             If globaltotalqtyavailable - (globaltotalqtyallocated + globaltotalqtyordered) < If(IsNumeric(dgCustomerOrderItems.Rows(a).Cells("ci_qtyordered").Value), CInt(dgCustomerOrderItems.Rows(a).Cells("ci_qtyordered").Value), 0) Then
                                 dgCustomerOrderItems.Rows(a).Cells("ci_qtyordered").ErrorText = "Qty. Orderable is less than qty. ordered."
                                 Exit Try
@@ -3823,7 +3824,7 @@ Public Class CustomerOrdersForm
                             If CInt(dgCustomerOrderItems.Rows(a).Cells("ci_pcsrowid").Value) <> 0 Then
                                 getTotalQtyAvailableA(CInt(dgCustomerOrderItems.Rows(a).Cells("ci_pcsrowid").Value), Me)
                                 getTotalQtyAllocatedA(CInt(dgCustomerOrderItems.Rows(a).Cells("ci_pcsrowid").Value), Me)
-                                getTotalQtyOrderedA(CInt(dgCustomerOrderItems.Rows(a).Cells("ci_pcsrowid").Value), "AND oi.`status` = 'New' AND o.`status` = 'Submitted To Warehouse' AND o.ordertype = 'CO'", Me)
+                                getTotalQtyOrderedA(CInt(dgCustomerOrderItems.Rows(a).Cells("ci_pcsrowid").Value), $"AND oi.`status` = 'New' AND o.`status` = 'Submitted To Warehouse' AND o.ordertype = '{OrderType.CO.ToString()}'", Me)
                                 If globaltotalqtyavailable - (globaltotalqtyallocated + globaltotalqtyordered) < If(IsNumeric(dgCustomerOrderItems.Rows(a).Cells("ci_qtyordered").Value), CInt(dgCustomerOrderItems.Rows(a).Cells("ci_qtyordered").Value), 0) Then
                                     dgCustomerOrderItems.Rows(a).Cells("ci_qtyordered").ErrorText = "Qty. Orderable is less than qty. ordered."
                                     Exit Try

@@ -1,17 +1,9 @@
 ﻿Imports MySql.Data.MySqlClient
-Imports System.IO
-Imports System.Windows.Forms
-Imports CrystalDecisions.CrystalReports.Engine
-Imports System.Linq
-Imports System.Collections
-Imports System.Collections.Generic
-Imports System.Data
-Imports System.Diagnostics
-Imports System.Runtime.InteropServices
-Imports System.Text.RegularExpressions
+Imports WarehouseManagementSystem.Core.Enums
+
 Public Class SalesAndQtyForm
     Dim manager As New sqlModule.Manager
-    Dim conn As New MySqlConnection(Manager.GetConnString)
+    Dim conn As New MySqlConnection(manager.GetConnString)
     Dim sqlcmd As MySqlCommand
     Dim sqlrd As MySqlDataReader
     Dim printdataset As New DataSetA.SetEDataTable
@@ -28,6 +20,7 @@ Public Class SalesAndQtyForm
     Dim sqtyfirstdayoftheyear, sqtyperiodFrom, sqtymonthstart As Date
     Dim sqtyconditionstringA, sqtyconditionstringB, sqtyconditionstringC As String
     Dim itemcount, rowscount, sqtybrandid, sqtycategoryid, sqtytotalqtydelivered As Integer
+
     Private Sub SalesAndQtyForm_Load(sender As Object, e As EventArgs) Handles Me.Load
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -42,16 +35,21 @@ Public Class SalesAndQtyForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #Region "Functions"
+
     Sub callAutoComplete()
         globalautocompleteBrandName(cboBrandName, "", Me)
         globalautocompleteCategory(cboCategory, "", Me)
     End Sub
+
     Sub callAutoPopulate()
         globalautopopulateBrandName(cboBrandName, "", Me)
         globalautopopulateCategory(cboCategory, "", Me)
     End Sub
+
 #Region "Clear/Enable/Visible"
+
     Sub clearfields()
         Try
             cboBrandName.Text = ""
@@ -65,8 +63,11 @@ Public Class SalesAndQtyForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Printing"
+
     Sub printSalesAndQtyReport(ByVal iconditionstring As String)
         Try
             sqtyplusmonth = 0 : sqtymonths = "" : stproductimage = Nothing
@@ -81,10 +82,10 @@ Public Class SalesAndQtyForm
                 Dim LastDayInMonthDate As Date = New Date(sqtymonthstart.Year, sqtymonthstart.Month, DaysInMonth)
                 sqtydateto.Value = LastDayInMonthDate
                 If conn.State = ConnectionState.Closed Then conn.Open()
-                Dim sql1 As String = "SELECT oi.rowid,oi.orderid,COALESCE(b.brandname,''),COALESCE(ct.categoryname,''),COALESCE(oi.srp,0.0) FROM orderitems oi LEFT JOIN orders o ON oi.orderid = o.rowid " & _
-                            "LEFT JOIN productcolorsizes pcs ON oi.productcolorsizeid = pcs.rowid LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN products p ON pc.productid = p.rowid " & _
-                            "LEFT JOIN brands b ON p.brandid = b.rowid LEFT JOIN categories ct ON p.categoryid = ct.rowid WHERE oi.organizationid = " & Z_OrganizationID & " AND o.ordertype = 'CO' " & _
-                            "AND o.`status` = 'Delivery' AND " & iconditionstring & " (o.orderdate >= '" & sqtydatefrom.Value.Year & "-" & sqtydatefrom.Value.Month & "-" & sqtydatefrom.Value.Day & "' " & _
+                Dim sql1 As String = "SELECT oi.rowid,oi.orderid,COALESCE(b.brandname,''),COALESCE(ct.categoryname,''),COALESCE(oi.srp,0.0) FROM orderitems oi LEFT JOIN orders o ON oi.orderid = o.rowid " &
+                            "LEFT JOIN productcolorsizes pcs ON oi.productcolorsizeid = pcs.rowid LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN products p ON pc.productid = p.rowid " &
+                            "LEFT JOIN brands b ON p.brandid = b.rowid LEFT JOIN categories ct ON p.categoryid = ct.rowid WHERE oi.organizationid = " & Z_OrganizationID & $" AND o.ordertype = '{OrderType.CO.ToString()}' " &
+                            "AND o.`status` = 'Delivery' AND " & iconditionstring & " (o.orderdate >= '" & sqtydatefrom.Value.Year & "-" & sqtydatefrom.Value.Month & "-" & sqtydatefrom.Value.Day & "' " &
                             "AND o.orderdate <= '" & sqtydateto.Value.Year & "-" & sqtydateto.Value.Month & "-" & sqtydateto.Value.Day & "') ORDER BY b.brandname,ct.categoryname "
                 Dim cmd1 As New MySqlCommand(sql1, conn)
                 Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -105,6 +106,7 @@ Public Class SalesAndQtyForm
             conn.Close()
         End Try
     End Sub
+
     Sub getPickListOrderID(ByVal iorderid As Integer, ByVal iorderitemid As Integer)
         Try
             sqtytotalqtydelivered = 0
@@ -117,6 +119,7 @@ Public Class SalesAndQtyForm
             MsgBox(getErrExcptn(ex, Me.Name))
         End Try
     End Sub
+
     Sub getTotalQtyDelivered(ByVal ipicklistorderid As Integer)
         Try
             Dim dtGtq As New DataTable
@@ -128,6 +131,7 @@ Public Class SalesAndQtyForm
             MsgBox(getErrExcptn(ex, Me.Name))
         End Try
     End Sub
+
     Sub getMonthOrder(ByVal imonth As String)
         Try
             If imonth = "January" Then
@@ -159,8 +163,11 @@ Public Class SalesAndQtyForm
             MsgBox(getErrExcptn(ex, Me.Name))
         End Try
     End Sub
+
 #End Region
+
 #End Region
+
     Private Sub pbClose_Click(sender As Object, e As EventArgs) Handles pbClose.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -175,6 +182,7 @@ Public Class SalesAndQtyForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboBrandName_TextChanged(sender As Object, e As EventArgs) Handles cboBrandName.TextChanged
         Try
             errProvider.Clear()
@@ -184,6 +192,7 @@ Public Class SalesAndQtyForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub cboBrandName_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboBrandName.SelectedIndexChanged
         Try
             errProvider.Clear()
@@ -193,6 +202,7 @@ Public Class SalesAndQtyForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub cboCategory_TextChanged(sender As Object, e As EventArgs) Handles cboCategory.TextChanged
         Try
             errProvider.Clear()
@@ -202,6 +212,7 @@ Public Class SalesAndQtyForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub cboCategory_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboCategory.SelectedIndexChanged
         Try
             errProvider.Clear()
@@ -211,6 +222,7 @@ Public Class SalesAndQtyForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub txtYear_TextChanged(sender As Object, e As EventArgs) Handles txtYear.TextChanged
         Try
             errProvider.Clear()
@@ -220,6 +232,7 @@ Public Class SalesAndQtyForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub btnPrint_Click(sender As Object, e As EventArgs) Handles btnPrint.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -310,4 +323,5 @@ Public Class SalesAndQtyForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 End Class

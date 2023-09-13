@@ -69,9 +69,14 @@ namespace WarehouseManagementSystem.Infrastructure.Data
                     .WithOne(x => x.InventoryLocation);
             });
 
-            modelBuilder.Entity<Order>()
-                .HasMany(x => x.OrderItems)
-                .WithOne(x => x.Order);
+            modelBuilder.Entity<Order>(t =>
+            {
+                t.HasMany(x => x.OrderItems)
+                    .WithOne(x => x.Order);
+
+                t.Property(x => x.OrderType)
+                    .HasConversion(new EnumToStringConverter<OrderType>());
+            });
 
             modelBuilder.Entity<Product>(t =>
             {

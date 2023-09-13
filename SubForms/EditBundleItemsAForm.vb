@@ -9,15 +9,18 @@ Imports System.Data
 Imports System.Diagnostics
 Imports System.Runtime.InteropServices
 Imports System.Text.RegularExpressions
+Imports WarehouseManagementSystem.Core.Enums
+
 Public Class EditBundleItemsAForm
     Dim manager As New sqlModule.Manager
-    Dim conn As New MySqlConnection(Manager.GetConnString)
-    Dim conn1 As New MySqlConnection(Manager.GetConnString)
+    Dim conn As New MySqlConnection(manager.GetConnString)
+    Dim conn1 As New MySqlConnection(manager.GetConnString)
     Dim sqlcmd As MySqlCommand
     Dim sqlrd As MySqlDataReader
     Dim sqlquery As String
     Dim ebioverallqtyordered, ebitotalqtydelivered, ebitotalqtypicked, itemno As Integer
     Public ebiacustomerorderid, ebiaorderitemid, ebiacustomerid As Integer
+
     Private Sub EditBundleItems_Load(sender As Object, e As EventArgs) Handles Me.Load
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -39,6 +42,7 @@ Public Class EditBundleItemsAForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub EditBundleItems_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -50,8 +54,11 @@ Public Class EditBundleItemsAForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #Region "Functions"
+
 #Region "Clear/Enable/Visible"
+
     Sub visibleBundleItems(ByVal visible1 As Boolean)
         Try
             bi_qtypicked.Visible = visible1
@@ -71,8 +78,11 @@ Public Class EditBundleItemsAForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Computations"
+
     Sub getPickListOrderID(ByVal iorderid As Integer, ByVal iorderitemid As Integer)
         Try
             ebitotalqtydelivered = 0 : ebitotalqtypicked = 0
@@ -86,6 +96,7 @@ Public Class EditBundleItemsAForm
             MsgBox(getErrExcptn(ex, Me.Name))
         End Try
     End Sub
+
     Sub getTotalQtyDelivered(ByVal ipicklistorderid As Integer)
         Try
             Dim dtGtq As New DataTable
@@ -97,6 +108,7 @@ Public Class EditBundleItemsAForm
             MsgBox(getErrExcptn(ex, Me.Name))
         End Try
     End Sub
+
     Sub getTotalQtyPicked(ByVal ipicklistorderid As Integer)
         Try
             Dim dtGtq As New DataTable
@@ -108,6 +120,7 @@ Public Class EditBundleItemsAForm
             MsgBox(getErrExcptn(ex, Me.Name))
         End Try
     End Sub
+
     Sub overallcomputations()
         Try
             ebioverallqtyordered = 0
@@ -125,17 +138,20 @@ Public Class EditBundleItemsAForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Display"
+
     Sub displayBundleItems(ByVal icustomerorderid As Integer, ByVal iorderitemid As Integer)
         Try
             dgBundleItems.Rows.Clear()
             If conn1.State = ConnectionState.Closed Then conn1.Open()
-            Dim sql1 As String = "SELECT ci.rowid,COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(c.colorname,''),COALESCE(pcs.size,''),COALESCE(pcs.seasoncode,''),COALESCE(pcs.sku,''),COALESCE(ci.qtyordered,0),COALESCE(ci.productcolorsizeid,0),COALESCE(ci.unitofmeasure,'')," & _
-                    "COALESCE(ci.remarks,''),COALESCE(ci.status,''),COALESCE(CONCAT(COALESCE(vb.firstname,''),' ',COALESCE(vb.lastname,''),' - ',COALESCE(vb.rowid,'')),''),COALESCE(DATE_FORMAT(ci.verifieddate,'%d-%b-%Y'),''),COALESCE(DATE_FORMAT(ci.packeddate,'%d-%b-%Y'),'')," & _
-                    "COALESCE(CONCAT(COALESCE(pa.firstname,''),' ',COALESCE(pa.middlename,''),' ',COALESCE(pa.lastname,''),' ',COALESCE(pa.suffix,''),' - ',COALESCE(pa.contactno,'')),''),COALESCE(DATE_FORMAT(ci.delivereddate,'%d-%b-%Y'),'')," & _
-                    "COALESCE(CONCAT(COALESCE(dr.firstname,''),' ',COALESCE(dr.middlename,''),' ',COALESCE(dr.lastname,''),' ',COALESCE(dr.suffix,''),' - ',COALESCE(dr.contactno,'')),''),COALESCE(ci.tags,'') FROM orderitems ci LEFT JOIN productcolorsizes pcs ON ci.productcolorsizeid = pcs.rowid " & _
-                    "LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN colors c ON pc.colorid = c.rowid LEFT JOIN products p ON pc.productid = p.rowid LEFT JOIN users vb ON ci.verifiedby = vb.rowid LEFT JOIN contacts pa ON ci.packedby = pa.rowid " & _
+            Dim sql1 As String = "SELECT ci.rowid,COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(c.colorname,''),COALESCE(pcs.size,''),COALESCE(pcs.seasoncode,''),COALESCE(pcs.sku,''),COALESCE(ci.qtyordered,0),COALESCE(ci.productcolorsizeid,0),COALESCE(ci.unitofmeasure,'')," &
+                    "COALESCE(ci.remarks,''),COALESCE(ci.status,''),COALESCE(CONCAT(COALESCE(vb.firstname,''),' ',COALESCE(vb.lastname,''),' - ',COALESCE(vb.rowid,'')),''),COALESCE(DATE_FORMAT(ci.verifieddate,'%d-%b-%Y'),''),COALESCE(DATE_FORMAT(ci.packeddate,'%d-%b-%Y'),'')," &
+                    "COALESCE(CONCAT(COALESCE(pa.firstname,''),' ',COALESCE(pa.middlename,''),' ',COALESCE(pa.lastname,''),' ',COALESCE(pa.suffix,''),' - ',COALESCE(pa.contactno,'')),''),COALESCE(DATE_FORMAT(ci.delivereddate,'%d-%b-%Y'),'')," &
+                    "COALESCE(CONCAT(COALESCE(dr.firstname,''),' ',COALESCE(dr.middlename,''),' ',COALESCE(dr.lastname,''),' ',COALESCE(dr.suffix,''),' - ',COALESCE(dr.contactno,'')),''),COALESCE(ci.tags,'') FROM orderitems ci LEFT JOIN productcolorsizes pcs ON ci.productcolorsizeid = pcs.rowid " &
+                    "LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN colors c ON pc.colorid = c.rowid LEFT JOIN products p ON pc.productid = p.rowid LEFT JOIN users vb ON ci.verifiedby = vb.rowid LEFT JOIN contacts pa ON ci.packedby = pa.rowid " &
                     "LEFT JOIN contacts dr ON ci.deliveredby = dr.rowid WHERE ci.orderid = " & icustomerorderid & " AND ci.organizationid = " & Z_OrganizationID & " AND ci.status != 'Inactive' AND ci.orderitemid = " & iorderitemid & " AND ci.itemtype = 'BI' ORDER BY p.productcode,c.colorname "
             Dim cmd1 As New MySqlCommand(sql1, conn1)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -160,7 +176,7 @@ Public Class EditBundleItemsAForm
                     dgBundleItems.Item(bi_qtyavailable.Index, n).Value = globaltotalqtyavailable
                     getTotalQtyAllocatedA(CInt(reader1(8)), Me)
                     dgBundleItems.Item(bi_qtyallocated.Index, n).Value = globaltotalqtyallocated
-                    getTotalQtyOrderedA(CInt(reader1(8)), "AND oi.`status` = 'New' AND o.`status` = 'Submitted To Warehouse' AND o.ordertype = 'CO'", Me)
+                    getTotalQtyOrderedA(CInt(reader1(8)), $"AND oi.`status` = 'New' AND o.`status` = 'Submitted To Warehouse' AND o.ordertype = '{OrderType.CO.ToString()}'", Me)
                     dgBundleItems.Item(bi_qtyorderable.Index, n).Value = globaltotalqtyavailable - globaltotalqtyallocated + globaltotalqtyordered
                     getTotalQtyReserveA(CInt(reader1(8)), Me)
                     dgBundleItems.Item(bi_qtyreserve.Index, n).Value = globaltotalqtyreserve
@@ -207,6 +223,7 @@ Public Class EditBundleItemsAForm
             conn1.Close()
         End Try
     End Sub
+
     Sub autopopulateTags()
         Try
             bi_tags.Items.Clear()
@@ -227,8 +244,11 @@ Public Class EditBundleItemsAForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Colors"
+
     Sub colorCoding()
         Try
             If dgBundleItems.Rows.Count <> 0 Then
@@ -245,8 +265,11 @@ Public Class EditBundleItemsAForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #End Region
+
     Private Sub chkOtherInfo_CheckedChanged(sender As Object, e As EventArgs) Handles chkOtherInfo.CheckedChanged
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -262,6 +285,7 @@ Public Class EditBundleItemsAForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgBundleItems_CellEndEdit(sender As Object, e As DataGridViewCellEventArgs) Handles dgBundleItems.CellEndEdit
         Try
             overallcomputations()
@@ -271,6 +295,7 @@ Public Class EditBundleItemsAForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub dgBundleItems_MouseUp(sender As Object, e As MouseEventArgs) Handles dgBundleItems.MouseUp
         Try
             Dim hitTestinfo As DataGridView.HitTestInfo
@@ -288,6 +313,7 @@ Public Class EditBundleItemsAForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub dgBundleItems_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgBundleItems.CellContentClick
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -328,6 +354,7 @@ Public Class EditBundleItemsAForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msSave_Click(sender As Object, e As EventArgs) Handles msSave.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -366,7 +393,7 @@ Public Class EditBundleItemsAForm
                 End If
                 If dgBundleItems.Rows.Count <> 0 Then
                     For a = 0 To dgBundleItems.Rows.Count - 1
-                        U_OrderItems(CInt(dgBundleItems.Rows(a).Cells("bi_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, ebiacustomerid, If(IsNumeric(dgBundleItems.Rows(a).Cells("bi_totalqtyorder").Value), CInt(dgBundleItems.Rows(a).Cells("bi_totalqtyorder").Value), 0.0), _
+                        U_OrderItems(CInt(dgBundleItems.Rows(a).Cells("bi_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, ebiacustomerid, If(IsNumeric(dgBundleItems.Rows(a).Cells("bi_totalqtyorder").Value), CInt(dgBundleItems.Rows(a).Cells("bi_totalqtyorder").Value), 0.0),
                             0.0, CStr(dgBundleItems.Rows(a).Cells("bi_sku").Value), CStr(dgBundleItems.Rows(a).Cells("bi_unitofmeasure").Value), CStr(dgBundleItems.Rows(a).Cells("bi_remarks").Value), CStr(dgBundleItems.Rows(a).Cells("bi_tags").Value), Me)
                     Next
                 End If
@@ -381,7 +408,9 @@ Public Class EditBundleItemsAForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #Region "Datagrid Errors"
+
     Private Sub dgBundleItems_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgBundleItems.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -422,5 +451,7 @@ Public Class EditBundleItemsAForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #End Region
+
 End Class

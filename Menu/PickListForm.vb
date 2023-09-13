@@ -1,5 +1,6 @@
 ﻿Imports Microsoft.Extensions.DependencyInjection
 Imports MySql.Data.MySqlClient
+Imports WarehouseManagementSystem.Core.Enums
 Imports WarehouseManagementSystem.Core.Interfaces
 
 Public Class PickListForm
@@ -1173,7 +1174,7 @@ Public Class PickListForm
             plloadingbar = 0
             If conn.State = ConnectionState.Open Then conn.Close()
             Dim dtCOs As New DataTable
-            dtCOs = getDataTableForSQL("SELECT COALESCE(COUNT(co.rowid),0) FROM orders co WHERE co.organizationid = " & Z_OrganizationID & " AND co.ordertype = 'CO' AND co.`status` = 'Submitted To Warehouse' ")
+            dtCOs = getDataTableForSQL("SELECT COALESCE(COUNT(co.rowid),0) FROM orders co WHERE co.organizationid = " & Z_OrganizationID & $" AND co.ordertype = '{OrderType.CO.ToString()}' AND co.`status` = 'Submitted To Warehouse' ")
             If dtCOs.Rows.Count <> 0 Then
                 plloadingbar = dtCOs.Rows(0)(0)
             Else
@@ -1191,7 +1192,7 @@ Public Class PickListForm
             plcountcos = 0
             If conn.State = ConnectionState.Open Then conn.Close()
             Dim dtCOs As New DataTable
-            dtCOs = getDataTableForSQL("SELECT COALESCE(COUNT(co.rowid),0) FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid WHERE co.organizationid = " & Z_OrganizationID & "  AND co.ordertype = 'CO' AND co.`status` = 'Submitted To Warehouse' AND cu.picklistgroupid IS NOT NULL ")
+            dtCOs = getDataTableForSQL("SELECT COALESCE(COUNT(co.rowid),0) FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid WHERE co.organizationid = " & Z_OrganizationID & $"  AND co.ordertype = '{OrderType.CO.ToString()}' AND co.`status` = 'Submitted To Warehouse' AND cu.picklistgroupid IS NOT NULL ")
             If dtCOs.Rows.Count <> 0 Then
                 plcountcos = dtCOs.Rows(0)(0)
             Else
@@ -1209,7 +1210,7 @@ Public Class PickListForm
             plcountcos = 0
             If conn.State = ConnectionState.Open Then conn.Close()
             Dim dtCOs As New DataTable
-            dtCOs = getDataTableForSQL("SELECT COALESCE(COUNT(co.rowid),0) FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid WHERE co.organizationid = " & Z_OrganizationID & " AND co.ordertype = 'CO' AND co.`status` = 'Submitted To Warehouse' AND cu.picklistgroupid IS NULL ")
+            dtCOs = getDataTableForSQL("SELECT COALESCE(COUNT(co.rowid),0) FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid WHERE co.organizationid = " & Z_OrganizationID & $" AND co.ordertype = '{OrderType.CO.ToString()}' AND co.`status` = 'Submitted To Warehouse' AND cu.picklistgroupid IS NULL ")
             If dtCOs.Rows.Count <> 0 Then
                 plcountcos = dtCOs.Rows(0)(0)
             Else
@@ -1226,7 +1227,7 @@ Public Class PickListForm
         Try
             If conn.State = ConnectionState.Closed Then conn.Open()
             Dim sql1 As String = "SELECT COALESCE(cu.picklistgroupid,0) FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid WHERE co.organizationid = " & Z_OrganizationID & " " &
-                        "AND co.ordertype = 'CO' AND co.`status` = 'Submitted To Warehouse' AND cu.picklistgroupid IS NOT NULL GROUP BY cu.picklistgroupid ORDER BY co.targetdate ASC "
+                        $"AND co.ordertype = '{OrderType.CO.ToString()}' AND co.`status` = 'Submitted To Warehouse' AND cu.picklistgroupid IS NOT NULL GROUP BY cu.picklistgroupid ORDER BY co.targetdate ASC "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             While reader1.Read()
@@ -1253,7 +1254,7 @@ Public Class PickListForm
         Try
             If conn1.State = ConnectionState.Closed Then conn1.Open()
             Dim sql1 As String = "SELECT co.rowid FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid WHERE co.organizationid = " & Z_OrganizationID & " " &
-                        "AND co.ordertype = 'CO' AND co.`status` = 'Submitted To Warehouse' AND cu.picklistgroupid = " & ipicklistgroupid & " ORDER BY co.targetdate ASC "
+                        $"AND co.ordertype = '{OrderType.CO.ToString()}' AND co.`status` = 'Submitted To Warehouse' AND cu.picklistgroupid = " & ipicklistgroupid & " ORDER BY co.targetdate ASC "
             Dim cmd1 As New MySqlCommand(sql1, conn1)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             While reader1.Read()
@@ -1289,7 +1290,7 @@ Public Class PickListForm
         Try
             If conn1.State = ConnectionState.Closed Then conn1.Open()
             Dim sql1 As String = "SELECT co.rowid FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid WHERE co.organizationid = " & Z_OrganizationID & " " &
-                        "AND co.ordertype = 'CO' AND co.`status` = 'Submitted To Warehouse' AND cu.picklistgroupid IS NULL ORDER BY co.targetdate ASC "
+                        $"AND co.ordertype = '{OrderType.CO.ToString()}' AND co.`status` = 'Submitted To Warehouse' AND cu.picklistgroupid IS NULL ORDER BY co.targetdate ASC "
             Dim cmd1 As New MySqlCommand(sql1, conn1)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             While reader1.Read()

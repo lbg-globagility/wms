@@ -9,10 +9,12 @@ Imports System.Data
 Imports System.Diagnostics
 Imports System.Runtime.InteropServices
 Imports System.Text.RegularExpressions
+Imports WarehouseManagementSystem.Core.Enums
+
 Public Class StockAdjustmentForm
     Dim manager As New sqlModule.Manager
-    Dim conn As New MySqlConnection(Manager.GetConnString)
-    Dim conn1 As New MySqlConnection(Manager.GetConnString)
+    Dim conn As New MySqlConnection(manager.GetConnString)
+    Dim conn1 As New MySqlConnection(manager.GetConnString)
     Dim sqlcmd As MySqlCommand
     Dim sqlrd As MySqlDataReader
     Dim sqlquery As String
@@ -35,6 +37,7 @@ Public Class StockAdjustmentForm
     Public Appupdates As Char = ""
     Public Appdisable As Char = ""
     Public Appreads As Char = ""
+
     Private Sub StockAdjustment_Load(sender As Object, e As EventArgs) Handles Me.Load
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -54,7 +57,7 @@ Public Class StockAdjustmentForm
             populateDataGridViewComboBox("SELECT rsc.shelfno FROM rackshelfcolumn rsc WHERE rsc.`Status`='Active' AND rsc.OrganizationID=" & Z_OrganizationID & " AND rsc.InventoryLocationID=" & getilid & " GROUP BY rsc.shelfno", r_shelf, Me)
             populateDataGridViewComboBox("SELECT rsc.columnno FROM rackshelfcolumn rsc WHERE rsc.`Status`='Active' AND rsc.OrganizationID=" & Z_OrganizationID & " AND rsc.InventoryLocationID=" & getilid & " GROUP BY rsc.columnno", r_column, Me)
             autocompleteProductCode(cboItemCode)
-            populateComboBox("SELECT CONCAT(COALESCE(p.productcode,''),'-', COALESCE(pcs.size,''),'-',COALESCE(c.colorname,''),'-',COALESCE(pcs.seasoncode,'')) FROM productcolorsizes pcs LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid " & _
+            populateComboBox("SELECT CONCAT(COALESCE(p.productcode,''),'-', COALESCE(pcs.size,''),'-',COALESCE(c.colorname,''),'-',COALESCE(pcs.seasoncode,'')) FROM productcolorsizes pcs LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid " &
                     "LEFT JOIN colors c ON pc.colorid = c.rowid LEFT JOIN products p ON pc.productid = p.rowid WHERE pcs.organizationid = " & Z_OrganizationID & " ORDER BY p.productcode ", cboItemCode, Me)
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
@@ -63,6 +66,7 @@ Public Class StockAdjustmentForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub StockAdjustment_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -74,6 +78,7 @@ Public Class StockAdjustmentForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboItemCode_KeyDown(sender As Object, e As KeyEventArgs) Handles cboItemCode.KeyDown
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -87,6 +92,7 @@ Public Class StockAdjustmentForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub chkApproveAll_CheckedChanged(sender As Object, e As EventArgs) Handles chkApproveAll.CheckedChanged
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -108,8 +114,11 @@ Public Class StockAdjustmentForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #Region "Functions"
+
 #Region "Clear/Enable/Visible"
+
     Sub clearfields()
         Try
             cue = ""
@@ -132,6 +141,7 @@ Public Class StockAdjustmentForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearRightPage()
         Try
             cue = ""
@@ -150,6 +160,7 @@ Public Class StockAdjustmentForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearSearchItems()
         Try
             txtSimpleSearch.Text = ""
@@ -169,6 +180,7 @@ Public Class StockAdjustmentForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearcboSearch()
         Try
             txtPage.Text = ""
@@ -186,6 +198,7 @@ Public Class StockAdjustmentForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearStockAdjInformation()
         Try
             txtStockAdjustmentNo.Text = ""
@@ -199,6 +212,7 @@ Public Class StockAdjustmentForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearAddProductA()
         Try
             cboItemCode.Text = ""
@@ -209,6 +223,7 @@ Public Class StockAdjustmentForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearRecevingOrderItems()
         Try
             chkOtherInfo.Checked = fraud
@@ -218,6 +233,7 @@ Public Class StockAdjustmentForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearDatagrids()
         Try
             dgStockAdjustmentItems.Rows.Clear()
@@ -228,6 +244,7 @@ Public Class StockAdjustmentForm
             conn.Close()
         End Try
     End Sub
+
     Sub enableGB(ByVal enable1 As Boolean, ByVal enable2 As Boolean, ByVal enable3 As Boolean)
         Try
             gbSearch.Enabled = enable1
@@ -242,6 +259,7 @@ Public Class StockAdjustmentForm
             conn.Close()
         End Try
     End Sub
+
     Sub enableANDvisibleMS(ByVal enable1 As Boolean, ByVal enable2 As Boolean, ByVal visible1 As Boolean, ByVal visible2 As Boolean)
         Try
             msNew.Enabled = enable1
@@ -254,6 +272,7 @@ Public Class StockAdjustmentForm
             conn.Close()
         End Try
     End Sub
+
     Sub visiblesupplierOrderItems(ByVal visible1 As Boolean)
         Try
             ci_unitofmeasure.Visible = visible1
@@ -264,12 +283,16 @@ Public Class StockAdjustmentForm
             conn.Close()
         End Try
     End Sub
+
     Sub visiblereadonly(ByVal reads As Boolean, ByVal shows As Boolean)
         ci_approved.ReadOnly = reads
         ci_qtyordered.Visible = shows
     End Sub
+
 #End Region
+
 #Region "Click"
+
     Sub tsrefreshperformclick()
         Try
             errProvider.Clear()
@@ -284,6 +307,7 @@ Public Class StockAdjustmentForm
             conn.Close()
         End Try
     End Sub
+
     Sub btnAddperformclick()
         Try
             errProvider.Clear()
@@ -305,8 +329,11 @@ Public Class StockAdjustmentForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Page Setup"
+
     Sub pageSetup()
         Try
             getCountPageNum()
@@ -327,12 +354,13 @@ Public Class StockAdjustmentForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCountPageNum()
         Try
             countpagenum = 0
             If conn.State = ConnectionState.Open Then conn.Close()
             Dim dtCid As New DataTable
-            dtCid = getDataTableForSQL("SELECT COUNT(po.rowid) FROM orders po WHERE po.organizationid = " & Z_OrganizationID & " AND po.ordertype ='Stock Adj.'")
+            dtCid = getDataTableForSQL("SELECT COUNT(po.rowid) FROM orders po WHERE po.organizationid = " & Z_OrganizationID & $" AND po.ordertype ='{OrderType.SA.ToString()}'")
             If dtCid.Rows.Count <> 0 Then
                 countpagenum = dtCid.Rows(0)(0)
             Else
@@ -344,6 +372,7 @@ Public Class StockAdjustmentForm
             conn.Close()
         End Try
     End Sub
+
     Sub pageSetup1(ByVal isearchstring As String)
         Try
             getCountPageNum1(isearchstring)
@@ -364,12 +393,13 @@ Public Class StockAdjustmentForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCountPageNum1(ByVal esearchstring As String)
         Try
             countpagenum = 0
             If conn.State = ConnectionState.Open Then conn.Close()
             Dim dtCid As New DataTable
-            dtCid = getDataTableForSQL("SELECT COALESCE(COUNT(po.rowid),0) FROM orders po LEFT JOIN accounts su ON po.accountid = su.rowid WHERE po.organizationid = " & Z_OrganizationID & " AND po.ordertype ='Stock Adj.' " & _
+            dtCid = getDataTableForSQL("SELECT COALESCE(COUNT(po.rowid),0) FROM orders po LEFT JOIN accounts su ON po.accountid = su.rowid WHERE po.organizationid = " & Z_OrganizationID & $" AND po.ordertype ='{OrderType.SA.ToString()}' " &
                             " AND (po.ordernumber LIKE '%" & esearchstring & "%' OR po.status LIKE '%" & esearchstring & "%' OR su.companyname LIKE '%" & esearchstring & "%') ")
             If dtCid.Rows.Count <> 0 Then
                 countpagenum = dtCid.Rows(0)(0)
@@ -382,6 +412,7 @@ Public Class StockAdjustmentForm
             conn.Close()
         End Try
     End Sub
+
     Sub pageSetup2(ByVal idatesearch As String)
         Try
             getCountPageNum2(idatesearch)
@@ -402,13 +433,14 @@ Public Class StockAdjustmentForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCountPageNum2(ByVal edatesearch As String)
         Try
             countpagenum = 0
             If conn.State = ConnectionState.Open Then conn.Close()
             Dim dtCid As New DataTable
-            dtCid = getDataTableForSQL("SELECT COALESCE(COUNT(po.rowid),0) FROM orders po WHERE po.organizationid = " & Z_OrganizationID & " AND po.ordertype ='Stock Adj.' AND " & _
-                            "(" & edatesearch & " >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " & _
+            dtCid = getDataTableForSQL("SELECT COALESCE(COUNT(po.rowid),0) FROM orders po WHERE po.organizationid = " & Z_OrganizationID & $" AND po.ordertype ='{OrderType.SA.ToString()}' AND " &
+                            "(" & edatesearch & " >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " &
                             "" & edatesearch & " <= '" & dtpToSearch.Value.Year & "-" & dtpToSearch.Value.Month & "-" & dtpToSearch.Value.Day & "' ) GROUP BY po.rowid ")
             If dtCid.Rows.Count <> 0 Then
                 countpagenum = dtCid.Rows(0)(0)
@@ -421,6 +453,7 @@ Public Class StockAdjustmentForm
             conn.Close()
         End Try
     End Sub
+
     Sub pageSetup3(ByVal icommonstring As String, ByVal idatesearch As String)
         Try
             getCountPageNum3(icommonstring, idatesearch)
@@ -441,12 +474,13 @@ Public Class StockAdjustmentForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCountPageNum3(ByVal ecommonstring As String, ByVal edatesearch As String)
         Try
             countpagenum = 0
             If conn.State = ConnectionState.Open Then conn.Close()
             Dim dtCid As New DataTable
-            dtCid = getDataTableForSQL("SELECT COALESCE(COUNT(po.rowid),0) FROM orders po WHERE po.organizationid = " & Z_OrganizationID & " AND po.ordertype ='Stock Adj.' AND " & ecommonstring & " " & edatesearch & " ")
+            dtCid = getDataTableForSQL("SELECT COALESCE(COUNT(po.rowid),0) FROM orders po WHERE po.organizationid = " & Z_OrganizationID & $" AND po.ordertype ='{OrderType.SA.ToString()}' AND " & ecommonstring & " " & edatesearch & " ")
             If dtCid.Rows.Count <> 0 Then
                 countpagenum = dtCid.Rows(0)(0)
             Else
@@ -458,6 +492,7 @@ Public Class StockAdjustmentForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCommonPhrase(ByVal icommonbox As ComboBox, ByVal icommonstring As String)
         Try
             commonphrase = ""
@@ -472,13 +507,17 @@ Public Class StockAdjustmentForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Display"
+
 #Region "AutoComplete"
+
     Sub autocompleteSupplierName(ByVal icombobox As ComboBox)
         Try
             Dim suppliername As New AutoCompleteStringCollection
-            Dim cmd As New MySqlCommand("SELECT COALESCE(CONCAT(COALESCE(su.companyname,''),' - ',COALESCE(su.accountno,'')),'') AS 'suppliername' FROM orders po LEFT JOIN accounts su ON po.accountid = su.rowid WHERE po.organizationid = " & Z_OrganizationID & " AND po.ordertype ='Stock Adj.' GROUP BY su.accountno ORDER BY su.accountno ", conn)
+            Dim cmd As New MySqlCommand("SELECT COALESCE(CONCAT(COALESCE(su.companyname,''),' - ',COALESCE(su.accountno,'')),'') AS 'suppliername' FROM orders po LEFT JOIN accounts su ON po.accountid = su.rowid WHERE po.organizationid = " & Z_OrganizationID & $" AND po.ordertype ='{OrderType.SA.ToString()}' GROUP BY su.accountno ORDER BY su.accountno ", conn)
             Dim ds As New DataSet
             Dim da As New MySqlDataAdapter(cmd)
             da.Fill(ds, "list")
@@ -495,10 +534,11 @@ Public Class StockAdjustmentForm
             conn.Close()
         End Try
     End Sub
+
     Sub autocompleteStatus(ByVal icombobox As ComboBox)
         Try
             Dim costatus As New AutoCompleteStringCollection
-            Dim cmd As New MySqlCommand("SELECT COALESCE(po.status,'') AS 'postatus' FROM orders po WHERE po.organizationid = " & Z_OrganizationID & " AND po.ordertype ='Stock Adj.' GROUP BY po.status ORDER BY po.status ", conn)
+            Dim cmd As New MySqlCommand("SELECT COALESCE(po.status,'') AS 'postatus' FROM orders po WHERE po.organizationid = " & Z_OrganizationID & $" AND po.ordertype ='{OrderType.SA.ToString()}' GROUP BY po.status ORDER BY po.status ", conn)
             Dim ds As New DataSet
             Dim da As New MySqlDataAdapter(cmd)
             da.Fill(ds, "list")
@@ -515,10 +555,11 @@ Public Class StockAdjustmentForm
             conn.Close()
         End Try
     End Sub
+
     Sub autocompleteProductCode(ByVal icombobox As ComboBox)
         Try
             Dim productcode As New AutoCompleteStringCollection
-            Dim cmd As New MySqlCommand("SELECT CONCAT(COALESCE(p.productcode,''),'-', COALESCE(pcs.size,''),'-',COALESCE(c.colorname,''),'-',COALESCE(pcs.seasoncode,'')) AS 'productcode' FROM productcolorsizes pcs " & _
+            Dim cmd As New MySqlCommand("SELECT CONCAT(COALESCE(p.productcode,''),'-', COALESCE(pcs.size,''),'-',COALESCE(c.colorname,''),'-',COALESCE(pcs.seasoncode,'')) AS 'productcode' FROM productcolorsizes pcs " &
                         "LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN colors c ON pc.colorid = c.rowid LEFT JOIN products p ON pc.productid = p.rowid WHERE pcs.organizationid = " & Z_OrganizationID & " ORDER BY p.productcode ", conn)
             Dim ds As New DataSet
             Dim da As New MySqlDataAdapter(cmd)
@@ -536,8 +577,11 @@ Public Class StockAdjustmentForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "AutoPopulate"
+
     Sub autopopulatecboSearch()
         Try
             cboSearch1.Items.Clear()
@@ -552,11 +596,12 @@ Public Class StockAdjustmentForm
             conn.Close()
         End Try
     End Sub
+
     Sub autopopulateSupplierName(ByVal icombobox As ComboBox)
         Try
             icombobox.Items.Clear()
             If conn.State = ConnectionState.Open Then conn.Close()
-            Dim sql1 As String = "SELECT COALESCE(CONCAT(COALESCE(su.companyname,''),' - ',COALESCE(su.accountno,'')),'') AS 'suppliername' FROM orders po LEFT JOIN accounts su ON po.accountid = su.rowid WHERE po.organizationid = " & Z_OrganizationID & " AND po.ordertype ='Stock Adj.' GROUP BY su.accountno ORDER BY su.companyname "
+            Dim sql1 As String = "SELECT COALESCE(CONCAT(COALESCE(su.companyname,''),' - ',COALESCE(su.accountno,'')),'') AS 'suppliername' FROM orders po LEFT JOIN accounts su ON po.accountid = su.rowid WHERE po.organizationid = " & Z_OrganizationID & $" AND po.ordertype ='{OrderType.SA.ToString()}' GROUP BY su.accountno ORDER BY su.companyname "
             If conn.State = ConnectionState.Closed Then conn.Open()
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader()
@@ -572,11 +617,12 @@ Public Class StockAdjustmentForm
             conn.Close()
         End Try
     End Sub
+
     Sub autopopulateStatus(ByVal icombobox As ComboBox)
         Try
             icombobox.Items.Clear()
             If conn.State = ConnectionState.Open Then conn.Close()
-            Dim sql1 As String = "SELECT COALESCE(po.status,'') AS 'postatus' FROM orders po WHERE po.organizationid = " & Z_OrganizationID & " AND po.ordertype ='Stock Adj.' GROUP BY po.status ORDER BY po.status "
+            Dim sql1 As String = "SELECT COALESCE(po.status,'') AS 'postatus' FROM orders po WHERE po.organizationid = " & Z_OrganizationID & $" AND po.ordertype ='{OrderType.SA.ToString()}' GROUP BY po.status ORDER BY po.status "
             If conn.State = ConnectionState.Closed Then conn.Open()
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader()
@@ -592,14 +638,17 @@ Public Class StockAdjustmentForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Datagrids"
+
     Sub displayStockAdjusmentList(ByVal istartpage As Integer)
         Try
             dgStockAdjusmentList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT s.rowid,COALESCE(s.ordernumber,''),DATE_FORMAT(s.orderdate,'%d-%b-%Y'),COALESCE(CONCAT(COALESCE(su.companyname,''),' - ',COALESCE(su.accountno,'')),'')," & _
-                        "COALESCE(s.status,''),COALESCE(s.RelatedOrderID,0) FROM orders s LEFT JOIN accounts su ON s.accountid = su.rowid WHERE s.organizationid = " & Z_OrganizationID & " AND s.ordertype = 'Stock Adj.' " & _
+            Dim sql1 As String = "SELECT s.rowid,COALESCE(s.ordernumber,''),DATE_FORMAT(s.orderdate,'%d-%b-%Y'),COALESCE(CONCAT(COALESCE(su.companyname,''),' - ',COALESCE(su.accountno,'')),'')," &
+                        "COALESCE(s.status,''),COALESCE(s.RelatedOrderID,0) FROM orders s LEFT JOIN accounts su ON s.accountid = su.rowid WHERE s.organizationid = " & Z_OrganizationID & $" AND s.ordertype = '{OrderType.SA.ToString()}' " &
                         "ORDER BY s.orderdate DESC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -627,13 +676,14 @@ Public Class StockAdjustmentForm
             conn.Close()
         End Try
     End Sub
+
     Sub displaySearchPhrase(ByVal isearchphrase As String, ByVal istartpage As Integer)
         Try
             dgStockAdjusmentList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT s.rowid,COALESCE(s.ordernumber,''),DATE_FORMAT(s.orderdate,'%d-%b-%Y'),COALESCE(CONCAT(COALESCE(su.companyname,''),' - ',COALESCE(su.accountno,'')),'')," & _
-                        "COALESCE(s.status,''),COALESCE(s.RelatedOrderID,0) FROM orders s LEFT JOIN accounts su ON s.accountid = su.rowid WHERE s.organizationid = " & Z_OrganizationID & " AND s.ordertype ='Stock Adj.' AND " & _
-                        "(s.ordernumber LIKE '%" & isearchphrase & "%' OR s.status LIKE '%" & isearchphrase & "%' OR cu.companyname LIKE '%" & isearchphrase & "%') " & _
+            Dim sql1 As String = "SELECT s.rowid,COALESCE(s.ordernumber,''),DATE_FORMAT(s.orderdate,'%d-%b-%Y'),COALESCE(CONCAT(COALESCE(su.companyname,''),' - ',COALESCE(su.accountno,'')),'')," &
+                        "COALESCE(s.status,''),COALESCE(s.RelatedOrderID,0) FROM orders s LEFT JOIN accounts su ON s.accountid = su.rowid WHERE s.organizationid = " & Z_OrganizationID & $" AND s.ordertype ='{OrderType.SA.ToString()}' AND " &
+                        "(s.ordernumber LIKE '%" & isearchphrase & "%' OR s.status LIKE '%" & isearchphrase & "%' OR cu.companyname LIKE '%" & isearchphrase & "%') " &
                         "ORDER BY s.orderdate DESC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -661,14 +711,15 @@ Public Class StockAdjustmentForm
             conn.Close()
         End Try
     End Sub
+
     Sub displayDateSearch(ByVal istartpage As Integer, ByVal idatesearch As String)
         Try
             dgStockAdjusmentList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT po.rowid,COALESCE(s.ordernumber,''),DATE_FORMAT(s.orderdate,'%d-%b-%Y'),COALESCE(CONCAT(COALESCE(su.companyname,''),' - ',COALESCE(su.accountno,'')),'')," & _
-                        "COALESCE(s.status,''),COALESCE(s.RelatedOrderID,0) FROM orders s LEFT JOIN accounts su ON s.accountid = su.rowid WHERE s.organizationid = " & Z_OrganizationID & " AND s.ordertype ='Stock Adj.' AND " & _
-                        "(" & idatesearch & " >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " & _
-                        "" & idatesearch & " <= '" & dtpToSearch.Value.Year & "-" & dtpToSearch.Value.Month & "-" & dtpToSearch.Value.Day & "' ) " & _
+            Dim sql1 As String = "SELECT po.rowid,COALESCE(s.ordernumber,''),DATE_FORMAT(s.orderdate,'%d-%b-%Y'),COALESCE(CONCAT(COALESCE(su.companyname,''),' - ',COALESCE(su.accountno,'')),'')," &
+                        "COALESCE(s.status,''),COALESCE(s.RelatedOrderID,0) FROM orders s LEFT JOIN accounts su ON s.accountid = su.rowid WHERE s.organizationid = " & Z_OrganizationID & $" AND s.ordertype ='{OrderType.SA.ToString()}' AND " &
+                        "(" & idatesearch & " >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " &
+                        "" & idatesearch & " <= '" & dtpToSearch.Value.Year & "-" & dtpToSearch.Value.Month & "-" & dtpToSearch.Value.Day & "' ) " &
                         "GROUP BY s.rowid ORDER BY s.orderdate DESC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -696,12 +747,13 @@ Public Class StockAdjustmentForm
             conn.Close()
         End Try
     End Sub
+
     Sub displayCommonPhrase(ByVal icommonphrase As String, ByVal idatesearch As String, ByVal istartpage As Integer)
         Try
             dgStockAdjusmentList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT s.rowid,COALESCE(s.ordernumber,''),DATE_FORMAT(s.orderdate,'%d-%b-%Y'),COALESCE(CONCAT(COALESCE(su.companyname,''),' - ',COALESCE(su.accountno,'')),'')," & _
-                        "COALESCE(s.status,''),COALESCE(s.RelatedOrderID,0) FROM orders s LEFT JOIN accounts su ON s.accountid = su.rowid WHERE s.organizationid = " & Z_OrganizationID & " AND s.ordertype ='Stock Adj.' " & _
+            Dim sql1 As String = "SELECT s.rowid,COALESCE(s.ordernumber,''),DATE_FORMAT(s.orderdate,'%d-%b-%Y'),COALESCE(CONCAT(COALESCE(su.companyname,''),' - ',COALESCE(su.accountno,'')),'')," &
+                        "COALESCE(s.status,''),COALESCE(s.RelatedOrderID,0) FROM orders s LEFT JOIN accounts su ON s.accountid = su.rowid WHERE s.organizationid = " & Z_OrganizationID & $" AND s.ordertype ='{OrderType.SA.ToString()}' " &
                         " AND " & icommonphrase & " " & idatesearch & " ORDER BY s.orderdate DESC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -729,13 +781,14 @@ Public Class StockAdjustmentForm
             conn.Close()
         End Try
     End Sub
+
     Sub displayStockAdjustmentInformation(ByVal isupplierorderid As Integer)
         Try
             If conn1.State = ConnectionState.Closed Then conn1.Open()
             Dim sql1 As String
-            sql1 = "SELECT COALESCE(s.ordernumber),DATE_FORMAT(s.orderdate,'%d-%b-%Y'),DATE_FORMAT(s.targetdate,'%d-%b-%Y'),COALESCE(CONCAT(COALESCE(su.companyname,''),' - ',COALESCE(su.accountno,'')),'')," & _
-                 "COALESCE(s.comments,''),COALESCE(s.status,''),COALESCE(s.ReceivedBy,'') FROM orders s " & _
-                 "LEFT JOIN accounts su ON s.accountid = su.rowid " & _
+            sql1 = "SELECT COALESCE(s.ordernumber),DATE_FORMAT(s.orderdate,'%d-%b-%Y'),DATE_FORMAT(s.targetdate,'%d-%b-%Y'),COALESCE(CONCAT(COALESCE(su.companyname,''),' - ',COALESCE(su.accountno,'')),'')," &
+                 "COALESCE(s.comments,''),COALESCE(s.status,''),COALESCE(s.ReceivedBy,'') FROM orders s " &
+                 "LEFT JOIN accounts su ON s.accountid = su.rowid " &
                  "WHERE s.rowid = " & isupplierorderid & " "
             Dim cmd1 As New MySqlCommand(sql1, conn1)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -757,14 +810,15 @@ Public Class StockAdjustmentForm
             conn1.Close()
         End Try
     End Sub
+
     Sub displayStockAdjustmentItems(ByVal isupplierorderid As Integer)
         Try
             dgStockAdjustmentItems.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT ci.rowid,COALESCE(ci.productcolorsizeid,0),COALESCE(ci.productbundleid,0),COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(b.bundlename,''),COALESCE(c.colorname,''),COALESCE(pcs.size,'')," & _
-                    "COALESCE(pcs.seasoncode,''),COALESCE(ci.unitofmeasure,''),COALESCE(ci.qtyordered,0),COALESCE(ci.srp,0.0),COALESCE(pcs.sku,''),COALESCE(b.sku,''),COALESCE(ci.itemtype,''),COALESCE(ci.remarks,''), COALESCE(ci.qtyreceived,0),COALESCE(ci.approval,'N'),COALESCE(SUM(rsc.QtyApplied),0) FROM orderitems ci " & _
-                    "LEFT JOIN productbundles b ON ci.productbundleid = b.rowid LEFT JOIN productcolorsizes pcs ON ci.productcolorsizeid = pcs.rowid LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid " & _
-                    "LEFT JOIN colors c ON pc.colorid = c.rowid LEFT JOIN products p ON pc.productid = p.rowid LEFT JOIN rscorderitems rsc ON rsc.OrderItemsID = ci.RowID WHERE ci.orderid = " & isupplierorderid & " AND ci.organizationid = " & Z_OrganizationID & " " & _
+            Dim sql1 As String = "SELECT ci.rowid,COALESCE(ci.productcolorsizeid,0),COALESCE(ci.productbundleid,0),COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(b.bundlename,''),COALESCE(c.colorname,''),COALESCE(pcs.size,'')," &
+                    "COALESCE(pcs.seasoncode,''),COALESCE(ci.unitofmeasure,''),COALESCE(ci.qtyordered,0),COALESCE(ci.srp,0.0),COALESCE(pcs.sku,''),COALESCE(b.sku,''),COALESCE(ci.itemtype,''),COALESCE(ci.remarks,''), COALESCE(ci.qtyreceived,0),COALESCE(ci.approval,'N'),COALESCE(SUM(rsc.QtyApplied),0) FROM orderitems ci " &
+                    "LEFT JOIN productbundles b ON ci.productbundleid = b.rowid LEFT JOIN productcolorsizes pcs ON ci.productcolorsizeid = pcs.rowid LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid " &
+                    "LEFT JOIN colors c ON pc.colorid = c.rowid LEFT JOIN products p ON pc.productid = p.rowid LEFT JOIN rscorderitems rsc ON rsc.OrderItemsID = ci.RowID WHERE ci.orderid = " & isupplierorderid & " AND ci.organizationid = " & Z_OrganizationID & " " &
                     "AND ci.status != 'Inactive' AND ci.itemtype != 'BI' GROUP BY pcs.rowid ORDER BY ci.rowid "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -842,6 +896,7 @@ Public Class StockAdjustmentForm
             conn.Close()
         End Try
     End Sub
+
     Sub displayStockAdjustmentItemsAdd(ByVal ipcsid As Integer)
         Try
             If conn.State = ConnectionState.Closed Then conn.Open()
@@ -850,7 +905,7 @@ Public Class StockAdjustmentForm
             '        "LEFT JOIN productbundles b ON ci.productbundleid = b.rowid LEFT JOIN productcolorsizes pcs ON ci.productcolorsizeid = pcs.rowid LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid " & _
             '        "LEFT JOIN colors c ON pc.colorid = c.rowid LEFT JOIN products p ON pc.productid = p.rowid LEFT JOIN rscorderitems rsc ON rsc.OrderItemsID = ci.RowID WHERE ci.ProductColorSizeID=" & pcsid & " AND ci.organizationid = " & Z_OrganizationID & " " & _
             '        "AND ci.status != 'Inactive' AND ci.itemtype != 'BI' GROUP BY pcs.RowID ORDER BY ci.rowid "
-            Dim sql1 As String = "SELECT pcs.rowid,COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(c.colorname,''),COALESCE(pcs.size,''),COALESCE(pcs.seasoncode,''),COALESCE(p.unitofmeasure,''),COALESCE(p.unitprice,0.0),COALESCE(pcs.sku,'') FROM productcolorsizes pcs " & _
+            Dim sql1 As String = "SELECT pcs.rowid,COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(c.colorname,''),COALESCE(pcs.size,''),COALESCE(pcs.seasoncode,''),COALESCE(p.unitofmeasure,''),COALESCE(p.unitprice,0.0),COALESCE(pcs.sku,'') FROM productcolorsizes pcs " &
                     "LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN colors c ON pc.colorid = c.rowid LEFT JOIN products p ON pc.productid = p.rowid WHERE pcs.rowid = " & ipcsid & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -942,11 +997,12 @@ Public Class StockAdjustmentForm
             conn.Close()
         End Try
     End Sub
+
     Sub displayProductRSC(ByVal pcsid As Integer)
         Try
             dgrackshelfcolumn.Rows.Clear()
             If conn1.State = ConnectionState.Closed Then conn1.Open()
-            Dim sql1 As String = "SELECT COALESCE(pil.totalavailableqty,0),COALESCE(r.rackno,0),COALESCE(r.shelfno,0),COALESCE(r.columnno,0),COALESCE(pil.rowid,0),COALESCE(SUM(rsc.qtyapplied),0),COALESCE(rsc.rowid,0),COALESCE(COALESCE(rsc.lastupd,rsc.created),''),COALESCE(pil.totalallocatedqty,0) FROM productinventorylocation pil " & _
+            Dim sql1 As String = "SELECT COALESCE(pil.totalavailableqty,0),COALESCE(r.rackno,0),COALESCE(r.shelfno,0),COALESCE(r.columnno,0),COALESCE(pil.rowid,0),COALESCE(SUM(rsc.qtyapplied),0),COALESCE(rsc.rowid,0),COALESCE(COALESCE(rsc.lastupd,rsc.created),''),COALESCE(pil.totalallocatedqty,0) FROM productinventorylocation pil " &
                     "LEFT JOIN rackshelfcolumn r ON pil.rackshelfcolumnid = r.rowid LEFT JOIN rscorderitems rsc ON pil.rowid = rsc.prodinventorylocid WHERE pil.productcolorsizeid = " & pcsid & " and pil.organizationid = " & Z_OrganizationID & " ORDER BY r.rackno,r.columnno,r.shelfno "
             Dim cmd1 As New MySqlCommand(sql1, conn1)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -992,9 +1048,13 @@ Public Class StockAdjustmentForm
             conn1.Close()
         End Try
     End Sub
+
 #End Region
+
 #End Region
+
 #Region "Update"
+
     Sub updatestatusToApproved(ByVal rowid As Integer)
         Try
             Me.Cursor = Cursors.WaitCursor
@@ -1016,6 +1076,7 @@ Public Class StockAdjustmentForm
             conn.Close()
         End Try
     End Sub
+
     Sub updatestatusofrelatedno(ByVal rowid As Integer, ByVal stat As String)
         Try
             Me.Cursor = Cursors.WaitCursor
@@ -1027,8 +1088,11 @@ Public Class StockAdjustmentForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "GETID"
+
     Sub getInventorylocid()
         Try
             getilid = 0
@@ -1040,6 +1104,7 @@ Public Class StockAdjustmentForm
             conn.Close()
         End Try
     End Sub
+
     Sub getrackid(ByVal rack As String, ByVal shelf As String, ByVal column As String)
         Try
             getrackshelfcolid = 0
@@ -1051,12 +1116,13 @@ Public Class StockAdjustmentForm
             conn.Close()
         End Try
     End Sub
+
     Sub getProdColorSizesID(ByVal itemcode As String)
         Try
             getorderitemsid = 0
             getprodcolorsizeid = 0
             Dim dt As New DataTable
-            dt = getDataTableForSQL("SELECT pcs.rowid FROM productcolorsizes pcs LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN colors c ON pc.colorid = c.rowid " & _
+            dt = getDataTableForSQL("SELECT pcs.rowid FROM productcolorsizes pcs LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN colors c ON pc.colorid = c.rowid " &
                             "LEFT JOIN products p ON pc.productid = p.rowid WHERE pcs.organizationid = " & Z_OrganizationID & " AND CONCAT(COALESCE(p.ProductCode,''),'-', COALESCE(pcs.Size,''),'-',COALESCE(c.ColorName,''),'-',COALESCE(pcs.SeasonCode,'')) = """ & itemcode & """ ")
             If dt.Rows.Count <> 0 Then
                 getorderitemsid = dt.Rows(0)("rowid")
@@ -1068,6 +1134,7 @@ Public Class StockAdjustmentForm
             conn.Close()
         End Try
     End Sub
+
     Sub getProdinvLocID(ByVal prodcolorsizes As Integer)
         Try
             getpilocid = 0
@@ -1079,6 +1146,7 @@ Public Class StockAdjustmentForm
             conn.Close()
         End Try
     End Sub
+
     Sub getrscOrderitemsid(ByVal orderitemsid As Integer)
         Try
             getrscid = 0
@@ -1090,9 +1158,13 @@ Public Class StockAdjustmentForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #End Region
+
 #Region "Menustrip"
+
     Private Sub msSave_Click(sender As Object, e As EventArgs) Handles msSave.Click
         Try
             errProvider.Clear()
@@ -1176,8 +1248,8 @@ Public Class StockAdjustmentForm
                     '    errProvider.SetError(txtStockAdjustmentNo, "Stock Adj. no. has been created already, please type a new one.")
                     '    Exit Try
                     'End If
-                    getOrderNo("Stock Adj.", Me)
-                    M_I_Orders(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, DBNull.Value, globalorderno, "Stock Adj.", _
+                    getOrderNo(globaliordertype:=OrderType.SA.ToString(), Me)
+                    M_I_Orders(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, DBNull.Value, globalorderno, OrderType:=OrderType.SA.ToString(),
                             dtpStockAdjustmentDate.Value, DBNull.Value, "", txtComments.Text, "For Approval", 0, txtAdjustedBy.Text, DBNull.Value, DBNull.Value, DBNull.Value, "", "", "", "", Me)
                     orderid = globalorderidsp
                     If dgStockAdjustmentItems.Rows.Count <> 0 Then
@@ -1186,9 +1258,9 @@ Public Class StockAdjustmentForm
                                 If IsNumeric(dgStockAdjustmentItems.Rows(a).Cells("ci_pcsrowid").Value) Then
                                     If CInt(dgStockAdjustmentItems.Rows(a).Cells("ci_pcsrowid").Value) <> 0 Then
                                         getTotalQtyAvailableA(CInt(dgStockAdjustmentItems.Rows(a).Cells("ci_pcsrowid").Value), Me)
-                                        M_I_OrderItems(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, Nothing, orderid, CInt(dgStockAdjustmentItems.Rows(a).Cells("ci_pcsrowid").Value), DBNull.Value, _
-                                                    If(IsNumeric(dgStockAdjustmentItems.Rows(a).Cells("ci_qtyordered").Value), CInt(dgStockAdjustmentItems.Rows(a).Cells("ci_qtyordered").Value), 0), globaltotalqtyavailable, "S", _
-                                                    "" & CStr(dgStockAdjustmentItems.Rows(a).Cells("ci_productcode").Value) & " / " & CStr(dgStockAdjustmentItems.Rows(a).Cells("ci_colorname").Value) & " / " & CStr(dgStockAdjustmentItems.Rows(a).Cells("ci_size").Value) & " / " & CStr(dgStockAdjustmentItems.Rows(a).Cells("ci_seasoncode").Value) & "", _
+                                        M_I_OrderItems(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, Nothing, orderid, CInt(dgStockAdjustmentItems.Rows(a).Cells("ci_pcsrowid").Value), DBNull.Value,
+                                                    If(IsNumeric(dgStockAdjustmentItems.Rows(a).Cells("ci_qtyordered").Value), CInt(dgStockAdjustmentItems.Rows(a).Cells("ci_qtyordered").Value), 0), globaltotalqtyavailable, "S",
+                                                    "" & CStr(dgStockAdjustmentItems.Rows(a).Cells("ci_productcode").Value) & " / " & CStr(dgStockAdjustmentItems.Rows(a).Cells("ci_colorname").Value) & " / " & CStr(dgStockAdjustmentItems.Rows(a).Cells("ci_size").Value) & " / " & CStr(dgStockAdjustmentItems.Rows(a).Cells("ci_seasoncode").Value) & "",
                                                     CStr(dgStockAdjustmentItems.Rows(a).Cells("ci_sku").Value), CStr(dgStockAdjustmentItems.Rows(a).Cells("ci_unitofmeasure").Value), CStr(dgStockAdjustmentItems.Rows(a).Cells("ci_remarks").Value), If(IsNumeric(dgStockAdjustmentItems.Rows(a).Cells("ci_srp").Value), CDec(dgStockAdjustmentItems.Rows(a).Cells("ci_srp").Value), 0.0), "Active",
                                                     If(IsNumeric(dgStockAdjustmentItems.Rows(a).Cells("ci_qtyreceived").Value), CInt(dgStockAdjustmentItems.Rows(a).Cells("ci_qtyreceived").Value), 0), If(dgStockAdjustmentItems.Rows(a).Cells("ci_approved").Value = False, "N", "Y"), 0, "", Me)
                                     End If
@@ -1245,7 +1317,7 @@ Public Class StockAdjustmentForm
                         '    errProvider.SetError(txtStockAdjustmentNo, "Stock Adj. no.has been created already, please type a new one.")
                         '    Exit Try
                         'End If
-                        M_U_Orders(CInt(dgStockAdjusmentList.CurrentRow.Cells("s_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Nothing, txtStockAdjustmentNo.Text, dtpStockAdjustmentDate.Value, _
+                        M_U_Orders(CInt(dgStockAdjusmentList.CurrentRow.Cells("s_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Nothing, txtStockAdjustmentNo.Text, dtpStockAdjustmentDate.Value,
                                         Nothing, txtComments.Text, 0, txtAdjustedBy.Text, DBNull.Value, DBNull.Value, "", "", "", "", Me)
                         If dgStockAdjustmentItems.Rows.Count <> 0 Then
                             For a = 0 To dgStockAdjustmentItems.Rows.Count - 1
@@ -1255,21 +1327,21 @@ Public Class StockAdjustmentForm
                                             If IsNumeric(dgStockAdjustmentItems.Rows(a).Cells("ci_rowid").Value) Then
                                                 If CInt(dgStockAdjustmentItems.Rows(a).Cells("ci_rowid").Value) <> 0 Then
                                                     getTotalQtyAvailableA(CInt(dgStockAdjustmentItems.Rows(a).Cells("ci_pcsrowid").Value), Me)
-                                                    M_U_OrderItems(CInt(dgStockAdjustmentItems.Rows(a).Cells("ci_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, If(IsNumeric(dgStockAdjustmentItems.Rows(a).Cells("ci_qtyreceived").Value), CInt(dgStockAdjustmentItems.Rows(a).Cells("ci_qtyreceived").Value), 0), _
+                                                    M_U_OrderItems(CInt(dgStockAdjustmentItems.Rows(a).Cells("ci_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, If(IsNumeric(dgStockAdjustmentItems.Rows(a).Cells("ci_qtyreceived").Value), CInt(dgStockAdjustmentItems.Rows(a).Cells("ci_qtyreceived").Value), 0),
                                                              0, CStr(dgStockAdjustmentItems.Rows(a).Cells("ci_remarks").Value), "", If(dgStockAdjustmentItems.Rows(a).Cells("ci_approved").Value = False, "N", "Y"), Me)
                                                 Else
                                                     getTotalQtyAvailableA(CInt(dgStockAdjustmentItems.Rows(a).Cells("ci_pcsrowid").Value), Me)
-                                                    M_I_OrderItems(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, Nothing, CInt(dgStockAdjusmentList.CurrentRow.Cells("s_rowid").Value), CInt(dgStockAdjustmentItems.Rows(a).Cells("ci_pcsrowid").Value), DBNull.Value, _
-                                                                If(IsNumeric(dgStockAdjustmentItems.Rows(a).Cells("ci_qtyordered").Value), CInt(dgStockAdjustmentItems.Rows(a).Cells("ci_qtyordered").Value), 0), globaltotalqtyavailable, "S", _
-                                                                "" & CStr(dgStockAdjustmentItems.Rows(a).Cells("ci_productcode").Value) & " / " & CStr(dgStockAdjustmentItems.Rows(a).Cells("ci_colorname").Value) & " / " & CStr(dgStockAdjustmentItems.Rows(a).Cells("ci_size").Value) & " / " & CStr(dgStockAdjustmentItems.Rows(a).Cells("ci_seasoncode").Value) & "", _
+                                                    M_I_OrderItems(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, Nothing, CInt(dgStockAdjusmentList.CurrentRow.Cells("s_rowid").Value), CInt(dgStockAdjustmentItems.Rows(a).Cells("ci_pcsrowid").Value), DBNull.Value,
+                                                                If(IsNumeric(dgStockAdjustmentItems.Rows(a).Cells("ci_qtyordered").Value), CInt(dgStockAdjustmentItems.Rows(a).Cells("ci_qtyordered").Value), 0), globaltotalqtyavailable, "S",
+                                                                "" & CStr(dgStockAdjustmentItems.Rows(a).Cells("ci_productcode").Value) & " / " & CStr(dgStockAdjustmentItems.Rows(a).Cells("ci_colorname").Value) & " / " & CStr(dgStockAdjustmentItems.Rows(a).Cells("ci_size").Value) & " / " & CStr(dgStockAdjustmentItems.Rows(a).Cells("ci_seasoncode").Value) & "",
                                                                 CStr(dgStockAdjustmentItems.Rows(a).Cells("ci_sku").Value), CStr(dgStockAdjustmentItems.Rows(a).Cells("ci_unitofmeasure").Value), CStr(dgStockAdjustmentItems.Rows(a).Cells("ci_remarks").Value), If(IsNumeric(dgStockAdjustmentItems.Rows(a).Cells("ci_srp").Value), CDec(dgStockAdjustmentItems.Rows(a).Cells("ci_srp").Value), 0.0), "Active",
                                                                 If(IsNumeric(dgStockAdjustmentItems.Rows(a).Cells("ci_qtyreceived").Value), CInt(dgStockAdjustmentItems.Rows(a).Cells("ci_qtyreceived").Value), 0), If(dgStockAdjustmentItems.Rows(a).Cells("ci_approved").Value = False, "N", "Y"), 0, "", Me)
                                                 End If
                                             Else
                                                 getTotalQtyAvailableA(CInt(dgStockAdjustmentItems.Rows(a).Cells("ci_pcsrowid").Value), Me)
-                                                M_I_OrderItems(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, Nothing, CInt(dgStockAdjusmentList.CurrentRow.Cells("s_rowid").Value), CInt(dgStockAdjustmentItems.Rows(a).Cells("ci_pcsrowid").Value), DBNull.Value, _
-                                                            If(IsNumeric(dgStockAdjustmentItems.Rows(a).Cells("ci_qtyordered").Value), CInt(dgStockAdjustmentItems.Rows(a).Cells("ci_qtyordered").Value), 0), globaltotalqtyavailable, "S", _
-                                                            "" & CStr(dgStockAdjustmentItems.Rows(a).Cells("ci_productcode").Value) & " / " & CStr(dgStockAdjustmentItems.Rows(a).Cells("ci_colorname").Value) & " / " & CStr(dgStockAdjustmentItems.Rows(a).Cells("ci_size").Value) & " / " & CStr(dgStockAdjustmentItems.Rows(a).Cells("ci_seasoncode").Value) & "", _
+                                                M_I_OrderItems(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, Nothing, CInt(dgStockAdjusmentList.CurrentRow.Cells("s_rowid").Value), CInt(dgStockAdjustmentItems.Rows(a).Cells("ci_pcsrowid").Value), DBNull.Value,
+                                                            If(IsNumeric(dgStockAdjustmentItems.Rows(a).Cells("ci_qtyordered").Value), CInt(dgStockAdjustmentItems.Rows(a).Cells("ci_qtyordered").Value), 0), globaltotalqtyavailable, "S",
+                                                            "" & CStr(dgStockAdjustmentItems.Rows(a).Cells("ci_productcode").Value) & " / " & CStr(dgStockAdjustmentItems.Rows(a).Cells("ci_colorname").Value) & " / " & CStr(dgStockAdjustmentItems.Rows(a).Cells("ci_size").Value) & " / " & CStr(dgStockAdjustmentItems.Rows(a).Cells("ci_seasoncode").Value) & "",
                                                             CStr(dgStockAdjustmentItems.Rows(a).Cells("ci_sku").Value), CStr(dgStockAdjustmentItems.Rows(a).Cells("ci_unitofmeasure").Value), CStr(dgStockAdjustmentItems.Rows(a).Cells("ci_remarks").Value), If(IsNumeric(dgStockAdjustmentItems.Rows(a).Cells("ci_srp").Value), CDec(dgStockAdjustmentItems.Rows(a).Cells("ci_srp").Value), 0.0), "Active",
                                                             If(IsNumeric(dgStockAdjustmentItems.Rows(a).Cells("ci_qtyreceived").Value), CInt(dgStockAdjustmentItems.Rows(a).Cells("ci_qtyreceived").Value), 0), If(dgStockAdjustmentItems.Rows(a).Cells("ci_approved").Value = False, "N", "Y"), 0, "", Me)
                                             End If
@@ -1290,7 +1362,7 @@ Public Class StockAdjustmentForm
                                             If IsNumeric(dgrackshelfcolumn.Rows(x).Cells("r_qtyapply").Value) Then
                                                 If CInt(dgrackshelfcolumn.Rows(x).Cells("r_qtyapply").Value) > neutralpage Or CInt(dgrackshelfcolumn.Rows(x).Cells("r_qtyapply").Value) = neutralpage Then
                                                     If getpilocid = 0 Then
-                                                        M_I_productinventorylocation(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, getrackshelfcolid, pcsids, _
+                                                        M_I_productinventorylocation(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, getrackshelfcolid, pcsids,
                                                                   If(IsNumeric(dgrackshelfcolumn.Rows(x).Cells("r_qtyapply").Value), CInt(dgrackshelfcolumn.Rows(x).Cells("r_qtyapply").Value), 0), 0, 0, 0, 0, 0, 0, 0, 0, Me)
                                                         getrackid(dgrackshelfcolumn.Rows(x).Cells("r_rack").Value, dgrackshelfcolumn.Rows(x).Cells("r_shelf").Value, dgrackshelfcolumn.Rows(x).Cells("r_column").Value)
                                                         getProdinvLocID(pcsids)
@@ -1332,6 +1404,7 @@ Public Class StockAdjustmentForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msCancel_Click(sender As Object, e As EventArgs) Handles msCancel.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1379,6 +1452,7 @@ Public Class StockAdjustmentForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msNew_Click(sender As Object, e As EventArgs) Handles msNew.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1396,7 +1470,7 @@ Public Class StockAdjustmentForm
             If dgStockAdjusmentList.Rows.Count <> 0 Then
                 dgStockAdjusmentList.CurrentRow.Selected = False
             End If
-            getOrderNo("Stock Adj.", Me)
+            getOrderNo(globaliordertype:=OrderType.SA.ToString(), Me)
             txtStockAdjustmentNo.Text = CStr(globalorderno)
             txtStatus.Text = "For Approval"
             UserRights(Z_PositionID, "Stock Adjustment", creates, updates, disable, reads, Me)
@@ -1412,6 +1486,7 @@ Public Class StockAdjustmentForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msOrder_Click(sender As Object, e As EventArgs) Handles msOrder.Click
         Try
             myModule.systemerrorfound = False
@@ -1463,6 +1538,7 @@ Public Class StockAdjustmentForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub pbClose_Click(sender As Object, e As EventArgs) Handles pbClose.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1477,8 +1553,11 @@ Public Class StockAdjustmentForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #End Region
+
 #Region "Colors"
+
     Sub colorCoding()
         Try
             If dgStockAdjustmentItems.Rows.Count <> 0 Then
@@ -1499,8 +1578,11 @@ Public Class StockAdjustmentForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "TabPage"
+
     Private Sub tabMain_DrawItem(sender As Object, e As DrawItemEventArgs) Handles tabMain.DrawItem
         Try
             TabControlColor(tabMain, e)
@@ -1510,8 +1592,11 @@ Public Class StockAdjustmentForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Textbox"
+
     Private Sub txtComments_Leave(sender As Object, e As EventArgs) Handles txtComments.Leave
         Try
             txtStockAdjustmentNo.Focus()
@@ -1521,6 +1606,7 @@ Public Class StockAdjustmentForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub txtSimpleSearch_KeyDown(sender As Object, e As KeyEventArgs) Handles txtSimpleSearch.KeyDown
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1545,6 +1631,7 @@ Public Class StockAdjustmentForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub txtPage_KeyDown(sender As Object, e As KeyEventArgs) Handles txtPage.KeyDown
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1589,6 +1676,7 @@ Public Class StockAdjustmentForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub txtAdjustedBy_TextChanged(sender As Object, e As EventArgs) Handles txtAdjustedBy.TextChanged
         Try
             If txtAdjustedBy.Text <> "" Then
@@ -1600,8 +1688,11 @@ Public Class StockAdjustmentForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Toolstrip"
+
     Private Sub tsRefresh_Click(sender As Object, e As EventArgs) Handles tsRefresh.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1614,8 +1705,11 @@ Public Class StockAdjustmentForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #End Region
+
 #Region "Datagridview"
+
     Public Sub dgStockAdjusmentList_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgStockAdjusmentList.CellClick
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1664,6 +1758,7 @@ Public Class StockAdjustmentForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgStockAdjusmentList_KeyUp(sender As Object, e As KeyEventArgs) Handles dgStockAdjusmentList.KeyUp
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1706,6 +1801,7 @@ Public Class StockAdjustmentForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgStockAdjustmentItems_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgStockAdjustmentItems.CellClick
         Try
             Me.Cursor = Cursors.WaitCursor
@@ -1725,6 +1821,7 @@ Public Class StockAdjustmentForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub dgStockAdjustmentItems_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgStockAdjustmentItems.CellContentClick
         Try
             If dgStockAdjustmentItems.Rows.Count <> 0 Then
@@ -1772,7 +1869,6 @@ Public Class StockAdjustmentForm
                                 End If
                             End If
                         End If
-
                     Else
                         If dgStockAdjustmentItems.SelectedRows.Count > 0 Then
                             dgStockAdjustmentItems.Rows.Remove(dgStockAdjustmentItems.SelectedRows(0))
@@ -1793,6 +1889,7 @@ Public Class StockAdjustmentForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgStockAdjusmentList_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgStockAdjusmentList.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1833,6 +1930,7 @@ Public Class StockAdjustmentForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgStockAdjustmentItems_CellEndEdit(sender As Object, e As DataGridViewCellEventArgs) Handles dgStockAdjustmentItems.CellEndEdit
         Try
             itemno = 0
@@ -1850,6 +1948,7 @@ Public Class StockAdjustmentForm
             MsgBox(getErrExcptn(ex, Me.Name))
         End Try
     End Sub
+
     Private Sub dgStockAdjustmentItems_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgStockAdjustmentItems.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1890,6 +1989,7 @@ Public Class StockAdjustmentForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgrackshelfcolumn_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgrackshelfcolumn.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1930,6 +2030,7 @@ Public Class StockAdjustmentForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgrackshelfcolumn_MouseUp(sender As Object, e As MouseEventArgs) Handles dgrackshelfcolumn.MouseUp
         Try
             Dim hitTestinfo As DataGridView.HitTestInfo
@@ -1947,6 +2048,7 @@ Public Class StockAdjustmentForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub dgStockAdjustmentItems_Mouseup(sender As Object, e As MouseEventArgs) Handles dgStockAdjustmentItems.MouseUp
         Try
             Dim hitTestinfo As DataGridView.HitTestInfo
@@ -1964,6 +2066,7 @@ Public Class StockAdjustmentForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub dgvprodinv_CellEndEdit(sender As Object, e As DataGridViewCellEventArgs) Handles dgrackshelfcolumn.CellEndEdit
         'Try
         '    Me.Cursor = Cursors.WaitCursor
@@ -1981,8 +2084,11 @@ Public Class StockAdjustmentForm
         '    conn.Close()
         'End Try
     End Sub
+
 #End Region
+
 #Region "CheckBox"
+
     Private Sub chkOtherInfo_CheckedChanged(sender As Object, e As EventArgs) Handles chkOtherInfo.CheckedChanged
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2000,7 +2106,9 @@ Public Class StockAdjustmentForm
     End Sub
 
 #End Region
+
 #Region "Button"
+
     Private Sub cmdFirst_Click(sender As Object, e As EventArgs) Handles cmdFirst.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2024,6 +2132,7 @@ Public Class StockAdjustmentForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdPrev_Click(sender As Object, e As EventArgs) Handles cmdPrev.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2055,6 +2164,7 @@ Public Class StockAdjustmentForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdNext_Click(sender As Object, e As EventArgs) Handles cmdNext.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2082,6 +2192,7 @@ Public Class StockAdjustmentForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdLast_Click(sender As Object, e As EventArgs) Handles cmdLast.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2109,6 +2220,7 @@ Public Class StockAdjustmentForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub btnAddProduct_Click(sender As Object, e As EventArgs) Handles btnAddProduct.Click
         Try
             Me.Cursor = Cursors.WaitCursor
@@ -2120,8 +2232,11 @@ Public Class StockAdjustmentForm
             Me.Cursor = Cursors.Default
         End Try
     End Sub
+
 #End Region
+
 #Region "Picturebox"
+
     Private Sub pcAddtnlItems_Click(sender As Object, e As EventArgs) Handles pcAddtnlItems.Click
         Try
             Me.Cursor = Cursors.WaitCursor
@@ -2137,7 +2252,7 @@ Public Class StockAdjustmentForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
 
- 
 End Class

@@ -9,6 +9,8 @@ Imports System.Data
 Imports System.Diagnostics
 Imports System.Runtime.InteropServices
 Imports System.Text.RegularExpressions
+Imports WarehouseManagementSystem.Core.Enums
+
 Public Class SellThroughForm
     Dim manager As New sqlModule.Manager
     Dim conn As New MySqlConnection(manager.GetConnString)
@@ -24,6 +26,7 @@ Public Class SellThroughForm
     Dim streceiptdate, stconditionstringA, stconditionstringB, stconditionstringC As String
     Dim stbrandid, stcategoryid, streceivedqty, stqtysold, sttotalqtydelivered, stqtyavailable, stqtyallocated As Integer
     Dim sttotalreceivedqty, sttotalreceivedretail, sttotalqtysold, sttotalqtyonhand, sttotalpvsold, sttotalpvonhand, sttotalpsoldpercentage As Decimal
+
     Private Sub SellThroughForm_Load(sender As Object, e As EventArgs) Handles Me.Load
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -38,16 +41,21 @@ Public Class SellThroughForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #Region "Functions"
+
     Sub callAutoComplete()
         globalautocompleteBrandName(cboBrandName, "", Me)
         globalautocompleteCategory(cboCategory, "", Me)
     End Sub
+
     Sub callAutoPopulate()
         globalautopopulateBrandName(cboBrandName, "", Me)
         globalautopopulateCategory(cboCategory, "", Me)
     End Sub
+
 #Region "Clear/Enable/Visible"
+
     Sub clearfields()
         Try
             clearFilters()
@@ -60,6 +68,7 @@ Public Class SellThroughForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearFilters()
         Try
             cboBrandName.Text = ""
@@ -72,6 +81,7 @@ Public Class SellThroughForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearTotals()
         Try
             txtTotalReceivedQty.Text = ""
@@ -87,8 +97,11 @@ Public Class SellThroughForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Computations"
+
     Sub sellthroughcomputations()
         Try
             sttotalreceivedqty = 0.0 : sttotalreceivedretail = 0.0 : sttotalqtysold = 0.0
@@ -139,13 +152,16 @@ Public Class SellThroughForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Display"
+
     Sub displaySellThroughReport(ByVal iconditionstring As String)
         Try
             dgProducts.Rows.Clear() : dgSellThrough.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT p.rowid,COALESCE(p.productcode,''),COALESCE(v.companyname,''),COALESCE(p.unitprice,0.0) FROM products p LEFT JOIN companies v ON p.companyid = v.rowid " & _
+            Dim sql1 As String = "SELECT p.rowid,COALESCE(p.productcode,''),COALESCE(v.companyname,''),COALESCE(p.unitprice,0.0) FROM products p LEFT JOIN companies v ON p.companyid = v.rowid " &
                         "WHERE p.organizationid = " & Z_OrganizationID & " AND " & iconditionstring & " ORDER BY p.productcode ASC "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -204,11 +220,12 @@ Public Class SellThroughForm
             conn.Close()
         End Try
     End Sub
+
     Sub getReceiptDate(ByVal iproductid As Integer)
         Try
             streceiptdate = ""
             Dim dtLsd As New DataTable
-            dtLsd = getDataTableForSQL("SELECT COALESCE(DATE_FORMAT(pcs.lastshipmentdate,'%d-%b-%Y'),'') FROM productcolorsizes pcs LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN products p ON pc.productid = p.rowid " & _
+            dtLsd = getDataTableForSQL("SELECT COALESCE(DATE_FORMAT(pcs.lastshipmentdate,'%d-%b-%Y'),'') FROM productcolorsizes pcs LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN products p ON pc.productid = p.rowid " &
                             "WHERE pcs.organizationid = " & Z_OrganizationID & " AND p.rowid = " & iproductid & " AND pcs.lastshipmentdate IS NOT NULL ORDER BY pcs.lastshipmentdate ASC LIMIT 0,1 ")
             If dtLsd.Rows.Count <> 0 Then
                 streceiptdate = dtLsd.Rows(0)(0)
@@ -219,12 +236,13 @@ Public Class SellThroughForm
             MsgBox(getErrExcptn(ex, Me.Name))
         End Try
     End Sub
+
     Sub getReceivedQty(ByVal iproductid As Integer)
         Try
             streceivedqty = 0
             Dim dtRqty As New DataTable
-            dtRqty = getDataTableForSQL("SELECT COALESCE(SUM(oi.qtyreceived),0) FROM orderitems oi LEFT JOIN orders o ON oi.orderid = o.rowid LEFT JOIN productcolorsizes pcs ON oi.productcolorsizeid = pcs.rowid " & _
-                            "LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN products p ON pc.productid = p.rowid WHERE oi.organizationid = " & Z_OrganizationID & " AND p.rowid = " & iproductid & " " & _
+            dtRqty = getDataTableForSQL("SELECT COALESCE(SUM(oi.qtyreceived),0) FROM orderitems oi LEFT JOIN orders o ON oi.orderid = o.rowid LEFT JOIN productcolorsizes pcs ON oi.productcolorsizeid = pcs.rowid " &
+                            "LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN products p ON pc.productid = p.rowid WHERE oi.organizationid = " & Z_OrganizationID & " AND p.rowid = " & iproductid & " " &
                             "AND o.ordertype = 'PO' AND oi.`approval` = 'Y' AND (oi.`status` != 'Inactive' AND oi.`status` != 'Cancelled') ")
             If dtRqty.Rows.Count <> 0 Then
                 streceivedqty = dtRqty.Rows(0)(0)
@@ -235,12 +253,13 @@ Public Class SellThroughForm
             MsgBox(getErrExcptn(ex, Me.Name))
         End Try
     End Sub
+
     Sub getCustomerOrderItems(ByVal iproductid As Integer)
         Try
             stqtysold = 0
             If conn1.State = ConnectionState.Closed Then conn1.Open()
-            Dim sql1 As String = "SELECT o.rowid,oi.rowid FROM orderitems oi LEFT JOIN orders o ON oi.orderid = o.rowid LEFT JOIN productcolorsizes pcs ON oi.productcolorsizeid = pcs.rowid LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid " & _
-                        "LEFT JOIN products p ON pc.productid = p.rowid WHERE oi.organizationid = " & Z_OrganizationID & " AND p.rowid = " & iproductid & " AND o.ordertype = 'CO' AND (oi.`status` != 'Inactive' AND oi.`status` != 'Cancelled') "
+            Dim sql1 As String = "SELECT o.rowid,oi.rowid FROM orderitems oi LEFT JOIN orders o ON oi.orderid = o.rowid LEFT JOIN productcolorsizes pcs ON oi.productcolorsizeid = pcs.rowid LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid " &
+                        "LEFT JOIN products p ON pc.productid = p.rowid WHERE oi.organizationid = " & Z_OrganizationID & " AND p.rowid = " & iproductid & $" AND o.ordertype = '{OrderType.CO.ToString()}' AND (oi.`status` != 'Inactive' AND oi.`status` != 'Cancelled') "
             Dim cmd1 As New MySqlCommand(sql1, conn1)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             While reader1.Read()
@@ -255,6 +274,7 @@ Public Class SellThroughForm
             conn1.Close()
         End Try
     End Sub
+
     Sub getPickListOrderID(ByVal iorderid As Integer, ByVal iorderitemid As Integer)
         Try
             Dim dtGid As New DataTable
@@ -267,6 +287,7 @@ Public Class SellThroughForm
             MsgBox(getErrExcptn(ex, Me.Name))
         End Try
     End Sub
+
     Sub getTotalQtyDelivered(ByVal ipicklistorderid As Integer)
         Try
             sttotalqtydelivered = 0
@@ -279,6 +300,7 @@ Public Class SellThroughForm
             MsgBox(getErrExcptn(ex, Me.Name))
         End Try
     End Sub
+
     Sub getQtyAvailable(ByVal iproductid As Integer)
         Try
             stqtyavailable = 0
@@ -293,6 +315,7 @@ Public Class SellThroughForm
             MsgBox(getErrExcptn(ex, Me.Name))
         End Try
     End Sub
+
     Sub getQtyAllocated(ByVal iproductid As Integer)
         Try
             stqtyallocated = 0
@@ -307,13 +330,16 @@ Public Class SellThroughForm
             MsgBox(getErrExcptn(ex, Me.Name))
         End Try
     End Sub
+
 #End Region
+
 #Region "Printing"
+
     Sub printSellThroughReportA(ByVal iconditionstring As String)
         Try
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT p.rowid,COALESCE(p.productcode,''),COALESCE(v.companyname,''),COALESCE(p.unitprice,0.0),COALESCE(b.brandname,''),COALESCE(ct.categoryname,''),p.image " & _
-                        "FROM products p LEFT JOIN companies v ON p.companyid = v.rowid LEFT JOIN brands b ON p.brandid = b.rowid LEFT JOIN categories ct ON p.categoryid = ct.rowid " & _
+            Dim sql1 As String = "SELECT p.rowid,COALESCE(p.productcode,''),COALESCE(v.companyname,''),COALESCE(p.unitprice,0.0),COALESCE(b.brandname,''),COALESCE(ct.categoryname,''),p.image " &
+                        "FROM products p LEFT JOIN companies v ON p.companyid = v.rowid LEFT JOIN brands b ON p.brandid = b.rowid LEFT JOIN categories ct ON p.categoryid = ct.rowid " &
                         "WHERE p.organizationid = " & Z_OrganizationID & " AND " & iconditionstring & " ORDER BY ct.categoryname,b.brandname,p.productcode "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -341,11 +367,12 @@ Public Class SellThroughForm
             conn.Close()
         End Try
     End Sub
+
     Sub printSellThroughReportB(ByVal iconditionstring As String)
         Try
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT p.rowid,COALESCE(p.productcode,''),COALESCE(v.companyname,''),COALESCE(p.unitprice,0.0),COALESCE(b.brandname,''),COALESCE(ct.categoryname,'') " & _
-                        "FROM products p LEFT JOIN companies v ON p.companyid = v.rowid LEFT JOIN brands b ON p.brandid = b.rowid LEFT JOIN categories ct ON p.categoryid = ct.rowid " & _
+            Dim sql1 As String = "SELECT p.rowid,COALESCE(p.productcode,''),COALESCE(v.companyname,''),COALESCE(p.unitprice,0.0),COALESCE(b.brandname,''),COALESCE(ct.categoryname,'') " &
+                        "FROM products p LEFT JOIN companies v ON p.companyid = v.rowid LEFT JOIN brands b ON p.brandid = b.rowid LEFT JOIN categories ct ON p.categoryid = ct.rowid " &
                         "WHERE p.organizationid = " & Z_OrganizationID & " AND " & iconditionstring & " ORDER BY ct.categoryname,b.brandname,p.productcode "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -370,8 +397,11 @@ Public Class SellThroughForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #End Region
+
     Private Sub pbClose_Click(sender As Object, e As EventArgs) Handles pbClose.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -386,6 +416,7 @@ Public Class SellThroughForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgProducts_Scroll(sender As Object, e As ScrollEventArgs) Handles dgProducts.Scroll
         Try
             If dgSellThrough.Rows.Count <> 0 Then
@@ -398,6 +429,7 @@ Public Class SellThroughForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgSellThrough_Scroll(sender As Object, e As ScrollEventArgs) Handles dgSellThrough.Scroll
         Try
             If dgProducts.Rows.Count <> 0 Then
@@ -410,6 +442,7 @@ Public Class SellThroughForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboBrandName_TextChanged(sender As Object, e As EventArgs) Handles cboBrandName.TextChanged
         Try
             errProvider.Clear()
@@ -419,6 +452,7 @@ Public Class SellThroughForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub cboBrandName_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboBrandName.SelectedIndexChanged
         Try
             errProvider.Clear()
@@ -428,6 +462,7 @@ Public Class SellThroughForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub cboCategory_TextChanged(sender As Object, e As EventArgs) Handles cboCategory.TextChanged
         Try
             errProvider.Clear()
@@ -437,6 +472,7 @@ Public Class SellThroughForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub cboCategory_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboCategory.SelectedIndexChanged
         Try
             errProvider.Clear()
@@ -446,6 +482,7 @@ Public Class SellThroughForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub btnEnter_Click(sender As Object, e As EventArgs) Handles btnEnter.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -521,6 +558,7 @@ Public Class SellThroughForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub btnPrint_Click(sender As Object, e As EventArgs) Handles btnPrint.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -627,7 +665,9 @@ Public Class SellThroughForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #Region "Datagrid Errors"
+
     Private Sub dgProducts_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgProducts.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -668,6 +708,7 @@ Public Class SellThroughForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgSellThrough_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgSellThrough.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -708,5 +749,7 @@ Public Class SellThroughForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #End Region
+
 End Class

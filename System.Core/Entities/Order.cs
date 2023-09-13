@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using WarehouseManagementSystem.Core.Entities.Base;
+using WarehouseManagementSystem.Core.Enums;
 
 namespace WarehouseManagementSystem.Core.Entities
 {
@@ -15,7 +16,7 @@ namespace WarehouseManagementSystem.Core.Entities
         public int? CompanyID { get; set; }
         public int? CombineCodingID { get; set; }
         public int? AccountID { get; set; }
-        public string OrderType { get; set; }
+        public OrderType OrderType { get; set; }
         public string OrderNumber { get; set; }
         public string ReferenceNumber { get; set; }
         public string DRNumber { get; set; }
