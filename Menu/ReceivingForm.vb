@@ -1,5 +1,6 @@
 ﻿Imports Microsoft.Extensions.DependencyInjection
 Imports MySql.Data.MySqlClient
+Imports WarehouseManagementSystem.Core.Enums
 Imports WarehouseManagementSystem.Core.Interfaces
 
 Public Class ReceivingForm
@@ -316,7 +317,7 @@ Public Class ReceivingForm
             countpagenum = 0
             If conn.State = ConnectionState.Open Then conn.Close()
             Dim dtCid As New DataTable
-            dtCid = getDataTableForSQL("SELECT COUNT(rr.rowid) FROM orders rr WHERE rr.organizationid = " & Z_OrganizationID & " AND rr.ordertype = 'RR' ")
+            dtCid = getDataTableForSQL("SELECT COUNT(rr.rowid) FROM orders rr WHERE rr.organizationid = " & Z_OrganizationID & $" AND rr.ordertype = '{OrderType.RR.ToString()}' ")
             If dtCid.Rows.Count <> 0 Then
                 countpagenum = dtCid.Rows(0)(0)
             Else
@@ -355,7 +356,7 @@ Public Class ReceivingForm
             countpagenum = 0
             If conn.State = ConnectionState.Open Then conn.Close()
             Dim dtCid As New DataTable
-            dtCid = getDataTableForSQL("SELECT COALESCE(COUNT(rr.rowid),0) FROM orders rr LEFT JOIN accounts ac ON rr.accountid = ac.rowid WHERE rr.organizationid = " & Z_OrganizationID & " AND rr.ordertype = 'RR' " &
+            dtCid = getDataTableForSQL("SELECT COALESCE(COUNT(rr.rowid),0) FROM orders rr LEFT JOIN accounts ac ON rr.accountid = ac.rowid WHERE rr.organizationid = " & Z_OrganizationID & $" AND rr.ordertype = '{OrderType.RR.ToString()}' " &
                             "AND (rr.ordernumber LIKE '%" & esearchstring & "%' OR rr.status LIKE '%" & esearchstring & "%' OR ac.companyname LIKE '%" & esearchstring & "%') ")
             If dtCid.Rows.Count <> 0 Then
                 countpagenum = dtCid.Rows(0)(0)
@@ -395,7 +396,7 @@ Public Class ReceivingForm
             countpagenum = 0
             If conn.State = ConnectionState.Open Then conn.Close()
             Dim dtCid As New DataTable
-            dtCid = getDataTableForSQL("SELECT COALESCE(COUNT(rr.rowid),0) FROM orders rr WHERE rr.organizationid = " & Z_OrganizationID & " AND rr.ordertype = 'RR' AND " &
+            dtCid = getDataTableForSQL("SELECT COALESCE(COUNT(rr.rowid),0) FROM orders rr WHERE rr.organizationid = " & Z_OrganizationID & $" AND rr.ordertype = '{OrderType.RR.ToString()}' AND " &
                             "(" & edatesearch & " >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " &
                             "" & edatesearch & " <= '" & dtpToSearch.Value.Year & "-" & dtpToSearch.Value.Month & "-" & dtpToSearch.Value.Day & "' ) ")
             If dtCid.Rows.Count <> 0 Then
@@ -436,7 +437,7 @@ Public Class ReceivingForm
             countpagenum = 0
             If conn.State = ConnectionState.Open Then conn.Close()
             Dim dtCid As New DataTable
-            dtCid = getDataTableForSQL("SELECT COALESCE(COUNT(rr.rowid),0) FROM orders rr WHERE rr.organizationid = " & Z_OrganizationID & " AND rr.ordertype = 'RR' AND " & ecommonstring & " " & edatesearch & " ")
+            dtCid = getDataTableForSQL("SELECT COALESCE(COUNT(rr.rowid),0) FROM orders rr WHERE rr.organizationid = " & Z_OrganizationID & $" AND rr.ordertype = '{OrderType.RR.ToString()}' AND " & ecommonstring & " " & edatesearch & " ")
             If dtCid.Rows.Count <> 0 Then
                 countpagenum = dtCid.Rows(0)(0)
             Else
@@ -587,7 +588,7 @@ Public Class ReceivingForm
             If conn.State = ConnectionState.Closed Then conn.Open()
             Dim sql1 As String = "SELECT rr.rowid,COALESCE(rr.ordernumber,''),DATE_FORMAT(rr.orderdate,'%d-%b-%Y'),COALESCE(CONCAT(COALESCE(ac.companyname,''),' - ',COALESCE(ac.accountno,''),' - ',COALESCE(ac.accounttype,'')),'')," &
                         "COALESCE(rr.status,''),COALESCE(rr.relatedorderid,0),COALESCE(o.ordertype,'Blank') FROM orders rr LEFT JOIN accounts ac ON rr.accountid = ac.rowid LEFT JOIN orders o ON rr.relatedorderid = o.rowid " &
-                        "WHERE rr.organizationid = " & Z_OrganizationID & " AND rr.ordertype = 'RR' ORDER BY rr.created DESC LIMIT " & istartpage & "," & pagedivisor & " "
+                        "WHERE rr.organizationid = " & Z_OrganizationID & $" AND rr.ordertype = '{OrderType.RR.ToString()}' ORDER BY rr.created DESC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             Dim n As Integer = 0
@@ -625,7 +626,7 @@ Public Class ReceivingForm
             If conn.State = ConnectionState.Closed Then conn.Open()
             Dim sql1 As String = "SELECT rr.rowid,COALESCE(rr.ordernumber,''),DATE_FORMAT(rr.orderdate,'%d-%b-%Y'),COALESCE(CONCAT(COALESCE(ac.companyname,''),' - ',COALESCE(ac.accountno,''),' - ',COALESCE(ac.accounttype,'')),'')," &
                         "COALESCE(rr.status,''),COALESCE(rr.relatedorderid,0),COALESCE(o.ordertype,'Blank') FROM orders rr LEFT JOIN accounts ac ON rr.accountid = ac.rowid LEFT JOIN orders o ON rr.relatedorderid = o.rowid WHERE rr.organizationid = " & Z_OrganizationID & " " &
-                        "AND rr.ordertype = 'RR' AND (rr.ordernumber LIKE '%" & isearchphrase & "%' OR rr.status LIKE '%" & isearchphrase & "%' OR ac.companyname LIKE '%" & isearchphrase & "%') ORDER BY rr.created DESC LIMIT " & istartpage & "," & pagedivisor & " "
+                        $"AND rr.ordertype = '{OrderType.RR.ToString()}' AND (rr.ordernumber LIKE '%" & isearchphrase & "%' OR rr.status LIKE '%" & isearchphrase & "%' OR ac.companyname LIKE '%" & isearchphrase & "%') ORDER BY rr.created DESC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             Dim n As Integer = 0
@@ -663,7 +664,7 @@ Public Class ReceivingForm
             If conn.State = ConnectionState.Closed Then conn.Open()
             Dim sql1 As String = "SELECT rr.rowid,COALESCE(rr.ordernumber,''),DATE_FORMAT(rr.orderdate,'%d-%b-%Y'),COALESCE(CONCAT(COALESCE(ac.companyname,''),' - ',COALESCE(ac.accountno,''),' - ',COALESCE(ac.accounttype,'')),'')," &
                         "COALESCE(rr.status,''),COALESCE(rr.relatedorderid,0),COALESCE(o.ordertype,'Blank') FROM orders rr LEFT JOIN accounts ac ON rr.accountid = ac.rowid LEFT JOIN orders o ON rr.relatedorderid = o.rowid " &
-                        "WHERE rr.organizationid = " & Z_OrganizationID & " AND rr.ordertype = 'RR' AND (" & idatesearch & " >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' " &
+                        "WHERE rr.organizationid = " & Z_OrganizationID & $" AND rr.ordertype = '{OrderType.RR.ToString()}' AND (" & idatesearch & " >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' " &
                         "AND " & idatesearch & " <= '" & dtpToSearch.Value.Year & "-" & dtpToSearch.Value.Month & "-" & dtpToSearch.Value.Day & "' ) GROUP BY rr.rowid ORDER BY rr.created DESC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -703,7 +704,7 @@ Public Class ReceivingForm
             If conn.State = ConnectionState.Closed Then conn.Open()
             Dim sql1 As String = "SELECT rr.rowid,COALESCE(rr.ordernumber,''),DATE_FORMAT(rr.orderdate,'%d-%b-%Y'),COALESCE(CONCAT(COALESCE(ac.companyname,''),' - ',COALESCE(ac.accountno,''),' - ',COALESCE(ac.accounttype,'')),'')," &
                         "COALESCE(rr.status,''),COALESCE(rr.relatedorderid,0),COALESCE(o.ordertype,'Blank') FROM orders rr LEFT JOIN accounts ac ON rr.accountid = ac.rowid LEFT JOIN orders o ON rr.relatedorderid = o.rowid " &
-                        "WHERE rr.organizationid = " & Z_OrganizationID & " AND rr.ordertype = 'RR' AND " & icommonphrase & " " & idatesearch & " ORDER BY rr.created DESC LIMIT " & istartpage & "," & pagedivisor & " "
+                        "WHERE rr.organizationid = " & Z_OrganizationID & $" AND rr.ordertype = '{OrderType.RR.ToString()}' AND " & icommonphrase & " " & idatesearch & " ORDER BY rr.created DESC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             Dim n As Integer = 0
@@ -1001,7 +1002,7 @@ Public Class ReceivingForm
                         rrprintrrno = CStr(reader1(6))
                         rrrelatedrefno = "n/a"
                     End If
-                    printdataset.AddSetDRow("R.R. No.: " & rrprintrrno & "", "Received Date: _______________", "Related Ref. No.: " & rrrelatedrefno & "", "R.R. Type: " & If(CStr(reader1(7)) = "RR", "Blank", CStr(reader1(7))) & "", "" & rrprintaccountlabel & " " & CStr(reader1(9)) & "",
+                    printdataset.AddSetDRow("R.R. No.: " & rrprintrrno & "", "Received Date: _______________", "Related Ref. No.: " & rrrelatedrefno & "", "R.R. Type: " & If(CStr(reader1(7)) = OrderType.RR.ToString(), "Blank", CStr(reader1(7))) & "", "" & rrprintaccountlabel & " " & CStr(reader1(9)) & "",
                             "Received By: ________________________________________________", CStr(seqno), CStr(reader1(0)), CStr(reader1(1)), CStr(reader1(2)), CStr(reader1(3)), CStr(reader1(4)), CStr(reader1(5)), "", "", "", "", "", "", "", "")
                     seqno = seqno + 1
                 End If
@@ -1308,15 +1309,15 @@ Public Class ReceivingForm
                 If dgReceivingList.Rows.Count <> 0 Then
                     dgReceivingList.CurrentRow.Selected = False
                 End If
-                getOrderNo("RR", Me)
+                getOrderNo(globaliordertype:=OrderType.RR.ToString(), Me)
                 txtRRNo.Text = CStr(globalorderno)
                 ci_option.Visible = fraud
                 cboAccountName.Enabled = fraud
                 btnStockToWarehouse.Enabled = fraud
                 btnAddAdditionalItems.Enabled = fraud
                 rrrelatedorderid = newrrlinkform.nrorderid
-                If newrrlinkform.nrrnewrrtype = "PO" Then
-                    txtRRType.Text = "PO"
+                If newrrlinkform.nrrnewrrtype = OrderType.PO.ToString() Then
+                    txtRRType.Text = OrderType.PO.ToString()
                     lblReferenceNo.Text = "Related P.O. No.:"
                 ElseIf newrrlinkform.nrrnewrrtype = "Pull-Out" Then
                     txtRRType.Text = "Pull-Out"
@@ -1373,7 +1374,7 @@ Public Class ReceivingForm
                 If txtRRType.Text <> "Blank" Then
                     ci_option.Visible = fraud
                     displayReceivingItems(CInt(dgReceivingList.CurrentRow.Cells("rr_relatedorderid").Value))
-                    If txtRRType.Text = "PO" Then
+                    If txtRRType.Text = OrderType.PO.ToString() Then
                         lblReferenceNo.Text = "Related P.O. No.:"
                     ElseIf txtRRType.Text = "Pull-Out" Then
                         lblReferenceNo.Text = "Related Pull-Out No.:"
@@ -1430,7 +1431,7 @@ Public Class ReceivingForm
                 If txtRRType.Text <> "Blank" Then
                     ci_option.Visible = fraud
                     displayReceivingItems(CInt(dgReceivingList.CurrentRow.Cells("rr_relatedorderid").Value))
-                    If txtRRType.Text = "PO" Then
+                    If txtRRType.Text = OrderType.PO.ToString() Then
                         lblReferenceNo.Text = "Related P.O. No.:"
                     ElseIf txtRRType.Text = "Pull-Out" Then
                         lblReferenceNo.Text = "Related Pull-Out No.:"
@@ -1486,7 +1487,7 @@ Public Class ReceivingForm
                     If txtRRType.Text <> "Blank" Then
                         ci_option.Visible = fraud
                         displayReceivingItems(CInt(dgReceivingList.CurrentRow.Cells("rr_relatedorderid").Value))
-                        If txtRRType.Text = "PO" Then
+                        If txtRRType.Text = OrderType.PO.ToString() Then
                             lblReferenceNo.Text = "Related P.O. No.:"
                         ElseIf txtRRType.Text = "Pull-Out" Then
                             lblReferenceNo.Text = "Related Pull-Out No.:"
@@ -1524,7 +1525,7 @@ Public Class ReceivingForm
             errProvider.Clear()
             If cue = "New" Then
                 If LTrim(txtRRNo.Text) <> "" Then
-                    getOrderIDSupB(txtRRNo.Text, "RR", Me)
+                    getOrderIDSupB(txtRRNo.Text, globaliordertype:=OrderType.RR.ToString(), Me)
                     rrorderid = globalorderid
                     If rrorderid <> 0 Then
                         errProvider.SetError(txtRRNo, "R.R. No. has been created already, please type a new one.")
@@ -1533,7 +1534,7 @@ Public Class ReceivingForm
             ElseIf cue = "Edit" Then
                 If dgReceivingList.Rows.Count <> 0 Then
                     If LTrim(txtRRNo.Text) <> "" Then
-                        getOrderIDSupA(CInt(dgReceivingList.CurrentRow.Cells("rr_rowid").Value), txtRRNo.Text, "RR", Me)
+                        getOrderIDSupA(CInt(dgReceivingList.CurrentRow.Cells("rr_rowid").Value), txtRRNo.Text, globaliordertype:=OrderType.RR.ToString(), Me)
                         rrorderid = globalorderid
                         If rrorderid <> 0 Then
                             errProvider.SetError(txtRRNo, "R.R. No. has been created already, please type a new one.")
@@ -1641,7 +1642,7 @@ Public Class ReceivingForm
             rrsuppliercustomerid = globalsuppliercustomerid
             Dim additionalitemslinkform As New AdditionalItemsForm
             If cue = "Edit" Then
-                If txtRRType.Text = "PO" Then
+                If txtRRType.Text = OrderType.PO.ToString() Then
                     additionalitemslinkform.aiforderid = CInt(dgReceivingList.CurrentRow.Cells("rr_relatedorderid").Value)
                 End If
                 additionalitemslinkform.aifrrid = CInt(dgReceivingList.CurrentRow.Cells("rr_rowid").Value)
@@ -1651,7 +1652,7 @@ Public Class ReceivingForm
             additionalitemslinkform.ShowInTaskbar = False
             additionalitemslinkform.ShowDialog()
             If additionalitemslinkform.additionalitemsformcue = legit Then
-                If txtRRType.Text = "PO" Then
+                If txtRRType.Text = OrderType.PO.ToString() Then
                     displayReceivingItems(CInt(dgReceivingList.CurrentRow.Cells("rr_relatedorderid").Value))
                     receivingitemscomputation() : colorCoding()
                 ElseIf txtRRType.Text = "Blank" Then
@@ -1724,7 +1725,7 @@ Public Class ReceivingForm
             End If
             If cue = "New" Then
                 If LTrim(txtRRNo.Text) <> "" Then
-                    getOrderIDSupB(txtRRNo.Text, "RR", Me)
+                    getOrderIDSupB(txtRRNo.Text, globaliordertype:=OrderType.RR.ToString(), Me)
                     rrorderid = globalorderid
                     If rrorderid <> 0 Then
                         errProvider.SetError(txtRRNo, "R.R. No. has been created already, please type a new one.")
@@ -1746,7 +1747,7 @@ Public Class ReceivingForm
                         Exit Try
                     End If
                     If LTrim(txtRRNo.Text) <> "" Then
-                        getOrderIDSupA(CInt(dgReceivingList.CurrentRow.Cells("rr_rowid").Value), txtRRNo.Text, "RR", Me)
+                        getOrderIDSupA(CInt(dgReceivingList.CurrentRow.Cells("rr_rowid").Value), txtRRNo.Text, globaliordertype:=OrderType.RR.ToString(), Me)
                         rrorderid = globalorderid
                         If rrorderid <> 0 Then
                             errProvider.SetError(txtRRNo, "R.R. No. has been created already, please type a new one.")
@@ -1768,13 +1769,13 @@ Public Class ReceivingForm
                 getReceivedBy(cboReceivedBy.Text, Me)
                 rrcontactid = globalcontactid
                 If cue = "New" Then
-                    getOrderIDSupB(txtRRNo.Text, "RR", Me)
+                    getOrderIDSupB(txtRRNo.Text, globaliordertype:=OrderType.RR.ToString(), Me)
                     rrorderid = globalorderid
                     If rrorderid <> 0 Then
                         errProvider.SetError(txtRRNo, "R.R. No. has been created already, please type a new one.")
                         Exit Try
                     End If
-                    M_I_Orders(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, rrsuppliercustomerid, txtRRNo.Text, "RR", dtpRRDate.Value, DBNull.Value, cboAccountName.Text, txtComments.Text,
+                    M_I_Orders(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, rrsuppliercustomerid, txtRRNo.Text, OrderType:=OrderType.RR.ToString(), dtpRRDate.Value, DBNull.Value, cboAccountName.Text, txtComments.Text,
                             "For Approval", 0, "", If(rrrelatedorderid = 0, DBNull.Value, rrrelatedorderid), If(rrcontactid = 0, DBNull.Value, rrcontactid), dtpTimeArrived.Value, txtBrands.Text, txtContainerNo.Text, txtSealNo.Text, txtArrivedIn.Text, Me)
                     rrorderid = globalorderidsp
                     If txtRRType.Text <> "Blank" Then
@@ -1838,7 +1839,7 @@ Public Class ReceivingForm
                             MessageBox.Show("This R.R. has been updated by other user, please click refresh button to check the new status of this order.", "Update", MessageBoxButtons.OK, MessageBoxIcon.Information)
                             Exit Try
                         End If
-                        getOrderIDSupA(CInt(dgReceivingList.CurrentRow.Cells("rr_rowid").Value), txtRRNo.Text, "RR", Me)
+                        getOrderIDSupA(CInt(dgReceivingList.CurrentRow.Cells("rr_rowid").Value), txtRRNo.Text, globaliordertype:=OrderType.RR.ToString(), Me)
                         rrorderid = globalorderid
                         If rrorderid <> 0 Then
                             errProvider.SetError(txtRRNo, "R.R. No. has been created already, please type a new one.")
@@ -2084,7 +2085,7 @@ Public Class ReceivingForm
                 If txtRRType.Text <> "Blank" Then
                     ci_option.Visible = fraud
                     displayReceivingItems(CInt(dgReceivingList.CurrentRow.Cells("rr_relatedorderid").Value))
-                    If txtRRType.Text = "PO" Then
+                    If txtRRType.Text = OrderType.PO.ToString() Then
                         lblReferenceNo.Text = "Related P.O. No.:"
                     ElseIf txtRRType.Text = "Pull-Out" Then
                         lblReferenceNo.Text = "Related Pull-Out No.:"

@@ -4,11 +4,15 @@ Imports CrystalDecisions.CrystalReports.Engine
 Imports CrystalDecisions.Shared
 Imports System.IO
 Imports System.Data.OleDb
+Imports WarehouseManagementSystem.Core.Enums
+
 Module MarvinModule
     Public gloPoNo, glopono1, glosuppid, globalsuppliercustomerid, globalsupplierid, glolocid, glorcsorderitemid, gloqtyapplied, gloprodctinvtylocid As Integer
     Public gloOrType, gloRRNo, gloRRDate, gloRRReceivedBy, gloRRTimeArrived, gloRRArrivedIn, gloRRContainerNo, gloRRSealNo, gloRRBrands As String
     Public gloNewR As Boolean = False
+
 #Region "Populate Combobox"
+
     Sub PopulatePRNO(ByVal icombobox As ComboBox, ByVal combotype As String, ByVal globalformname As Object)
         Try
             icombobox.Items.Clear()
@@ -29,6 +33,7 @@ Module MarvinModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub populateDataGridViewComboBox(ByVal comboquery As String, ByVal combo As DataGridViewComboBoxColumn, ByVal globalformname As Object)
         Try
             combo.Items.Clear()
@@ -49,6 +54,7 @@ Module MarvinModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub populateComboBox(ByVal comboquery As String, ByVal combo As ComboBox, ByVal globalformname As Object)
         Try
             combo.Items.Clear()
@@ -69,6 +75,7 @@ Module MarvinModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub globalautopopulateAccountNameReceiving(ByVal globalicombobox As ComboBox, ByVal globalformname As Object)
         Try
             globalicombobox.Items.Clear()
@@ -89,6 +96,7 @@ Module MarvinModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub globalautopopulateReceivedBy(ByVal globalicombobox As ComboBox, ByVal globalformname As Object)
         Try
             globalicombobox.Items.Clear()
@@ -108,8 +116,11 @@ Module MarvinModule
             globalconn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Auto Complete Combobox"
+
     Sub globalautocompleteAccountNameReceiving(ByVal globalicombobox As ComboBox, ByVal globalformname As Object)
         Try
             Dim accountname As New AutoCompleteStringCollection
@@ -130,6 +141,7 @@ Module MarvinModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub globalautocompleteReceivedBy(ByVal globalicombobox As ComboBox, ByVal globalformname As Object)
         Try
             Dim contactname As New AutoCompleteStringCollection
@@ -157,8 +169,11 @@ Module MarvinModule
             globalconn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Get ID/Information"
+
     Sub getSupplierID(ByVal globalicustomername As String, ByVal globalformname As Object)
         Try
             globalsupplierid = 0
@@ -176,6 +191,7 @@ Module MarvinModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getOrderIDSupA(ByVal globaliorderid As Integer, ByVal globaliordernumber As String, ByVal globaliordertype As String, ByVal globalformname As Object)
         Try
             globalorderid = 0
@@ -193,6 +209,7 @@ Module MarvinModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getOrderIDSupB(ByVal globaliordernumber As String, ByVal globaliordertype As String, ByVal globalformname As Object)
         Try
             globalorderid = 0
@@ -210,6 +227,7 @@ Module MarvinModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getIDPRNOA(ByVal globalireferenceno As String, ByVal globaliordertype As String, ByVal globalformname As Object)
         Try
             gloPoNo = 0
@@ -227,6 +245,7 @@ Module MarvinModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getIDPRNOB(ByVal globalireferenceno As String, ByVal globaliordertype As String, ByVal globalformname As Object)
         Try
             gloPoNo = 0
@@ -244,6 +263,7 @@ Module MarvinModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub MgetSupplierID(ByVal globalisuppliercustomername As String, ByVal globalformname As Object)
         Try
             glosuppid = 0
@@ -261,6 +281,7 @@ Module MarvinModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getSupplierCustomerID(ByVal globalicustomername As String, ByVal globalformname As Object)
         Try
             globalsuppliercustomerid = 0
@@ -278,6 +299,7 @@ Module MarvinModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getReceivedBy(ByVal globalicontactname As String, ByVal globalformname As Object)
         Try
             globalcontactid = 0
@@ -303,6 +325,7 @@ Module MarvinModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getOrderItemApproveFlg(ByVal globaliorderitemid As Integer, ByVal globalformname As Object)
         Try
             globalorderitemapproveflg = ""
@@ -320,6 +343,7 @@ Module MarvinModule
             globalconn.Close()
         End Try
     End Sub
+
     Sub getInventoryLocID(ByVal globalformname As Object)
         Try
             glolocid = 0
@@ -334,6 +358,7 @@ Module MarvinModule
             MsgBox(getErrExcptn(ex, globalformname.Name))
         End Try
     End Sub
+
     Sub getProductInventoryLocID(ByVal globalirackcolumnshelfid As Integer, ByVal globaliproductcolorsizeid As Integer, ByVal globalformname As Object)
         Try
             gloprodctinvtylocid = 0
@@ -348,6 +373,7 @@ Module MarvinModule
             MsgBox(getErrExcptn(ex, globalformname.Name))
         End Try
     End Sub
+
     Sub getRCSOrderItemID(ByVal globaliproductinventorylocationid As Integer, ByVal globaliorderitemid As Integer, ByVal globalformname As Object)
         Try
             glorcsorderitemid = 0 : gloqtyapplied = 0
@@ -364,13 +390,14 @@ Module MarvinModule
             MsgBox(getErrExcptn(ex, globalformname.Name))
         End Try
     End Sub
+
     Sub getRRInfo(ByVal globalirelatedorderid As Integer, ByVal globalformname As Object)
         Try
             gloRRNo = "" : gloRRDate = "" : gloRRReceivedBy = "" : gloRRTimeArrived = "" : gloRRArrivedIn = "" : gloRRContainerNo = "" : gloRRSealNo = "" : gloRRBrands = ""
             Dim dtGid As New DataTable
-            dtGid = getDataTableForSQL("SELECT COALESCE(rr.ordernumber,''),DATE_FORMAT(rr.orderdate,'%d-%b-%Y'),COALESCE(CONCAT(COALESCE(c.firstname,''),' ',COALESCE(c.middlename,''),' ',COALESCE(c.lastname,''),' ',COALESCE(c.suffix,''),' - ',COALESCE(c.contactno,''),' / ',COALESCE(c.`type`,'')),'')," & _
-                            "COALESCE(TIME_FORMAT(rr.timearrived,'%r'),''),COALESCE(rr.arrivedin,''),COALESCE(rr.containerno,''),COALESCE(rr.sealno,''),COALESCE(rr.receivedbrands,'') FROM orders rr LEFT JOIN contacts c ON rr.contactid = c.rowid " & _
-                            "WHERE rr.ordertype = 'RR' AND rr.relatedorderid = " & globalirelatedorderid & " AND rr.organizationid = " & Z_OrganizationID & " AND rr.`status` != 'Cancelled' ")
+            dtGid = getDataTableForSQL("SELECT COALESCE(rr.ordernumber,''),DATE_FORMAT(rr.orderdate,'%d-%b-%Y'),COALESCE(CONCAT(COALESCE(c.firstname,''),' ',COALESCE(c.middlename,''),' ',COALESCE(c.lastname,''),' ',COALESCE(c.suffix,''),' - ',COALESCE(c.contactno,''),' / ',COALESCE(c.`type`,'')),'')," &
+                            "COALESCE(TIME_FORMAT(rr.timearrived,'%r'),''),COALESCE(rr.arrivedin,''),COALESCE(rr.containerno,''),COALESCE(rr.sealno,''),COALESCE(rr.receivedbrands,'') FROM orders rr LEFT JOIN contacts c ON rr.contactid = c.rowid " &
+                            $"WHERE rr.ordertype = '{OrderType.RR.ToString()}' AND rr.relatedorderid = " & globalirelatedorderid & " AND rr.organizationid = " & Z_OrganizationID & " AND rr.`status` != 'Cancelled' ")
             If dtGid.Rows.Count <> 0 Then
                 gloRRNo = dtGid.Rows(0)(0)
                 gloRRDate = dtGid.Rows(0)(1)
@@ -387,6 +414,7 @@ Module MarvinModule
             MsgBox(getErrExcptn(ex, globalformname.Name))
         End Try
     End Sub
+
     Sub getProductColorSizeTotalDamageQty(ByVal globaliproductcolorsizeid As Integer, ByVal globalformname As Object)
         Try
             globaltotalqtydamage = 0
@@ -401,25 +429,29 @@ Module MarvinModule
             MsgBox(getErrExcptn(ex, globalformname.Name))
         End Try
     End Sub
+
 #End Region
+
 #Region "Stored Procedure"
+
 #Region "Insert"
-    Public Function I_PositionView(ByVal OrganizationID As Integer, _
-                                  ByVal Created As DateTime, _
-                                  ByVal CreatedBy As Integer, _
-                                  ByVal LastUpd As DateTime, _
-                                  ByVal LastUpdBy As Integer, _
-                                  ByVal PositionID As Integer, _
-                                  ByVal ViewID As Integer, _
-                                  ByVal Creates As Char, _
-                                  ByVal Updates As Char, _
-                                  ByVal Disable As Char, _
-                                  ByVal Reading As Char, _
-                                  ByVal Remarks As String, _
+
+    Public Function I_PositionView(ByVal OrganizationID As Integer,
+                                  ByVal Created As DateTime,
+                                  ByVal CreatedBy As Integer,
+                                  ByVal LastUpd As DateTime,
+                                  ByVal LastUpdBy As Integer,
+                                  ByVal PositionID As Integer,
+                                  ByVal ViewID As Integer,
+                                  ByVal Creates As Char,
+                                  ByVal Updates As Char,
+                                  ByVal Disable As Char,
+                                  ByVal Reading As Char,
+                                  ByVal Remarks As String,
                                   ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("I_positionview", connection)
         With SQL_command
             Try
@@ -438,7 +470,6 @@ Module MarvinModule
                 .Parameters.AddWithValue("I_Remarks", Remarks)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -447,20 +478,21 @@ Module MarvinModule
         End With
         Return F_return
     End Function
-    Public Function I_Position(ByVal OrganizationID As Integer, _
-                            ByVal Created As DateTime, _
-                            ByVal CreatedBy As Integer, _
-                            ByVal LastUpd As DateTime, _
-                            ByVal LastUpdBy As Integer, _
-                            ByVal PositionName As String, _
-                            ByVal ParentPositionID As Object, _
-                            ByVal DivisionID As Object, _
-                            ByVal Status As String, _
-                            ByVal Comments As String, _
+
+    Public Function I_Position(ByVal OrganizationID As Integer,
+                            ByVal Created As DateTime,
+                            ByVal CreatedBy As Integer,
+                            ByVal LastUpd As DateTime,
+                            ByVal LastUpdBy As Integer,
+                            ByVal PositionName As String,
+                            ByVal ParentPositionID As Object,
+                            ByVal DivisionID As Object,
+                            ByVal Status As String,
+                            ByVal Comments As String,
                             ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("I_position", connection)
         With SQL_command
             Try
@@ -478,7 +510,6 @@ Module MarvinModule
                 .Parameters.AddWithValue("I_Comments", Comments)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -487,27 +518,28 @@ Module MarvinModule
         End With
         Return F_return
     End Function
-    Public Function M_I_OrderItemsA(ByVal OrganizationID As Integer, _
-                             ByVal Created As DateTime, _
-                             ByVal CreatedBy As Integer, _
-                             ByVal LastUpdBy As Integer, _
-                             ByVal AccountID As Integer, _
-                             ByVal OrderID As Integer, _
-                             ByVal ProductColorSizeID As Object, _
-                             ByVal ProductBundleID As Object, _
-                             ByVal QtyOrdered As Integer, _
-                             ByVal QtyAvailable As Integer, _
-                             ByVal ItemType As String, _
-                             ByVal ItemCode As String, _
-                             ByVal SKU As String, _
-                             ByVal UnitOfMeasure As String, _
-                             ByVal Remarks As String, _
-                             ByVal SRP As Decimal, _
-                             ByVal Status As String, _
+
+    Public Function M_I_OrderItemsA(ByVal OrganizationID As Integer,
+                             ByVal Created As DateTime,
+                             ByVal CreatedBy As Integer,
+                             ByVal LastUpdBy As Integer,
+                             ByVal AccountID As Integer,
+                             ByVal OrderID As Integer,
+                             ByVal ProductColorSizeID As Object,
+                             ByVal ProductBundleID As Object,
+                             ByVal QtyOrdered As Integer,
+                             ByVal QtyAvailable As Integer,
+                             ByVal ItemType As String,
+                             ByVal ItemCode As String,
+                             ByVal SKU As String,
+                             ByVal UnitOfMeasure As String,
+                             ByVal Remarks As String,
+                             ByVal SRP As Decimal,
+                             ByVal Status As String,
                              ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("M_I_orderitemsA", connection)
         With SQL_command
             Try
@@ -532,7 +564,6 @@ Module MarvinModule
                 .Parameters.AddWithValue("I_Status", Status)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -541,23 +572,24 @@ Module MarvinModule
         End With
         Return F_return
     End Function
-    Public Function M_I_OrdersA(ByVal OrganizationID As Integer, _
-                        ByVal Created As DateTime, _
-                        ByVal CreatedBy As Integer, _
-                        ByVal LastUpdBy As Integer, _
-                        ByVal AccountID As Integer, _
-                        ByVal OrderNumber As String, _
-                        ByVal OrderType As String, _
-                        ByVal OrderDate As Date, _
-                        ByVal TargetDate As Date, _
-                        ByVal CustomerName As String, _
-                        ByVal Comments As String, _
-                        ByVal Status As String, _
-                        ByVal TotalAmount As Decimal, _
+
+    Public Function M_I_OrdersA(ByVal OrganizationID As Integer,
+                        ByVal Created As DateTime,
+                        ByVal CreatedBy As Integer,
+                        ByVal LastUpdBy As Integer,
+                        ByVal AccountID As Integer,
+                        ByVal OrderNumber As String,
+                        ByVal OrderType As String,
+                        ByVal OrderDate As Date,
+                        ByVal TargetDate As Date,
+                        ByVal CustomerName As String,
+                        ByVal Comments As String,
+                        ByVal Status As String,
+                        ByVal TotalAmount As Decimal,
                         ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("M_I_ordersA", connection)
         With SQL_command
             Try
@@ -582,7 +614,6 @@ Module MarvinModule
                 .Parameters("newOrdersID").Direction = ParameterDirection.ReturnValue
                 globaldatareader = .ExecuteReader
                 globalorderidsp = globaldatareader(0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -591,30 +622,31 @@ Module MarvinModule
         End With
         Return F_return
     End Function
-    Public Function M_I_Accounts(ByVal OrganizationID As Integer, _
-                          ByVal Created As DateTime, _
-                          ByVal CreatedBy As Integer, _
-                          ByVal LastUpdBy As Integer, _
-                          ByVal PrimaryContactID As Object, _
-                          ByVal PrimaryAddressID As Object, _
-                          ByVal ParentAccountID As Object, _
-                          ByVal PickListGroupID As Object, _
-                          ByVal AccountNo As Integer, _
-                          ByVal AccountType As String, _
-                          ByVal CompanyName As String, _
-                          ByVal TradeName As String, _
-                          ByVal MainPhone As String, _
-                          ByVal AltPhone As String, _
-                          ByVal FaxNumber As String, _
-                          ByVal EmailAddress As String, _
-                          ByVal VATRegistrationNo As String, _
-                          ByVal Website As String, _
-                          ByVal Comments As String, _
-                          ByVal Status As String, _
+
+    Public Function M_I_Accounts(ByVal OrganizationID As Integer,
+                          ByVal Created As DateTime,
+                          ByVal CreatedBy As Integer,
+                          ByVal LastUpdBy As Integer,
+                          ByVal PrimaryContactID As Object,
+                          ByVal PrimaryAddressID As Object,
+                          ByVal ParentAccountID As Object,
+                          ByVal PickListGroupID As Object,
+                          ByVal AccountNo As Integer,
+                          ByVal AccountType As String,
+                          ByVal CompanyName As String,
+                          ByVal TradeName As String,
+                          ByVal MainPhone As String,
+                          ByVal AltPhone As String,
+                          ByVal FaxNumber As String,
+                          ByVal EmailAddress As String,
+                          ByVal VATRegistrationNo As String,
+                          ByVal Website As String,
+                          ByVal Comments As String,
+                          ByVal Status As String,
                           ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("M_I_accounts", connection)
         With SQL_command
             Try
@@ -641,7 +673,6 @@ Module MarvinModule
                 .Parameters.AddWithValue("I_Status", Status)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -650,31 +681,32 @@ Module MarvinModule
         End With
         Return F_return
     End Function
-    Public Function M_I_Orders(ByVal OrganizationID As Integer, _
-                     ByVal Created As DateTime, _
-                     ByVal CreatedBy As Integer, _
-                     ByVal LastUpdBy As Integer, _
-                     ByVal AccountID As Object, _
-                     ByVal OrderNumber As String, _
-                     ByVal OrderType As String, _
-                     ByVal OrderDate As Date, _
-                     ByVal TargetDate As Object, _
-                     ByVal CustomerName As String, _
-                     ByVal Comments As String, _
-                     ByVal Status As String, _
-                     ByVal TotalAmount As Decimal, _
-                     ByVal ReceivedBy As String, _
-                     ByVal RelatedOrderID As Object, _
-                     ByVal ContactID As Object, _
-                     ByVal TimeArrived As Object, _
-                     ByVal ReceivedBrands As String, _
-                     ByVal ContainerNo As String, _
-                     ByVal SealNo As String, _
-                     ByVal ArrivedIn As String, _
+
+    Public Function M_I_Orders(ByVal OrganizationID As Integer,
+                     ByVal Created As DateTime,
+                     ByVal CreatedBy As Integer,
+                     ByVal LastUpdBy As Integer,
+                     ByVal AccountID As Object,
+                     ByVal OrderNumber As String,
+                     ByVal OrderType As String,
+                     ByVal OrderDate As Date,
+                     ByVal TargetDate As Object,
+                     ByVal CustomerName As String,
+                     ByVal Comments As String,
+                     ByVal Status As String,
+                     ByVal TotalAmount As Decimal,
+                     ByVal ReceivedBy As String,
+                     ByVal RelatedOrderID As Object,
+                     ByVal ContactID As Object,
+                     ByVal TimeArrived As Object,
+                     ByVal ReceivedBrands As String,
+                     ByVal ContainerNo As String,
+                     ByVal SealNo As String,
+                     ByVal ArrivedIn As String,
                      ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("M_I_Orders", connection)
         With SQL_command
             Try
@@ -707,7 +739,6 @@ Module MarvinModule
                 .Parameters("newOrdersID").Direction = ParameterDirection.ReturnValue
                 globaldatareader = .ExecuteReader
                 globalorderidsp = globaldatareader(0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -716,31 +747,32 @@ Module MarvinModule
         End With
         Return F_return
     End Function
-    Public Function M_I_OrderItems(ByVal OrganizationID As Integer, _
-                           ByVal Created As DateTime, _
-                           ByVal CreatedBy As Integer, _
-                           ByVal LastUpdBy As Integer, _
-                           ByVal AccountID As Object, _
-                           ByVal OrderID As Integer, _
-                           ByVal ProductColorSizeID As Object, _
-                           ByVal ProductBundleID As Object, _
-                           ByVal QtyOrdered As Integer, _
-                           ByVal QtyAvailable As Integer, _
-                           ByVal ItemType As String, _
-                           ByVal ItemCode As String, _
-                           ByVal SKU As String, _
-                           ByVal UnitOfMeasure As String, _
-                           ByVal Remarks As String, _
-                           ByVal SRP As Decimal, _
-                           ByVal Status As String, _
-                           ByVal QtyReceived As Integer, _
-                           ByVal Approval As Char, _
-                           ByVal QtyDamaged As Integer, _
-                           ByVal Reasons As String, _
+
+    Public Function M_I_OrderItems(ByVal OrganizationID As Integer,
+                           ByVal Created As DateTime,
+                           ByVal CreatedBy As Integer,
+                           ByVal LastUpdBy As Integer,
+                           ByVal AccountID As Object,
+                           ByVal OrderID As Integer,
+                           ByVal ProductColorSizeID As Object,
+                           ByVal ProductBundleID As Object,
+                           ByVal QtyOrdered As Integer,
+                           ByVal QtyAvailable As Integer,
+                           ByVal ItemType As String,
+                           ByVal ItemCode As String,
+                           ByVal SKU As String,
+                           ByVal UnitOfMeasure As String,
+                           ByVal Remarks As String,
+                           ByVal SRP As Decimal,
+                           ByVal Status As String,
+                           ByVal QtyReceived As Integer,
+                           ByVal Approval As Char,
+                           ByVal QtyDamaged As Integer,
+                           ByVal Reasons As String,
                            ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("M_I_OrderItems", connection)
         With SQL_command
             Try
@@ -769,7 +801,6 @@ Module MarvinModule
                 .Parameters.AddWithValue("I_Reasons", Reasons)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -778,25 +809,26 @@ Module MarvinModule
         End With
         Return F_return
     End Function
-    Public Function M_I_productinventorylocation(ByVal OrganizationID As Integer, _
-                                                 ByVal Created As DateTime, _
-                                                 ByVal CreatedBy As Integer, _
-                                                 ByVal LastUpdBy As Integer, _
-                                                 ByVal RackShelfColumnID As Integer, _
-                                                 ByVal ProductColorSizeID As Integer, _
-                                                 ByVal TotalAvailableQty As Integer, _
-                                                 ByVal TotalReserveQty As Integer, _
-                                                 ByVal TotalDamageQty As Integer, _
-                                                 ByVal TotalSupplierProblemQty As Integer, _
-                                                 ByVal TotalInRepairQty As Integer, _
-                                                 ByVal TotalToReceiveQty As Integer, _
-                                                 ByVal RunningTotalQty As Integer, _
-                                                 ByVal UnitPrice As Decimal, _
-                                                 ByVal LastInventoryCount As Integer, _
+
+    Public Function M_I_productinventorylocation(ByVal OrganizationID As Integer,
+                                                 ByVal Created As DateTime,
+                                                 ByVal CreatedBy As Integer,
+                                                 ByVal LastUpdBy As Integer,
+                                                 ByVal RackShelfColumnID As Integer,
+                                                 ByVal ProductColorSizeID As Integer,
+                                                 ByVal TotalAvailableQty As Integer,
+                                                 ByVal TotalReserveQty As Integer,
+                                                 ByVal TotalDamageQty As Integer,
+                                                 ByVal TotalSupplierProblemQty As Integer,
+                                                 ByVal TotalInRepairQty As Integer,
+                                                 ByVal TotalToReceiveQty As Integer,
+                                                 ByVal RunningTotalQty As Integer,
+                                                 ByVal UnitPrice As Decimal,
+                                                 ByVal LastInventoryCount As Integer,
                                                  ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("M_I_productinventorylocation", connection)
         With SQL_command
             Try
@@ -829,18 +861,19 @@ Module MarvinModule
         End With
         Return F_return
     End Function
-    Public Function M_I_rscorderitems(ByVal OrganizationID As Integer, _
-                                      ByVal Created As DateTime, _
-                                      ByVal CreatedBy As Integer, _
-                                      ByVal LastUpdBy As Integer, _
-                                      ByVal ProdInventoryLocID As Integer, _
-                                      ByVal OrderItemsID As Object, _
-                                      ByVal QtyApplied As Integer, _
-                                      ByVal Status As String, _
+
+    Public Function M_I_rscorderitems(ByVal OrganizationID As Integer,
+                                      ByVal Created As DateTime,
+                                      ByVal CreatedBy As Integer,
+                                      ByVal LastUpdBy As Integer,
+                                      ByVal ProdInventoryLocID As Integer,
+                                      ByVal OrderItemsID As Object,
+                                      ByVal QtyApplied As Integer,
+                                      ByVal Status As String,
                                       ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("M_I_rscorderitems", connection)
         With SQL_command
             Try
@@ -858,7 +891,6 @@ Module MarvinModule
                 .Parameters.AddWithValue("I_Status", Status)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -867,6 +899,7 @@ Module MarvinModule
         End With
         Return F_return
     End Function
+
     Public Function M_I_productmovementhistory(ByVal OrganizationID As Integer,
                                                ByVal Created As DateTime,
                                                ByVal CreatedBy As Integer,
@@ -882,7 +915,7 @@ Module MarvinModule
                                                ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("M_I_productmovementhistory", connection)
         With SQL_command
             Try
@@ -912,6 +945,7 @@ Module MarvinModule
         End With
         Return F_return
     End Function
+
     Public Function M_I_productmovementhistoryStockAdjustment(ByVal OrganizationID As Integer,
                                              ByVal Created As DateTime,
                                              ByVal CreatedBy As Integer,
@@ -927,7 +961,7 @@ Module MarvinModule
                                              ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("M_I_productmovementhistory", connection)
         With SQL_command
             Try
@@ -957,6 +991,7 @@ Module MarvinModule
         End With
         Return F_return
     End Function
+
     Public Function M_I_productmovementhistoryStockTransfer(ByVal OrganizationID As Integer,
                                              ByVal Created As DateTime,
                                              ByVal CreatedBy As Integer,
@@ -972,7 +1007,7 @@ Module MarvinModule
                                              ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("M_I_productmovementhistory", connection)
         With SQL_command
             Try
@@ -1002,20 +1037,23 @@ Module MarvinModule
         End With
         Return F_return
     End Function
+
 #End Region
+
 #Region "Update"
-    Public Function U_PositionView(ByVal RowID As Integer, _
-                                ByVal LastUpd As DateTime, _
-                                ByVal LastUpdBy As Integer, _
-                                ByVal Creates As Char, _
-                                ByVal Updates As Char, _
-                                ByVal Disable As Char, _
-                                ByVal Reading As Char, _
-                                ByVal Remarks As String, _
+
+    Public Function U_PositionView(ByVal RowID As Integer,
+                                ByVal LastUpd As DateTime,
+                                ByVal LastUpdBy As Integer,
+                                ByVal Creates As Char,
+                                ByVal Updates As Char,
+                                ByVal Disable As Char,
+                                ByVal Reading As Char,
+                                ByVal Remarks As String,
                                 ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_positionview", connection)
         With SQL_command
             Try
@@ -1030,7 +1068,6 @@ Module MarvinModule
                 .Parameters.AddWithValue("U_Remarks", Remarks)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -1039,18 +1076,19 @@ Module MarvinModule
         End With
         Return F_return
     End Function
-    Public Function U_Position(ByVal RowID As Integer, _
-                          ByVal LastUpd As DateTime, _
-                          ByVal LastUpdBy As Integer, _
-                          ByVal PositionName As String, _
-                          ByVal ParentPositionID As Object, _
-                          ByVal DivisionID As Object, _
-                          ByVal Status As String, _
-                          ByVal Comments As String, _
+
+    Public Function U_Position(ByVal RowID As Integer,
+                          ByVal LastUpd As DateTime,
+                          ByVal LastUpdBy As Integer,
+                          ByVal PositionName As String,
+                          ByVal ParentPositionID As Object,
+                          ByVal DivisionID As Object,
+                          ByVal Status As String,
+                          ByVal Comments As String,
                           ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("U_position", connection)
         With SQL_command
             Try
@@ -1066,7 +1104,6 @@ Module MarvinModule
                 .Parameters.AddWithValue("U_Comments", Comments)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -1075,17 +1112,18 @@ Module MarvinModule
         End With
         Return F_return
     End Function
-    Public Function MB_U_OrderItemsA(ByVal RowID As Integer, _
-                              ByVal LastUpd As DateTime, _
-                              ByVal LastUpdBy As Integer, _
-                              ByVal QtyOrdered As Integer, _
-                              ByVal SRP As Decimal, _
-                              ByVal UnitOfMeasure As String, _
-                              ByVal Remarks As String, _
+
+    Public Function MB_U_OrderItemsA(ByVal RowID As Integer,
+                              ByVal LastUpd As DateTime,
+                              ByVal LastUpdBy As Integer,
+                              ByVal QtyOrdered As Integer,
+                              ByVal SRP As Decimal,
+                              ByVal UnitOfMeasure As String,
+                              ByVal Remarks As String,
                               ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("MB_U_orderitemsA", connection)
         With SQL_command
             Try
@@ -1099,7 +1137,6 @@ Module MarvinModule
                 .Parameters.AddWithValue("U_Remarks", Remarks)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -1108,19 +1145,20 @@ Module MarvinModule
         End With
         Return F_return
     End Function
-    Public Function M_U_OrderA(ByVal RowID As Integer, _
-                                 ByVal LastUpd As DateTime, _
-                                 ByVal LastUpdBy As Integer, _
-                                 ByVal AccountID As Integer, _
-                                 ByVal OrderNumber As String, _
-                                 ByVal OrderDate As Date, _
-                                 ByVal TargetDate As Date, _
-                                 ByVal Comments As String, _
-                                 ByVal TotalAmount As Decimal, _
+
+    Public Function M_U_OrderA(ByVal RowID As Integer,
+                                 ByVal LastUpd As DateTime,
+                                 ByVal LastUpdBy As Integer,
+                                 ByVal AccountID As Integer,
+                                 ByVal OrderNumber As String,
+                                 ByVal OrderDate As Date,
+                                 ByVal TargetDate As Date,
+                                 ByVal Comments As String,
+                                 ByVal TotalAmount As Decimal,
                                  ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("M_U_orderA", connection)
         With SQL_command
             Try
@@ -1136,7 +1174,6 @@ Module MarvinModule
                 .Parameters.AddWithValue("U_TotalAmount", TotalAmount)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -1145,17 +1182,18 @@ Module MarvinModule
         End With
         Return F_return
     End Function
-    Public Function M_U_OrderB(ByVal RowID As Integer, _
-                              ByVal LastUpd As DateTime, _
-                              ByVal LastUpdBy As Integer, _
-                              ByVal BranchID As Object, _
-                              ByVal CompanyID As Object, _
-                              ByVal CombineCodingID As Object, _
-                              ByVal ReferenceNumber As String, _
+
+    Public Function M_U_OrderB(ByVal RowID As Integer,
+                              ByVal LastUpd As DateTime,
+                              ByVal LastUpdBy As Integer,
+                              ByVal BranchID As Object,
+                              ByVal CompanyID As Object,
+                              ByVal CombineCodingID As Object,
+                              ByVal ReferenceNumber As String,
                               ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("M_U_orderB", connection)
         With SQL_command
             Try
@@ -1171,7 +1209,6 @@ Module MarvinModule
                 .Parameters.AddWithValue("U_ReferenceNumber", ReferenceNumber)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -1180,27 +1217,27 @@ Module MarvinModule
         End With
         Return F_return
     End Function
-    Public Function M_U_Accounts(ByVal RowID As Integer, _
-                  ByVal LastUpd As DateTime, _
-                  ByVal LastUpdby As Integer, _
-                  ByVal PrimaryContactID As Object, _
-                  ByVal PrimaryAddressID As Object, _
-                  ByVal ParentAccountID As Object, _
-                  ByVal PickListGroupID As Object, _
-                  ByVal CompanyName As String, _
-                  ByVal MainPhone As String, _
-                  ByVal AltPhone As String, _
-                  ByVal FaxNumber As String, _
-                  ByVal EmailAddress As String, _
-                  ByVal VATRegistrationNo As String, _
-                  ByVal Website As String, _
-                  ByVal Comments As String, _
-                  ByVal Status As String, _
+
+    Public Function M_U_Accounts(ByVal RowID As Integer,
+                  ByVal LastUpd As DateTime,
+                  ByVal LastUpdby As Integer,
+                  ByVal PrimaryContactID As Object,
+                  ByVal PrimaryAddressID As Object,
+                  ByVal ParentAccountID As Object,
+                  ByVal PickListGroupID As Object,
+                  ByVal CompanyName As String,
+                  ByVal MainPhone As String,
+                  ByVal AltPhone As String,
+                  ByVal FaxNumber As String,
+                  ByVal EmailAddress As String,
+                  ByVal VATRegistrationNo As String,
+                  ByVal Website As String,
+                  ByVal Comments As String,
+                  ByVal Status As String,
                   ByVal globalformname As Object) As Boolean
 
-
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("M_U_accounts", connection)
         With SQL_command
             Try
@@ -1223,7 +1260,6 @@ Module MarvinModule
                 .Parameters.AddWithValue("U_Status", Status)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -1232,26 +1268,27 @@ Module MarvinModule
         End With
         Return F_return
     End Function
-    Public Function M_U_Orders(ByVal RowID As Integer, _
-                             ByVal LastUpd As DateTime, _
-                             ByVal LastUpdBy As Integer, _
-                             ByVal AccountID As Object, _
-                             ByVal OrderNumber As String, _
-                             ByVal OrderDate As Date, _
-                             ByVal TargetDate As Object, _
-                             ByVal Comments As String, _
-                             ByVal TotalAmount As Decimal, _
-                             ByVal ReceivedBy As String, _
-                             ByVal ContactID As Object, _
-                             ByVal TimeArrived As Object, _
-                             ByVal ReceivedBrands As String, _
-                             ByVal ContainerNo As String, _
-                             ByVal SealNo As String, _
-                             ByVal ArrivedIn As String, _
+
+    Public Function M_U_Orders(ByVal RowID As Integer,
+                             ByVal LastUpd As DateTime,
+                             ByVal LastUpdBy As Integer,
+                             ByVal AccountID As Object,
+                             ByVal OrderNumber As String,
+                             ByVal OrderDate As Date,
+                             ByVal TargetDate As Object,
+                             ByVal Comments As String,
+                             ByVal TotalAmount As Decimal,
+                             ByVal ReceivedBy As String,
+                             ByVal ContactID As Object,
+                             ByVal TimeArrived As Object,
+                             ByVal ReceivedBrands As String,
+                             ByVal ContainerNo As String,
+                             ByVal SealNo As String,
+                             ByVal ArrivedIn As String,
                              ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("M_U_Orders", connection)
         With SQL_command
             Try
@@ -1274,7 +1311,6 @@ Module MarvinModule
                 .Parameters.AddWithValue("U_ArrivedIn", ArrivedIn)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -1283,18 +1319,19 @@ Module MarvinModule
         End With
         Return F_return
     End Function
-    Public Function M_U_OrderItems(ByVal RowID As Integer, _
-                             ByVal LastUpd As DateTime, _
-                             ByVal LastUpdBy As Integer, _
-                             ByVal QtyReceived As Integer, _
-                             ByVal QtyDamaged As Integer, _
-                             ByVal Remarks As String, _
-                             ByVal Reasons As String, _
-                             ByVal Approval As Char, _
+
+    Public Function M_U_OrderItems(ByVal RowID As Integer,
+                             ByVal LastUpd As DateTime,
+                             ByVal LastUpdBy As Integer,
+                             ByVal QtyReceived As Integer,
+                             ByVal QtyDamaged As Integer,
+                             ByVal Remarks As String,
+                             ByVal Reasons As String,
+                             ByVal Approval As Char,
                              ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("M_U_OrderItems", connection)
         With SQL_command
             Try
@@ -1317,19 +1354,20 @@ Module MarvinModule
         End With
         Return F_return
     End Function
-    Public Function M_U_OrderItemsA(ByVal RowID As Integer, _
-                              ByVal LastUpd As DateTime, _
-                              ByVal LastUpdBy As Integer, _
-                              ByVal QtyOrdered As Integer, _
-                              ByVal QtyDamaged As Integer, _
-                              ByVal SRP As Decimal, _
-                              ByVal UnitOfMeasure As String, _
-                              ByVal Remarks As String, _
-                              ByVal Reasons As String, _
+
+    Public Function M_U_OrderItemsA(ByVal RowID As Integer,
+                              ByVal LastUpd As DateTime,
+                              ByVal LastUpdBy As Integer,
+                              ByVal QtyOrdered As Integer,
+                              ByVal QtyDamaged As Integer,
+                              ByVal SRP As Decimal,
+                              ByVal UnitOfMeasure As String,
+                              ByVal Remarks As String,
+                              ByVal Reasons As String,
                               ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("M_U_OrderitemsA", connection)
         With SQL_command
             Try
@@ -1354,15 +1392,16 @@ Module MarvinModule
         End With
         Return F_return
     End Function
-    Public Function M_U_rscorderitems(ByVal RowID As Integer, _
-                            ByVal LastUpd As DateTime, _
-                            ByVal LastUpdBy As Integer, _
-                            ByVal QtyApplied As Integer, _
-                            ByVal Status As String, _
+
+    Public Function M_U_rscorderitems(ByVal RowID As Integer,
+                            ByVal LastUpd As DateTime,
+                            ByVal LastUpdBy As Integer,
+                            ByVal QtyApplied As Integer,
+                            ByVal Status As String,
                             ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
-        Dim SQL_command As MySqlCommand = _
+        Dim SQL_command As MySqlCommand =
                   New MySqlCommand("M_U_rscorderitems", connection)
         With SQL_command
             Try
@@ -1375,7 +1414,6 @@ Module MarvinModule
                 .Parameters.AddWithValue("U_Status", Status)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
-
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -1384,9 +1422,13 @@ Module MarvinModule
         End With
         Return F_return
     End Function
+
 #End Region
+
 #End Region
+
 #Region "User rights"
+
     Public Sub UserRights(ByVal positionid As Integer, ByVal viewname As String,
                           ByRef creates As Char, ByRef updates As Char, ByRef disable As Char,
                           ByRef reads As Char, ByVal formname As Object)
@@ -1408,12 +1450,13 @@ Module MarvinModule
             updates = dtPosV.Rows(0)(2)
             disable = dtPosV.Rows(0)(3)
             reads = dtPosV.Rows(0)(1)
-
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, formname.Name))
         Finally
             connection.Close()
         End Try
     End Sub
+
 #End Region
+
 End Module

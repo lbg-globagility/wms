@@ -457,7 +457,7 @@ Public Class PrimaryForm
             Dim sql1 As String = "SELECT rr.rowid,COALESCE(rr.ordernumber,''),DATE_FORMAT(rr.orderdate,'%d-%b-%Y'),COALESCE(CONCAT(COALESCE(ac.companyname,''),' - ',COALESCE(ac.accountno,''),' - ',COALESCE(ac.accounttype,'')),'')," &
                         "COALESCE(o.ordernumber,''),COALESCE(o.ordertype,'Blank'),COALESCE(CONCAT(COALESCE(cb.firstname,''),' ',COALESCE(cb.lastname,''),' - ',COALESCE(cb.rowid,'')),'') FROM orders rr " &
                         "LEFT JOIN accounts ac ON rr.accountid = ac.rowid LEFT JOIN orders o ON rr.relatedorderid = o.rowid LEFT JOIN users cb ON rr.createdby = cb.rowid " &
-                        "WHERE rr.organizationid = " & Z_OrganizationID & " AND rr.ordertype = 'RR' AND rr.`status` = 'For Approval' ORDER BY rr.orderdate ASC "
+                        "WHERE rr.organizationid = " & Z_OrganizationID & $" AND rr.ordertype = '{OrderType.RR.ToString()}' AND rr.`status` = 'For Approval' ORDER BY rr.orderdate ASC "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             Dim seqno As Integer = 1
@@ -501,7 +501,7 @@ Public Class PrimaryForm
             If conn.State = ConnectionState.Closed Then conn.Open()
             Dim sql1 As String = "SELECT po.rowid,COALESCE(po.ordernumber,''),DATE_FORMAT(po.orderdate,'%d-%b-%Y'),COALESCE(CONCAT(COALESCE(ac.companyname,''),' - ',COALESCE(ac.accountno,'')),'')," &
                         "COALESCE(CONCAT(COALESCE(cb.firstname,''),' ',COALESCE(cb.lastname,''),' - ',COALESCE(cb.rowid,'')),'') FROM orders po LEFT JOIN accounts ac ON po.accountid = ac.rowid " &
-                        "LEFT JOIN users cb ON po.createdby = cb.rowid WHERE po.organizationid = " & Z_OrganizationID & " AND po.ordertype = 'PO' AND po.`status` = 'New' ORDER BY po.ordernumber DESC "
+                        "LEFT JOIN users cb ON po.createdby = cb.rowid WHERE po.organizationid = " & Z_OrganizationID & $" AND po.ordertype = '{OrderType.PO.ToString()}' AND po.`status` = 'New' ORDER BY po.ordernumber DESC "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             Dim seqno As Integer = 1

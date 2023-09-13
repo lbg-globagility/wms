@@ -9,6 +9,8 @@ Imports System.Data
 Imports System.Diagnostics
 Imports System.Runtime.InteropServices
 Imports System.Text.RegularExpressions
+Imports WarehouseManagementSystem.Core.Enums
+
 Public Class NewRR
     Dim manager As New sqlModule.Manager
     Dim conn As New MySqlConnection(manager.GetConnString)
@@ -19,6 +21,7 @@ Public Class NewRR
     Public nrorderid As Integer = 0
     Public nrrnewrrtype As String = ""
     Public newrrcue As Boolean = False
+
     Private Sub NewRR_Load(sender As Object, e As EventArgs) Handles Me.Load
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -43,6 +46,7 @@ Public Class NewRR
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboPONo_TextChanged(sender As Object, e As EventArgs) Handles cboPONo.TextChanged
         Try
             errProvider.Clear()
@@ -53,6 +57,7 @@ Public Class NewRR
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboPONo_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboPONo.SelectedIndexChanged
         Try
             errProvider.Clear()
@@ -63,6 +68,7 @@ Public Class NewRR
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboReturned_TextChanged(sender As Object, e As EventArgs) Handles cboReturned.TextChanged
         Try
             errProvider.Clear()
@@ -73,6 +79,7 @@ Public Class NewRR
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboReturned_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboReturned.SelectedIndexChanged
         Try
             errProvider.Clear()
@@ -83,6 +90,7 @@ Public Class NewRR
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboPullout_TextChanged(sender As Object, e As EventArgs) Handles cboPullout.TextChanged
         Try
             errProvider.Clear()
@@ -93,6 +101,7 @@ Public Class NewRR
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboPullout_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboPullout.SelectedIndexChanged
         Try
             errProvider.Clear()
@@ -103,6 +112,7 @@ Public Class NewRR
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub rdPO_CheckedChanged(sender As Object, e As EventArgs) Handles rdPO.CheckedChanged
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -113,7 +123,7 @@ Public Class NewRR
                 cboPONo.Visible = True
                 cboReturned.Visible = False
                 cboPullout.Visible = False
-                PopulatePRNO(cboPONo, "PO", Me)
+                PopulatePRNO(cboPONo, combotype:=OrderType.PO.ToString(), Me)
             Else
                 cboPONo.Visible = False
             End If
@@ -124,6 +134,7 @@ Public Class NewRR
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub rdPulloutno_CheckedChanged(sender As Object, e As EventArgs) Handles rdPulloutno.CheckedChanged
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -145,6 +156,7 @@ Public Class NewRR
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub rdReturnNo_CheckedChanged(sender As Object, e As EventArgs) Handles rdReturnNo.CheckedChanged
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -166,6 +178,7 @@ Public Class NewRR
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub rdBlankRR_CheckedChanged(sender As Object, e As EventArgs) Handles rdBlankRR.CheckedChanged
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -182,6 +195,7 @@ Public Class NewRR
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub btnOKRR_Click(sender As Object, e As EventArgs) Handles btnOKRR.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -198,12 +212,12 @@ Public Class NewRR
                 errProvider.SetError(cboReturned, "Please choose Return No.")
             Else
                 If rdPO.Checked = True Then
-                    getIDPRNOB(cboPONo.Text, "PO", Me.Name)
+                    getIDPRNOB(cboPONo.Text, globaliordertype:=OrderType.PO.ToString(), Me.Name)
                     If gloPoNo = 0 Then
                         errProvider.SetError(cboPONo, "P.O. No. is not available any longer, please choose another P.O. No.")
                         Exit Try
                     End If
-                    nrrnewrrtype = "PO"
+                    nrrnewrrtype = OrderType.PO.ToString()
                 ElseIf rdPulloutno.Checked = True Then
                     getIDPRNOB(cboPullout.Text, "Pull-Out", Me.Name)
                     If gloPoNo = 0 Then
@@ -232,4 +246,5 @@ Public Class NewRR
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 End Class

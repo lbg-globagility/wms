@@ -9,10 +9,12 @@ Imports System.Data
 Imports System.Diagnostics
 Imports System.Runtime.InteropServices
 Imports System.Text.RegularExpressions
+Imports WarehouseManagementSystem.Core.Enums
+
 Public Class PurchaseForm
     Dim manager As New sqlModule.Manager
-    Dim conn As New MySqlConnection(Manager.GetConnString)
-    Dim conn1 As New MySqlConnection(Manager.GetConnString)
+    Dim conn As New MySqlConnection(manager.GetConnString)
+    Dim conn1 As New MySqlConnection(manager.GetConnString)
     Dim sqlcmd As MySqlCommand
     Dim sqlrd As MySqlDataReader
     Dim printdataset As New DataSetA.SetDDataTable
@@ -27,6 +29,7 @@ Public Class PurchaseForm
     Dim pototalqtyordered, poqtyordered, poitotalqtyordered, poiqtyordered As Integer
     Dim posupplierid, poorderid, poproductcolorsizesid, poproductid, poproductbundleid As Integer
     Dim simplesearchphrase, datephrase, commonphrase, pagefilter1, pagefilter2, pagefilter3, pagefilter4 As String
+
     Private Sub PurchaseForm_Load(sender As Object, e As EventArgs) Handles Me.Load
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -44,6 +47,7 @@ Public Class PurchaseForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub PurchaseOrderForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -55,16 +59,21 @@ Public Class PurchaseForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #Region "Functions"
+
     Sub callAutoComplete()
         globalautocompleteAccountName(cboSupplierName, "Supplier", "AND a.`status` = 'Active'", Me)
     End Sub
+
     Sub callAutoPopulate()
         autopopulatecboSearch()
         autopopulatecboBy()
         globalautopopulateAccountName(cboSupplierName, "Supplier", "AND a.`status` = 'Active'", Me)
     End Sub
+
 #Region "Clear/Enable/Visible"
+
     Sub clearfields()
         Try
             cue = ""
@@ -87,6 +96,7 @@ Public Class PurchaseForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearRightPage()
         Try
             cue = ""
@@ -106,6 +116,7 @@ Public Class PurchaseForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearSearchItems()
         Try
             txtSimpleSearch.Text = ""
@@ -126,6 +137,7 @@ Public Class PurchaseForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearcboSearch()
         Try
             txtPage.Text = ""
@@ -144,6 +156,7 @@ Public Class PurchaseForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearSupplierOrderInformation()
         Try
             txtSupplierOrderNo.Text = ""
@@ -166,6 +179,7 @@ Public Class PurchaseForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearAddProductA()
         Try
             cboBy.Text = ""
@@ -179,6 +193,7 @@ Public Class PurchaseForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearAddProductB()
         Try
             txtOverallQty.Text = ""
@@ -189,6 +204,7 @@ Public Class PurchaseForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearSupplierOrderItems()
         Try
             chkOtherInfo.Checked = fraud
@@ -201,6 +217,7 @@ Public Class PurchaseForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearDatagrids()
         Try
             dgProductColorSizes.Rows.Clear()
@@ -213,6 +230,7 @@ Public Class PurchaseForm
             conn.Close()
         End Try
     End Sub
+
     Sub enableGB(ByVal enable1 As Boolean, ByVal enable2 As Boolean, ByVal enable3 As Boolean)
         Try
             gbSearch.Enabled = enable1
@@ -226,6 +244,7 @@ Public Class PurchaseForm
             conn.Close()
         End Try
     End Sub
+
     Sub enableANDvisibleMS(ByVal enable1 As Boolean, ByVal enable2 As Boolean, ByVal enable3 As Boolean, ByVal visible1 As Boolean, ByVal visible2 As Boolean)
         Try
             msNew.Enabled = enable1
@@ -239,6 +258,7 @@ Public Class PurchaseForm
             conn.Close()
         End Try
     End Sub
+
     Sub visibleSupplierOrderItems(ByVal visible1 As Boolean)
         Try
             ci_unitofmeasure.Visible = visible1
@@ -252,6 +272,7 @@ Public Class PurchaseForm
             conn.Close()
         End Try
     End Sub
+
     Sub visibleAddProductItems(ByVal visible1 As Boolean, ByVal visible2 As Boolean, ByVal visible3 As Boolean, ByVal visible4 As Boolean, ByVal visible5 As Boolean)
         Try
             dgProductColorSizes.Visible = visible1
@@ -268,8 +289,11 @@ Public Class PurchaseForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Click"
+
     Sub tsrefreshperformclick()
         Try
             errProvider.Clear()
@@ -285,6 +309,7 @@ Public Class PurchaseForm
             conn.Close()
         End Try
     End Sub
+
     Sub btnAddperformclick()
         Try
             errProvider.Clear()
@@ -338,8 +363,11 @@ Public Class PurchaseForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Computations"
+
     Sub addproductcomputations()
         Try
             pototalqtyordered = 0 : poqtyordered = 0 : pooverallsrp = 0.0 : pototalsrp = 0.0
@@ -385,6 +413,7 @@ Public Class PurchaseForm
             conn.Close()
         End Try
     End Sub
+
     Sub supplierorderitemscomputations()
         Try
             poitotalqtyordered = 0 : poiqtyordered = 0 : poitotalprice = 0.0
@@ -415,8 +444,11 @@ Public Class PurchaseForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Page Setup"
+
     Sub pageSetup()
         Try
             getCountPageNum()
@@ -437,12 +469,13 @@ Public Class PurchaseForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCountPageNum()
         Try
             countpagenum = 0
             If conn.State = ConnectionState.Open Then conn.Close()
             Dim dtCid As New DataTable
-            dtCid = getDataTableForSQL("SELECT COUNT(po.rowid) FROM orders po WHERE po.organizationid = " & Z_OrganizationID & " AND po.ordertype = 'PO' ")
+            dtCid = getDataTableForSQL("SELECT COUNT(po.rowid) FROM orders po WHERE po.organizationid = " & Z_OrganizationID & $" AND po.ordertype = '{OrderType.PO.ToString()}' ")
             If dtCid.Rows.Count <> 0 Then
                 countpagenum = dtCid.Rows(0)(0)
             Else
@@ -454,6 +487,7 @@ Public Class PurchaseForm
             conn.Close()
         End Try
     End Sub
+
     Sub pageSetup1(ByVal isearchstring As String)
         Try
             getCountPageNum1(isearchstring)
@@ -474,12 +508,13 @@ Public Class PurchaseForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCountPageNum1(ByVal esearchstring As String)
         Try
             countpagenum = 0
             If conn.State = ConnectionState.Open Then conn.Close()
             Dim dtCid As New DataTable
-            dtCid = getDataTableForSQL("SELECT COALESCE(COUNT(po.rowid),0) FROM orders po LEFT JOIN accounts su ON po.accountid = su.rowid WHERE po.organizationid = " & Z_OrganizationID & " AND po.ordertype = 'PO' " & _
+            dtCid = getDataTableForSQL("SELECT COALESCE(COUNT(po.rowid),0) FROM orders po LEFT JOIN accounts su ON po.accountid = su.rowid WHERE po.organizationid = " & Z_OrganizationID & $" AND po.ordertype = '{OrderType.PO.ToString()}' " &
                             "AND (po.ordernumber LIKE '%" & esearchstring & "%' OR po.status LIKE '%" & esearchstring & "%' OR su.companyname LIKE '%" & esearchstring & "%') ")
             If dtCid.Rows.Count <> 0 Then
                 countpagenum = dtCid.Rows(0)(0)
@@ -492,6 +527,7 @@ Public Class PurchaseForm
             conn.Close()
         End Try
     End Sub
+
     Sub pageSetup2(ByVal idatesearch As String)
         Try
             getCountPageNum2(idatesearch)
@@ -512,13 +548,14 @@ Public Class PurchaseForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCountPageNum2(ByVal edatesearch As String)
         Try
             countpagenum = 0
             If conn.State = ConnectionState.Open Then conn.Close()
             Dim dtCid As New DataTable
-            dtCid = getDataTableForSQL("SELECT COALESCE(COUNT(po.rowid),0) FROM orders po WHERE po.organizationid = " & Z_OrganizationID & " AND po.ordertype = 'PO' AND " & _
-                            "(" & edatesearch & " >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " & _
+            dtCid = getDataTableForSQL("SELECT COALESCE(COUNT(po.rowid),0) FROM orders po WHERE po.organizationid = " & Z_OrganizationID & $" AND po.ordertype = '{OrderType.PO.ToString()}' AND " &
+                            "(" & edatesearch & " >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " &
                             "" & edatesearch & " <= '" & dtpToSearch.Value.Year & "-" & dtpToSearch.Value.Month & "-" & dtpToSearch.Value.Day & "' ) ")
             If dtCid.Rows.Count <> 0 Then
                 countpagenum = dtCid.Rows(0)(0)
@@ -531,6 +568,7 @@ Public Class PurchaseForm
             conn.Close()
         End Try
     End Sub
+
     Sub pageSetup3(ByVal icommonstring As String, ByVal idatesearch As String)
         Try
             getCountPageNum3(icommonstring, idatesearch)
@@ -551,12 +589,13 @@ Public Class PurchaseForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCountPageNum3(ByVal ecommonstring As String, ByVal edatesearch As String)
         Try
             countpagenum = 0
             If conn.State = ConnectionState.Open Then conn.Close()
             Dim dtCid As New DataTable
-            dtCid = getDataTableForSQL("SELECT COALESCE(COUNT(po.rowid),0) FROM orders po WHERE po.organizationid = " & Z_OrganizationID & " AND po.ordertype = 'PO' AND " & ecommonstring & " " & edatesearch & " ")
+            dtCid = getDataTableForSQL("SELECT COALESCE(COUNT(po.rowid),0) FROM orders po WHERE po.organizationid = " & Z_OrganizationID & $" AND po.ordertype = 'PO{OrderType.PO.ToString()} AND " & ecommonstring & " " & edatesearch & " ")
             If dtCid.Rows.Count <> 0 Then
                 countpagenum = dtCid.Rows(0)(0)
             Else
@@ -568,6 +607,7 @@ Public Class PurchaseForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCommonPhrase(ByVal icommonbox As ComboBox, ByVal icommonstring As String)
         Try
             commonphrase = ""
@@ -584,13 +624,17 @@ Public Class PurchaseForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Display"
+
 #Region "AutoComplete"
+
     Sub autocompleteSupplierName(ByVal icombobox As ComboBox)
         Try
             Dim suppliername As New AutoCompleteStringCollection
-            Dim cmd As New MySqlCommand("SELECT COALESCE(CONCAT(COALESCE(su.companyname,''),' - ',COALESCE(su.accountno,'')),'') AS 'suppliername' FROM orders po LEFT JOIN accounts su ON po.accountid = su.rowid WHERE po.organizationid = " & Z_OrganizationID & " AND po.ordertype = 'PO' GROUP BY su.accountno ORDER BY su.accountno ", conn)
+            Dim cmd As New MySqlCommand("SELECT COALESCE(CONCAT(COALESCE(su.companyname,''),' - ',COALESCE(su.accountno,'')),'') AS 'suppliername' FROM orders po LEFT JOIN accounts su ON po.accountid = su.rowid WHERE po.organizationid = " & Z_OrganizationID & $" AND po.ordertype = '{OrderType.PO.ToString()}' GROUP BY su.accountno ORDER BY su.accountno ", conn)
             Dim ds As New DataSet
             Dim da As New MySqlDataAdapter(cmd)
             da.Fill(ds, "list")
@@ -607,10 +651,11 @@ Public Class PurchaseForm
             conn.Close()
         End Try
     End Sub
+
     Sub autocompleteStatus(ByVal icombobox As ComboBox)
         Try
             Dim costatus As New AutoCompleteStringCollection
-            Dim cmd As New MySqlCommand("SELECT COALESCE(po.status,'') AS 'postatus' FROM orders po WHERE po.organizationid = " & Z_OrganizationID & " AND po.ordertype = 'PO' GROUP BY po.status ORDER BY po.status ", conn)
+            Dim cmd As New MySqlCommand("SELECT COALESCE(po.status,'') AS 'postatus' FROM orders po WHERE po.organizationid = " & Z_OrganizationID & $" AND po.ordertype = '{OrderType.PO.ToString()}' GROUP BY po.status ORDER BY po.status ", conn)
             Dim ds As New DataSet
             Dim da As New MySqlDataAdapter(cmd)
             da.Fill(ds, "list")
@@ -627,8 +672,11 @@ Public Class PurchaseForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "AutoPopulate"
+
     Sub autopopulatecboSearch()
         Try
             cboDate.Items.Clear()
@@ -649,6 +697,7 @@ Public Class PurchaseForm
             conn.Close()
         End Try
     End Sub
+
     Sub autopopulatecboBy()
         Try
             cboBy.Items.Clear()
@@ -662,11 +711,12 @@ Public Class PurchaseForm
             conn.Close()
         End Try
     End Sub
+
     Sub autopopulateSupplierName(ByVal icombobox As ComboBox)
         Try
             icombobox.Items.Clear()
             If conn.State = ConnectionState.Open Then conn.Close()
-            Dim sql1 As String = "SELECT COALESCE(CONCAT(COALESCE(su.companyname,''),' - ',COALESCE(su.accountno,'')),'') AS 'suppliername' FROM orders po LEFT JOIN accounts su ON po.accountid = su.rowid WHERE po.organizationid = " & Z_OrganizationID & " AND po.ordertype = 'PO' GROUP BY su.accountno ORDER BY su.companyname "
+            Dim sql1 As String = "SELECT COALESCE(CONCAT(COALESCE(su.companyname,''),' - ',COALESCE(su.accountno,'')),'') AS 'suppliername' FROM orders po LEFT JOIN accounts su ON po.accountid = su.rowid WHERE po.organizationid = " & Z_OrganizationID & $" AND po.ordertype = '{OrderType.PO.ToString()}' GROUP BY su.accountno ORDER BY su.companyname "
             If conn.State = ConnectionState.Closed Then conn.Open()
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader()
@@ -682,11 +732,12 @@ Public Class PurchaseForm
             conn.Close()
         End Try
     End Sub
+
     Sub autopopulateStatus(ByVal icombobox As ComboBox)
         Try
             icombobox.Items.Clear()
             If conn.State = ConnectionState.Open Then conn.Close()
-            Dim sql1 As String = "SELECT COALESCE(po.status,'') AS 'postatus' FROM orders po WHERE po.organizationid = " & Z_OrganizationID & " AND po.ordertype = 'PO' GROUP BY po.status ORDER BY po.status "
+            Dim sql1 As String = "SELECT COALESCE(po.status,'') AS 'postatus' FROM orders po WHERE po.organizationid = " & Z_OrganizationID & $" AND po.ordertype = '{OrderType.PO.ToString()}' GROUP BY po.status ORDER BY po.status "
             If conn.State = ConnectionState.Closed Then conn.Open()
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader()
@@ -702,14 +753,17 @@ Public Class PurchaseForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Datagrids"
+
     Sub displaySupplierOrderList(ByVal istartpage As Integer)
         Try
             dgSupplierOrderList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT po.rowid,COALESCE(po.ordernumber,''),DATE_FORMAT(po.orderdate,'%d-%b-%Y'),COALESCE(CONCAT(COALESCE(su.companyname,''),' - ',COALESCE(su.accountno,'')),'')," & _
-                        "COALESCE(po.status,'') FROM orders po LEFT JOIN accounts su ON po.accountid = su.rowid WHERE po.organizationid = " & Z_OrganizationID & " AND po.ordertype = 'PO' " & _
+            Dim sql1 As String = "SELECT po.rowid,COALESCE(po.ordernumber,''),DATE_FORMAT(po.orderdate,'%d-%b-%Y'),COALESCE(CONCAT(COALESCE(su.companyname,''),' - ',COALESCE(su.accountno,'')),'')," &
+                        "COALESCE(po.status,'') FROM orders po LEFT JOIN accounts su ON po.accountid = su.rowid WHERE po.organizationid = " & Z_OrganizationID & $" AND po.ordertype = '{OrderType.PO.ToString()}' " &
                         "ORDER BY po.orderdate DESC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -738,13 +792,14 @@ Public Class PurchaseForm
             conn.Close()
         End Try
     End Sub
+
     Sub displaySearchPhrase(ByVal isearchphrase As String, ByVal istartpage As Integer)
         Try
             dgSupplierOrderList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT po.rowid,COALESCE(po.ordernumber,''),DATE_FORMAT(po.orderdate,'%d-%b-%Y'),COALESCE(CONCAT(COALESCE(su.companyname,''),' - ',COALESCE(su.accountno,'')),'')," & _
-                        "COALESCE(po.status,'') FROM orders po LEFT JOIN accounts su ON po.accountid = su.rowid WHERE po.organizationid = " & Z_OrganizationID & " AND po.ordertype = 'PO' AND " & _
-                        "(po.ordernumber LIKE '%" & isearchphrase & "%' OR po.status LIKE '%" & isearchphrase & "%' OR su.companyname LIKE '%" & isearchphrase & "%') " & _
+            Dim sql1 As String = "SELECT po.rowid,COALESCE(po.ordernumber,''),DATE_FORMAT(po.orderdate,'%d-%b-%Y'),COALESCE(CONCAT(COALESCE(su.companyname,''),' - ',COALESCE(su.accountno,'')),'')," &
+                        "COALESCE(po.status,'') FROM orders po LEFT JOIN accounts su ON po.accountid = su.rowid WHERE po.organizationid = " & Z_OrganizationID & $" AND po.ordertype = '{OrderType.PO.ToString()}' AND " &
+                        "(po.ordernumber LIKE '%" & isearchphrase & "%' OR po.status LIKE '%" & isearchphrase & "%' OR su.companyname LIKE '%" & isearchphrase & "%') " &
                         "ORDER BY po.orderdate DESC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -773,14 +828,15 @@ Public Class PurchaseForm
             conn.Close()
         End Try
     End Sub
+
     Sub displayDateSearch(ByVal istartpage As Integer, ByVal idatesearch As String)
         Try
             dgSupplierOrderList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT po.rowid,COALESCE(po.ordernumber,''),DATE_FORMAT(po.orderdate,'%d-%b-%Y'),COALESCE(CONCAT(COALESCE(su.companyname,''),' - ',COALESCE(su.accountno,'')),'')," & _
-                        "COALESCE(po.status,'') FROM orders po LEFT JOIN accounts su ON po.accountid = su.rowid WHERE po.organizationid = " & Z_OrganizationID & " AND po.ordertype = 'PO' AND " & _
-                        "(" & idatesearch & " >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " & _
-                        "" & idatesearch & " <= '" & dtpToSearch.Value.Year & "-" & dtpToSearch.Value.Month & "-" & dtpToSearch.Value.Day & "' ) " & _
+            Dim sql1 As String = "SELECT po.rowid,COALESCE(po.ordernumber,''),DATE_FORMAT(po.orderdate,'%d-%b-%Y'),COALESCE(CONCAT(COALESCE(su.companyname,''),' - ',COALESCE(su.accountno,'')),'')," &
+                        "COALESCE(po.status,'') FROM orders po LEFT JOIN accounts su ON po.accountid = su.rowid WHERE po.organizationid = " & Z_OrganizationID & $" AND po.ordertype = '{OrderType.PO.ToString()}' AND " &
+                        "(" & idatesearch & " >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " &
+                        "" & idatesearch & " <= '" & dtpToSearch.Value.Year & "-" & dtpToSearch.Value.Month & "-" & dtpToSearch.Value.Day & "' ) " &
                         "GROUP BY po.rowid ORDER BY po.orderdate DESC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -809,12 +865,13 @@ Public Class PurchaseForm
             conn.Close()
         End Try
     End Sub
+
     Sub displayCommonPhrase(ByVal icommonphrase As String, ByVal idatesearch As String, ByVal istartpage As Integer)
         Try
             dgSupplierOrderList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT po.rowid,COALESCE(po.ordernumber,''),DATE_FORMAT(po.orderdate,'%d-%b-%Y'),COALESCE(CONCAT(COALESCE(su.companyname,''),' - ',COALESCE(su.accountno,'')),'')," & _
-                        "COALESCE(po.status,'') FROM orders po LEFT JOIN accounts su ON po.accountid = su.rowid WHERE po.organizationid = " & Z_OrganizationID & " AND po.ordertype = 'PO' " & _
+            Dim sql1 As String = "SELECT po.rowid,COALESCE(po.ordernumber,''),DATE_FORMAT(po.orderdate,'%d-%b-%Y'),COALESCE(CONCAT(COALESCE(su.companyname,''),' - ',COALESCE(su.accountno,'')),'')," &
+                        "COALESCE(po.status,'') FROM orders po LEFT JOIN accounts su ON po.accountid = su.rowid WHERE po.organizationid = " & Z_OrganizationID & $" AND po.ordertype = '{OrderType.PO.ToString()}' " &
                         "AND " & icommonphrase & " " & idatesearch & " GROUP BY po.rowid ORDER BY po.orderdate DESC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -843,10 +900,11 @@ Public Class PurchaseForm
             conn.Close()
         End Try
     End Sub
+
     Sub displaySupplierOrderInformation(ByVal isupplierorderid As Integer)
         Try
             If conn1.State = ConnectionState.Closed Then conn1.Open()
-            Dim sql1 As String = "SELECT COALESCE(po.ordernumber,''),DATE_FORMAT(po.orderdate,'%d-%b-%Y'),DATE_FORMAT(po.targetdate,'%d-%b-%Y'),COALESCE(CONCAT(COALESCE(su.companyname,''),' - ',COALESCE(su.accountno,'')),'')," & _
+            Dim sql1 As String = "SELECT COALESCE(po.ordernumber,''),DATE_FORMAT(po.orderdate,'%d-%b-%Y'),DATE_FORMAT(po.targetdate,'%d-%b-%Y'),COALESCE(CONCAT(COALESCE(su.companyname,''),' - ',COALESCE(su.accountno,'')),'')," &
                         "COALESCE(po.comments,''),COALESCE(po.status,'') FROM orders po LEFT JOIN accounts su ON po.accountid = su.rowid WHERE po.rowid = " & isupplierorderid & " "
             Dim cmd1 As New MySqlCommand(sql1, conn1)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -876,13 +934,14 @@ Public Class PurchaseForm
             conn1.Close()
         End Try
     End Sub
+
     Sub displaySupplierOrderItems(ByVal isupplierorderid As Integer)
         Try
             dgSupplierOrderItems.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT ci.rowid,COALESCE(ci.productcolorsizeid,0),COALESCE(ci.productbundleid,0),COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(b.bundlename,''),COALESCE(c.colorname,''),COALESCE(pcs.size,'')," & _
-                    "COALESCE(pcs.seasoncode,''),COALESCE(ci.unitofmeasure,''),COALESCE(ci.qtyordered,0),COALESCE(ci.srp,0.0),COALESCE(pcs.sku,''),COALESCE(b.sku,''),COALESCE(ci.itemtype,''),COALESCE(ci.remarks,''),COALESCE(ci.qtyreceived,0)," & _
-                    "COALESCE(ci.qtydamaged,0),COALESCE(ci.reasons,'') FROM orderitems ci LEFT JOIN productbundles b ON ci.productbundleid = b.rowid LEFT JOIN productcolorsizes pcs ON ci.productcolorsizeid = pcs.rowid LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid " & _
+            Dim sql1 As String = "SELECT ci.rowid,COALESCE(ci.productcolorsizeid,0),COALESCE(ci.productbundleid,0),COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(b.bundlename,''),COALESCE(c.colorname,''),COALESCE(pcs.size,'')," &
+                    "COALESCE(pcs.seasoncode,''),COALESCE(ci.unitofmeasure,''),COALESCE(ci.qtyordered,0),COALESCE(ci.srp,0.0),COALESCE(pcs.sku,''),COALESCE(b.sku,''),COALESCE(ci.itemtype,''),COALESCE(ci.remarks,''),COALESCE(ci.qtyreceived,0)," &
+                    "COALESCE(ci.qtydamaged,0),COALESCE(ci.reasons,'') FROM orderitems ci LEFT JOIN productbundles b ON ci.productbundleid = b.rowid LEFT JOIN productcolorsizes pcs ON ci.productcolorsizeid = pcs.rowid LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid " &
                     "LEFT JOIN colors c ON pc.colorid = c.rowid LEFT JOIN products p ON pc.productid = p.rowid WHERE ci.orderid = " & isupplierorderid & " AND ci.organizationid = " & Z_OrganizationID & " AND ci.status != 'Inactive' AND ci.itemtype != 'BI' ORDER BY ci.rowid "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -945,11 +1004,12 @@ Public Class PurchaseForm
             conn.Close()
         End Try
     End Sub
+
     Sub displayProductsA(ByVal iproductcolorsizeid As Integer)
         Try
             dgProductColorSizes.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT pcs.rowid,COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(c.colorname,''),COALESCE(pcs.size,''),COALESCE(pcs.seasoncode,''),COALESCE(pcs.sku,''),COALESCE(p.unitprice,0.00) " & _
+            Dim sql1 As String = "SELECT pcs.rowid,COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(c.colorname,''),COALESCE(pcs.size,''),COALESCE(pcs.seasoncode,''),COALESCE(pcs.sku,''),COALESCE(p.unitprice,0.00) " &
                 "FROM productcolorsizes pcs LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN colors c ON pc.colorid = c.rowid LEFT JOIN products p ON pc.productid = p.rowid WHERE pcs.rowid = " & iproductcolorsizeid & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -987,11 +1047,12 @@ Public Class PurchaseForm
             conn.Close()
         End Try
     End Sub
+
     Sub displayProductsB(ByVal iproductid As Integer)
         Try
             dgProductColors.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT pc.rowid,COALESCE(c.colorvalue,''),COALESCE(c.colorname,'') FROM productcolors pc LEFT JOIN colors c ON pc.colorid = c.rowid " & _
+            Dim sql1 As String = "SELECT pc.rowid,COALESCE(c.colorvalue,''),COALESCE(c.colorname,'') FROM productcolors pc LEFT JOIN colors c ON pc.colorid = c.rowid " &
                             "WHERE pc.organizationid = " & Z_OrganizationID & " AND pc.productid = " & iproductid & " ORDER BY c.colorname ASC "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -1021,11 +1082,12 @@ Public Class PurchaseForm
             conn.Close()
         End Try
     End Sub
+
     Sub displayProductsC(ByVal iproductcolorid As Integer)
         Try
             dgProductSizes.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT pcs.rowid,COALESCE(pcs.size,0.0),COALESCE(pcs.seasoncode,''),COALESCE(p.unitprice,0.00),COALESCE(pcs.sku,'') FROM productcolorsizes pcs LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid " & _
+            Dim sql1 As String = "SELECT pcs.rowid,COALESCE(pcs.size,0.0),COALESCE(pcs.seasoncode,''),COALESCE(p.unitprice,0.00),COALESCE(pcs.sku,'') FROM productcolorsizes pcs LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid " &
                         "LEFT JOIN products p ON pc.productid = p.rowid WHERE pcs.organizationid = " & Z_OrganizationID & " AND pcs.productcolorid = " & iproductcolorid & " AND pcs.status = 'Active' ORDER BY pcs.size ASC "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -1062,8 +1124,11 @@ Public Class PurchaseForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Colors"
+
     Sub colorCoding()
         Try
             If dgProductColorSizes.Rows.Count <> 0 Then
@@ -1099,9 +1164,13 @@ Public Class PurchaseForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #End Region
+
 #Region "Adding"
+
     Sub checkSupplierOrderItemsA()
         Try
             If dgProductColorSizes.Rows.Count <> 0 Then
@@ -1152,6 +1221,7 @@ Public Class PurchaseForm
             conn.Close()
         End Try
     End Sub
+
     Sub checkSupplierOrderItemsB()
         Try
             If dgProductSizes.Rows.Count <> 0 Then
@@ -1192,10 +1262,11 @@ Public Class PurchaseForm
             conn.Close()
         End Try
     End Sub
+
     Sub addSupplierOrderItemA(ByVal iproductcolorsizeid As Integer, ByVal iqtyordered As Integer, ByVal isrp As Decimal)
         Try
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT pcs.rowid,COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(c.colorname,''),COALESCE(pcs.size,''),COALESCE(p.unitofmeasure,''),COALESCE(pcs.sku,''),COALESCE(pcs.seasoncode,'') " & _
+            Dim sql1 As String = "SELECT pcs.rowid,COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(c.colorname,''),COALESCE(pcs.size,''),COALESCE(p.unitofmeasure,''),COALESCE(pcs.sku,''),COALESCE(pcs.seasoncode,'') " &
                 "FROM productcolorsizes pcs LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN colors c ON pc.colorid = c.rowid LEFT JOIN products p ON pc.productid = p.rowid WHERE pcs.rowid = " & iproductcolorsizeid & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -1242,14 +1313,17 @@ Public Class PurchaseForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Printing"
+
     Sub printPurchaseOrder(ByVal isupplierorderid As Integer)
         Try
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT o.rowid,COALESCE(o.ordernumber,''),DATE_FORMAT(o.orderdate,'%d-%b-%Y'),COALESCE(CONCAT(COALESCE(su.companyname,''),' - ',COALESCE(su.accountno,'')),''),COALESCE(p.productcode,'')," & _
-                        "COALESCE(c.colorname,''),COALESCE(pcs.size,''),COALESCE(pcs.seasoncode,''),COALESCE(pcs.sku,''),COALESCE(ci.unitofmeasure,''),COALESCE(ci.qtyordered,0),COALESCE(ci.qtyreceived,0),COALESCE(ci.qtydamaged,0) FROM orderitems ci " & _
-                        "LEFT JOIN productcolorsizes pcs ON ci.productcolorsizeid = pcs.rowid LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN colors c ON pc.colorid = c.rowid LEFT JOIN products p ON pc.productid = p.rowid " & _
+            Dim sql1 As String = "SELECT o.rowid,COALESCE(o.ordernumber,''),DATE_FORMAT(o.orderdate,'%d-%b-%Y'),COALESCE(CONCAT(COALESCE(su.companyname,''),' - ',COALESCE(su.accountno,'')),''),COALESCE(p.productcode,'')," &
+                        "COALESCE(c.colorname,''),COALESCE(pcs.size,''),COALESCE(pcs.seasoncode,''),COALESCE(pcs.sku,''),COALESCE(ci.unitofmeasure,''),COALESCE(ci.qtyordered,0),COALESCE(ci.qtyreceived,0),COALESCE(ci.qtydamaged,0) FROM orderitems ci " &
+                        "LEFT JOIN productcolorsizes pcs ON ci.productcolorsizeid = pcs.rowid LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN colors c ON pc.colorid = c.rowid LEFT JOIN products p ON pc.productid = p.rowid " &
                         "LEFT JOIN orders o ON ci.orderid = o.rowid LEFT JOIN accounts su ON o.accountid = su.rowid WHERE ci.orderid = " & isupplierorderid & " AND ci.organizationid = " & Z_OrganizationID & " AND ci.`status` != 'Inactive' AND (ci.itemtype != 'BI' AND ci.itemtype != 'A') ORDER BY p.productcode,c.colorname,pcs.size "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -1270,8 +1344,11 @@ Public Class PurchaseForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #End Region
+
     Private Sub tabMain_DrawItem(sender As Object, e As DrawItemEventArgs) Handles tabMain.DrawItem
         Try
             TabControlColor(tabMain, e)
@@ -1281,6 +1358,7 @@ Public Class PurchaseForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbClose_Click(sender As Object, e As EventArgs) Handles pbClose.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1295,6 +1373,7 @@ Public Class PurchaseForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub btnAddProduct_Leave(sender As Object, e As EventArgs) Handles btnAddProduct.Leave
         Try
             cboByPhrase.Focus()
@@ -1304,6 +1383,7 @@ Public Class PurchaseForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub tsRefresh_Click(sender As Object, e As EventArgs) Handles tsRefresh.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1316,6 +1396,7 @@ Public Class PurchaseForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msNew_Click(sender As Object, e As EventArgs) Handles msNew.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1349,7 +1430,7 @@ Public Class PurchaseForm
             If dgSupplierOrderList.Rows.Count <> 0 Then
                 dgSupplierOrderList.CurrentRow.Selected = False
             End If
-            getOrderNo("PO", Me)
+            getOrderNo(globaliordertype:=OrderType.PO.ToString(), Me)
             txtSupplierOrderNo.Text = CStr(globalorderno)
             txtStatus.Text = "New"
             txtSupplierOrderNo.Focus()
@@ -1360,6 +1441,7 @@ Public Class PurchaseForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msCancel_Click(sender As Object, e As EventArgs) Handles msCancel.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1403,6 +1485,7 @@ Public Class PurchaseForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgSupplierOrderList_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgSupplierOrderList.CellClick
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1443,6 +1526,7 @@ Public Class PurchaseForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgSupplierOrderList_KeyUp(sender As Object, e As KeyEventArgs) Handles dgSupplierOrderList.KeyUp
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1485,6 +1569,7 @@ Public Class PurchaseForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub chkOtherInfo_CheckedChanged(sender As Object, e As EventArgs) Handles chkOtherInfo.CheckedChanged
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1500,13 +1585,14 @@ Public Class PurchaseForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub txtSupplierOrderNo_Leave(sender As Object, e As EventArgs) Handles txtSupplierOrderNo.Leave
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
             If cue = "New" Then
                 If LTrim(txtSupplierOrderNo.Text) <> "" Then
-                    getOrderIDSupB(txtSupplierOrderNo.Text, "PO", Me)
+                    getOrderIDSupB(txtSupplierOrderNo.Text, globaliordertype:=OrderType.PO.ToString(), Me)
                     poorderid = globalorderid
                     If poorderid <> 0 Then
                         errProvider.SetError(txtSupplierOrderNo, "Purchase order no. has been created already, please type a new one.")
@@ -1515,7 +1601,7 @@ Public Class PurchaseForm
             ElseIf cue = "Edit" Then
                 If dgSupplierOrderList.Rows.Count <> 0 Then
                     If LTrim(txtSupplierOrderNo.Text) <> "" Then
-                        getOrderIDSupA(CInt(dgSupplierOrderList.CurrentRow.Cells("so_rowid").Value), txtSupplierOrderNo.Text, "PO", Me)
+                        getOrderIDSupA(CInt(dgSupplierOrderList.CurrentRow.Cells("so_rowid").Value), txtSupplierOrderNo.Text, globaliordertype:=OrderType.PO.ToString(), Me)
                         poorderid = globalorderid
                         If poorderid <> 0 Then
                             errProvider.SetError(txtSupplierOrderNo, "Purchase order no. has been created already, please type a new one.")
@@ -1530,6 +1616,7 @@ Public Class PurchaseForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     'Private Sub txtSupplierOrderNo_TextChanged(sender As Object, e As EventArgs) Handles txtSupplierOrderNo.TextChanged
     '    Me.Cursor = Cursors.WaitCursor
     '    Try
@@ -1593,6 +1680,7 @@ Public Class PurchaseForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboByPhrase_Leave(sender As Object, e As EventArgs) Handles cboByPhrase.Leave
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1643,6 +1731,7 @@ Public Class PurchaseForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     'Private Sub cboByPhrase_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboByPhrase.SelectedIndexChanged
     '    Try
     '        errProvider.Clear()
@@ -1738,7 +1827,7 @@ Public Class PurchaseForm
     '    Finally
     '        conn.Close()
     '    End Try
-    'End Sub    
+    'End Sub
     Private Sub txtQtyOrdered_TextChanged(sender As Object, e As EventArgs) Handles txtQtyOrdered.TextChanged
         Try
             errProvider.Clear()
@@ -1749,6 +1838,7 @@ Public Class PurchaseForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub dgProductColors_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgProductColors.CellClick
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1762,6 +1852,7 @@ Public Class PurchaseForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgProductColors_KeyUp(sender As Object, e As KeyEventArgs) Handles dgProductColors.KeyUp
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1777,6 +1868,7 @@ Public Class PurchaseForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgProductSizes_CellEndEdit(sender As Object, e As DataGridViewCellEventArgs) Handles dgProductSizes.CellEndEdit
         Try
             addproductcomputations()
@@ -1786,6 +1878,7 @@ Public Class PurchaseForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub dgProductSizes_KeyDown(sender As Object, e As KeyEventArgs) Handles dgProductSizes.KeyDown
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1801,6 +1894,7 @@ Public Class PurchaseForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub btnAddProduct_Click(sender As Object, e As EventArgs) Handles btnAddProduct.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1812,6 +1906,7 @@ Public Class PurchaseForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub txtQtyOrdered_KeyDown(sender As Object, e As KeyEventArgs) Handles txtQtyOrdered.KeyDown
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1825,6 +1920,7 @@ Public Class PurchaseForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub pbAddSupplier_MouseEnter(sender As Object, e As EventArgs) Handles pbAddSupplier.MouseEnter
         Try
             pbAddSupplier.BackColor = Color.MediumSpringGreen
@@ -1834,6 +1930,7 @@ Public Class PurchaseForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbAddSupplier_MouseLeave(sender As Object, e As EventArgs) Handles pbAddSupplier.MouseLeave
         Try
             pbAddSupplier.BackColor = Color.Transparent
@@ -1843,6 +1940,7 @@ Public Class PurchaseForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbAddSupplier_Click(sender As Object, e As EventArgs) Handles pbAddSupplier.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1876,6 +1974,7 @@ Public Class PurchaseForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgSupplierOrderItems_CellEndEdit(sender As Object, e As DataGridViewCellEventArgs) Handles dgSupplierOrderItems.CellEndEdit
         Try
             supplierorderitemscomputations()
@@ -1885,6 +1984,7 @@ Public Class PurchaseForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub msOrder_Click(sender As Object, e As EventArgs) Handles msOrder.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1956,6 +2056,7 @@ Public Class PurchaseForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msSave_Click(sender As Object, e As EventArgs) Handles msSave.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1991,7 +2092,7 @@ Public Class PurchaseForm
             End If
             If cue = "New" Then
                 If LTrim(txtSupplierOrderNo.Text) <> "" Then
-                    getOrderIDSupB(txtSupplierOrderNo.Text, "PO", Me)
+                    getOrderIDSupB(txtSupplierOrderNo.Text, globaliordertype:=OrderType.PO.ToString(), Me)
                     poorderid = globalorderid
                     If poorderid <> 0 Then
                         errProvider.SetError(txtSupplierOrderNo, "Purchase order no. has been created already, please type a new one.")
@@ -2013,7 +2114,7 @@ Public Class PurchaseForm
                         Exit Try
                     End If
                     If LTrim(txtSupplierOrderNo.Text) <> "" Then
-                        getOrderIDSupA(CInt(dgSupplierOrderList.CurrentRow.Cells("so_rowid").Value), txtSupplierOrderNo.Text, "PO", Me)
+                        getOrderIDSupA(CInt(dgSupplierOrderList.CurrentRow.Cells("so_rowid").Value), txtSupplierOrderNo.Text, globaliordertype:=OrderType.PO.ToString(), Me)
                         poorderid = globalorderid
                         If poorderid <> 0 Then
                             errProvider.SetError(txtSupplierOrderNo, "Purchase order no. has been created already, please type a new one.")
@@ -2038,13 +2139,13 @@ Public Class PurchaseForm
                         errProvider.SetError(pbAddSupplier, "System cannot find the supplier name.")
                         Exit Try
                     End If
-                    getOrderIDSupB(txtSupplierOrderNo.Text, "PO", Me)
+                    getOrderIDSupB(txtSupplierOrderNo.Text, globaliordertype:=OrderType.PO.ToString(), Me)
                     poorderid = globalorderid
                     If poorderid <> 0 Then
                         errProvider.SetError(txtSupplierOrderNo, "Purchase order no. has been created already, please type a new one.")
                         Exit Try
                     End If
-                    M_I_OrdersA(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, posupplierid, txtSupplierOrderNo.Text, "PO", dtpSupplierOrderDate.Value, dtpTargetDeliveryDate.Value, _
+                    M_I_OrdersA(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, posupplierid, txtSupplierOrderNo.Text, OrderType:=OrderType.PO.ToString(), dtpSupplierOrderDate.Value, dtpTargetDeliveryDate.Value,
                            cboSupplierName.Text, txtComments.Text, txtStatus.Text, Math.Round(poitotalprice, 2), Me)
                     poorderid = globalorderidsp
                     If dgSupplierOrderItems.Rows.Count <> 0 Then
@@ -2053,16 +2154,16 @@ Public Class PurchaseForm
                                 If IsNumeric(dgSupplierOrderItems.Rows(a).Cells("ci_pcsrowid").Value) Then
                                     If CInt(dgSupplierOrderItems.Rows(a).Cells("ci_pcsrowid").Value) <> 0 Then
                                         getTotalQtyAvailableA(CInt(dgSupplierOrderItems.Rows(a).Cells("ci_pcsrowid").Value), Me)
-                                        M_I_OrderItemsA(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, posupplierid, poorderid, CInt(dgSupplierOrderItems.Rows(a).Cells("ci_pcsrowid").Value), DBNull.Value, _
-                                            If(IsNumeric(dgSupplierOrderItems.Rows(a).Cells("ci_qtyordered").Value), CInt(dgSupplierOrderItems.Rows(a).Cells("ci_qtyordered").Value), 0), globaltotalqtyavailable, "S", _
-                                            "" & CStr(dgSupplierOrderItems.Rows(a).Cells("ci_productcode").Value) & " / " & CStr(dgSupplierOrderItems.Rows(a).Cells("ci_colorname").Value) & " / " & CStr(dgSupplierOrderItems.Rows(a).Cells("ci_size").Value) & " / " & CStr(dgSupplierOrderItems.Rows(a).Cells("ci_seasoncode").Value) & "", _
+                                        M_I_OrderItemsA(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, posupplierid, poorderid, CInt(dgSupplierOrderItems.Rows(a).Cells("ci_pcsrowid").Value), DBNull.Value,
+                                            If(IsNumeric(dgSupplierOrderItems.Rows(a).Cells("ci_qtyordered").Value), CInt(dgSupplierOrderItems.Rows(a).Cells("ci_qtyordered").Value), 0), globaltotalqtyavailable, "S",
+                                            "" & CStr(dgSupplierOrderItems.Rows(a).Cells("ci_productcode").Value) & " / " & CStr(dgSupplierOrderItems.Rows(a).Cells("ci_colorname").Value) & " / " & CStr(dgSupplierOrderItems.Rows(a).Cells("ci_size").Value) & " / " & CStr(dgSupplierOrderItems.Rows(a).Cells("ci_seasoncode").Value) & "",
                                             CStr(dgSupplierOrderItems.Rows(a).Cells("ci_sku").Value), CStr(dgSupplierOrderItems.Rows(a).Cells("ci_unitofmeasure").Value), CStr(dgSupplierOrderItems.Rows(a).Cells("ci_remarks").Value), If(IsNumeric(dgSupplierOrderItems.Rows(a).Cells("ci_srp").Value), CDec(dgSupplierOrderItems.Rows(a).Cells("ci_srp").Value), 0.0), "Active", Me)
                                     End If
                                 End If
                                 If IsNumeric(dgSupplierOrderItems.Rows(a).Cells("ci_bid").Value) Then
                                     If CInt(dgSupplierOrderItems.Rows(a).Cells("ci_bid").Value) <> 0 Then
-                                        M_I_OrderItemsA(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, posupplierid, poorderid, DBNull.Value, CInt(dgSupplierOrderItems.Rows(a).Cells("ci_bid").Value), If(IsNumeric(dgSupplierOrderItems.Rows(a).Cells("ci_qtyordered").Value), CInt(dgSupplierOrderItems.Rows(a).Cells("ci_qtyordered").Value), 0), _
-                                            0, "S", CStr(dgSupplierOrderItems.Rows(a).Cells("ci_productcode").Value), CStr(dgSupplierOrderItems.Rows(a).Cells("ci_sku").Value), CStr(dgSupplierOrderItems.Rows(a).Cells("ci_unitofmeasure").Value), CStr(dgSupplierOrderItems.Rows(a).Cells("ci_remarks").Value), _
+                                        M_I_OrderItemsA(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, posupplierid, poorderid, DBNull.Value, CInt(dgSupplierOrderItems.Rows(a).Cells("ci_bid").Value), If(IsNumeric(dgSupplierOrderItems.Rows(a).Cells("ci_qtyordered").Value), CInt(dgSupplierOrderItems.Rows(a).Cells("ci_qtyordered").Value), 0),
+                                            0, "S", CStr(dgSupplierOrderItems.Rows(a).Cells("ci_productcode").Value), CStr(dgSupplierOrderItems.Rows(a).Cells("ci_sku").Value), CStr(dgSupplierOrderItems.Rows(a).Cells("ci_unitofmeasure").Value), CStr(dgSupplierOrderItems.Rows(a).Cells("ci_remarks").Value),
                                             If(IsNumeric(dgSupplierOrderItems.Rows(a).Cells("ci_srp").Value), CDec(dgSupplierOrderItems.Rows(a).Cells("ci_srp").Value), 0.0), "Active", Me)
                                     End If
                                 End If
@@ -2087,42 +2188,42 @@ Public Class PurchaseForm
                             errProvider.SetError(pbAddSupplier, "System cannot find the supplier name.")
                             Exit Try
                         End If
-                        getOrderIDSupA(CInt(dgSupplierOrderList.CurrentRow.Cells("so_rowid").Value), txtSupplierOrderNo.Text, "PO", Me)
+                        getOrderIDSupA(CInt(dgSupplierOrderList.CurrentRow.Cells("so_rowid").Value), txtSupplierOrderNo.Text, globaliordertype:=OrderType.PO.ToString(), Me)
                         poorderid = globalorderid
                         If poorderid <> 0 Then
                             errProvider.SetError(txtSupplierOrderNo, "Purchase order no. has been created already, please type a new one.")
                             Exit Try
                         End If
-                        M_U_OrderA(CInt(dgSupplierOrderList.CurrentRow.Cells("so_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, posupplierid, txtSupplierOrderNo.Text, dtpSupplierOrderDate.Value, _
+                        M_U_OrderA(CInt(dgSupplierOrderList.CurrentRow.Cells("so_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, posupplierid, txtSupplierOrderNo.Text, dtpSupplierOrderDate.Value,
                             dtpTargetDeliveryDate.Value, txtComments.Text, Math.Round(poitotalprice, 2), Me)
                         If dgSupplierOrderItems.Rows.Count <> 0 Then
                             For a = 0 To dgSupplierOrderItems.Rows.Count - 1
                                 If myModule.systemerrorfound = False Then
                                     If IsNumeric(dgSupplierOrderItems.Rows(a).Cells("ci_rowid").Value) Then
                                         If CInt(dgSupplierOrderItems.Rows(a).Cells("ci_rowid").Value) <> 0 Then
-                                            MB_U_OrderItemsA(CInt(dgSupplierOrderItems.Rows(a).Cells("ci_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, If(IsNumeric(dgSupplierOrderItems.Rows(a).Cells("ci_qtyordered").Value), CInt(dgSupplierOrderItems.Rows(a).Cells("ci_qtyordered").Value), 0), _
+                                            MB_U_OrderItemsA(CInt(dgSupplierOrderItems.Rows(a).Cells("ci_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, If(IsNumeric(dgSupplierOrderItems.Rows(a).Cells("ci_qtyordered").Value), CInt(dgSupplierOrderItems.Rows(a).Cells("ci_qtyordered").Value), 0),
                                                     If(IsNumeric(dgSupplierOrderItems.Rows(a).Cells("ci_srp").Value), CDec(dgSupplierOrderItems.Rows(a).Cells("ci_srp").Value), 0.0), CStr(dgSupplierOrderItems.Rows(a).Cells("ci_unitofmeasure").Value), CStr(dgSupplierOrderItems.Rows(a).Cells("ci_remarks").Value), Me)
                                         Else
                                             getTotalQtyAvailableA(CInt(dgSupplierOrderItems.Rows(a).Cells("ci_pcsrowid").Value), Me)
-                                            M_I_OrderItemsA(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, posupplierid, CInt(dgSupplierOrderList.CurrentRow.Cells("so_rowid").Value), CInt(dgSupplierOrderItems.Rows(a).Cells("ci_pcsrowid").Value), DBNull.Value, _
-                                                If(IsNumeric(dgSupplierOrderItems.Rows(a).Cells("ci_qtyordered").Value), CInt(dgSupplierOrderItems.Rows(a).Cells("ci_qtyordered").Value), 0), globaltotalqtyavailable, "S", _
-                                                "" & CStr(dgSupplierOrderItems.Rows(a).Cells("ci_productcode").Value) & " / " & CStr(dgSupplierOrderItems.Rows(a).Cells("ci_colorname").Value) & " / " & CStr(dgSupplierOrderItems.Rows(a).Cells("ci_size").Value) & " / " & CStr(dgSupplierOrderItems.Rows(a).Cells("ci_seasoncode").Value) & "", _
+                                            M_I_OrderItemsA(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, posupplierid, CInt(dgSupplierOrderList.CurrentRow.Cells("so_rowid").Value), CInt(dgSupplierOrderItems.Rows(a).Cells("ci_pcsrowid").Value), DBNull.Value,
+                                                If(IsNumeric(dgSupplierOrderItems.Rows(a).Cells("ci_qtyordered").Value), CInt(dgSupplierOrderItems.Rows(a).Cells("ci_qtyordered").Value), 0), globaltotalqtyavailable, "S",
+                                                "" & CStr(dgSupplierOrderItems.Rows(a).Cells("ci_productcode").Value) & " / " & CStr(dgSupplierOrderItems.Rows(a).Cells("ci_colorname").Value) & " / " & CStr(dgSupplierOrderItems.Rows(a).Cells("ci_size").Value) & " / " & CStr(dgSupplierOrderItems.Rows(a).Cells("ci_seasoncode").Value) & "",
                                                 CStr(dgSupplierOrderItems.Rows(a).Cells("ci_sku").Value), CStr(dgSupplierOrderItems.Rows(a).Cells("ci_unitofmeasure").Value), CStr(dgSupplierOrderItems.Rows(a).Cells("ci_remarks").Value), If(IsNumeric(dgSupplierOrderItems.Rows(a).Cells("ci_srp").Value), CDec(dgSupplierOrderItems.Rows(a).Cells("ci_srp").Value), 0.0), "Active", Me)
                                         End If
                                     Else
                                         If IsNumeric(dgSupplierOrderItems.Rows(a).Cells("ci_pcsrowid").Value) Then
                                             If CInt(dgSupplierOrderItems.Rows(a).Cells("ci_pcsrowid").Value) <> 0 Then
                                                 getTotalQtyAvailableA(CInt(dgSupplierOrderItems.Rows(a).Cells("ci_pcsrowid").Value), Me)
-                                                M_I_OrderItemsA(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, posupplierid, CInt(dgSupplierOrderList.CurrentRow.Cells("so_rowid").Value), CInt(dgSupplierOrderItems.Rows(a).Cells("ci_pcsrowid").Value), DBNull.Value, _
-                                                    If(IsNumeric(dgSupplierOrderItems.Rows(a).Cells("ci_qtyordered").Value), CInt(dgSupplierOrderItems.Rows(a).Cells("ci_qtyordered").Value), 0), globaltotalqtyavailable, "S", _
-                                                    "" & CStr(dgSupplierOrderItems.Rows(a).Cells("ci_productcode").Value) & " / " & CStr(dgSupplierOrderItems.Rows(a).Cells("ci_colorname").Value) & " / " & CStr(dgSupplierOrderItems.Rows(a).Cells("ci_size").Value) & " / " & CStr(dgSupplierOrderItems.Rows(a).Cells("ci_seasoncode").Value) & "", _
+                                                M_I_OrderItemsA(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, posupplierid, CInt(dgSupplierOrderList.CurrentRow.Cells("so_rowid").Value), CInt(dgSupplierOrderItems.Rows(a).Cells("ci_pcsrowid").Value), DBNull.Value,
+                                                    If(IsNumeric(dgSupplierOrderItems.Rows(a).Cells("ci_qtyordered").Value), CInt(dgSupplierOrderItems.Rows(a).Cells("ci_qtyordered").Value), 0), globaltotalqtyavailable, "S",
+                                                    "" & CStr(dgSupplierOrderItems.Rows(a).Cells("ci_productcode").Value) & " / " & CStr(dgSupplierOrderItems.Rows(a).Cells("ci_colorname").Value) & " / " & CStr(dgSupplierOrderItems.Rows(a).Cells("ci_size").Value) & " / " & CStr(dgSupplierOrderItems.Rows(a).Cells("ci_seasoncode").Value) & "",
                                                     CStr(dgSupplierOrderItems.Rows(a).Cells("ci_sku").Value), CStr(dgSupplierOrderItems.Rows(a).Cells("ci_unitofmeasure").Value), CStr(dgSupplierOrderItems.Rows(a).Cells("ci_remarks").Value), If(IsNumeric(dgSupplierOrderItems.Rows(a).Cells("ci_srp").Value), CDec(dgSupplierOrderItems.Rows(a).Cells("ci_srp").Value), 0.0), "Active", Me)
                                             End If
                                         End If
                                         If IsNumeric(dgSupplierOrderItems.Rows(a).Cells("ci_bid").Value) Then
                                             If CInt(dgSupplierOrderItems.Rows(a).Cells("ci_bid").Value) <> 0 Then
-                                                M_I_OrderItemsA(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, posupplierid, CInt(dgSupplierOrderList.CurrentRow.Cells("so_rowid").Value), DBNull.Value, CInt(dgSupplierOrderItems.Rows(a).Cells("ci_bid").Value), If(IsNumeric(dgSupplierOrderItems.Rows(a).Cells("ci_qtyordered").Value), CInt(dgSupplierOrderItems.Rows(a).Cells("ci_qtyordered").Value), 0), _
-                                                    0, "S", CStr(dgSupplierOrderItems.Rows(a).Cells("ci_productcode").Value), CStr(dgSupplierOrderItems.Rows(a).Cells("ci_sku").Value), CStr(dgSupplierOrderItems.Rows(a).Cells("ci_unitofmeasure").Value), CStr(dgSupplierOrderItems.Rows(a).Cells("ci_remarks").Value), _
+                                                M_I_OrderItemsA(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, posupplierid, CInt(dgSupplierOrderList.CurrentRow.Cells("so_rowid").Value), DBNull.Value, CInt(dgSupplierOrderItems.Rows(a).Cells("ci_bid").Value), If(IsNumeric(dgSupplierOrderItems.Rows(a).Cells("ci_qtyordered").Value), CInt(dgSupplierOrderItems.Rows(a).Cells("ci_qtyordered").Value), 0),
+                                                    0, "S", CStr(dgSupplierOrderItems.Rows(a).Cells("ci_productcode").Value), CStr(dgSupplierOrderItems.Rows(a).Cells("ci_sku").Value), CStr(dgSupplierOrderItems.Rows(a).Cells("ci_unitofmeasure").Value), CStr(dgSupplierOrderItems.Rows(a).Cells("ci_remarks").Value),
                                                     If(IsNumeric(dgSupplierOrderItems.Rows(a).Cells("ci_srp").Value), CDec(dgSupplierOrderItems.Rows(a).Cells("ci_srp").Value), 0.0), "Active", Me)
                                             End If
                                         End If
@@ -2149,6 +2250,7 @@ Public Class PurchaseForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgSupplierOrderItems_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgSupplierOrderItems.CellContentClick
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2232,6 +2334,7 @@ Public Class PurchaseForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msPrint_Click(sender As Object, e As EventArgs) Handles msPrint.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2290,7 +2393,9 @@ Public Class PurchaseForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #Region "Search/Page Setup"
+
     Private Sub txtSimpleSearch_KeyDown(sender As Object, e As KeyEventArgs) Handles txtSimpleSearch.KeyDown
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2315,6 +2420,7 @@ Public Class PurchaseForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboSearch1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboSearch1.SelectedIndexChanged
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2335,6 +2441,7 @@ Public Class PurchaseForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboSearch3_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboSearch3.SelectedIndexChanged
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2355,6 +2462,7 @@ Public Class PurchaseForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboSearch2_KeyDown(sender As Object, e As KeyEventArgs) Handles cboSearch2.KeyDown
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2414,10 +2522,10 @@ Public Class PurchaseForm
                             pagefilter3 = "" & pagefilter1 & " AND " & pagefilter2 & ""
                         End If
                         If cboDate.Text = "OrderDate" Then
-                            pagefilter4 = " AND (po.orderdate >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " & _
+                            pagefilter4 = " AND (po.orderdate >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " &
                                     "po.orderdate <= '" & dtpToSearch.Value.Year & "-" & dtpToSearch.Value.Month & "-" & dtpToSearch.Value.Day & "') "
                         ElseIf cboDate.Text = "TargetDate" Then
-                            pagefilter4 = " AND (po.targetdate >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " & _
+                            pagefilter4 = " AND (po.targetdate >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " &
                                     "po.targetdate <= '" & dtpToSearch.Value.Year & "-" & dtpToSearch.Value.Month & "-" & dtpToSearch.Value.Day & "') "
                         Else
                             pagefilter4 = ""
@@ -2436,6 +2544,7 @@ Public Class PurchaseForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboSearch4_KeyDown(sender As Object, e As KeyEventArgs) Handles cboSearch4.KeyDown
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2495,10 +2604,10 @@ Public Class PurchaseForm
                             pagefilter3 = "" & pagefilter1 & " AND " & pagefilter2 & ""
                         End If
                         If cboDate.Text = "OrderDate" Then
-                            pagefilter4 = " AND (po.orderdate >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " & _
+                            pagefilter4 = " AND (po.orderdate >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " &
                                     "po.orderdate <= '" & dtpToSearch.Value.Year & "-" & dtpToSearch.Value.Month & "-" & dtpToSearch.Value.Day & "') "
                         ElseIf cboDate.Text = "TargetDate" Then
-                            pagefilter4 = " AND (po.targetdate >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " & _
+                            pagefilter4 = " AND (po.targetdate >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " &
                                     "po.targetdate <= '" & dtpToSearch.Value.Year & "-" & dtpToSearch.Value.Month & "-" & dtpToSearch.Value.Day & "') "
                         Else
                             pagefilter4 = ""
@@ -2517,6 +2626,7 @@ Public Class PurchaseForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdFirst_Click(sender As Object, e As EventArgs) Handles cmdFirst.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2540,6 +2650,7 @@ Public Class PurchaseForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdPrev_Click(sender As Object, e As EventArgs) Handles cmdPrev.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2571,6 +2682,7 @@ Public Class PurchaseForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdNext_Click(sender As Object, e As EventArgs) Handles cmdNext.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2598,6 +2710,7 @@ Public Class PurchaseForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdLast_Click(sender As Object, e As EventArgs) Handles cmdLast.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2625,6 +2738,7 @@ Public Class PurchaseForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub txtPage_KeyDown(sender As Object, e As KeyEventArgs) Handles txtPage.KeyDown
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2669,8 +2783,11 @@ Public Class PurchaseForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #End Region
+
 #Region "Datagrid MouseUp"
+
     Private Sub dgProductColorSizes_MouseUp(sender As Object, e As MouseEventArgs) Handles dgProductColorSizes.MouseUp
         Try
             Dim hitTestinfo As DataGridView.HitTestInfo
@@ -2688,6 +2805,7 @@ Public Class PurchaseForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub dgProductSizes_MouseUp(sender As Object, e As MouseEventArgs) Handles dgProductSizes.MouseUp
         Try
             Dim hitTestinfo As DataGridView.HitTestInfo
@@ -2705,6 +2823,7 @@ Public Class PurchaseForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub dgSupplierOrderItems_MouseUp(sender As Object, e As MouseEventArgs) Handles dgSupplierOrderItems.MouseUp
         Try
             Dim hitTestinfo As DataGridView.HitTestInfo
@@ -2722,8 +2841,11 @@ Public Class PurchaseForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Datagrid Errors"
+
     Private Sub dgSupplierOrderList_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgSupplierOrderList.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2764,6 +2886,7 @@ Public Class PurchaseForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgProductColorSizes_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgProductColorSizes.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2804,6 +2927,7 @@ Public Class PurchaseForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgProductColors_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgProductColors.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2844,6 +2968,7 @@ Public Class PurchaseForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgProductSizes_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgProductSizes.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2884,6 +3009,7 @@ Public Class PurchaseForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgSupplierOrderItems_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgSupplierOrderItems.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2924,5 +3050,7 @@ Public Class PurchaseForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #End Region
+
 End Class

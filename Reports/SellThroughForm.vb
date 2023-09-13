@@ -243,7 +243,7 @@ Public Class SellThroughForm
             Dim dtRqty As New DataTable
             dtRqty = getDataTableForSQL("SELECT COALESCE(SUM(oi.qtyreceived),0) FROM orderitems oi LEFT JOIN orders o ON oi.orderid = o.rowid LEFT JOIN productcolorsizes pcs ON oi.productcolorsizeid = pcs.rowid " &
                             "LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN products p ON pc.productid = p.rowid WHERE oi.organizationid = " & Z_OrganizationID & " AND p.rowid = " & iproductid & " " &
-                            "AND o.ordertype = 'PO' AND oi.`approval` = 'Y' AND (oi.`status` != 'Inactive' AND oi.`status` != 'Cancelled') ")
+                            $"AND o.ordertype = '{OrderType.PO.ToString()}' AND oi.`approval` = 'Y' AND (oi.`status` != 'Inactive' AND oi.`status` != 'Cancelled') ")
             If dtRqty.Rows.Count <> 0 Then
                 streceivedqty = dtRqty.Rows(0)(0)
             Else
