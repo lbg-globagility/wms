@@ -25,11 +25,12 @@ Public Class PickListForm
     Dim simplesearchphrase, datephrase, commonphrase, pagefilter1, pagefilter2, plnewpicklistcreated, plgeneratepickliststatus As String
     Dim pluserid, plcountcos, plloadingbar, plinventorylocationdid, plpicklistid, plpicklistorderid, plcontactid, plpicklistorderitemid, plcustomerid, pllistofvalueid As Integer
     Dim ploverallqtyordered, pltotalqtyordered, pltotalqtypicked, ploverallqtytopick, plqtytopick, plqtytopickbalance, plqtyorderedsum, pltotalqtytopicksum, plqtytopicksum As Integer
+    Private _systemOwner As WarehouseManagementSystem.Core.Entities.SystemOwner
 
     Private Async Sub PickListForm_Load(sender As Object, e As EventArgs) Handles Me.Load
 
         Dim _systemOwnerService = MainServiceProvider.GetRequiredService(Of ISystemOwnerService)
-        Dim _systemOwner = Await _systemOwnerService.GetCurrentSystemOwnerEntityAsync()
+        _systemOwner = Await _systemOwnerService.GetCurrentSystemOwnerEntityAsync()
 
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -44,6 +45,7 @@ Public Class PickListForm
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
             conn.Close()
+            ShowOrHideUserInterface()
         End Try
         Me.Cursor = Cursors.Default
     End Sub
@@ -957,8 +959,8 @@ Public Class PickListForm
         Try
             If conn1.State = ConnectionState.Closed Then conn1.Open()
             Dim sql1 As String = "SELECT co.rowid,COALESCE(co.ordernumber,''),COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),''),DATE_FORMAT(co.orderdate,'%d-%b-%Y')," &
-                        "DATE_FORMAT(co.targetdate,'%d-%b-%Y'),COALESCE(co.status,''),COALESCE(pg.groupname,''),COALESCE(co.referencenumber,''),DATE_FORMAT(co.enddate,'%d-%b-%Y') FROM orders co " &
-                        "LEFT JOIN accounts cu ON co.accountid = cu.rowid LEFT JOIN picklistgroup pg ON cu.picklistgroupid = pg.rowid WHERE co.rowid = " & icustomerorderid & " "
+                        "DATE_FORMAT(co.targetdate,'%d-%b-%Y'),COALESCE(co.status,''),COALESCE(pg.groupname,''),COALESCE(co.referencenumber,''),DATE_FORMAT(co.enddate,'%d-%b-%Y'), IFNULL(il.Name, '') `InventoryLocation` FROM orders co " &
+                        "LEFT JOIN accounts cu ON co.accountid = cu.rowid LEFT JOIN picklistgroup pg ON cu.picklistgroupid = pg.rowid LEFT JOIN inventorylocations il ON il.RowID=co.InventoryLocationID WHERE co.rowid = " & icustomerorderid & " "
             Dim cmd1 As New MySqlCommand(sql1, conn1)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             While reader1.Read()
@@ -972,6 +974,7 @@ Public Class PickListForm
                     dgCustomerOrders.Rows(dgCustomerOrders.Rows.Count - 1).Cells("co_status").Value = reader1(5)
                     dgCustomerOrders.Rows(dgCustomerOrders.Rows.Count - 1).Cells("co_pono").Value = reader1(7)
                     dgCustomerOrders.Rows(dgCustomerOrders.Rows.Count - 1).Cells("co_canceldate").Value = reader1(8)
+                    dgCustomerOrders.Rows(dgCustomerOrders.Rows.Count - 1).Cells(co_inventorylocation.Name).Value = reader1(9)
                 End If
             End While
             reader1.Close()
@@ -3068,5 +3071,22 @@ Public Class PickListForm
     End Sub
 
 #End Region
+
+    Private ReadOnly Property IsThurston As Boolean
+        Get
+            Return _systemOwner.IsThurston
+        End Get
+    End Property
+
+    Private Sub ShowOrHideUserInterface()
+        If IsThurston Then
+            Dim visibility = Not IsThurston
+            cboLocationName.Visible = visibility
+            Label10.Visible = visibility
+            Label22.Visible = visibility
+
+            co_inventorylocation.Visible = IsThurston
+        End If
+    End Sub
 
 End Class

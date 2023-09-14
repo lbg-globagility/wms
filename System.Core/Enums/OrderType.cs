@@ -3,22 +3,22 @@
     public enum OrderType
     {
         /// <summary>
-        /// CustomerOrder
+        /// Customer Order
         /// </summary>
         CO,
 
         /// <summary>
-        /// PurchaseOrder
+        /// Purchase Order
         /// </summary>
         PO,
 
         /// <summary>
-        /// ReceivingReport
+        /// Receiving Report
         /// </summary>
         RR,
 
         /// <summary>
-        /// StockAdjust
+        /// Stock Adjust
         /// </summary>
         SA
     }

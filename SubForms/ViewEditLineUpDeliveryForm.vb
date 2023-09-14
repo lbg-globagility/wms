@@ -1,17 +1,8 @@
 ﻿Imports MySql.Data.MySqlClient
-Imports System.IO
-Imports System.Windows.Forms
-Imports CrystalDecisions.CrystalReports.Engine
-Imports System.Linq
-Imports System.Collections
-Imports System.Collections.Generic
-Imports System.Data
-Imports System.Diagnostics
-Imports System.Runtime.InteropServices
-Imports System.Text.RegularExpressions
+
 Public Class ViewEditLineUpDeliveryForm
     Dim manager As New sqlModule.Manager
-    Dim conn As New MySqlConnection(Manager.GetConnString)
+    Dim conn As New MySqlConnection(manager.GetConnString)
     Dim conn1 As New MySqlConnection(manager.GetConnString)
     Dim conn2 As New MySqlConnection(manager.GetConnString)
     Dim sqlcmd As MySqlCommand
@@ -31,6 +22,7 @@ Public Class ViewEditLineUpDeliveryForm
     Public veludpublicdeliverytruckshiftid As Integer
     Public vieweditlineupdeliverycue As Boolean = False
     Public veludpublicselectedcellcue As Boolean = False
+
     Private Sub ViewEditLineUpDeliveryForm_Load(sender As Object, e As EventArgs) Handles Me.Load
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -58,6 +50,7 @@ Public Class ViewEditLineUpDeliveryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub ViewEditLineUpDeliveryForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -69,17 +62,22 @@ Public Class ViewEditLineUpDeliveryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #Region "Functions"
+
     Sub callAutoComplete()
         globalautocompleteTruckShiftInfo(cboTruckShiftInfo, Me)
         globalautocompleteContactName(cboDriverName, "Driver", Me)
     End Sub
+
     Sub callAutoPopulate()
         autopopulatecboSearch()
         globalautopopulateTruckShiftInfo(cboTruckShiftInfo, Me)
         globalautopopulateContactName(cboDriverName, "Driver", Me)
     End Sub
+
 #Region "Click"
+
     Sub tsrefreshperformclick()
         Try
             errProvider.Clear()
@@ -95,6 +93,7 @@ Public Class ViewEditLineUpDeliveryForm
             conn.Close()
         End Try
     End Sub
+
     Sub btnAddperformclick()
         Try
             errProvider.Clear()
@@ -204,8 +203,11 @@ Public Class ViewEditLineUpDeliveryForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Computations"
+
     Sub getTotalQtyInCarton(ByVal epackinglistid As Integer, ByVal eorderitemid As Integer)
         Try
             veludtotalqtyincarton = 0
@@ -220,6 +222,7 @@ Public Class ViewEditLineUpDeliveryForm
             MsgBox(getErrExcptn(ex, Me.Name))
         End Try
     End Sub
+
     Sub getDeliveryTruckCBM(ByVal edeliverytruckid As Integer)
         Try
             veluddeliverytruckcbm = 0
@@ -234,6 +237,7 @@ Public Class ViewEditLineUpDeliveryForm
             MsgBox(getErrExcptn(ex, Me.Name))
         End Try
     End Sub
+
     Sub getLineUpID(ByVal edeliverytruckshiftid As Integer, ByVal edeliverydate As String)
         Try
             veludlineupboxescbmsum = 0.0
@@ -254,6 +258,7 @@ Public Class ViewEditLineUpDeliveryForm
             conn.Close()
         End Try
     End Sub
+
     Sub getLineUpBoxesCBM(ByVal ilineupid As Integer)
         Try
             veludlineupboxescbm = 0
@@ -268,6 +273,7 @@ Public Class ViewEditLineUpDeliveryForm
             MsgBox(getErrExcptn(ex, Me.Name))
         End Try
     End Sub
+
     Sub cbmcomputation(ByVal ideliverytruckid As Integer, ByVal ideliverytruckshiftid As Integer, ByVal ideliverydate As String)
         Try
             getLineUpCBMID(ideliverytruckshiftid, ideliverydate, Me)
@@ -283,8 +289,11 @@ Public Class ViewEditLineUpDeliveryForm
             MsgBox(getErrExcptn(ex, Me.Name))
         End Try
     End Sub
+
 #End Region
+
 #Region "Clear/Enable/Visible"
+
     Sub clearfields()
         Try
             cue = ""
@@ -301,6 +310,7 @@ Public Class ViewEditLineUpDeliveryForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearRightPage()
         Try
             cue = ""
@@ -314,6 +324,7 @@ Public Class ViewEditLineUpDeliveryForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearSearchItems()
         Try
             txtSimpleSearch.Text = ""
@@ -334,6 +345,7 @@ Public Class ViewEditLineUpDeliveryForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearcboSearch()
         Try
             txtPage.Text = ""
@@ -352,6 +364,7 @@ Public Class ViewEditLineUpDeliveryForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearLineUpInformation()
         Try
             txtLineUpNo.Text = ""
@@ -385,6 +398,7 @@ Public Class ViewEditLineUpDeliveryForm
             conn.Close()
         End Try
     End Sub
+
     Sub enableGB(ByVal enable1 As Boolean, ByVal enable2 As Boolean)
         Try
             gbSearch.Enabled = enable1
@@ -397,6 +411,7 @@ Public Class ViewEditLineUpDeliveryForm
             conn.Close()
         End Try
     End Sub
+
     Sub enableANDvisibleMS(ByVal enable1 As Boolean, ByVal enable2 As Boolean, ByVal enable3 As Boolean, ByVal enable4 As Boolean, ByVal enable5 As Boolean)
         Try
             msSave.Enabled = enable1
@@ -410,8 +425,11 @@ Public Class ViewEditLineUpDeliveryForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Page Setup"
+
     Sub pageSetup()
         Try
             getCountPageNum()
@@ -432,6 +450,7 @@ Public Class ViewEditLineUpDeliveryForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCountPageNum()
         Try
             countpagenum = 0
@@ -449,6 +468,7 @@ Public Class ViewEditLineUpDeliveryForm
             conn.Close()
         End Try
     End Sub
+
     Sub pageSetup1(ByVal isearchstring As String)
         Try
             getCountPageNum1(isearchstring)
@@ -469,12 +489,13 @@ Public Class ViewEditLineUpDeliveryForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCountPageNum1(ByVal esearchstring As String)
         Try
             countpagenum = 0
             If conn.State = ConnectionState.Open Then conn.Close()
             Dim dtCid As New DataTable
-            dtCid = getDataTableForSQL("SELECT COALESCE(COUNT(lu.rowid),0) FROM lineups lu LEFT JOIN orders o ON lu.orderid = o.rowid LEFT JOIN accounts a ON o.accountid = a.rowid WHERE lu.organizationid = " & Z_OrganizationID & " " & _
+            dtCid = getDataTableForSQL("SELECT COALESCE(COUNT(lu.rowid),0) FROM lineups lu LEFT JOIN orders o ON lu.orderid = o.rowid LEFT JOIN accounts a ON o.accountid = a.rowid WHERE lu.organizationid = " & Z_OrganizationID & " " &
                             "AND (lu.deliveryno LIKE ""%" & esearchstring & "%"" OR o.ordernumber LIKE ""%" & esearchstring & "%"" OR lu.lineupno LIKE ""%" & esearchstring & "%"" OR a.companyname LIKE ""%" & esearchstring & "%"" OR lu.status LIKE ""%" & esearchstring & "%"") ")
             If dtCid.Rows.Count <> 0 Then
                 countpagenum = dtCid.Rows(0)(0)
@@ -487,6 +508,7 @@ Public Class ViewEditLineUpDeliveryForm
             conn.Close()
         End Try
     End Sub
+
     Sub pageSetup2(ByVal idatesearch As String)
         Try
             getCountPageNum2(idatesearch)
@@ -507,13 +529,14 @@ Public Class ViewEditLineUpDeliveryForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCountPageNum2(ByVal edatesearch As String)
         Try
             countpagenum = 0
             If conn.State = ConnectionState.Open Then conn.Close()
             Dim dtCid As New DataTable
-            dtCid = getDataTableForSQL("SELECT COALESCE(COUNT(lu.rowid),0) FROM lineups lu WHERE lu.organizationid = " & Z_OrganizationID & " AND " & _
-                            "(" & edatesearch & " >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " & _
+            dtCid = getDataTableForSQL("SELECT COALESCE(COUNT(lu.rowid),0) FROM lineups lu WHERE lu.organizationid = " & Z_OrganizationID & " AND " &
+                            "(" & edatesearch & " >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " &
                             "" & edatesearch & " <= '" & dtpToSearch.Value.Year & "-" & dtpToSearch.Value.Month & "-" & dtpToSearch.Value.Day & "' ) ")
             If dtCid.Rows.Count <> 0 Then
                 countpagenum = dtCid.Rows(0)(0)
@@ -526,6 +549,7 @@ Public Class ViewEditLineUpDeliveryForm
             conn.Close()
         End Try
     End Sub
+
     Sub pageSetup3(ByVal icommonstring As String, ByVal idatesearch As String)
         Try
             getCountPageNum3(icommonstring, idatesearch)
@@ -546,6 +570,7 @@ Public Class ViewEditLineUpDeliveryForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCountPageNum3(ByVal ecommonstring As String, ByVal edatesearch As String)
         Try
             countpagenum = 0
@@ -563,6 +588,7 @@ Public Class ViewEditLineUpDeliveryForm
             conn.Close()
         End Try
     End Sub
+
     Sub pageSetup4(ByVal ilineupdate As String, ByVal iconditionstring As String)
         Try
             getCountPageNum4(ilineupdate, iconditionstring)
@@ -583,6 +609,7 @@ Public Class ViewEditLineUpDeliveryForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCountPageNum4(ByVal elineupdate As String, ByVal econditionstring As String)
         Try
             countpagenum = 0
@@ -600,6 +627,7 @@ Public Class ViewEditLineUpDeliveryForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCommonPhrase(ByVal icommonbox As ComboBox, ByVal icommonstring As String)
         Try
             commonphrase = ""
@@ -630,9 +658,13 @@ Public Class ViewEditLineUpDeliveryForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Display"
+
 #Region "AutoComplete"
+
     Sub autocompleteCustomerName(ByVal icombobox As ComboBox)
         Try
             Dim customername As New AutoCompleteStringCollection
@@ -653,6 +685,7 @@ Public Class ViewEditLineUpDeliveryForm
             conn.Close()
         End Try
     End Sub
+
     Sub autocompleteCustomerOrderNo(ByVal icombobox As ComboBox)
         Try
             Dim ordernumber As New AutoCompleteStringCollection
@@ -673,6 +706,7 @@ Public Class ViewEditLineUpDeliveryForm
             conn.Close()
         End Try
     End Sub
+
     Sub autocompleteDeliveryNo(ByVal icombobox As ComboBox)
         Try
             Dim deliveryno As New AutoCompleteStringCollection
@@ -693,6 +727,7 @@ Public Class ViewEditLineUpDeliveryForm
             conn.Close()
         End Try
     End Sub
+
     Sub autocompleteDriverName(ByVal icombobox As ComboBox)
         Try
             Dim drivername As New AutoCompleteStringCollection
@@ -713,6 +748,7 @@ Public Class ViewEditLineUpDeliveryForm
             conn.Close()
         End Try
     End Sub
+
     Sub autocompleteLineUpNo(ByVal icombobox As ComboBox)
         Try
             Dim lineupno As New AutoCompleteStringCollection
@@ -733,6 +769,7 @@ Public Class ViewEditLineUpDeliveryForm
             conn.Close()
         End Try
     End Sub
+
     Sub autocompleteStatus(ByVal icombobox As ComboBox)
         Try
             Dim lustatus As New AutoCompleteStringCollection
@@ -753,10 +790,11 @@ Public Class ViewEditLineUpDeliveryForm
             conn.Close()
         End Try
     End Sub
+
     Sub autocompleteTruckShiftInfo(ByVal icombobox As ComboBox)
         Try
             Dim truckshiftinfo As New AutoCompleteStringCollection
-            Dim cmd As New MySqlCommand("SELECT COALESCE(CONCAT(COALESCE(dt.truckname,''),' - ',COALESCE(dt.truckno,''),' / ',COALESCE(s.shiftname,'')),'') AS 'truckshiftinfo' FROM lineups lu LEFT JOIN deliverytruckshifts dts ON lu.deliverytruckshiftid = dts.rowid " & _
+            Dim cmd As New MySqlCommand("SELECT COALESCE(CONCAT(COALESCE(dt.truckname,''),' - ',COALESCE(dt.truckno,''),' / ',COALESCE(s.shiftname,'')),'') AS 'truckshiftinfo' FROM lineups lu LEFT JOIN deliverytruckshifts dts ON lu.deliverytruckshiftid = dts.rowid " &
                             "LEFT JOIN deliverytrucks dt ON dts.deliverytruckid = dt.rowid LEFT JOIN shifts s ON dts.shiftid = s.rowid WHERE lu.organizationid = " & Z_OrganizationID & " GROUP BY dts.rowid ", conn)
             Dim ds As New DataSet
             Dim da As New MySqlDataAdapter(cmd)
@@ -774,8 +812,11 @@ Public Class ViewEditLineUpDeliveryForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "AutoPopulate"
+
     Sub autopopulatecboSearch()
         Try
             cboDate.Items.Clear()
@@ -806,6 +847,7 @@ Public Class ViewEditLineUpDeliveryForm
             conn.Close()
         End Try
     End Sub
+
     Sub autopopulateCustomerName(ByVal icombobox As ComboBox)
         Try
             icombobox.Items.Clear()
@@ -826,6 +868,7 @@ Public Class ViewEditLineUpDeliveryForm
             conn.Close()
         End Try
     End Sub
+
     Sub autopopulateCustomerOrderNo(ByVal icombobox As ComboBox)
         Try
             icombobox.Items.Clear()
@@ -846,6 +889,7 @@ Public Class ViewEditLineUpDeliveryForm
             conn.Close()
         End Try
     End Sub
+
     Sub autopopulateDeliveryNo(ByVal icombobox As ComboBox)
         Try
             icombobox.Items.Clear()
@@ -866,6 +910,7 @@ Public Class ViewEditLineUpDeliveryForm
             conn.Close()
         End Try
     End Sub
+
     Sub autopopulateDriverName(ByVal icombobox As ComboBox)
         Try
             icombobox.Items.Clear()
@@ -886,6 +931,7 @@ Public Class ViewEditLineUpDeliveryForm
             conn.Close()
         End Try
     End Sub
+
     Sub autopopulateLineUpNo(ByVal icombobox As ComboBox)
         Try
             icombobox.Items.Clear()
@@ -906,6 +952,7 @@ Public Class ViewEditLineUpDeliveryForm
             conn.Close()
         End Try
     End Sub
+
     Sub autopopulateStatus(ByVal icombobox As ComboBox)
         Try
             icombobox.Items.Clear()
@@ -926,11 +973,12 @@ Public Class ViewEditLineUpDeliveryForm
             conn.Close()
         End Try
     End Sub
+
     Sub autopopulateTruckShiftInfo(ByVal icombobox As ComboBox)
         Try
             icombobox.Items.Clear()
             If conn.State = ConnectionState.Open Then conn.Close()
-            Dim sql1 As String = "SELECT COALESCE(CONCAT(COALESCE(dt.truckname,''),' - ',COALESCE(dt.truckno,''),' / ',COALESCE(s.shiftname,'')),'') AS 'truckshiftinfo' FROM lineups lu LEFT JOIN deliverytruckshifts dts ON lu.deliverytruckshiftid = dts.rowid " & _
+            Dim sql1 As String = "SELECT COALESCE(CONCAT(COALESCE(dt.truckname,''),' - ',COALESCE(dt.truckno,''),' / ',COALESCE(s.shiftname,'')),'') AS 'truckshiftinfo' FROM lineups lu LEFT JOIN deliverytruckshifts dts ON lu.deliverytruckshiftid = dts.rowid " &
                         "LEFT JOIN deliverytrucks dt ON dts.deliverytruckid = dt.rowid LEFT JOIN shifts s ON dts.shiftid = s.rowid WHERE lu.organizationid = " & Z_OrganizationID & " GROUP BY dts.rowid ORDER BY dt.truckname,s.shiftname DESC "
             If conn.State = ConnectionState.Closed Then conn.Open()
             Dim cmd1 As New MySqlCommand(sql1, conn)
@@ -947,14 +995,17 @@ Public Class ViewEditLineUpDeliveryForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Datagrids"
+
     Sub displayLineUpList(ByVal istartpage As Integer)
         Try
             dgLineUpList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT lu.rowid,COALESCE(lu.lineupno,''),COALESCE(o.drnumber,''),COALESCE(CONCAT(COALESCE(o.ordernumber,''),' (C.O. No.) / ',COALESCE(a.companyname,''),' - ',COALESCE(a.accountno,'')),'')," & _
-                        "COALESCE(DATE_FORMAT(lu.lineupdate,'%d-%b-%Y'),'') FROM lineups lu LEFT JOIN orders o ON lu.orderid = o.rowid LEFT JOIN accounts a ON o.accountid = a.rowid WHERE lu.organizationid = " & Z_OrganizationID & " " & _
+            Dim sql1 As String = "SELECT lu.rowid,COALESCE(lu.lineupno,''),COALESCE(o.drnumber,''),COALESCE(CONCAT(COALESCE(o.ordernumber,''),' (C.O. No.) / ',COALESCE(a.companyname,''),' - ',COALESCE(a.accountno,'')),'')," &
+                        "COALESCE(DATE_FORMAT(lu.lineupdate,'%d-%b-%Y'),'') FROM lineups lu LEFT JOIN orders o ON lu.orderid = o.rowid LEFT JOIN accounts a ON o.accountid = a.rowid WHERE lu.organizationid = " & Z_OrganizationID & " " &
                         "ORDER BY lu.deliveryno DESC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -983,13 +1034,14 @@ Public Class ViewEditLineUpDeliveryForm
             conn.Close()
         End Try
     End Sub
+
     Sub displaySearchPhrase(ByVal isearchphrase As String, ByVal istartpage As Integer)
         Try
             dgLineUpList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT lu.rowid,COALESCE(lu.lineupno,''),COALESCE(o.drnumber,''),COALESCE(CONCAT(COALESCE(o.ordernumber,''),' (C.O. No.) / ',COALESCE(a.companyname,''),' - ',COALESCE(a.accountno,'')),'')," & _
-                        "COALESCE(DATE_FORMAT(lu.lineupdate,'%d-%b-%Y'),'') FROM lineups lu LEFT JOIN orders o ON lu.orderid = o.rowid LEFT JOIN accounts a ON o.accountid = a.rowid WHERE lu.organizationid = " & Z_OrganizationID & " " & _
-                        "AND (lu.deliveryno LIKE ""%" & isearchphrase & "%"" OR o.ordernumber LIKE ""%" & isearchphrase & "%"" OR lu.lineupno LIKE ""%" & isearchphrase & "%"" OR a.companyname LIKE ""%" & isearchphrase & "%"" OR lu.status LIKE ""%" & isearchphrase & "%"") " & _
+            Dim sql1 As String = "SELECT lu.rowid,COALESCE(lu.lineupno,''),COALESCE(o.drnumber,''),COALESCE(CONCAT(COALESCE(o.ordernumber,''),' (C.O. No.) / ',COALESCE(a.companyname,''),' - ',COALESCE(a.accountno,'')),'')," &
+                        "COALESCE(DATE_FORMAT(lu.lineupdate,'%d-%b-%Y'),'') FROM lineups lu LEFT JOIN orders o ON lu.orderid = o.rowid LEFT JOIN accounts a ON o.accountid = a.rowid WHERE lu.organizationid = " & Z_OrganizationID & " " &
+                        "AND (lu.deliveryno LIKE ""%" & isearchphrase & "%"" OR o.ordernumber LIKE ""%" & isearchphrase & "%"" OR lu.lineupno LIKE ""%" & isearchphrase & "%"" OR a.companyname LIKE ""%" & isearchphrase & "%"" OR lu.status LIKE ""%" & isearchphrase & "%"") " &
                         "ORDER BY lu.deliveryno DESC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -1018,13 +1070,14 @@ Public Class ViewEditLineUpDeliveryForm
             conn.Close()
         End Try
     End Sub
+
     Sub displayDateSearch(ByVal istartpage As Integer, ByVal idatesearch As String)
         Try
             dgLineUpList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT lu.rowid,COALESCE(lu.lineupno,''),COALESCE(o.drnumber,''),COALESCE(CONCAT(COALESCE(o.ordernumber,''),' (C.O. No.) / ',COALESCE(a.companyname,''),' - ',COALESCE(a.accountno,'')),'')," & _
-                        "COALESCE(DATE_FORMAT(lu.lineupdate,'%d-%b-%Y'),'') FROM lineups lu LEFT JOIN orders o ON lu.orderid = o.rowid LEFT JOIN accounts a ON o.accountid = a.rowid WHERE lu.organizationid = " & Z_OrganizationID & " " & _
-                        "AND (" & idatesearch & " >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " & idatesearch & " <= '" & dtpToSearch.Value.Year & "-" & dtpToSearch.Value.Month & "-" & dtpToSearch.Value.Day & "' ) " & _
+            Dim sql1 As String = "SELECT lu.rowid,COALESCE(lu.lineupno,''),COALESCE(o.drnumber,''),COALESCE(CONCAT(COALESCE(o.ordernumber,''),' (C.O. No.) / ',COALESCE(a.companyname,''),' - ',COALESCE(a.accountno,'')),'')," &
+                        "COALESCE(DATE_FORMAT(lu.lineupdate,'%d-%b-%Y'),'') FROM lineups lu LEFT JOIN orders o ON lu.orderid = o.rowid LEFT JOIN accounts a ON o.accountid = a.rowid WHERE lu.organizationid = " & Z_OrganizationID & " " &
+                        "AND (" & idatesearch & " >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " & idatesearch & " <= '" & dtpToSearch.Value.Year & "-" & dtpToSearch.Value.Month & "-" & dtpToSearch.Value.Day & "' ) " &
                         "GROUP BY lu.rowid ORDER BY lu.deliveryno DESC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -1053,12 +1106,13 @@ Public Class ViewEditLineUpDeliveryForm
             conn.Close()
         End Try
     End Sub
+
     Sub displayCommonPhrase(ByVal icommonphrase As String, ByVal idatesearch As String, ByVal istartpage As Integer)
         Try
             dgLineUpList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT lu.rowid,COALESCE(lu.lineupno,''),COALESCE(o.drnumber,''),COALESCE(CONCAT(COALESCE(o.ordernumber,''),' (C.O. No.) / ',COALESCE(a.companyname,''),' - ',COALESCE(a.accountno,'')),'')," & _
-                        "COALESCE(DATE_FORMAT(lu.lineupdate,'%d-%b-%Y'),'') FROM lineups lu LEFT JOIN orders o ON lu.orderid = o.rowid LEFT JOIN accounts a ON o.accountid = a.rowid WHERE lu.organizationid = " & Z_OrganizationID & " " & _
+            Dim sql1 As String = "SELECT lu.rowid,COALESCE(lu.lineupno,''),COALESCE(o.drnumber,''),COALESCE(CONCAT(COALESCE(o.ordernumber,''),' (C.O. No.) / ',COALESCE(a.companyname,''),' - ',COALESCE(a.accountno,'')),'')," &
+                        "COALESCE(DATE_FORMAT(lu.lineupdate,'%d-%b-%Y'),'') FROM lineups lu LEFT JOIN orders o ON lu.orderid = o.rowid LEFT JOIN accounts a ON o.accountid = a.rowid WHERE lu.organizationid = " & Z_OrganizationID & " " &
                         "AND " & icommonphrase & " " & idatesearch & " ORDER BY lu.deliveryno DESC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -1087,12 +1141,13 @@ Public Class ViewEditLineUpDeliveryForm
             conn.Close()
         End Try
     End Sub
+
     Sub displaySelectedSearch(ByVal ilineupdate As String, ByVal iconditionstring As String, ByVal istartpage As Integer)
         Try
             dgLineUpList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT lu.rowid,COALESCE(lu.lineupno,''),COALESCE(lu.deliveryno,''),COALESCE(CONCAT(COALESCE(o.ordernumber,''),' (C.O. No.) / ',COALESCE(a.companyname,''),' - ',COALESCE(a.accountno,'')),'')," & _
-                        "COALESCE(DATE_FORMAT(lu.lineupdate,'%d-%b-%Y'),'') FROM lineups lu LEFT JOIN orders o ON lu.orderid = o.rowid LEFT JOIN accounts a ON o.accountid = a.rowid WHERE lu.organizationid = " & Z_OrganizationID & " " & _
+            Dim sql1 As String = "SELECT lu.rowid,COALESCE(lu.lineupno,''),COALESCE(lu.deliveryno,''),COALESCE(CONCAT(COALESCE(o.ordernumber,''),' (C.O. No.) / ',COALESCE(a.companyname,''),' - ',COALESCE(a.accountno,'')),'')," &
+                        "COALESCE(DATE_FORMAT(lu.lineupdate,'%d-%b-%Y'),'') FROM lineups lu LEFT JOIN orders o ON lu.orderid = o.rowid LEFT JOIN accounts a ON o.accountid = a.rowid WHERE lu.organizationid = " & Z_OrganizationID & " " &
                         "AND lu.lineupdate = '" & ilineupdate & "' " & iconditionstring & " ORDER BY lu.deliveryno DESC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -1121,13 +1176,14 @@ Public Class ViewEditLineUpDeliveryForm
             conn.Close()
         End Try
     End Sub
+
     Sub displayLineUpInformation(ByVal ilineupid As Integer)
         Try
             Dim dtLUinfo As New DataTable
-            dtLUinfo = getDataTableForSQL("SELECT COALESCE(lu.lineupno,''),COALESCE(DATE_FORMAT(lu.lineupdate,'%d-%b-%Y'),''),COALESCE(o.drnumber,''),COALESCE(DATE_FORMAT(lu.deliverydate,'%d-%b-%Y'),''),COALESCE(CONCAT(COALESCE(dt.truckname,''),' - ',COALESCE(dt.truckno,''),' / ',COALESCE(s.shiftname,'')),''),COALESCE(lu.status,'')," & _
-                        "COALESCE(CONCAT(COALESCE(c.firstname,''),' ',COALESCE(c.middlename,''),' ',COALESCE(c.lastname,''),' ',COALESCE(c.suffix,''),' - ',COALESCE(c.contactno,'')),''),COALESCE(CONCAT(COALESCE(o.ordernumber,''),' (C.O. No.) / ', COALESCE(a.companyname,''),' - ', COALESCE(a.accountno,''),' / ',CONCAT(COALESCE(pl.packinglistno,''),' (Pa.L. No.)')),'')," & _
-                        "COALESCE(DATE_FORMAT(o.orderdate,'%d-%b-%Y'),''),COALESCE(DATE_FORMAT(o.targetdate,'%d-%b-%Y'),''),COALESCE(o.customeraddress,''),COALESCE(lu.comments,''),COALESCE(o.deliveryhours,''),COALESCE(lu.packinglistid,0),COALESCE(lu.orderid,0),COALESCE(o.referencenumber,''),COALESCE(DATE_FORMAT(o.enddate,'%d-%b-%Y'),''),COALESCE(CONCAT(COALESCE(bc.branchcode,''),' - ',COALESCE(bc.branchname,'')),'')," & _
-                        "COALESCE(CONCAT(COALESCE(ve.companyname,''),' - ',COALESCE(ve.companycode,'')),''),COALESCE(CONCAT(COALESCE(cc.codename,''),' / ',COALESCE(c1.codeno,''),'-',COALESCE(c2.codeno,''),'-',COALESCE(c3.codeno,'')),'') FROM lineups lu LEFT JOIN orders o ON lu.orderid = o.rowid LEFT JOIN deliverytruckshifts dts ON lu.deliverytruckshiftid = dts.rowid LEFT JOIN combinecodings cc ON o.combinecodingid = cc.rowid LEFT JOIN codings c1 ON cc.codingida = c1.rowid " & _
+            dtLUinfo = getDataTableForSQL("SELECT COALESCE(lu.lineupno,''),COALESCE(DATE_FORMAT(lu.lineupdate,'%d-%b-%Y'),''),COALESCE(o.drnumber,''),COALESCE(DATE_FORMAT(lu.deliverydate,'%d-%b-%Y'),''),COALESCE(CONCAT(COALESCE(dt.truckname,''),' - ',COALESCE(dt.truckno,''),' / ',COALESCE(s.shiftname,'')),''),COALESCE(lu.status,'')," &
+                        "COALESCE(CONCAT(COALESCE(c.firstname,''),' ',COALESCE(c.middlename,''),' ',COALESCE(c.lastname,''),' ',COALESCE(c.suffix,''),' - ',COALESCE(c.contactno,'')),''),COALESCE(CONCAT(COALESCE(o.ordernumber,''),' (C.O. No.) / ', COALESCE(a.companyname,''),' - ', COALESCE(a.accountno,''),' / ',CONCAT(COALESCE(pl.packinglistno,''),' (Pa.L. No.)')),'')," &
+                        "COALESCE(DATE_FORMAT(o.orderdate,'%d-%b-%Y'),''),COALESCE(DATE_FORMAT(o.targetdate,'%d-%b-%Y'),''),COALESCE(o.customeraddress,''),COALESCE(lu.comments,''),COALESCE(o.deliveryhours,''),COALESCE(lu.packinglistid,0),COALESCE(lu.orderid,0),COALESCE(o.referencenumber,''),COALESCE(DATE_FORMAT(o.enddate,'%d-%b-%Y'),''),COALESCE(CONCAT(COALESCE(bc.branchcode,''),' - ',COALESCE(bc.branchname,'')),'')," &
+                        "COALESCE(CONCAT(COALESCE(ve.companyname,''),' - ',COALESCE(ve.companycode,'')),''),COALESCE(CONCAT(COALESCE(cc.codename,''),' / ',COALESCE(c1.codeno,''),'-',COALESCE(c2.codeno,''),'-',COALESCE(c3.codeno,'')),'') FROM lineups lu LEFT JOIN orders o ON lu.orderid = o.rowid LEFT JOIN deliverytruckshifts dts ON lu.deliverytruckshiftid = dts.rowid LEFT JOIN combinecodings cc ON o.combinecodingid = cc.rowid LEFT JOIN codings c1 ON cc.codingida = c1.rowid " &
                         "LEFT JOIN codings c2 ON cc.codingidb = c2.rowid LEFT JOIN codings c3 ON cc.codingidc = c3.rowid LEFT JOIN branches bc ON o.branchid = bc.rowid LEFT JOIN companies ve ON o.companyid = ve.rowid LEFT JOIN deliverytrucks dt ON dts.deliverytruckid = dt.rowid LEFT JOIN shifts s ON dts.shiftid = s.rowid LEFT JOIN contacts c ON lu.contactid = c.rowid LEFT JOIN accounts a ON o.accountid = a.rowid LEFT JOIN packinglist pl ON lu.packinglistid = pl.rowid WHERE lu.rowid = " & ilineupid & " ")
             If dtLUinfo.Rows.Count <> 0 Then
                 veludpackinglistid = dtLUinfo.Rows(0)(13)
@@ -1155,11 +1211,12 @@ Public Class ViewEditLineUpDeliveryForm
             MsgBox(getErrExcptn(ex, Me.Name))
         End Try
     End Sub
+
     Sub displayLineUpCartons(ByVal ilineupid As Integer)
         Try
             dgCartons.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT luc.rowid,luc.packinglistcartonid,COALESCE(pc.cartonno,''),COALESCE(CONCAT(COALESCE(c.firstname,''),' ',COALESCE(c.middlename,''),' ',COALESCE(c.lastname,''),' ',COALESCE(c.suffix,''),' - ',COALESCE(c.contactno,'')),''),COALESCE(DATE_FORMAT(pc.packeddate,'%d-%b-%Y'),''),COALESCE(luc.`status`,''),COALESCE(cs.sizename,''),COALESCE(cs.`length`,0)," & _
+            Dim sql1 As String = "SELECT luc.rowid,luc.packinglistcartonid,COALESCE(pc.cartonno,''),COALESCE(CONCAT(COALESCE(c.firstname,''),' ',COALESCE(c.middlename,''),' ',COALESCE(c.lastname,''),' ',COALESCE(c.suffix,''),' - ',COALESCE(c.contactno,'')),''),COALESCE(DATE_FORMAT(pc.packeddate,'%d-%b-%Y'),''),COALESCE(luc.`status`,''),COALESCE(cs.sizename,''),COALESCE(cs.`length`,0)," &
                         "COALESCE(cs.`width`,0),COALESCE(cs.`height`,0) FROM lineupcartons luc LEFT JOIN packinglistcartons pc ON luc.packinglistcartonid = pc.rowid LEFT JOIN contacts c ON pc.contactid = c.rowid LEFT JOIN cartonsizes cs ON pc.cartonsizeid = cs.rowid WHERE luc.lineupid = " & ilineupid & " AND luc.organizationid = " & Z_OrganizationID & " AND luc.`status` != 'Inactive' ORDER BY pc.cartonno "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -1198,9 +1255,13 @@ Public Class ViewEditLineUpDeliveryForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #End Region
+
 #Region "Adding / Removing / Cancelling / Confirming"
+
     Sub cancelLineUpCartons(ByVal ilineupid As Integer)
         Try
             If conn1.State = ConnectionState.Closed Then conn1.Open()
@@ -1227,6 +1288,7 @@ Public Class ViewEditLineUpDeliveryForm
             conn1.Close()
         End Try
     End Sub
+
     Sub confirmLineUpCartons(ByVal ilineupid As Integer)
         Try
             If conn.State = ConnectionState.Closed Then conn.Open()
@@ -1253,6 +1315,7 @@ Public Class ViewEditLineUpDeliveryForm
             conn.Close()
         End Try
     End Sub
+
     Sub getPickListOrderID(ByVal iorderid As Integer, ByVal iorderitemid As Integer, ByVal iqtyincarton As Integer)
         Try
             Dim dtGid As New DataTable
@@ -1264,6 +1327,7 @@ Public Class ViewEditLineUpDeliveryForm
             MsgBox(getErrExcptn(ex, Me.Name))
         End Try
     End Sub
+
     Sub updatePackingListCartonItemsA(ByVal ipackinglistcartonid As Integer)
         Try
             If conn.State = ConnectionState.Closed Then conn.Open()
@@ -1289,6 +1353,7 @@ Public Class ViewEditLineUpDeliveryForm
             conn.Close()
         End Try
     End Sub
+
     Sub updatePackingListCartonItemsB(ByVal ipackinglistcartonid As Integer)
         Try
             If conn.State = ConnectionState.Closed Then conn.Open()
@@ -1318,6 +1383,7 @@ Public Class ViewEditLineUpDeliveryForm
             conn.Close()
         End Try
     End Sub
+
     Sub updatePackingListCartonItemsC(ByVal ipackinglistcartonid As Integer)
         Try
             If conn1.State = ConnectionState.Closed Then conn1.Open()
@@ -1342,6 +1408,7 @@ Public Class ViewEditLineUpDeliveryForm
             conn1.Close()
         End Try
     End Sub
+
     Sub updatePackingListCartonItemsD(ByVal epicklistorderid As Integer, ByVal eqtyincarton As Integer)
         Try
             veludqtyincartonbalance = eqtyincarton
@@ -1358,14 +1425,14 @@ Public Class ViewEditLineUpDeliveryForm
                                 U_PickListOrderItemQtyDelivered(CInt(reader1(0)), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, veludqtytodeliver + CInt(reader1(3)), Me)
                                 getProductInventoryLocationTotals(CInt(reader1(1)), Me)
                                 U_ProductInventoryLocationTotals(CInt(reader1(1)), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, globalpiltotalavailableqty, globalpiltotalreserveqty - veludqtytodeliver, Me)
-                                I_ProductMovementHistory(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, DBNull.Value, CInt(dgLineUpList.CurrentRow.Cells("lu_rowid").Value), DBNull.Value, DBNull.Value, CInt(reader1(1)), _
+                                I_ProductMovementHistory(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, DBNull.Value, CInt(dgLineUpList.CurrentRow.Cells("lu_rowid").Value), DBNull.Value, DBNull.Value, CInt(reader1(1)),
                                         DBNull.Value, globalpiltotalreserveqty, veludqtytodeliver, globalpiltotalreserveqty - veludqtytodeliver, "Delivery", "TotalReserveQty", "", Me)
                                 veludqtyincartonbalance = veludqtyincartonbalance - veludqtytodeliver
                             Else
                                 U_PickListOrderItemQtyDelivered(CInt(reader1(0)), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, veludqtyincartonbalance + CInt(reader1(3)), Me)
                                 getProductInventoryLocationTotals(CInt(reader1(1)), Me)
                                 U_ProductInventoryLocationTotals(CInt(reader1(1)), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, globalpiltotalavailableqty, globalpiltotalreserveqty - veludqtyincartonbalance, Me)
-                                I_ProductMovementHistory(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, DBNull.Value, CInt(dgLineUpList.CurrentRow.Cells("lu_rowid").Value), DBNull.Value, DBNull.Value, CInt(reader1(1)), _
+                                I_ProductMovementHistory(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, DBNull.Value, CInt(dgLineUpList.CurrentRow.Cells("lu_rowid").Value), DBNull.Value, DBNull.Value, CInt(reader1(1)),
                                         DBNull.Value, globalpiltotalreserveqty, veludqtyincartonbalance, globalpiltotalreserveqty - veludqtyincartonbalance, "Delivery", "TotalReserveQty", "", Me)
                                 veludqtyincartonbalance = veludqtyincartonbalance - veludqtyincartonbalance
                             End If
@@ -1380,8 +1447,11 @@ Public Class ViewEditLineUpDeliveryForm
             conn2.Close()
         End Try
     End Sub
+
 #End Region
+
 #End Region
+
     Private Sub tsRefresh_Click(sender As Object, e As EventArgs) Handles tsRefresh.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1394,6 +1464,7 @@ Public Class ViewEditLineUpDeliveryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub pbAddTruckShiftInfo_MouseEnter(sender As Object, e As EventArgs) Handles pbAddTruckShiftInfo.MouseEnter
         Try
             pbAddTruckShiftInfo.BackColor = Color.MediumSpringGreen
@@ -1403,6 +1474,7 @@ Public Class ViewEditLineUpDeliveryForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbAddTruckShiftInfo_MouseLeave(sender As Object, e As EventArgs) Handles pbAddTruckShiftInfo.MouseLeave
         Try
             pbAddTruckShiftInfo.BackColor = Color.Transparent
@@ -1412,6 +1484,7 @@ Public Class ViewEditLineUpDeliveryForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbAddDriver_MouseEnter(sender As Object, e As EventArgs) Handles pbAddDriver.MouseEnter
         Try
             pbAddDriver.BackColor = Color.MediumSpringGreen
@@ -1421,6 +1494,7 @@ Public Class ViewEditLineUpDeliveryForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbAddDriver_MouseLeave(sender As Object, e As EventArgs) Handles pbAddDriver.MouseLeave
         Try
             pbAddDriver.BackColor = Color.Transparent
@@ -1430,6 +1504,7 @@ Public Class ViewEditLineUpDeliveryForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbAddTruckShiftInfo_Click(sender As Object, e As EventArgs) Handles pbAddTruckShiftInfo.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1463,6 +1538,7 @@ Public Class ViewEditLineUpDeliveryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub pbAddDriver_Click(sender As Object, e As EventArgs) Handles pbAddDriver.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1495,6 +1571,7 @@ Public Class ViewEditLineUpDeliveryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgLineUpList_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgLineUpList.CellClick
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1529,6 +1606,7 @@ Public Class ViewEditLineUpDeliveryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgLineUpList_KeyUp(sender As Object, e As KeyEventArgs) Handles dgLineUpList.KeyUp
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1565,6 +1643,7 @@ Public Class ViewEditLineUpDeliveryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dtpLineUpDate_ValueChanged(sender As Object, e As EventArgs) Handles dtpLineUpDate.ValueChanged
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1596,6 +1675,7 @@ Public Class ViewEditLineUpDeliveryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboTruckShiftInfo_Leave(sender As Object, e As EventArgs) Handles cboTruckShiftInfo.Leave
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1627,6 +1707,7 @@ Public Class ViewEditLineUpDeliveryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     'Private Sub cboTruckShiftInfo_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboTruckShiftInfo.SelectedIndexChanged
     '    Me.Cursor = Cursors.WaitCursor
     '    Try
@@ -1779,6 +1860,7 @@ Public Class ViewEditLineUpDeliveryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboCartonNo_Leave(sender As Object, e As EventArgs) Handles cboCartonNo.Leave
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1807,6 +1889,7 @@ Public Class ViewEditLineUpDeliveryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     'Private Sub cboCartonNo_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboCartonNo.SelectedIndexChanged
     '    Me.Cursor = Cursors.WaitCursor
     '    Try
@@ -1872,6 +1955,7 @@ Public Class ViewEditLineUpDeliveryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboCartonNo_KeyDown(sender As Object, e As KeyEventArgs) Handles cboCartonNo.KeyDown
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1885,6 +1969,7 @@ Public Class ViewEditLineUpDeliveryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msSave_Click(sender As Object, e As EventArgs) Handles msSave.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1996,6 +2081,7 @@ Public Class ViewEditLineUpDeliveryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msToDeliver_Click(sender As Object, e As EventArgs) Handles msToDeliver.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2113,6 +2199,7 @@ Public Class ViewEditLineUpDeliveryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msOrder_Click(sender As Object, e As EventArgs) Handles msOrder.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2171,6 +2258,7 @@ Public Class ViewEditLineUpDeliveryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msConfirm_Click(sender As Object, e As EventArgs) Handles msConfirm.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2321,7 +2409,9 @@ Public Class ViewEditLineUpDeliveryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #Region "Search/Page Setup"
+
     Private Sub txtSimpleSearch_KeyDown(sender As Object, e As KeyEventArgs) Handles txtSimpleSearch.KeyDown
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2346,6 +2436,7 @@ Public Class ViewEditLineUpDeliveryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboSearch1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboSearch1.SelectedIndexChanged
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2381,6 +2472,7 @@ Public Class ViewEditLineUpDeliveryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboSearch3_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboSearch3.SelectedIndexChanged
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2416,6 +2508,7 @@ Public Class ViewEditLineUpDeliveryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboSearch2_KeyDown(sender As Object, e As KeyEventArgs) Handles cboSearch2.KeyDown
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2477,10 +2570,10 @@ Public Class ViewEditLineUpDeliveryForm
                             pagefilter3 = "" & pagefilter1 & " AND " & pagefilter2 & ""
                         End If
                         If cboDate.Text = "ConfirmedDate" Then
-                            pagefilter4 = " AND (lu.deliverydate >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " & _
+                            pagefilter4 = " AND (lu.deliverydate >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " &
                                     "lu.deliverydate <= '" & dtpToSearch.Value.Year & "-" & dtpToSearch.Value.Month & "-" & dtpToSearch.Value.Day & "') "
                         ElseIf cboDate.Text = "DeliveryDate" Then
-                            pagefilter4 = " AND (lu.lineupdate >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " & _
+                            pagefilter4 = " AND (lu.lineupdate >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " &
                                     "lu.lineupdate <= '" & dtpToSearch.Value.Year & "-" & dtpToSearch.Value.Month & "-" & dtpToSearch.Value.Day & "') "
                         Else
                             pagefilter4 = ""
@@ -2499,6 +2592,7 @@ Public Class ViewEditLineUpDeliveryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboSearch4_KeyDown(sender As Object, e As KeyEventArgs) Handles cboSearch4.KeyDown
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2560,10 +2654,10 @@ Public Class ViewEditLineUpDeliveryForm
                             pagefilter3 = "" & pagefilter1 & " AND " & pagefilter2 & ""
                         End If
                         If cboDate.Text = "ConfirmedDate" Then
-                            pagefilter4 = " AND (lu.deliverydate >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " & _
+                            pagefilter4 = " AND (lu.deliverydate >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " &
                                     "lu.deliverydate <= '" & dtpToSearch.Value.Year & "-" & dtpToSearch.Value.Month & "-" & dtpToSearch.Value.Day & "') "
                         ElseIf cboDate.Text = "DeliveryDate" Then
-                            pagefilter4 = " AND (lu.lineupdate >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " & _
+                            pagefilter4 = " AND (lu.lineupdate >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " &
                                     "lu.lineupdate <= '" & dtpToSearch.Value.Year & "-" & dtpToSearch.Value.Month & "-" & dtpToSearch.Value.Day & "') "
                         Else
                             pagefilter4 = ""
@@ -2582,6 +2676,7 @@ Public Class ViewEditLineUpDeliveryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdFirst_Click(sender As Object, e As EventArgs) Handles cmdFirst.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2605,6 +2700,7 @@ Public Class ViewEditLineUpDeliveryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdPrev_Click(sender As Object, e As EventArgs) Handles cmdPrev.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2636,6 +2732,7 @@ Public Class ViewEditLineUpDeliveryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdNext_Click(sender As Object, e As EventArgs) Handles cmdNext.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2663,6 +2760,7 @@ Public Class ViewEditLineUpDeliveryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdLast_Click(sender As Object, e As EventArgs) Handles cmdLast.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2690,6 +2788,7 @@ Public Class ViewEditLineUpDeliveryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub txtPage_KeyDown(sender As Object, e As KeyEventArgs) Handles txtPage.KeyDown
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2734,8 +2833,11 @@ Public Class ViewEditLineUpDeliveryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #End Region
+
 #Region "Datagrid MouseUp"
+
     Private Sub dgCartons_MouseUp(sender As Object, e As MouseEventArgs) Handles dgCartons.MouseUp
         Try
             Dim hitTestinfo As DataGridView.HitTestInfo
@@ -2753,8 +2855,11 @@ Public Class ViewEditLineUpDeliveryForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Datagrid Errors"
+
     Private Sub dgLineUp_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgLineUpList.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2795,6 +2900,7 @@ Public Class ViewEditLineUpDeliveryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgCartons_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgCartons.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2835,5 +2941,7 @@ Public Class ViewEditLineUpDeliveryForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #End Region
+
 End Class

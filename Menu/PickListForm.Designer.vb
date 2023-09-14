@@ -88,16 +88,6 @@ Partial Class PickListForm
         Me.msSaveRSC = New System.Windows.Forms.ToolStripMenuItem()
         Me.gbCustomerOrders = New System.Windows.Forms.GroupBox()
         Me.dgCustomerOrders = New DevComponents.DotNetBar.Controls.DataGridViewX()
-        Me.co_rowid = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.co_seqno = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.co_customerorderno = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.co_pono = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.co_customername = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.co_customerorderdate = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.co_targetdate = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.co_canceldate = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.co_status = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.co_option = New System.Windows.Forms.DataGridViewButtonColumn()
         Me.txtOverallQtyToPick = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label6 = New System.Windows.Forms.Label()
@@ -159,6 +149,17 @@ Partial Class PickListForm
         Me.errProvider = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.pbClose = New System.Windows.Forms.PictureBox()
         Me.lblTitle = New System.Windows.Forms.Label()
+        Me.co_rowid = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.co_seqno = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.co_customerorderno = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.co_pono = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.co_customername = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.co_customerorderdate = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.co_inventorylocation = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.co_targetdate = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.co_canceldate = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.co_status = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.co_option = New System.Windows.Forms.DataGridViewButtonColumn()
         CType(Me.dgPickList, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ToolStrip3.SuspendLayout()
         Me.gbPickList.SuspendLayout()
@@ -580,6 +581,8 @@ Partial Class PickListForm
         '
         'gbRackShelfColumn
         '
+        Me.gbRackShelfColumn.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.gbRackShelfColumn.Controls.Add(Me.dgRackShelfColumn)
         Me.gbRackShelfColumn.Controls.Add(Me.txtQtyToPick)
         Me.gbRackShelfColumn.Controls.Add(Me.Label8)
@@ -587,9 +590,9 @@ Partial Class PickListForm
         Me.gbRackShelfColumn.Controls.Add(Me.MenuStrip1)
         Me.gbRackShelfColumn.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.gbRackShelfColumn.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.gbRackShelfColumn.Location = New System.Drawing.Point(6, 396)
+        Me.gbRackShelfColumn.Location = New System.Drawing.Point(7, 396)
         Me.gbRackShelfColumn.Name = "gbRackShelfColumn"
-        Me.gbRackShelfColumn.Size = New System.Drawing.Size(815, 200)
+        Me.gbRackShelfColumn.Size = New System.Drawing.Size(802, 200)
         Me.gbRackShelfColumn.TabIndex = 6
         Me.gbRackShelfColumn.TabStop = False
         '
@@ -764,6 +767,8 @@ Partial Class PickListForm
         '
         'gbCustomerOrders
         '
+        Me.gbCustomerOrders.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.gbCustomerOrders.Controls.Add(Me.dgCustomerOrders)
         Me.gbCustomerOrders.Controls.Add(Me.txtOverallQtyToPick)
         Me.gbCustomerOrders.Controls.Add(Me.Label1)
@@ -772,7 +777,7 @@ Partial Class PickListForm
         Me.gbCustomerOrders.Controls.Add(Me.Label9)
         Me.gbCustomerOrders.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.gbCustomerOrders.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.gbCustomerOrders.Location = New System.Drawing.Point(371, 5)
+        Me.gbCustomerOrders.Location = New System.Drawing.Point(372, 5)
         Me.gbCustomerOrders.Name = "gbCustomerOrders"
         Me.gbCustomerOrders.Size = New System.Drawing.Size(450, 190)
         Me.gbCustomerOrders.TabIndex = 4
@@ -784,6 +789,8 @@ Partial Class PickListForm
         Me.dgCustomerOrders.AllowUserToDeleteRows = False
         Me.dgCustomerOrders.AllowUserToOrderColumns = True
         Me.dgCustomerOrders.AllowUserToResizeRows = False
+        Me.dgCustomerOrders.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.dgCustomerOrders.BackgroundColor = System.Drawing.Color.White
         DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
         DataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control
@@ -794,7 +801,7 @@ Partial Class PickListForm
         DataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
         Me.dgCustomerOrders.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle6
         Me.dgCustomerOrders.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgCustomerOrders.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.co_rowid, Me.co_seqno, Me.co_customerorderno, Me.co_pono, Me.co_customername, Me.co_customerorderdate, Me.co_targetdate, Me.co_canceldate, Me.co_status, Me.co_option})
+        Me.dgCustomerOrders.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.co_rowid, Me.co_seqno, Me.co_customerorderno, Me.co_pono, Me.co_customername, Me.co_customerorderdate, Me.co_inventorylocation, Me.co_targetdate, Me.co_canceldate, Me.co_status, Me.co_option})
         DataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
         DataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Window
         DataGridViewCellStyle7.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -820,78 +827,6 @@ Partial Class PickListForm
         Me.dgCustomerOrders.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.dgCustomerOrders.Size = New System.Drawing.Size(435, 136)
         Me.dgCustomerOrders.TabIndex = 24
-        '
-        'co_rowid
-        '
-        Me.co_rowid.HeaderText = "rowid"
-        Me.co_rowid.Name = "co_rowid"
-        Me.co_rowid.ReadOnly = True
-        Me.co_rowid.Visible = False
-        '
-        'co_seqno
-        '
-        Me.co_seqno.HeaderText = "Seq. No."
-        Me.co_seqno.Name = "co_seqno"
-        Me.co_seqno.ReadOnly = True
-        Me.co_seqno.Width = 40
-        '
-        'co_customerorderno
-        '
-        Me.co_customerorderno.HeaderText = "Customer Order No."
-        Me.co_customerorderno.Name = "co_customerorderno"
-        Me.co_customerorderno.ReadOnly = True
-        Me.co_customerorderno.Width = 80
-        '
-        'co_pono
-        '
-        Me.co_pono.HeaderText = "P.O. No."
-        Me.co_pono.Name = "co_pono"
-        Me.co_pono.ReadOnly = True
-        Me.co_pono.Width = 80
-        '
-        'co_customername
-        '
-        Me.co_customername.HeaderText = "Customer Name"
-        Me.co_customername.Name = "co_customername"
-        Me.co_customername.ReadOnly = True
-        Me.co_customername.Width = 150
-        '
-        'co_customerorderdate
-        '
-        Me.co_customerorderdate.HeaderText = "Customer Order Date"
-        Me.co_customerorderdate.Name = "co_customerorderdate"
-        Me.co_customerorderdate.ReadOnly = True
-        Me.co_customerorderdate.Width = 90
-        '
-        'co_targetdate
-        '
-        Me.co_targetdate.HeaderText = "Receipt Date"
-        Me.co_targetdate.Name = "co_targetdate"
-        Me.co_targetdate.ReadOnly = True
-        Me.co_targetdate.Width = 80
-        '
-        'co_canceldate
-        '
-        Me.co_canceldate.HeaderText = "Cancel Date"
-        Me.co_canceldate.Name = "co_canceldate"
-        Me.co_canceldate.ReadOnly = True
-        Me.co_canceldate.Width = 80
-        '
-        'co_status
-        '
-        Me.co_status.HeaderText = "Status"
-        Me.co_status.Name = "co_status"
-        Me.co_status.ReadOnly = True
-        Me.co_status.Width = 80
-        '
-        'co_option
-        '
-        Me.co_option.HeaderText = ""
-        Me.co_option.Name = "co_option"
-        Me.co_option.ReadOnly = True
-        Me.co_option.Text = "Delete"
-        Me.co_option.UseColumnTextForButtonValue = True
-        Me.co_option.Width = 50
         '
         'txtOverallQtyToPick
         '
@@ -951,6 +886,8 @@ Partial Class PickListForm
         '
         'gbCustomerOrderItems
         '
+        Me.gbCustomerOrderItems.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.gbCustomerOrderItems.Controls.Add(Me.chkOtherInfo)
         Me.gbCustomerOrderItems.Controls.Add(Me.txtTotalQtyToPick)
         Me.gbCustomerOrderItems.Controls.Add(Me.lnkViewEditBundleItems)
@@ -961,7 +898,7 @@ Partial Class PickListForm
         Me.gbCustomerOrderItems.Controls.Add(Me.Label7)
         Me.gbCustomerOrderItems.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.gbCustomerOrderItems.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.gbCustomerOrderItems.Location = New System.Drawing.Point(6, 195)
+        Me.gbCustomerOrderItems.Location = New System.Drawing.Point(7, 195)
         Me.gbCustomerOrderItems.Name = "gbCustomerOrderItems"
         Me.gbCustomerOrderItems.Size = New System.Drawing.Size(815, 200)
         Me.gbCustomerOrderItems.TabIndex = 5
@@ -1507,6 +1444,84 @@ Partial Class PickListForm
         Me.lblTitle.Text = "Pick List"
         Me.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
+        'co_rowid
+        '
+        Me.co_rowid.HeaderText = "rowid"
+        Me.co_rowid.Name = "co_rowid"
+        Me.co_rowid.ReadOnly = True
+        Me.co_rowid.Visible = False
+        '
+        'co_seqno
+        '
+        Me.co_seqno.HeaderText = "Seq. No."
+        Me.co_seqno.Name = "co_seqno"
+        Me.co_seqno.ReadOnly = True
+        Me.co_seqno.Width = 40
+        '
+        'co_customerorderno
+        '
+        Me.co_customerorderno.HeaderText = "Customer Order No."
+        Me.co_customerorderno.Name = "co_customerorderno"
+        Me.co_customerorderno.ReadOnly = True
+        Me.co_customerorderno.Width = 80
+        '
+        'co_pono
+        '
+        Me.co_pono.HeaderText = "P.O. No."
+        Me.co_pono.Name = "co_pono"
+        Me.co_pono.ReadOnly = True
+        Me.co_pono.Width = 80
+        '
+        'co_customername
+        '
+        Me.co_customername.HeaderText = "Customer Name"
+        Me.co_customername.Name = "co_customername"
+        Me.co_customername.ReadOnly = True
+        Me.co_customername.Width = 150
+        '
+        'co_customerorderdate
+        '
+        Me.co_customerorderdate.HeaderText = "Customer Order Date"
+        Me.co_customerorderdate.Name = "co_customerorderdate"
+        Me.co_customerorderdate.ReadOnly = True
+        Me.co_customerorderdate.Width = 90
+        '
+        'co_inventorylocation
+        '
+        Me.co_inventorylocation.HeaderText = "Inventory Location"
+        Me.co_inventorylocation.Name = "co_inventorylocation"
+        Me.co_inventorylocation.ReadOnly = True
+        '
+        'co_targetdate
+        '
+        Me.co_targetdate.HeaderText = "Receipt Date"
+        Me.co_targetdate.Name = "co_targetdate"
+        Me.co_targetdate.ReadOnly = True
+        Me.co_targetdate.Width = 80
+        '
+        'co_canceldate
+        '
+        Me.co_canceldate.HeaderText = "Cancel Date"
+        Me.co_canceldate.Name = "co_canceldate"
+        Me.co_canceldate.ReadOnly = True
+        Me.co_canceldate.Width = 80
+        '
+        'co_status
+        '
+        Me.co_status.HeaderText = "Status"
+        Me.co_status.Name = "co_status"
+        Me.co_status.ReadOnly = True
+        Me.co_status.Width = 80
+        '
+        'co_option
+        '
+        Me.co_option.HeaderText = ""
+        Me.co_option.Name = "co_option"
+        Me.co_option.ReadOnly = True
+        Me.co_option.Text = "Delete"
+        Me.co_option.UseColumnTextForButtonValue = True
+        Me.co_option.Width = 50
+        '
         'PickListForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -1665,16 +1680,6 @@ Partial Class PickListForm
     Friend WithEvents ci_remarks As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents ci_unitofmeasure As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents ci_type As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents co_rowid As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents co_seqno As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents co_customerorderno As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents co_pono As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents co_customername As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents co_customerorderdate As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents co_targetdate As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents co_canceldate As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents co_status As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents co_option As System.Windows.Forms.DataGridViewButtonColumn
     Friend WithEvents rsc_rowid As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents rsc_rack As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents rsc_column As System.Windows.Forms.DataGridViewTextBoxColumn
@@ -1686,4 +1691,15 @@ Partial Class PickListForm
     Friend WithEvents rsc_pickorderno As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents rsc_issueflg As System.Windows.Forms.DataGridViewCheckBoxColumn
     Friend WithEvents rsc_remarks As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents co_rowid As DataGridViewTextBoxColumn
+    Friend WithEvents co_seqno As DataGridViewTextBoxColumn
+    Friend WithEvents co_customerorderno As DataGridViewTextBoxColumn
+    Friend WithEvents co_pono As DataGridViewTextBoxColumn
+    Friend WithEvents co_customername As DataGridViewTextBoxColumn
+    Friend WithEvents co_customerorderdate As DataGridViewTextBoxColumn
+    Friend WithEvents co_inventorylocation As DataGridViewTextBoxColumn
+    Friend WithEvents co_targetdate As DataGridViewTextBoxColumn
+    Friend WithEvents co_canceldate As DataGridViewTextBoxColumn
+    Friend WithEvents co_status As DataGridViewTextBoxColumn
+    Friend WithEvents co_option As DataGridViewButtonColumn
 End Class
