@@ -9,7 +9,19 @@
 
 DROP PROCEDURE IF EXISTS `U_lineups`;
 DELIMITER //
-CREATE PROCEDURE `U_lineups`(IN `U_RowID` INT(11), IN `U_LastUpd` DATETIME, IN `U_LastUpdBy` INT(11), IN `U_ContactID` INT(11), IN `U_DeliveryTruckShiftID` INT(11), IN `U_LineUpDate` DATE, IN `U_DeliveryNo` VARCHAR(50), IN `U_Comments` VARCHAR(100))
+CREATE PROCEDURE `U_lineups`(
+	IN `U_RowID` INT(11),
+	IN `U_LastUpd` DATETIME,
+	IN `U_LastUpdBy` INT(11),
+	IN `U_ContactID` INT(11),
+	IN `U_DeliveryTruckShiftID` INT(11),
+	IN `U_LineUpDate` DATE,
+	IN `U_DeliveryNo` VARCHAR(50),
+	IN `U_Comments` VARCHAR(100),
+	IN `U_AgentId` INT,
+	IN `U_Helper1Id` INT,
+	IN `U_Helper2Id` INT
+)
 BEGIN
 UPDATE lineups SET
 	LastUpd = U_LastUpd,
@@ -18,7 +30,10 @@ UPDATE lineups SET
 	DeliveryTruckShiftID = U_DeliveryTruckShiftID,
 	LineUpDate = U_LineUpDate,
 	DeliveryNo = U_DeliveryNo,
-	Comments = U_Comments 
+	Comments = U_Comments,
+	`AgentId` = U_AgentId,
+	`Helper1Id` = U_Helper1Id,
+	`Helper2Id` = U_Helper2Id
 WHERE RowID = U_RowID;
 END//
 DELIMITER ;

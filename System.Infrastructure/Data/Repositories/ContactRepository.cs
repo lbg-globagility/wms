@@ -17,7 +17,9 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
 
         public async Task<List<Contact>> GetManyByTypeAsync(int organizationId, ContactType contactType = ContactType.Contact) => await _context.Contacts
             .AsNoTracking()
+            .Where(c => c.OrganizationID == organizationId)
             .Where(c => c.Type == contactType)
+            .Where(c => c.Status == "Active")
             .ToListAsync();
     }
 }

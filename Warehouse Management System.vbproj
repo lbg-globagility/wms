@@ -728,6 +728,12 @@
     <Compile Include="SubForms\AddCodeForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="SubForms\AddContactForm.Designer.vb">
+      <DependentUpon>AddContactForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="SubForms\AddContactForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="SubForms\AddCycleCountForm.Designer.vb">
       <DependentUpon>AddCycleCountForm.vb</DependentUpon>
     </Compile>
@@ -1150,6 +1156,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SubForms\AddCodeForm.resx">
       <DependentUpon>AddCodeForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SubForms\AddContactForm.resx">
+      <DependentUpon>AddContactForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SubForms\AddCycleCountForm.resx">
       <DependentUpon>AddCycleCountForm.vb</DependentUpon>

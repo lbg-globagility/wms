@@ -31,14 +31,17 @@ Public Class DependencyInjectionHelper
             ServiceLifetime.Transient)
 
         With services
+            'Data Services
             .AddTransient(Of ICategoryDataService, CategoryDataService)
             .AddTransient(Of IColorDataService, ColorDataService)
+            .AddTransient(Of IContactDataService, ContactDataService)
             .AddTransient(Of IInventoryLocationDataService, InventoryLocationDataService)
             .AddTransient(Of IProductDataService, ProductDataService)
             .AddTransient(Of IProductColorDataService, ProductColorDataService)
             .AddTransient(Of IProductInventoryLocationDataService, ProductInventoryLocationDataService)
             .AddTransient(Of ISystemOwnerService, SystemOwnerService)
 
+            ' Repositories
             .AddTransient(Of ICategoryRepository, CategoryRepository)
             .AddTransient(Of IColorRepository, ColorRepository)
             .AddTransient(Of IContactRepository, ContactRepository)

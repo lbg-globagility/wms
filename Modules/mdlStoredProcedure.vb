@@ -1436,7 +1436,10 @@ Module mdlStoredProcedure
                         ByVal Status As String,
                         ByVal Comments As String,
                         ByVal DeliveryAddress As String,
-                        ByVal globalformname As Object) As Boolean
+                        ByVal globalformname As Object,
+                        Optional AgentId As Integer? = Nothing,
+                        Optional Helper1Id As Integer? = Nothing,
+                        Optional Helper2Id As Integer? = Nothing) As Boolean
 
         Dim F_return As Boolean = False
         Dim SQL_command As MySqlCommand =
@@ -1463,6 +1466,11 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("I_Status", Status)
                 .Parameters.AddWithValue("I_Comments", Comments)
                 .Parameters.AddWithValue("I_DeliveryAddress", DeliveryAddress)
+
+                .Parameters.AddWithValue("I_AgentId", If(AgentId Is Nothing, DBNull.Value, AgentId))
+                .Parameters.AddWithValue("I_Helper1Id", If(Helper1Id Is Nothing, DBNull.Value, Helper1Id))
+                .Parameters.AddWithValue("I_Helper2Id", If(Helper2Id Is Nothing, DBNull.Value, Helper2Id))
+
                 .Parameters("newLineUpID").Direction = ParameterDirection.ReturnValue
                 globaldatareader = .ExecuteReader
                 globallineupidsp = globaldatareader(0)
@@ -1483,7 +1491,10 @@ Module mdlStoredProcedure
                                 ByVal LineUpDate As Date,
                                 ByVal DeliveryNo As String,
                                 ByVal Comments As String,
-                                ByVal globalformname As Object) As Boolean
+                                ByVal globalformname As Object,
+                                Optional AgentId As Integer? = Nothing,
+                                Optional Helper1Id As Integer? = Nothing,
+                                Optional Helper2Id As Integer? = Nothing) As Boolean
 
         Dim F_return As Boolean = False
         Dim SQL_command As MySqlCommand =
@@ -1499,6 +1510,11 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_LineUpDate", LineUpDate)
                 .Parameters.AddWithValue("U_DeliveryNo", DeliveryNo)
                 .Parameters.AddWithValue("U_Comments", Comments)
+
+                .Parameters.AddWithValue("U_AgentId", If(AgentId Is Nothing, DBNull.Value, AgentId))
+                .Parameters.AddWithValue("U_Helper1Id", If(Helper1Id Is Nothing, DBNull.Value, Helper1Id))
+                .Parameters.AddWithValue("U_Helper2Id", If(Helper2Id Is Nothing, DBNull.Value, Helper2Id))
+
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
             Catch ex As Exception

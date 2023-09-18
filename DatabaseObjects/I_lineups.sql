@@ -9,7 +9,26 @@
 
 DROP FUNCTION IF EXISTS `I_lineups`;
 DELIMITER //
-CREATE FUNCTION `I_lineups`(`I_OrganizationID` INT(11), `I_Created` DATETIME, `I_CreatedBy` INT(11), `I_LastUpdBy` INT(11), `I_ContactID` INT(11), `I_PackingListID` INT(11), `I_DeliveryTruckShiftID` INT(11), `I_OrderID` INT(11), `I_LineUpDate` DATE, `I_DeliveryHours` VARCHAR(100), `I_LineUpNo` VARCHAR(50), `I_DeliveryNo` VARCHAR(50), `I_Status` VARCHAR(50), `I_Comments` VARCHAR(100), `I_DeliveryAddress` VARCHAR(250)) RETURNS int(10)
+CREATE FUNCTION `I_lineups`(
+	`I_OrganizationID` INT(11),
+	`I_Created` DATETIME,
+	`I_CreatedBy` INT(11),
+	`I_LastUpdBy` INT(11),
+	`I_ContactID` INT(11),
+	`I_PackingListID` INT(11),
+	`I_DeliveryTruckShiftID` INT(11),
+	`I_OrderID` INT(11),
+	`I_LineUpDate` DATE,
+	`I_DeliveryHours` VARCHAR(100),
+	`I_LineUpNo` VARCHAR(50),
+	`I_DeliveryNo` VARCHAR(50),
+	`I_Status` VARCHAR(50),
+	`I_Comments` VARCHAR(100),
+	`I_DeliveryAddress` VARCHAR(250),
+	`I_AgentId` INT,
+	`I_Helper1Id` INT,
+	`I_Helper2Id` INT
+) RETURNS int(10)
 BEGIN
 
 DECLARE newLineUpID INT(11);
@@ -30,7 +49,10 @@ INSERT INTO lineups
 	DeliveryNo,
 	`Status`,
 	Comments,
-	DeliveryAddress
+	DeliveryAddress,
+	`AgentId`,
+	`Helper1Id`,
+	`Helper2Id`
 )
 VALUES
 (
@@ -48,7 +70,10 @@ VALUES
 	I_DeliveryNo,
 	I_Status,
 	I_Comments,
-	I_DeliveryAddress
+	I_DeliveryAddress,
+	I_AgentId,
+	I_Helper1Id,
+	I_Helper2Id
 );
 
 SELECT @@Identity AS ID INTO newLineUpID;

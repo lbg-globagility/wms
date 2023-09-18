@@ -85,6 +85,15 @@ Partial Class ViewEditLineUpDeliveryForm
         Me.cboCartonNo = New System.Windows.Forms.ComboBox()
         Me.btnAddCarton = New System.Windows.Forms.Button()
         Me.gbLineUpInformation = New System.Windows.Forms.GroupBox()
+        Me.btnAddHelper2 = New System.Windows.Forms.PictureBox()
+        Me.btnAddHelper1 = New System.Windows.Forms.PictureBox()
+        Me.btnAddAgent = New System.Windows.Forms.PictureBox()
+        Me.Label32 = New System.Windows.Forms.Label()
+        Me.Label28 = New System.Windows.Forms.Label()
+        Me.Label26 = New System.Windows.Forms.Label()
+        Me.cboHelper2 = New System.Windows.Forms.ComboBox()
+        Me.cboHelper1 = New System.Windows.Forms.ComboBox()
+        Me.cboAgent = New System.Windows.Forms.ComboBox()
         Me.txtClassDescription = New System.Windows.Forms.TextBox()
         Me.Label31 = New System.Windows.Forms.Label()
         Me.txtVendorCodeNameInfo = New System.Windows.Forms.TextBox()
@@ -152,6 +161,9 @@ Partial Class ViewEditLineUpDeliveryForm
         CType(Me.dgCartons, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.gbAddProductItem.SuspendLayout()
         Me.gbLineUpInformation.SuspendLayout()
+        CType(Me.btnAddHelper2, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.btnAddHelper1, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.btnAddAgent, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbAddDriver, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbAddTruckShiftInfo, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.msMenu.SuspendLayout()
@@ -554,7 +566,7 @@ Partial Class ViewEditLineUpDeliveryForm
         Me.gbCartons.Controls.Add(Me.gbAddProductItem)
         Me.gbCartons.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.gbCartons.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.gbCartons.Location = New System.Drawing.Point(7, 298)
+        Me.gbCartons.Location = New System.Drawing.Point(7, 371)
         Me.gbCartons.Name = "gbCartons"
         Me.gbCartons.Size = New System.Drawing.Size(605, 230)
         Me.gbCartons.TabIndex = 4
@@ -768,6 +780,15 @@ Partial Class ViewEditLineUpDeliveryForm
         '
         'gbLineUpInformation
         '
+        Me.gbLineUpInformation.Controls.Add(Me.btnAddHelper2)
+        Me.gbLineUpInformation.Controls.Add(Me.btnAddHelper1)
+        Me.gbLineUpInformation.Controls.Add(Me.btnAddAgent)
+        Me.gbLineUpInformation.Controls.Add(Me.Label32)
+        Me.gbLineUpInformation.Controls.Add(Me.Label28)
+        Me.gbLineUpInformation.Controls.Add(Me.Label26)
+        Me.gbLineUpInformation.Controls.Add(Me.cboHelper2)
+        Me.gbLineUpInformation.Controls.Add(Me.cboHelper1)
+        Me.gbLineUpInformation.Controls.Add(Me.cboAgent)
         Me.gbLineUpInformation.Controls.Add(Me.txtClassDescription)
         Me.gbLineUpInformation.Controls.Add(Me.Label31)
         Me.gbLineUpInformation.Controls.Add(Me.txtVendorCodeNameInfo)
@@ -815,9 +836,108 @@ Partial Class ViewEditLineUpDeliveryForm
         Me.gbLineUpInformation.ForeColor = System.Drawing.SystemColors.ControlText
         Me.gbLineUpInformation.Location = New System.Drawing.Point(7, 26)
         Me.gbLineUpInformation.Name = "gbLineUpInformation"
-        Me.gbLineUpInformation.Size = New System.Drawing.Size(605, 270)
+        Me.gbLineUpInformation.Size = New System.Drawing.Size(605, 339)
         Me.gbLineUpInformation.TabIndex = 3
         Me.gbLineUpInformation.TabStop = False
+        '
+        'btnAddHelper2
+        '
+        Me.btnAddHelper2.BackColor = System.Drawing.Color.Transparent
+        Me.btnAddHelper2.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.btnAddHelper2.Image = CType(resources.GetObject("btnAddHelper2.Image"), System.Drawing.Image)
+        Me.btnAddHelper2.Location = New System.Drawing.Point(582, 303)
+        Me.btnAddHelper2.Name = "btnAddHelper2"
+        Me.btnAddHelper2.Size = New System.Drawing.Size(14, 18)
+        Me.btnAddHelper2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.btnAddHelper2.TabIndex = 605
+        Me.btnAddHelper2.TabStop = False
+        Me.btnAddHelper2.Tag = ""
+        '
+        'btnAddHelper1
+        '
+        Me.btnAddHelper1.BackColor = System.Drawing.Color.Transparent
+        Me.btnAddHelper1.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.btnAddHelper1.Image = CType(resources.GetObject("btnAddHelper1.Image"), System.Drawing.Image)
+        Me.btnAddHelper1.Location = New System.Drawing.Point(582, 276)
+        Me.btnAddHelper1.Name = "btnAddHelper1"
+        Me.btnAddHelper1.Size = New System.Drawing.Size(14, 18)
+        Me.btnAddHelper1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.btnAddHelper1.TabIndex = 604
+        Me.btnAddHelper1.TabStop = False
+        Me.btnAddHelper1.Tag = ""
+        '
+        'btnAddAgent
+        '
+        Me.btnAddAgent.BackColor = System.Drawing.Color.Transparent
+        Me.btnAddAgent.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.btnAddAgent.Image = CType(resources.GetObject("btnAddAgent.Image"), System.Drawing.Image)
+        Me.btnAddAgent.Location = New System.Drawing.Point(294, 276)
+        Me.btnAddAgent.Name = "btnAddAgent"
+        Me.btnAddAgent.Size = New System.Drawing.Size(14, 18)
+        Me.btnAddAgent.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.btnAddAgent.TabIndex = 603
+        Me.btnAddAgent.TabStop = False
+        Me.btnAddAgent.Tag = ""
+        '
+        'Label32
+        '
+        Me.Label32.AutoSize = True
+        Me.Label32.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label32.Location = New System.Drawing.Point(312, 306)
+        Me.Label32.Name = "Label32"
+        Me.Label32.Size = New System.Drawing.Size(57, 15)
+        Me.Label32.TabIndex = 595
+        Me.Label32.Text = "Helper 2:"
+        '
+        'Label28
+        '
+        Me.Label28.AutoSize = True
+        Me.Label28.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label28.Location = New System.Drawing.Point(312, 279)
+        Me.Label28.Name = "Label28"
+        Me.Label28.Size = New System.Drawing.Size(57, 15)
+        Me.Label28.TabIndex = 595
+        Me.Label28.Text = "Helper 1:"
+        '
+        'Label26
+        '
+        Me.Label26.AutoSize = True
+        Me.Label26.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label26.Location = New System.Drawing.Point(5, 279)
+        Me.Label26.Name = "Label26"
+        Me.Label26.Size = New System.Drawing.Size(41, 15)
+        Me.Label26.TabIndex = 595
+        Me.Label26.Text = "Agent:"
+        '
+        'cboHelper2
+        '
+        Me.cboHelper2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cboHelper2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cboHelper2.FormattingEnabled = True
+        Me.cboHelper2.Location = New System.Drawing.Point(385, 298)
+        Me.cboHelper2.Name = "cboHelper2"
+        Me.cboHelper2.Size = New System.Drawing.Size(194, 23)
+        Me.cboHelper2.TabIndex = 594
+        '
+        'cboHelper1
+        '
+        Me.cboHelper1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cboHelper1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cboHelper1.FormattingEnabled = True
+        Me.cboHelper1.Location = New System.Drawing.Point(385, 271)
+        Me.cboHelper1.Name = "cboHelper1"
+        Me.cboHelper1.Size = New System.Drawing.Size(194, 23)
+        Me.cboHelper1.TabIndex = 594
+        '
+        'cboAgent
+        '
+        Me.cboAgent.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cboAgent.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cboAgent.FormattingEnabled = True
+        Me.cboAgent.Location = New System.Drawing.Point(52, 271)
+        Me.cboAgent.Name = "cboAgent"
+        Me.cboAgent.Size = New System.Drawing.Size(238, 23)
+        Me.cboAgent.TabIndex = 594
         '
         'txtClassDescription
         '
@@ -1262,7 +1382,7 @@ Partial Class ViewEditLineUpDeliveryForm
         Me.msMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.msSave, Me.msToDeliver, Me.msOrder, Me.msPrint, Me.msConfirm})
         Me.msMenu.Location = New System.Drawing.Point(0, 0)
         Me.msMenu.Name = "msMenu"
-        Me.msMenu.Size = New System.Drawing.Size(619, 24)
+        Me.msMenu.Size = New System.Drawing.Size(612, 24)
         Me.msMenu.TabIndex = 18
         '
         'msSave
@@ -1276,7 +1396,7 @@ Partial Class ViewEditLineUpDeliveryForm
         '
         Me.msToDeliver.Image = CType(resources.GetObject("msToDeliver.Image"), System.Drawing.Image)
         Me.msToDeliver.Name = "msToDeliver"
-        Me.msToDeliver.Size = New System.Drawing.Size(93, 20)
+        Me.msToDeliver.Size = New System.Drawing.Size(92, 20)
         Me.msToDeliver.Text = "To &Deliver"
         '
         'msOrder
@@ -1365,6 +1485,9 @@ Partial Class ViewEditLineUpDeliveryForm
         Me.gbAddProductItem.PerformLayout()
         Me.gbLineUpInformation.ResumeLayout(False)
         Me.gbLineUpInformation.PerformLayout()
+        CType(Me.btnAddHelper2, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.btnAddHelper1, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.btnAddAgent, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.pbAddDriver, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.pbAddTruckShiftInfo, System.ComponentModel.ISupportInitialize).EndInit()
         Me.msMenu.ResumeLayout(False)
@@ -1481,4 +1604,13 @@ Partial Class ViewEditLineUpDeliveryForm
     Friend WithEvents ca_status As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents ca_packeddate As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents ca_option As System.Windows.Forms.DataGridViewButtonColumn
+    Friend WithEvents Label32 As Label
+    Friend WithEvents Label28 As Label
+    Friend WithEvents Label26 As Label
+    Friend WithEvents cboHelper2 As ComboBox
+    Friend WithEvents cboHelper1 As ComboBox
+    Friend WithEvents cboAgent As ComboBox
+    Friend WithEvents btnAddAgent As PictureBox
+    Friend WithEvents btnAddHelper1 As PictureBox
+    Friend WithEvents btnAddHelper2 As PictureBox
 End Class

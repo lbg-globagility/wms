@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using WarehouseManagementSystem.Core.Entities.Base;
 using WarehouseManagementSystem.Core.Enums;
 
@@ -36,11 +37,50 @@ namespace WarehouseManagementSystem.Core.Entities
 
     public partial class Contact
     {
+        private Contact()
+        { }
+
+        public Contact(int organizationId,
+            string lastName,
+            string firstName,
+            ContactType type,
+            string workPhone,
+            string status = "Active")
+        {
+            OrganizationID = organizationId;
+            LastName = lastName;
+            FirstName = firstName;
+            Type = type;
+            Status = status;
+            WorkPhone = workPhone;
+        }
+
         public bool IsAgent => Type == ContactType.Agent;
         public bool IsContact => Type == ContactType.Contact;
         public bool IsDriver => Type == ContactType.Driver;
         public bool IsHelper => Type == ContactType.Helper;
         public bool IsPacker => Type == ContactType.Packer;
         public bool IsPicker => Type == ContactType.Picker;
+
+        public string FullNameLastNameFirst
+        {
+            get
+            {
+                string[] names = { LastName, FirstName };
+                return string.Join(", ", names.Where(n => !string.IsNullOrEmpty(n)).ToArray());
+            }
+        }
+
+        public static Contact NewContact(int organizationId,
+            string lastName,
+            string firstName,
+            ContactType type,
+            string workPhone,
+            string status = "Active") => new Contact(organizationId: organizationId,
+                lastName: lastName,
+                firstName: firstName,
+                type: type,
+                workPhone: workPhone,
+                status: status);
     }
 }

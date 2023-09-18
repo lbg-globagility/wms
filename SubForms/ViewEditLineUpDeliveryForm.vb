@@ -1,4 +1,7 @@
-﻿Imports MySql.Data.MySqlClient
+﻿Imports Microsoft.Extensions.DependencyInjection
+Imports MySql.Data.MySqlClient
+Imports WarehouseManagementSystem.Core.Enums
+Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
 
 Public Class ViewEditLineUpDeliveryForm
     Dim manager As New sqlModule.Manager
@@ -22,8 +25,10 @@ Public Class ViewEditLineUpDeliveryForm
     Public veludpublicdeliverytruckshiftid As Integer
     Public vieweditlineupdeliverycue As Boolean = False
     Public veludpublicselectedcellcue As Boolean = False
+    Private _agents As List(Of WarehouseManagementSystem.Core.Entities.Contact)
+    Private _drivers As List(Of WarehouseManagementSystem.Core.Entities.Contact)
 
-    Private Sub ViewEditLineUpDeliveryForm_Load(sender As Object, e As EventArgs) Handles Me.Load
+    Private Async Function ViewEditLineUpDeliveryForm_LoadAsync(sender As Object, e As EventArgs) As Task Handles Me.Load
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
@@ -49,7 +54,41 @@ Public Class ViewEditLineUpDeliveryForm
             conn.Close()
         End Try
         Me.Cursor = Cursors.Default
-    End Sub
+
+        Await GetAgentsAsync()
+        Await GetDriversAsync()
+    End Function
+
+    Private Async Function GetAgentsAsync() As Task
+        Dim contactDataService = MainServiceProvider.GetRequiredService(Of IContactDataService)
+
+        _agents = Await contactDataService.GetAgentsAsync(organizationId:=Z_OrganizationID)
+
+        Dim agentDataSource = New List(Of WarehouseManagementSystem.Core.Entities.Contact) From {WarehouseManagementSystem.Core.Entities.Contact.NewContact(organizationId:=Z_OrganizationID, lastName:=String.Empty, firstName:=String.Empty, workPhone:=String.Empty, type:=ContactType.Agent)}
+        agentDataSource.AddRange(_agents)
+        cboAgent.ValueMember = "RowID"
+        cboAgent.DisplayMember = "FullNameLastNameFirst"
+        cboAgent.DataSource = agentDataSource
+
+    End Function
+
+    Private Async Function GetDriversAsync() As Task
+        Dim contactDataService = MainServiceProvider.GetRequiredService(Of IContactDataService)
+
+        _drivers = Await contactDataService.GetDriversAsync(organizationId:=Z_OrganizationID)
+
+        Dim driverDataSource = New List(Of WarehouseManagementSystem.Core.Entities.Contact) From {WarehouseManagementSystem.Core.Entities.Contact.NewContact(organizationId:=Z_OrganizationID, lastName:=String.Empty, firstName:=String.Empty, workPhone:=String.Empty, type:=ContactType.Driver)}
+        driverDataSource.AddRange(_drivers)
+
+        cboHelper1.ValueMember = "RowID"
+        cboHelper1.DisplayMember = "FullNameLastNameFirst"
+        cboHelper1.DataSource = driverDataSource
+
+        cboHelper2.ValueMember = "RowID"
+        cboHelper2.DisplayMember = "FullNameLastNameFirst"
+        cboHelper2.DataSource = driverDataSource
+
+    End Function
 
     Private Sub ViewEditLineUpDeliveryForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
         Me.Cursor = Cursors.WaitCursor
@@ -2068,7 +2107,10 @@ Public Class ViewEditLineUpDeliveryForm
                 End If
                 getContactID(cboDriverName.Text, "Driver", Me)
                 veludcontactid = globalcontactid
-                U_LineUps(CInt(dgLineUpList.CurrentRow.Cells("lu_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, If(veludcontactid = 0, DBNull.Value, veludcontactid), veluddeliverytruckshiftid, dtpLineUpDate.Value, txtSIDRNo.Text, txtComments.Text, Me)
+                U_LineUps(CInt(dgLineUpList.CurrentRow.Cells("lu_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, If(veludcontactid = 0, DBNull.Value, veludcontactid), veluddeliverytruckshiftid, dtpLineUpDate.Value, txtSIDRNo.Text, txtComments.Text, Me,
+                    AgentId:=cboAgent.SelectedValue,
+                    Helper1Id:=cboHelper1.SelectedValue,
+                    Helper2Id:=cboHelper2.SelectedValue)
                 If myModule.systemerrorfound = False Then
                     myBalloon("Successfully Updated", "Update", lblsavemsg, -15, -65)
                     vieweditlineupdeliverycue = legit
@@ -2184,7 +2226,10 @@ Public Class ViewEditLineUpDeliveryForm
                 End If
                 getContactID(cboDriverName.Text, "Driver", Me)
                 veludcontactid = globalcontactid
-                U_LineUps(CInt(dgLineUpList.CurrentRow.Cells("lu_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, If(veludcontactid = 0, DBNull.Value, veludcontactid), veluddeliverytruckshiftid, dtpLineUpDate.Value, txtSIDRNo.Text, txtComments.Text, Me)
+                U_LineUps(CInt(dgLineUpList.CurrentRow.Cells("lu_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, If(veludcontactid = 0, DBNull.Value, veludcontactid), veluddeliverytruckshiftid, dtpLineUpDate.Value, txtSIDRNo.Text, txtComments.Text, Me,
+                    AgentId:=cboAgent.SelectedValue,
+                    Helper1Id:=cboHelper1.SelectedValue,
+                    Helper2Id:=cboHelper2.SelectedValue)
                 U_LineUpStatus(CInt(dgLineUpList.CurrentRow.Cells("lu_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, "Delivered", Me)
                 If myModule.systemerrorfound = False Then
                     myBalloon("Successfully Delivered", "Deliver", lblsavemsg, -15, -65)
@@ -2373,7 +2418,10 @@ Public Class ViewEditLineUpDeliveryForm
                 End If
                 getContactID(cboDriverName.Text, "Driver", Me)
                 veludcontactid = globalcontactid
-                U_LineUps(CInt(dgLineUpList.CurrentRow.Cells("lu_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, If(veludcontactid = 0, DBNull.Value, veludcontactid), veluddeliverytruckshiftid, dtpLineUpDate.Value, txtSIDRNo.Text, txtComments.Text, Me)
+                U_LineUps(CInt(dgLineUpList.CurrentRow.Cells("lu_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, If(veludcontactid = 0, DBNull.Value, veludcontactid), veluddeliverytruckshiftid, dtpLineUpDate.Value, txtSIDRNo.Text, txtComments.Text, Me,
+                    AgentId:=cboAgent.SelectedValue,
+                    Helper1Id:=cboHelper1.SelectedValue,
+                    Helper2Id:=cboHelper2.SelectedValue)
                 If PrimaryForm.MainLoadingBar.Value < vplloadingbar Then
                     PrimaryForm.MainLoadingBar.Value = PrimaryForm.MainLoadingBar.Value + startingpage
                 End If
@@ -2943,5 +2991,26 @@ Public Class ViewEditLineUpDeliveryForm
     End Sub
 
 #End Region
+
+    Private Async Sub btnAddAgent_Click(sender As Object, e As EventArgs) Handles btnAddAgent.Click
+        Dim form As New AddContactForm(contactType:=ContactType.Agent, True)
+        If form.ShowDialog() = DialogResult.OK Then
+            Await GetAgentsAsync()
+        End If
+    End Sub
+
+    Private Async Sub btnAddHelper1_Click(sender As Object, e As EventArgs) Handles btnAddHelper1.Click
+        Dim form As New AddContactForm(contactType:=ContactType.Helper, True)
+        If form.ShowDialog() = DialogResult.OK Then
+            Await GetDriversAsync()
+        End If
+    End Sub
+
+    Private Async Sub btnAddHelper2_Click(sender As Object, e As EventArgs) Handles btnAddHelper2.Click
+        Dim form As New AddContactForm(contactType:=ContactType.Helper, True)
+        If form.ShowDialog() = DialogResult.OK Then
+            Await GetDriversAsync()
+        End If
+    End Sub
 
 End Class

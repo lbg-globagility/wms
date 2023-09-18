@@ -1,18 +1,12 @@
-﻿Imports MySql.Data.MySqlClient
-Imports System.IO
-Imports System.Windows.Forms
-Imports CrystalDecisions.CrystalReports.Engine
-Imports System.Linq
-Imports System.Collections
-Imports System.Collections.Generic
-Imports System.Data
-Imports System.Diagnostics
-Imports System.Runtime.InteropServices
-Imports System.Text.RegularExpressions
+﻿Imports Microsoft.Extensions.DependencyInjection
+Imports MySql.Data.MySqlClient
+Imports WarehouseManagementSystem.Core.Enums
+Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
+
 Public Class AddLineUpForm
     Dim manager As New sqlModule.Manager
-    Dim conn As New MySqlConnection(Manager.GetConnString)
-    Dim conn1 As New MySqlConnection(Manager.GetConnString)
+    Dim conn As New MySqlConnection(manager.GetConnString)
+    Dim conn1 As New MySqlConnection(manager.GetConnString)
     Dim sqlcmd As MySqlCommand
     Dim sqlrd As MySqlDataReader
     Dim sqlquery As String
@@ -21,7 +15,10 @@ Public Class AddLineUpForm
     Dim aluddeliverytruckcbm, aludlineupboxescbm, aludlineupboxescbmsum, aludtobelineupcbm As Decimal
     Dim aludorderid, aludpackinglistid, aludqtyincartonsum, aluddeliverytruckshiftid, aludtotalqtyincarton As Integer
     Public addlineupdeliverycue As Boolean = False
-    Private Sub AddLineUpForm_Load(sender As Object, e As EventArgs) Handles Me.Load
+    Private _agents As List(Of WarehouseManagementSystem.Core.Entities.Contact)
+    Private _drivers As List(Of WarehouseManagementSystem.Core.Entities.Contact)
+
+    Private Async Sub AddLineUpForm_Load(sender As Object, e As EventArgs) Handles Me.Load
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
@@ -37,19 +34,27 @@ Public Class AddLineUpForm
             conn.Close()
         End Try
         Me.Cursor = Cursors.Default
+
+        Await GetAgentsAsync()
+        Await GetDriversAsync()
     End Sub
+
 #Region "Functions"
+
     Sub callAutoComplete()
         globalautocompleteOrderInfoB(cboCustomerOrderInfo, Me)
         globalautocompleteTruckShiftInfo(cboTruckShiftInfo, Me)
         globalautocompleteContactName(cboDriverName, "Driver", Me)
     End Sub
+
     Sub callAutoPopulate()
         globalautopopulateOrderInfoB(cboCustomerOrderInfo, Me)
         globalautopopulateTruckShiftInfo(cboTruckShiftInfo, Me)
         globalautopopulateContactName(cboDriverName, "Driver", Me)
     End Sub
+
 #Region "Clear/Enable/Visible"
+
     Sub clearfields()
         Try
             clearLineUpInformation()
@@ -62,6 +67,7 @@ Public Class AddLineUpForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearLineUpInformation()
         Try
             txtLineUpNo.Text = ""
@@ -92,6 +98,7 @@ Public Class AddLineUpForm
             conn.Close()
         End Try
     End Sub
+
     Sub enableGB(ByVal enable1 As Boolean)
         Try
             gbCartons.Enabled = enable1
@@ -102,8 +109,11 @@ Public Class AddLineUpForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Computations"
+
     Sub getTotalQtyInCarton(ByVal epackinglistid As Integer, ByVal eorderitemid As Integer)
         Try
             aludtotalqtyincarton = 0
@@ -118,6 +128,7 @@ Public Class AddLineUpForm
             MsgBox(getErrExcptn(ex, Me.Name))
         End Try
     End Sub
+
     Sub getDeliveryTruckCBM(ByVal edeliverytruckid As Integer)
         Try
             aluddeliverytruckcbm = 0
@@ -132,6 +143,7 @@ Public Class AddLineUpForm
             MsgBox(getErrExcptn(ex, Me.Name))
         End Try
     End Sub
+
     Sub getLineUpID(ByVal edeliverytruckshiftid As Integer, ByVal edeliverydate As String)
         Try
             aludlineupboxescbmsum = 0.0
@@ -152,6 +164,7 @@ Public Class AddLineUpForm
             conn.Close()
         End Try
     End Sub
+
     Sub getLineUpBoxesCBM(ByVal ilineupid As Integer)
         Try
             aludlineupboxescbm = 0
@@ -166,6 +179,7 @@ Public Class AddLineUpForm
             MsgBox(getErrExcptn(ex, Me.Name))
         End Try
     End Sub
+
     Sub addlineupdeliverycomputations()
         Try
             aludqtyincartonsum = 0
@@ -183,6 +197,7 @@ Public Class AddLineUpForm
             conn.Close()
         End Try
     End Sub
+
     Sub cbmcomputation(ByVal ideliverytruckid As Integer, ByVal ideliverytruckshiftid As Integer, ByVal ideliverydate As String)
         Try
             getLineUpCBMID(ideliverytruckshiftid, ideliverydate, Me)
@@ -208,14 +223,18 @@ Public Class AddLineUpForm
             MsgBox(getErrExcptn(ex, Me.Name))
         End Try
     End Sub
+
 #End Region
+
 #Region "Display"
+
 #Region "Datagrids"
+
     Sub displayPackingListCartons(ByVal ipackinglistid As Integer)
         Try
             dgCartons.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT pc.rowid,COALESCE(pc.cartonno,''),COALESCE(CONCAT(COALESCE(c.firstname,''),' ',COALESCE(c.middlename,''),' ',COALESCE(c.lastname,''),' ',COALESCE(c.suffix,''),' - ',COALESCE(c.contactno,'')),''),COALESCE(DATE_FORMAT(pc.packeddate,'%d-%b-%Y'),''),COALESCE(pc.`status`,''),COALESCE(cs.sizename,'')," & _
+            Dim sql1 As String = "SELECT pc.rowid,COALESCE(pc.cartonno,''),COALESCE(CONCAT(COALESCE(c.firstname,''),' ',COALESCE(c.middlename,''),' ',COALESCE(c.lastname,''),' ',COALESCE(c.suffix,''),' - ',COALESCE(c.contactno,'')),''),COALESCE(DATE_FORMAT(pc.packeddate,'%d-%b-%Y'),''),COALESCE(pc.`status`,''),COALESCE(cs.sizename,'')," &
                         "COALESCE(cs.`length`,0),COALESCE(cs.`width`,0),COALESCE(cs.`height`,0) FROM packinglistcartons pc LEFT JOIN contacts c ON pc.contactid = c.rowid LEFT JOIN cartonsizes cs ON pc.cartonsizeid = cs.rowid WHERE pc.packinglistid = " & ipackinglistid & " AND pc.organizationid = " & Z_OrganizationID & " AND pc.`status` != 'Inactive' ORDER BY pc.cartonno "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -254,12 +273,13 @@ Public Class AddLineUpForm
             conn.Close()
         End Try
     End Sub
+
     Sub displayPackingListCartonItems(ByVal ipackinglistcartonid As Integer)
         Try
             dgCartonItems.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT pci.rowid,COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(c.colorname,''),COALESCE(pcs.size,''),COALESCE(pcs.seasoncode,''),COALESCE(pci.qtyincarton,0),COALESCE(pcs.sku,''),COALESCE(oi.unitofmeasure,''),COALESCE(oi.itemtype,''),COALESCE(oi.sku,'') " & _
-                    "FROM packinglistcartonitems pci LEFT JOIN orderitems oi ON pci.orderitemid = oi.rowid LEFT JOIN productcolorsizes pcs ON oi.productcolorsizeid = pcs.rowid LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN colors c ON pc.colorid = c.rowid " & _
+            Dim sql1 As String = "SELECT pci.rowid,COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(c.colorname,''),COALESCE(pcs.size,''),COALESCE(pcs.seasoncode,''),COALESCE(pci.qtyincarton,0),COALESCE(pcs.sku,''),COALESCE(oi.unitofmeasure,''),COALESCE(oi.itemtype,''),COALESCE(oi.sku,'') " &
+                    "FROM packinglistcartonitems pci LEFT JOIN orderitems oi ON pci.orderitemid = oi.rowid LEFT JOIN productcolorsizes pcs ON oi.productcolorsizeid = pcs.rowid LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN colors c ON pc.colorid = c.rowid " &
                     "LEFT JOIN products p ON pc.productid = p.rowid WHERE pci.packinglistcartonid = " & ipackinglistcartonid & " AND pci.organizationid = " & Z_OrganizationID & " AND pci.status != 'Inactive' ORDER BY p.productcode,c.colorname,pcs.size "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -307,8 +327,11 @@ Public Class AddLineUpForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Colors"
+
     Sub colorCoding()
         Try
             If dgCartonItems.Rows.Count <> 0 Then
@@ -328,9 +351,13 @@ Public Class AddLineUpForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #End Region
+
 #Region "Saving"
+
     Sub updatePackingListCartonItems(ByVal ipackinglistcartonid As Integer)
         Try
             If conn.State = ConnectionState.Closed Then conn.Open()
@@ -356,8 +383,42 @@ Public Class AddLineUpForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
+    Private Async Function GetAgentsAsync() As Task
+        Dim contactDataService = MainServiceProvider.GetRequiredService(Of IContactDataService)
+
+        _agents = Await contactDataService.GetAgentsAsync(organizationId:=Z_OrganizationID)
+
+        Dim agentDataSource = New List(Of WarehouseManagementSystem.Core.Entities.Contact) From {WarehouseManagementSystem.Core.Entities.Contact.NewContact(organizationId:=Z_OrganizationID, lastName:=String.Empty, firstName:=String.Empty, workPhone:=String.Empty, type:=ContactType.Agent)}
+        agentDataSource.AddRange(_agents)
+        cboAgent.ValueMember = "RowID"
+        cboAgent.DisplayMember = "FullNameLastNameFirst"
+        cboAgent.DataSource = agentDataSource
+
+    End Function
+
+    Private Async Function GetDriversAsync() As Task
+        Dim contactDataService = MainServiceProvider.GetRequiredService(Of IContactDataService)
+
+        _drivers = Await contactDataService.GetDriversAsync(organizationId:=Z_OrganizationID)
+
+        Dim driverDataSource = New List(Of WarehouseManagementSystem.Core.Entities.Contact) From {WarehouseManagementSystem.Core.Entities.Contact.NewContact(organizationId:=Z_OrganizationID, lastName:=String.Empty, firstName:=String.Empty, workPhone:=String.Empty, type:=ContactType.Driver)}
+        driverDataSource.AddRange(_drivers)
+
+        cboHelper1.ValueMember = "RowID"
+        cboHelper1.DisplayMember = "FullNameLastNameFirst"
+        cboHelper1.DataSource = driverDataSource
+
+        cboHelper2.ValueMember = "RowID"
+        cboHelper2.DisplayMember = "FullNameLastNameFirst"
+        cboHelper2.DataSource = driverDataSource
+
+    End Function
+
 #End Region
+
     'Private Sub cboCustomerOrderInfo_Leave(sender As Object, e As EventArgs) Handles cboCustomerOrderInfo.Leave
     '    Me.Cursor = Cursors.WaitCursor
     '    Try
@@ -520,6 +581,7 @@ Public Class AddLineUpForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboCustomerOrderInfo_TextChanged(sender As Object, e As EventArgs) Handles cboCustomerOrderInfo.TextChanged
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -601,6 +663,7 @@ Public Class AddLineUpForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     'Private Sub cboTruckShiftInfo_Leave(sender As Object, e As EventArgs) Handles cboTruckShiftInfo.Leave
     '    Me.Cursor = Cursors.WaitCursor
     '    Try
@@ -681,6 +744,7 @@ Public Class AddLineUpForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboTruckShiftInfo_TextChanged(sender As Object, e As EventArgs) Handles cboTruckShiftInfo.TextChanged
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -721,6 +785,7 @@ Public Class AddLineUpForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dtpLineUpDate_ValueChanged(sender As Object, e As EventArgs) Handles dtpLineUpDate.ValueChanged
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -761,6 +826,7 @@ Public Class AddLineUpForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub pbAddTruckShiftInfo_MouseEnter(sender As Object, e As EventArgs) Handles pbAddTruckShiftInfo.MouseEnter
         Try
             pbAddTruckShiftInfo.BackColor = Color.MediumSpringGreen
@@ -770,6 +836,7 @@ Public Class AddLineUpForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbAddTruckShiftInfo_MouseLeave(sender As Object, e As EventArgs) Handles pbAddTruckShiftInfo.MouseLeave
         Try
             pbAddTruckShiftInfo.BackColor = Color.Transparent
@@ -779,6 +846,7 @@ Public Class AddLineUpForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbAddDriver_MouseEnter(sender As Object, e As EventArgs) Handles pbAddDriver.MouseEnter
         Try
             pbAddDriver.BackColor = Color.MediumSpringGreen
@@ -788,6 +856,7 @@ Public Class AddLineUpForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbAddDriver_MouseLeave(sender As Object, e As EventArgs) Handles pbAddDriver.MouseLeave
         Try
             pbAddDriver.BackColor = Color.Transparent
@@ -797,6 +866,7 @@ Public Class AddLineUpForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbAddTruckShiftInfo_Click(sender As Object, e As EventArgs) Handles pbAddTruckShiftInfo.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -829,6 +899,7 @@ Public Class AddLineUpForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub pbAddDriver_Click(sender As Object, e As EventArgs) Handles pbAddDriver.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -860,6 +931,7 @@ Public Class AddLineUpForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgCartons_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgCartons.CellClick
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -874,6 +946,7 @@ Public Class AddLineUpForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgCartons_CellEndEdit(sender As Object, e As DataGridViewCellEventArgs) Handles dgCartons.CellEndEdit
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -892,6 +965,7 @@ Public Class AddLineUpForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgCartons_KeyUp(sender As Object, e As KeyEventArgs) Handles dgCartons.KeyUp
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -908,6 +982,7 @@ Public Class AddLineUpForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgCartons_CurrentCellDirtyStateChanged(ByVal sender As Object, ByVal e As EventArgs) Handles dgCartons.CurrentCellDirtyStateChanged
         Try
             If dgCartons.IsCurrentCellDirty = legit Then
@@ -920,6 +995,7 @@ Public Class AddLineUpForm
             MsgBox(getErrExcptn(ex, Me.Name))
         End Try
     End Sub
+
     Private Sub msSave_Click(sender As Object, e As EventArgs) Handles msSave.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1023,7 +1099,10 @@ Public Class AddLineUpForm
                 aludcontactid = globalcontactid
                 getLineUpNo(Me)
                 If myModule.systemerrorfound = False Then
-                    I_LineUps(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, If(aludcontactid = 0, DBNull.Value, aludcontactid), aludpackinglistid, aluddeliverytruckshiftid, aludorderid, dtpLineUpDate.Value, txtDeliveryHours.Text, globallineupno, txtSIDRNo.Text, txtStatus.Text, txtComments.Text, txtDeliveryAddress.Text, Me)
+                    I_LineUps(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, If(aludcontactid = 0, DBNull.Value, aludcontactid), aludpackinglistid, aluddeliverytruckshiftid, aludorderid, dtpLineUpDate.Value, txtDeliveryHours.Text, globallineupno, txtSIDRNo.Text, txtStatus.Text, txtComments.Text, txtDeliveryAddress.Text, Me,
+                        AgentId:=cboAgent.SelectedValue,
+                        Helper1Id:=cboHelper1.SelectedValue,
+                        Helper2Id:=cboHelper2.SelectedValue)
                     aludlineupid = globallineupidsp
                     getLineUpCBMID(aluddeliverytruckshiftid, Format(dtpLineUpDate.Value, "yyyy-MM-dd"), Me)
                     aludlineupcbmid = globallineupcbmid
@@ -1036,7 +1115,7 @@ Public Class AddLineUpForm
                         If dgCartons.Rows(a).Cells("ca_lineup").Value = legit Then
                             getPackingListCartonStatus(CInt(dgCartons.Rows(a).Cells("ca_rowid").Value), Me)
                             If globalpackinglistcartonstatus = "Active" Then
-                                I_LineUpCartons(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, CInt(dgCartons.Rows(a).Cells("ca_rowid").Value), aludlineupid, "Lined Up", _
+                                I_LineUpCartons(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, CInt(dgCartons.Rows(a).Cells("ca_rowid").Value), aludlineupid, "Lined Up",
                                             If(IsNumeric(dgCartons.Rows(a).Cells("ca_cbm").Value), CDec(dgCartons.Rows(a).Cells("ca_cbm").Value), 0.0), Me)
                                 If myModule.systemerrorfound = False Then
                                     U_PackingListCartonStatus(CInt(dgCartons.Rows(a).Cells("ca_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, "Lined Up", Me)
@@ -1071,7 +1150,9 @@ Public Class AddLineUpForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #Region "Datagrid MouseUp"
+
     Private Sub dgCartons_MouseUp(sender As Object, e As MouseEventArgs) Handles dgCartons.MouseUp
         Try
             Dim hitTestinfo As DataGridView.HitTestInfo
@@ -1089,8 +1170,11 @@ Public Class AddLineUpForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Datagrid Errors"
+
     Private Sub dgCartons_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgCartons.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1131,6 +1215,7 @@ Public Class AddLineUpForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgCartonItems_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgCartonItems.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1171,5 +1256,28 @@ Public Class AddLineUpForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #End Region
+
+    Private Async Sub btnAddAgent_Click(sender As Object, e As EventArgs) Handles btnAddAgent.Click
+        Dim form As New AddContactForm(contactType:=ContactType.Agent, True)
+        If form.ShowDialog() = DialogResult.OK Then
+            Await GetAgentsAsync()
+        End If
+    End Sub
+
+    Private Async Sub btnAddHelper1_Click(sender As Object, e As EventArgs) Handles btnAddHelper1.Click
+        Dim form As New AddContactForm(contactType:=ContactType.Helper, True)
+        If form.ShowDialog() = DialogResult.OK Then
+            Await GetDriversAsync()
+        End If
+    End Sub
+
+    Private Async Sub btnAddHelper2_Click(sender As Object, e As EventArgs) Handles btnAddHelper2.Click
+        Dim form As New AddContactForm(contactType:=ContactType.Helper, True)
+        If form.ShowDialog() = DialogResult.OK Then
+            Await GetDriversAsync()
+        End If
+    End Sub
+
 End Class
