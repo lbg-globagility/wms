@@ -50,7 +50,8 @@ namespace WarehouseManagementSystem.Core.Entities
             int userId,
             int categoryId,
             string productCode,
-            string description)
+            string description,
+            decimal? unitPrice)
         {
             OrganizationID = organizationId;
             CreatedBy = userId;
@@ -58,6 +59,7 @@ namespace WarehouseManagementSystem.Core.Entities
             ProductCode = productCode;
             ProductName = productCode;
             Description = description;
+            UnitPrice = unitPrice;
         }
 
         public virtual Category Category { get; set; }
@@ -68,11 +70,13 @@ namespace WarehouseManagementSystem.Core.Entities
             int userId,
             int categoryId,
             string productCode,
-            string description) => new Product(organizationId: organizationId,
+            string description,
+            decimal? unitPrice) => new Product(organizationId: organizationId,
                 categoryId: categoryId,
                 userId: userId,
                 productCode: productCode,
-                description: description);
+                description: description,
+                unitPrice: unitPrice);
 
         public bool HasColorAndSize(string colorName, decimal size) => ProductColors == null ? false : ProductColors?.Any(t => t.HasColorAndSize(colorName, size)) ?? false;
     }

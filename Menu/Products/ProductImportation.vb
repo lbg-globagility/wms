@@ -70,7 +70,8 @@ Public Class ProductImportation
                                     userId:=Z_UserID,
                                     categoryId:=category.RowID.Value,
                                     productCode:=productItem.FirstOrDefault().ProductCode,
-                                    description:=productItem.FirstOrDefault().Description),
+                                    description:=productItem.FirstOrDefault().Description,
+                                    unitPrice:=productItem.FirstOrDefault().SRP),
                                 userId:=Z_UserID)
                         End If
 

@@ -53,8 +53,9 @@ Public Class ImportProductForm
             ToArray()
 
         Dim productDataService = MainServiceProvider.GetRequiredService(Of IProductDataService)
-        Dim products = Await productDataService.GetManyByProductCodesAsync(organizationId:=Z_OrganizationID,
-            productCodes:=groupByColorList)
+        'Dim products = Await productDataService.GetManyByProductCodesAsync(organizationId:=Z_OrganizationID,
+        '    productCodes:=groupByColorList)
+        Dim products = Await productDataService.GetManyByOrganizationIdAsync(organizationId:=Z_OrganizationID)
 
         Dim hasColorAndSize =
             Function(t As ProductRowRecord)

@@ -47,11 +47,12 @@ namespace WarehouseManagementSystem.Core.Entities
 
         public bool HasColorAndSize(string colorName, decimal size)
         {
-            var hasColor = Color == null ? false : Color?.ColorName.ToLower() == colorName.ToLower();
+            string[] productCodes = {"MC-50M-#12",
+                "TS2-50M-BLK",
+                "TS4-50M-RED",
+                "LOO-TS4-BLU"};
 
-            var hasSize = ProductColorSizes == null ? false : ProductColorSizes?.Any(t => t.Size == size) ?? false;
-
-            return hasColor && hasSize;
+            return ProductColorSizes == null ? false : ProductColorSizes?.Any(t => t.HasColorAndSize(colorName: colorName ?? string.Empty, size: size)) ?? false;
         }
 
         public void AddProductColorSizes(List<ProductColorSize> productColorSizes)

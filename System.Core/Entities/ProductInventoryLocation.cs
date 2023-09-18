@@ -33,11 +33,13 @@ namespace WarehouseManagementSystem.Core.Entities
 
         public ProductInventoryLocation(int organizationId,
             int userId,
-            int productColorSizeId)
+            int productColorSizeId,
+            decimal? unitPrice = null)
         {
             OrganizationID = organizationId;
             CreatedBy = userId;
             ProductColorSizeID = productColorSizeId;
+            UnitPrice = unitPrice;
         }
 
         public virtual ProductColorSize ProductColorSize { get; set; }
@@ -45,8 +47,10 @@ namespace WarehouseManagementSystem.Core.Entities
 
         public static ProductInventoryLocation NewProductInventoryLocation(int organizationId,
             int userId,
-            int productColorSizeId) => new ProductInventoryLocation(organizationId: organizationId,
+            int productColorSizeId,
+            decimal? unitPrice = null) => new ProductInventoryLocation(organizationId: organizationId,
                 userId: userId,
-                productColorSizeId: productColorSizeId);
+                productColorSizeId: productColorSizeId,
+                unitPrice: unitPrice);
     }
 }

@@ -8,5 +8,7 @@ namespace WarehouseManagementSystem.Core.Interfaces.DomainServices
     public interface IProductDataService : IBaseSavableDataService<Product>
     {
         Task<List<Product>> GetManyByProductCodesAsync(int organizationId, string[] productCodes);
+
+        Task<List<Product>> GetManyByOrganizationIdAsync(int organizationId);
     }
 }

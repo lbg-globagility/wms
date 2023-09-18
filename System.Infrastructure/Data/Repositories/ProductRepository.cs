@@ -17,6 +17,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
         public async Task<List<Product>> GetManyByProductCodesAsync(int organizationId, string[] productCodes)
         {
             var productCodesToLower = productCodes
+                .Where(s => !string.IsNullOrEmpty(s))
                 .Select(s => s.ToLower())
                 .ToArray();
 
@@ -25,11 +26,25 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
                     .ThenInclude(pc => pc.Color)
                 .Include(p => p.ProductColors)
                     .ThenInclude(pc => pc.ProductColorSizes)
+                        .ThenInclude(pcs => pcs.ProductColor)
+                            .ThenInclude(pc => pc.Color)
                 .Include(p => p.Category)
                 .AsNoTracking()
                 .Where(t => t.OrganizationID == organizationId)
                 .Where(t => productCodesToLower.Contains(t.ProductCode.ToLower()))
                 .ToListAsync();
         }
+
+        public async Task<List<Product>> GetManyByOrganizationIdAsync(int organizationId) => await _context.Products
+            .Include(p => p.ProductColors)
+                .ThenInclude(pc => pc.Color)
+            .Include(p => p.ProductColors)
+                .ThenInclude(pc => pc.ProductColorSizes)
+                    .ThenInclude(pcs => pcs.ProductColor)
+                        .ThenInclude(pc => pc.Color)
+            .Include(p => p.Category)
+            .AsNoTracking()
+            .Where(t => t.OrganizationID == organizationId)
+            .ToListAsync();
     }
 }

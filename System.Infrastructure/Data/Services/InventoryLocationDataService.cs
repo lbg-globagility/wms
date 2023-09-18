@@ -81,7 +81,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
 
             var nonExistentProductColorSizes = allProductColorSizes.ToList();
 
-            if (inventoryLocationProductColorSizeIds.Any()) allProductColorSizes
+            if (inventoryLocationProductColorSizeIds.Any()) nonExistentProductColorSizes = allProductColorSizes
                 .Where(t => !inventoryLocationProductColorSizeIds.Contains(t.RowID.Value))
                 .ToList();
 

@@ -27,5 +27,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
         }
 
         public async Task<List<Product>> GetManyByProductCodesAsync(int organizationId, string[] productCodes) => await _productRepository.GetManyByProductCodesAsync(organizationId: organizationId, productCodes: productCodes);
+
+        public async Task<List<Product>> GetManyByOrganizationIdAsync(int organizationId) => await _productRepository.GetManyByOrganizationIdAsync(organizationId);
     }
 }
