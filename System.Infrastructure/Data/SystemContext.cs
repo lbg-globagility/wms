@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using System.Linq.Expressions;
 using WarehouseManagementSystem.Core.Entities;
 using WarehouseManagementSystem.Core.Enums;
 
@@ -21,6 +22,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data
         internal virtual DbSet<Invoice> Invoices { get; set; }
         internal virtual DbSet<InvoiceItem> InvoiceItems { get; set; }
         internal virtual DbSet<InvoicePayment> InvoicePayments { get; set; }
+        internal virtual DbSet<Lineup> Lineups { get; set; }
         internal virtual DbSet<Order> Orders { get; set; }
         internal virtual DbSet<OrderItem> OrderItems { get; set; }
         internal virtual DbSet<Organization> Organizations { get; set; }
@@ -145,6 +147,27 @@ namespace WarehouseManagementSystem.Infrastructure.Data
             {
                 t.Property(x => x.Type)
                     .HasConversion(new EnumToStringConverter<ContactType>());
+            });
+
+            modelBuilder.Entity<Lineup>(t =>
+            {
+                // entity value
+                Expression<System.Func<string, LineupStatus>> stringToLineupStatus()
+                {
+                    return s => s == LineupStatus.Cancelled.ToString() ? LineupStatus.Cancelled : s == LineupStatus.Delivered.ToString() ? LineupStatus.Delivered : LineupStatus.ConfirmedDelivery;
+                }
+
+                // database value
+                Expression<System.Func<LineupStatus, string>> lineupStatusToString()
+                {
+                    return l => l == LineupStatus.Cancelled ? LineupStatus.Cancelled.ToString() : l == LineupStatus.Delivered ? LineupStatus.Delivered.ToString() : "Confirmed Delivery";
+                }
+
+                var converter = new ValueConverter<LineupStatus, string>(convertToProviderExpression: lineupStatusToString(),
+                    convertFromProviderExpression: stringToLineupStatus());
+
+                t.Property(x => x.Status)
+                    .HasConversion(converter);
             });
         }
     }
