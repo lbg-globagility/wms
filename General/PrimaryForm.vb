@@ -1546,4 +1546,9 @@ Public Class PrimaryForm
         Me.Cursor = Cursors.Default
     End Sub
 
+    Private Sub AgentHelperToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AgentHelperToolStripMenuItem.Click
+        Dim form As New ViewAccounsListForm
+        form.ShowDialog()
+    End Sub
+
 End Class

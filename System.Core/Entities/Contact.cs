@@ -45,14 +45,18 @@ namespace WarehouseManagementSystem.Core.Entities
             string firstName,
             ContactType type,
             string workPhone,
+            string email,
+            string comments,
             string status = "Active")
         {
             OrganizationID = organizationId;
             LastName = lastName;
             FirstName = firstName;
             Type = type;
-            Status = status;
             WorkPhone = workPhone;
+            EmailAddress = email;
+            Comments = comments;
+            Status = status;
         }
 
         public bool IsAgent => Type == ContactType.Agent;
@@ -61,6 +65,7 @@ namespace WarehouseManagementSystem.Core.Entities
         public bool IsHelper => Type == ContactType.Helper;
         public bool IsPacker => Type == ContactType.Packer;
         public bool IsPicker => Type == ContactType.Picker;
+        public bool IsCustomer => Type == ContactType.Customer;
 
         public string FullNameLastNameFirst
         {
@@ -76,11 +81,15 @@ namespace WarehouseManagementSystem.Core.Entities
             string firstName,
             ContactType type,
             string workPhone,
+            string email = "",
+            string comments = "",
             string status = "Active") => new Contact(organizationId: organizationId,
                 lastName: lastName,
                 firstName: firstName,
                 type: type,
                 workPhone: workPhone,
+                email: email,
+                comments: comments,
                 status: status);
     }
 }

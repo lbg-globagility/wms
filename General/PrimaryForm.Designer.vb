@@ -106,12 +106,38 @@ Partial Class PrimaryForm
         Me.tabReceiving = New System.Windows.Forms.TabControl()
         Me.tabForApproval = New System.Windows.Forms.TabPage()
         Me.dgForApproval = New DevComponents.DotNetBar.Controls.DataGridViewX()
+        Me.fa_rowid = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.fa_seqno = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.fa_rrno = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.fa_rrdate = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.fa_relatedrefno = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.fa_accountname = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.fa_rrtype = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.fa_createdby = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.tabPurchaseOrders = New System.Windows.Forms.TabPage()
         Me.dgPurchaseOrders = New DevComponents.DotNetBar.Controls.DataGridViewX()
+        Me.po_rowid = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.po_seqno = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.po_pono = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.po_podate = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.po_suppliername = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.po_createdby = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.tabPullOut = New System.Windows.Forms.TabPage()
         Me.dgPullOut = New DevComponents.DotNetBar.Controls.DataGridViewX()
+        Me.pu_rowid = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.pu_seqno = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.pu_pulloutno = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.pu_pulloutdate = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.pu_customername = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.pu_createdby = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.tabReturn = New System.Windows.Forms.TabPage()
         Me.dgReturns = New DevComponents.DotNetBar.Controls.DataGridViewX()
+        Me.rt_rowid = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.rt_seqno = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.rt_returnno = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.rt_returndate = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.rt_customername = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.rt_createdby = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.pnCustomerOrders = New System.Windows.Forms.Panel()
@@ -120,19 +146,6 @@ Partial Class PrimaryForm
         Me.tabCustomerOrders = New System.Windows.Forms.TabControl()
         Me.tabNewCO = New System.Windows.Forms.TabPage()
         Me.dgNewCO = New DevComponents.DotNetBar.Controls.DataGridViewX()
-        Me.tabSubmittedToWarehouseCO = New System.Windows.Forms.TabPage()
-        Me.dgSubmittedToWarehouseCO = New DevComponents.DotNetBar.Controls.DataGridViewX()
-        Me.tabPickListedCO = New System.Windows.Forms.TabPage()
-        Me.dgPickListedCO = New DevComponents.DotNetBar.Controls.DataGridViewX()
-        Me.tabForPackingCO = New System.Windows.Forms.TabPage()
-        Me.dgForPackingCO = New DevComponents.DotNetBar.Controls.DataGridViewX()
-        Me.tabPackingCO = New System.Windows.Forms.TabPage()
-        Me.dgPackingCO = New DevComponents.DotNetBar.Controls.DataGridViewX()
-        Me.tabLinedUpCO = New System.Windows.Forms.TabPage()
-        Me.dgLinedUpCO = New DevComponents.DotNetBar.Controls.DataGridViewX()
-        Me.PictureBox2 = New System.Windows.Forms.PictureBox()
-        Me.Label3 = New System.Windows.Forms.Label()
-        Me.MainLoadingBar = New System.Windows.Forms.ProgressBar()
         Me.nw_rowid = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.nw_seqno = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.nw_cono = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -145,6 +158,8 @@ Partial Class PrimaryForm
         Me.nw_vendorinfo = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.nw_classdescription = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.nw_createdby = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.tabSubmittedToWarehouseCO = New System.Windows.Forms.TabPage()
+        Me.dgSubmittedToWarehouseCO = New DevComponents.DotNetBar.Controls.DataGridViewX()
         Me.stw_rowid = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.stw_seqno = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.stw_cono = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -158,6 +173,8 @@ Partial Class PrimaryForm
         Me.stw_vendorinfo = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.stw_classdescription = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.stw_createdby = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.tabPickListedCO = New System.Windows.Forms.TabPage()
+        Me.dgPickListedCO = New DevComponents.DotNetBar.Controls.DataGridViewX()
         Me.pl_rowid = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.pl_seqno = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.pl_plno = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -172,6 +189,8 @@ Partial Class PrimaryForm
         Me.pl_vendorinfo = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.pl_classdescription = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.pl_createdby = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.tabForPackingCO = New System.Windows.Forms.TabPage()
+        Me.dgForPackingCO = New DevComponents.DotNetBar.Controls.DataGridViewX()
         Me.fp_rowid = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.fp_seqno = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.fp_cono = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -185,6 +204,8 @@ Partial Class PrimaryForm
         Me.fp_vendorinfo = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.fp_classdescription = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.fp_createdby = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.tabPackingCO = New System.Windows.Forms.TabPage()
+        Me.dgPackingCO = New DevComponents.DotNetBar.Controls.DataGridViewX()
         Me.pa_rowid = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.pa_seqno = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.pa_pano = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -199,6 +220,8 @@ Partial Class PrimaryForm
         Me.pa_vendorinfo = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.pa_classdescription = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.pa_createdby = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.tabLinedUpCO = New System.Windows.Forms.TabPage()
+        Me.dgLinedUpCO = New DevComponents.DotNetBar.Controls.DataGridViewX()
         Me.lu_rowid = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.lu_seqno = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.lu_lineupno = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -213,32 +236,10 @@ Partial Class PrimaryForm
         Me.lu_vendorinfo = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.lu_classdescription = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.lu_createdby = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.fa_rowid = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.fa_seqno = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.fa_rrno = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.fa_rrdate = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.fa_relatedrefno = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.fa_accountname = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.fa_rrtype = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.fa_createdby = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.po_rowid = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.po_seqno = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.po_pono = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.po_podate = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.po_suppliername = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.po_createdby = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.pu_rowid = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.pu_seqno = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.pu_pulloutno = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.pu_pulloutdate = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.pu_customername = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.pu_createdby = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.rt_rowid = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.rt_seqno = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.rt_returnno = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.rt_returndate = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.rt_customername = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.rt_createdby = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.PictureBox2 = New System.Windows.Forms.PictureBox()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.MainLoadingBar = New System.Windows.Forms.ProgressBar()
+        Me.AgentHelperToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.msHome.SuspendLayout()
         Me.tsInformation.SuspendLayout()
         CType(Me.pbPin, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -350,7 +351,7 @@ Partial Class PrimaryForm
         Me.msPickList.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.msPickList.Image = CType(resources.GetObject("msPickList.Image"), System.Drawing.Image)
         Me.msPickList.Name = "msPickList"
-        Me.msPickList.Size = New System.Drawing.Size(272, 22)
+        Me.msPickList.Size = New System.Drawing.Size(271, 22)
         Me.msPickList.Text = "(&E) Pick List"
         '
         'msVerifyPickList
@@ -358,7 +359,7 @@ Partial Class PrimaryForm
         Me.msVerifyPickList.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.msVerifyPickList.Image = CType(resources.GetObject("msVerifyPickList.Image"), System.Drawing.Image)
         Me.msVerifyPickList.Name = "msVerifyPickList"
-        Me.msVerifyPickList.Size = New System.Drawing.Size(272, 22)
+        Me.msVerifyPickList.Size = New System.Drawing.Size(271, 22)
         Me.msVerifyPickList.Text = "(&F) Move From Picking To Packing"
         '
         'msPackingList
@@ -366,7 +367,7 @@ Partial Class PrimaryForm
         Me.msPackingList.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.msPackingList.Image = CType(resources.GetObject("msPackingList.Image"), System.Drawing.Image)
         Me.msPackingList.Name = "msPackingList"
-        Me.msPackingList.Size = New System.Drawing.Size(272, 22)
+        Me.msPackingList.Size = New System.Drawing.Size(271, 22)
         Me.msPackingList.Text = "(&G) Packing List"
         '
         'msLineUpAndDelivery
@@ -374,7 +375,7 @@ Partial Class PrimaryForm
         Me.msLineUpAndDelivery.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.msLineUpAndDelivery.Image = CType(resources.GetObject("msLineUpAndDelivery.Image"), System.Drawing.Image)
         Me.msLineUpAndDelivery.Name = "msLineUpAndDelivery"
-        Me.msLineUpAndDelivery.Size = New System.Drawing.Size(272, 22)
+        Me.msLineUpAndDelivery.Size = New System.Drawing.Size(271, 22)
         Me.msLineUpAndDelivery.Text = "(&H) Line-Up And Delivery"
         '
         'msReceiving
@@ -382,7 +383,7 @@ Partial Class PrimaryForm
         Me.msReceiving.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.msReceiving.Image = CType(resources.GetObject("msReceiving.Image"), System.Drawing.Image)
         Me.msReceiving.Name = "msReceiving"
-        Me.msReceiving.Size = New System.Drawing.Size(272, 22)
+        Me.msReceiving.Size = New System.Drawing.Size(271, 22)
         Me.msReceiving.Text = "(&I) Receiving"
         '
         'msProductManagement
@@ -445,7 +446,7 @@ Partial Class PrimaryForm
         '
         'msAccountsContactsReferences
         '
-        Me.msAccountsContactsReferences.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.msAccounts, Me.msContacts, Me.msReferences})
+        Me.msAccountsContactsReferences.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.msAccounts, Me.msContacts, Me.msReferences, Me.AgentHelperToolStripMenuItem})
         Me.msAccountsContactsReferences.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.msAccountsContactsReferences.Image = CType(resources.GetObject("msAccountsContactsReferences.Image"), System.Drawing.Image)
         Me.msAccountsContactsReferences.Name = "msAccountsContactsReferences"
@@ -457,7 +458,7 @@ Partial Class PrimaryForm
         Me.msAccounts.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.msAccounts.Image = CType(resources.GetObject("msAccounts.Image"), System.Drawing.Image)
         Me.msAccounts.Name = "msAccounts"
-        Me.msAccounts.Size = New System.Drawing.Size(162, 22)
+        Me.msAccounts.Size = New System.Drawing.Size(180, 22)
         Me.msAccounts.Text = "(&O) Accounts"
         '
         'msContacts
@@ -465,7 +466,7 @@ Partial Class PrimaryForm
         Me.msContacts.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.msContacts.Image = CType(resources.GetObject("msContacts.Image"), System.Drawing.Image)
         Me.msContacts.Name = "msContacts"
-        Me.msContacts.Size = New System.Drawing.Size(162, 22)
+        Me.msContacts.Size = New System.Drawing.Size(180, 22)
         Me.msContacts.Text = "(&P) Contacts"
         '
         'msReferences
@@ -473,7 +474,7 @@ Partial Class PrimaryForm
         Me.msReferences.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.msReferences.Image = CType(resources.GetObject("msReferences.Image"), System.Drawing.Image)
         Me.msReferences.Name = "msReferences"
-        Me.msReferences.Size = New System.Drawing.Size(162, 22)
+        Me.msReferences.Size = New System.Drawing.Size(180, 22)
         Me.msReferences.Text = "(&Q) References"
         '
         'msReports
@@ -873,6 +874,61 @@ Partial Class PrimaryForm
         Me.dgForApproval.Size = New System.Drawing.Size(1200, 230)
         Me.dgForApproval.TabIndex = 20
         '
+        'fa_rowid
+        '
+        Me.fa_rowid.HeaderText = "rowid"
+        Me.fa_rowid.Name = "fa_rowid"
+        Me.fa_rowid.ReadOnly = True
+        Me.fa_rowid.Visible = False
+        '
+        'fa_seqno
+        '
+        Me.fa_seqno.HeaderText = "Seq. No."
+        Me.fa_seqno.Name = "fa_seqno"
+        Me.fa_seqno.ReadOnly = True
+        Me.fa_seqno.Width = 50
+        '
+        'fa_rrno
+        '
+        Me.fa_rrno.HeaderText = "R.R. No."
+        Me.fa_rrno.Name = "fa_rrno"
+        Me.fa_rrno.ReadOnly = True
+        Me.fa_rrno.Width = 80
+        '
+        'fa_rrdate
+        '
+        Me.fa_rrdate.HeaderText = "R.R. Date"
+        Me.fa_rrdate.Name = "fa_rrdate"
+        Me.fa_rrdate.ReadOnly = True
+        Me.fa_rrdate.Width = 80
+        '
+        'fa_relatedrefno
+        '
+        Me.fa_relatedrefno.HeaderText = "Related Ref. No."
+        Me.fa_relatedrefno.Name = "fa_relatedrefno"
+        Me.fa_relatedrefno.ReadOnly = True
+        Me.fa_relatedrefno.Width = 90
+        '
+        'fa_accountname
+        '
+        Me.fa_accountname.HeaderText = "Suppplier / Customer Name"
+        Me.fa_accountname.Name = "fa_accountname"
+        Me.fa_accountname.ReadOnly = True
+        Me.fa_accountname.Width = 140
+        '
+        'fa_rrtype
+        '
+        Me.fa_rrtype.HeaderText = "R.R. Type"
+        Me.fa_rrtype.Name = "fa_rrtype"
+        Me.fa_rrtype.ReadOnly = True
+        '
+        'fa_createdby
+        '
+        Me.fa_createdby.HeaderText = "Created By"
+        Me.fa_createdby.Name = "fa_createdby"
+        Me.fa_createdby.ReadOnly = True
+        Me.fa_createdby.Width = 120
+        '
         'tabPurchaseOrders
         '
         Me.tabPurchaseOrders.AutoScroll = True
@@ -918,6 +974,46 @@ Partial Class PrimaryForm
         Me.dgPurchaseOrders.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.dgPurchaseOrders.Size = New System.Drawing.Size(1200, 230)
         Me.dgPurchaseOrders.TabIndex = 20
+        '
+        'po_rowid
+        '
+        Me.po_rowid.HeaderText = "rowid"
+        Me.po_rowid.Name = "po_rowid"
+        Me.po_rowid.ReadOnly = True
+        Me.po_rowid.Visible = False
+        '
+        'po_seqno
+        '
+        Me.po_seqno.HeaderText = "Seq. No."
+        Me.po_seqno.Name = "po_seqno"
+        Me.po_seqno.ReadOnly = True
+        Me.po_seqno.Width = 50
+        '
+        'po_pono
+        '
+        Me.po_pono.HeaderText = "Purchase Order No."
+        Me.po_pono.Name = "po_pono"
+        Me.po_pono.ReadOnly = True
+        '
+        'po_podate
+        '
+        Me.po_podate.HeaderText = "Purchase Order Date"
+        Me.po_podate.Name = "po_podate"
+        Me.po_podate.ReadOnly = True
+        '
+        'po_suppliername
+        '
+        Me.po_suppliername.HeaderText = "Supplier Name"
+        Me.po_suppliername.Name = "po_suppliername"
+        Me.po_suppliername.ReadOnly = True
+        Me.po_suppliername.Width = 140
+        '
+        'po_createdby
+        '
+        Me.po_createdby.HeaderText = "Created By"
+        Me.po_createdby.Name = "po_createdby"
+        Me.po_createdby.ReadOnly = True
+        Me.po_createdby.Width = 120
         '
         'tabPullOut
         '
@@ -965,6 +1061,46 @@ Partial Class PrimaryForm
         Me.dgPullOut.Size = New System.Drawing.Size(1200, 230)
         Me.dgPullOut.TabIndex = 21
         '
+        'pu_rowid
+        '
+        Me.pu_rowid.HeaderText = "rowid"
+        Me.pu_rowid.Name = "pu_rowid"
+        Me.pu_rowid.ReadOnly = True
+        Me.pu_rowid.Visible = False
+        '
+        'pu_seqno
+        '
+        Me.pu_seqno.HeaderText = "Seq. No."
+        Me.pu_seqno.Name = "pu_seqno"
+        Me.pu_seqno.ReadOnly = True
+        Me.pu_seqno.Width = 50
+        '
+        'pu_pulloutno
+        '
+        Me.pu_pulloutno.HeaderText = "Pull-Out No."
+        Me.pu_pulloutno.Name = "pu_pulloutno"
+        Me.pu_pulloutno.ReadOnly = True
+        '
+        'pu_pulloutdate
+        '
+        Me.pu_pulloutdate.HeaderText = "Pull-Out Date"
+        Me.pu_pulloutdate.Name = "pu_pulloutdate"
+        Me.pu_pulloutdate.ReadOnly = True
+        '
+        'pu_customername
+        '
+        Me.pu_customername.HeaderText = "Customer Name"
+        Me.pu_customername.Name = "pu_customername"
+        Me.pu_customername.ReadOnly = True
+        Me.pu_customername.Width = 140
+        '
+        'pu_createdby
+        '
+        Me.pu_createdby.HeaderText = "Created By"
+        Me.pu_createdby.Name = "pu_createdby"
+        Me.pu_createdby.ReadOnly = True
+        Me.pu_createdby.Width = 120
+        '
         'tabReturn
         '
         Me.tabReturn.Controls.Add(Me.dgReturns)
@@ -1009,6 +1145,46 @@ Partial Class PrimaryForm
         Me.dgReturns.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.dgReturns.Size = New System.Drawing.Size(1200, 230)
         Me.dgReturns.TabIndex = 22
+        '
+        'rt_rowid
+        '
+        Me.rt_rowid.HeaderText = "rowid"
+        Me.rt_rowid.Name = "rt_rowid"
+        Me.rt_rowid.ReadOnly = True
+        Me.rt_rowid.Visible = False
+        '
+        'rt_seqno
+        '
+        Me.rt_seqno.HeaderText = "Seq. No."
+        Me.rt_seqno.Name = "rt_seqno"
+        Me.rt_seqno.ReadOnly = True
+        Me.rt_seqno.Width = 50
+        '
+        'rt_returnno
+        '
+        Me.rt_returnno.HeaderText = "Return No."
+        Me.rt_returnno.Name = "rt_returnno"
+        Me.rt_returnno.ReadOnly = True
+        '
+        'rt_returndate
+        '
+        Me.rt_returndate.HeaderText = "Return Date"
+        Me.rt_returndate.Name = "rt_returndate"
+        Me.rt_returndate.ReadOnly = True
+        '
+        'rt_customername
+        '
+        Me.rt_customername.HeaderText = "Customer Name"
+        Me.rt_customername.Name = "rt_customername"
+        Me.rt_customername.ReadOnly = True
+        Me.rt_customername.Width = 140
+        '
+        'rt_createdby
+        '
+        Me.rt_createdby.HeaderText = "Created By"
+        Me.rt_createdby.Name = "rt_createdby"
+        Me.rt_createdby.ReadOnly = True
+        Me.rt_createdby.Width = 120
         '
         'PictureBox1
         '
@@ -1133,264 +1309,6 @@ Partial Class PrimaryForm
         Me.dgNewCO.Size = New System.Drawing.Size(1200, 260)
         Me.dgNewCO.TabIndex = 20
         '
-        'tabSubmittedToWarehouseCO
-        '
-        Me.tabSubmittedToWarehouseCO.AutoScroll = True
-        Me.tabSubmittedToWarehouseCO.Controls.Add(Me.dgSubmittedToWarehouseCO)
-        Me.tabSubmittedToWarehouseCO.Location = New System.Drawing.Point(4, 4)
-        Me.tabSubmittedToWarehouseCO.Name = "tabSubmittedToWarehouseCO"
-        Me.tabSubmittedToWarehouseCO.Padding = New System.Windows.Forms.Padding(3)
-        Me.tabSubmittedToWarehouseCO.Size = New System.Drawing.Size(1212, 269)
-        Me.tabSubmittedToWarehouseCO.TabIndex = 1
-        Me.tabSubmittedToWarehouseCO.Text = "Submitted To Warehouse"
-        Me.tabSubmittedToWarehouseCO.UseVisualStyleBackColor = True
-        '
-        'dgSubmittedToWarehouseCO
-        '
-        Me.dgSubmittedToWarehouseCO.AllowUserToAddRows = False
-        Me.dgSubmittedToWarehouseCO.AllowUserToDeleteRows = False
-        Me.dgSubmittedToWarehouseCO.AllowUserToOrderColumns = True
-        Me.dgSubmittedToWarehouseCO.AllowUserToResizeRows = False
-        Me.dgSubmittedToWarehouseCO.BackgroundColor = System.Drawing.Color.White
-        DataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle11.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle11.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle11.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle11.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle11.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgSubmittedToWarehouseCO.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle11
-        Me.dgSubmittedToWarehouseCO.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgSubmittedToWarehouseCO.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.stw_rowid, Me.stw_seqno, Me.stw_cono, Me.stw_pono, Me.stw_codate, Me.stw_receiptdate, Me.stw_canceldate, Me.stw_datesubmitted, Me.stw_customername, Me.stw_branchinfo, Me.stw_vendorinfo, Me.stw_classdescription, Me.stw_createdby})
-        DataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle12.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle12.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle12.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle12.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle12.SelectionForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.dgSubmittedToWarehouseCO.DefaultCellStyle = DataGridViewCellStyle12
-        Me.dgSubmittedToWarehouseCO.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
-        Me.dgSubmittedToWarehouseCO.Location = New System.Drawing.Point(6, 5)
-        Me.dgSubmittedToWarehouseCO.MultiSelect = False
-        Me.dgSubmittedToWarehouseCO.Name = "dgSubmittedToWarehouseCO"
-        Me.dgSubmittedToWarehouseCO.ReadOnly = True
-        Me.dgSubmittedToWarehouseCO.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgSubmittedToWarehouseCO.Size = New System.Drawing.Size(1200, 260)
-        Me.dgSubmittedToWarehouseCO.TabIndex = 20
-        '
-        'tabPickListedCO
-        '
-        Me.tabPickListedCO.AutoScroll = True
-        Me.tabPickListedCO.Controls.Add(Me.dgPickListedCO)
-        Me.tabPickListedCO.Location = New System.Drawing.Point(4, 4)
-        Me.tabPickListedCO.Name = "tabPickListedCO"
-        Me.tabPickListedCO.Padding = New System.Windows.Forms.Padding(3)
-        Me.tabPickListedCO.Size = New System.Drawing.Size(1212, 269)
-        Me.tabPickListedCO.TabIndex = 2
-        Me.tabPickListedCO.Text = "Pick Listed"
-        Me.tabPickListedCO.UseVisualStyleBackColor = True
-        '
-        'dgPickListedCO
-        '
-        Me.dgPickListedCO.AllowUserToAddRows = False
-        Me.dgPickListedCO.AllowUserToDeleteRows = False
-        Me.dgPickListedCO.AllowUserToOrderColumns = True
-        Me.dgPickListedCO.AllowUserToResizeRows = False
-        Me.dgPickListedCO.BackgroundColor = System.Drawing.Color.White
-        DataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle13.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle13.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle13.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle13.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle13.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle13.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgPickListedCO.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle13
-        Me.dgPickListedCO.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgPickListedCO.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.pl_rowid, Me.pl_seqno, Me.pl_plno, Me.pl_cono, Me.pl_pono, Me.pl_codate, Me.pl_receiptdate, Me.pl_canceldate, Me.pl_datesubmitted, Me.pl_customername, Me.pl_branchinfo, Me.pl_vendorinfo, Me.pl_classdescription, Me.pl_createdby})
-        DataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle14.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle14.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle14.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle14.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle14.SelectionForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.dgPickListedCO.DefaultCellStyle = DataGridViewCellStyle14
-        Me.dgPickListedCO.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
-        Me.dgPickListedCO.Location = New System.Drawing.Point(6, 5)
-        Me.dgPickListedCO.MultiSelect = False
-        Me.dgPickListedCO.Name = "dgPickListedCO"
-        Me.dgPickListedCO.ReadOnly = True
-        Me.dgPickListedCO.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgPickListedCO.Size = New System.Drawing.Size(1200, 260)
-        Me.dgPickListedCO.TabIndex = 21
-        '
-        'tabForPackingCO
-        '
-        Me.tabForPackingCO.Controls.Add(Me.dgForPackingCO)
-        Me.tabForPackingCO.Location = New System.Drawing.Point(4, 4)
-        Me.tabForPackingCO.Name = "tabForPackingCO"
-        Me.tabForPackingCO.Padding = New System.Windows.Forms.Padding(3)
-        Me.tabForPackingCO.Size = New System.Drawing.Size(1212, 269)
-        Me.tabForPackingCO.TabIndex = 3
-        Me.tabForPackingCO.Text = "For Packing"
-        Me.tabForPackingCO.UseVisualStyleBackColor = True
-        '
-        'dgForPackingCO
-        '
-        Me.dgForPackingCO.AllowUserToAddRows = False
-        Me.dgForPackingCO.AllowUserToDeleteRows = False
-        Me.dgForPackingCO.AllowUserToOrderColumns = True
-        Me.dgForPackingCO.AllowUserToResizeRows = False
-        Me.dgForPackingCO.BackgroundColor = System.Drawing.Color.White
-        DataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle15.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle15.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle15.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle15.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle15.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgForPackingCO.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle15
-        Me.dgForPackingCO.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgForPackingCO.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.fp_rowid, Me.fp_seqno, Me.fp_cono, Me.fp_plno, Me.fp_pono, Me.fp_codate, Me.fp_receiptdate, Me.fp_canceldate, Me.fp_customername, Me.fp_branchinfo, Me.fp_vendorinfo, Me.fp_classdescription, Me.fp_createdby})
-        DataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle16.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle16.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle16.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle16.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle16.SelectionForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle16.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.dgForPackingCO.DefaultCellStyle = DataGridViewCellStyle16
-        Me.dgForPackingCO.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
-        Me.dgForPackingCO.Location = New System.Drawing.Point(6, 5)
-        Me.dgForPackingCO.MultiSelect = False
-        Me.dgForPackingCO.Name = "dgForPackingCO"
-        Me.dgForPackingCO.ReadOnly = True
-        Me.dgForPackingCO.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgForPackingCO.Size = New System.Drawing.Size(1200, 260)
-        Me.dgForPackingCO.TabIndex = 22
-        '
-        'tabPackingCO
-        '
-        Me.tabPackingCO.Controls.Add(Me.dgPackingCO)
-        Me.tabPackingCO.Location = New System.Drawing.Point(4, 4)
-        Me.tabPackingCO.Name = "tabPackingCO"
-        Me.tabPackingCO.Padding = New System.Windows.Forms.Padding(3)
-        Me.tabPackingCO.Size = New System.Drawing.Size(1212, 269)
-        Me.tabPackingCO.TabIndex = 4
-        Me.tabPackingCO.Text = "Packing"
-        Me.tabPackingCO.UseVisualStyleBackColor = True
-        '
-        'dgPackingCO
-        '
-        Me.dgPackingCO.AllowUserToAddRows = False
-        Me.dgPackingCO.AllowUserToDeleteRows = False
-        Me.dgPackingCO.AllowUserToOrderColumns = True
-        Me.dgPackingCO.AllowUserToResizeRows = False
-        Me.dgPackingCO.BackgroundColor = System.Drawing.Color.White
-        DataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle17.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle17.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle17.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle17.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle17.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle17.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgPackingCO.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle17
-        Me.dgPackingCO.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgPackingCO.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.pa_rowid, Me.pa_seqno, Me.pa_pano, Me.pa_cono, Me.pa_pono, Me.pa_sidrno, Me.pa_codate, Me.pa_receiptdate, Me.pa_canceldate, Me.pa_customername, Me.pa_branchinfo, Me.pa_vendorinfo, Me.pa_classdescription, Me.pa_createdby})
-        DataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle18.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle18.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle18.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle18.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle18.SelectionForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle18.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.dgPackingCO.DefaultCellStyle = DataGridViewCellStyle18
-        Me.dgPackingCO.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
-        Me.dgPackingCO.Location = New System.Drawing.Point(6, 5)
-        Me.dgPackingCO.MultiSelect = False
-        Me.dgPackingCO.Name = "dgPackingCO"
-        Me.dgPackingCO.ReadOnly = True
-        Me.dgPackingCO.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgPackingCO.Size = New System.Drawing.Size(1200, 260)
-        Me.dgPackingCO.TabIndex = 23
-        '
-        'tabLinedUpCO
-        '
-        Me.tabLinedUpCO.Controls.Add(Me.dgLinedUpCO)
-        Me.tabLinedUpCO.Location = New System.Drawing.Point(4, 4)
-        Me.tabLinedUpCO.Name = "tabLinedUpCO"
-        Me.tabLinedUpCO.Padding = New System.Windows.Forms.Padding(3)
-        Me.tabLinedUpCO.Size = New System.Drawing.Size(1212, 269)
-        Me.tabLinedUpCO.TabIndex = 5
-        Me.tabLinedUpCO.Text = "Lined-Up"
-        Me.tabLinedUpCO.UseVisualStyleBackColor = True
-        '
-        'dgLinedUpCO
-        '
-        Me.dgLinedUpCO.AllowUserToAddRows = False
-        Me.dgLinedUpCO.AllowUserToDeleteRows = False
-        Me.dgLinedUpCO.AllowUserToOrderColumns = True
-        Me.dgLinedUpCO.AllowUserToResizeRows = False
-        Me.dgLinedUpCO.BackgroundColor = System.Drawing.Color.White
-        DataGridViewCellStyle19.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle19.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle19.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle19.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle19.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle19.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle19.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgLinedUpCO.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle19
-        Me.dgLinedUpCO.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgLinedUpCO.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.lu_rowid, Me.lu_seqno, Me.lu_lineupno, Me.lu_cono, Me.lu_pono, Me.lu_sidrno, Me.lu_codate, Me.lu_receiptdate, Me.lu_canceldate, Me.lu_customername, Me.lu_branchinfo, Me.lu_vendorinfo, Me.lu_classdescription, Me.lu_createdby})
-        DataGridViewCellStyle20.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle20.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle20.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle20.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle20.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle20.SelectionForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle20.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.dgLinedUpCO.DefaultCellStyle = DataGridViewCellStyle20
-        Me.dgLinedUpCO.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
-        Me.dgLinedUpCO.Location = New System.Drawing.Point(6, 5)
-        Me.dgLinedUpCO.MultiSelect = False
-        Me.dgLinedUpCO.Name = "dgLinedUpCO"
-        Me.dgLinedUpCO.ReadOnly = True
-        Me.dgLinedUpCO.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgLinedUpCO.Size = New System.Drawing.Size(1200, 260)
-        Me.dgLinedUpCO.TabIndex = 24
-        '
-        'PictureBox2
-        '
-        Me.PictureBox2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
-        Me.PictureBox2.Image = CType(resources.GetObject("PictureBox2.Image"), System.Drawing.Image)
-        Me.PictureBox2.Location = New System.Drawing.Point(10, 5)
-        Me.PictureBox2.Name = "PictureBox2"
-        Me.PictureBox2.Size = New System.Drawing.Size(20, 20)
-        Me.PictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
-        Me.PictureBox2.TabIndex = 245
-        Me.PictureBox2.TabStop = False
-        '
-        'Label3
-        '
-        Me.Label3.AutoSize = True
-        Me.Label3.Font = New System.Drawing.Font("Cambria", 12.0!, CType(((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Italic) _
-                Or System.Drawing.FontStyle.Underline), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label3.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label3.Location = New System.Drawing.Point(30, 5)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(131, 19)
-        Me.Label3.TabIndex = 255
-        Me.Label3.Text = "Customer Orders"
-        '
-        'MainLoadingBar
-        '
-        Me.MainLoadingBar.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.MainLoadingBar.Location = New System.Drawing.Point(905, 705)
-        Me.MainLoadingBar.Name = "MainLoadingBar"
-        Me.MainLoadingBar.Size = New System.Drawing.Size(160, 21)
-        Me.MainLoadingBar.TabIndex = 10
-        '
         'nw_rowid
         '
         Me.nw_rowid.HeaderText = "rowid"
@@ -1474,6 +1392,52 @@ Partial Class PrimaryForm
         Me.nw_createdby.Name = "nw_createdby"
         Me.nw_createdby.ReadOnly = True
         Me.nw_createdby.Width = 120
+        '
+        'tabSubmittedToWarehouseCO
+        '
+        Me.tabSubmittedToWarehouseCO.AutoScroll = True
+        Me.tabSubmittedToWarehouseCO.Controls.Add(Me.dgSubmittedToWarehouseCO)
+        Me.tabSubmittedToWarehouseCO.Location = New System.Drawing.Point(4, 4)
+        Me.tabSubmittedToWarehouseCO.Name = "tabSubmittedToWarehouseCO"
+        Me.tabSubmittedToWarehouseCO.Padding = New System.Windows.Forms.Padding(3)
+        Me.tabSubmittedToWarehouseCO.Size = New System.Drawing.Size(1212, 269)
+        Me.tabSubmittedToWarehouseCO.TabIndex = 1
+        Me.tabSubmittedToWarehouseCO.Text = "Submitted To Warehouse"
+        Me.tabSubmittedToWarehouseCO.UseVisualStyleBackColor = True
+        '
+        'dgSubmittedToWarehouseCO
+        '
+        Me.dgSubmittedToWarehouseCO.AllowUserToAddRows = False
+        Me.dgSubmittedToWarehouseCO.AllowUserToDeleteRows = False
+        Me.dgSubmittedToWarehouseCO.AllowUserToOrderColumns = True
+        Me.dgSubmittedToWarehouseCO.AllowUserToResizeRows = False
+        Me.dgSubmittedToWarehouseCO.BackgroundColor = System.Drawing.Color.White
+        DataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle11.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle11.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle11.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle11.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle11.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgSubmittedToWarehouseCO.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle11
+        Me.dgSubmittedToWarehouseCO.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.dgSubmittedToWarehouseCO.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.stw_rowid, Me.stw_seqno, Me.stw_cono, Me.stw_pono, Me.stw_codate, Me.stw_receiptdate, Me.stw_canceldate, Me.stw_datesubmitted, Me.stw_customername, Me.stw_branchinfo, Me.stw_vendorinfo, Me.stw_classdescription, Me.stw_createdby})
+        DataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle12.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle12.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle12.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle12.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle12.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.dgSubmittedToWarehouseCO.DefaultCellStyle = DataGridViewCellStyle12
+        Me.dgSubmittedToWarehouseCO.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
+        Me.dgSubmittedToWarehouseCO.Location = New System.Drawing.Point(6, 5)
+        Me.dgSubmittedToWarehouseCO.MultiSelect = False
+        Me.dgSubmittedToWarehouseCO.Name = "dgSubmittedToWarehouseCO"
+        Me.dgSubmittedToWarehouseCO.ReadOnly = True
+        Me.dgSubmittedToWarehouseCO.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
+        Me.dgSubmittedToWarehouseCO.Size = New System.Drawing.Size(1200, 260)
+        Me.dgSubmittedToWarehouseCO.TabIndex = 20
         '
         'stw_rowid
         '
@@ -1563,6 +1527,52 @@ Partial Class PrimaryForm
         Me.stw_createdby.HeaderText = "Created By"
         Me.stw_createdby.Name = "stw_createdby"
         Me.stw_createdby.ReadOnly = True
+        '
+        'tabPickListedCO
+        '
+        Me.tabPickListedCO.AutoScroll = True
+        Me.tabPickListedCO.Controls.Add(Me.dgPickListedCO)
+        Me.tabPickListedCO.Location = New System.Drawing.Point(4, 4)
+        Me.tabPickListedCO.Name = "tabPickListedCO"
+        Me.tabPickListedCO.Padding = New System.Windows.Forms.Padding(3)
+        Me.tabPickListedCO.Size = New System.Drawing.Size(1212, 269)
+        Me.tabPickListedCO.TabIndex = 2
+        Me.tabPickListedCO.Text = "Pick Listed"
+        Me.tabPickListedCO.UseVisualStyleBackColor = True
+        '
+        'dgPickListedCO
+        '
+        Me.dgPickListedCO.AllowUserToAddRows = False
+        Me.dgPickListedCO.AllowUserToDeleteRows = False
+        Me.dgPickListedCO.AllowUserToOrderColumns = True
+        Me.dgPickListedCO.AllowUserToResizeRows = False
+        Me.dgPickListedCO.BackgroundColor = System.Drawing.Color.White
+        DataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle13.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle13.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle13.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle13.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle13.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle13.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgPickListedCO.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle13
+        Me.dgPickListedCO.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.dgPickListedCO.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.pl_rowid, Me.pl_seqno, Me.pl_plno, Me.pl_cono, Me.pl_pono, Me.pl_codate, Me.pl_receiptdate, Me.pl_canceldate, Me.pl_datesubmitted, Me.pl_customername, Me.pl_branchinfo, Me.pl_vendorinfo, Me.pl_classdescription, Me.pl_createdby})
+        DataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle14.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle14.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle14.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle14.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle14.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.dgPickListedCO.DefaultCellStyle = DataGridViewCellStyle14
+        Me.dgPickListedCO.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
+        Me.dgPickListedCO.Location = New System.Drawing.Point(6, 5)
+        Me.dgPickListedCO.MultiSelect = False
+        Me.dgPickListedCO.Name = "dgPickListedCO"
+        Me.dgPickListedCO.ReadOnly = True
+        Me.dgPickListedCO.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
+        Me.dgPickListedCO.Size = New System.Drawing.Size(1200, 260)
+        Me.dgPickListedCO.TabIndex = 21
         '
         'pl_rowid
         '
@@ -1661,6 +1671,51 @@ Partial Class PrimaryForm
         Me.pl_createdby.Name = "pl_createdby"
         Me.pl_createdby.ReadOnly = True
         '
+        'tabForPackingCO
+        '
+        Me.tabForPackingCO.Controls.Add(Me.dgForPackingCO)
+        Me.tabForPackingCO.Location = New System.Drawing.Point(4, 4)
+        Me.tabForPackingCO.Name = "tabForPackingCO"
+        Me.tabForPackingCO.Padding = New System.Windows.Forms.Padding(3)
+        Me.tabForPackingCO.Size = New System.Drawing.Size(1212, 269)
+        Me.tabForPackingCO.TabIndex = 3
+        Me.tabForPackingCO.Text = "For Packing"
+        Me.tabForPackingCO.UseVisualStyleBackColor = True
+        '
+        'dgForPackingCO
+        '
+        Me.dgForPackingCO.AllowUserToAddRows = False
+        Me.dgForPackingCO.AllowUserToDeleteRows = False
+        Me.dgForPackingCO.AllowUserToOrderColumns = True
+        Me.dgForPackingCO.AllowUserToResizeRows = False
+        Me.dgForPackingCO.BackgroundColor = System.Drawing.Color.White
+        DataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle15.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle15.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle15.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle15.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle15.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgForPackingCO.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle15
+        Me.dgForPackingCO.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.dgForPackingCO.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.fp_rowid, Me.fp_seqno, Me.fp_cono, Me.fp_plno, Me.fp_pono, Me.fp_codate, Me.fp_receiptdate, Me.fp_canceldate, Me.fp_customername, Me.fp_branchinfo, Me.fp_vendorinfo, Me.fp_classdescription, Me.fp_createdby})
+        DataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle16.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle16.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle16.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle16.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle16.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle16.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.dgForPackingCO.DefaultCellStyle = DataGridViewCellStyle16
+        Me.dgForPackingCO.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
+        Me.dgForPackingCO.Location = New System.Drawing.Point(6, 5)
+        Me.dgForPackingCO.MultiSelect = False
+        Me.dgForPackingCO.Name = "dgForPackingCO"
+        Me.dgForPackingCO.ReadOnly = True
+        Me.dgForPackingCO.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
+        Me.dgForPackingCO.Size = New System.Drawing.Size(1200, 260)
+        Me.dgForPackingCO.TabIndex = 22
+        '
         'fp_rowid
         '
         Me.fp_rowid.HeaderText = "rowid"
@@ -1750,6 +1805,51 @@ Partial Class PrimaryForm
         Me.fp_createdby.HeaderText = "Created By"
         Me.fp_createdby.Name = "fp_createdby"
         Me.fp_createdby.ReadOnly = True
+        '
+        'tabPackingCO
+        '
+        Me.tabPackingCO.Controls.Add(Me.dgPackingCO)
+        Me.tabPackingCO.Location = New System.Drawing.Point(4, 4)
+        Me.tabPackingCO.Name = "tabPackingCO"
+        Me.tabPackingCO.Padding = New System.Windows.Forms.Padding(3)
+        Me.tabPackingCO.Size = New System.Drawing.Size(1212, 269)
+        Me.tabPackingCO.TabIndex = 4
+        Me.tabPackingCO.Text = "Packing"
+        Me.tabPackingCO.UseVisualStyleBackColor = True
+        '
+        'dgPackingCO
+        '
+        Me.dgPackingCO.AllowUserToAddRows = False
+        Me.dgPackingCO.AllowUserToDeleteRows = False
+        Me.dgPackingCO.AllowUserToOrderColumns = True
+        Me.dgPackingCO.AllowUserToResizeRows = False
+        Me.dgPackingCO.BackgroundColor = System.Drawing.Color.White
+        DataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle17.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle17.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle17.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle17.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle17.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle17.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgPackingCO.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle17
+        Me.dgPackingCO.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.dgPackingCO.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.pa_rowid, Me.pa_seqno, Me.pa_pano, Me.pa_cono, Me.pa_pono, Me.pa_sidrno, Me.pa_codate, Me.pa_receiptdate, Me.pa_canceldate, Me.pa_customername, Me.pa_branchinfo, Me.pa_vendorinfo, Me.pa_classdescription, Me.pa_createdby})
+        DataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle18.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle18.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle18.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle18.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle18.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle18.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.dgPackingCO.DefaultCellStyle = DataGridViewCellStyle18
+        Me.dgPackingCO.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
+        Me.dgPackingCO.Location = New System.Drawing.Point(6, 5)
+        Me.dgPackingCO.MultiSelect = False
+        Me.dgPackingCO.Name = "dgPackingCO"
+        Me.dgPackingCO.ReadOnly = True
+        Me.dgPackingCO.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
+        Me.dgPackingCO.Size = New System.Drawing.Size(1200, 260)
+        Me.dgPackingCO.TabIndex = 23
         '
         'pa_rowid
         '
@@ -1846,6 +1946,51 @@ Partial Class PrimaryForm
         Me.pa_createdby.Name = "pa_createdby"
         Me.pa_createdby.ReadOnly = True
         '
+        'tabLinedUpCO
+        '
+        Me.tabLinedUpCO.Controls.Add(Me.dgLinedUpCO)
+        Me.tabLinedUpCO.Location = New System.Drawing.Point(4, 4)
+        Me.tabLinedUpCO.Name = "tabLinedUpCO"
+        Me.tabLinedUpCO.Padding = New System.Windows.Forms.Padding(3)
+        Me.tabLinedUpCO.Size = New System.Drawing.Size(1212, 269)
+        Me.tabLinedUpCO.TabIndex = 5
+        Me.tabLinedUpCO.Text = "Lined-Up"
+        Me.tabLinedUpCO.UseVisualStyleBackColor = True
+        '
+        'dgLinedUpCO
+        '
+        Me.dgLinedUpCO.AllowUserToAddRows = False
+        Me.dgLinedUpCO.AllowUserToDeleteRows = False
+        Me.dgLinedUpCO.AllowUserToOrderColumns = True
+        Me.dgLinedUpCO.AllowUserToResizeRows = False
+        Me.dgLinedUpCO.BackgroundColor = System.Drawing.Color.White
+        DataGridViewCellStyle19.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle19.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle19.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle19.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle19.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle19.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle19.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgLinedUpCO.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle19
+        Me.dgLinedUpCO.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.dgLinedUpCO.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.lu_rowid, Me.lu_seqno, Me.lu_lineupno, Me.lu_cono, Me.lu_pono, Me.lu_sidrno, Me.lu_codate, Me.lu_receiptdate, Me.lu_canceldate, Me.lu_customername, Me.lu_branchinfo, Me.lu_vendorinfo, Me.lu_classdescription, Me.lu_createdby})
+        DataGridViewCellStyle20.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle20.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle20.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle20.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle20.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle20.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle20.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.dgLinedUpCO.DefaultCellStyle = DataGridViewCellStyle20
+        Me.dgLinedUpCO.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
+        Me.dgLinedUpCO.Location = New System.Drawing.Point(6, 5)
+        Me.dgLinedUpCO.MultiSelect = False
+        Me.dgLinedUpCO.Name = "dgLinedUpCO"
+        Me.dgLinedUpCO.ReadOnly = True
+        Me.dgLinedUpCO.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
+        Me.dgLinedUpCO.Size = New System.Drawing.Size(1200, 260)
+        Me.dgLinedUpCO.TabIndex = 24
+        '
         'lu_rowid
         '
         Me.lu_rowid.HeaderText = "rowid"
@@ -1941,180 +2086,43 @@ Partial Class PrimaryForm
         Me.lu_createdby.Name = "lu_createdby"
         Me.lu_createdby.ReadOnly = True
         '
-        'fa_rowid
+        'PictureBox2
         '
-        Me.fa_rowid.HeaderText = "rowid"
-        Me.fa_rowid.Name = "fa_rowid"
-        Me.fa_rowid.ReadOnly = True
-        Me.fa_rowid.Visible = False
+        Me.PictureBox2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.PictureBox2.Image = CType(resources.GetObject("PictureBox2.Image"), System.Drawing.Image)
+        Me.PictureBox2.Location = New System.Drawing.Point(10, 5)
+        Me.PictureBox2.Name = "PictureBox2"
+        Me.PictureBox2.Size = New System.Drawing.Size(20, 20)
+        Me.PictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.PictureBox2.TabIndex = 245
+        Me.PictureBox2.TabStop = False
         '
-        'fa_seqno
+        'Label3
         '
-        Me.fa_seqno.HeaderText = "Seq. No."
-        Me.fa_seqno.Name = "fa_seqno"
-        Me.fa_seqno.ReadOnly = True
-        Me.fa_seqno.Width = 50
+        Me.Label3.AutoSize = True
+        Me.Label3.Font = New System.Drawing.Font("Cambria", 12.0!, CType(((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Italic) _
+                Or System.Drawing.FontStyle.Underline), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label3.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.Label3.Location = New System.Drawing.Point(30, 5)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(131, 19)
+        Me.Label3.TabIndex = 255
+        Me.Label3.Text = "Customer Orders"
         '
-        'fa_rrno
+        'MainLoadingBar
         '
-        Me.fa_rrno.HeaderText = "R.R. No."
-        Me.fa_rrno.Name = "fa_rrno"
-        Me.fa_rrno.ReadOnly = True
-        Me.fa_rrno.Width = 80
+        Me.MainLoadingBar.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.MainLoadingBar.Location = New System.Drawing.Point(905, 705)
+        Me.MainLoadingBar.Name = "MainLoadingBar"
+        Me.MainLoadingBar.Size = New System.Drawing.Size(160, 21)
+        Me.MainLoadingBar.TabIndex = 10
         '
-        'fa_rrdate
+        'AgentHelperToolStripMenuItem
         '
-        Me.fa_rrdate.HeaderText = "R.R. Date"
-        Me.fa_rrdate.Name = "fa_rrdate"
-        Me.fa_rrdate.ReadOnly = True
-        Me.fa_rrdate.Width = 80
-        '
-        'fa_relatedrefno
-        '
-        Me.fa_relatedrefno.HeaderText = "Related Ref. No."
-        Me.fa_relatedrefno.Name = "fa_relatedrefno"
-        Me.fa_relatedrefno.ReadOnly = True
-        Me.fa_relatedrefno.Width = 90
-        '
-        'fa_accountname
-        '
-        Me.fa_accountname.HeaderText = "Suppplier / Customer Name"
-        Me.fa_accountname.Name = "fa_accountname"
-        Me.fa_accountname.ReadOnly = True
-        Me.fa_accountname.Width = 140
-        '
-        'fa_rrtype
-        '
-        Me.fa_rrtype.HeaderText = "R.R. Type"
-        Me.fa_rrtype.Name = "fa_rrtype"
-        Me.fa_rrtype.ReadOnly = True
-        '
-        'fa_createdby
-        '
-        Me.fa_createdby.HeaderText = "Created By"
-        Me.fa_createdby.Name = "fa_createdby"
-        Me.fa_createdby.ReadOnly = True
-        Me.fa_createdby.Width = 120
-        '
-        'po_rowid
-        '
-        Me.po_rowid.HeaderText = "rowid"
-        Me.po_rowid.Name = "po_rowid"
-        Me.po_rowid.ReadOnly = True
-        Me.po_rowid.Visible = False
-        '
-        'po_seqno
-        '
-        Me.po_seqno.HeaderText = "Seq. No."
-        Me.po_seqno.Name = "po_seqno"
-        Me.po_seqno.ReadOnly = True
-        Me.po_seqno.Width = 50
-        '
-        'po_pono
-        '
-        Me.po_pono.HeaderText = "Purchase Order No."
-        Me.po_pono.Name = "po_pono"
-        Me.po_pono.ReadOnly = True
-        '
-        'po_podate
-        '
-        Me.po_podate.HeaderText = "Purchase Order Date"
-        Me.po_podate.Name = "po_podate"
-        Me.po_podate.ReadOnly = True
-        '
-        'po_suppliername
-        '
-        Me.po_suppliername.HeaderText = "Supplier Name"
-        Me.po_suppliername.Name = "po_suppliername"
-        Me.po_suppliername.ReadOnly = True
-        Me.po_suppliername.Width = 140
-        '
-        'po_createdby
-        '
-        Me.po_createdby.HeaderText = "Created By"
-        Me.po_createdby.Name = "po_createdby"
-        Me.po_createdby.ReadOnly = True
-        Me.po_createdby.Width = 120
-        '
-        'pu_rowid
-        '
-        Me.pu_rowid.HeaderText = "rowid"
-        Me.pu_rowid.Name = "pu_rowid"
-        Me.pu_rowid.ReadOnly = True
-        Me.pu_rowid.Visible = False
-        '
-        'pu_seqno
-        '
-        Me.pu_seqno.HeaderText = "Seq. No."
-        Me.pu_seqno.Name = "pu_seqno"
-        Me.pu_seqno.ReadOnly = True
-        Me.pu_seqno.Width = 50
-        '
-        'pu_pulloutno
-        '
-        Me.pu_pulloutno.HeaderText = "Pull-Out No."
-        Me.pu_pulloutno.Name = "pu_pulloutno"
-        Me.pu_pulloutno.ReadOnly = True
-        '
-        'pu_pulloutdate
-        '
-        Me.pu_pulloutdate.HeaderText = "Pull-Out Date"
-        Me.pu_pulloutdate.Name = "pu_pulloutdate"
-        Me.pu_pulloutdate.ReadOnly = True
-        '
-        'pu_customername
-        '
-        Me.pu_customername.HeaderText = "Customer Name"
-        Me.pu_customername.Name = "pu_customername"
-        Me.pu_customername.ReadOnly = True
-        Me.pu_customername.Width = 140
-        '
-        'pu_createdby
-        '
-        Me.pu_createdby.HeaderText = "Created By"
-        Me.pu_createdby.Name = "pu_createdby"
-        Me.pu_createdby.ReadOnly = True
-        Me.pu_createdby.Width = 120
-        '
-        'rt_rowid
-        '
-        Me.rt_rowid.HeaderText = "rowid"
-        Me.rt_rowid.Name = "rt_rowid"
-        Me.rt_rowid.ReadOnly = True
-        Me.rt_rowid.Visible = False
-        '
-        'rt_seqno
-        '
-        Me.rt_seqno.HeaderText = "Seq. No."
-        Me.rt_seqno.Name = "rt_seqno"
-        Me.rt_seqno.ReadOnly = True
-        Me.rt_seqno.Width = 50
-        '
-        'rt_returnno
-        '
-        Me.rt_returnno.HeaderText = "Return No."
-        Me.rt_returnno.Name = "rt_returnno"
-        Me.rt_returnno.ReadOnly = True
-        '
-        'rt_returndate
-        '
-        Me.rt_returndate.HeaderText = "Return Date"
-        Me.rt_returndate.Name = "rt_returndate"
-        Me.rt_returndate.ReadOnly = True
-        '
-        'rt_customername
-        '
-        Me.rt_customername.HeaderText = "Customer Name"
-        Me.rt_customername.Name = "rt_customername"
-        Me.rt_customername.ReadOnly = True
-        Me.rt_customername.Width = 140
-        '
-        'rt_createdby
-        '
-        Me.rt_createdby.HeaderText = "Created By"
-        Me.rt_createdby.Name = "rt_createdby"
-        Me.rt_createdby.ReadOnly = True
-        Me.rt_createdby.Width = 120
+        Me.AgentHelperToolStripMenuItem.Font = New System.Drawing.Font("Segoe UI", 9.75!)
+        Me.AgentHelperToolStripMenuItem.Name = "AgentHelperToolStripMenuItem"
+        Me.AgentHelperToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.AgentHelperToolStripMenuItem.Text = "Agent/Helper"
         '
         'PrimaryForm
         '
@@ -2373,4 +2381,5 @@ Partial Class PrimaryForm
     Friend WithEvents rt_returndate As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents rt_customername As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents rt_createdby As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents AgentHelperToolStripMenuItem As ToolStripMenuItem
 End Class

@@ -26,7 +26,7 @@ Public Class ViewEditLineUpDeliveryForm
     Public vieweditlineupdeliverycue As Boolean = False
     Public veludpublicselectedcellcue As Boolean = False
     Private _agents As List(Of WarehouseManagementSystem.Core.Entities.Contact)
-    Private _drivers As List(Of WarehouseManagementSystem.Core.Entities.Contact)
+    Private _helpers As List(Of WarehouseManagementSystem.Core.Entities.Contact)
 
     Private Async Function ViewEditLineUpDeliveryForm_LoadAsync(sender As Object, e As EventArgs) As Task Handles Me.Load
         Me.Cursor = Cursors.WaitCursor
@@ -56,7 +56,7 @@ Public Class ViewEditLineUpDeliveryForm
         Me.Cursor = Cursors.Default
 
         Await GetAgentsAsync()
-        Await GetDriversAsync()
+        Await GetHelpersAsync()
     End Function
 
     Private Async Function GetAgentsAsync() As Task
@@ -72,21 +72,21 @@ Public Class ViewEditLineUpDeliveryForm
 
     End Function
 
-    Private Async Function GetDriversAsync() As Task
+    Private Async Function GetHelpersAsync() As Task
         Dim contactDataService = MainServiceProvider.GetRequiredService(Of IContactDataService)
 
-        _drivers = Await contactDataService.GetDriversAsync(organizationId:=Z_OrganizationID)
+        _helpers = Await contactDataService.GetHelpersAsync(organizationId:=Z_OrganizationID)
 
-        Dim driverDataSource = New List(Of WarehouseManagementSystem.Core.Entities.Contact) From {WarehouseManagementSystem.Core.Entities.Contact.NewContact(organizationId:=Z_OrganizationID, lastName:=String.Empty, firstName:=String.Empty, workPhone:=String.Empty, type:=ContactType.Driver)}
-        driverDataSource.AddRange(_drivers)
+        Dim helperDataSource = New List(Of WarehouseManagementSystem.Core.Entities.Contact) From {WarehouseManagementSystem.Core.Entities.Contact.NewContact(organizationId:=Z_OrganizationID, lastName:=String.Empty, firstName:=String.Empty, workPhone:=String.Empty, type:=ContactType.Driver)}
+        helperDataSource.AddRange(_helpers)
 
         cboHelper1.ValueMember = "RowID"
         cboHelper1.DisplayMember = "FullNameLastNameFirst"
-        cboHelper1.DataSource = driverDataSource
+        cboHelper1.DataSource = helperDataSource
 
         cboHelper2.ValueMember = "RowID"
         cboHelper2.DisplayMember = "FullNameLastNameFirst"
-        cboHelper2.DataSource = driverDataSource
+        cboHelper2.DataSource = helperDataSource
 
     End Function
 
@@ -3002,14 +3002,14 @@ Public Class ViewEditLineUpDeliveryForm
     Private Async Sub btnAddHelper1_Click(sender As Object, e As EventArgs) Handles btnAddHelper1.Click
         Dim form As New AddContactForm(contactType:=ContactType.Helper, True)
         If form.ShowDialog() = DialogResult.OK Then
-            Await GetDriversAsync()
+            Await GetHelpersAsync()
         End If
     End Sub
 
     Private Async Sub btnAddHelper2_Click(sender As Object, e As EventArgs) Handles btnAddHelper2.Click
         Dim form As New AddContactForm(contactType:=ContactType.Helper, True)
         If form.ShowDialog() = DialogResult.OK Then
-            Await GetDriversAsync()
+            Await GetHelpersAsync()
         End If
     End Sub
 

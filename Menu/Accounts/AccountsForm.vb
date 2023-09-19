@@ -1888,7 +1888,7 @@ Public Class AccountsForm
                     If cueA = "New" Then
                         getAccountNo("Customer", Me)
                         I_Accounts(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, If(cfcontactpersonid = 0, DBNull.Value, cfcontactpersonid), If(cfdeliveryaddressid = 0, DBNull.Value, cfdeliveryaddressid), If(cfparentcustomerid = 0, DBNull.Value, cfparentcustomerid), If(cfpicklistgroupid = 0, DBNull.Value, cfpicklistgroupid),
-                                If(cfbranchid = 0, DBNull.Value, cfbranchid), globalaccountno, "Customer", txtCustomerName.Text, txtCustomerName.Text, txtMainPhoneA.Text, txtAlternatePhoneA.Text, txtFaxNoA.Text, txtEmailAddressA.Text, txtTINA.Text, txtWebsiteA.Text, txtDeliveryHours.Text, txtCommentsA.Text, cboStatusA.Text, Me)
+                                If(cfbranchid = 0, DBNull.Value, cfbranchid), globalaccountno, AccountType:="Customer", txtCustomerName.Text, txtCustomerName.Text, txtMainPhoneA.Text, txtAlternatePhoneA.Text, txtFaxNoA.Text, txtEmailAddressA.Text, txtTINA.Text, txtWebsiteA.Text, txtDeliveryHours.Text, txtCommentsA.Text, cboStatusA.Text, Me)
                         If CInt(txtCustomerNo.Text) <> globalaccountno Then
                             MessageBox.Show("Please take note that the Customer No. will change from " & CInt(txtCustomerNo.Text) & " to " & globalaccountno & "." & vbNewLine & "Another user used the Customer No. " & CInt(txtCustomerNo.Text) & " for its new customer", "Note:", MessageBoxButtons.OK, MessageBoxIcon.Information)
                             txtCustomerNo.Text = globalaccountno

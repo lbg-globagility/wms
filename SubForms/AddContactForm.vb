@@ -50,6 +50,8 @@ Public Class AddContactForm
                     lastName:=txtLastName.Text.Trim,
                     firstName:=txtFirstName.Text.Trim,
                     workPhone:=txtContactNo.Text.Trim,
+                    email:=txtEmail.Text.Trim,
+                    comments:=txtComments.Text.Trim,
                     type:=_contactType)
 
                 Await contactDataService.SaveManyAsync(entities:=New List(Of Entities.Contact) From {contact},
@@ -59,10 +61,23 @@ Public Class AddContactForm
 
                 If _isFormDialog Then DialogResult = DialogResult.OK
             End Function)
+        tsbtnSave.Enabled = True
     End Sub
 
     Private Sub tsbtnCancel_Click(sender As Object, e As EventArgs) Handles tsbtnCancel.Click
         Close()
+    End Sub
+
+    Private Sub txtLastName_TextChanged(sender As Object, e As EventArgs) Handles txtLastName.TextChanged
+        Dim bool = Not String.Concat(txtLastName.Text.Trim, txtFirstName.Text.Trim) = String.Empty
+        tsbtnSave.Enabled = bool
+        btnSave.Enabled = bool
+    End Sub
+
+    Private Sub txtFirstName_TextChanged(sender As Object, e As EventArgs) Handles txtFirstName.TextChanged
+        Dim bool = Not String.Concat(txtLastName.Text.Trim, txtFirstName.Text.Trim) = String.Empty
+        tsbtnSave.Enabled = bool
+        btnSave.Enabled = bool
     End Sub
 
 End Class

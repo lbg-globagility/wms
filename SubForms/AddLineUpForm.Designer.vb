@@ -24,12 +24,12 @@ Partial Class AddLineUpForm
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(AddLineUpForm))
-        Dim DataGridViewCellStyle19 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle20 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle21 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle22 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle23 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle24 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.lblTitle = New System.Windows.Forms.Label()
         Me.msMenu = New System.Windows.Forms.MenuStrip()
         Me.msSave = New System.Windows.Forms.ToolStripMenuItem()
@@ -63,6 +63,9 @@ Partial Class AddLineUpForm
         Me.ca_packeddate = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Label9 = New System.Windows.Forms.Label()
         Me.gbLineUpInformation = New System.Windows.Forms.GroupBox()
+        Me.btnAddHelper2 = New System.Windows.Forms.PictureBox()
+        Me.btnAddHelper1 = New System.Windows.Forms.PictureBox()
+        Me.btnAddAgent = New System.Windows.Forms.PictureBox()
         Me.Label32 = New System.Windows.Forms.Label()
         Me.Label28 = New System.Windows.Forms.Label()
         Me.Label26 = New System.Windows.Forms.Label()
@@ -112,21 +115,18 @@ Partial Class AddLineUpForm
         Me.Label8 = New System.Windows.Forms.Label()
         Me.Label13 = New System.Windows.Forms.Label()
         Me.errProvider = New System.Windows.Forms.ErrorProvider(Me.components)
-        Me.btnAddAgent = New System.Windows.Forms.PictureBox()
-        Me.btnAddHelper1 = New System.Windows.Forms.PictureBox()
-        Me.btnAddHelper2 = New System.Windows.Forms.PictureBox()
         Me.msMenu.SuspendLayout()
         Me.gbCartonItems.SuspendLayout()
         CType(Me.dgCartonItems, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.gbCartons.SuspendLayout()
         CType(Me.dgCartons, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.gbLineUpInformation.SuspendLayout()
+        CType(Me.btnAddHelper2, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.btnAddHelper1, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.btnAddAgent, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbAddDriver, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbAddTruckShiftInfo, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.errProvider, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.btnAddAgent, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.btnAddHelper1, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.btnAddHelper2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'lblTitle
@@ -201,37 +201,37 @@ Partial Class AddLineUpForm
         Me.dgCartonItems.AllowUserToOrderColumns = True
         Me.dgCartonItems.AllowUserToResizeRows = False
         Me.dgCartonItems.BackgroundColor = System.Drawing.Color.White
-        DataGridViewCellStyle19.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle19.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle19.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle19.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle19.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle19.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle19.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgCartonItems.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle19
+        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgCartonItems.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
         Me.dgCartonItems.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.dgCartonItems.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.cai_rowid, Me.cai_colorvalue, Me.cai_seqno, Me.cai_productcode, Me.cai_colorname, Me.cai_color, Me.cai_size, Me.cai_seasoncode, Me.cai_qtyincarton, Me.cai_sku, Me.cai_unitofmeasure, Me.cai_type})
-        DataGridViewCellStyle20.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle20.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle20.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle20.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle20.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle20.SelectionForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle20.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.dgCartonItems.DefaultCellStyle = DataGridViewCellStyle20
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.dgCartonItems.DefaultCellStyle = DataGridViewCellStyle2
         Me.dgCartonItems.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
         Me.dgCartonItems.Location = New System.Drawing.Point(8, 17)
         Me.dgCartonItems.MultiSelect = False
         Me.dgCartonItems.Name = "dgCartonItems"
         Me.dgCartonItems.ReadOnly = True
-        DataGridViewCellStyle21.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle21.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle21.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle21.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle21.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle21.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle21.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgCartonItems.RowHeadersDefaultCellStyle = DataGridViewCellStyle21
+        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle3.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgCartonItems.RowHeadersDefaultCellStyle = DataGridViewCellStyle3
         Me.dgCartonItems.RowHeadersVisible = False
         Me.dgCartonItems.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.dgCartonItems.Size = New System.Drawing.Size(475, 190)
@@ -350,36 +350,36 @@ Partial Class AddLineUpForm
         Me.dgCartons.AllowUserToOrderColumns = True
         Me.dgCartons.AllowUserToResizeRows = False
         Me.dgCartons.BackgroundColor = System.Drawing.Color.White
-        DataGridViewCellStyle22.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle22.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle22.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle22.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle22.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle22.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle22.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgCartons.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle22
+        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle4.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgCartons.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle4
         Me.dgCartons.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.dgCartons.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ca_rowid, Me.ca_seqno, Me.ca_cartonno, Me.ca_lineup, Me.ca_cbm, Me.ca_sizename, Me.ca_packername, Me.ca_status, Me.ca_packeddate})
-        DataGridViewCellStyle23.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle23.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle23.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle23.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle23.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle23.SelectionForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle23.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.dgCartons.DefaultCellStyle = DataGridViewCellStyle23
+        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle5.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.dgCartons.DefaultCellStyle = DataGridViewCellStyle5
         Me.dgCartons.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
         Me.dgCartons.Location = New System.Drawing.Point(8, 17)
         Me.dgCartons.MultiSelect = False
         Me.dgCartons.Name = "dgCartons"
-        DataGridViewCellStyle24.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle24.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle24.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle24.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle24.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle24.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle24.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgCartons.RowHeadersDefaultCellStyle = DataGridViewCellStyle24
+        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle6.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgCartons.RowHeadersDefaultCellStyle = DataGridViewCellStyle6
         Me.dgCartons.RowHeadersVisible = False
         Me.dgCartons.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.dgCartons.Size = New System.Drawing.Size(445, 215)
@@ -517,6 +517,45 @@ Partial Class AddLineUpForm
         Me.gbLineUpInformation.Size = New System.Drawing.Size(960, 262)
         Me.gbLineUpInformation.TabIndex = 2
         Me.gbLineUpInformation.TabStop = False
+        '
+        'btnAddHelper2
+        '
+        Me.btnAddHelper2.BackColor = System.Drawing.Color.Transparent
+        Me.btnAddHelper2.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.btnAddHelper2.Image = CType(resources.GetObject("btnAddHelper2.Image"), System.Drawing.Image)
+        Me.btnAddHelper2.Location = New System.Drawing.Point(648, 217)
+        Me.btnAddHelper2.Name = "btnAddHelper2"
+        Me.btnAddHelper2.Size = New System.Drawing.Size(14, 18)
+        Me.btnAddHelper2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.btnAddHelper2.TabIndex = 604
+        Me.btnAddHelper2.TabStop = False
+        Me.btnAddHelper2.Tag = ""
+        '
+        'btnAddHelper1
+        '
+        Me.btnAddHelper1.BackColor = System.Drawing.Color.Transparent
+        Me.btnAddHelper1.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.btnAddHelper1.Image = CType(resources.GetObject("btnAddHelper1.Image"), System.Drawing.Image)
+        Me.btnAddHelper1.Location = New System.Drawing.Point(648, 190)
+        Me.btnAddHelper1.Name = "btnAddHelper1"
+        Me.btnAddHelper1.Size = New System.Drawing.Size(14, 18)
+        Me.btnAddHelper1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.btnAddHelper1.TabIndex = 603
+        Me.btnAddHelper1.TabStop = False
+        Me.btnAddHelper1.Tag = ""
+        '
+        'btnAddAgent
+        '
+        Me.btnAddAgent.BackColor = System.Drawing.Color.Transparent
+        Me.btnAddAgent.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.btnAddAgent.Image = CType(resources.GetObject("btnAddAgent.Image"), System.Drawing.Image)
+        Me.btnAddAgent.Location = New System.Drawing.Point(331, 190)
+        Me.btnAddAgent.Name = "btnAddAgent"
+        Me.btnAddAgent.Size = New System.Drawing.Size(14, 18)
+        Me.btnAddAgent.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.btnAddAgent.TabIndex = 602
+        Me.btnAddAgent.TabStop = False
+        Me.btnAddAgent.Tag = ""
         '
         'Label32
         '
@@ -1009,45 +1048,6 @@ Partial Class AddLineUpForm
         '
         Me.errProvider.ContainerControl = Me
         '
-        'btnAddAgent
-        '
-        Me.btnAddAgent.BackColor = System.Drawing.Color.Transparent
-        Me.btnAddAgent.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.btnAddAgent.Image = CType(resources.GetObject("btnAddAgent.Image"), System.Drawing.Image)
-        Me.btnAddAgent.Location = New System.Drawing.Point(331, 190)
-        Me.btnAddAgent.Name = "btnAddAgent"
-        Me.btnAddAgent.Size = New System.Drawing.Size(14, 18)
-        Me.btnAddAgent.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
-        Me.btnAddAgent.TabIndex = 602
-        Me.btnAddAgent.TabStop = False
-        Me.btnAddAgent.Tag = ""
-        '
-        'btnAddHelper1
-        '
-        Me.btnAddHelper1.BackColor = System.Drawing.Color.Transparent
-        Me.btnAddHelper1.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.btnAddHelper1.Image = CType(resources.GetObject("btnAddHelper1.Image"), System.Drawing.Image)
-        Me.btnAddHelper1.Location = New System.Drawing.Point(648, 190)
-        Me.btnAddHelper1.Name = "btnAddHelper1"
-        Me.btnAddHelper1.Size = New System.Drawing.Size(14, 18)
-        Me.btnAddHelper1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
-        Me.btnAddHelper1.TabIndex = 603
-        Me.btnAddHelper1.TabStop = False
-        Me.btnAddHelper1.Tag = ""
-        '
-        'btnAddHelper2
-        '
-        Me.btnAddHelper2.BackColor = System.Drawing.Color.Transparent
-        Me.btnAddHelper2.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.btnAddHelper2.Image = CType(resources.GetObject("btnAddHelper2.Image"), System.Drawing.Image)
-        Me.btnAddHelper2.Location = New System.Drawing.Point(648, 217)
-        Me.btnAddHelper2.Name = "btnAddHelper2"
-        Me.btnAddHelper2.Size = New System.Drawing.Size(14, 18)
-        Me.btnAddHelper2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
-        Me.btnAddHelper2.TabIndex = 604
-        Me.btnAddHelper2.TabStop = False
-        Me.btnAddHelper2.Tag = ""
-        '
         'AddLineUpForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -1077,12 +1077,12 @@ Partial Class AddLineUpForm
         CType(Me.dgCartons, System.ComponentModel.ISupportInitialize).EndInit()
         Me.gbLineUpInformation.ResumeLayout(False)
         Me.gbLineUpInformation.PerformLayout()
+        CType(Me.btnAddHelper2, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.btnAddHelper1, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.btnAddAgent, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.pbAddDriver, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.pbAddTruckShiftInfo, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.errProvider, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.btnAddAgent, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.btnAddHelper1, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.btnAddHelper2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 

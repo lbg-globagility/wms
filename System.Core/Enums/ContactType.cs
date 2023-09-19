@@ -7,6 +7,7 @@
         Driver,
         Helper,
         Packer,
-        Picker
+        Picker,
+        Customer
     }
 }

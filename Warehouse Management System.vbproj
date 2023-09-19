@@ -308,6 +308,12 @@
     <Compile Include="Information\SystemIllustrationForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Menu\Accounts\ViewAccounsListForm.Designer.vb">
+      <DependentUpon>ViewAccounsListForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Menu\Accounts\ViewAccounsListForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Menu\BundlesForm.Designer.vb">
       <DependentUpon>BundlesForm.vb</DependentUpon>
     </Compile>
@@ -326,10 +332,10 @@
     <Compile Include="Menu\CustomerOrdersForm.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Menu\AccountsForm.Designer.vb">
+    <Compile Include="Menu\Accounts\AccountsForm.Designer.vb">
       <DependentUpon>AccountsForm.vb</DependentUpon>
     </Compile>
-    <Compile Include="Menu\AccountsForm.vb">
+    <Compile Include="Menu\Accounts\AccountsForm.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Menu\InventoryLocationsForm.Designer.vb">
@@ -925,6 +931,9 @@
     <EmbeddedResource Include="Information\SystemIllustrationForm.resx">
       <DependentUpon>SystemIllustrationForm.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Menu\Accounts\ViewAccounsListForm.resx">
+      <DependentUpon>ViewAccounsListForm.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Menu\BundlesForm.resx">
       <DependentUpon>BundlesForm.vb</DependentUpon>
     </EmbeddedResource>
@@ -934,7 +943,7 @@
     <EmbeddedResource Include="Menu\CustomerOrdersForm.resx">
       <DependentUpon>CustomerOrdersForm.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Menu\AccountsForm.resx">
+    <EmbeddedResource Include="Menu\Accounts\AccountsForm.resx">
       <DependentUpon>AccountsForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Menu\InventoryLocationsForm.resx">
