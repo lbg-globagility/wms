@@ -37,8 +37,6 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
 
         public async Task<List<Product>> GetManyByOrganizationIdAsync(int organizationId) => await _context.Products
             .Include(p => p.ProductColors)
-                .ThenInclude(pc => pc.Color)
-            .Include(p => p.ProductColors)
                 .ThenInclude(pc => pc.ProductColorSizes)
                     .ThenInclude(pcs => pcs.ProductColor)
                         .ThenInclude(pc => pc.Color)

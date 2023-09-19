@@ -45,15 +45,7 @@ namespace WarehouseManagementSystem.Core.Entities
                 colorId: colorId,
                 productId: productId);
 
-        public bool HasColorAndSize(string colorName, decimal size)
-        {
-            string[] productCodes = {"MC-50M-#12",
-                "TS2-50M-BLK",
-                "TS4-50M-RED",
-                "LOO-TS4-BLU"};
-
-            return ProductColorSizes == null ? false : ProductColorSizes?.Any(t => t.HasColorAndSize(colorName: colorName ?? string.Empty, size: size)) ?? false;
-        }
+        public bool HasColorAndSize(string colorName, decimal size) => ProductColorSizes == null ? false : ProductColorSizes?.Any(t => t.HasColorAndSize(colorName: colorName ?? string.Empty, size: size)) ?? false;
 
         public void AddProductColorSizes(List<ProductColorSize> productColorSizes)
         {

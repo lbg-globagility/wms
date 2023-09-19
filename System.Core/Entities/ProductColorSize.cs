@@ -62,6 +62,6 @@ namespace WarehouseManagementSystem.Core.Entities
                 sku2: sku2,
                 seasonCode: seasonCode);
 
-        public bool HasColorAndSize(string colorName, decimal size) => ProductColor == null ? false : ProductColor.Color.ColorName.ToLower() == (colorName?.ToLower() ?? string.Empty) && Size == size;
+        public bool HasColorAndSize(string colorName, decimal size) => ProductColor == null ? false : ProductColor.Color.ColorName.ToLower().Trim() == (colorName?.ToLower() ?? string.Empty).Trim() && Size == size;
     }
 }

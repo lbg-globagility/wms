@@ -60,7 +60,9 @@ Public Class ImportProductForm
         Dim hasColorAndSize =
             Function(t As ProductRowRecord)
                 Dim size = CDec(t.Style)
-                Return products.Any(Function(x) x.HasColorAndSize(t.Colors, size))
+                Return products.
+                    Where(Function(x) x.ProductCode = t.ProductCode).
+                    Any(Function(x) x.HasColorAndSize(t.Colors, size))
             End Function
 
         Dim validParse = productRowRecords.
