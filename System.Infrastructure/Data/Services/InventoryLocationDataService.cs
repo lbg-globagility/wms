@@ -89,7 +89,10 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
                 userId: userId,
                 nonExistentProductColorSizes: nonExistentProductColorSizes);
 
-            await _rackShelfColumnRepository.SaveManyAsync(added: inventoryLocation.RackShelfColumns.ToList());
+            if (!nonExistentProductColorSizes?.Any() ?? true) return;
+
+            await _rackShelfColumnRepository.SaveManyAsync(added: inventoryLocation.RackShelfColumns.Where(i => i.IsNewEntity).ToList(),
+                updated: inventoryLocation.RackShelfColumns.Where(i => !i.IsNewEntity).ToList());
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using WarehouseManagementSystem.Core.Entities.Base;
 using WarehouseManagementSystem.Core.Enums;
 
@@ -45,45 +46,89 @@ namespace WarehouseManagementSystem.Core.Entities
             int userId,
             List<ProductColorSize> nonExistentProductColorSizes)
         {
-            if (IsNewEntity) return;
+            if (!nonExistentProductColorSizes?.Any() ?? true) return;
 
-            var newRackShelfColumns = new List<RackShelfColumn>();
+            var thisRackShelfColumns = new List<RackShelfColumn>();
+            var hasRackShelfColumns = RackShelfColumns != null && RackShelfColumns.Any();
+            if (hasRackShelfColumns) thisRackShelfColumns = RackShelfColumns.ToList();
 
             if (IsMainWarehouse)
             {
-                foreach (var nonExistentProductColorSize in nonExistentProductColorSizes)
+                if (hasRackShelfColumns)
                 {
-                    var newProductInventoryLocation = ProductInventoryLocation.NewProductInventoryLocation(organizationId: organizationId,
-                        userId: userId,
-                        productColorSizeId: nonExistentProductColorSize.RowID.Value,
-                        unitPrice: nonExistentProductColorSize?.ProductColor?.Product?.UnitPrice ?? 0);
+                    var thisRackShelfColumn = thisRackShelfColumns
+                        .OrderBy(t => t.PickOrderNo)
+                        .FirstOrDefault();
 
+                    foreach (var nonExistentProductColorSize in nonExistentProductColorSizes)
+                    {
+                        var newProductInventoryLocation = ProductInventoryLocation.NewProductInventoryLocation(organizationId: organizationId,
+                            userId: userId,
+                            productColorSizeId: nonExistentProductColorSize.RowID.Value,
+                            unitPrice: nonExistentProductColorSize?.ProductColor?.Product?.UnitPrice ?? 0);
+
+                        newProductInventoryLocation.RackShelfColumnID = thisRackShelfColumn.RowID;
+
+                        thisRackShelfColumn.AddProductInventoryLocations(productInventoryLocations: new List<ProductInventoryLocation>() { newProductInventoryLocation });
+                    }
+                }
+                else
+                {
                     var newRackShelfColumn = RackShelfColumn.NewRackShelfColumn(organizationId: organizationId, userId: userId, inventoryLocationId: RowID.Value);
 
-                    newRackShelfColumn.AddProductInventoryLocations(productInventoryLocations: new List<ProductInventoryLocation>() { newProductInventoryLocation });
+                    foreach (var nonExistentProductColorSize in nonExistentProductColorSizes)
+                    {
+                        var newProductInventoryLocation = ProductInventoryLocation.NewProductInventoryLocation(organizationId: organizationId,
+                            userId: userId,
+                            productColorSizeId: nonExistentProductColorSize.RowID.Value,
+                            unitPrice: nonExistentProductColorSize?.ProductColor?.Product?.UnitPrice ?? 0);
 
-                    newRackShelfColumns.Add(newRackShelfColumn);
+                        newRackShelfColumn.AddProductInventoryLocations(productInventoryLocations: new List<ProductInventoryLocation>() { newProductInventoryLocation });
+                    }
+
+                    thisRackShelfColumns.Add(newRackShelfColumn);
                 }
             }
             else if (IsNotMain)
             {
-                var newRackShelfColumn = RackShelfColumn.NewRackShelfColumn(organizationId: organizationId, userId: userId, inventoryLocationId: RowID.Value);
-
-                newRackShelfColumns.Add(newRackShelfColumn);
-
-                foreach (var nonExistentProductColorSize in nonExistentProductColorSizes)
+                if (hasRackShelfColumns)
                 {
-                    var newProductInventoryLocation = ProductInventoryLocation.NewProductInventoryLocation(organizationId: organizationId,
-                        userId: userId,
-                        productColorSizeId: nonExistentProductColorSize.RowID.Value,
-                        unitPrice: nonExistentProductColorSize?.ProductColor?.Product?.UnitPrice ?? 0);
+                    var thisRackShelfColumn = thisRackShelfColumns
+                        .OrderBy(t => t.PickOrderNo)
+                        .FirstOrDefault();
 
-                    newRackShelfColumn.AddProductInventoryLocations(productInventoryLocations: new List<ProductInventoryLocation>() { newProductInventoryLocation });
+                    foreach (var nonExistentProductColorSize in nonExistentProductColorSizes)
+                    {
+                        var newProductInventoryLocation = ProductInventoryLocation.NewProductInventoryLocation(organizationId: organizationId,
+                            userId: userId,
+                            productColorSizeId: nonExistentProductColorSize.RowID.Value,
+                            unitPrice: nonExistentProductColorSize?.ProductColor?.Product?.UnitPrice ?? 0);
+
+                        newProductInventoryLocation.RackShelfColumnID = thisRackShelfColumn.RowID;
+
+                        thisRackShelfColumn.AddProductInventoryLocations(productInventoryLocations: new List<ProductInventoryLocation>() { newProductInventoryLocation });
+                    }
+                }
+                else
+                {
+                    var newRackShelfColumn = RackShelfColumn.NewRackShelfColumn(organizationId: organizationId, userId: userId, inventoryLocationId: RowID.Value);
+
+                    foreach (var nonExistentProductColorSize in nonExistentProductColorSizes)
+                    {
+                        var newProductInventoryLocation = ProductInventoryLocation.NewProductInventoryLocation(organizationId: organizationId,
+                            userId: userId,
+                            productColorSizeId: nonExistentProductColorSize.RowID.Value,
+                            unitPrice: nonExistentProductColorSize?.ProductColor?.Product?.UnitPrice ?? 0);
+
+                        newRackShelfColumn.AddProductInventoryLocations(productInventoryLocations: new List<ProductInventoryLocation>() { newProductInventoryLocation });
+                    }
+
+                    thisRackShelfColumns.Add(newRackShelfColumn);
                 }
             }
 
             if (RackShelfColumns == null) RackShelfColumns = new List<RackShelfColumn>();
-            RackShelfColumns = newRackShelfColumns;
+            RackShelfColumns = thisRackShelfColumns;
         }
 
         public InventoryLocation(int organizationId,

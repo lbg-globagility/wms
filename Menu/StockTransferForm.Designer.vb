@@ -23,9 +23,6 @@ Partial Class StockTransferForm
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim DataGridViewCellStyle7 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle8 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle9 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(StockTransferForm))
         Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
@@ -33,26 +30,12 @@ Partial Class StockTransferForm
         Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle7 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle8 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle9 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle10 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle11 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.gbStockTransferItems = New System.Windows.Forms.GroupBox()
-        Me.dgProductHistory = New DevComponents.DotNetBar.Controls.DataGridViewX()
-        Me.h_rowid = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.h_colorvalue = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.h_productcode = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.h_colorname = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.h_color = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.h_size = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.h_seasoncode = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.h_rack = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.h_column = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.h_shelf = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.h_qtybefore = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.h_qtyapplied = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.h_qtyafter = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.h_type = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.h_uom = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.h_sku = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.chkOtherInfo = New System.Windows.Forms.CheckBox()
         Me.txtTotalQtyToTransfer = New System.Windows.Forms.TextBox()
         Me.lblTotalQtyToTransfer = New System.Windows.Forms.Label()
@@ -88,6 +71,23 @@ Partial Class StockTransferForm
         Me.r_qtystock = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.r_remove = New System.Windows.Forms.DataGridViewButtonColumn()
         Me.lblStockTransferItems = New System.Windows.Forms.Label()
+        Me.dgProductHistory = New DevComponents.DotNetBar.Controls.DataGridViewX()
+        Me.h_rowid = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.h_colorvalue = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.h_productcode = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.h_colorname = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.h_color = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.h_size = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.h_seasoncode = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.h_rack = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.h_column = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.h_shelf = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.h_qtybefore = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.h_qtyapplied = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.h_qtyafter = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.h_type = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.h_uom = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.h_sku = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.pbClose = New System.Windows.Forms.PictureBox()
         Me.errProvider = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.lblsavemsg = New System.Windows.Forms.Label()
@@ -134,9 +134,9 @@ Partial Class StockTransferForm
         Me.tabDetails = New System.Windows.Forms.TabPage()
         Me.lblTitle = New System.Windows.Forms.Label()
         Me.gbStockTransferItems.SuspendLayout()
-        CType(Me.dgProductHistory, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.dgRackShelfColumnTo, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.dgRackShelfColumnFrom, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.dgProductHistory, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbClose, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.errProvider, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.gbStockTransferInformation.SuspendLayout()
@@ -177,163 +177,6 @@ Partial Class StockTransferForm
         Me.gbStockTransferItems.Size = New System.Drawing.Size(800, 400)
         Me.gbStockTransferItems.TabIndex = 4
         Me.gbStockTransferItems.TabStop = False
-        '
-        'dgProductHistory
-        '
-        Me.dgProductHistory.AllowUserToAddRows = False
-        Me.dgProductHistory.AllowUserToDeleteRows = False
-        Me.dgProductHistory.AllowUserToOrderColumns = True
-        Me.dgProductHistory.AllowUserToResizeRows = False
-        Me.dgProductHistory.BackgroundColor = System.Drawing.Color.White
-        DataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle7.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgProductHistory.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle7
-        Me.dgProductHistory.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgProductHistory.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.h_rowid, Me.h_colorvalue, Me.h_productcode, Me.h_colorname, Me.h_color, Me.h_size, Me.h_seasoncode, Me.h_rack, Me.h_column, Me.h_shelf, Me.h_qtybefore, Me.h_qtyapplied, Me.h_qtyafter, Me.h_type, Me.h_uom, Me.h_sku})
-        DataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle8.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.dgProductHistory.DefaultCellStyle = DataGridViewCellStyle8
-        Me.dgProductHistory.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
-        Me.dgProductHistory.Location = New System.Drawing.Point(30, 60)
-        Me.dgProductHistory.MultiSelect = False
-        Me.dgProductHistory.Name = "dgProductHistory"
-        Me.dgProductHistory.ReadOnly = True
-        DataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle9.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgProductHistory.RowHeadersDefaultCellStyle = DataGridViewCellStyle9
-        Me.dgProductHistory.RowHeadersVisible = False
-        Me.dgProductHistory.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgProductHistory.Size = New System.Drawing.Size(720, 330)
-        Me.dgProductHistory.TabIndex = 24
-        Me.dgProductHistory.Visible = False
-        '
-        'h_rowid
-        '
-        Me.h_rowid.HeaderText = "rowid"
-        Me.h_rowid.Name = "h_rowid"
-        Me.h_rowid.ReadOnly = True
-        Me.h_rowid.Visible = False
-        Me.h_rowid.Width = 62
-        '
-        'h_colorvalue
-        '
-        Me.h_colorvalue.HeaderText = "colorvalue"
-        Me.h_colorvalue.Name = "h_colorvalue"
-        Me.h_colorvalue.ReadOnly = True
-        Me.h_colorvalue.Visible = False
-        '
-        'h_productcode
-        '
-        Me.h_productcode.HeaderText = "Product Code"
-        Me.h_productcode.Name = "h_productcode"
-        Me.h_productcode.ReadOnly = True
-        Me.h_productcode.Width = 110
-        '
-        'h_colorname
-        '
-        Me.h_colorname.HeaderText = "Color Name"
-        Me.h_colorname.Name = "h_colorname"
-        Me.h_colorname.ReadOnly = True
-        Me.h_colorname.Width = 90
-        '
-        'h_color
-        '
-        Me.h_color.HeaderText = ""
-        Me.h_color.Name = "h_color"
-        Me.h_color.ReadOnly = True
-        Me.h_color.Width = 30
-        '
-        'h_size
-        '
-        Me.h_size.HeaderText = "Size"
-        Me.h_size.Name = "h_size"
-        Me.h_size.ReadOnly = True
-        Me.h_size.Width = 50
-        '
-        'h_seasoncode
-        '
-        Me.h_seasoncode.HeaderText = "Season Code"
-        Me.h_seasoncode.Name = "h_seasoncode"
-        Me.h_seasoncode.ReadOnly = True
-        Me.h_seasoncode.Width = 70
-        '
-        'h_rack
-        '
-        Me.h_rack.HeaderText = "Rack"
-        Me.h_rack.Name = "h_rack"
-        Me.h_rack.ReadOnly = True
-        Me.h_rack.Width = 50
-        '
-        'h_column
-        '
-        Me.h_column.HeaderText = "Column"
-        Me.h_column.Name = "h_column"
-        Me.h_column.ReadOnly = True
-        Me.h_column.Width = 60
-        '
-        'h_shelf
-        '
-        Me.h_shelf.HeaderText = "Shelf"
-        Me.h_shelf.Name = "h_shelf"
-        Me.h_shelf.ReadOnly = True
-        Me.h_shelf.Width = 50
-        '
-        'h_qtybefore
-        '
-        Me.h_qtybefore.HeaderText = "Qty. Before Trans."
-        Me.h_qtybefore.Name = "h_qtybefore"
-        Me.h_qtybefore.ReadOnly = True
-        Me.h_qtybefore.Width = 90
-        '
-        'h_qtyapplied
-        '
-        Me.h_qtyapplied.HeaderText = "Qty. Applied"
-        Me.h_qtyapplied.Name = "h_qtyapplied"
-        Me.h_qtyapplied.ReadOnly = True
-        Me.h_qtyapplied.Width = 70
-        '
-        'h_qtyafter
-        '
-        Me.h_qtyafter.HeaderText = "Qty. After Trans."
-        Me.h_qtyafter.Name = "h_qtyafter"
-        Me.h_qtyafter.ReadOnly = True
-        Me.h_qtyafter.Width = 80
-        '
-        'h_type
-        '
-        Me.h_type.HeaderText = "Type"
-        Me.h_type.Name = "h_type"
-        Me.h_type.ReadOnly = True
-        Me.h_type.Width = 70
-        '
-        'h_uom
-        '
-        Me.h_uom.HeaderText = "Unit Of Measure"
-        Me.h_uom.Name = "h_uom"
-        Me.h_uom.ReadOnly = True
-        Me.h_uom.Width = 70
-        '
-        'h_sku
-        '
-        Me.h_sku.HeaderText = "SKU"
-        Me.h_sku.Name = "h_sku"
-        Me.h_sku.ReadOnly = True
-        Me.h_sku.Width = 80
         '
         'chkOtherInfo
         '
@@ -692,6 +535,163 @@ Partial Class StockTransferForm
         Me.lblStockTransferItems.TabIndex = 238
         Me.lblStockTransferItems.Text = "Stock Transfer Items:" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         '
+        'dgProductHistory
+        '
+        Me.dgProductHistory.AllowUserToAddRows = False
+        Me.dgProductHistory.AllowUserToDeleteRows = False
+        Me.dgProductHistory.AllowUserToOrderColumns = True
+        Me.dgProductHistory.AllowUserToResizeRows = False
+        Me.dgProductHistory.BackgroundColor = System.Drawing.Color.White
+        DataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle7.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgProductHistory.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle7
+        Me.dgProductHistory.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.dgProductHistory.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.h_rowid, Me.h_colorvalue, Me.h_productcode, Me.h_colorname, Me.h_color, Me.h_size, Me.h_seasoncode, Me.h_rack, Me.h_column, Me.h_shelf, Me.h_qtybefore, Me.h_qtyapplied, Me.h_qtyafter, Me.h_type, Me.h_uom, Me.h_sku})
+        DataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle8.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.dgProductHistory.DefaultCellStyle = DataGridViewCellStyle8
+        Me.dgProductHistory.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
+        Me.dgProductHistory.Location = New System.Drawing.Point(30, 60)
+        Me.dgProductHistory.MultiSelect = False
+        Me.dgProductHistory.Name = "dgProductHistory"
+        Me.dgProductHistory.ReadOnly = True
+        DataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle9.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgProductHistory.RowHeadersDefaultCellStyle = DataGridViewCellStyle9
+        Me.dgProductHistory.RowHeadersVisible = False
+        Me.dgProductHistory.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
+        Me.dgProductHistory.Size = New System.Drawing.Size(720, 330)
+        Me.dgProductHistory.TabIndex = 24
+        Me.dgProductHistory.Visible = False
+        '
+        'h_rowid
+        '
+        Me.h_rowid.HeaderText = "rowid"
+        Me.h_rowid.Name = "h_rowid"
+        Me.h_rowid.ReadOnly = True
+        Me.h_rowid.Visible = False
+        Me.h_rowid.Width = 62
+        '
+        'h_colorvalue
+        '
+        Me.h_colorvalue.HeaderText = "colorvalue"
+        Me.h_colorvalue.Name = "h_colorvalue"
+        Me.h_colorvalue.ReadOnly = True
+        Me.h_colorvalue.Visible = False
+        '
+        'h_productcode
+        '
+        Me.h_productcode.HeaderText = "Product Code"
+        Me.h_productcode.Name = "h_productcode"
+        Me.h_productcode.ReadOnly = True
+        Me.h_productcode.Width = 110
+        '
+        'h_colorname
+        '
+        Me.h_colorname.HeaderText = "Color Name"
+        Me.h_colorname.Name = "h_colorname"
+        Me.h_colorname.ReadOnly = True
+        Me.h_colorname.Width = 90
+        '
+        'h_color
+        '
+        Me.h_color.HeaderText = ""
+        Me.h_color.Name = "h_color"
+        Me.h_color.ReadOnly = True
+        Me.h_color.Width = 30
+        '
+        'h_size
+        '
+        Me.h_size.HeaderText = "Size"
+        Me.h_size.Name = "h_size"
+        Me.h_size.ReadOnly = True
+        Me.h_size.Width = 50
+        '
+        'h_seasoncode
+        '
+        Me.h_seasoncode.HeaderText = "Season Code"
+        Me.h_seasoncode.Name = "h_seasoncode"
+        Me.h_seasoncode.ReadOnly = True
+        Me.h_seasoncode.Width = 70
+        '
+        'h_rack
+        '
+        Me.h_rack.HeaderText = "Rack"
+        Me.h_rack.Name = "h_rack"
+        Me.h_rack.ReadOnly = True
+        Me.h_rack.Width = 50
+        '
+        'h_column
+        '
+        Me.h_column.HeaderText = "Column"
+        Me.h_column.Name = "h_column"
+        Me.h_column.ReadOnly = True
+        Me.h_column.Width = 60
+        '
+        'h_shelf
+        '
+        Me.h_shelf.HeaderText = "Shelf"
+        Me.h_shelf.Name = "h_shelf"
+        Me.h_shelf.ReadOnly = True
+        Me.h_shelf.Width = 50
+        '
+        'h_qtybefore
+        '
+        Me.h_qtybefore.HeaderText = "Qty. Before Trans."
+        Me.h_qtybefore.Name = "h_qtybefore"
+        Me.h_qtybefore.ReadOnly = True
+        Me.h_qtybefore.Width = 90
+        '
+        'h_qtyapplied
+        '
+        Me.h_qtyapplied.HeaderText = "Qty. Applied"
+        Me.h_qtyapplied.Name = "h_qtyapplied"
+        Me.h_qtyapplied.ReadOnly = True
+        Me.h_qtyapplied.Width = 70
+        '
+        'h_qtyafter
+        '
+        Me.h_qtyafter.HeaderText = "Qty. After Trans."
+        Me.h_qtyafter.Name = "h_qtyafter"
+        Me.h_qtyafter.ReadOnly = True
+        Me.h_qtyafter.Width = 80
+        '
+        'h_type
+        '
+        Me.h_type.HeaderText = "Type"
+        Me.h_type.Name = "h_type"
+        Me.h_type.ReadOnly = True
+        Me.h_type.Width = 70
+        '
+        'h_uom
+        '
+        Me.h_uom.HeaderText = "Unit Of Measure"
+        Me.h_uom.Name = "h_uom"
+        Me.h_uom.ReadOnly = True
+        Me.h_uom.Width = 70
+        '
+        'h_sku
+        '
+        Me.h_sku.HeaderText = "SKU"
+        Me.h_sku.Name = "h_sku"
+        Me.h_sku.ReadOnly = True
+        Me.h_sku.Width = 80
+        '
         'pbClose
         '
         Me.pbClose.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
@@ -953,6 +953,7 @@ Partial Class StockTransferForm
         '
         Me.SplitContainer1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.SplitContainer1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SplitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1
         Me.SplitContainer1.IsSplitterFixed = True
         Me.SplitContainer1.Location = New System.Drawing.Point(0, 28)
         Me.SplitContainer1.Name = "SplitContainer1"
@@ -1204,9 +1205,9 @@ Partial Class StockTransferForm
         Me.Text = "StockTransferForm"
         Me.gbStockTransferItems.ResumeLayout(False)
         Me.gbStockTransferItems.PerformLayout()
-        CType(Me.dgProductHistory, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.dgRackShelfColumnTo, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.dgRackShelfColumnFrom, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.dgProductHistory, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.pbClose, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.errProvider, System.ComponentModel.ISupportInitialize).EndInit()
         Me.gbStockTransferInformation.ResumeLayout(False)

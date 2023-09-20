@@ -1978,22 +1978,7 @@ Public Class InventoryLocationsForm
                             End If
                         End If
                         If myModule.systemerrorfound = False Then
-                            Await Task.
-                                Run(Async Function()
-                                        Await FunctionUtils.TryCatchFunctionAsync("New Inventory Location",
-                                            Async Function()
-                                                Dim inventoryLocationDataService = MainServiceProvider.GetRequiredService(Of IInventoryLocationDataService)
-
-                                                Await inventoryLocationDataService.PopulateWithProductColorSizesAsync(
-                                                    inventoryLocationName:=txtLocationName.Text.Trim,
-                                                    userId:=Z_UserID)
-
-                                                MessageBox.Show(text:="New inventory location created successfully!",
-                                                    caption:="Success — created inventory location",
-                                                    buttons:=MessageBoxButtons.OK,
-                                                    icon:=MessageBoxIcon.Information)
-                                            End Function)
-                                    End Function)
+                            Await Task.Run(PopulateInventoryLocationWithProductColorSizesAsync())
 
                             myBalloon("Successfully Save", "Save", lblsavemsg, -15, -65)
                         End If
@@ -2028,6 +2013,8 @@ Public Class InventoryLocationsForm
                             End If
                         End If
                         If myModule.systemerrorfound = False Then
+                            Await Task.Run(PopulateInventoryLocationWithProductColorSizesAsync())
+
                             myBalloon("Successfully Updated", "Update", lblsavemsg, -15, -65)
                         End If
                     Else
@@ -2044,6 +2031,24 @@ Public Class InventoryLocationsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
+    Private Function PopulateInventoryLocationWithProductColorSizesAsync() As Func(Of Task)
+        Return Async Function()
+                   Await FunctionUtils.TryCatchFunctionAsync("Save changes Inventory Location",
+                Async Function()
+                    Dim inventoryLocationDataService = MainServiceProvider.GetRequiredService(Of IInventoryLocationDataService)
+
+                    Await inventoryLocationDataService.PopulateWithProductColorSizesAsync(
+                        inventoryLocationName:=txtLocationName.Text.Trim,
+                        userId:=Z_UserID)
+
+                    MessageBox.Show(text:="Inventory location save changes!",
+                        caption:="",
+                        buttons:=MessageBoxButtons.OK,
+                        icon:=MessageBoxIcon.Information)
+                End Function)
+               End Function
+    End Function
 
 #Region "Search/Page Setup"
 

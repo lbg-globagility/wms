@@ -240,6 +240,7 @@ Partial Class PulloutForm
         '
         Me.SplitContainer1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.SplitContainer1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SplitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1
         Me.SplitContainer1.IsSplitterFixed = True
         Me.SplitContainer1.Location = New System.Drawing.Point(0, 28)
         Me.SplitContainer1.Name = "SplitContainer1"
@@ -1570,14 +1571,14 @@ Partial Class PulloutForm
         '
         Me.tsPrintA.Image = CType(resources.GetObject("tsPrintA.Image"), System.Drawing.Image)
         Me.tsPrintA.Name = "tsPrintA"
-        Me.tsPrintA.Size = New System.Drawing.Size(152, 22)
+        Me.tsPrintA.Size = New System.Drawing.Size(119, 22)
         Me.tsPrintA.Text = "Print &A"
         '
         'tsPrintB
         '
         Me.tsPrintB.Image = CType(resources.GetObject("tsPrintB.Image"), System.Drawing.Image)
         Me.tsPrintB.Name = "tsPrintB"
-        Me.tsPrintB.Size = New System.Drawing.Size(152, 22)
+        Me.tsPrintB.Size = New System.Drawing.Size(119, 22)
         Me.tsPrintB.Text = "Print &B"
         '
         'msCancel

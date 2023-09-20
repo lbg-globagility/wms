@@ -50,6 +50,25 @@ Partial Class ReturnForm
         Me.txtTotalGoodQty = New System.Windows.Forms.TextBox()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.dgReturnOrderItems = New DevComponents.DotNetBar.Controls.DataGridViewX()
+        Me.ci_rowid = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ci_pcsrowid = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ci_bid = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ci_colorvalue = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ci_seqno = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ci_productcode = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ci_colorname = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ci_color = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ci_size = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ci_seasoncode = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ci_unitofmeasure = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ci_goodqty = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ci_badqty = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ci_reasons = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ci_srp = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ci_totalprice = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ci_sku = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ci_remarks = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ci_option = New System.Windows.Forms.DataGridViewButtonColumn()
         Me.Label15 = New System.Windows.Forms.Label()
         Me.errProvider = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.c_seqno = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -157,25 +176,6 @@ Partial Class ReturnForm
         Me.Label1 = New System.Windows.Forms.Label()
         Me.dgProductColors = New DevComponents.DotNetBar.Controls.DataGridViewX()
         Me.pbClose = New System.Windows.Forms.PictureBox()
-        Me.ci_rowid = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ci_pcsrowid = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ci_bid = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ci_colorvalue = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ci_seqno = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ci_productcode = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ci_colorname = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ci_color = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ci_size = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ci_seasoncode = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ci_unitofmeasure = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ci_goodqty = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ci_badqty = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ci_reasons = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ci_srp = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ci_totalprice = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ci_sku = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ci_remarks = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ci_option = New System.Windows.Forms.DataGridViewButtonColumn()
         Me.gbReturnOrderItems.SuspendLayout()
         CType(Me.dgReturnOrderItems, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.errProvider, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -209,7 +209,7 @@ Partial Class ReturnForm
         Me.Label17.AutoSize = True
         Me.Label17.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label17.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label17.Location = New System.Drawing.Point(640, 121)
+        Me.Label17.Location = New System.Drawing.Point(640, 104)
         Me.Label17.Name = "Label17"
         Me.Label17.Size = New System.Drawing.Size(16, 15)
         Me.Label17.TabIndex = 466
@@ -235,7 +235,7 @@ Partial Class ReturnForm
         Me.gbReturnOrderItems.ForeColor = System.Drawing.SystemColors.ControlText
         Me.gbReturnOrderItems.Location = New System.Drawing.Point(6, 287)
         Me.gbReturnOrderItems.Name = "gbReturnOrderItems"
-        Me.gbReturnOrderItems.Size = New System.Drawing.Size(815, 147)
+        Me.gbReturnOrderItems.Size = New System.Drawing.Size(815, 130)
         Me.gbReturnOrderItems.TabIndex = 5
         Me.gbReturnOrderItems.TabStop = False
         '
@@ -243,7 +243,7 @@ Partial Class ReturnForm
         '
         Me.TxtTotalBadQty.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.TxtTotalBadQty.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TxtTotalBadQty.Location = New System.Drawing.Point(513, 118)
+        Me.TxtTotalBadQty.Location = New System.Drawing.Point(513, 101)
         Me.TxtTotalBadQty.Name = "TxtTotalBadQty"
         Me.TxtTotalBadQty.ReadOnly = True
         Me.TxtTotalBadQty.Size = New System.Drawing.Size(75, 21)
@@ -256,7 +256,7 @@ Partial Class ReturnForm
         Me.Label19.AutoSize = True
         Me.Label19.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label19.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label19.Location = New System.Drawing.Point(441, 113)
+        Me.Label19.Location = New System.Drawing.Point(441, 96)
         Me.Label19.Name = "Label19"
         Me.Label19.Size = New System.Drawing.Size(75, 30)
         Me.Label19.TabIndex = 468
@@ -267,7 +267,7 @@ Partial Class ReturnForm
         Me.chkOtherInfo.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.chkOtherInfo.AutoSize = True
         Me.chkOtherInfo.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.chkOtherInfo.Location = New System.Drawing.Point(5, 117)
+        Me.chkOtherInfo.Location = New System.Drawing.Point(5, 100)
         Me.chkOtherInfo.Name = "chkOtherInfo"
         Me.chkOtherInfo.Size = New System.Drawing.Size(105, 17)
         Me.chkOtherInfo.TabIndex = 41
@@ -278,7 +278,7 @@ Partial Class ReturnForm
         '
         Me.txtTotalPrice.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.txtTotalPrice.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtTotalPrice.Location = New System.Drawing.Point(659, 118)
+        Me.txtTotalPrice.Location = New System.Drawing.Point(659, 101)
         Me.txtTotalPrice.Name = "txtTotalPrice"
         Me.txtTotalPrice.ReadOnly = True
         Me.txtTotalPrice.Size = New System.Drawing.Size(129, 21)
@@ -291,7 +291,7 @@ Partial Class ReturnForm
         Me.Label13.AutoSize = True
         Me.Label13.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label13.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label13.Location = New System.Drawing.Point(597, 114)
+        Me.Label13.Location = New System.Drawing.Point(597, 97)
         Me.Label13.Name = "Label13"
         Me.Label13.Size = New System.Drawing.Size(44, 30)
         Me.Label13.TabIndex = 465
@@ -301,7 +301,7 @@ Partial Class ReturnForm
         '
         Me.txtTotalItems.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.txtTotalItems.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtTotalItems.Location = New System.Drawing.Point(210, 118)
+        Me.txtTotalItems.Location = New System.Drawing.Point(210, 101)
         Me.txtTotalItems.Name = "txtTotalItems"
         Me.txtTotalItems.ReadOnly = True
         Me.txtTotalItems.Size = New System.Drawing.Size(65, 21)
@@ -314,7 +314,7 @@ Partial Class ReturnForm
         Me.Label8.AutoSize = True
         Me.Label8.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label8.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label8.Location = New System.Drawing.Point(122, 121)
+        Me.Label8.Location = New System.Drawing.Point(122, 104)
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(82, 15)
         Me.Label8.TabIndex = 463
@@ -324,7 +324,7 @@ Partial Class ReturnForm
         '
         Me.txtTotalGoodQty.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.txtTotalGoodQty.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtTotalGoodQty.Location = New System.Drawing.Point(364, 118)
+        Me.txtTotalGoodQty.Location = New System.Drawing.Point(364, 101)
         Me.txtTotalGoodQty.Name = "txtTotalGoodQty"
         Me.txtTotalGoodQty.ReadOnly = True
         Me.txtTotalGoodQty.Size = New System.Drawing.Size(75, 21)
@@ -337,7 +337,7 @@ Partial Class ReturnForm
         Me.Label7.AutoSize = True
         Me.Label7.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label7.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label7.Location = New System.Drawing.Point(279, 111)
+        Me.Label7.Location = New System.Drawing.Point(279, 94)
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(84, 30)
         Me.Label7.TabIndex = 461
@@ -384,8 +384,127 @@ Partial Class ReturnForm
         Me.dgReturnOrderItems.RowHeadersDefaultCellStyle = DataGridViewCellStyle3
         Me.dgReturnOrderItems.RowHeadersVisible = False
         Me.dgReturnOrderItems.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgReturnOrderItems.Size = New System.Drawing.Size(800, 92)
+        Me.dgReturnOrderItems.Size = New System.Drawing.Size(800, 75)
         Me.dgReturnOrderItems.TabIndex = 40
+        '
+        'ci_rowid
+        '
+        Me.ci_rowid.HeaderText = "rowid"
+        Me.ci_rowid.Name = "ci_rowid"
+        Me.ci_rowid.Visible = False
+        '
+        'ci_pcsrowid
+        '
+        Me.ci_pcsrowid.HeaderText = "pcsrowid"
+        Me.ci_pcsrowid.Name = "ci_pcsrowid"
+        Me.ci_pcsrowid.Visible = False
+        '
+        'ci_bid
+        '
+        Me.ci_bid.HeaderText = "bid"
+        Me.ci_bid.Name = "ci_bid"
+        Me.ci_bid.Visible = False
+        '
+        'ci_colorvalue
+        '
+        Me.ci_colorvalue.HeaderText = "colorvalue"
+        Me.ci_colorvalue.Name = "ci_colorvalue"
+        Me.ci_colorvalue.Visible = False
+        '
+        'ci_seqno
+        '
+        Me.ci_seqno.HeaderText = "Seq. No."
+        Me.ci_seqno.Name = "ci_seqno"
+        Me.ci_seqno.ReadOnly = True
+        Me.ci_seqno.Width = 40
+        '
+        'ci_productcode
+        '
+        Me.ci_productcode.HeaderText = "Product Code"
+        Me.ci_productcode.Name = "ci_productcode"
+        Me.ci_productcode.ReadOnly = True
+        Me.ci_productcode.Width = 120
+        '
+        'ci_colorname
+        '
+        Me.ci_colorname.HeaderText = "Color Name"
+        Me.ci_colorname.Name = "ci_colorname"
+        Me.ci_colorname.ReadOnly = True
+        Me.ci_colorname.Width = 60
+        '
+        'ci_color
+        '
+        Me.ci_color.HeaderText = ""
+        Me.ci_color.Name = "ci_color"
+        Me.ci_color.ReadOnly = True
+        Me.ci_color.Width = 30
+        '
+        'ci_size
+        '
+        Me.ci_size.HeaderText = "Size"
+        Me.ci_size.Name = "ci_size"
+        Me.ci_size.ReadOnly = True
+        Me.ci_size.Width = 40
+        '
+        'ci_seasoncode
+        '
+        Me.ci_seasoncode.HeaderText = "Season Code"
+        Me.ci_seasoncode.Name = "ci_seasoncode"
+        Me.ci_seasoncode.ReadOnly = True
+        Me.ci_seasoncode.Width = 70
+        '
+        'ci_unitofmeasure
+        '
+        Me.ci_unitofmeasure.HeaderText = "Unit Of Measure"
+        Me.ci_unitofmeasure.Name = "ci_unitofmeasure"
+        Me.ci_unitofmeasure.Width = 70
+        '
+        'ci_goodqty
+        '
+        Me.ci_goodqty.HeaderText = "Good Items Qty."
+        Me.ci_goodqty.Name = "ci_goodqty"
+        Me.ci_goodqty.Width = 60
+        '
+        'ci_badqty
+        '
+        Me.ci_badqty.HeaderText = "Bad Items Qty."
+        Me.ci_badqty.Name = "ci_badqty"
+        '
+        'ci_reasons
+        '
+        Me.ci_reasons.HeaderText = "Reason"
+        Me.ci_reasons.Name = "ci_reasons"
+        '
+        'ci_srp
+        '
+        Me.ci_srp.HeaderText = "SRP"
+        Me.ci_srp.Name = "ci_srp"
+        Me.ci_srp.Width = 80
+        '
+        'ci_totalprice
+        '
+        Me.ci_totalprice.HeaderText = "Total Price"
+        Me.ci_totalprice.Name = "ci_totalprice"
+        Me.ci_totalprice.ReadOnly = True
+        '
+        'ci_sku
+        '
+        Me.ci_sku.HeaderText = "SKU"
+        Me.ci_sku.Name = "ci_sku"
+        Me.ci_sku.ReadOnly = True
+        '
+        'ci_remarks
+        '
+        Me.ci_remarks.HeaderText = "Remarks"
+        Me.ci_remarks.Name = "ci_remarks"
+        '
+        'ci_option
+        '
+        Me.ci_option.HeaderText = ""
+        Me.ci_option.Name = "ci_option"
+        Me.ci_option.Text = "Delete"
+        Me.ci_option.UseColumnTextForButtonValue = True
+        Me.ci_option.Width = 50
         '
         'Label15
         '
@@ -1138,6 +1257,7 @@ Partial Class ReturnForm
         '
         Me.SplitContainer1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.SplitContainer1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SplitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1
         Me.SplitContainer1.IsSplitterFixed = True
         Me.SplitContainer1.Location = New System.Drawing.Point(0, 28)
         Me.SplitContainer1.Name = "SplitContainer1"
@@ -1560,125 +1680,6 @@ Partial Class ReturnForm
         Me.pbClose.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
         Me.pbClose.TabIndex = 246
         Me.pbClose.TabStop = False
-        '
-        'ci_rowid
-        '
-        Me.ci_rowid.HeaderText = "rowid"
-        Me.ci_rowid.Name = "ci_rowid"
-        Me.ci_rowid.Visible = False
-        '
-        'ci_pcsrowid
-        '
-        Me.ci_pcsrowid.HeaderText = "pcsrowid"
-        Me.ci_pcsrowid.Name = "ci_pcsrowid"
-        Me.ci_pcsrowid.Visible = False
-        '
-        'ci_bid
-        '
-        Me.ci_bid.HeaderText = "bid"
-        Me.ci_bid.Name = "ci_bid"
-        Me.ci_bid.Visible = False
-        '
-        'ci_colorvalue
-        '
-        Me.ci_colorvalue.HeaderText = "colorvalue"
-        Me.ci_colorvalue.Name = "ci_colorvalue"
-        Me.ci_colorvalue.Visible = False
-        '
-        'ci_seqno
-        '
-        Me.ci_seqno.HeaderText = "Seq. No."
-        Me.ci_seqno.Name = "ci_seqno"
-        Me.ci_seqno.ReadOnly = True
-        Me.ci_seqno.Width = 40
-        '
-        'ci_productcode
-        '
-        Me.ci_productcode.HeaderText = "Product Code"
-        Me.ci_productcode.Name = "ci_productcode"
-        Me.ci_productcode.ReadOnly = True
-        Me.ci_productcode.Width = 120
-        '
-        'ci_colorname
-        '
-        Me.ci_colorname.HeaderText = "Color Name"
-        Me.ci_colorname.Name = "ci_colorname"
-        Me.ci_colorname.ReadOnly = True
-        Me.ci_colorname.Width = 60
-        '
-        'ci_color
-        '
-        Me.ci_color.HeaderText = ""
-        Me.ci_color.Name = "ci_color"
-        Me.ci_color.ReadOnly = True
-        Me.ci_color.Width = 30
-        '
-        'ci_size
-        '
-        Me.ci_size.HeaderText = "Size"
-        Me.ci_size.Name = "ci_size"
-        Me.ci_size.ReadOnly = True
-        Me.ci_size.Width = 40
-        '
-        'ci_seasoncode
-        '
-        Me.ci_seasoncode.HeaderText = "Season Code"
-        Me.ci_seasoncode.Name = "ci_seasoncode"
-        Me.ci_seasoncode.ReadOnly = True
-        Me.ci_seasoncode.Width = 70
-        '
-        'ci_unitofmeasure
-        '
-        Me.ci_unitofmeasure.HeaderText = "Unit Of Measure"
-        Me.ci_unitofmeasure.Name = "ci_unitofmeasure"
-        Me.ci_unitofmeasure.Width = 70
-        '
-        'ci_goodqty
-        '
-        Me.ci_goodqty.HeaderText = "Good Items Qty."
-        Me.ci_goodqty.Name = "ci_goodqty"
-        Me.ci_goodqty.Width = 60
-        '
-        'ci_badqty
-        '
-        Me.ci_badqty.HeaderText = "Bad Items Qty."
-        Me.ci_badqty.Name = "ci_badqty"
-        '
-        'ci_reasons
-        '
-        Me.ci_reasons.HeaderText = "Reason"
-        Me.ci_reasons.Name = "ci_reasons"
-        '
-        'ci_srp
-        '
-        Me.ci_srp.HeaderText = "SRP"
-        Me.ci_srp.Name = "ci_srp"
-        Me.ci_srp.Width = 80
-        '
-        'ci_totalprice
-        '
-        Me.ci_totalprice.HeaderText = "Total Price"
-        Me.ci_totalprice.Name = "ci_totalprice"
-        Me.ci_totalprice.ReadOnly = True
-        '
-        'ci_sku
-        '
-        Me.ci_sku.HeaderText = "SKU"
-        Me.ci_sku.Name = "ci_sku"
-        Me.ci_sku.ReadOnly = True
-        '
-        'ci_remarks
-        '
-        Me.ci_remarks.HeaderText = "Remarks"
-        Me.ci_remarks.Name = "ci_remarks"
-        '
-        'ci_option
-        '
-        Me.ci_option.HeaderText = ""
-        Me.ci_option.Name = "ci_option"
-        Me.ci_option.Text = "Delete"
-        Me.ci_option.UseColumnTextForButtonValue = True
-        Me.ci_option.Width = 50
         '
         'ReturnForm
         '

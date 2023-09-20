@@ -70,6 +70,16 @@ Partial Class StockAdjustmentForm
         Me.pcAddtnlItems = New System.Windows.Forms.PictureBox()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.dgrackshelfcolumn = New DevComponents.DotNetBar.Controls.DataGridViewX()
+        Me.r_rack = New System.Windows.Forms.DataGridViewComboBoxColumn()
+        Me.r_column = New System.Windows.Forms.DataGridViewComboBoxColumn()
+        Me.r_shelf = New System.Windows.Forms.DataGridViewComboBoxColumn()
+        Me.r_qtystock = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.r_qtyallocated = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.r_qtyapply = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.r_qtystocked = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.r_datestocked = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.r_prodinvlocinventoryid = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.r_rscid = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.grpStockAdjustmentitems = New System.Windows.Forms.GroupBox()
         Me.chkApproveAll = New System.Windows.Forms.CheckBox()
         Me.gbAddProductItem = New System.Windows.Forms.GroupBox()
@@ -122,16 +132,6 @@ Partial Class StockAdjustmentForm
         Me.errProvider = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.lblTitle = New System.Windows.Forms.Label()
         Me.pbClose = New System.Windows.Forms.PictureBox()
-        Me.r_rack = New System.Windows.Forms.DataGridViewComboBoxColumn()
-        Me.r_column = New System.Windows.Forms.DataGridViewComboBoxColumn()
-        Me.r_shelf = New System.Windows.Forms.DataGridViewComboBoxColumn()
-        Me.r_qtystock = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.r_qtyallocated = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.r_qtyapply = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.r_qtystocked = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.r_datestocked = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.r_prodinvlocinventoryid = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.r_rscid = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.gbStockAdjustmentOrderList.SuspendLayout()
         Me.ToolStrip3.SuspendLayout()
         CType(Me.dgStockAdjusmentList, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -335,6 +335,7 @@ Partial Class StockAdjustmentForm
         '
         Me.SplitContainer1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.SplitContainer1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SplitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1
         Me.SplitContainer1.IsSplitterFixed = True
         Me.SplitContainer1.Location = New System.Drawing.Point(0, 28)
         Me.SplitContainer1.Name = "SplitContainer1"
@@ -625,6 +626,85 @@ Partial Class StockAdjustmentForm
         Me.dgrackshelfcolumn.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.dgrackshelfcolumn.Size = New System.Drawing.Size(790, 150)
         Me.dgrackshelfcolumn.TabIndex = 240
+        '
+        'r_rack
+        '
+        Me.r_rack.FlatStyle = System.Windows.Forms.FlatStyle.Popup
+        Me.r_rack.HeaderText = "Rack"
+        Me.r_rack.Name = "r_rack"
+        Me.r_rack.ReadOnly = True
+        Me.r_rack.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.r_rack.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
+        Me.r_rack.Width = 60
+        '
+        'r_column
+        '
+        Me.r_column.FlatStyle = System.Windows.Forms.FlatStyle.Popup
+        Me.r_column.HeaderText = "Column"
+        Me.r_column.Name = "r_column"
+        Me.r_column.ReadOnly = True
+        Me.r_column.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.r_column.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
+        Me.r_column.Width = 75
+        '
+        'r_shelf
+        '
+        Me.r_shelf.FlatStyle = System.Windows.Forms.FlatStyle.Popup
+        Me.r_shelf.HeaderText = "Shelf"
+        Me.r_shelf.Name = "r_shelf"
+        Me.r_shelf.ReadOnly = True
+        Me.r_shelf.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.r_shelf.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
+        Me.r_shelf.Width = 60
+        '
+        'r_qtystock
+        '
+        Me.r_qtystock.HeaderText = "Quantity in Stock Before"
+        Me.r_qtystock.Name = "r_qtystock"
+        Me.r_qtystock.ReadOnly = True
+        Me.r_qtystock.Width = 114
+        '
+        'r_qtyallocated
+        '
+        Me.r_qtyallocated.HeaderText = "Qty. Allocated"
+        Me.r_qtyallocated.Name = "r_qtyallocated"
+        Me.r_qtyallocated.ReadOnly = True
+        Me.r_qtyallocated.Width = 96
+        '
+        'r_qtyapply
+        '
+        Me.r_qtyapply.HeaderText = "Quantity to Stock After"
+        Me.r_qtyapply.Name = "r_qtyapply"
+        Me.r_qtyapply.Width = 114
+        '
+        'r_qtystocked
+        '
+        Me.r_qtystocked.HeaderText = "Qty. Stocked"
+        Me.r_qtystocked.Name = "r_qtystocked"
+        Me.r_qtystocked.ReadOnly = True
+        Me.r_qtystocked.Visible = False
+        Me.r_qtystocked.Width = 91
+        '
+        'r_datestocked
+        '
+        Me.r_datestocked.HeaderText = "Date Stocked Adjusted"
+        Me.r_datestocked.Name = "r_datestocked"
+        Me.r_datestocked.ReadOnly = True
+        Me.r_datestocked.Width = 141
+        '
+        'r_prodinvlocinventoryid
+        '
+        Me.r_prodinvlocinventoryid.HeaderText = "prodinvlocinventoryID"
+        Me.r_prodinvlocinventoryid.Name = "r_prodinvlocinventoryid"
+        Me.r_prodinvlocinventoryid.Visible = False
+        Me.r_prodinvlocinventoryid.Width = 148
+        '
+        'r_rscid
+        '
+        Me.r_rscid.HeaderText = "RSCID"
+        Me.r_rscid.Name = "r_rscid"
+        Me.r_rscid.Visible = False
+        Me.r_rscid.Width = 69
         '
         'grpStockAdjustmentitems
         '
@@ -1113,85 +1193,6 @@ Partial Class StockAdjustmentForm
         Me.pbClose.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
         Me.pbClose.TabIndex = 244
         Me.pbClose.TabStop = False
-        '
-        'r_rack
-        '
-        Me.r_rack.FlatStyle = System.Windows.Forms.FlatStyle.Popup
-        Me.r_rack.HeaderText = "Rack"
-        Me.r_rack.Name = "r_rack"
-        Me.r_rack.ReadOnly = True
-        Me.r_rack.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.r_rack.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
-        Me.r_rack.Width = 60
-        '
-        'r_column
-        '
-        Me.r_column.FlatStyle = System.Windows.Forms.FlatStyle.Popup
-        Me.r_column.HeaderText = "Column"
-        Me.r_column.Name = "r_column"
-        Me.r_column.ReadOnly = True
-        Me.r_column.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.r_column.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
-        Me.r_column.Width = 75
-        '
-        'r_shelf
-        '
-        Me.r_shelf.FlatStyle = System.Windows.Forms.FlatStyle.Popup
-        Me.r_shelf.HeaderText = "Shelf"
-        Me.r_shelf.Name = "r_shelf"
-        Me.r_shelf.ReadOnly = True
-        Me.r_shelf.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.r_shelf.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
-        Me.r_shelf.Width = 60
-        '
-        'r_qtystock
-        '
-        Me.r_qtystock.HeaderText = "Quantity in Stock Before"
-        Me.r_qtystock.Name = "r_qtystock"
-        Me.r_qtystock.ReadOnly = True
-        Me.r_qtystock.Width = 114
-        '
-        'r_qtyallocated
-        '
-        Me.r_qtyallocated.HeaderText = "Qty. Allocated"
-        Me.r_qtyallocated.Name = "r_qtyallocated"
-        Me.r_qtyallocated.ReadOnly = True
-        Me.r_qtyallocated.Width = 96
-        '
-        'r_qtyapply
-        '
-        Me.r_qtyapply.HeaderText = "Quantity to Stock After"
-        Me.r_qtyapply.Name = "r_qtyapply"
-        Me.r_qtyapply.Width = 114
-        '
-        'r_qtystocked
-        '
-        Me.r_qtystocked.HeaderText = "Qty. Stocked"
-        Me.r_qtystocked.Name = "r_qtystocked"
-        Me.r_qtystocked.ReadOnly = True
-        Me.r_qtystocked.Visible = False
-        Me.r_qtystocked.Width = 91
-        '
-        'r_datestocked
-        '
-        Me.r_datestocked.HeaderText = "Date Stocked Adjusted"
-        Me.r_datestocked.Name = "r_datestocked"
-        Me.r_datestocked.ReadOnly = True
-        Me.r_datestocked.Width = 141
-        '
-        'r_prodinvlocinventoryid
-        '
-        Me.r_prodinvlocinventoryid.HeaderText = "prodinvlocinventoryID"
-        Me.r_prodinvlocinventoryid.Name = "r_prodinvlocinventoryid"
-        Me.r_prodinvlocinventoryid.Visible = False
-        Me.r_prodinvlocinventoryid.Width = 148
-        '
-        'r_rscid
-        '
-        Me.r_rscid.HeaderText = "RSCID"
-        Me.r_rscid.Name = "r_rscid"
-        Me.r_rscid.Visible = False
-        Me.r_rscid.Width = 69
         '
         'StockAdjustmentForm
         '
