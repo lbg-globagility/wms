@@ -81,13 +81,17 @@ Public Class ImportProductForm
 
         ParsedTabControl.Text = $"Ok ({validParse.Count})"
         ErrorsTabControl.Text = $"Errors ({invalidParse.Count})"
-        AlreadyExistsTabControl.Text = $"Already Exists ({alreadyExistsParse.Count})"
 
         SaveButton.Enabled = validParse.Count > 0
 
         ValidRecordsGrid.DataSource = validParse
-        RejectedRecordsGrid.DataSource = invalidParse
-        AlreadyExistRecordsGrid.DataSource = alreadyExistsParse
+
+        alreadyExistsParse.
+            ForEach(Sub(t)
+                        t.AppendErrorMessage(errorMessage:="Already exists")
+                    End Sub)
+        invalidParse.AddRange(alreadyExistsParse)
+        RejectedRecordsGrid.DataSource = invalidParse.OrderBy(Function(t) t.LineNumber).ToList()
     End Sub
 
     Private Sub btnDownloadTemplate_Click(sender As Object, e As EventArgs) Handles btnDownloadTemplate.Click

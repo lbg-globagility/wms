@@ -42,9 +42,6 @@ Partial Class ImportProductForm
         Dim DataGridViewCellStyle20 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle18 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle19 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle23 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle21 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle22 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.DataGridViewTextBoxColumn1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DataGridViewTextBoxColumn3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DataGridViewTextBoxColumn4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -80,11 +77,12 @@ Partial Class ImportProductForm
         Me.Column12 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column13 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ParsedTabControl = New System.Windows.Forms.TabPage()
-        Me.btnDownloadTemplate = New System.Windows.Forms.Button()
-        Me.CancelDialogButton = New System.Windows.Forms.Button()
-        Me.SaveButton = New System.Windows.Forms.Button()
-        Me.lblStatus = New System.Windows.Forms.Label()
+        Me.Panel1 = New System.Windows.Forms.Panel()
         Me.BrowseButton = New System.Windows.Forms.Button()
+        Me.btnDownloadTemplate = New System.Windows.Forms.Button()
+        Me.SaveButton = New System.Windows.Forms.Button()
+        Me.CancelDialogButton = New System.Windows.Forms.Button()
+        Me.lblStatus = New System.Windows.Forms.Label()
         Me.DataGridViewTextBoxColumn27 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.ErrorsTabControl = New System.Windows.Forms.TabPage()
@@ -102,28 +100,12 @@ Partial Class ImportProductForm
         Me.DataGridViewTextBoxColumn32 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DataGridViewTextBoxColumn33 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DataGridViewTextBoxColumn34 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.AlreadyExistsTabControl = New System.Windows.Forms.TabPage()
-        Me.AlreadyExistRecordsGrid = New DevComponents.DotNetBar.Controls.DataGridViewX()
-        Me.DataGridViewTextBoxColumn35 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DataGridViewTextBoxColumn36 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DataGridViewTextBoxColumn37 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DataGridViewTextBoxColumn38 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DataGridViewTextBoxColumn39 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DataGridViewTextBoxColumn40 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DataGridViewTextBoxColumn41 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DataGridViewTextBoxColumn42 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DataGridViewTextBoxColumn43 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DataGridViewTextBoxColumn44 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DataGridViewTextBoxColumn45 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Panel1 = New System.Windows.Forms.Panel()
         CType(Me.ValidRecordsGrid, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ParsedTabControl.SuspendLayout()
+        Me.Panel1.SuspendLayout()
         Me.TabControl1.SuspendLayout()
         Me.ErrorsTabControl.SuspendLayout()
         CType(Me.RejectedRecordsGrid, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.AlreadyExistsTabControl.SuspendLayout()
-        CType(Me.AlreadyExistRecordsGrid, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
         '
         'DataGridViewTextBoxColumn1
@@ -444,6 +426,27 @@ Partial Class ImportProductForm
         Me.ParsedTabControl.Text = "Ok"
         Me.ParsedTabControl.UseVisualStyleBackColor = True
         '
+        'Panel1
+        '
+        Me.Panel1.Controls.Add(Me.BrowseButton)
+        Me.Panel1.Controls.Add(Me.btnDownloadTemplate)
+        Me.Panel1.Controls.Add(Me.SaveButton)
+        Me.Panel1.Controls.Add(Me.CancelDialogButton)
+        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.Panel1.Location = New System.Drawing.Point(3, 363)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(786, 58)
+        Me.Panel1.TabIndex = 21
+        '
+        'BrowseButton
+        '
+        Me.BrowseButton.Location = New System.Drawing.Point(5, 14)
+        Me.BrowseButton.Name = "BrowseButton"
+        Me.BrowseButton.Size = New System.Drawing.Size(96, 32)
+        Me.BrowseButton.TabIndex = 17
+        Me.BrowseButton.Text = "&Browse..."
+        Me.BrowseButton.UseVisualStyleBackColor = True
+        '
         'btnDownloadTemplate
         '
         Me.btnDownloadTemplate.Location = New System.Drawing.Point(107, 14)
@@ -452,15 +455,6 @@ Partial Class ImportProductForm
         Me.btnDownloadTemplate.TabIndex = 20
         Me.btnDownloadTemplate.Text = "&Download Template"
         Me.btnDownloadTemplate.UseVisualStyleBackColor = True
-        '
-        'CancelDialogButton
-        '
-        Me.CancelDialogButton.Location = New System.Drawing.Point(685, 14)
-        Me.CancelDialogButton.Name = "CancelDialogButton"
-        Me.CancelDialogButton.Size = New System.Drawing.Size(96, 32)
-        Me.CancelDialogButton.TabIndex = 19
-        Me.CancelDialogButton.Text = "&Cancel"
-        Me.CancelDialogButton.UseVisualStyleBackColor = True
         '
         'SaveButton
         '
@@ -471,6 +465,15 @@ Partial Class ImportProductForm
         Me.SaveButton.TabIndex = 18
         Me.SaveButton.Text = "&Save"
         Me.SaveButton.UseVisualStyleBackColor = True
+        '
+        'CancelDialogButton
+        '
+        Me.CancelDialogButton.Location = New System.Drawing.Point(685, 14)
+        Me.CancelDialogButton.Name = "CancelDialogButton"
+        Me.CancelDialogButton.Size = New System.Drawing.Size(96, 32)
+        Me.CancelDialogButton.TabIndex = 19
+        Me.CancelDialogButton.Text = "&Cancel"
+        Me.CancelDialogButton.UseVisualStyleBackColor = True
         '
         'lblStatus
         '
@@ -485,15 +488,6 @@ Partial Class ImportProductForm
         Me.lblStatus.Text = "Click the Browse button to select the file then click the Save button after you c" &
     "hecked the preview."
         '
-        'BrowseButton
-        '
-        Me.BrowseButton.Location = New System.Drawing.Point(5, 14)
-        Me.BrowseButton.Name = "BrowseButton"
-        Me.BrowseButton.Size = New System.Drawing.Size(96, 32)
-        Me.BrowseButton.TabIndex = 17
-        Me.BrowseButton.Text = "&Browse..."
-        Me.BrowseButton.UseVisualStyleBackColor = True
-        '
         'DataGridViewTextBoxColumn27
         '
         Me.DataGridViewTextBoxColumn27.DataPropertyName = "Comments"
@@ -505,7 +499,6 @@ Partial Class ImportProductForm
         '
         Me.TabControl1.Controls.Add(Me.ParsedTabControl)
         Me.TabControl1.Controls.Add(Me.ErrorsTabControl)
-        Me.TabControl1.Controls.Add(Me.AlreadyExistsTabControl)
         Me.TabControl1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TabControl1.Location = New System.Drawing.Point(0, 0)
         Me.TabControl1.Name = "TabControl1"
@@ -641,132 +634,6 @@ Partial Class ImportProductForm
         Me.DataGridViewTextBoxColumn34.Name = "DataGridViewTextBoxColumn34"
         Me.DataGridViewTextBoxColumn34.ReadOnly = True
         '
-        'AlreadyExistsTabControl
-        '
-        Me.AlreadyExistsTabControl.Controls.Add(Me.AlreadyExistRecordsGrid)
-        Me.AlreadyExistsTabControl.Location = New System.Drawing.Point(4, 22)
-        Me.AlreadyExistsTabControl.Name = "AlreadyExistsTabControl"
-        Me.AlreadyExistsTabControl.Padding = New System.Windows.Forms.Padding(3)
-        Me.AlreadyExistsTabControl.Size = New System.Drawing.Size(792, 424)
-        Me.AlreadyExistsTabControl.TabIndex = 2
-        Me.AlreadyExistsTabControl.Text = "Already Exists"
-        Me.AlreadyExistsTabControl.UseVisualStyleBackColor = True
-        '
-        'AlreadyExistRecordsGrid
-        '
-        Me.AlreadyExistRecordsGrid.AllowUserToAddRows = False
-        Me.AlreadyExistRecordsGrid.AllowUserToDeleteRows = False
-        Me.AlreadyExistRecordsGrid.BackgroundColor = System.Drawing.Color.White
-        Me.AlreadyExistRecordsGrid.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.DataGridViewTextBoxColumn35, Me.DataGridViewTextBoxColumn36, Me.DataGridViewTextBoxColumn37, Me.DataGridViewTextBoxColumn38, Me.DataGridViewTextBoxColumn39, Me.DataGridViewTextBoxColumn40, Me.DataGridViewTextBoxColumn41, Me.DataGridViewTextBoxColumn42, Me.DataGridViewTextBoxColumn43, Me.DataGridViewTextBoxColumn44, Me.DataGridViewTextBoxColumn45})
-        DataGridViewCellStyle23.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle23.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle23.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle23.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle23.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle23.SelectionForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle23.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.AlreadyExistRecordsGrid.DefaultCellStyle = DataGridViewCellStyle23
-        Me.AlreadyExistRecordsGrid.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.AlreadyExistRecordsGrid.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
-        Me.AlreadyExistRecordsGrid.Location = New System.Drawing.Point(3, 3)
-        Me.AlreadyExistRecordsGrid.Name = "AlreadyExistRecordsGrid"
-        Me.AlreadyExistRecordsGrid.ReadOnly = True
-        Me.AlreadyExistRecordsGrid.Size = New System.Drawing.Size(786, 418)
-        Me.AlreadyExistRecordsGrid.TabIndex = 1
-        '
-        'DataGridViewTextBoxColumn35
-        '
-        Me.DataGridViewTextBoxColumn35.DataPropertyName = "ProductCode"
-        Me.DataGridViewTextBoxColumn35.HeaderText = "ProductCode"
-        Me.DataGridViewTextBoxColumn35.Name = "DataGridViewTextBoxColumn35"
-        Me.DataGridViewTextBoxColumn35.ReadOnly = True
-        '
-        'DataGridViewTextBoxColumn36
-        '
-        Me.DataGridViewTextBoxColumn36.DataPropertyName = "BrandName"
-        Me.DataGridViewTextBoxColumn36.HeaderText = "BrandName"
-        Me.DataGridViewTextBoxColumn36.Name = "DataGridViewTextBoxColumn36"
-        Me.DataGridViewTextBoxColumn36.ReadOnly = True
-        '
-        'DataGridViewTextBoxColumn37
-        '
-        Me.DataGridViewTextBoxColumn37.DataPropertyName = "Category"
-        Me.DataGridViewTextBoxColumn37.HeaderText = "Category"
-        Me.DataGridViewTextBoxColumn37.Name = "DataGridViewTextBoxColumn37"
-        Me.DataGridViewTextBoxColumn37.ReadOnly = True
-        '
-        'DataGridViewTextBoxColumn38
-        '
-        Me.DataGridViewTextBoxColumn38.DataPropertyName = "SRP"
-        Me.DataGridViewTextBoxColumn38.HeaderText = "SRP"
-        Me.DataGridViewTextBoxColumn38.Name = "DataGridViewTextBoxColumn38"
-        Me.DataGridViewTextBoxColumn38.ReadOnly = True
-        '
-        'DataGridViewTextBoxColumn39
-        '
-        Me.DataGridViewTextBoxColumn39.DataPropertyName = "UnitOfMeasure"
-        DataGridViewCellStyle21.NullValue = Nothing
-        Me.DataGridViewTextBoxColumn39.DefaultCellStyle = DataGridViewCellStyle21
-        Me.DataGridViewTextBoxColumn39.HeaderText = "UnitOfMeasure"
-        Me.DataGridViewTextBoxColumn39.Name = "DataGridViewTextBoxColumn39"
-        Me.DataGridViewTextBoxColumn39.ReadOnly = True
-        '
-        'DataGridViewTextBoxColumn40
-        '
-        Me.DataGridViewTextBoxColumn40.DataPropertyName = "Description"
-        DataGridViewCellStyle22.NullValue = Nothing
-        Me.DataGridViewTextBoxColumn40.DefaultCellStyle = DataGridViewCellStyle22
-        Me.DataGridViewTextBoxColumn40.HeaderText = "Description"
-        Me.DataGridViewTextBoxColumn40.Name = "DataGridViewTextBoxColumn40"
-        Me.DataGridViewTextBoxColumn40.ReadOnly = True
-        '
-        'DataGridViewTextBoxColumn41
-        '
-        Me.DataGridViewTextBoxColumn41.DataPropertyName = "Colors"
-        Me.DataGridViewTextBoxColumn41.HeaderText = "Colors"
-        Me.DataGridViewTextBoxColumn41.Name = "DataGridViewTextBoxColumn41"
-        Me.DataGridViewTextBoxColumn41.ReadOnly = True
-        '
-        'DataGridViewTextBoxColumn42
-        '
-        Me.DataGridViewTextBoxColumn42.DataPropertyName = "Style"
-        Me.DataGridViewTextBoxColumn42.HeaderText = "Style"
-        Me.DataGridViewTextBoxColumn42.Name = "DataGridViewTextBoxColumn42"
-        Me.DataGridViewTextBoxColumn42.ReadOnly = True
-        '
-        'DataGridViewTextBoxColumn43
-        '
-        Me.DataGridViewTextBoxColumn43.DataPropertyName = "SeasonCode"
-        Me.DataGridViewTextBoxColumn43.HeaderText = "SeasonCode"
-        Me.DataGridViewTextBoxColumn43.Name = "DataGridViewTextBoxColumn43"
-        Me.DataGridViewTextBoxColumn43.ReadOnly = True
-        '
-        'DataGridViewTextBoxColumn44
-        '
-        Me.DataGridViewTextBoxColumn44.DataPropertyName = "SKU"
-        Me.DataGridViewTextBoxColumn44.HeaderText = "SKU"
-        Me.DataGridViewTextBoxColumn44.Name = "DataGridViewTextBoxColumn44"
-        Me.DataGridViewTextBoxColumn44.ReadOnly = True
-        '
-        'DataGridViewTextBoxColumn45
-        '
-        Me.DataGridViewTextBoxColumn45.DataPropertyName = "SKU2"
-        Me.DataGridViewTextBoxColumn45.HeaderText = "SKU2"
-        Me.DataGridViewTextBoxColumn45.Name = "DataGridViewTextBoxColumn45"
-        Me.DataGridViewTextBoxColumn45.ReadOnly = True
-        '
-        'Panel1
-        '
-        Me.Panel1.Controls.Add(Me.BrowseButton)
-        Me.Panel1.Controls.Add(Me.btnDownloadTemplate)
-        Me.Panel1.Controls.Add(Me.SaveButton)
-        Me.Panel1.Controls.Add(Me.CancelDialogButton)
-        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Panel1.Location = New System.Drawing.Point(3, 363)
-        Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(786, 58)
-        Me.Panel1.TabIndex = 21
-        '
         'ImportProductForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -782,12 +649,10 @@ Partial Class ImportProductForm
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         CType(Me.ValidRecordsGrid, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ParsedTabControl.ResumeLayout(False)
+        Me.Panel1.ResumeLayout(False)
         Me.TabControl1.ResumeLayout(False)
         Me.ErrorsTabControl.ResumeLayout(False)
         CType(Me.RejectedRecordsGrid, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.AlreadyExistsTabControl.ResumeLayout(False)
-        CType(Me.AlreadyExistRecordsGrid, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.Panel1.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -849,18 +714,5 @@ Partial Class ImportProductForm
     Friend WithEvents DataGridViewTextBoxColumn32 As DataGridViewTextBoxColumn
     Friend WithEvents DataGridViewTextBoxColumn33 As DataGridViewTextBoxColumn
     Friend WithEvents DataGridViewTextBoxColumn34 As DataGridViewTextBoxColumn
-    Friend WithEvents AlreadyExistsTabControl As TabPage
-    Friend WithEvents AlreadyExistRecordsGrid As DevComponents.DotNetBar.Controls.DataGridViewX
-    Friend WithEvents DataGridViewTextBoxColumn35 As DataGridViewTextBoxColumn
-    Friend WithEvents DataGridViewTextBoxColumn36 As DataGridViewTextBoxColumn
-    Friend WithEvents DataGridViewTextBoxColumn37 As DataGridViewTextBoxColumn
-    Friend WithEvents DataGridViewTextBoxColumn38 As DataGridViewTextBoxColumn
-    Friend WithEvents DataGridViewTextBoxColumn39 As DataGridViewTextBoxColumn
-    Friend WithEvents DataGridViewTextBoxColumn40 As DataGridViewTextBoxColumn
-    Friend WithEvents DataGridViewTextBoxColumn41 As DataGridViewTextBoxColumn
-    Friend WithEvents DataGridViewTextBoxColumn42 As DataGridViewTextBoxColumn
-    Friend WithEvents DataGridViewTextBoxColumn43 As DataGridViewTextBoxColumn
-    Friend WithEvents DataGridViewTextBoxColumn44 As DataGridViewTextBoxColumn
-    Friend WithEvents DataGridViewTextBoxColumn45 As DataGridViewTextBoxColumn
     Friend WithEvents Panel1 As Panel
 End Class

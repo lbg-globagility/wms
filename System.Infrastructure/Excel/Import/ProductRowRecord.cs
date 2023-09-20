@@ -47,6 +47,8 @@ namespace WarehouseManagementSystem.Infrastructure.Excel.Import
 
     public partial class ProductRowRecord
     {
+        private string _errorMessage;
+
         public bool HasProductCode => !string.IsNullOrEmpty(ProductCode);
         public bool HasCategory => !string.IsNullOrEmpty(Category);
         public bool HasColor => !string.IsNullOrEmpty(Colors);
@@ -61,7 +63,8 @@ namespace WarehouseManagementSystem.Infrastructure.Excel.Import
                     HasProductCode ? string.Empty : "Invalid Product Code",
                     HasCategory ? string.Empty : "Invalid Category",
                     HasColor ? string.Empty : "Invalid Color",
-                    HasStyle ? string.Empty : "Invalid Style"
+                    HasStyle ? string.Empty : "Invalid Style",
+                    _errorMessage
                 };
                 var errorTexts2 = errorTexts.Where(t => !string.IsNullOrEmpty(t));
 
@@ -85,6 +88,11 @@ namespace WarehouseManagementSystem.Infrastructure.Excel.Import
         public void SetCategoryId(int categoryId)
         {
             CategoryId = categoryId;
+        }
+
+        public void AppendErrorMessage(string errorMessage)
+        {
+            _errorMessage = errorMessage;
         }
     }
 }
