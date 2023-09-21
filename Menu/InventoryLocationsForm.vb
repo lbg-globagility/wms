@@ -3,6 +3,7 @@
 Imports Microsoft.Extensions.DependencyInjection
 Imports MySql.Data.MySqlClient
 Imports WarehouseManagementSystem.Core.Enums
+Imports WarehouseManagementSystem.Core.Interfaces
 Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
 Imports WarehouseManagementSystem.Desktop.Utilities
 
@@ -20,8 +21,12 @@ Public Class InventoryLocationsForm
     Dim simplesearchphrase, commonphrase, pagefilter1, pagefilter2, pagefilter3 As String
     Dim spagenum, countpagenum, numofpages, validpages, rcspagenum, rcscountpagenum, rcsnumofpages, rcsvalidpages As Integer
     Dim iltotalqtyavailable, iltotalqtyreserve, iltotalqtydamage, iltotalqtyallocated, iltotalqtyorderable, ilinventorylocationid, iladdressid, ilrackshelfcolumnid As Integer
+    Private _systemOwner As WarehouseManagementSystem.Core.Entities.SystemOwner
 
-    Private Sub InventoryLocationsForm_Load(sender As Object, e As EventArgs) Handles Me.Load
+    Private Async Sub InventoryLocationsForm_Load(sender As Object, e As EventArgs) Handles Me.Load
+        Dim _systemOwnerService = MainServiceProvider.GetRequiredService(Of ISystemOwnerService)
+        _systemOwner = Await _systemOwnerService.GetCurrentSystemOwnerEntityAsync()
+
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
@@ -728,6 +733,15 @@ Public Class InventoryLocationsForm
     End Sub
 
     Sub autopopulateLocationTypeB(ByVal icombobox As ComboBox)
+        If IsThurston Then
+            Dim inventoryLocationTypes = [Enum].GetValues(GetType(InventoryLocationType))
+            icombobox.Items.Clear()
+            For Each item In inventoryLocationTypes
+                icombobox.Items.Add(item)
+            Next
+            Return
+        End If
+
         Try
             icombobox.Items.Clear()
             If conn.State = ConnectionState.Open Then conn.Close()
@@ -1397,6 +1411,10 @@ Public Class InventoryLocationsForm
         Me.Cursor = Cursors.Default
     End Sub
 
+    Private Sub dgInventoryLocationList_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgInventoryLocationList.CellContentClick
+
+    End Sub
+
     Private Sub dgInventoryLocationList_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgInventoryLocationList.CellClick
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1412,6 +1430,7 @@ Public Class InventoryLocationsForm
                 displayInventoryLocationInformation(CInt(dgInventoryLocationList.CurrentRow.Cells("il_rowid").Value))
                 rcspagenum = neutralpage : rcsnumofpages = startingpage
                 displayRackShelfColumn(CInt(dgInventoryLocationList.CurrentRow.Cells("il_rowid").Value), rcspagenum)
+                LoadProductColorSizesBasedOnRackShelfColumn()
                 pageSetupRCS(CInt(dgInventoryLocationList.CurrentRow.Cells("il_rowid").Value))
                 txtPageNoRCS.Text = "" & rcsnumofpages & " of " & rcsvalidpages & " " : txtLocationName.Focus()
             End If
@@ -1421,6 +1440,15 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
         Me.Cursor = Cursors.Default
+    End Sub
+
+    Private Sub LoadProductColorSizesBasedOnRackShelfColumn()
+        If Not IsThurston Then Return
+
+        Dim row = dgRackShelfColumn.Rows.OfType(Of DataGridViewRow).FirstOrDefault()
+
+        If row Is Nothing Then Return
+        displayProducts(irackshelfcolumnid:=CInt(row.Cells(rsc_rowid.Name).Value))
     End Sub
 
     Private Sub dgInventoryLocationList_KeyUp(sender As Object, e As KeyEventArgs) Handles dgInventoryLocationList.KeyUp
@@ -2498,5 +2526,11 @@ Public Class InventoryLocationsForm
     End Sub
 
 #End Region
+
+    Private ReadOnly Property IsThurston As Boolean
+        Get
+            Return _systemOwner.IsThurston
+        End Get
+    End Property
 
 End Class

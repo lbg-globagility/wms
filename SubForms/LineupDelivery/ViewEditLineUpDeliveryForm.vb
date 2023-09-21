@@ -2376,6 +2376,13 @@ Public Class ViewEditLineUpDeliveryForm
                 errProvider.SetError(txtSIDRNo, "Please enter the S.I./D.R. No.")
                 Exit Try
             End If
+
+            Dim form = New DeliveryTimestampTrackingForm(lineupId:=CInt(dgLineUpList.CurrentRow.Cells(lu_rowid.Name).Value))
+            If Not form.ShowDialog() = DialogResult.OK Then
+                Me.Cursor = Cursors.Default
+                Return
+            End If
+
             If MessageBox.Show("NOTE: Once you confirmed this delivery, you cannot undo the process again." & vbNewLine & "" & vbNewLine & "Do you want to proceed confirming this delivery?", "Confirm Delivery", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
                 Me.Cursor = Cursors.WaitCursor
                 PrimaryForm.MainLoadingBar.Visible = legit

@@ -1,0 +1,4 @@
+# 5:51 PM 9/21/2023
+
+ALTER TABLE `lineups`
+	ADD COLUMN IF NOT EXISTS `ConfirmedDeliveryTimeStamp` DATETIME NULL DEFAULT NULL AFTER `Helper2Id`;

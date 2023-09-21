@@ -228,6 +228,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Import Include="Microsoft.VisualBasic" />
@@ -860,6 +861,12 @@
     <Compile Include="SubForms\ImportProductsForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="SubForms\LineupDelivery\DeliveryTimestampTrackingForm.Designer.vb">
+      <DependentUpon>DeliveryTimestampTrackingForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="SubForms\LineupDelivery\DeliveryTimestampTrackingForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="SubForms\NewRR.Designer.vb">
       <DependentUpon>NewRR.vb</DependentUpon>
     </Compile>
@@ -896,10 +903,10 @@
     <Compile Include="SubForms\ViewCartonsForm.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SubForms\ViewEditLineUpDeliveryForm.Designer.vb">
+    <Compile Include="SubForms\LineupDelivery\ViewEditLineUpDeliveryForm.Designer.vb">
       <DependentUpon>ViewEditLineUpDeliveryForm.vb</DependentUpon>
     </Compile>
-    <Compile Include="SubForms\ViewEditLineUpDeliveryForm.vb">
+    <Compile Include="SubForms\LineupDelivery\ViewEditLineUpDeliveryForm.vb">
       <SubType>Form</SubType>
     </Compile>
   </ItemGroup>
@@ -1229,6 +1236,9 @@
     <EmbeddedResource Include="SubForms\ImportProductsForm.resx">
       <DependentUpon>ImportProductsForm.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="SubForms\LineupDelivery\DeliveryTimestampTrackingForm.resx">
+      <DependentUpon>DeliveryTimestampTrackingForm.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SubForms\NewRR.resx">
       <DependentUpon>NewRR.vb</DependentUpon>
     </EmbeddedResource>
@@ -1247,7 +1257,7 @@
     <EmbeddedResource Include="SubForms\ViewCartonsForm.resx">
       <DependentUpon>ViewCartonsForm.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SubForms\ViewEditLineUpDeliveryForm.resx">
+    <EmbeddedResource Include="SubForms\LineupDelivery\ViewEditLineUpDeliveryForm.resx">
       <DependentUpon>ViewEditLineUpDeliveryForm.vb</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
@@ -1329,7 +1339,9 @@
       <Name>WarehouseManagementSystem.Utilities</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="UserControls\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

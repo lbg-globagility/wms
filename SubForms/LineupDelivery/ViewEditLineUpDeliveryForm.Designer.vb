@@ -146,6 +146,7 @@ Partial Class ViewEditLineUpDeliveryForm
         Me.lblsavemsg = New System.Windows.Forms.Label()
         Me.errProvider = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.lblTitle = New System.Windows.Forms.Label()
+        Me.Button1 = New System.Windows.Forms.Button()
         CType(Me.dgLineUpList, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ToolStrip3.SuspendLayout()
         Me.gbLineUpList.SuspendLayout()
@@ -426,6 +427,7 @@ Partial Class ViewEditLineUpDeliveryForm
         '
         'tabSimple
         '
+        Me.tabSimple.Controls.Add(Me.Button1)
         Me.tabSimple.Controls.Add(Me.txtSimpleSearch)
         Me.tabSimple.Controls.Add(Me.Label30)
         Me.tabSimple.Location = New System.Drawing.Point(4, 29)
@@ -1445,6 +1447,15 @@ Partial Class ViewEditLineUpDeliveryForm
         Me.lblTitle.Text = "View / Edit Line-Up And Delivery"
         Me.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
+        'Button1
+        '
+        Me.Button1.Location = New System.Drawing.Point(96, 71)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(75, 23)
+        Me.Button1.TabIndex = 7
+        Me.Button1.Text = "Button1"
+        Me.Button1.UseVisualStyleBackColor = True
+        '
         'ViewEditLineUpDeliveryForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -1613,4 +1624,5 @@ Partial Class ViewEditLineUpDeliveryForm
     Friend WithEvents btnAddAgent As PictureBox
     Friend WithEvents btnAddHelper1 As PictureBox
     Friend WithEvents btnAddHelper2 As PictureBox
+    Friend WithEvents Button1 As Button
 End Class
