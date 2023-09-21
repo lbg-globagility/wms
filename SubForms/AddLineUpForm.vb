@@ -413,6 +413,7 @@ Public Class AddLineUpForm
 
         cboHelper2.ValueMember = "RowID"
         cboHelper2.DisplayMember = "FullNameLastNameFirst"
+        cboHelper2.BindingContext = New BindingContext()
         cboHelper2.DataSource = helperDataSource
 
     End Function

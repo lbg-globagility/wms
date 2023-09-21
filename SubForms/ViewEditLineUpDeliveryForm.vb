@@ -86,6 +86,7 @@ Public Class ViewEditLineUpDeliveryForm
 
         cboHelper2.ValueMember = "RowID"
         cboHelper2.DisplayMember = "FullNameLastNameFirst"
+        cboHelper2.BindingContext = New BindingContext()
         cboHelper2.DataSource = helperDataSource
 
     End Function
@@ -1222,7 +1223,7 @@ Public Class ViewEditLineUpDeliveryForm
             dtLUinfo = getDataTableForSQL("SELECT COALESCE(lu.lineupno,''),COALESCE(DATE_FORMAT(lu.lineupdate,'%d-%b-%Y'),''),COALESCE(o.drnumber,''),COALESCE(DATE_FORMAT(lu.deliverydate,'%d-%b-%Y'),''),COALESCE(CONCAT(COALESCE(dt.truckname,''),' - ',COALESCE(dt.truckno,''),' / ',COALESCE(s.shiftname,'')),''),COALESCE(lu.status,'')," &
                         "COALESCE(CONCAT(COALESCE(c.firstname,''),' ',COALESCE(c.middlename,''),' ',COALESCE(c.lastname,''),' ',COALESCE(c.suffix,''),' - ',COALESCE(c.contactno,'')),''),COALESCE(CONCAT(COALESCE(o.ordernumber,''),' (C.O. No.) / ', COALESCE(a.companyname,''),' - ', COALESCE(a.accountno,''),' / ',CONCAT(COALESCE(pl.packinglistno,''),' (Pa.L. No.)')),'')," &
                         "COALESCE(DATE_FORMAT(o.orderdate,'%d-%b-%Y'),''),COALESCE(DATE_FORMAT(o.targetdate,'%d-%b-%Y'),''),COALESCE(o.customeraddress,''),COALESCE(lu.comments,''),COALESCE(o.deliveryhours,''),COALESCE(lu.packinglistid,0),COALESCE(lu.orderid,0),COALESCE(o.referencenumber,''),COALESCE(DATE_FORMAT(o.enddate,'%d-%b-%Y'),''),COALESCE(CONCAT(COALESCE(bc.branchcode,''),' - ',COALESCE(bc.branchname,'')),'')," &
-                        "COALESCE(CONCAT(COALESCE(ve.companyname,''),' - ',COALESCE(ve.companycode,'')),''),COALESCE(CONCAT(COALESCE(cc.codename,''),' / ',COALESCE(c1.codeno,''),'-',COALESCE(c2.codeno,''),'-',COALESCE(c3.codeno,'')),'') FROM lineups lu LEFT JOIN orders o ON lu.orderid = o.rowid LEFT JOIN deliverytruckshifts dts ON lu.deliverytruckshiftid = dts.rowid LEFT JOIN combinecodings cc ON o.combinecodingid = cc.rowid LEFT JOIN codings c1 ON cc.codingida = c1.rowid " &
+                        "COALESCE(CONCAT(COALESCE(ve.companyname,''),' - ',COALESCE(ve.companycode,'')),''),COALESCE(CONCAT(COALESCE(cc.codename,''),' / ',COALESCE(c1.codeno,''),'-',COALESCE(c2.codeno,''),'-',COALESCE(c3.codeno,'')),''), lu.AgentId, lu.Helper1Id, lu.Helper2Id FROM lineups lu LEFT JOIN orders o ON lu.orderid = o.rowid LEFT JOIN deliverytruckshifts dts ON lu.deliverytruckshiftid = dts.rowid LEFT JOIN combinecodings cc ON o.combinecodingid = cc.rowid LEFT JOIN codings c1 ON cc.codingida = c1.rowid " &
                         "LEFT JOIN codings c2 ON cc.codingidb = c2.rowid LEFT JOIN codings c3 ON cc.codingidc = c3.rowid LEFT JOIN branches bc ON o.branchid = bc.rowid LEFT JOIN companies ve ON o.companyid = ve.rowid LEFT JOIN deliverytrucks dt ON dts.deliverytruckid = dt.rowid LEFT JOIN shifts s ON dts.shiftid = s.rowid LEFT JOIN contacts c ON lu.contactid = c.rowid LEFT JOIN accounts a ON o.accountid = a.rowid LEFT JOIN packinglist pl ON lu.packinglistid = pl.rowid WHERE lu.rowid = " & ilineupid & " ")
             If dtLUinfo.Rows.Count <> 0 Then
                 veludpackinglistid = dtLUinfo.Rows(0)(13)
@@ -1245,6 +1246,9 @@ Public Class ViewEditLineUpDeliveryForm
                 txtBranchCodeNameInfo.Text = dtLUinfo.Rows(0)(17)
                 txtVendorCodeNameInfo.Text = dtLUinfo.Rows(0)(18)
                 txtClassDescription.Text = dtLUinfo.Rows(0)(19)
+                cboAgent.SelectedValue = dtLUinfo.Rows(0)(20)
+                cboHelper1.SelectedValue = dtLUinfo.Rows(0)(21)
+                cboHelper2.SelectedValue = dtLUinfo.Rows(0)(22)
             End If
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
