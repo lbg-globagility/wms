@@ -192,6 +192,9 @@ Partial Class CustomerOrdersForm
         Me.ci_option = New System.Windows.Forms.DataGridViewButtonColumn()
         Me.Label15 = New System.Windows.Forms.Label()
         Me.gbCustomerOrderInformation = New System.Windows.Forms.GroupBox()
+        Me.PictureBox2 = New System.Windows.Forms.PictureBox()
+        Me.cboAgent = New System.Windows.Forms.ComboBox()
+        Me.Label36 = New System.Windows.Forms.Label()
         Me.cboInventoryLocation = New System.Windows.Forms.ComboBox()
         Me.Label33 = New System.Windows.Forms.Label()
         Me.pbAddClassDescription = New System.Windows.Forms.PictureBox()
@@ -200,7 +203,10 @@ Partial Class CustomerOrdersForm
         Me.pbAddBranchCodeName = New System.Windows.Forms.PictureBox()
         Me.cboBranchCodeNameInfo = New System.Windows.Forms.ComboBox()
         Me.Label41 = New System.Windows.Forms.Label()
+        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.pbAddVendorCodeName = New System.Windows.Forms.PictureBox()
+        Me.cboCustomerOrderType = New System.Windows.Forms.ComboBox()
+        Me.Label35 = New System.Windows.Forms.Label()
         Me.cboVendorCodeNameInfo = New System.Windows.Forms.ComboBox()
         Me.Label29 = New System.Windows.Forms.Label()
         Me.pbSaveSIDRNo = New System.Windows.Forms.PictureBox()
@@ -250,9 +256,8 @@ Partial Class CustomerOrdersForm
         Me.errProvider = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.pbClose = New System.Windows.Forms.PictureBox()
         Me.lblTitle = New System.Windows.Forms.Label()
-        Me.Label35 = New System.Windows.Forms.Label()
-        Me.ComboBox1 = New System.Windows.Forms.ComboBox()
-        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
+        Me.DataSetA = New Warehouse_Management_System.DataSetA()
+        Me.DataSetABindingSource = New System.Windows.Forms.BindingSource(Me.components)
         CType(Me.dgProductSizes, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.dgProductColors, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.gbAddProductItem.SuspendLayout()
@@ -276,15 +281,18 @@ Partial Class CustomerOrdersForm
         Me.gbCustomerOrderItems.SuspendLayout()
         CType(Me.dgCustomerOrderItems, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.gbCustomerOrderInformation.SuspendLayout()
+        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbAddClassDescription, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbAddBranchCodeName, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbAddVendorCodeName, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbSaveSIDRNo, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbAddCustomer, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.msMenu.SuspendLayout()
         CType(Me.errProvider, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbClose, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.DataSetA, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.DataSetABindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'dgProductSizes
@@ -1062,9 +1070,9 @@ Partial Class CustomerOrdersForm
         Me.gbAddProducts.Controls.Add(Me.dgProductColorSizes)
         Me.gbAddProducts.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.gbAddProducts.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.gbAddProducts.Location = New System.Drawing.Point(6, 263)
+        Me.gbAddProducts.Location = New System.Drawing.Point(6, 292)
         Me.gbAddProducts.Name = "gbAddProducts"
-        Me.gbAddProducts.Size = New System.Drawing.Size(815, 210)
+        Me.gbAddProducts.Size = New System.Drawing.Size(815, 181)
         Me.gbAddProducts.TabIndex = 4
         Me.gbAddProducts.TabStop = False
         '
@@ -1072,7 +1080,7 @@ Partial Class CustomerOrdersForm
         '
         Me.txtBundleSRP.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.txtBundleSRP.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtBundleSRP.Location = New System.Drawing.Point(697, 83)
+        Me.txtBundleSRP.Location = New System.Drawing.Point(697, 54)
         Me.txtBundleSRP.Name = "txtBundleSRP"
         Me.txtBundleSRP.Size = New System.Drawing.Size(95, 21)
         Me.txtBundleSRP.TabIndex = 47
@@ -1084,7 +1092,7 @@ Partial Class CustomerOrdersForm
         Me.lblSRP.AutoSize = True
         Me.lblSRP.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblSRP.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.lblSRP.Location = New System.Drawing.Point(722, 65)
+        Me.lblSRP.Location = New System.Drawing.Point(722, 36)
         Me.lblSRP.Name = "lblSRP"
         Me.lblSRP.Size = New System.Drawing.Size(39, 15)
         Me.lblSRP.TabIndex = 473
@@ -1094,7 +1102,7 @@ Partial Class CustomerOrdersForm
         '
         Me.txtOverallQty.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.txtOverallQty.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtOverallQty.Location = New System.Drawing.Point(697, 125)
+        Me.txtOverallQty.Location = New System.Drawing.Point(697, 96)
         Me.txtOverallQty.Name = "txtOverallQty"
         Me.txtOverallQty.ReadOnly = True
         Me.txtOverallQty.Size = New System.Drawing.Size(95, 21)
@@ -1107,7 +1115,7 @@ Partial Class CustomerOrdersForm
         Me.lblOverallQty.AutoSize = True
         Me.lblOverallQty.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblOverallQty.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.lblOverallQty.Location = New System.Drawing.Point(704, 107)
+        Me.lblOverallQty.Location = New System.Drawing.Point(704, 78)
         Me.lblOverallQty.Name = "lblOverallQty"
         Me.lblOverallQty.Size = New System.Drawing.Size(84, 15)
         Me.lblOverallQty.TabIndex = 470
@@ -1117,7 +1125,7 @@ Partial Class CustomerOrdersForm
         '
         Me.txtOverallPrice.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.txtOverallPrice.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtOverallPrice.Location = New System.Drawing.Point(683, 168)
+        Me.txtOverallPrice.Location = New System.Drawing.Point(683, 139)
         Me.txtOverallPrice.Name = "txtOverallPrice"
         Me.txtOverallPrice.ReadOnly = True
         Me.txtOverallPrice.Size = New System.Drawing.Size(122, 21)
@@ -1130,7 +1138,7 @@ Partial Class CustomerOrdersForm
         Me.lblOverallPrice.AutoSize = True
         Me.lblOverallPrice.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblOverallPrice.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.lblOverallPrice.Location = New System.Drawing.Point(700, 150)
+        Me.lblOverallPrice.Location = New System.Drawing.Point(700, 121)
         Me.lblOverallPrice.Name = "lblOverallPrice"
         Me.lblOverallPrice.Size = New System.Drawing.Size(93, 15)
         Me.lblOverallPrice.TabIndex = 468
@@ -1795,6 +1803,9 @@ Partial Class CustomerOrdersForm
         '
         'gbCustomerOrderInformation
         '
+        Me.gbCustomerOrderInformation.Controls.Add(Me.PictureBox2)
+        Me.gbCustomerOrderInformation.Controls.Add(Me.cboAgent)
+        Me.gbCustomerOrderInformation.Controls.Add(Me.Label36)
         Me.gbCustomerOrderInformation.Controls.Add(Me.cboInventoryLocation)
         Me.gbCustomerOrderInformation.Controls.Add(Me.Label33)
         Me.gbCustomerOrderInformation.Controls.Add(Me.pbAddClassDescription)
@@ -1805,7 +1816,7 @@ Partial Class CustomerOrdersForm
         Me.gbCustomerOrderInformation.Controls.Add(Me.Label41)
         Me.gbCustomerOrderInformation.Controls.Add(Me.PictureBox1)
         Me.gbCustomerOrderInformation.Controls.Add(Me.pbAddVendorCodeName)
-        Me.gbCustomerOrderInformation.Controls.Add(Me.ComboBox1)
+        Me.gbCustomerOrderInformation.Controls.Add(Me.cboCustomerOrderType)
         Me.gbCustomerOrderInformation.Controls.Add(Me.Label35)
         Me.gbCustomerOrderInformation.Controls.Add(Me.cboVendorCodeNameInfo)
         Me.gbCustomerOrderInformation.Controls.Add(Me.Label29)
@@ -1848,9 +1859,41 @@ Partial Class CustomerOrdersForm
         Me.gbCustomerOrderInformation.ForeColor = System.Drawing.SystemColors.ControlText
         Me.gbCustomerOrderInformation.Location = New System.Drawing.Point(6, 5)
         Me.gbCustomerOrderInformation.Name = "gbCustomerOrderInformation"
-        Me.gbCustomerOrderInformation.Size = New System.Drawing.Size(815, 264)
+        Me.gbCustomerOrderInformation.Size = New System.Drawing.Size(819, 281)
         Me.gbCustomerOrderInformation.TabIndex = 3
         Me.gbCustomerOrderInformation.TabStop = False
+        '
+        'PictureBox2
+        '
+        Me.PictureBox2.BackColor = System.Drawing.Color.Transparent
+        Me.PictureBox2.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.PictureBox2.Image = CType(resources.GetObject("PictureBox2.Image"), System.Drawing.Image)
+        Me.PictureBox2.Location = New System.Drawing.Point(367, 250)
+        Me.PictureBox2.Name = "PictureBox2"
+        Me.PictureBox2.Size = New System.Drawing.Size(14, 18)
+        Me.PictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.PictureBox2.TabIndex = 463
+        Me.PictureBox2.TabStop = False
+        Me.PictureBox2.Tag = ""
+        '
+        'cboAgent
+        '
+        Me.cboAgent.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cboAgent.FormattingEnabled = True
+        Me.cboAgent.Location = New System.Drawing.Point(156, 247)
+        Me.cboAgent.Name = "cboAgent"
+        Me.cboAgent.Size = New System.Drawing.Size(208, 23)
+        Me.cboAgent.TabIndex = 461
+        '
+        'Label36
+        '
+        Me.Label36.AutoSize = True
+        Me.Label36.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label36.Location = New System.Drawing.Point(6, 251)
+        Me.Label36.Name = "Label36"
+        Me.Label36.Size = New System.Drawing.Size(38, 15)
+        Me.Label36.TabIndex = 462
+        Me.Label36.Text = "Agent"
         '
         'cboInventoryLocation
         '
@@ -1861,6 +1904,7 @@ Partial Class CustomerOrdersForm
         Me.cboInventoryLocation.Name = "cboInventoryLocation"
         Me.cboInventoryLocation.Size = New System.Drawing.Size(288, 23)
         Me.cboInventoryLocation.TabIndex = 459
+        Me.cboInventoryLocation.Visible = False
         '
         'Label33
         '
@@ -1871,6 +1915,7 @@ Partial Class CustomerOrdersForm
         Me.Label33.Size = New System.Drawing.Size(108, 15)
         Me.Label33.TabIndex = 458
         Me.Label33.Text = "Inventory Location:"
+        Me.Label33.Visible = False
         '
         'pbAddClassDescription
         '
@@ -1937,6 +1982,19 @@ Partial Class CustomerOrdersForm
         Me.Label41.TabIndex = 453
         Me.Label41.Text = "Branch Code / Name Info:"
         '
+        'PictureBox1
+        '
+        Me.PictureBox1.BackColor = System.Drawing.Color.Transparent
+        Me.PictureBox1.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.PictureBox1.Image = CType(resources.GetObject("PictureBox1.Image"), System.Drawing.Image)
+        Me.PictureBox1.Location = New System.Drawing.Point(367, 220)
+        Me.PictureBox1.Name = "PictureBox1"
+        Me.PictureBox1.Size = New System.Drawing.Size(14, 18)
+        Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.PictureBox1.TabIndex = 451
+        Me.PictureBox1.TabStop = False
+        Me.PictureBox1.Tag = ""
+        '
         'pbAddVendorCodeName
         '
         Me.pbAddVendorCodeName.BackColor = System.Drawing.Color.Transparent
@@ -1949,6 +2007,25 @@ Partial Class CustomerOrdersForm
         Me.pbAddVendorCodeName.TabIndex = 451
         Me.pbAddVendorCodeName.TabStop = False
         Me.pbAddVendorCodeName.Tag = ""
+        '
+        'cboCustomerOrderType
+        '
+        Me.cboCustomerOrderType.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cboCustomerOrderType.FormattingEnabled = True
+        Me.cboCustomerOrderType.Location = New System.Drawing.Point(156, 217)
+        Me.cboCustomerOrderType.Name = "cboCustomerOrderType"
+        Me.cboCustomerOrderType.Size = New System.Drawing.Size(208, 23)
+        Me.cboCustomerOrderType.TabIndex = 31
+        '
+        'Label35
+        '
+        Me.Label35.AutoSize = True
+        Me.Label35.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label35.Location = New System.Drawing.Point(6, 221)
+        Me.Label35.Name = "Label35"
+        Me.Label35.Size = New System.Drawing.Size(73, 15)
+        Me.Label35.TabIndex = 450
+        Me.Label35.Text = "Order Type: "
         '
         'cboVendorCodeNameInfo
         '
@@ -2329,6 +2406,7 @@ Partial Class CustomerOrdersForm
         Me.Label34.Size = New System.Drawing.Size(16, 20)
         Me.Label34.TabIndex = 460
         Me.Label34.Text = "*"
+        Me.Label34.Visible = False
         '
         'msMenu
         '
@@ -2426,37 +2504,15 @@ Partial Class CustomerOrdersForm
         Me.lblTitle.Text = "Customer Orders"
         Me.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'Label35
+        'DataSetA
         '
-        Me.Label35.AutoSize = True
-        Me.Label35.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label35.Location = New System.Drawing.Point(6, 219)
-        Me.Label35.Name = "Label35"
-        Me.Label35.Size = New System.Drawing.Size(73, 15)
-        Me.Label35.TabIndex = 450
-        Me.Label35.Text = "Order Type: "
+        Me.DataSetA.DataSetName = "DataSetA"
+        Me.DataSetA.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema
         '
-        'ComboBox1
+        'DataSetABindingSource
         '
-        Me.ComboBox1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ComboBox1.FormattingEnabled = True
-        Me.ComboBox1.Location = New System.Drawing.Point(156, 215)
-        Me.ComboBox1.Name = "ComboBox1"
-        Me.ComboBox1.Size = New System.Drawing.Size(208, 23)
-        Me.ComboBox1.TabIndex = 31
-        '
-        'PictureBox1
-        '
-        Me.PictureBox1.BackColor = System.Drawing.Color.Transparent
-        Me.PictureBox1.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.PictureBox1.Image = CType(resources.GetObject("PictureBox1.Image"), System.Drawing.Image)
-        Me.PictureBox1.Location = New System.Drawing.Point(367, 218)
-        Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(14, 18)
-        Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
-        Me.PictureBox1.TabIndex = 451
-        Me.PictureBox1.TabStop = False
-        Me.PictureBox1.Tag = ""
+        Me.DataSetABindingSource.DataSource = Me.DataSetA
+        Me.DataSetABindingSource.Position = 0
         '
         'CustomerOrdersForm
         '
@@ -2506,8 +2562,10 @@ Partial Class CustomerOrdersForm
         CType(Me.dgCustomerOrderItems, System.ComponentModel.ISupportInitialize).EndInit()
         Me.gbCustomerOrderInformation.ResumeLayout(False)
         Me.gbCustomerOrderInformation.PerformLayout()
+        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.pbAddClassDescription, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.pbAddBranchCodeName, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.pbAddVendorCodeName, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.pbSaveSIDRNo, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.pbAddCustomer, System.ComponentModel.ISupportInitialize).EndInit()
@@ -2515,7 +2573,8 @@ Partial Class CustomerOrdersForm
         Me.msMenu.PerformLayout()
         CType(Me.errProvider, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.pbClose, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.DataSetA, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.DataSetABindingSource, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -2729,6 +2788,11 @@ Partial Class CustomerOrdersForm
     Friend WithEvents Label33 As Label
     Friend WithEvents Label34 As Label
     Friend WithEvents PictureBox1 As PictureBox
-    Friend WithEvents ComboBox1 As ComboBox
+    Friend WithEvents cboCustomerOrderType As ComboBox
     Friend WithEvents Label35 As Label
+    Friend WithEvents PictureBox2 As PictureBox
+    Friend WithEvents cboAgent As ComboBox
+    Friend WithEvents Label36 As Label
+    Friend WithEvents DataSetA As DataSetA
+    Friend WithEvents DataSetABindingSource As BindingSource
 End Class

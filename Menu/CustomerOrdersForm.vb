@@ -74,6 +74,7 @@ Public Class CustomerOrdersForm
         globalautopopulateClassDescription(cboClassDescription, Me)
         globalautopopulateListOfValues(cboTags, "Tags", Me)
         autopopulateTags()
+        autoPopulateCustomerOrderType()
     End Sub
 
 #Region "Clear/Enable/Visible"
@@ -906,6 +907,14 @@ Public Class CustomerOrdersForm
         Finally
             conn.Close()
         End Try
+    End Sub
+
+    Sub autoPopulateCustomerOrderType()
+        Dim CustomerOrderTypes = [Enum].GetValues(GetType(CustomerOrderType))
+        cboCustomerOrderType.Items.Clear()
+        For Each type In CustomerOrderTypes
+            cboCustomerOrderType.Items.Add(type)
+        Next
     End Sub
 
     Private Async Function LoadInventoryLocations() As Task

@@ -6,5 +6,9 @@ namespace WarehouseManagementSystem.Core.Enums
 {
     public enum CustomerOrderType
     {
+        Sales,
+        Sample,
+        Damage,
+        Donation
     }
 }
