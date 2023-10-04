@@ -4173,7 +4173,7 @@ Public Class CustomerOrdersForm
         Me.Cursor = Cursors.Default
     End Sub
 
-    Private Sub pbAddVendorCodeName_MouseEnter(sender As Object, e As EventArgs) Handles pbAddVendorCodeName.MouseEnter
+    Private Sub pbAddVendorCodeName_MouseEnter(sender As Object, e As EventArgs) Handles pbAddVendorCodeName.MouseEnter, PictureBox1.MouseEnter
         Try
             pbAddVendorCodeName.BackColor = Color.MediumSpringGreen
         Catch ex As Exception
@@ -4183,7 +4183,7 @@ Public Class CustomerOrdersForm
         End Try
     End Sub
 
-    Private Sub pbAddVendorCodeName_MouseLeave(sender As Object, e As EventArgs) Handles pbAddVendorCodeName.MouseLeave
+    Private Sub pbAddVendorCodeName_MouseLeave(sender As Object, e As EventArgs) Handles pbAddVendorCodeName.MouseLeave, PictureBox1.MouseLeave
         Try
             pbAddVendorCodeName.BackColor = Color.Transparent
         Catch ex As Exception
@@ -4193,7 +4193,7 @@ Public Class CustomerOrdersForm
         End Try
     End Sub
 
-    Private Sub pbAddVendorCodeName_Click(sender As Object, e As EventArgs) Handles pbAddVendorCodeName.Click
+    Private Sub pbAddVendorCodeName_Click(sender As Object, e As EventArgs) Handles pbAddVendorCodeName.Click, PictureBox1.Click
         Me.Cursor = Cursors.WaitCursor
         Try
             getPositionID(Me)
