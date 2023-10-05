@@ -1760,9 +1760,11 @@ Module mdlStoredProcedure
                           ByVal TotalAmount As Decimal,
                           ByVal DeliveryHours As String,
                           ByVal CustomerAddress As String,
+                          ByVal CustomerOrderType As String,
                           ByVal globalformname As Object,
                           Optional InventoryLocationId As Integer? = Nothing,
-                          Optional AgentId As Integer? = Nothing) As Boolean
+                          Optional AgentId As Integer? = Nothing
+                          ) As Boolean
 
         Dim F_return As Boolean = False
         Dim SQL_command As MySqlCommand =
@@ -1796,7 +1798,8 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("I_DeliveryHours", DeliveryHours)
                 .Parameters.AddWithValue("I_CustomerAddress", CustomerAddress)
                 .Parameters.AddWithValue("I_InventoryLocationID", If(InventoryLocationId Is Nothing, DBNull.Value, InventoryLocationId))
-                .Parameters.AddWithValue("AgentId", If(InventoryLocationId Is Nothing, DBNull.Value, InventoryLocationId))
+                .Parameters.AddWithValue("I_AgentID", If(AgentId Is Nothing, DBNull.Value, AgentId))
+                .Parameters.AddWithValue("I_CustomerOrderType", CustomerOrderType)
                 .Parameters("newOrdersID").Direction = ParameterDirection.ReturnValue
                 globaldatareader = .ExecuteReader
                 globalorderidsp = globaldatareader(0)
@@ -1826,8 +1829,10 @@ Module mdlStoredProcedure
                                 ByVal TotalAmount As Decimal,
                                 ByVal DeliveryHours As String,
                                 ByVal CustomerAddress As String,
+                                ByVal CustomerOrderType As String,
                                 ByVal globalformname As Object,
-                                Optional InventoryLocationId As Integer? = Nothing) As Boolean
+                                Optional InventoryLocationId As Integer? = Nothing,
+                                Optional AgentId As Integer? = Nothing) As Boolean
 
         Dim F_return As Boolean = False
         Dim SQL_command As MySqlCommand =
@@ -1855,6 +1860,9 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_DeliveryHours", DeliveryHours)
                 .Parameters.AddWithValue("U_CustomerAddress", CustomerAddress)
                 .Parameters.AddWithValue("U_InventoryLocationID", If(InventoryLocationId Is Nothing, DBNull.Value, InventoryLocationId))
+                .Parameters.AddWithValue("U_AgentID", If(AgentId Is Nothing, DBNull.Value, AgentId))
+                .Parameters.AddWithValue("U_CustomerOrderType", CustomerOrderType)
+
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
             Catch ex As Exception

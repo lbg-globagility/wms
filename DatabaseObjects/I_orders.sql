@@ -1,16 +1,20 @@
+-- --------------------------------------------------------
+-- Host:                         127.0.0.1
+-- Server version:               10.4.28-MariaDB - mariadb.org binary distribution
+-- Server OS:                    Win64
+-- HeidiSQL Version:             11.3.0.6295
+-- --------------------------------------------------------
+
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET NAMES utf8 */;
 /*!50503 SET NAMES utf8mb4 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
-DROP FUNCTION IF EXISTS `I_orders`;
+-- Dumping structure for function dws.I_orders
 DELIMITER //
-CREATE FUNCTION `I_orders`(
-	`I_OrganizationID` INT(11),
+CREATE FUNCTION `I_orders`(`I_OrganizationID` INT(11),
 	`I_Created` DATETIME,
 	`I_CreatedBy` INT(11),
 	`I_LastUpdBy` INT(11),
@@ -31,12 +35,12 @@ CREATE FUNCTION `I_orders`(
 	`I_TotalAmount` DECIMAL(10,2),
 	`I_DeliveryHours` VARCHAR(100),
 	`I_CustomerAddress` VARCHAR(150),
-	`I_InventoryLocationID` INT
+	`I_InventoryLocationID` INT,
+	`I_AgentID` INT,
+	`I_CustomerOrderType` VARCHAR(100)
 ) RETURNS int(10)
 BEGIN
-
 DECLARE newOrdersID INT(11);
-
 INSERT INTO orders
 (
 	OrganizationID,
@@ -60,7 +64,9 @@ INSERT INTO orders
 	TotalAmount,
 	DeliveryHours,
 	CustomerAddress,
-	InventoryLocationID
+	InventoryLocationID,
+	AgentID,
+	CustomerOrderType
 )
 VALUES
 (
@@ -85,16 +91,15 @@ VALUES
 	I_TotalAmount,
 	I_DeliveryHours,
 	I_CustomerAddress,
-	I_InventoryLocationID
+	I_InventoryLocationID,
+	I_AgentID,
+	I_CustomerOrderType
 );
-
 SELECT @@Identity AS ID INTO newOrdersID;
 RETURN newOrdersID;
-
 END//
 DELIMITER ;
 
-/*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
