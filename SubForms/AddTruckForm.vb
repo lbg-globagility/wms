@@ -227,7 +227,7 @@ Public Class AddTruckForm
             If MessageBox.Show("Would you like to save the changes in this page?", "Saving", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
                 Me.Cursor = Cursors.WaitCursor
                 getDeliveryTruckNo(Me)
-                I_DeliveryTrucks(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, globaldeliverytruckno, txtTruckName.Text, txtPlateNo.Text, cboBrandName.Text, cboMadeIn.Text, If(IsNumeric(txtCBM.Text), CDec(txtCBM.Text), 0.0), "Active", Me)
+                I_DeliveryTrucks(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, globaldeliverytruckno, txtTruckName.Text, txtPlateNo.Text, cboBrandName.Text, cboMadeIn.Text, If(IsNumeric(txtCBM.Text), CDec(txtCBM.Text), 0.0), "Active", txtMaxCapacity.Text, txtYearModel.Text, Me)
                 If myModule.systemerrorfound = False Then
                     If CInt(txtTruckNo.Text) <> globaldeliverytruckno Then
                         MessageBox.Show("Please take note that the truck No. will change from " & txtTruckNo.Text & " to " & globaldeliverytruckno & "." & vbNewLine & "Another user used Truck No. " & txtTruckNo.Text & " for its new truck", "Note:", MessageBoxButtons.OK, MessageBoxIcon.Information)

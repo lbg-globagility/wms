@@ -1192,6 +1192,8 @@ Module mdlStoredProcedure
                          ByVal MadeIn As String,
                          ByVal CBM As Decimal,
                          ByVal Status As String,
+                         ByVal MaxCapacity As String,
+                         ByVal YearAndModel As String,
                          ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
@@ -1212,6 +1214,8 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("I_MadeIn", MadeIn)
                 .Parameters.AddWithValue("I_CBM", CBM)
                 .Parameters.AddWithValue("I_Status", Status)
+                .Parameters.AddWithValue("I_MaxCapacity", MaxCapacity)
+                .Parameters.AddWithValue("I_YearAndModel", YearAndModel)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
             Catch ex As Exception
@@ -1232,6 +1236,8 @@ Module mdlStoredProcedure
                                      ByVal MadeIn As String,
                                      ByVal CBM As Decimal,
                                      ByVal Status As String,
+                                     ByVal MaxCapacity As String,
+                                     ByVal YearAndModel As String,
                                      ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
@@ -1250,6 +1256,8 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_MadeIn", MadeIn)
                 .Parameters.AddWithValue("U_CBM", CBM)
                 .Parameters.AddWithValue("U_Status", Status)
+                .Parameters.AddWithValue("U_MaxCapacity", MaxCapacity)
+                .Parameters.AddWithValue("U_YearAndModel", YearAndModel)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
             Catch ex As Exception

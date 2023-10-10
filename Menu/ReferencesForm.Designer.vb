@@ -24,27 +24,34 @@ Partial Class ReferencesForm
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ReferencesForm))
-        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle7 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle8 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle9 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle10 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle11 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle12 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle13 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle14 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle15 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle16 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle17 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle18 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle19 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle20 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle21 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle22 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle23 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle24 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle25 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle26 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle27 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle28 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle29 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle30 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle31 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle32 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle33 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle34 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle35 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle36 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.lblTitle = New System.Windows.Forms.Label()
         Me.pbClose = New System.Windows.Forms.PictureBox()
         Me.gbPickerList = New System.Windows.Forms.GroupBox()
+        Me.dgBranches = New DevComponents.DotNetBar.Controls.DataGridViewX()
+        Me.br_rowid = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.br_branchaddress = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.br_seqno = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.br_branchname = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.br_branchcode = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.br_status = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.dgBoxSizes = New DevComponents.DotNetBar.Controls.DataGridViewX()
         Me.bs_rowid = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.bs_seqno = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -101,9 +108,81 @@ Partial Class ReferencesForm
         Me.tsRefresh = New System.Windows.Forms.ToolStripButton()
         Me.cboReferenceType = New System.Windows.Forms.ComboBox()
         Me.Label3 = New System.Windows.Forms.Label()
-        Me.dgBranches = New DevComponents.DotNetBar.Controls.DataGridViewX()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.gbReferenceInformation = New System.Windows.Forms.GroupBox()
+        Me.gbTruckInfo = New System.Windows.Forms.GroupBox()
+        Me.txtYearModel = New System.Windows.Forms.TextBox()
+        Me.Label54 = New System.Windows.Forms.Label()
+        Me.txtMaxCapacity = New System.Windows.Forms.TextBox()
+        Me.Label53 = New System.Windows.Forms.Label()
+        Me.cboTruckStatus = New System.Windows.Forms.ComboBox()
+        Me.Label26 = New System.Windows.Forms.Label()
+        Me.txtCBM = New System.Windows.Forms.TextBox()
+        Me.Label18 = New System.Windows.Forms.Label()
+        Me.pbAutoAddB = New System.Windows.Forms.PictureBox()
+        Me.pbAutoAddA = New System.Windows.Forms.PictureBox()
+        Me.cboMadeIn = New System.Windows.Forms.ComboBox()
+        Me.cboBrandName = New System.Windows.Forms.ComboBox()
+        Me.Label21 = New System.Windows.Forms.Label()
+        Me.Label22 = New System.Windows.Forms.Label()
+        Me.txtPlateNo = New System.Windows.Forms.TextBox()
+        Me.Label23 = New System.Windows.Forms.Label()
+        Me.Label52 = New System.Windows.Forms.Label()
+        Me.txtTruckNo = New System.Windows.Forms.TextBox()
+        Me.Label24 = New System.Windows.Forms.Label()
+        Me.txtTruckName = New System.Windows.Forms.TextBox()
+        Me.Label25 = New System.Windows.Forms.Label()
+        Me.gbShiftInfo = New System.Windows.Forms.GroupBox()
+        Me.cboShiftStatus = New System.Windows.Forms.ComboBox()
+        Me.Label31 = New System.Windows.Forms.Label()
+        Me.Label27 = New System.Windows.Forms.Label()
+        Me.dtpTimeTo = New System.Windows.Forms.DateTimePicker()
+        Me.Label28 = New System.Windows.Forms.Label()
+        Me.dtpTimeFrom = New System.Windows.Forms.DateTimePicker()
+        Me.Label29 = New System.Windows.Forms.Label()
+        Me.txtShiftName = New System.Windows.Forms.TextBox()
+        Me.Label30 = New System.Windows.Forms.Label()
+        Me.gbCategoryInfo = New System.Windows.Forms.GroupBox()
+        Me.Label17 = New System.Windows.Forms.Label()
+        Me.cboCategoryStatus = New System.Windows.Forms.ComboBox()
+        Me.Label19 = New System.Windows.Forms.Label()
+        Me.txtCategory = New System.Windows.Forms.TextBox()
+        Me.Label20 = New System.Windows.Forms.Label()
+        Me.gbBoxSizes = New System.Windows.Forms.GroupBox()
+        Me.Label50 = New System.Windows.Forms.Label()
+        Me.cboBoxSizeStatus = New System.Windows.Forms.ComboBox()
+        Me.pbAutoAddE = New System.Windows.Forms.PictureBox()
+        Me.pbAutoAddD = New System.Windows.Forms.PictureBox()
+        Me.pbAutoAddC = New System.Windows.Forms.PictureBox()
+        Me.txtSizeName = New System.Windows.Forms.TextBox()
+        Me.lblCartonNoA = New System.Windows.Forms.Label()
+        Me.lblCartonNoAsteriskA = New System.Windows.Forms.Label()
+        Me.Label44 = New System.Windows.Forms.Label()
+        Me.cboHeightUOM = New System.Windows.Forms.ComboBox()
+        Me.txtHeight = New System.Windows.Forms.TextBox()
+        Me.Label45 = New System.Windows.Forms.Label()
+        Me.Label46 = New System.Windows.Forms.Label()
+        Me.cboWidthUOM = New System.Windows.Forms.ComboBox()
+        Me.txtWidth = New System.Windows.Forms.TextBox()
+        Me.Label47 = New System.Windows.Forms.Label()
+        Me.Label48 = New System.Windows.Forms.Label()
+        Me.cboLengthUOM = New System.Windows.Forms.ComboBox()
+        Me.txtLength = New System.Windows.Forms.TextBox()
+        Me.Label49 = New System.Windows.Forms.Label()
+        Me.lblsavemsg = New System.Windows.Forms.Label()
+        Me.msMenu = New System.Windows.Forms.MenuStrip()
+        Me.msSave = New System.Windows.Forms.ToolStripMenuItem()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.gbBranchInfo = New System.Windows.Forms.GroupBox()
+        Me.Label51 = New System.Windows.Forms.Label()
+        Me.txtBranchAddress = New System.Windows.Forms.TextBox()
+        Me.Label6 = New System.Windows.Forms.Label()
+        Me.Label7 = New System.Windows.Forms.Label()
+        Me.cboBranchStatus = New System.Windows.Forms.ComboBox()
+        Me.txtBranchName = New System.Windows.Forms.TextBox()
+        Me.Label4 = New System.Windows.Forms.Label()
+        Me.txtBranchCode = New System.Windows.Forms.TextBox()
+        Me.Label8 = New System.Windows.Forms.Label()
         Me.gbTruckShiftInfo = New System.Windows.Forms.GroupBox()
         Me.cboTruckShiftStatus = New System.Windows.Forms.ComboBox()
         Me.Label36 = New System.Windows.Forms.Label()
@@ -143,73 +222,6 @@ Partial Class ReferencesForm
         Me.Label15 = New System.Windows.Forms.Label()
         Me.txtVendorCode = New System.Windows.Forms.TextBox()
         Me.Label16 = New System.Windows.Forms.Label()
-        Me.gbTruckInfo = New System.Windows.Forms.GroupBox()
-        Me.cboTruckStatus = New System.Windows.Forms.ComboBox()
-        Me.Label26 = New System.Windows.Forms.Label()
-        Me.txtCBM = New System.Windows.Forms.TextBox()
-        Me.Label18 = New System.Windows.Forms.Label()
-        Me.pbAutoAddB = New System.Windows.Forms.PictureBox()
-        Me.pbAutoAddA = New System.Windows.Forms.PictureBox()
-        Me.cboMadeIn = New System.Windows.Forms.ComboBox()
-        Me.cboBrandName = New System.Windows.Forms.ComboBox()
-        Me.Label21 = New System.Windows.Forms.Label()
-        Me.Label22 = New System.Windows.Forms.Label()
-        Me.txtPlateNo = New System.Windows.Forms.TextBox()
-        Me.Label23 = New System.Windows.Forms.Label()
-        Me.Label52 = New System.Windows.Forms.Label()
-        Me.txtTruckNo = New System.Windows.Forms.TextBox()
-        Me.Label24 = New System.Windows.Forms.Label()
-        Me.txtTruckName = New System.Windows.Forms.TextBox()
-        Me.Label25 = New System.Windows.Forms.Label()
-        Me.gbShiftInfo = New System.Windows.Forms.GroupBox()
-        Me.cboShiftStatus = New System.Windows.Forms.ComboBox()
-        Me.Label31 = New System.Windows.Forms.Label()
-        Me.Label27 = New System.Windows.Forms.Label()
-        Me.dtpTimeTo = New System.Windows.Forms.DateTimePicker()
-        Me.Label28 = New System.Windows.Forms.Label()
-        Me.dtpTimeFrom = New System.Windows.Forms.DateTimePicker()
-        Me.Label29 = New System.Windows.Forms.Label()
-        Me.txtShiftName = New System.Windows.Forms.TextBox()
-        Me.Label30 = New System.Windows.Forms.Label()
-        Me.gbCategoryInfo = New System.Windows.Forms.GroupBox()
-        Me.Label17 = New System.Windows.Forms.Label()
-        Me.cboCategoryStatus = New System.Windows.Forms.ComboBox()
-        Me.Label19 = New System.Windows.Forms.Label()
-        Me.txtCategory = New System.Windows.Forms.TextBox()
-        Me.Label20 = New System.Windows.Forms.Label()
-        Me.gbBranchInfo = New System.Windows.Forms.GroupBox()
-        Me.Label6 = New System.Windows.Forms.Label()
-        Me.Label7 = New System.Windows.Forms.Label()
-        Me.cboBranchStatus = New System.Windows.Forms.ComboBox()
-        Me.txtBranchName = New System.Windows.Forms.TextBox()
-        Me.Label4 = New System.Windows.Forms.Label()
-        Me.txtBranchCode = New System.Windows.Forms.TextBox()
-        Me.Label8 = New System.Windows.Forms.Label()
-        Me.gbBoxSizes = New System.Windows.Forms.GroupBox()
-        Me.Label50 = New System.Windows.Forms.Label()
-        Me.cboBoxSizeStatus = New System.Windows.Forms.ComboBox()
-        Me.pbAutoAddE = New System.Windows.Forms.PictureBox()
-        Me.pbAutoAddD = New System.Windows.Forms.PictureBox()
-        Me.pbAutoAddC = New System.Windows.Forms.PictureBox()
-        Me.txtSizeName = New System.Windows.Forms.TextBox()
-        Me.lblCartonNoA = New System.Windows.Forms.Label()
-        Me.lblCartonNoAsteriskA = New System.Windows.Forms.Label()
-        Me.Label44 = New System.Windows.Forms.Label()
-        Me.cboHeightUOM = New System.Windows.Forms.ComboBox()
-        Me.txtHeight = New System.Windows.Forms.TextBox()
-        Me.Label45 = New System.Windows.Forms.Label()
-        Me.Label46 = New System.Windows.Forms.Label()
-        Me.cboWidthUOM = New System.Windows.Forms.ComboBox()
-        Me.txtWidth = New System.Windows.Forms.TextBox()
-        Me.Label47 = New System.Windows.Forms.Label()
-        Me.Label48 = New System.Windows.Forms.Label()
-        Me.cboLengthUOM = New System.Windows.Forms.ComboBox()
-        Me.txtLength = New System.Windows.Forms.TextBox()
-        Me.Label49 = New System.Windows.Forms.Label()
-        Me.lblsavemsg = New System.Windows.Forms.Label()
-        Me.msMenu = New System.Windows.Forms.MenuStrip()
-        Me.msSave = New System.Windows.Forms.ToolStripMenuItem()
-        Me.Label2 = New System.Windows.Forms.Label()
         Me.gbAddReference = New System.Windows.Forms.GroupBox()
         Me.btnAddBoxSizes = New System.Windows.Forms.Button()
         Me.btnAddCode = New System.Windows.Forms.Button()
@@ -222,16 +234,9 @@ Partial Class ReferencesForm
         Me.btnAddBranch = New System.Windows.Forms.Button()
         Me.Label9 = New System.Windows.Forms.Label()
         Me.errProvider = New System.Windows.Forms.ErrorProvider(Me.components)
-        Me.txtBranchAddress = New System.Windows.Forms.TextBox()
-        Me.Label51 = New System.Windows.Forms.Label()
-        Me.br_rowid = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.br_branchaddress = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.br_seqno = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.br_branchname = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.br_branchcode = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.br_status = New System.Windows.Forms.DataGridViewTextBoxColumn()
         CType(Me.pbClose, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.gbPickerList.SuspendLayout()
+        CType(Me.dgBranches, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.dgBoxSizes, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.dgCodings, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.dgClassDescription, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -241,23 +246,22 @@ Partial Class ReferencesForm
         CType(Me.dgCategories, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.dgVendors, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ToolStrip3.SuspendLayout()
-        CType(Me.dgBranches, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.gbReferenceInformation.SuspendLayout()
-        Me.gbTruckShiftInfo.SuspendLayout()
-        Me.gbCodingInfo.SuspendLayout()
-        Me.gbClassDescInfo.SuspendLayout()
-        Me.gbVendorInfo.SuspendLayout()
         Me.gbTruckInfo.SuspendLayout()
         CType(Me.pbAutoAddB, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbAutoAddA, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.gbShiftInfo.SuspendLayout()
         Me.gbCategoryInfo.SuspendLayout()
-        Me.gbBranchInfo.SuspendLayout()
         Me.gbBoxSizes.SuspendLayout()
         CType(Me.pbAutoAddE, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbAutoAddD, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbAutoAddC, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.msMenu.SuspendLayout()
+        Me.gbBranchInfo.SuspendLayout()
+        Me.gbTruckShiftInfo.SuspendLayout()
+        Me.gbCodingInfo.SuspendLayout()
+        Me.gbClassDescInfo.SuspendLayout()
+        Me.gbVendorInfo.SuspendLayout()
         Me.gbAddReference.SuspendLayout()
         CType(Me.errProvider, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -281,7 +285,7 @@ Partial Class ReferencesForm
         Me.pbClose.BackColor = System.Drawing.Color.FromArgb(CType(CType(253, Byte), Integer), CType(CType(209, Byte), Integer), CType(CType(128, Byte), Integer))
         Me.pbClose.Cursor = System.Windows.Forms.Cursors.Hand
         Me.pbClose.Image = CType(resources.GetObject("pbClose.Image"), System.Drawing.Image)
-        Me.pbClose.Location = New System.Drawing.Point(1170, 5)
+        Me.pbClose.Location = New System.Drawing.Point(1242, 5)
         Me.pbClose.Name = "pbClose"
         Me.pbClose.Size = New System.Drawing.Size(22, 19)
         Me.pbClose.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
@@ -312,6 +316,84 @@ Partial Class ReferencesForm
         Me.gbPickerList.TabIndex = 1
         Me.gbPickerList.TabStop = False
         '
+        'dgBranches
+        '
+        Me.dgBranches.AllowUserToAddRows = False
+        Me.dgBranches.AllowUserToDeleteRows = False
+        Me.dgBranches.AllowUserToOrderColumns = True
+        Me.dgBranches.AllowUserToResizeRows = False
+        Me.dgBranches.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.dgBranches.BackgroundColor = System.Drawing.Color.White
+        DataGridViewCellStyle19.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle19.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle19.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle19.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle19.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle19.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle19.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgBranches.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle19
+        Me.dgBranches.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.dgBranches.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.br_rowid, Me.br_branchaddress, Me.br_seqno, Me.br_branchname, Me.br_branchcode, Me.br_status})
+        DataGridViewCellStyle20.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle20.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle20.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle20.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle20.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle20.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle20.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.dgBranches.DefaultCellStyle = DataGridViewCellStyle20
+        Me.dgBranches.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
+        Me.dgBranches.Location = New System.Drawing.Point(10, 50)
+        Me.dgBranches.MultiSelect = False
+        Me.dgBranches.Name = "dgBranches"
+        Me.dgBranches.ReadOnly = True
+        Me.dgBranches.RowHeadersVisible = False
+        Me.dgBranches.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
+        Me.dgBranches.Size = New System.Drawing.Size(380, 440)
+        Me.dgBranches.TabIndex = 6
+        '
+        'br_rowid
+        '
+        Me.br_rowid.HeaderText = "rowid"
+        Me.br_rowid.Name = "br_rowid"
+        Me.br_rowid.ReadOnly = True
+        Me.br_rowid.Visible = False
+        '
+        'br_branchaddress
+        '
+        Me.br_branchaddress.HeaderText = "branchaddress"
+        Me.br_branchaddress.Name = "br_branchaddress"
+        Me.br_branchaddress.ReadOnly = True
+        Me.br_branchaddress.Visible = False
+        '
+        'br_seqno
+        '
+        Me.br_seqno.HeaderText = "Seq. No."
+        Me.br_seqno.Name = "br_seqno"
+        Me.br_seqno.ReadOnly = True
+        Me.br_seqno.Width = 60
+        '
+        'br_branchname
+        '
+        Me.br_branchname.HeaderText = "Branch Name"
+        Me.br_branchname.Name = "br_branchname"
+        Me.br_branchname.ReadOnly = True
+        Me.br_branchname.Width = 120
+        '
+        'br_branchcode
+        '
+        Me.br_branchcode.HeaderText = "Branch Code"
+        Me.br_branchcode.Name = "br_branchcode"
+        Me.br_branchcode.ReadOnly = True
+        Me.br_branchcode.Width = 80
+        '
+        'br_status
+        '
+        Me.br_status.HeaderText = "Status"
+        Me.br_status.Name = "br_status"
+        Me.br_status.ReadOnly = True
+        '
         'dgBoxSizes
         '
         Me.dgBoxSizes.AllowUserToAddRows = False
@@ -321,24 +403,24 @@ Partial Class ReferencesForm
         Me.dgBoxSizes.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.dgBoxSizes.BackgroundColor = System.Drawing.Color.White
-        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle3.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgBoxSizes.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle3
+        DataGridViewCellStyle21.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle21.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle21.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle21.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle21.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle21.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle21.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgBoxSizes.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle21
         Me.dgBoxSizes.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.dgBoxSizes.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.bs_rowid, Me.bs_seqno, Me.bs_sizename, Me.bs_length, Me.bs_width, Me.bs_height, Me.bs_status})
-        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle4.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.dgBoxSizes.DefaultCellStyle = DataGridViewCellStyle4
+        DataGridViewCellStyle22.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle22.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle22.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle22.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle22.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle22.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle22.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.dgBoxSizes.DefaultCellStyle = DataGridViewCellStyle22
         Me.dgBoxSizes.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
         Me.dgBoxSizes.Location = New System.Drawing.Point(10, 50)
         Me.dgBoxSizes.MultiSelect = False
@@ -406,24 +488,24 @@ Partial Class ReferencesForm
         Me.dgCodings.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.dgCodings.BackgroundColor = System.Drawing.Color.White
-        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle5.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgCodings.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle5
+        DataGridViewCellStyle23.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle23.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle23.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle23.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle23.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle23.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle23.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgCodings.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle23
         Me.dgCodings.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.dgCodings.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.co_rowid, Me.co_seqno, Me.co_codetype, Me.co_codeno, Me.co_codename, Me.co_status})
-        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle6.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.dgCodings.DefaultCellStyle = DataGridViewCellStyle6
+        DataGridViewCellStyle24.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle24.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle24.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle24.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle24.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle24.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle24.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.dgCodings.DefaultCellStyle = DataGridViewCellStyle24
         Me.dgCodings.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
         Me.dgCodings.Location = New System.Drawing.Point(10, 50)
         Me.dgCodings.MultiSelect = False
@@ -482,24 +564,24 @@ Partial Class ReferencesForm
         Me.dgClassDescription.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.dgClassDescription.BackgroundColor = System.Drawing.Color.White
-        DataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle7.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgClassDescription.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle7
+        DataGridViewCellStyle25.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle25.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle25.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle25.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle25.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle25.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle25.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgClassDescription.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle25
         Me.dgClassDescription.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.dgClassDescription.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.cd_rowid, Me.cd_seqno, Me.cd_classname, Me.cd_deptcode, Me.cd_subdeptcode, Me.cd_classcode, Me.cd_status})
-        DataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle8.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.dgClassDescription.DefaultCellStyle = DataGridViewCellStyle8
+        DataGridViewCellStyle26.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle26.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle26.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle26.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle26.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle26.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle26.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.dgClassDescription.DefaultCellStyle = DataGridViewCellStyle26
         Me.dgClassDescription.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
         Me.dgClassDescription.Location = New System.Drawing.Point(10, 50)
         Me.dgClassDescription.MultiSelect = False
@@ -566,24 +648,24 @@ Partial Class ReferencesForm
         Me.dgTruckShifts.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.dgTruckShifts.BackgroundColor = System.Drawing.Color.White
-        DataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle9.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgTruckShifts.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle9
+        DataGridViewCellStyle27.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle27.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle27.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle27.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle27.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle27.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle27.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgTruckShifts.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle27
         Me.dgTruckShifts.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.dgTruckShifts.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ts_rowid, Me.ts_seqno, Me.ts_truckinfo, Me.ts_shiftname, Me.ts_status})
-        DataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle10.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle10.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle10.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle10.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.dgTruckShifts.DefaultCellStyle = DataGridViewCellStyle10
+        DataGridViewCellStyle28.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle28.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle28.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle28.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle28.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle28.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle28.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.dgTruckShifts.DefaultCellStyle = DataGridViewCellStyle28
         Me.dgTruckShifts.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
         Me.dgTruckShifts.Location = New System.Drawing.Point(10, 50)
         Me.dgTruckShifts.MultiSelect = False
@@ -635,24 +717,24 @@ Partial Class ReferencesForm
         Me.dgShifts.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.dgShifts.BackgroundColor = System.Drawing.Color.White
-        DataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle11.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle11.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle11.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle11.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle11.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgShifts.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle11
+        DataGridViewCellStyle29.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle29.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle29.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle29.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle29.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle29.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle29.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgShifts.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle29
         Me.dgShifts.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.dgShifts.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.sh_rowid, Me.sh_seqno, Me.sh_shiftname, Me.sh_fromto, Me.sh_status})
-        DataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle12.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle12.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle12.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle12.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle12.SelectionForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.dgShifts.DefaultCellStyle = DataGridViewCellStyle12
+        DataGridViewCellStyle30.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle30.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle30.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle30.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle30.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle30.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle30.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.dgShifts.DefaultCellStyle = DataGridViewCellStyle30
         Me.dgShifts.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
         Me.dgShifts.Location = New System.Drawing.Point(10, 50)
         Me.dgShifts.MultiSelect = False
@@ -704,24 +786,24 @@ Partial Class ReferencesForm
         Me.dgTrucks.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.dgTrucks.BackgroundColor = System.Drawing.Color.White
-        DataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle13.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle13.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle13.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle13.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle13.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle13.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgTrucks.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle13
+        DataGridViewCellStyle31.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle31.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle31.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle31.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle31.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle31.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle31.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgTrucks.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle31
         Me.dgTrucks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.dgTrucks.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.tr_rowid, Me.tr_truckno, Me.tr_truckname, Me.tr_plateno, Me.tr_status})
-        DataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle14.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle14.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle14.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle14.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle14.SelectionForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.dgTrucks.DefaultCellStyle = DataGridViewCellStyle14
+        DataGridViewCellStyle32.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle32.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle32.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle32.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle32.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle32.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle32.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.dgTrucks.DefaultCellStyle = DataGridViewCellStyle32
         Me.dgTrucks.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
         Me.dgTrucks.Location = New System.Drawing.Point(10, 50)
         Me.dgTrucks.MultiSelect = False
@@ -773,24 +855,24 @@ Partial Class ReferencesForm
         Me.dgCategories.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.dgCategories.BackgroundColor = System.Drawing.Color.White
-        DataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle15.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle15.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle15.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle15.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle15.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgCategories.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle15
+        DataGridViewCellStyle33.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle33.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle33.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle33.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle33.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle33.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle33.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgCategories.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle33
         Me.dgCategories.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.dgCategories.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ct_rowid, Me.ct_seqno, Me.ct_category, Me.ct_status})
-        DataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle16.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle16.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle16.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle16.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle16.SelectionForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle16.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.dgCategories.DefaultCellStyle = DataGridViewCellStyle16
+        DataGridViewCellStyle34.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle34.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle34.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle34.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle34.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle34.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle34.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.dgCategories.DefaultCellStyle = DataGridViewCellStyle34
         Me.dgCategories.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
         Me.dgCategories.Location = New System.Drawing.Point(10, 50)
         Me.dgCategories.MultiSelect = False
@@ -836,24 +918,24 @@ Partial Class ReferencesForm
         Me.dgVendors.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.dgVendors.BackgroundColor = System.Drawing.Color.White
-        DataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle17.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle17.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle17.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle17.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle17.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle17.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgVendors.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle17
+        DataGridViewCellStyle35.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle35.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle35.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle35.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle35.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle35.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle35.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgVendors.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle35
         Me.dgVendors.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.dgVendors.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ve_rowid, Me.ve_seqno, Me.ve_vendorname, Me.ve_vendorcode, Me.ve_status})
-        DataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle18.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle18.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle18.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle18.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle18.SelectionForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle18.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.dgVendors.DefaultCellStyle = DataGridViewCellStyle18
+        DataGridViewCellStyle36.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle36.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle36.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle36.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle36.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle36.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle36.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.dgVendors.DefaultCellStyle = DataGridViewCellStyle36
         Me.dgVendors.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
         Me.dgVendors.Location = New System.Drawing.Point(10, 50)
         Me.dgVendors.MultiSelect = False
@@ -944,43 +1026,6 @@ Partial Class ReferencesForm
         Me.Label3.TabIndex = 588
         Me.Label3.Text = "Reference Type:"
         '
-        'dgBranches
-        '
-        Me.dgBranches.AllowUserToAddRows = False
-        Me.dgBranches.AllowUserToDeleteRows = False
-        Me.dgBranches.AllowUserToOrderColumns = True
-        Me.dgBranches.AllowUserToResizeRows = False
-        Me.dgBranches.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.dgBranches.BackgroundColor = System.Drawing.Color.White
-        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgBranches.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
-        Me.dgBranches.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgBranches.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.br_rowid, Me.br_branchaddress, Me.br_seqno, Me.br_branchname, Me.br_branchcode, Me.br_status})
-        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.dgBranches.DefaultCellStyle = DataGridViewCellStyle2
-        Me.dgBranches.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
-        Me.dgBranches.Location = New System.Drawing.Point(10, 50)
-        Me.dgBranches.MultiSelect = False
-        Me.dgBranches.Name = "dgBranches"
-        Me.dgBranches.ReadOnly = True
-        Me.dgBranches.RowHeadersVisible = False
-        Me.dgBranches.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgBranches.Size = New System.Drawing.Size(380, 440)
-        Me.dgBranches.TabIndex = 6
-        '
         'Label1
         '
         Me.Label1.AutoSize = True
@@ -995,12 +1040,12 @@ Partial Class ReferencesForm
         '
         'gbReferenceInformation
         '
+        Me.gbReferenceInformation.Controls.Add(Me.gbTruckInfo)
+        Me.gbReferenceInformation.Controls.Add(Me.gbVendorInfo)
         Me.gbReferenceInformation.Controls.Add(Me.gbBranchInfo)
         Me.gbReferenceInformation.Controls.Add(Me.gbTruckShiftInfo)
         Me.gbReferenceInformation.Controls.Add(Me.gbCodingInfo)
         Me.gbReferenceInformation.Controls.Add(Me.gbClassDescInfo)
-        Me.gbReferenceInformation.Controls.Add(Me.gbVendorInfo)
-        Me.gbReferenceInformation.Controls.Add(Me.gbTruckInfo)
         Me.gbReferenceInformation.Controls.Add(Me.gbShiftInfo)
         Me.gbReferenceInformation.Controls.Add(Me.gbCategoryInfo)
         Me.gbReferenceInformation.Controls.Add(Me.gbBoxSizes)
@@ -1009,436 +1054,18 @@ Partial Class ReferencesForm
         Me.gbReferenceInformation.Controls.Add(Me.Label2)
         Me.gbReferenceInformation.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.gbReferenceInformation.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.gbReferenceInformation.Location = New System.Drawing.Point(470, 80)
+        Me.gbReferenceInformation.Location = New System.Drawing.Point(470, 40)
         Me.gbReferenceInformation.Name = "gbReferenceInformation"
-        Me.gbReferenceInformation.Size = New System.Drawing.Size(400, 200)
+        Me.gbReferenceInformation.Size = New System.Drawing.Size(400, 262)
         Me.gbReferenceInformation.TabIndex = 2
         Me.gbReferenceInformation.TabStop = False
         '
-        'gbTruckShiftInfo
-        '
-        Me.gbTruckShiftInfo.Controls.Add(Me.cboTruckShiftStatus)
-        Me.gbTruckShiftInfo.Controls.Add(Me.Label36)
-        Me.gbTruckShiftInfo.Controls.Add(Me.Label32)
-        Me.gbTruckShiftInfo.Controls.Add(Me.cboShiftInfo)
-        Me.gbTruckShiftInfo.Controls.Add(Me.Label33)
-        Me.gbTruckShiftInfo.Controls.Add(Me.Label34)
-        Me.gbTruckShiftInfo.Controls.Add(Me.cboTruckInfo)
-        Me.gbTruckShiftInfo.Controls.Add(Me.Label35)
-        Me.gbTruckShiftInfo.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.gbTruckShiftInfo.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.gbTruckShiftInfo.Location = New System.Drawing.Point(10, 40)
-        Me.gbTruckShiftInfo.Name = "gbTruckShiftInfo"
-        Me.gbTruckShiftInfo.Size = New System.Drawing.Size(380, 150)
-        Me.gbTruckShiftInfo.TabIndex = 8
-        Me.gbTruckShiftInfo.TabStop = False
-        '
-        'cboTruckShiftStatus
-        '
-        Me.cboTruckShiftStatus.BackColor = System.Drawing.SystemColors.Window
-        Me.cboTruckShiftStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cboTruckShiftStatus.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cboTruckShiftStatus.FormattingEnabled = True
-        Me.cboTruckShiftStatus.Location = New System.Drawing.Point(87, 84)
-        Me.cboTruckShiftStatus.Name = "cboTruckShiftStatus"
-        Me.cboTruckShiftStatus.Size = New System.Drawing.Size(110, 23)
-        Me.cboTruckShiftStatus.TabIndex = 11
-        '
-        'Label36
-        '
-        Me.Label36.AutoSize = True
-        Me.Label36.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label36.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label36.Location = New System.Drawing.Point(4, 87)
-        Me.Label36.Name = "Label36"
-        Me.Label36.Size = New System.Drawing.Size(44, 15)
-        Me.Label36.TabIndex = 590
-        Me.Label36.Text = "Status:"
-        '
-        'Label32
-        '
-        Me.Label32.AutoSize = True
-        Me.Label32.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label32.ForeColor = System.Drawing.Color.Red
-        Me.Label32.Location = New System.Drawing.Point(69, 53)
-        Me.Label32.Name = "Label32"
-        Me.Label32.Size = New System.Drawing.Size(16, 20)
-        Me.Label32.TabIndex = 458
-        Me.Label32.Text = "*"
-        '
-        'cboShiftInfo
-        '
-        Me.cboShiftInfo.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cboShiftInfo.FormattingEnabled = True
-        Me.cboShiftInfo.Location = New System.Drawing.Point(87, 55)
-        Me.cboShiftInfo.Name = "cboShiftInfo"
-        Me.cboShiftInfo.Size = New System.Drawing.Size(270, 23)
-        Me.cboShiftInfo.TabIndex = 10
-        '
-        'Label33
-        '
-        Me.Label33.AutoSize = True
-        Me.Label33.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label33.Location = New System.Drawing.Point(4, 58)
-        Me.Label33.Name = "Label33"
-        Me.Label33.Size = New System.Drawing.Size(60, 15)
-        Me.Label33.TabIndex = 457
-        Me.Label33.Text = "Shift Info.:"
-        '
-        'Label34
-        '
-        Me.Label34.AutoSize = True
-        Me.Label34.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label34.ForeColor = System.Drawing.Color.Red
-        Me.Label34.Location = New System.Drawing.Point(69, 24)
-        Me.Label34.Name = "Label34"
-        Me.Label34.Size = New System.Drawing.Size(16, 20)
-        Me.Label34.TabIndex = 455
-        Me.Label34.Text = "*"
-        '
-        'cboTruckInfo
-        '
-        Me.cboTruckInfo.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cboTruckInfo.FormattingEnabled = True
-        Me.cboTruckInfo.Location = New System.Drawing.Point(87, 26)
-        Me.cboTruckInfo.Name = "cboTruckInfo"
-        Me.cboTruckInfo.Size = New System.Drawing.Size(270, 23)
-        Me.cboTruckInfo.TabIndex = 9
-        '
-        'Label35
-        '
-        Me.Label35.AutoSize = True
-        Me.Label35.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label35.Location = New System.Drawing.Point(4, 29)
-        Me.Label35.Name = "Label35"
-        Me.Label35.Size = New System.Drawing.Size(66, 15)
-        Me.Label35.TabIndex = 454
-        Me.Label35.Text = "Truck Info.:"
-        '
-        'gbCodingInfo
-        '
-        Me.gbCodingInfo.Controls.Add(Me.cboCodingStatus)
-        Me.gbCodingInfo.Controls.Add(Me.Label43)
-        Me.gbCodingInfo.Controls.Add(Me.txtCodeName)
-        Me.gbCodingInfo.Controls.Add(Me.Label5)
-        Me.gbCodingInfo.Controls.Add(Me.Label10)
-        Me.gbCodingInfo.Controls.Add(Me.txtCodeNo)
-        Me.gbCodingInfo.Controls.Add(Me.Label42)
-        Me.gbCodingInfo.Controls.Add(Me.txtCodeType)
-        Me.gbCodingInfo.Controls.Add(Me.Label12)
-        Me.gbCodingInfo.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.gbCodingInfo.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.gbCodingInfo.Location = New System.Drawing.Point(10, 40)
-        Me.gbCodingInfo.Name = "gbCodingInfo"
-        Me.gbCodingInfo.Size = New System.Drawing.Size(380, 150)
-        Me.gbCodingInfo.TabIndex = 8
-        Me.gbCodingInfo.TabStop = False
-        '
-        'cboCodingStatus
-        '
-        Me.cboCodingStatus.BackColor = System.Drawing.SystemColors.Window
-        Me.cboCodingStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cboCodingStatus.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cboCodingStatus.FormattingEnabled = True
-        Me.cboCodingStatus.Location = New System.Drawing.Point(126, 99)
-        Me.cboCodingStatus.Name = "cboCodingStatus"
-        Me.cboCodingStatus.Size = New System.Drawing.Size(110, 23)
-        Me.cboCodingStatus.TabIndex = 12
-        '
-        'Label43
-        '
-        Me.Label43.AutoSize = True
-        Me.Label43.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label43.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label43.Location = New System.Drawing.Point(40, 102)
-        Me.Label43.Name = "Label43"
-        Me.Label43.Size = New System.Drawing.Size(44, 15)
-        Me.Label43.TabIndex = 590
-        Me.Label43.Text = "Status:"
-        '
-        'txtCodeName
-        '
-        Me.txtCodeName.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtCodeName.Location = New System.Drawing.Point(126, 72)
-        Me.txtCodeName.Name = "txtCodeName"
-        Me.txtCodeName.Size = New System.Drawing.Size(150, 21)
-        Me.txtCodeName.TabIndex = 11
-        '
-        'Label5
-        '
-        Me.Label5.AutoSize = True
-        Me.Label5.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label5.Location = New System.Drawing.Point(40, 75)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(76, 15)
-        Me.Label5.TabIndex = 258
-        Me.Label5.Text = "Code Name:"
-        '
-        'Label10
-        '
-        Me.Label10.AutoSize = True
-        Me.Label10.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label10.ForeColor = System.Drawing.Color.Red
-        Me.Label10.Location = New System.Drawing.Point(109, 45)
-        Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(16, 20)
-        Me.Label10.TabIndex = 257
-        Me.Label10.Text = "*"
-        '
-        'txtCodeNo
-        '
-        Me.txtCodeNo.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtCodeNo.Location = New System.Drawing.Point(126, 45)
-        Me.txtCodeNo.Name = "txtCodeNo"
-        Me.txtCodeNo.Size = New System.Drawing.Size(150, 21)
-        Me.txtCodeNo.TabIndex = 10
-        '
-        'Label42
-        '
-        Me.Label42.AutoSize = True
-        Me.Label42.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label42.Location = New System.Drawing.Point(40, 48)
-        Me.Label42.Name = "Label42"
-        Me.Label42.Size = New System.Drawing.Size(61, 15)
-        Me.Label42.TabIndex = 256
-        Me.Label42.Text = "Code No.:"
-        '
-        'txtCodeType
-        '
-        Me.txtCodeType.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtCodeType.Location = New System.Drawing.Point(126, 19)
-        Me.txtCodeType.Name = "txtCodeType"
-        Me.txtCodeType.ReadOnly = True
-        Me.txtCodeType.Size = New System.Drawing.Size(150, 21)
-        Me.txtCodeType.TabIndex = 9
-        '
-        'Label12
-        '
-        Me.Label12.AutoSize = True
-        Me.Label12.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label12.Location = New System.Drawing.Point(40, 22)
-        Me.Label12.Name = "Label12"
-        Me.Label12.Size = New System.Drawing.Size(68, 15)
-        Me.Label12.TabIndex = 250
-        Me.Label12.Text = "Code Type:"
-        '
-        'gbClassDescInfo
-        '
-        Me.gbClassDescInfo.Controls.Add(Me.Label37)
-        Me.gbClassDescInfo.Controls.Add(Me.Label38)
-        Me.gbClassDescInfo.Controls.Add(Me.cboClassDescStatus)
-        Me.gbClassDescInfo.Controls.Add(Me.txtClassName)
-        Me.gbClassDescInfo.Controls.Add(Me.Label11)
-        Me.gbClassDescInfo.Controls.Add(Me.cboCodeC)
-        Me.gbClassDescInfo.Controls.Add(Me.cboCodeB)
-        Me.gbClassDescInfo.Controls.Add(Me.Label39)
-        Me.gbClassDescInfo.Controls.Add(Me.Label40)
-        Me.gbClassDescInfo.Controls.Add(Me.cboCodeA)
-        Me.gbClassDescInfo.Controls.Add(Me.Label41)
-        Me.gbClassDescInfo.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.gbClassDescInfo.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.gbClassDescInfo.Location = New System.Drawing.Point(10, 40)
-        Me.gbClassDescInfo.Name = "gbClassDescInfo"
-        Me.gbClassDescInfo.Size = New System.Drawing.Size(380, 150)
-        Me.gbClassDescInfo.TabIndex = 8
-        Me.gbClassDescInfo.TabStop = False
-        '
-        'Label37
-        '
-        Me.Label37.AutoSize = True
-        Me.Label37.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label37.Location = New System.Drawing.Point(14, 97)
-        Me.Label37.Name = "Label37"
-        Me.Label37.Size = New System.Drawing.Size(77, 15)
-        Me.Label37.TabIndex = 22
-        Me.Label37.Text = "Class Name:"
-        '
-        'Label38
-        '
-        Me.Label38.AutoSize = True
-        Me.Label38.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label38.ForeColor = System.Drawing.Color.Red
-        Me.Label38.Location = New System.Drawing.Point(90, 93)
-        Me.Label38.Name = "Label38"
-        Me.Label38.Size = New System.Drawing.Size(16, 20)
-        Me.Label38.TabIndex = 23
-        Me.Label38.Text = "*"
-        '
-        'cboClassDescStatus
-        '
-        Me.cboClassDescStatus.BackColor = System.Drawing.SystemColors.Window
-        Me.cboClassDescStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cboClassDescStatus.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cboClassDescStatus.FormattingEnabled = True
-        Me.cboClassDescStatus.Location = New System.Drawing.Point(105, 120)
-        Me.cboClassDescStatus.Name = "cboClassDescStatus"
-        Me.cboClassDescStatus.Size = New System.Drawing.Size(110, 23)
-        Me.cboClassDescStatus.TabIndex = 13
-        '
-        'txtClassName
-        '
-        Me.txtClassName.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtClassName.Location = New System.Drawing.Point(106, 94)
-        Me.txtClassName.Name = "txtClassName"
-        Me.txtClassName.Size = New System.Drawing.Size(229, 21)
-        Me.txtClassName.TabIndex = 12
-        '
-        'Label11
-        '
-        Me.Label11.AutoSize = True
-        Me.Label11.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label11.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label11.Location = New System.Drawing.Point(14, 125)
-        Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(44, 15)
-        Me.Label11.TabIndex = 588
-        Me.Label11.Text = "Status:"
-        '
-        'cboCodeC
-        '
-        Me.cboCodeC.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cboCodeC.FormattingEnabled = True
-        Me.cboCodeC.Location = New System.Drawing.Point(91, 67)
-        Me.cboCodeC.Name = "cboCodeC"
-        Me.cboCodeC.Size = New System.Drawing.Size(250, 23)
-        Me.cboCodeC.TabIndex = 11
-        '
-        'cboCodeB
-        '
-        Me.cboCodeB.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cboCodeB.FormattingEnabled = True
-        Me.cboCodeB.Location = New System.Drawing.Point(113, 40)
-        Me.cboCodeB.Name = "cboCodeB"
-        Me.cboCodeB.Size = New System.Drawing.Size(228, 23)
-        Me.cboCodeB.TabIndex = 10
-        '
-        'Label39
-        '
-        Me.Label39.AutoSize = True
-        Me.Label39.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label39.Location = New System.Drawing.Point(14, 70)
-        Me.Label39.Name = "Label39"
-        Me.Label39.Size = New System.Drawing.Size(72, 15)
-        Me.Label39.TabIndex = 21
-        Me.Label39.Text = "Class Code:"
-        '
-        'Label40
-        '
-        Me.Label40.AutoSize = True
-        Me.Label40.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label40.Location = New System.Drawing.Point(14, 43)
-        Me.Label40.Name = "Label40"
-        Me.Label40.Size = New System.Drawing.Size(97, 15)
-        Me.Label40.TabIndex = 20
-        Me.Label40.Text = "Sub-Dept. Code:"
-        '
-        'cboCodeA
-        '
-        Me.cboCodeA.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cboCodeA.FormattingEnabled = True
-        Me.cboCodeA.Location = New System.Drawing.Point(91, 13)
-        Me.cboCodeA.Name = "cboCodeA"
-        Me.cboCodeA.Size = New System.Drawing.Size(250, 23)
-        Me.cboCodeA.TabIndex = 9
-        '
-        'Label41
-        '
-        Me.Label41.AutoSize = True
-        Me.Label41.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label41.Location = New System.Drawing.Point(14, 16)
-        Me.Label41.Name = "Label41"
-        Me.Label41.Size = New System.Drawing.Size(71, 15)
-        Me.Label41.TabIndex = 19
-        Me.Label41.Text = "Dept. Code:"
-        '
-        'gbVendorInfo
-        '
-        Me.gbVendorInfo.Controls.Add(Me.Label13)
-        Me.gbVendorInfo.Controls.Add(Me.Label14)
-        Me.gbVendorInfo.Controls.Add(Me.cboVendorStatus)
-        Me.gbVendorInfo.Controls.Add(Me.txtVendorName)
-        Me.gbVendorInfo.Controls.Add(Me.Label15)
-        Me.gbVendorInfo.Controls.Add(Me.txtVendorCode)
-        Me.gbVendorInfo.Controls.Add(Me.Label16)
-        Me.gbVendorInfo.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.gbVendorInfo.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.gbVendorInfo.Location = New System.Drawing.Point(10, 40)
-        Me.gbVendorInfo.Name = "gbVendorInfo"
-        Me.gbVendorInfo.Size = New System.Drawing.Size(380, 150)
-        Me.gbVendorInfo.TabIndex = 8
-        Me.gbVendorInfo.TabStop = False
-        '
-        'Label13
-        '
-        Me.Label13.AutoSize = True
-        Me.Label13.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label13.ForeColor = System.Drawing.Color.Red
-        Me.Label13.Location = New System.Drawing.Point(113, 44)
-        Me.Label13.Name = "Label13"
-        Me.Label13.Size = New System.Drawing.Size(16, 20)
-        Me.Label13.TabIndex = 252
-        Me.Label13.Text = "*"
-        '
-        'Label14
-        '
-        Me.Label14.AutoSize = True
-        Me.Label14.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label14.Location = New System.Drawing.Point(29, 49)
-        Me.Label14.Name = "Label14"
-        Me.Label14.Size = New System.Drawing.Size(86, 15)
-        Me.Label14.TabIndex = 251
-        Me.Label14.Text = "Vendor Name:"
-        '
-        'cboVendorStatus
-        '
-        Me.cboVendorStatus.BackColor = System.Drawing.SystemColors.Window
-        Me.cboVendorStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cboVendorStatus.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cboVendorStatus.FormattingEnabled = True
-        Me.cboVendorStatus.Location = New System.Drawing.Point(130, 73)
-        Me.cboVendorStatus.Name = "cboVendorStatus"
-        Me.cboVendorStatus.Size = New System.Drawing.Size(90, 23)
-        Me.cboVendorStatus.TabIndex = 11
-        '
-        'txtVendorName
-        '
-        Me.txtVendorName.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtVendorName.Location = New System.Drawing.Point(130, 46)
-        Me.txtVendorName.Name = "txtVendorName"
-        Me.txtVendorName.Size = New System.Drawing.Size(170, 21)
-        Me.txtVendorName.TabIndex = 10
-        '
-        'Label15
-        '
-        Me.Label15.AutoSize = True
-        Me.Label15.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label15.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label15.Location = New System.Drawing.Point(29, 76)
-        Me.Label15.Name = "Label15"
-        Me.Label15.Size = New System.Drawing.Size(44, 15)
-        Me.Label15.TabIndex = 588
-        Me.Label15.Text = "Status:"
-        '
-        'txtVendorCode
-        '
-        Me.txtVendorCode.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtVendorCode.Location = New System.Drawing.Point(130, 19)
-        Me.txtVendorCode.Name = "txtVendorCode"
-        Me.txtVendorCode.Size = New System.Drawing.Size(170, 21)
-        Me.txtVendorCode.TabIndex = 9
-        '
-        'Label16
-        '
-        Me.Label16.AutoSize = True
-        Me.Label16.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label16.Location = New System.Drawing.Point(29, 22)
-        Me.Label16.Name = "Label16"
-        Me.Label16.Size = New System.Drawing.Size(81, 15)
-        Me.Label16.TabIndex = 250
-        Me.Label16.Text = "Vendor Code:"
-        '
         'gbTruckInfo
         '
+        Me.gbTruckInfo.Controls.Add(Me.txtYearModel)
+        Me.gbTruckInfo.Controls.Add(Me.Label54)
+        Me.gbTruckInfo.Controls.Add(Me.txtMaxCapacity)
+        Me.gbTruckInfo.Controls.Add(Me.Label53)
         Me.gbTruckInfo.Controls.Add(Me.cboTruckStatus)
         Me.gbTruckInfo.Controls.Add(Me.Label26)
         Me.gbTruckInfo.Controls.Add(Me.txtCBM)
@@ -1458,11 +1085,47 @@ Partial Class ReferencesForm
         Me.gbTruckInfo.Controls.Add(Me.Label25)
         Me.gbTruckInfo.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.gbTruckInfo.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.gbTruckInfo.Location = New System.Drawing.Point(10, 40)
+        Me.gbTruckInfo.Location = New System.Drawing.Point(10, 44)
         Me.gbTruckInfo.Name = "gbTruckInfo"
-        Me.gbTruckInfo.Size = New System.Drawing.Size(380, 150)
+        Me.gbTruckInfo.Size = New System.Drawing.Size(380, 206)
         Me.gbTruckInfo.TabIndex = 8
         Me.gbTruckInfo.TabStop = False
+        '
+        'txtYearModel
+        '
+        Me.txtYearModel.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtYearModel.Location = New System.Drawing.Point(105, 173)
+        Me.txtYearModel.Name = "txtYearModel"
+        Me.txtYearModel.Size = New System.Drawing.Size(150, 21)
+        Me.txtYearModel.TabIndex = 593
+        '
+        'Label54
+        '
+        Me.Label54.AutoSize = True
+        Me.Label54.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label54.Location = New System.Drawing.Point(5, 177)
+        Me.Label54.Name = "Label54"
+        Me.Label54.Size = New System.Drawing.Size(100, 15)
+        Me.Label54.TabIndex = 594
+        Me.Label54.Text = "Year and Model :"
+        '
+        'txtMaxCapacity
+        '
+        Me.txtMaxCapacity.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtMaxCapacity.Location = New System.Drawing.Point(105, 148)
+        Me.txtMaxCapacity.Name = "txtMaxCapacity"
+        Me.txtMaxCapacity.Size = New System.Drawing.Size(175, 21)
+        Me.txtMaxCapacity.TabIndex = 591
+        '
+        'Label53
+        '
+        Me.Label53.AutoSize = True
+        Me.Label53.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label53.Location = New System.Drawing.Point(5, 150)
+        Me.Label53.Name = "Label53"
+        Me.Label53.Size = New System.Drawing.Size(83, 15)
+        Me.Label53.TabIndex = 592
+        Me.Label53.Text = "Max Capacity:"
         '
         'cboTruckStatus
         '
@@ -1650,7 +1313,7 @@ Partial Class ReferencesForm
         Me.gbShiftInfo.ForeColor = System.Drawing.SystemColors.ControlText
         Me.gbShiftInfo.Location = New System.Drawing.Point(10, 40)
         Me.gbShiftInfo.Name = "gbShiftInfo"
-        Me.gbShiftInfo.Size = New System.Drawing.Size(380, 150)
+        Me.gbShiftInfo.Size = New System.Drawing.Size(380, 206)
         Me.gbShiftInfo.TabIndex = 8
         Me.gbShiftInfo.TabStop = False
         '
@@ -1759,7 +1422,7 @@ Partial Class ReferencesForm
         Me.gbCategoryInfo.ForeColor = System.Drawing.SystemColors.ControlText
         Me.gbCategoryInfo.Location = New System.Drawing.Point(10, 40)
         Me.gbCategoryInfo.Name = "gbCategoryInfo"
-        Me.gbCategoryInfo.Size = New System.Drawing.Size(380, 150)
+        Me.gbCategoryInfo.Size = New System.Drawing.Size(380, 206)
         Me.gbCategoryInfo.TabIndex = 8
         Me.gbCategoryInfo.TabStop = False
         '
@@ -1814,94 +1477,6 @@ Partial Class ReferencesForm
         Me.Label20.TabIndex = 250
         Me.Label20.Text = "Category:"
         '
-        'gbBranchInfo
-        '
-        Me.gbBranchInfo.Controls.Add(Me.Label51)
-        Me.gbBranchInfo.Controls.Add(Me.txtBranchAddress)
-        Me.gbBranchInfo.Controls.Add(Me.Label6)
-        Me.gbBranchInfo.Controls.Add(Me.Label7)
-        Me.gbBranchInfo.Controls.Add(Me.cboBranchStatus)
-        Me.gbBranchInfo.Controls.Add(Me.txtBranchName)
-        Me.gbBranchInfo.Controls.Add(Me.Label4)
-        Me.gbBranchInfo.Controls.Add(Me.txtBranchCode)
-        Me.gbBranchInfo.Controls.Add(Me.Label8)
-        Me.gbBranchInfo.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.gbBranchInfo.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.gbBranchInfo.Location = New System.Drawing.Point(10, 40)
-        Me.gbBranchInfo.Name = "gbBranchInfo"
-        Me.gbBranchInfo.Size = New System.Drawing.Size(380, 150)
-        Me.gbBranchInfo.TabIndex = 8
-        Me.gbBranchInfo.TabStop = False
-        '
-        'Label6
-        '
-        Me.Label6.AutoSize = True
-        Me.Label6.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label6.ForeColor = System.Drawing.Color.Red
-        Me.Label6.Location = New System.Drawing.Point(113, 44)
-        Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(16, 20)
-        Me.Label6.TabIndex = 252
-        Me.Label6.Text = "*"
-        '
-        'Label7
-        '
-        Me.Label7.AutoSize = True
-        Me.Label7.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label7.Location = New System.Drawing.Point(25, 49)
-        Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(86, 15)
-        Me.Label7.TabIndex = 251
-        Me.Label7.Text = "Branch Name:"
-        '
-        'cboBranchStatus
-        '
-        Me.cboBranchStatus.BackColor = System.Drawing.SystemColors.Window
-        Me.cboBranchStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cboBranchStatus.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cboBranchStatus.FormattingEnabled = True
-        Me.cboBranchStatus.Location = New System.Drawing.Point(130, 118)
-        Me.cboBranchStatus.Name = "cboBranchStatus"
-        Me.cboBranchStatus.Size = New System.Drawing.Size(100, 23)
-        Me.cboBranchStatus.TabIndex = 12
-        '
-        'txtBranchName
-        '
-        Me.txtBranchName.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtBranchName.Location = New System.Drawing.Point(130, 46)
-        Me.txtBranchName.Name = "txtBranchName"
-        Me.txtBranchName.Size = New System.Drawing.Size(230, 21)
-        Me.txtBranchName.TabIndex = 10
-        '
-        'Label4
-        '
-        Me.Label4.AutoSize = True
-        Me.Label4.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label4.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label4.Location = New System.Drawing.Point(25, 121)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(44, 15)
-        Me.Label4.TabIndex = 588
-        Me.Label4.Text = "Status:"
-        '
-        'txtBranchCode
-        '
-        Me.txtBranchCode.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtBranchCode.Location = New System.Drawing.Point(130, 19)
-        Me.txtBranchCode.Name = "txtBranchCode"
-        Me.txtBranchCode.Size = New System.Drawing.Size(230, 21)
-        Me.txtBranchCode.TabIndex = 9
-        '
-        'Label8
-        '
-        Me.Label8.AutoSize = True
-        Me.Label8.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label8.Location = New System.Drawing.Point(25, 22)
-        Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(81, 15)
-        Me.Label8.TabIndex = 250
-        Me.Label8.Text = "Branch Code:"
-        '
         'gbBoxSizes
         '
         Me.gbBoxSizes.Controls.Add(Me.Label50)
@@ -1928,7 +1503,7 @@ Partial Class ReferencesForm
         Me.gbBoxSizes.ForeColor = System.Drawing.SystemColors.ControlText
         Me.gbBoxSizes.Location = New System.Drawing.Point(10, 40)
         Me.gbBoxSizes.Name = "gbBoxSizes"
-        Me.gbBoxSizes.Size = New System.Drawing.Size(380, 150)
+        Me.gbBoxSizes.Size = New System.Drawing.Size(380, 206)
         Me.gbBoxSizes.TabIndex = 8
         Me.gbBoxSizes.TabStop = False
         '
@@ -2178,6 +1753,536 @@ Partial Class ReferencesForm
         Me.Label2.TabIndex = 228
         Me.Label2.Text = "Reference Information:"
         '
+        'gbBranchInfo
+        '
+        Me.gbBranchInfo.Controls.Add(Me.Label51)
+        Me.gbBranchInfo.Controls.Add(Me.txtBranchAddress)
+        Me.gbBranchInfo.Controls.Add(Me.Label6)
+        Me.gbBranchInfo.Controls.Add(Me.Label7)
+        Me.gbBranchInfo.Controls.Add(Me.cboBranchStatus)
+        Me.gbBranchInfo.Controls.Add(Me.txtBranchName)
+        Me.gbBranchInfo.Controls.Add(Me.Label4)
+        Me.gbBranchInfo.Controls.Add(Me.txtBranchCode)
+        Me.gbBranchInfo.Controls.Add(Me.Label8)
+        Me.gbBranchInfo.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.gbBranchInfo.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.gbBranchInfo.Location = New System.Drawing.Point(10, 38)
+        Me.gbBranchInfo.Name = "gbBranchInfo"
+        Me.gbBranchInfo.Size = New System.Drawing.Size(380, 206)
+        Me.gbBranchInfo.TabIndex = 8
+        Me.gbBranchInfo.TabStop = False
+        '
+        'Label51
+        '
+        Me.Label51.AutoSize = True
+        Me.Label51.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label51.Location = New System.Drawing.Point(25, 77)
+        Me.Label51.Name = "Label51"
+        Me.Label51.Size = New System.Drawing.Size(86, 15)
+        Me.Label51.TabIndex = 590
+        Me.Label51.Text = "Branch Name:"
+        '
+        'txtBranchAddress
+        '
+        Me.txtBranchAddress.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtBranchAddress.Location = New System.Drawing.Point(130, 74)
+        Me.txtBranchAddress.Multiline = True
+        Me.txtBranchAddress.Name = "txtBranchAddress"
+        Me.txtBranchAddress.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
+        Me.txtBranchAddress.Size = New System.Drawing.Size(230, 38)
+        Me.txtBranchAddress.TabIndex = 11
+        '
+        'Label6
+        '
+        Me.Label6.AutoSize = True
+        Me.Label6.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label6.ForeColor = System.Drawing.Color.Red
+        Me.Label6.Location = New System.Drawing.Point(113, 44)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(16, 20)
+        Me.Label6.TabIndex = 252
+        Me.Label6.Text = "*"
+        '
+        'Label7
+        '
+        Me.Label7.AutoSize = True
+        Me.Label7.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label7.Location = New System.Drawing.Point(25, 49)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(86, 15)
+        Me.Label7.TabIndex = 251
+        Me.Label7.Text = "Branch Name:"
+        '
+        'cboBranchStatus
+        '
+        Me.cboBranchStatus.BackColor = System.Drawing.SystemColors.Window
+        Me.cboBranchStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cboBranchStatus.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cboBranchStatus.FormattingEnabled = True
+        Me.cboBranchStatus.Location = New System.Drawing.Point(130, 118)
+        Me.cboBranchStatus.Name = "cboBranchStatus"
+        Me.cboBranchStatus.Size = New System.Drawing.Size(100, 23)
+        Me.cboBranchStatus.TabIndex = 12
+        '
+        'txtBranchName
+        '
+        Me.txtBranchName.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtBranchName.Location = New System.Drawing.Point(130, 46)
+        Me.txtBranchName.Name = "txtBranchName"
+        Me.txtBranchName.Size = New System.Drawing.Size(230, 21)
+        Me.txtBranchName.TabIndex = 10
+        '
+        'Label4
+        '
+        Me.Label4.AutoSize = True
+        Me.Label4.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label4.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.Label4.Location = New System.Drawing.Point(25, 121)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(44, 15)
+        Me.Label4.TabIndex = 588
+        Me.Label4.Text = "Status:"
+        '
+        'txtBranchCode
+        '
+        Me.txtBranchCode.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtBranchCode.Location = New System.Drawing.Point(130, 19)
+        Me.txtBranchCode.Name = "txtBranchCode"
+        Me.txtBranchCode.Size = New System.Drawing.Size(230, 21)
+        Me.txtBranchCode.TabIndex = 9
+        '
+        'Label8
+        '
+        Me.Label8.AutoSize = True
+        Me.Label8.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label8.Location = New System.Drawing.Point(25, 22)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(81, 15)
+        Me.Label8.TabIndex = 250
+        Me.Label8.Text = "Branch Code:"
+        '
+        'gbTruckShiftInfo
+        '
+        Me.gbTruckShiftInfo.Controls.Add(Me.cboTruckShiftStatus)
+        Me.gbTruckShiftInfo.Controls.Add(Me.Label36)
+        Me.gbTruckShiftInfo.Controls.Add(Me.Label32)
+        Me.gbTruckShiftInfo.Controls.Add(Me.cboShiftInfo)
+        Me.gbTruckShiftInfo.Controls.Add(Me.Label33)
+        Me.gbTruckShiftInfo.Controls.Add(Me.Label34)
+        Me.gbTruckShiftInfo.Controls.Add(Me.cboTruckInfo)
+        Me.gbTruckShiftInfo.Controls.Add(Me.Label35)
+        Me.gbTruckShiftInfo.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.gbTruckShiftInfo.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.gbTruckShiftInfo.Location = New System.Drawing.Point(10, 38)
+        Me.gbTruckShiftInfo.Name = "gbTruckShiftInfo"
+        Me.gbTruckShiftInfo.Size = New System.Drawing.Size(380, 206)
+        Me.gbTruckShiftInfo.TabIndex = 8
+        Me.gbTruckShiftInfo.TabStop = False
+        '
+        'cboTruckShiftStatus
+        '
+        Me.cboTruckShiftStatus.BackColor = System.Drawing.SystemColors.Window
+        Me.cboTruckShiftStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cboTruckShiftStatus.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cboTruckShiftStatus.FormattingEnabled = True
+        Me.cboTruckShiftStatus.Location = New System.Drawing.Point(87, 84)
+        Me.cboTruckShiftStatus.Name = "cboTruckShiftStatus"
+        Me.cboTruckShiftStatus.Size = New System.Drawing.Size(110, 23)
+        Me.cboTruckShiftStatus.TabIndex = 11
+        '
+        'Label36
+        '
+        Me.Label36.AutoSize = True
+        Me.Label36.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label36.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.Label36.Location = New System.Drawing.Point(4, 87)
+        Me.Label36.Name = "Label36"
+        Me.Label36.Size = New System.Drawing.Size(44, 15)
+        Me.Label36.TabIndex = 590
+        Me.Label36.Text = "Status:"
+        '
+        'Label32
+        '
+        Me.Label32.AutoSize = True
+        Me.Label32.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label32.ForeColor = System.Drawing.Color.Red
+        Me.Label32.Location = New System.Drawing.Point(69, 53)
+        Me.Label32.Name = "Label32"
+        Me.Label32.Size = New System.Drawing.Size(16, 20)
+        Me.Label32.TabIndex = 458
+        Me.Label32.Text = "*"
+        '
+        'cboShiftInfo
+        '
+        Me.cboShiftInfo.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cboShiftInfo.FormattingEnabled = True
+        Me.cboShiftInfo.Location = New System.Drawing.Point(87, 55)
+        Me.cboShiftInfo.Name = "cboShiftInfo"
+        Me.cboShiftInfo.Size = New System.Drawing.Size(270, 23)
+        Me.cboShiftInfo.TabIndex = 10
+        '
+        'Label33
+        '
+        Me.Label33.AutoSize = True
+        Me.Label33.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label33.Location = New System.Drawing.Point(4, 58)
+        Me.Label33.Name = "Label33"
+        Me.Label33.Size = New System.Drawing.Size(60, 15)
+        Me.Label33.TabIndex = 457
+        Me.Label33.Text = "Shift Info.:"
+        '
+        'Label34
+        '
+        Me.Label34.AutoSize = True
+        Me.Label34.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label34.ForeColor = System.Drawing.Color.Red
+        Me.Label34.Location = New System.Drawing.Point(69, 24)
+        Me.Label34.Name = "Label34"
+        Me.Label34.Size = New System.Drawing.Size(16, 20)
+        Me.Label34.TabIndex = 455
+        Me.Label34.Text = "*"
+        '
+        'cboTruckInfo
+        '
+        Me.cboTruckInfo.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cboTruckInfo.FormattingEnabled = True
+        Me.cboTruckInfo.Location = New System.Drawing.Point(87, 26)
+        Me.cboTruckInfo.Name = "cboTruckInfo"
+        Me.cboTruckInfo.Size = New System.Drawing.Size(270, 23)
+        Me.cboTruckInfo.TabIndex = 9
+        '
+        'Label35
+        '
+        Me.Label35.AutoSize = True
+        Me.Label35.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label35.Location = New System.Drawing.Point(4, 29)
+        Me.Label35.Name = "Label35"
+        Me.Label35.Size = New System.Drawing.Size(66, 15)
+        Me.Label35.TabIndex = 454
+        Me.Label35.Text = "Truck Info.:"
+        '
+        'gbCodingInfo
+        '
+        Me.gbCodingInfo.Controls.Add(Me.cboCodingStatus)
+        Me.gbCodingInfo.Controls.Add(Me.Label43)
+        Me.gbCodingInfo.Controls.Add(Me.txtCodeName)
+        Me.gbCodingInfo.Controls.Add(Me.Label5)
+        Me.gbCodingInfo.Controls.Add(Me.Label10)
+        Me.gbCodingInfo.Controls.Add(Me.txtCodeNo)
+        Me.gbCodingInfo.Controls.Add(Me.Label42)
+        Me.gbCodingInfo.Controls.Add(Me.txtCodeType)
+        Me.gbCodingInfo.Controls.Add(Me.Label12)
+        Me.gbCodingInfo.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.gbCodingInfo.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.gbCodingInfo.Location = New System.Drawing.Point(10, 38)
+        Me.gbCodingInfo.Name = "gbCodingInfo"
+        Me.gbCodingInfo.Size = New System.Drawing.Size(380, 206)
+        Me.gbCodingInfo.TabIndex = 8
+        Me.gbCodingInfo.TabStop = False
+        '
+        'cboCodingStatus
+        '
+        Me.cboCodingStatus.BackColor = System.Drawing.SystemColors.Window
+        Me.cboCodingStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cboCodingStatus.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cboCodingStatus.FormattingEnabled = True
+        Me.cboCodingStatus.Location = New System.Drawing.Point(126, 99)
+        Me.cboCodingStatus.Name = "cboCodingStatus"
+        Me.cboCodingStatus.Size = New System.Drawing.Size(110, 23)
+        Me.cboCodingStatus.TabIndex = 12
+        '
+        'Label43
+        '
+        Me.Label43.AutoSize = True
+        Me.Label43.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label43.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.Label43.Location = New System.Drawing.Point(40, 102)
+        Me.Label43.Name = "Label43"
+        Me.Label43.Size = New System.Drawing.Size(44, 15)
+        Me.Label43.TabIndex = 590
+        Me.Label43.Text = "Status:"
+        '
+        'txtCodeName
+        '
+        Me.txtCodeName.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtCodeName.Location = New System.Drawing.Point(126, 72)
+        Me.txtCodeName.Name = "txtCodeName"
+        Me.txtCodeName.Size = New System.Drawing.Size(150, 21)
+        Me.txtCodeName.TabIndex = 11
+        '
+        'Label5
+        '
+        Me.Label5.AutoSize = True
+        Me.Label5.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label5.Location = New System.Drawing.Point(40, 75)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(76, 15)
+        Me.Label5.TabIndex = 258
+        Me.Label5.Text = "Code Name:"
+        '
+        'Label10
+        '
+        Me.Label10.AutoSize = True
+        Me.Label10.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label10.ForeColor = System.Drawing.Color.Red
+        Me.Label10.Location = New System.Drawing.Point(109, 45)
+        Me.Label10.Name = "Label10"
+        Me.Label10.Size = New System.Drawing.Size(16, 20)
+        Me.Label10.TabIndex = 257
+        Me.Label10.Text = "*"
+        '
+        'txtCodeNo
+        '
+        Me.txtCodeNo.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtCodeNo.Location = New System.Drawing.Point(126, 45)
+        Me.txtCodeNo.Name = "txtCodeNo"
+        Me.txtCodeNo.Size = New System.Drawing.Size(150, 21)
+        Me.txtCodeNo.TabIndex = 10
+        '
+        'Label42
+        '
+        Me.Label42.AutoSize = True
+        Me.Label42.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label42.Location = New System.Drawing.Point(40, 48)
+        Me.Label42.Name = "Label42"
+        Me.Label42.Size = New System.Drawing.Size(61, 15)
+        Me.Label42.TabIndex = 256
+        Me.Label42.Text = "Code No.:"
+        '
+        'txtCodeType
+        '
+        Me.txtCodeType.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtCodeType.Location = New System.Drawing.Point(126, 19)
+        Me.txtCodeType.Name = "txtCodeType"
+        Me.txtCodeType.ReadOnly = True
+        Me.txtCodeType.Size = New System.Drawing.Size(150, 21)
+        Me.txtCodeType.TabIndex = 9
+        '
+        'Label12
+        '
+        Me.Label12.AutoSize = True
+        Me.Label12.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label12.Location = New System.Drawing.Point(40, 22)
+        Me.Label12.Name = "Label12"
+        Me.Label12.Size = New System.Drawing.Size(68, 15)
+        Me.Label12.TabIndex = 250
+        Me.Label12.Text = "Code Type:"
+        '
+        'gbClassDescInfo
+        '
+        Me.gbClassDescInfo.Controls.Add(Me.Label37)
+        Me.gbClassDescInfo.Controls.Add(Me.Label38)
+        Me.gbClassDescInfo.Controls.Add(Me.cboClassDescStatus)
+        Me.gbClassDescInfo.Controls.Add(Me.txtClassName)
+        Me.gbClassDescInfo.Controls.Add(Me.Label11)
+        Me.gbClassDescInfo.Controls.Add(Me.cboCodeC)
+        Me.gbClassDescInfo.Controls.Add(Me.cboCodeB)
+        Me.gbClassDescInfo.Controls.Add(Me.Label39)
+        Me.gbClassDescInfo.Controls.Add(Me.Label40)
+        Me.gbClassDescInfo.Controls.Add(Me.cboCodeA)
+        Me.gbClassDescInfo.Controls.Add(Me.Label41)
+        Me.gbClassDescInfo.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.gbClassDescInfo.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.gbClassDescInfo.Location = New System.Drawing.Point(10, 38)
+        Me.gbClassDescInfo.Name = "gbClassDescInfo"
+        Me.gbClassDescInfo.Size = New System.Drawing.Size(380, 206)
+        Me.gbClassDescInfo.TabIndex = 8
+        Me.gbClassDescInfo.TabStop = False
+        '
+        'Label37
+        '
+        Me.Label37.AutoSize = True
+        Me.Label37.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label37.Location = New System.Drawing.Point(14, 97)
+        Me.Label37.Name = "Label37"
+        Me.Label37.Size = New System.Drawing.Size(77, 15)
+        Me.Label37.TabIndex = 22
+        Me.Label37.Text = "Class Name:"
+        '
+        'Label38
+        '
+        Me.Label38.AutoSize = True
+        Me.Label38.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label38.ForeColor = System.Drawing.Color.Red
+        Me.Label38.Location = New System.Drawing.Point(90, 93)
+        Me.Label38.Name = "Label38"
+        Me.Label38.Size = New System.Drawing.Size(16, 20)
+        Me.Label38.TabIndex = 23
+        Me.Label38.Text = "*"
+        '
+        'cboClassDescStatus
+        '
+        Me.cboClassDescStatus.BackColor = System.Drawing.SystemColors.Window
+        Me.cboClassDescStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cboClassDescStatus.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cboClassDescStatus.FormattingEnabled = True
+        Me.cboClassDescStatus.Location = New System.Drawing.Point(105, 120)
+        Me.cboClassDescStatus.Name = "cboClassDescStatus"
+        Me.cboClassDescStatus.Size = New System.Drawing.Size(110, 23)
+        Me.cboClassDescStatus.TabIndex = 13
+        '
+        'txtClassName
+        '
+        Me.txtClassName.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtClassName.Location = New System.Drawing.Point(106, 94)
+        Me.txtClassName.Name = "txtClassName"
+        Me.txtClassName.Size = New System.Drawing.Size(229, 21)
+        Me.txtClassName.TabIndex = 12
+        '
+        'Label11
+        '
+        Me.Label11.AutoSize = True
+        Me.Label11.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label11.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.Label11.Location = New System.Drawing.Point(14, 125)
+        Me.Label11.Name = "Label11"
+        Me.Label11.Size = New System.Drawing.Size(44, 15)
+        Me.Label11.TabIndex = 588
+        Me.Label11.Text = "Status:"
+        '
+        'cboCodeC
+        '
+        Me.cboCodeC.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cboCodeC.FormattingEnabled = True
+        Me.cboCodeC.Location = New System.Drawing.Point(91, 67)
+        Me.cboCodeC.Name = "cboCodeC"
+        Me.cboCodeC.Size = New System.Drawing.Size(250, 23)
+        Me.cboCodeC.TabIndex = 11
+        '
+        'cboCodeB
+        '
+        Me.cboCodeB.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cboCodeB.FormattingEnabled = True
+        Me.cboCodeB.Location = New System.Drawing.Point(113, 40)
+        Me.cboCodeB.Name = "cboCodeB"
+        Me.cboCodeB.Size = New System.Drawing.Size(228, 23)
+        Me.cboCodeB.TabIndex = 10
+        '
+        'Label39
+        '
+        Me.Label39.AutoSize = True
+        Me.Label39.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label39.Location = New System.Drawing.Point(14, 70)
+        Me.Label39.Name = "Label39"
+        Me.Label39.Size = New System.Drawing.Size(72, 15)
+        Me.Label39.TabIndex = 21
+        Me.Label39.Text = "Class Code:"
+        '
+        'Label40
+        '
+        Me.Label40.AutoSize = True
+        Me.Label40.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label40.Location = New System.Drawing.Point(14, 43)
+        Me.Label40.Name = "Label40"
+        Me.Label40.Size = New System.Drawing.Size(97, 15)
+        Me.Label40.TabIndex = 20
+        Me.Label40.Text = "Sub-Dept. Code:"
+        '
+        'cboCodeA
+        '
+        Me.cboCodeA.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cboCodeA.FormattingEnabled = True
+        Me.cboCodeA.Location = New System.Drawing.Point(91, 13)
+        Me.cboCodeA.Name = "cboCodeA"
+        Me.cboCodeA.Size = New System.Drawing.Size(250, 23)
+        Me.cboCodeA.TabIndex = 9
+        '
+        'Label41
+        '
+        Me.Label41.AutoSize = True
+        Me.Label41.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label41.Location = New System.Drawing.Point(14, 16)
+        Me.Label41.Name = "Label41"
+        Me.Label41.Size = New System.Drawing.Size(71, 15)
+        Me.Label41.TabIndex = 19
+        Me.Label41.Text = "Dept. Code:"
+        '
+        'gbVendorInfo
+        '
+        Me.gbVendorInfo.Controls.Add(Me.Label13)
+        Me.gbVendorInfo.Controls.Add(Me.Label14)
+        Me.gbVendorInfo.Controls.Add(Me.cboVendorStatus)
+        Me.gbVendorInfo.Controls.Add(Me.txtVendorName)
+        Me.gbVendorInfo.Controls.Add(Me.Label15)
+        Me.gbVendorInfo.Controls.Add(Me.txtVendorCode)
+        Me.gbVendorInfo.Controls.Add(Me.Label16)
+        Me.gbVendorInfo.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.gbVendorInfo.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.gbVendorInfo.Location = New System.Drawing.Point(10, 44)
+        Me.gbVendorInfo.Name = "gbVendorInfo"
+        Me.gbVendorInfo.Size = New System.Drawing.Size(380, 206)
+        Me.gbVendorInfo.TabIndex = 8
+        Me.gbVendorInfo.TabStop = False
+        '
+        'Label13
+        '
+        Me.Label13.AutoSize = True
+        Me.Label13.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label13.ForeColor = System.Drawing.Color.Red
+        Me.Label13.Location = New System.Drawing.Point(113, 44)
+        Me.Label13.Name = "Label13"
+        Me.Label13.Size = New System.Drawing.Size(16, 20)
+        Me.Label13.TabIndex = 252
+        Me.Label13.Text = "*"
+        '
+        'Label14
+        '
+        Me.Label14.AutoSize = True
+        Me.Label14.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label14.Location = New System.Drawing.Point(29, 49)
+        Me.Label14.Name = "Label14"
+        Me.Label14.Size = New System.Drawing.Size(86, 15)
+        Me.Label14.TabIndex = 251
+        Me.Label14.Text = "Vendor Name:"
+        '
+        'cboVendorStatus
+        '
+        Me.cboVendorStatus.BackColor = System.Drawing.SystemColors.Window
+        Me.cboVendorStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cboVendorStatus.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cboVendorStatus.FormattingEnabled = True
+        Me.cboVendorStatus.Location = New System.Drawing.Point(130, 73)
+        Me.cboVendorStatus.Name = "cboVendorStatus"
+        Me.cboVendorStatus.Size = New System.Drawing.Size(90, 23)
+        Me.cboVendorStatus.TabIndex = 11
+        '
+        'txtVendorName
+        '
+        Me.txtVendorName.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtVendorName.Location = New System.Drawing.Point(130, 46)
+        Me.txtVendorName.Name = "txtVendorName"
+        Me.txtVendorName.Size = New System.Drawing.Size(170, 21)
+        Me.txtVendorName.TabIndex = 10
+        '
+        'Label15
+        '
+        Me.Label15.AutoSize = True
+        Me.Label15.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label15.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.Label15.Location = New System.Drawing.Point(29, 76)
+        Me.Label15.Name = "Label15"
+        Me.Label15.Size = New System.Drawing.Size(44, 15)
+        Me.Label15.TabIndex = 588
+        Me.Label15.Text = "Status:"
+        '
+        'txtVendorCode
+        '
+        Me.txtVendorCode.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtVendorCode.Location = New System.Drawing.Point(130, 19)
+        Me.txtVendorCode.Name = "txtVendorCode"
+        Me.txtVendorCode.Size = New System.Drawing.Size(170, 21)
+        Me.txtVendorCode.TabIndex = 9
+        '
+        'Label16
+        '
+        Me.Label16.AutoSize = True
+        Me.Label16.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label16.Location = New System.Drawing.Point(29, 22)
+        Me.Label16.Name = "Label16"
+        Me.Label16.Size = New System.Drawing.Size(81, 15)
+        Me.Label16.TabIndex = 250
+        Me.Label16.Text = "Vendor Code:"
+        '
         'gbAddReference
         '
         Me.gbAddReference.Controls.Add(Me.btnAddBoxSizes)
@@ -2192,7 +2297,7 @@ Partial Class ReferencesForm
         Me.gbAddReference.Controls.Add(Me.Label9)
         Me.gbAddReference.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.gbAddReference.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.gbAddReference.Location = New System.Drawing.Point(470, 290)
+        Me.gbAddReference.Location = New System.Drawing.Point(470, 328)
         Me.gbAddReference.Name = "gbAddReference"
         Me.gbAddReference.Size = New System.Drawing.Size(620, 180)
         Me.gbAddReference.TabIndex = 3
@@ -2349,67 +2454,6 @@ Partial Class ReferencesForm
         '
         Me.errProvider.ContainerControl = Me
         '
-        'txtBranchAddress
-        '
-        Me.txtBranchAddress.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtBranchAddress.Location = New System.Drawing.Point(130, 74)
-        Me.txtBranchAddress.Multiline = True
-        Me.txtBranchAddress.Name = "txtBranchAddress"
-        Me.txtBranchAddress.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.txtBranchAddress.Size = New System.Drawing.Size(230, 38)
-        Me.txtBranchAddress.TabIndex = 11
-        '
-        'Label51
-        '
-        Me.Label51.AutoSize = True
-        Me.Label51.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label51.Location = New System.Drawing.Point(25, 77)
-        Me.Label51.Name = "Label51"
-        Me.Label51.Size = New System.Drawing.Size(86, 15)
-        Me.Label51.TabIndex = 590
-        Me.Label51.Text = "Branch Name:"
-        '
-        'br_rowid
-        '
-        Me.br_rowid.HeaderText = "rowid"
-        Me.br_rowid.Name = "br_rowid"
-        Me.br_rowid.ReadOnly = True
-        Me.br_rowid.Visible = False
-        '
-        'br_branchaddress
-        '
-        Me.br_branchaddress.HeaderText = "branchaddress"
-        Me.br_branchaddress.Name = "br_branchaddress"
-        Me.br_branchaddress.ReadOnly = True
-        Me.br_branchaddress.Visible = False
-        '
-        'br_seqno
-        '
-        Me.br_seqno.HeaderText = "Seq. No."
-        Me.br_seqno.Name = "br_seqno"
-        Me.br_seqno.ReadOnly = True
-        Me.br_seqno.Width = 60
-        '
-        'br_branchname
-        '
-        Me.br_branchname.HeaderText = "Branch Name"
-        Me.br_branchname.Name = "br_branchname"
-        Me.br_branchname.ReadOnly = True
-        Me.br_branchname.Width = 120
-        '
-        'br_branchcode
-        '
-        Me.br_branchcode.HeaderText = "Branch Code"
-        Me.br_branchcode.Name = "br_branchcode"
-        Me.br_branchcode.ReadOnly = True
-        Me.br_branchcode.Width = 80
-        '
-        'br_status
-        '
-        Me.br_status.HeaderText = "Status"
-        Me.br_status.Name = "br_status"
-        Me.br_status.ReadOnly = True
-        '
         'ReferencesForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -2430,6 +2474,7 @@ Partial Class ReferencesForm
         CType(Me.pbClose, System.ComponentModel.ISupportInitialize).EndInit()
         Me.gbPickerList.ResumeLayout(False)
         Me.gbPickerList.PerformLayout()
+        CType(Me.dgBranches, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.dgBoxSizes, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.dgCodings, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.dgClassDescription, System.ComponentModel.ISupportInitialize).EndInit()
@@ -2440,17 +2485,8 @@ Partial Class ReferencesForm
         CType(Me.dgVendors, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ToolStrip3.ResumeLayout(False)
         Me.ToolStrip3.PerformLayout()
-        CType(Me.dgBranches, System.ComponentModel.ISupportInitialize).EndInit()
         Me.gbReferenceInformation.ResumeLayout(False)
         Me.gbReferenceInformation.PerformLayout()
-        Me.gbTruckShiftInfo.ResumeLayout(False)
-        Me.gbTruckShiftInfo.PerformLayout()
-        Me.gbCodingInfo.ResumeLayout(False)
-        Me.gbCodingInfo.PerformLayout()
-        Me.gbClassDescInfo.ResumeLayout(False)
-        Me.gbClassDescInfo.PerformLayout()
-        Me.gbVendorInfo.ResumeLayout(False)
-        Me.gbVendorInfo.PerformLayout()
         Me.gbTruckInfo.ResumeLayout(False)
         Me.gbTruckInfo.PerformLayout()
         CType(Me.pbAutoAddB, System.ComponentModel.ISupportInitialize).EndInit()
@@ -2459,8 +2495,6 @@ Partial Class ReferencesForm
         Me.gbShiftInfo.PerformLayout()
         Me.gbCategoryInfo.ResumeLayout(False)
         Me.gbCategoryInfo.PerformLayout()
-        Me.gbBranchInfo.ResumeLayout(False)
-        Me.gbBranchInfo.PerformLayout()
         Me.gbBoxSizes.ResumeLayout(False)
         Me.gbBoxSizes.PerformLayout()
         CType(Me.pbAutoAddE, System.ComponentModel.ISupportInitialize).EndInit()
@@ -2468,6 +2502,16 @@ Partial Class ReferencesForm
         CType(Me.pbAutoAddC, System.ComponentModel.ISupportInitialize).EndInit()
         Me.msMenu.ResumeLayout(False)
         Me.msMenu.PerformLayout()
+        Me.gbBranchInfo.ResumeLayout(False)
+        Me.gbBranchInfo.PerformLayout()
+        Me.gbTruckShiftInfo.ResumeLayout(False)
+        Me.gbTruckShiftInfo.PerformLayout()
+        Me.gbCodingInfo.ResumeLayout(False)
+        Me.gbCodingInfo.PerformLayout()
+        Me.gbClassDescInfo.ResumeLayout(False)
+        Me.gbClassDescInfo.PerformLayout()
+        Me.gbVendorInfo.ResumeLayout(False)
+        Me.gbVendorInfo.PerformLayout()
         Me.gbAddReference.ResumeLayout(False)
         Me.gbAddReference.PerformLayout()
         CType(Me.errProvider, System.ComponentModel.ISupportInitialize).EndInit()
@@ -2662,4 +2706,8 @@ Partial Class ReferencesForm
     Friend WithEvents br_branchname As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents br_branchcode As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents br_status As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents txtYearModel As TextBox
+    Friend WithEvents Label54 As Label
+    Friend WithEvents txtMaxCapacity As TextBox
+    Friend WithEvents Label53 As Label
 End Class
