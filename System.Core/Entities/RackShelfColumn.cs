@@ -42,6 +42,7 @@ namespace WarehouseManagementSystem.Core.Entities
             CreatedBy = userId;
             InventoryLocationID = inventoryLocationId;
             Status = RackShelfColumnStatus.Active;
+            PickOrderNo = (PickOrderNo ?? 0) == 0 ? 1 : PickOrderNo;
         }
 
         public virtual InventoryLocation InventoryLocation { get; set; }
