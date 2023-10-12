@@ -1,0 +1,16 @@
+# 12:00 PM 10/12/2023
+
+ALTER TABLE `productinventorylocation`
+	ADD COLUMN IF NOT EXISTS `UnitOfMeasure` VARCHAR(50) NULL DEFAULT NULL AFTER `LastInventoryCount`;
+
+COMMIT;
+
+UPDATE productinventorylocation pil
+INNER JOIN productcolorsizes pcs ON pcs.RowID=pil.ProductColorSizeID
+INNER JOIN productcolors pc ON pc.RowID=pcs.ProductColorID
+INNER JOIN products p ON p.RowID=pc.ProductID
+SET pil.UnitOfMeasure=p.UnitOfMeasure
+WHERE pil.UnitOfMeasure IS NULL
+;
+
+COMMIT;

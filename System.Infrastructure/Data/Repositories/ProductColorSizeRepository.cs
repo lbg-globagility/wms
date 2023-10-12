@@ -19,6 +19,9 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
             return await _context.ProductColorSizes
                 .Include(pcs => pcs.ProductColor)
                     .ThenInclude(pc => pc.Product)
+                        .ThenInclude(p => p.Category)
+                .Include(pcs => pcs.ProductColor)
+                    .ThenInclude(pc => pc.Color)
                 .AsNoTracking()
                 .Where(x => x.OrganizationID == organizationId)
                 .ToListAsync();

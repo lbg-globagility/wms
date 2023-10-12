@@ -7,7 +7,7 @@ using WarehouseManagementSystem.Core.Enums;
 namespace WarehouseManagementSystem.Core.Entities
 {
     [Table("orders")]
-    public class Order : AuditableEntity
+    public partial class Order : AuditableEntity
     {
         public int? RelatedOrderID { get; set; }
         public int? InventoryLocationID { get; set; }
@@ -39,7 +39,43 @@ namespace WarehouseManagementSystem.Core.Entities
         public decimal? TotalDownPayment { get; set; }
         public decimal? TotalPayment { get; set; }
         public decimal? TotalBalance { get; set; }
+    }
+
+    public partial class Order
+    {
+        private Order()
+        {
+        }
 
         public virtual ICollection<OrderItem> OrderItems { get; set; }
+        public bool IsCustomerOrderType => OrderType == OrderType.CO;
+        public bool IsPurchaseOrderType => OrderType == OrderType.PO;
+        public bool IsReceivingReportType => OrderType == OrderType.RR;
+        public bool IsStockAdjustType => OrderType == OrderType.SA;
+        public bool IsStockTransferType => OrderType == OrderType.ST;
+        public int OrderNumberInt => int.Parse(OrderNumber);
+
+        public Order(int organizationId,
+            int userId,
+            string orderNumber,
+            string status,
+            DateTime orderDate)
+        {
+            OrganizationID = organizationId;
+            CreatedBy = userId;
+            OrderNumber = orderNumber;
+            Status = status;
+            OrderDate = orderDate;
+        }
+
+        public static Order NewStockTransferOrder(int organizationId,
+            int userId,
+            string orderNumber,
+            string status,
+            DateTime orderDate) => new Order(organizationId: organizationId,
+                userId: userId,
+                orderNumber: orderNumber,
+                status: status,
+                orderDate: orderDate);
     }
 }

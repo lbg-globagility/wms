@@ -198,13 +198,13 @@ Public Class InventoryLocationsForm
         End Try
     End Sub
 
-    Sub enableGB(ByVal enable1 As Boolean, ByVal enable2 As Boolean, ByVal enable3 As Boolean, ByVal enable4 As Boolean)
+    Private Sub enableGB(ByVal enable1 As Boolean, ByVal enable2 As Boolean, ByVal enable3 As Boolean, ByVal enable4 As Boolean)
         Try
             gbSearch.Enabled = enable1
             gbInventoryLocationList.Enabled = enable1
             gbInventoryLocationInformation.Enabled = enable2
-            gbRackShelfColumn.Enabled = enable3
-            gbProducts.Enabled = enable4
+            'gbRackShelfColumn.Enabled = enable3
+            'gbProducts.Enabled = enable4
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -1032,7 +1032,7 @@ Public Class InventoryLocationsForm
         Try
             dgProducts.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT pil.rowid,COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(c.colorname,''),COALESCE(pcs.size,''),COALESCE(pil.totalavailableqty,0),COALESCE(pil.totalreserveqty,0),COALESCE(pil.totaldamageqty,0),COALESCE(pcs.sku,''),COALESCE(pcs.seasoncode,'')," &
+            Dim sql1 As String = "SELECT pil.rowid,COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(c.colorname,''),COALESCE(pcs.size,''),IFNULL(pil.UnitOfMeasure, ''),COALESCE(pil.totalavailableqty,0),COALESCE(pil.totalreserveqty,0),COALESCE(pil.totaldamageqty,0),COALESCE(pcs.sku,''),COALESCE(pcs.sku2,''),COALESCE(pcs.seasoncode,'')," &
                         "COALESCE(pil.totalallocatedqty,0) FROM productinventorylocation pil LEFT JOIN productcolorsizes pcs ON pil.productcolorsizeid = pcs.rowid LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN colors c ON pc.colorid = c.rowid " &
                         "LEFT JOIN products p ON pc.productid = p.rowid WHERE pil.organizationid = " & Z_OrganizationID & " AND pil.rackshelfcolumnid = " & irackshelfcolumnid & " ORDER BY p.productcode ASC,c.colorname ASC "
             Dim cmd1 As New MySqlCommand(sql1, conn)
@@ -1048,13 +1048,15 @@ Public Class InventoryLocationsForm
                     dgProducts.Item(p_productcode.Index, n).Value = reader1(2)
                     dgProducts.Item(p_colorname.Index, n).Value = reader1(3)
                     dgProducts.Item(p_size.Index, n).Value = reader1(4)
-                    dgProducts.Item(p_qtyavailable.Index, n).Value = reader1(5)
-                    dgProducts.Item(p_qtyreserve.Index, n).Value = reader1(6)
-                    dgProducts.Item(p_qtydamage.Index, n).Value = reader1(7)
-                    dgProducts.Item(p_sku.Index, n).Value = reader1(8)
-                    dgProducts.Item(p_seasoncode.Index, n).Value = reader1(9)
-                    dgProducts.Item(p_qtyallocated.Index, n).Value = reader1(10)
-                    dgProducts.Item(p_qtyorderable.Index, n).Value = CInt(reader1(5)) - CInt(reader1(10))
+                    dgProducts.Item(p_unitOfMeasure.Index, n).Value = reader1(5)
+                    dgProducts.Item(p_qtyavailable.Index, n).Value = reader1(6)
+                    dgProducts.Item(p_qtyreserve.Index, n).Value = reader1(7)
+                    dgProducts.Item(p_qtydamage.Index, n).Value = reader1(8)
+                    dgProducts.Item(p_sku.Index, n).Value = reader1(9)
+                    dgProducts.Item(p_sku2.Index, n).Value = reader1(10)
+                    dgProducts.Item(p_seasoncode.Index, n).Value = reader1(11)
+                    dgProducts.Item(p_qtyallocated.Index, n).Value = reader1(12)
+                    dgProducts.Item(p_qtyorderable.Index, n).Value = CInt(reader1(7)) - CInt(reader1(12))
                     seqno = seqno + 1
                     n = n + 1
                 End If
