@@ -312,4 +312,24 @@ Public Class StockTransferForm2
         _isNew = Not ToolStripButtonNew.Enabled
     End Sub
 
+    Private Async Sub ToolStripButtonApproved_Click(sender As Object, e As EventArgs) Handles ToolStripButtonApproved.Click
+        Dim prompt = MessageBox.Show(text:="Are you sure you want to `Approve` this Stock Transfer?", caption:="Approve Stock Transfer", icon:=MessageBoxIcon.Question, buttons:=MessageBoxButtons.YesNoCancel)
+        If Not prompt = DialogResult.Yes Then Return
+
+        ToolStripButtonApproved.Enabled = False
+
+        Await FunctionUtils.TryCatchFunctionAsync("Approve Stock Transfer",
+            Async Function()
+                Dim orderDataService = MainServiceProvider.GetRequiredService(Of IOrderDataService)
+
+                Await orderDataService.ApproveStockTransfer(_selectedOrder)
+
+                Await LoadStockTransferOrders()
+
+                ToolStripButtonApproved.Enabled = True
+            End Function)
+
+        ToolStripButtonApproved.Enabled = True
+    End Sub
+
 End Class

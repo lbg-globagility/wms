@@ -32,7 +32,7 @@ namespace WarehouseManagementSystem.Core.Entities
         public string DeliveryHours { get; set; }
         public string Comments { get; set; }
         public string ReceivedBy { get; set; }
-        public string Status { get; set; }
+        public OrderStatus Status { get; set; }
         public string ReceivedBrands { get; set; }
         public string ContainerNo { get; set; }
         public string SealNo { get; set; }
@@ -63,7 +63,7 @@ namespace WarehouseManagementSystem.Core.Entities
             int userId,
             OrderType orderType,
             string orderNumber,
-            string status,
+            OrderStatus status,
             DateTime orderDate)
         {
             OrganizationID = organizationId;
@@ -77,7 +77,7 @@ namespace WarehouseManagementSystem.Core.Entities
         public static Order NewStockTransferOrder(int organizationId,
             int userId,
             string orderNumber,
-            string status,
+            OrderStatus status,
             DateTime orderDate) => new Order(organizationId: organizationId,
                 userId: userId,
                 orderType: OrderType.ST,
@@ -131,5 +131,10 @@ namespace WarehouseManagementSystem.Core.Entities
         public List<IGrouping<int?, MovementHistory>> MovementHistoriesToGroupByProductColorSize => MovementHistoriesTo?
             .GroupBy(t => t.ProductColorSizeID)
             .ToList();
+
+        public void ApproveStockTransfer()
+        {
+            Status = OrderStatus.Approved;
+        }
     }
 }

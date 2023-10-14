@@ -84,6 +84,9 @@ namespace WarehouseManagementSystem.Infrastructure.Data
 
                 t.Property(x => x.OrderType)
                     .HasConversion(new EnumToStringConverter<OrderType>());
+
+                t.Property(x => x.Status)
+                    .HasConversion(new EnumToStringConverter<OrderStatus>());
             });
 
             modelBuilder.Entity<Product>(t =>

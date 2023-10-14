@@ -15,11 +15,13 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
     public class OrderDataService : BaseSavableDataService<Order>, IOrderDataService
     {
         private readonly IOrderRepository _orderRepository;
+        private readonly IProductInventoryLocationRepository _productInventoryLocationRepository;
 
         public OrderDataService(IOrderRepository orderRepository,
             IUserActivityRepository userActivityRepository,
             SystemContext context,
-            IPolicyHelper policy) :
+            IPolicyHelper policy,
+            IProductInventoryLocationRepository productInventoryLocationRepository) :
 
             base(orderRepository,
                 userActivityRepository,
@@ -28,6 +30,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
                 entityName: "Order")
         {
             _orderRepository = orderRepository;
+            _productInventoryLocationRepository = productInventoryLocationRepository;
         }
 
         public async Task<List<Order>> GetOrdersByOrderTypeAsync(int organizationId, OrderType orderType) =>
@@ -45,7 +48,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
             var stockTransferOrder = Order.NewStockTransferOrder(organizationId: organizationId,
                 userId: userId,
                 orderNumber: $"{orderNumber}",
-                status: OrderStatus.Approved.ToString(),
+                status: OrderStatus.Open,
                 orderDate: DateTime.Now);
 
             await _orderRepository.SaveAsync(entity: stockTransferOrder);
@@ -77,6 +80,27 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
 
                 await _context.SaveChangesAsync();
             }
+
+            await _orderRepository.SaveAsync(order);
+        }
+
+        public async Task ApproveStockTransfer(Order order)
+        {
+            var pilIds = order.MovementHistories
+                .Select(t => t.ProductInventoryLocationIDA.Value)
+                .ToArray();
+            var productInventoryLocations = await _productInventoryLocationRepository.GetManyByIdsAsync(pilIds);
+
+            foreach (var productInventoryLocation in productInventoryLocations)
+            {
+                var movementHistory = order.MovementHistories.FirstOrDefault(t => t.ProductInventoryLocationIDA == productInventoryLocation.RowID);
+                if (movementHistory == null) continue;
+                productInventoryLocation.TotalAvailableQty = (productInventoryLocation.TotalAvailableQty ?? 0) + movementHistory.FormulatedQtyToApply;
+            }
+
+            await _productInventoryLocationRepository.SaveManyAsync(updated: productInventoryLocations.ToList());
+
+            order.ApproveStockTransfer();
 
             await _orderRepository.SaveAsync(order);
         }

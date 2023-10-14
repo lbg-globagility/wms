@@ -27,4 +27,9 @@
         /// </summary>
         ST// Stock Trans.
     }
+
+    //Stock Adj.
+    //CO
+    //RR
+    //PO
 }

@@ -263,6 +263,7 @@ Partial Class ProductSelectorDialog
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "ProductSelectorDialog"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Panel1.ResumeLayout(False)
         CType(Me.grid, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel2.ResumeLayout(False)

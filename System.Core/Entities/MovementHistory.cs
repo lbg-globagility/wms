@@ -88,8 +88,9 @@ namespace WarehouseManagementSystem.Core.Entities
 
         public void RecomputeNewQty()
         {
-            NewQty = CurrentQty +
-                (QtyToApply * (IsTransactionTypeIsFrom ? -1 : IsTransactionTypeIsTo ? 1 : 1));
+            NewQty = CurrentQty + FormulatedQtyToApply;
         }
+
+        public int FormulatedQtyToApply => (QtyToApply * (IsTransactionTypeIsFrom ? -1 : IsTransactionTypeIsTo ? 1 : 1)) ?? 0;
     }
 }

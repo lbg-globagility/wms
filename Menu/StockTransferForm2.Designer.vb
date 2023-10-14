@@ -23,10 +23,10 @@ Partial Class StockTransferForm2
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(StockTransferForm2))
-        Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.gridStockTransferOrders = New DevComponents.DotNetBar.Controls.DataGridViewX()
         Me.Column5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column6 = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -75,6 +75,8 @@ Partial Class StockTransferForm2
         Me.ToolStripButtonCancel = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButtonClose = New System.Windows.Forms.ToolStripButton()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
+        Me.ToolStripButtonApproved = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripLabel2 = New System.Windows.Forms.ToolStripLabel()
         CType(Me.gridStockTransferOrders, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
@@ -102,14 +104,14 @@ Partial Class StockTransferForm2
         Me.gridStockTransferOrders.AllowUserToDeleteRows = False
         Me.gridStockTransferOrders.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.gridStockTransferOrders.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column5, Me.Column6, Me.Column7})
-        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle4.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.gridStockTransferOrders.DefaultCellStyle = DataGridViewCellStyle4
+        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle1.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.gridStockTransferOrders.DefaultCellStyle = DataGridViewCellStyle1
         Me.gridStockTransferOrders.Dock = System.Windows.Forms.DockStyle.Fill
         Me.gridStockTransferOrders.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
         Me.gridStockTransferOrders.Location = New System.Drawing.Point(0, 109)
@@ -236,7 +238,7 @@ Partial Class StockTransferForm2
         'Label5
         '
         Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(21, 115)
+        Me.Label5.Location = New System.Drawing.Point(21, 112)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(106, 13)
         Me.Label5.TabIndex = 5
@@ -245,7 +247,7 @@ Partial Class StockTransferForm2
         'Label4
         '
         Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(239, 31)
+        Me.Label4.Location = New System.Drawing.Point(239, 28)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(61, 13)
         Me.Label4.TabIndex = 5
@@ -254,7 +256,7 @@ Partial Class StockTransferForm2
         'Label3
         '
         Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(21, 87)
+        Me.Label3.Location = New System.Drawing.Point(21, 84)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(75, 13)
         Me.Label3.TabIndex = 5
@@ -272,7 +274,7 @@ Partial Class StockTransferForm2
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(21, 31)
+        Me.Label1.Location = New System.Drawing.Point(21, 28)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(100, 13)
         Me.Label1.TabIndex = 5
@@ -281,7 +283,7 @@ Partial Class StockTransferForm2
         'txtStockTransferNo
         '
         Me.txtStockTransferNo.BackColor = System.Drawing.Color.White
-        Me.txtStockTransferNo.Location = New System.Drawing.Point(133, 22)
+        Me.txtStockTransferNo.Location = New System.Drawing.Point(133, 19)
         Me.txtStockTransferNo.Name = "txtStockTransferNo"
         Me.txtStockTransferNo.ReadOnly = True
         Me.txtStockTransferNo.Size = New System.Drawing.Size(100, 22)
@@ -290,7 +292,7 @@ Partial Class StockTransferForm2
         'txtStatus
         '
         Me.txtStatus.BackColor = System.Drawing.Color.White
-        Me.txtStatus.Location = New System.Drawing.Point(133, 50)
+        Me.txtStatus.Location = New System.Drawing.Point(133, 47)
         Me.txtStatus.Name = "txtStatus"
         Me.txtStatus.ReadOnly = True
         Me.txtStatus.Size = New System.Drawing.Size(100, 22)
@@ -299,7 +301,7 @@ Partial Class StockTransferForm2
         'txtTransferedBy
         '
         Me.txtTransferedBy.BackColor = System.Drawing.Color.White
-        Me.txtTransferedBy.Location = New System.Drawing.Point(133, 78)
+        Me.txtTransferedBy.Location = New System.Drawing.Point(133, 75)
         Me.txtTransferedBy.Name = "txtTransferedBy"
         Me.txtTransferedBy.ReadOnly = True
         Me.txtTransferedBy.Size = New System.Drawing.Size(100, 22)
@@ -307,7 +309,7 @@ Partial Class StockTransferForm2
         '
         'txtComments
         '
-        Me.txtComments.Location = New System.Drawing.Point(306, 22)
+        Me.txtComments.Location = New System.Drawing.Point(306, 19)
         Me.txtComments.MaxLength = 255
         Me.txtComments.Multiline = True
         Me.txtComments.Name = "txtComments"
@@ -318,7 +320,7 @@ Partial Class StockTransferForm2
         'dtpStockTransferDate
         '
         Me.dtpStockTransferDate.Format = System.Windows.Forms.DateTimePickerFormat.[Short]
-        Me.dtpStockTransferDate.Location = New System.Drawing.Point(133, 106)
+        Me.dtpStockTransferDate.Location = New System.Drawing.Point(133, 103)
         Me.dtpStockTransferDate.Name = "dtpStockTransferDate"
         Me.dtpStockTransferDate.Size = New System.Drawing.Size(100, 22)
         Me.dtpStockTransferDate.TabIndex = 3
@@ -349,20 +351,20 @@ Partial Class StockTransferForm2
         Me.gridStockTransferOrdersFrom.AllowUserToDeleteRows = False
         Me.gridStockTransferOrdersFrom.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.gridStockTransferOrdersFrom.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column1, Me.Column2, Me.pickFromRackShelfColumn, Me.Column3, Me.rackShelfColumnFrom, Me.deleteProductColorSize})
-        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle5.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.gridStockTransferOrdersFrom.DefaultCellStyle = DataGridViewCellStyle5
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle2.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.gridStockTransferOrdersFrom.DefaultCellStyle = DataGridViewCellStyle2
         Me.gridStockTransferOrdersFrom.Dock = System.Windows.Forms.DockStyle.Fill
         Me.gridStockTransferOrdersFrom.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
         Me.gridStockTransferOrdersFrom.Location = New System.Drawing.Point(0, 100)
         Me.gridStockTransferOrdersFrom.Name = "gridStockTransferOrdersFrom"
         Me.gridStockTransferOrdersFrom.Size = New System.Drawing.Size(422, 248)
-        Me.gridStockTransferOrdersFrom.TabIndex = 13
+        Me.gridStockTransferOrdersFrom.TabIndex = 2
         '
         'Column1
         '
@@ -422,7 +424,7 @@ Partial Class StockTransferForm2
         Me.Panel2.Location = New System.Drawing.Point(0, 0)
         Me.Panel2.Name = "Panel2"
         Me.Panel2.Size = New System.Drawing.Size(422, 100)
-        Me.Panel2.TabIndex = 17
+        Me.Panel2.TabIndex = 0
         '
         'btnAddItem
         '
@@ -431,7 +433,7 @@ Partial Class StockTransferForm2
         Me.btnAddItem.Location = New System.Drawing.Point(7, 71)
         Me.btnAddItem.Name = "btnAddItem"
         Me.btnAddItem.Size = New System.Drawing.Size(56, 23)
-        Me.btnAddItem.TabIndex = 15
+        Me.btnAddItem.TabIndex = 1
         Me.btnAddItem.Text = "Add"
         Me.btnAddItem.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.ToolTip1.SetToolTip(Me.btnAddItem, "Add Product Code-Color-Size")
@@ -453,7 +455,7 @@ Partial Class StockTransferForm2
         Me.cboFromInventory.Location = New System.Drawing.Point(104, 21)
         Me.cboFromInventory.Name = "cboFromInventory"
         Me.cboFromInventory.Size = New System.Drawing.Size(192, 21)
-        Me.cboFromInventory.TabIndex = 14
+        Me.cboFromInventory.TabIndex = 0
         '
         'gridStockTransferOrdersTo
         '
@@ -461,20 +463,20 @@ Partial Class StockTransferForm2
         Me.gridStockTransferOrdersTo.AllowUserToDeleteRows = False
         Me.gridStockTransferOrdersTo.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.gridStockTransferOrdersTo.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.DataGridViewTextBoxColumn1, Me.DataGridViewTextBoxColumn2, Me.pickToRackShelfColumn, Me.DataGridViewTextBoxColumn3, Me.rackShelfColumnTo})
-        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle6.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.gridStockTransferOrdersTo.DefaultCellStyle = DataGridViewCellStyle6
+        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle3.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.gridStockTransferOrdersTo.DefaultCellStyle = DataGridViewCellStyle3
         Me.gridStockTransferOrdersTo.Dock = System.Windows.Forms.DockStyle.Fill
         Me.gridStockTransferOrdersTo.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
         Me.gridStockTransferOrdersTo.Location = New System.Drawing.Point(0, 100)
         Me.gridStockTransferOrdersTo.Name = "gridStockTransferOrdersTo"
         Me.gridStockTransferOrdersTo.Size = New System.Drawing.Size(423, 248)
-        Me.gridStockTransferOrdersTo.TabIndex = 13
+        Me.gridStockTransferOrdersTo.TabIndex = 1
         '
         'DataGridViewTextBoxColumn1
         '
@@ -520,7 +522,7 @@ Partial Class StockTransferForm2
         Me.Panel3.Location = New System.Drawing.Point(0, 0)
         Me.Panel3.Name = "Panel3"
         Me.Panel3.Size = New System.Drawing.Size(423, 100)
-        Me.Panel3.TabIndex = 18
+        Me.Panel3.TabIndex = 1
         '
         'cboToInventory
         '
@@ -529,7 +531,7 @@ Partial Class StockTransferForm2
         Me.cboToInventory.Location = New System.Drawing.Point(104, 21)
         Me.cboToInventory.Name = "cboToInventory"
         Me.cboToInventory.Size = New System.Drawing.Size(192, 21)
-        Me.cboToInventory.TabIndex = 14
+        Me.cboToInventory.TabIndex = 0
         '
         'Label8
         '
@@ -544,7 +546,7 @@ Partial Class StockTransferForm2
         '
         Me.ToolStrip1.BackColor = System.Drawing.Color.Transparent
         Me.ToolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButtonNew, Me.ToolStripButtonSave, Me.ToolStripLabel1, Me.ToolStripButtonCancel, Me.ToolStripButtonClose})
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButtonNew, Me.ToolStripButtonSave, Me.ToolStripLabel1, Me.ToolStripButtonApproved, Me.ToolStripLabel2, Me.ToolStripButtonCancel, Me.ToolStripButtonClose})
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
         Me.ToolStrip1.Size = New System.Drawing.Size(853, 25)
@@ -590,6 +592,21 @@ Partial Class StockTransferForm2
         Me.ToolStripButtonClose.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.ToolStripButtonClose.Size = New System.Drawing.Size(56, 22)
         Me.ToolStripButtonClose.Text = "Close"
+        '
+        'ToolStripButtonApproved
+        '
+        Me.ToolStripButtonApproved.Image = CType(resources.GetObject("ToolStripButtonApproved.Image"), System.Drawing.Image)
+        Me.ToolStripButtonApproved.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButtonApproved.Name = "ToolStripButtonApproved"
+        Me.ToolStripButtonApproved.Size = New System.Drawing.Size(148, 22)
+        Me.ToolStripButtonApproved.Text = "Approve Stock Transfer"
+        Me.ToolStripButtonApproved.ToolTipText = "Approve Stock Transfer"
+        '
+        'ToolStripLabel2
+        '
+        Me.ToolStripLabel2.Name = "ToolStripLabel2"
+        Me.ToolStripLabel2.Size = New System.Drawing.Size(52, 22)
+        Me.ToolStripLabel2.Text = "               "
         '
         'StockTransferForm2
         '
@@ -679,4 +696,6 @@ Partial Class StockTransferForm2
     Friend WithEvents Column3 As DataGridViewTextBoxColumn
     Friend WithEvents rackShelfColumnFrom As DataGridViewButtonColumn
     Friend WithEvents deleteProductColorSize As DevComponents.DotNetBar.Controls.DataGridViewButtonXColumn
+    Friend WithEvents ToolStripButtonApproved As ToolStripButton
+    Friend WithEvents ToolStripLabel2 As ToolStripLabel
 End Class
