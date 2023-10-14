@@ -1,4 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using WarehouseManagementSystem.Core.Entities;
 using WarehouseManagementSystem.Core.Enums;
 using WarehouseManagementSystem.Core.Interfaces;
@@ -26,6 +30,12 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
             _orderRepository = orderRepository;
         }
 
+        public async Task<List<Order>> GetOrdersByOrderTypeAsync(int organizationId, OrderType orderType) =>
+            await _orderRepository.GetOrdersByOrderTypeAsync(organizationId: organizationId, orderType: orderType);
+
+        public async Task<List<Order>> GetStockTransferOrdersAsync(int organizationId) =>
+            await GetOrdersByOrderTypeAsync(organizationId: organizationId, orderType: OrderType.ST);
+
         public async Task<Order> QuickCreateStockTransferOrderAsync(int organizationId, int userId)
         {
             var lastOrder = await _orderRepository.GetLastOrderOfThisTypeAsync(organizationId: organizationId, orderType: OrderType.ST);
@@ -36,11 +46,39 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
                 userId: userId,
                 orderNumber: $"{orderNumber}",
                 status: OrderStatus.Approved.ToString(),
-                orderDate: System.DateTime.Now);
+                orderDate: DateTime.Now);
 
             await _orderRepository.SaveAsync(entity: stockTransferOrder);
 
             return stockTransferOrder;
+        }
+
+        public async Task SaveAsync(Order order)
+        {
+            if (order.IsStockTransferType)
+            {
+                order.MovementHistories?.ToList().ForEach(movementHistory =>
+                {
+                    if (movementHistory.ProductColorSize != null)
+                    {
+                        _context.Entry(movementHistory.ProductColorSize).State = EntityState.Detached;
+                        movementHistory.ProductColorSize = null;
+                    }
+
+                    if (movementHistory.ProductInventoryLocation != null)
+                    {
+                        _context.Entry(movementHistory.ProductInventoryLocation).State = EntityState.Detached;
+                        movementHistory.ProductInventoryLocation = null;
+                    }
+
+                    if (movementHistory.IsNewEntity) _context.MovementHistories.Add(movementHistory);
+                    else _context.Entry(movementHistory).State = EntityState.Modified;
+                });
+
+                await _context.SaveChangesAsync();
+            }
+
+            await _orderRepository.SaveAsync(order);
         }
     }
 }

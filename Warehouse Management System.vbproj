@@ -363,6 +363,13 @@
     <Compile Include="Menu\PickListForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Menu\ProductInventoryLocation\RackShelfColumnModel.vb" />
+    <Compile Include="Menu\ProductInventoryLocation\RackShelfColumnSelectorDialog.Designer.vb">
+      <DependentUpon>RackShelfColumnSelectorDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Menu\ProductInventoryLocation\RackShelfColumnSelectorDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Menu\Products\ImportProductForm.Designer.vb">
       <DependentUpon>ImportProductForm.vb</DependentUpon>
     </Compile>
@@ -977,6 +984,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Menu\PickListForm.resx">
       <DependentUpon>PickListForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Menu\ProductInventoryLocation\RackShelfColumnSelectorDialog.resx">
+      <DependentUpon>RackShelfColumnSelectorDialog.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Menu\Products\ImportProductForm.resx">
       <DependentUpon>ImportProductForm.vb</DependentUpon>

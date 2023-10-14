@@ -1,19 +1,19 @@
 ﻿Imports Microsoft.Extensions.DependencyInjection
-Imports WarehouseManagementSystem.Core.Entities
 Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
 
 Public Class ProductSelectorDialog
     Private _baseSource As List(Of ProductColorSizeModel)
     Private ReadOnly _inventoryLocationId As Integer
 
-    Public ReadOnly Property SelectedProductColorSizes As List(Of ProductColorSize)
+    Public ReadOnly Property SelectedProductColorSizeModels As List(Of ProductColorSizeModel)
         Get
             Return _baseSource.
                 Where(Function(t) t.IsSelected).
-                Select(Function(t) t.ProductColorSize).
                 ToList()
         End Get
     End Property
+
+    Public Property ProductColorSizeExceptionIds As List(Of Integer)
 
     Public Sub New(inventoryLocationId As Integer)
 
@@ -44,8 +44,15 @@ Public Class ProductSelectorDialog
         'Return productColorSizes.
         '    Select(Function(t) New ProductColorSizeModel(t)).
         '    ToList()
+        If ProductColorSizeExceptionIds IsNot Nothing AndAlso ProductColorSizeExceptionIds.Any() Then
+            Return productInventoryLocations.
+                Where(Function(t) Not ProductColorSizeExceptionIds.Contains(t.ProductColorSizeID)).
+                Select(Function(t) New ProductColorSizeModel(productInventoryLocation:=t, productColorSize:=t.ProductColorSize)).
+                ToList()
+        End If
+
         Return productInventoryLocations.
-            Select(Function(t) New ProductColorSizeModel(t.ProductColorSize)).
+            Select(Function(t) New ProductColorSizeModel(productInventoryLocation:=t, productColorSize:=t.ProductColorSize)).
             ToList()
     End Function
 

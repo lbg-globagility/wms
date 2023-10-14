@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using WarehouseManagementSystem.Core.Dto;
 using WarehouseManagementSystem.Core.Entities.Base;
 using WarehouseManagementSystem.Core.Enums;
 
@@ -48,6 +50,8 @@ namespace WarehouseManagementSystem.Core.Entities
         }
 
         public virtual ICollection<OrderItem> OrderItems { get; set; }
+        public virtual ICollection<MovementHistory> MovementHistories { get; set; }
+
         public bool IsCustomerOrderType => OrderType == OrderType.CO;
         public bool IsPurchaseOrderType => OrderType == OrderType.PO;
         public bool IsReceivingReportType => OrderType == OrderType.RR;
@@ -57,12 +61,14 @@ namespace WarehouseManagementSystem.Core.Entities
 
         public Order(int organizationId,
             int userId,
+            OrderType orderType,
             string orderNumber,
             string status,
             DateTime orderDate)
         {
             OrganizationID = organizationId;
             CreatedBy = userId;
+            OrderType = orderType;
             OrderNumber = orderNumber;
             Status = status;
             OrderDate = orderDate;
@@ -74,8 +80,56 @@ namespace WarehouseManagementSystem.Core.Entities
             string status,
             DateTime orderDate) => new Order(organizationId: organizationId,
                 userId: userId,
+                orderType: OrderType.ST,
                 orderNumber: orderNumber,
                 status: status,
                 orderDate: orderDate);
+
+        public void AddMovementHistories(List<MovementHistory> movementHistories)
+        {
+            if (MovementHistories == null) MovementHistories = new List<MovementHistory>();
+
+            foreach (var movementHistory in movementHistories)
+            {
+                var productColorSizeId = movementHistory.ProductColorSizeID;
+                var productInventoryLocationId = movementHistory.ProductInventoryLocationIDA;
+                var existingMovementHistory = MovementHistories
+                    .Where(t => t.ProductColorSizeID == productColorSizeId)
+                    .Where(t => t.ProductInventoryLocationIDA == productInventoryLocationId)
+                    .FirstOrDefault();
+                if (existingMovementHistory == null) MovementHistories.Add(movementHistory);
+                else
+                {
+                    existingMovementHistory.QtyToApply = movementHistory.QtyToApply;
+                    existingMovementHistory.RecomputeNewQty();
+                }
+            }
+        }
+
+        public int? StockTransferFromInventoryLocationId =>
+            MovementHistories != null ?
+            MovementHistories.FirstOrDefault(t => t.IsTransactionTypeIsFrom)?.ProductInventoryLocation?.RackShelfColumn?.InventoryLocationID :
+            null;
+
+        public int? StockTransferToInventoryLocationId =>
+            MovementHistories != null ?
+            MovementHistories.FirstOrDefault(t => t.IsTransactionTypeIsTo)?.ProductInventoryLocation?.RackShelfColumn?.InventoryLocationID :
+            null;
+
+        public ICollection<MovementHistory> MovementHistoriesFrom => MovementHistories?
+            .Where(t => t.ProductInventoryLocation?.RackShelfColumn?.InventoryLocationID == StockTransferFromInventoryLocationId)
+            .ToList();
+
+        public ICollection<MovementHistory> MovementHistoriesTo => MovementHistories?
+            .Where(t => t.ProductInventoryLocation?.RackShelfColumn?.InventoryLocationID == StockTransferToInventoryLocationId)
+            .ToList();
+
+        public List<IGrouping<int?, MovementHistory>> MovementHistoriesFromGroupByProductColorSize => MovementHistoriesFrom?
+            .GroupBy(t => t.ProductColorSizeID)
+            .ToList();
+
+        public List<IGrouping<int?, MovementHistory>> MovementHistoriesToGroupByProductColorSize => MovementHistoriesTo?
+            .GroupBy(t => t.ProductColorSizeID)
+            .ToList();
     }
 }

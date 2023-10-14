@@ -1,10 +1,13 @@
 ﻿Imports WarehouseManagementSystem.Core.Entities
 
 Public Class ProductColorSizeModel
+    Private ReadOnly _productInventoryLocation As ProductInventoryLocation
     Private ReadOnly _productColorSize As ProductColorSize
     Private ReadOnly _productColor As ProductColor
 
-    Public Sub New(productColorSize As ProductColorSize)
+    Public Sub New(productInventoryLocation As ProductInventoryLocation,
+        productColorSize As ProductColorSize)
+        _productInventoryLocation = productInventoryLocation
         _productColorSize = productColorSize
         _productColor = productColorSize.ProductColor
     End Sub
@@ -68,6 +71,12 @@ Public Class ProductColorSizeModel
     Public ReadOnly Property ProductColorSize As ProductColorSize
         Get
             Return _productColorSize
+        End Get
+    End Property
+
+    Public ReadOnly Property ProductInventoryLocation As ProductInventoryLocation
+        Get
+            Return _productInventoryLocation
         End Get
     End Property
 

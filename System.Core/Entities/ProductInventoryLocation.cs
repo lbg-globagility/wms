@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using WarehouseManagementSystem.Core.Entities.Base;
 
@@ -47,6 +48,7 @@ namespace WarehouseManagementSystem.Core.Entities
 
         public virtual ProductColorSize ProductColorSize { get; set; }
         public virtual RackShelfColumn RackShelfColumn { get; set; }
+        public virtual ICollection<MovementHistory> MovementHistories { get; set; }
 
         public static ProductInventoryLocation NewProductInventoryLocation(int organizationId,
             int userId,
@@ -57,5 +59,7 @@ namespace WarehouseManagementSystem.Core.Entities
                 productColorSizeId: productColorSizeId,
                 unitOfMeasure: unitOfMeasure,
                 unitPrice: unitPrice);
+
+        public int QtyOrderable => (TotalReserveQty - TotalAllocatedQty) ?? 0;
     }
 }
