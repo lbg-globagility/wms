@@ -21,6 +21,7 @@ namespace WarehouseManagementSystem.Core.Entities
         public string Comments { get; set; }
         public string DeliveryAddress { get; set; }
         public DateTime? ConfirmedDeliveryTimeStamp { get; private set; }
+        public Order Order { get; set; }
     }
 
     public partial class Lineup

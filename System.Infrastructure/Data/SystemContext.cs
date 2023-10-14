@@ -80,6 +80,12 @@ namespace WarehouseManagementSystem.Infrastructure.Data
                     .HasConversion(new EnumToStringConverter<OrderType>());
             });
 
+            modelBuilder.Entity<Lineup>(t =>
+            {
+                t.HasOne(x => x.Order)
+                    .WithMany(x => x.Lineups);
+            });
+
             modelBuilder.Entity<Product>(t =>
             {
                 t.HasMany(x => x.ProductColors)

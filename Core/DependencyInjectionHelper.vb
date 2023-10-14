@@ -53,6 +53,7 @@ Public Class DependencyInjectionHelper
             .AddTransient(Of IProductRepository, ProductRepository)
             .AddTransient(Of IRackShelfColumnRepository, RackShelfColumnRepository)
             .AddTransient(Of IUserActivityRepository, UserActivityRepository)
+            .AddTransient(Of IOrderRepository, OrderRepository)
 
             .AddTransient(Of IPolicyHelper, PolicyHelper)
 

@@ -40,5 +40,7 @@ namespace WarehouseManagementSystem.Core.Entities
         public string Reasons { get; set; }
 
         public virtual Order Order { get; set; }
+
+        public virtual ProductColorSize ProductColorSize { get; set; }
     }
 }

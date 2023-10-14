@@ -41,6 +41,7 @@ namespace WarehouseManagementSystem.Core.Entities
         public decimal? TotalBalance { get; set; }
 
         public virtual ICollection<OrderItem> OrderItems { get; set; }
+        public virtual ICollection<Lineup> Lineups { get; set; }
         public int? AgentId { get; set; }
     }
 }
