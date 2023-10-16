@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using WarehouseManagementSystem.Core.Enums;
+using WarehouseManagementSystem.Core.Exceptions;
+using WarehouseManagementSystem.Utilities.Extensions;
 
 namespace WarehouseManagementSystem.Core.Entities
 {
@@ -39,10 +42,12 @@ namespace WarehouseManagementSystem.Core.Entities
 
         public ICollection<MovementHistory> MovementHistoriesFrom => MovementHistories?
             .Where(t => t.ProductInventoryLocation?.RackShelfColumn?.InventoryLocationID == StockTransferFromInventoryLocationId)
+            .OrderBy(t => t.ProductCode)
             .ToList();
 
         public ICollection<MovementHistory> MovementHistoriesTo => MovementHistories?
             .Where(t => t.ProductInventoryLocation?.RackShelfColumn?.InventoryLocationID == StockTransferToInventoryLocationId)
+            .OrderBy(t => t.ProductCode)
             .ToList();
 
         public List<IGrouping<int?, MovementHistory>> MovementHistoriesFromGroupByProductColorSize => MovementHistoriesFrom?
@@ -54,12 +59,32 @@ namespace WarehouseManagementSystem.Core.Entities
             .ToList();
 
         public bool HasMovementHistoryProductLikeThis(string searchText) => MovementHistories?
-            .Where(t => t.ProductCode.Contains(searchText))?
+            .Where(t => t.ProductCode.Like(searchText))?
             .Any() ?? false;
 
-        public void ApproveStockTransfer()
+        public void SetApproveStockTransfer()
         {
             Status = OrderStatus.Approved;
         }
+
+        public void DeleteMovementHistoryByProductColorSizeId(int productColorSizeId)
+        {
+            if (IsApproved) throw new BusinessLogicException("Invalid Command. Stock Transfer already `Approved`.");
+
+            var deleteItems = MovementHistories?.Where(t => t.ProductColorSizeID.Value == productColorSizeId).ToList();
+            if (DeletedMovementHistories == null) DeletedMovementHistories = new List<MovementHistory>();
+            DeletedMovementHistories = DeletedMovementHistories.Concat(deleteItems).ToList();
+
+            var preserveItems = MovementHistories?.Where(t => t.ProductColorSizeID.Value != productColorSizeId).ToList();
+            foreach (var deleteItem in deleteItems)
+                MovementHistories?.Remove(deleteItem);
+
+            AddMovementHistories(preserveItems);
+        }
+
+        [NotMapped]
+        public ICollection<MovementHistory> DeletedMovementHistories { get; private set; }
+
+        public List<int> DeletedMovementHistoryProductColorSizeIds => DeletedMovementHistories?.GroupBy(t => t.ProductColorSizeID.Value).Select(t => t.Key).ToList();
     }
 }

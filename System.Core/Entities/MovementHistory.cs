@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using WarehouseManagementSystem.Core.Entities.Base;
+using WarehouseManagementSystem.Utilities.Attributes;
 
 namespace WarehouseManagementSystem.Core.Entities
 {

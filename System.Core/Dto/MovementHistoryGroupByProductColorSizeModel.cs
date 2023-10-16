@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using WarehouseManagementSystem.Core.Entities;
+using WarehouseManagementSystem.Core.Exceptions;
 
 namespace WarehouseManagementSystem.Core.Dto
 {
@@ -55,5 +55,7 @@ namespace WarehouseManagementSystem.Core.Dto
             MovementHistories != null ?
             MovementHistories?.FirstOrDefault(t => t.IsTransactionTypeIsTo)?.ProductInventoryLocation.RackShelfColumn.InventoryLocationID :
             null;
+
+        public static List<MovementHistoryGroupByProductColorSizeModel> EmptyDataSource() => Enumerable.Empty<MovementHistoryGroupByProductColorSizeModel>().ToList();
     }
 }

@@ -192,7 +192,7 @@ Partial Class StockTransferForm2
         'Label9
         '
         Me.Label9.AutoSize = True
-        Me.Label9.Location = New System.Drawing.Point(11, 31)
+        Me.Label9.Location = New System.Drawing.Point(11, 28)
         Me.Label9.Name = "Label9"
         Me.Label9.Size = New System.Drawing.Size(41, 13)
         Me.Label9.TabIndex = 6
@@ -202,7 +202,7 @@ Partial Class StockTransferForm2
         '
         Me.txtSearch.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtSearch.Location = New System.Drawing.Point(11, 47)
+        Me.txtSearch.Location = New System.Drawing.Point(11, 44)
         Me.txtSearch.Name = "txtSearch"
         Me.txtSearch.Size = New System.Drawing.Size(182, 22)
         Me.txtSearch.TabIndex = 0

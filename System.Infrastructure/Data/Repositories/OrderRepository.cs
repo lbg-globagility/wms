@@ -64,6 +64,20 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
 
         public Task<List<Order>> SearchOrdersAsync(int organizationId, OrderType orderType, string searchText)
         {
+            var query = OrderQueryable(organizationId, orderType);
+
+            return Task.FromResult(
+                query
+                .AsEnumerable()
+                .Where(o => o.OrderType == orderType)
+                .Where(o => o.OrderNumber.Contains(searchText) ||
+                    (o.Comments?.ToLower().Contains(searchText) ?? false) ||
+                    o.HasMovementHistoryProductLikeThis(searchText))
+                .ToList());
+        }
+
+        private IQueryable<Order> OrderQueryable(int organizationId, OrderType orderType)
+        {
             var query = _context.Orders
                 .Include(o => o.OrderItems)
                 .AsNoTracking()
@@ -84,17 +98,9 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
                                     .ThenInclude(pc => pc.Color)
                     .Include(o => o.MovementHistories)
                         .ThenInclude(m => m.ProductInventoryLocation)
-                            .ThenInclude(pil => pil.RackShelfColumn)
-                    ;
+                            .ThenInclude(pil => pil.RackShelfColumn);
 
-            return Task.FromResult(
-                query
-                .AsEnumerable()
-                .Where(o => o.OrderType == orderType)
-                .Where(o => o.OrderNumber.Contains(searchText) ||
-                    (o.Comments?.Contains(searchText) ?? false) ||
-                    o.HasMovementHistoryProductLikeThis(searchText))
-                .ToList());
+            return query;
         }
     }
 }

@@ -79,6 +79,8 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
                     else _context.Entry(movementHistory).State = EntityState.Modified;
                 });
 
+                if (order.DeletedMovementHistories != null && order.DeletedMovementHistories.Any(t => !t.IsNewEntity)) _context.MovementHistories.RemoveRange(order.DeletedMovementHistories.Where(t => !t.IsNewEntity));
+
                 await _context.SaveChangesAsync();
             }
 
@@ -104,7 +106,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
 
             await _productInventoryLocationRepository.SaveManyAsync(updated: productInventoryLocations.ToList());
 
-            order.ApproveStockTransfer();
+            order.SetApproveStockTransfer();
 
             await _orderRepository.SaveAsync(order);
         }
