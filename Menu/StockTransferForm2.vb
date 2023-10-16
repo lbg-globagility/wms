@@ -1,4 +1,5 @@
-﻿Imports Microsoft.Extensions.DependencyInjection
+﻿Imports System.Windows.Forms.LinkLabel
+Imports Microsoft.Extensions.DependencyInjection
 Imports WarehouseManagementSystem.Core.Dto
 Imports WarehouseManagementSystem.Core.Entities
 Imports WarehouseManagementSystem.Core.Enums
@@ -69,61 +70,85 @@ Public Class StockTransferForm2
 
     End Sub
 
-    Private Sub txtSearch_TextChanged(sender As Object, e As EventArgs) Handles txtSearch.TextChanged
+    Private Async Sub txtSearch_TextChanged(sender As Object, e As EventArgs) Handles txtSearch.TextChanged
+        If String.IsNullOrEmpty(txtSearch.Text.Trim()) Then
+            LinkLabelRefresh_LinkClicked(LinkLabelRefresh,
+                New LinkLabelLinkClickedEventArgs(LinkLabelRefresh.Links.OfType(Of Link).FirstOrDefault()))
+            Return
+        End If
 
+        Dim orderDataService = MainServiceProvider.GetRequiredService(Of IOrderDataService)
+        gridStockTransferOrders.DataSource = Await orderDataService.SearchStockTransferOrdersAsync(organizationId:=Z_OrganizationID,
+            searchText:=txtSearch.Text)
     End Sub
 
     Private Async Sub ToolStripButtonNew_Click(sender As Object, e As EventArgs) Handles ToolStripButtonNew.Click
-        Dim orderDataService = MainServiceProvider.GetRequiredService(Of IOrderDataService)
-        Dim newOrder = Await orderDataService.QuickCreateStockTransferOrderAsync(organizationId:=Z_OrganizationID, userId:=Z_UserID)
-
-        _selectedOrder = newOrder
-
         ToolStripButtonNew.Enabled = False
 
-        ReloadDisplayForm(order:=_selectedOrder)
+        Await FunctionUtils.TryCatchFunctionAsync("Quick create stock transfer",
+            Async Function()
+                Dim orderDataService = MainServiceProvider.GetRequiredService(Of IOrderDataService)
+                Dim newOrder = Await orderDataService.QuickCreateStockTransferOrderAsync(organizationId:=Z_OrganizationID, userId:=Z_UserID)
 
-        SplitContainer1.Panel1.Enabled = False
+                _selectedOrder = newOrder
+
+                ReloadDisplayForm(order:=_selectedOrder)
+
+                SplitContainer1.Panel1.Enabled = False
+
+                DisEnableButtons(True)
+            End Function)
+
     End Sub
 
     Private Async Sub ToolStripButtonSave_Click(sender As Object, e As EventArgs) Handles ToolStripButtonSave.Click
-        ToolStripButtonSave.Enabled = False
-        txtSearch.Focus()
+        SplitContainer1.Panel1.Enabled = False
+        txtStockTransferNo.Focus()
+
+        Dim action As Action =
+            Async Sub()
+                Await LoadStockTransferOrders()
+                SplitContainer1.Panel1.Enabled = True
+            End Sub
 
         Await FunctionUtils.TryCatchFunctionAsync("Save Stock Transfer changes",
+            action:=
             Async Function()
                 Dim orderDataService = MainServiceProvider.GetRequiredService(Of IOrderDataService)
                 Await orderDataService.SaveAsync(_selectedOrder)
 
-                Await LoadStockTransferOrders()
+                action()
+            End Function,
+            errorCallBack:=action)
 
-                ToolStripButtonSave.Enabled = True
-                ToolStripButtonNew.Enabled = True
-                SplitContainer1.Panel1.Enabled = True
-                txtStockTransferNo.Focus()
-            End Function)
-
-        ToolStripButtonSave.Enabled = True
-        ToolStripButtonNew.Enabled = True
         SplitContainer1.Panel1.Enabled = True
-        txtStockTransferNo.Focus()
     End Sub
 
     Private Async Sub ToolStripButtonCancel_Click(sender As Object, e As EventArgs) Handles ToolStripButtonCancel.Click
+        Dim cancelButtonAction As Action =
+            Async Sub()
+                ToolStripButtonNew.Enabled = True
+                Await LoadStockTransferOrders()
+                SplitContainer1.Panel1.Enabled = True
+                'Return Nothing
+            End Sub
+
         If _isNew Then
+            SplitContainer1.Panel1.Enabled = False
+
             Await FunctionUtils.TryCatchFunctionAsync("Delete order after quick create stock transfer",
-            Async Function()
-                Dim orderRepository = MainServiceProvider.GetRequiredService(Of IOrderRepository)
-                Await orderRepository.DeleteAsync(_selectedOrder)
-            End Function)
+                action:=
+                Async Function()
+                    Dim orderRepository = MainServiceProvider.GetRequiredService(Of IOrderRepository)
+                    Await orderRepository.DeleteAsync(_selectedOrder)
+
+                    cancelButtonAction()
+                End Function,
+                errorCallBack:=cancelButtonAction)
+
+            Return
         End If
 
-        ToolStripButtonNew.Enabled = True
-        SplitContainer1.Panel1.Enabled = True
-
-        Await LoadStockTransferOrders()
-
-        SplitContainer1.Panel1.Enabled = True
     End Sub
 
     Private Sub ToolStripButtonClose_Click(sender As Object, e As EventArgs) Handles ToolStripButtonClose.Click
@@ -205,8 +230,12 @@ Public Class StockTransferForm2
 
             cboFromInventory.SelectedIndex = -1
             cboToInventory.SelectedIndex = -1
+
+            ToolStripButtonApproved.Enabled = False
             Return
         End If
+
+        ToolStripButtonApproved.Enabled = order.IsOpen AndAlso order.HasMovementHistories
 
         txtStockTransferNo.Text = order?.OrderNumber
         txtStockTransferNo.DataBindings.Add("Text", order, "OrderNumber", True, DataSourceUpdateMode.OnPropertyChanged)
@@ -316,7 +345,13 @@ Public Class StockTransferForm2
         Dim prompt = MessageBox.Show(text:="Are you sure you want to `Approve` this Stock Transfer?", caption:="Approve Stock Transfer", icon:=MessageBoxIcon.Question, buttons:=MessageBoxButtons.YesNoCancel)
         If Not prompt = DialogResult.Yes Then Return
 
-        ToolStripButtonApproved.Enabled = False
+        SplitContainer1.Panel1.Enabled = False
+
+        Dim action As Action =
+            Async Sub()
+                Await LoadStockTransferOrders()
+                SplitContainer1.Panel1.Enabled = True
+            End Sub
 
         Await FunctionUtils.TryCatchFunctionAsync("Approve Stock Transfer",
             Async Function()
@@ -324,12 +359,29 @@ Public Class StockTransferForm2
 
                 Await orderDataService.ApproveStockTransfer(_selectedOrder)
 
-                Await LoadStockTransferOrders()
+                action()
+            End Function,
+            errorCallBack:=action)
 
-                ToolStripButtonApproved.Enabled = True
-            End Function)
+        SplitContainer1.Panel1.Enabled = True
+    End Sub
 
-        ToolStripButtonApproved.Enabled = True
+    Private Sub SplitContainer1_Panel1_EnabledChanged(sender As Object, e As EventArgs) Handles SplitContainer1.Panel1.EnabledChanged
+        Dim enabled = SplitContainer1.Panel1.Enabled
+
+        DisEnableButtons(enabled)
+    End Sub
+
+    Private Sub DisEnableButtons(enabled As Boolean)
+        Dim names = {ToolStripButtonSave.Name,
+                    ToolStripButtonApproved.Name,
+                    ToolStripButtonCancel.Name}
+        Dim toolStripButtons = ToolStrip1.Items.OfType(Of ToolStripButton).
+            Where(Function(t) names.Contains(t.Name)).
+            ToList()
+        For Each button In toolStripButtons
+            button.Enabled = enabled
+        Next
     End Sub
 
 End Class

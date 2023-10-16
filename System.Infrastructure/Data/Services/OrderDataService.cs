@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WarehouseManagementSystem.Core.Entities;
 using WarehouseManagementSystem.Core.Enums;
+using WarehouseManagementSystem.Core.Exceptions;
 using WarehouseManagementSystem.Core.Interfaces;
 using WarehouseManagementSystem.Core.Interfaces.DomainServices;
 using WarehouseManagementSystem.Core.Interfaces.Repositories;
@@ -86,6 +87,9 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
 
         public async Task ApproveStockTransfer(Order order)
         {
+            //BusinessLogicException
+            if ((order?.IsApproved) ?? false) throw new BusinessLogicException(message: "Stock Transfer already `Approved`");
+
             var pilIds = order.MovementHistories
                 .Select(t => t.ProductInventoryLocationIDA.Value)
                 .ToArray();
@@ -104,5 +108,8 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
 
             await _orderRepository.SaveAsync(order);
         }
+
+        public async Task<List<Order>> SearchStockTransferOrdersAsync(int organizationId, string searchText) =>
+            await _orderRepository.SearchOrdersAsync(organizationId: organizationId, orderType: OrderType.ST, searchText: searchText);
     }
 }

@@ -10,5 +10,7 @@ namespace WarehouseManagementSystem.Core.Interfaces.Repositories
         Task<Order> GetLastOrderOfThisTypeAsync(int organizationId, OrderType orderType);
 
         Task<List<Order>> GetOrdersByOrderTypeAsync(int organizationId, OrderType orderType);
+
+        Task<List<Order>> SearchOrdersAsync(int organizationId, OrderType orderType, string searchText);
     }
 }

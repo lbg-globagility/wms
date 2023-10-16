@@ -72,11 +72,11 @@ Partial Class StockTransferForm2
         Me.ToolStripButtonNew = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButtonSave = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripLabel1 = New System.Windows.Forms.ToolStripLabel()
+        Me.ToolStripButtonApproved = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripLabel2 = New System.Windows.Forms.ToolStripLabel()
         Me.ToolStripButtonCancel = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButtonClose = New System.Windows.Forms.ToolStripButton()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
-        Me.ToolStripButtonApproved = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripLabel2 = New System.Windows.Forms.ToolStripLabel()
         CType(Me.gridStockTransferOrders, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
@@ -575,6 +575,21 @@ Partial Class StockTransferForm2
         Me.ToolStripLabel1.Size = New System.Drawing.Size(52, 22)
         Me.ToolStripLabel1.Text = "               "
         '
+        'ToolStripButtonApproved
+        '
+        Me.ToolStripButtonApproved.Image = CType(resources.GetObject("ToolStripButtonApproved.Image"), System.Drawing.Image)
+        Me.ToolStripButtonApproved.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButtonApproved.Name = "ToolStripButtonApproved"
+        Me.ToolStripButtonApproved.Size = New System.Drawing.Size(148, 22)
+        Me.ToolStripButtonApproved.Text = "Approve Stock Transfer"
+        Me.ToolStripButtonApproved.ToolTipText = "Approve Stock Transfer"
+        '
+        'ToolStripLabel2
+        '
+        Me.ToolStripLabel2.Name = "ToolStripLabel2"
+        Me.ToolStripLabel2.Size = New System.Drawing.Size(52, 22)
+        Me.ToolStripLabel2.Text = "               "
+        '
         'ToolStripButtonCancel
         '
         Me.ToolStripButtonCancel.Image = CType(resources.GetObject("ToolStripButtonCancel.Image"), System.Drawing.Image)
@@ -592,21 +607,6 @@ Partial Class StockTransferForm2
         Me.ToolStripButtonClose.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.ToolStripButtonClose.Size = New System.Drawing.Size(56, 22)
         Me.ToolStripButtonClose.Text = "Close"
-        '
-        'ToolStripButtonApproved
-        '
-        Me.ToolStripButtonApproved.Image = CType(resources.GetObject("ToolStripButtonApproved.Image"), System.Drawing.Image)
-        Me.ToolStripButtonApproved.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButtonApproved.Name = "ToolStripButtonApproved"
-        Me.ToolStripButtonApproved.Size = New System.Drawing.Size(148, 22)
-        Me.ToolStripButtonApproved.Text = "Approve Stock Transfer"
-        Me.ToolStripButtonApproved.ToolTipText = "Approve Stock Transfer"
-        '
-        'ToolStripLabel2
-        '
-        Me.ToolStripLabel2.Name = "ToolStripLabel2"
-        Me.ToolStripLabel2.Size = New System.Drawing.Size(52, 22)
-        Me.ToolStripLabel2.Text = "               "
         '
         'StockTransferForm2
         '

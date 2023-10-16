@@ -53,16 +53,47 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
                     .Include(o => o.MovementHistories)
                         .ThenInclude(m => m.ProductInventoryLocation)
                             .ThenInclude(pil => pil.RackShelfColumn)
-                    //.Include(o => o.MovementHistories)
-                    //    .ThenInclude(mh => mh.ProductColorSize)
-                    //        .ThenInclude(pcs => pcs.ProductColor)
-                    //            .ThenInclude(pc => pc.Product)
                     ;
 
             return Task.FromResult(
                 query
                 .AsEnumerable()
                 .Where(o => o.OrderType == orderType)
+                .ToList());
+        }
+
+        public Task<List<Order>> SearchOrdersAsync(int organizationId, OrderType orderType, string searchText)
+        {
+            var query = _context.Orders
+                .Include(o => o.OrderItems)
+                .AsNoTracking()
+                .Where(o => o.OrganizationID == organizationId)
+                .AsQueryable();
+
+            if (orderType == OrderType.ST)
+                query = query
+                    .Include(o => o.MovementHistories)
+                        .ThenInclude(m => m.ProductInventoryLocation)
+                            .ThenInclude(pil => pil.ProductColorSize)
+                                .ThenInclude(pcs => pcs.ProductColor)
+                                    .ThenInclude(pc => pc.Product)
+                    .Include(o => o.MovementHistories)
+                        .ThenInclude(m => m.ProductInventoryLocation)
+                            .ThenInclude(pil => pil.ProductColorSize)
+                                .ThenInclude(pcs => pcs.ProductColor)
+                                    .ThenInclude(pc => pc.Color)
+                    .Include(o => o.MovementHistories)
+                        .ThenInclude(m => m.ProductInventoryLocation)
+                            .ThenInclude(pil => pil.RackShelfColumn)
+                    ;
+
+            return Task.FromResult(
+                query
+                .AsEnumerable()
+                .Where(o => o.OrderType == orderType)
+                .Where(o => o.OrderNumber.Contains(searchText) ||
+                    (o.Comments?.Contains(searchText) ?? false) ||
+                    o.HasMovementHistoryProductLikeThis(searchText))
                 .ToList());
         }
     }

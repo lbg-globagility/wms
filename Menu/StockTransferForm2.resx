@@ -230,10 +230,10 @@
   <data name="ToolStripButtonApproved.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACnSURBVDhPtZHLDcMgEESpjVo4mFroiQuphBqAa+KxGbRZ
-        EcMlI41k9jNvJRuqtfaW7uV9Yclae3kWUGvNEgCfteOLLAPovnyklEbfOYflfCXLRW0RkL33ox5jvOk7
-        ATN6KeWmQxii5SL9SJfSAagt6RCGJJHuvT36j8HXkk4hVQ/jii06pa8IIYzvRzqlr5Be0il9BbxFp2ZX
-        bNMpXCF/J9699Q8Z8wGFqqmXjVKHPAAAAABJRU5ErkJggg==
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACpSURBVDhPtZHLDcMgEESpjVo4mFroiQupxC3wudoZ24M2
+        CJm9ZKSR4mV33kgxVGvtkH7GeuHIWnt5FlBK2SUArrVuP2QZQOMYiyml/u6cOxB4JcvD0QzAsve+z2OM
+        N10TMKPnnG86hCVaHtKvdKkxALMlHcKSJNJ4U9Nni9/ZZ0mnZlXRQkWnxhYhhP77lU6NLaSXdGpsAavo
+        1KyFmk6hhfw78f08/UPGnCdyqWfZdpqgAAAAAElFTkSuQmCC
 </value>
   </data>
   <data name="ToolStripButtonCancel.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">

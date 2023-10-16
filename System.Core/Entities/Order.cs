@@ -51,6 +51,7 @@ namespace WarehouseManagementSystem.Core.Entities
 
         public virtual ICollection<OrderItem> OrderItems { get; set; }
         public virtual ICollection<MovementHistory> MovementHistories { get; set; }
+        public bool HasMovementHistories => MovementHistories?.Any(t => (t.QtyToApply ?? 0) != 0) ?? false;
 
         public bool IsCustomerOrderType => OrderType == OrderType.CO;
         public bool IsPurchaseOrderType => OrderType == OrderType.PO;
@@ -58,6 +59,20 @@ namespace WarehouseManagementSystem.Core.Entities
         public bool IsStockAdjustType => OrderType == OrderType.SA;
         public bool IsStockTransferType => OrderType == OrderType.ST;
         public int OrderNumberInt => int.Parse(OrderNumber);
+
+        public bool IsOpen => Status == OrderStatus.Open;
+        public bool IsClose => Status == OrderStatus.Close;
+        public bool IsApproved => Status == OrderStatus.Approved;
+        public bool IsDelivery => Status == OrderStatus.Delivery;
+        public bool IsPacking => Status == OrderStatus.Packing;
+        public bool IsForPacking => Status == OrderStatus.ForPacking;
+        public bool IsPickListed => Status == OrderStatus.PickListed;
+        public bool IsNew => Status == OrderStatus.New;
+        public bool IsLinedUp => Status == OrderStatus.LinedUp;
+        public bool IsCancelled => Status == OrderStatus.Cancelled;
+        public bool IsReceived => Status == OrderStatus.Received;
+        public bool IsForApproval => Status == OrderStatus.ForApproval;
+        public bool IsSubmittedToWarehouse => Status == OrderStatus.SubmittedToWarehouse;
 
         public Order(int organizationId,
             int userId,
@@ -84,57 +99,5 @@ namespace WarehouseManagementSystem.Core.Entities
                 orderNumber: orderNumber,
                 status: status,
                 orderDate: orderDate);
-
-        public void AddMovementHistories(List<MovementHistory> movementHistories)
-        {
-            if (MovementHistories == null) MovementHistories = new List<MovementHistory>();
-
-            foreach (var movementHistory in movementHistories)
-            {
-                var productColorSizeId = movementHistory.ProductColorSizeID;
-                var productInventoryLocationId = movementHistory.ProductInventoryLocationIDA;
-                var existingMovementHistory = MovementHistories
-                    .Where(t => t.ProductColorSizeID == productColorSizeId)
-                    .Where(t => t.ProductInventoryLocationIDA == productInventoryLocationId)
-                    .FirstOrDefault();
-                if (existingMovementHistory == null) MovementHistories.Add(movementHistory);
-                else
-                {
-                    existingMovementHistory.QtyToApply = movementHistory.QtyToApply;
-                    existingMovementHistory.RecomputeNewQty();
-                }
-            }
-        }
-
-        public int? StockTransferFromInventoryLocationId =>
-            MovementHistories != null ?
-            MovementHistories.FirstOrDefault(t => t.IsTransactionTypeIsFrom)?.ProductInventoryLocation?.RackShelfColumn?.InventoryLocationID :
-            null;
-
-        public int? StockTransferToInventoryLocationId =>
-            MovementHistories != null ?
-            MovementHistories.FirstOrDefault(t => t.IsTransactionTypeIsTo)?.ProductInventoryLocation?.RackShelfColumn?.InventoryLocationID :
-            null;
-
-        public ICollection<MovementHistory> MovementHistoriesFrom => MovementHistories?
-            .Where(t => t.ProductInventoryLocation?.RackShelfColumn?.InventoryLocationID == StockTransferFromInventoryLocationId)
-            .ToList();
-
-        public ICollection<MovementHistory> MovementHistoriesTo => MovementHistories?
-            .Where(t => t.ProductInventoryLocation?.RackShelfColumn?.InventoryLocationID == StockTransferToInventoryLocationId)
-            .ToList();
-
-        public List<IGrouping<int?, MovementHistory>> MovementHistoriesFromGroupByProductColorSize => MovementHistoriesFrom?
-            .GroupBy(t => t.ProductColorSizeID)
-            .ToList();
-
-        public List<IGrouping<int?, MovementHistory>> MovementHistoriesToGroupByProductColorSize => MovementHistoriesTo?
-            .GroupBy(t => t.ProductColorSizeID)
-            .ToList();
-
-        public void ApproveStockTransfer()
-        {
-            Status = OrderStatus.Approved;
-        }
     }
 }
