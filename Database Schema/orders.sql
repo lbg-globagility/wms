@@ -52,6 +52,7 @@ CREATE TABLE IF NOT EXISTS `orders` (
   `TotalBalance` decimal(10,2) DEFAULT 0.00,
   `AgentID` int(11) DEFAULT NULL,
   `CustomerOrderType` varchar(50) DEFAULT NULL,
+  `LineUpId` int(11) DEFAULT NULL,
   PRIMARY KEY (`RowID`),
   UNIQUE KEY `Index_orders` (`OrganizationID`,`OrderNumber`,`AccountID`,`OrderType`),
   KEY `FK_order_order` (`RelatedOrderID`),
@@ -74,7 +75,7 @@ CREATE TABLE IF NOT EXISTS `orders` (
   CONSTRAINT `FK_order_lastupdby` FOREIGN KEY (`LastUpdBy`) REFERENCES `users` (`RowID`),
   CONSTRAINT `FK_order_order` FOREIGN KEY (`RelatedOrderID`) REFERENCES `orders` (`RowID`),
   CONSTRAINT `FK_order_organization` FOREIGN KEY (`OrganizationID`) REFERENCES `organizations` (`RowID`)
-) ENGINE=InnoDB AUTO_INCREMENT=1250 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci COMMENT='This is the table that holds all orders - Purchase Order/Requisition, Material Request, Sales Order, Service Order anything that has to do with Orders.  The differentiation is by the column "Type"';
+) ENGINE=InnoDB AUTO_INCREMENT=1253 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci COMMENT='This is the table that holds all orders - Purchase Order/Requisition, Material Request, Sales Order, Service Order anything that has to do with Orders.  The differentiation is by the column "Type"';
 
 -- Data exporting was unselected.
 
