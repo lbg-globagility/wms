@@ -20,6 +20,8 @@ namespace WarehouseManagementSystem.Core.Entities
                 var existingMovementHistory = MovementHistories
                     .Where(t => t.ProductColorSizeID == productColorSizeId)
                     .Where(t => t.ProductInventoryLocationIDA == productInventoryLocationId)
+                    .Where(t => t.IsTransactionTypeIsFrom == movementHistory.IsTransactionTypeIsFrom)
+                    .Where(t => t.IsTransactionTypeIsTo == movementHistory.IsTransactionTypeIsTo)
                     .FirstOrDefault();
                 if (existingMovementHistory == null) MovementHistories.Add(movementHistory);
                 else

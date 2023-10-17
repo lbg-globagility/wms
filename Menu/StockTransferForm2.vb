@@ -103,7 +103,7 @@ Public Class StockTransferForm2
 
                 SplitContainer1.Panel1.Enabled = False
 
-                DisEnableButtons(True)
+                DisEnableButtons(True, ignoreToolStripButton:=ToolStripButtonApproved)
             End Function)
 
     End Sub
@@ -134,6 +134,10 @@ Public Class StockTransferForm2
             Sub()
                 LinkLabelRefresh_LinkClicked(LinkLabelRefresh,
                     New LinkLabelLinkClickedEventArgs(LinkLabelRefresh.Links.OfType(Of Link).FirstOrDefault()))
+
+                If ToolStripButtonNew.Enabled = False Then ToolStripButtonNew.Enabled = True
+
+                If SplitContainer1.Panel1.Enabled = False Then SplitContainer1.Panel1.Enabled = True
             End Sub
 
         If _isNew Then
@@ -169,7 +173,7 @@ Public Class StockTransferForm2
 
         Dim invalidFrom = inventoryLocationIdFrom = Nothing OrElse inventoryLocationIdFrom = 0
         Dim invalidTo = inventoryLocationIdTo = Nothing OrElse inventoryLocationIdTo = 0
-        btnAddItem.Enabled = Not invalidFrom AndAlso Not invalidTo
+        btnAddItem.Enabled = Not invalidFrom AndAlso Not invalidTo AndAlso If(_selectedOrder?.IsOpen, False)
     End Sub
 
     Private Sub cboToInventory_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboToInventory.SelectedIndexChanged
@@ -391,10 +395,14 @@ Public Class StockTransferForm2
         DisEnableButtons(enabled)
     End Sub
 
-    Private Sub DisEnableButtons(enabled As Boolean)
+    Private Sub DisEnableButtons(enabled As Boolean,
+        Optional ignoreToolStripButton As ToolStripButton = Nothing)
+
         Dim names = {ToolStripButtonSave.Name,
                     ToolStripButtonApproved.Name,
                     ToolStripButtonCancel.Name}
+        If ignoreToolStripButton IsNot Nothing Then names = names.Where(Function(t) Not t = ignoreToolStripButton.Name).ToArray()
+
         Dim toolStripButtons = ToolStrip1.Items.OfType(Of ToolStripButton).
             Where(Function(t) names.Contains(t.Name)).
             ToList()
