@@ -1308,6 +1308,7 @@ Public Class ReturnsForm
             txtPullOutNo.Text = CStr(globalorderno)
             txtStatus.Text = "New"
             txtPullOutNo.Focus()
+            cboDRNo.Enabled=True
             If dgPullOutList.Rows.Count <> 0 Then
                 dgPullOutList.CurrentRow.Selected = False
             End If
