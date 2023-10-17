@@ -35,6 +35,9 @@ Public Class StockTransferForm2
         _inventoryLocations = Await GetInventoryLocations()
         cboFromInventory.DataSource = _inventoryLocations
 
+        cboToInventory.BindingContext = New BindingContext()
+        cboToInventory.DataSource = _inventoryLocations
+
         Await LoadStockTransferOrders()
     End Sub
 
@@ -124,17 +127,13 @@ Public Class StockTransferForm2
                 action()
             End Function,
             errorCallBack:=action)
-
-        SplitContainer1.Panel1.Enabled = True
     End Sub
 
     Private Async Sub ToolStripButtonCancel_Click(sender As Object, e As EventArgs) Handles ToolStripButtonCancel.Click
         Dim cancelButtonAction As Action =
-            Async Sub()
-                ToolStripButtonNew.Enabled = True
-                Await LoadStockTransferOrders()
-                SplitContainer1.Panel1.Enabled = True
-                'Return Nothing
+            Sub()
+                LinkLabelRefresh_LinkClicked(LinkLabelRefresh,
+                    New LinkLabelLinkClickedEventArgs(LinkLabelRefresh.Links.OfType(Of Link).FirstOrDefault()))
             End Sub
 
         If _isNew Then
@@ -153,6 +152,7 @@ Public Class StockTransferForm2
             Return
         End If
 
+        cancelButtonAction()
     End Sub
 
     Private Sub ToolStripButtonClose_Click(sender As Object, e As EventArgs) Handles ToolStripButtonClose.Click
@@ -160,9 +160,6 @@ Public Class StockTransferForm2
     End Sub
 
     Private Sub cboFromInventory_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboFromInventory.SelectedIndexChanged
-        cboToInventory.BindingContext = New BindingContext()
-        cboToInventory.DataSource = _inventoryLocations.Where(Function(i) Not i.RowID = CInt(cboFromInventory.SelectedValue)).ToList()
-
         EnOrDisableAddItemButton()
     End Sub
 
