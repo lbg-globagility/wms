@@ -586,6 +586,7 @@ Module MarvinModule
                         ByVal Comments As String,
                         ByVal Status As String,
                         ByVal TotalAmount As Decimal,
+                        ByVal LineUpId As Integer,
                         ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
@@ -611,6 +612,7 @@ Module MarvinModule
                 .Parameters.AddWithValue("I_Comments", Comments)
                 .Parameters.AddWithValue("I_Status", Status)
                 .Parameters.AddWithValue("I_TotalAmount", TotalAmount)
+                .Parameters.AddWithValue("I_LineUpId", LineUpId)
                 .Parameters("newOrdersID").Direction = ParameterDirection.ReturnValue
                 globaldatareader = .ExecuteReader
                 globalorderidsp = globaldatareader(0)

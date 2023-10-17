@@ -846,7 +846,7 @@ Public Class ReturnsForm
         Try
             If conn1.State = ConnectionState.Closed Then conn1.Open()
             Dim sql1 As String = "SELECT COALESCE(po.ordernumber,''),DATE_FORMAT(po.orderdate,'%d-%b-%Y'),COALESCE(CONCAT(COALESCE(su.companyname,''),' - ',COALESCE(su.accountno,'')),'')," &
-                        "COALESCE(po.comments,''),COALESCE(po.status,'') FROM orders po LEFT JOIN accounts su ON po.accountid = su.rowid WHERE po.rowid = " & ipulloutid & " "
+                        "COALESCE(po.comments,''),COALESCE(po.status,''),COALESCE(po.lineUpId,'') FROM orders po LEFT JOIN accounts su ON po.accountid = su.rowid WHERE po.rowid = " & ipulloutid & " "
             Dim cmd1 As New MySqlCommand(sql1, conn1)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             While reader1.Read()
@@ -856,6 +856,7 @@ Public Class ReturnsForm
                     cboCustomerName.Text = reader1(2)
                     txtComments.Text = reader1(3)
                     txtStatus.Text = reader1(4)
+                    cboDRNo.Text = reader1(5)
                     getRRInfo(ipulloutid, Me)
                     txtRRNo.Text = gloRRNo
                 End If
@@ -1373,6 +1374,7 @@ Public Class ReturnsForm
                 clearDatagrids()
                 visiblePullOutItems(fraud)
                 visibleGB(fraud, fraud, fraud, fraud, fraud)
+                cboDRNo.Enabled = False
                 displayPullOutInformation(CInt(dgPullOutList.CurrentRow.Cells("so_rowid").Value))
                 displayPullOutItems(CInt(dgPullOutList.CurrentRow.Cells("so_rowid").Value))
                 pulloutitemscomputations() : colorCoding()
@@ -1803,43 +1805,47 @@ Public Class ReturnsForm
 
     Private Async Sub cboDRNo_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboDRNo.SelectedIndexChanged
         dgPullOutItems.Rows.Clear()
-        If (cboDRNo.Text <> "") Then
-            Dim ask As MsgBoxResult = MsgBox("Add Order Items from Delivery Lineup?", MsgBoxStyle.YesNo)
+        Console.WriteLine(cue)
+        If cue = "New" Then
+            If (cboDRNo.Text <> "") Then
 
-            If ask = MsgBoxResult.Yes Then
-                Dim lineUpRepository = MainServiceProvider.GetRequiredService(Of ILineupRepository)
-                Dim lineUp = Await lineUpRepository.GetById(cboDRNo.Text)
-                Dim orderRepository = MainServiceProvider.GetRequiredService(Of IOrderRepository)
-                Dim order = Await orderRepository.GetById(lineUp.OrderID)
-                Dim n As Integer = 0
-                Dim seqno As Integer = 1
+                Dim ask As MsgBoxResult = MsgBox("Add Order Items from Delivery Lineup?", MsgBoxStyle.YesNo)
 
-                For Each item In order.OrderItems
-                    dgPullOutItems.Rows.Add()
-                    dgPullOutItems.Item(ci_seqno.Index, n).Value = seqno
-                    'dgPullOutItems.Item(ci_rowid.Index, n).Value = item.RowID
-                    dgPullOutItems.Item(ci_pcsrowid.Index, n).Value = item.ProductColorSizeID
-                    dgPullOutItems.Item(ci_bid.Index, n).Value = item.ProductBundleID
-                    dgPullOutItems.Item(ci_colorvalue.Index, n).Value = item.ProductColorSize.ProductColor.Color.ColorValue
-                    dgPullOutItems.Item(ci_productcode.Index, n).Value = item.ProductColorSize.ProductColor.Product.ProductCode
+                If ask = MsgBoxResult.Yes Then
+                    Dim lineUpRepository = MainServiceProvider.GetRequiredService(Of ILineupRepository)
+                    Dim lineUp = Await lineUpRepository.GetById(cboDRNo.Text)
+                    Dim orderRepository = MainServiceProvider.GetRequiredService(Of IOrderRepository)
+                    Dim order = Await orderRepository.GetById(lineUp.OrderID)
+                    Dim n As Integer = 0
+                    Dim seqno As Integer = 1
 
-                    dgPullOutItems.Item(ci_colorname.Index, n).Value = item.ProductColorSize.ProductColor.Color.ColorName
-                    dgPullOutItems.Item(ci_size.Index, n).Value = item.ProductColorSize.Size
-                    dgPullOutItems.Item(ci_seasoncode.Index, n).Value = item.ProductColorSize.SeasonCode
-                    dgPullOutItems.Item(ci_unitofmeasure.Index, n).Value = item.UnitOfMeasure
-                    dgPullOutItems.Item(ci_qtyordered.Index, n).Value = item.QtyOrdered
-                    dgPullOutItems.Item(ci_srp.Index, n).Value = item.SRP
-                    dgPullOutItems.Item(ci_sku.Index, n).Value = item.SKU
-                    dgPullOutItems.Item(ci_remarks.Index, n).Value = item.Remarks
-                    dgPullOutItems.Item(ci_qtyreceived.Index, n).Value = item.QtyReceived
-                    dgPullOutItems.Item(ci_qtybad.Index, n).Value = item.QtyDamaged
-                    dgPullOutItems.Item(ci_reason.Index, n).Value = item.Reasons
+                    For Each item In order.OrderItems
+                        dgPullOutItems.Rows.Add()
+                        dgPullOutItems.Item(ci_seqno.Index, n).Value = seqno
+                        'dgPullOutItems.Item(ci_rowid.Index, n).Value = item.RowID
+                        dgPullOutItems.Item(ci_pcsrowid.Index, n).Value = item.ProductColorSizeID
+                        dgPullOutItems.Item(ci_bid.Index, n).Value = item.ProductBundleID
+                        dgPullOutItems.Item(ci_colorvalue.Index, n).Value = item.ProductColorSize.ProductColor.Color.ColorValue
+                        dgPullOutItems.Item(ci_productcode.Index, n).Value = item.ProductColorSize.ProductColor.Product.ProductCode
 
-                    seqno = seqno + 1
-                    n = n + 1
-                Next
-                colorCoding()
+                        dgPullOutItems.Item(ci_colorname.Index, n).Value = item.ProductColorSize.ProductColor.Color.ColorName
+                        dgPullOutItems.Item(ci_size.Index, n).Value = item.ProductColorSize.Size
+                        dgPullOutItems.Item(ci_seasoncode.Index, n).Value = item.ProductColorSize.SeasonCode
+                        dgPullOutItems.Item(ci_unitofmeasure.Index, n).Value = item.UnitOfMeasure
+                        dgPullOutItems.Item(ci_qtyordered.Index, n).Value = item.QtyOrdered
+                        dgPullOutItems.Item(ci_srp.Index, n).Value = item.SRP
+                        dgPullOutItems.Item(ci_sku.Index, n).Value = item.SKU
+                        dgPullOutItems.Item(ci_remarks.Index, n).Value = item.Remarks
+                        dgPullOutItems.Item(ci_qtyreceived.Index, n).Value = item.QtyReceived
+                        dgPullOutItems.Item(ci_qtybad.Index, n).Value = item.QtyDamaged
+                        dgPullOutItems.Item(ci_reason.Index, n).Value = item.Reasons
 
+                        seqno = seqno + 1
+                        n = n + 1
+                    Next
+                    colorCoding()
+
+                End If
             End If
 
         End If
@@ -2056,8 +2062,8 @@ Public Class ReturnsForm
                         errProvider.SetError(txtPullOutNo, "Return No. has been created already, please type a new one.")
                         Exit Try
                     End If
-                    M_I_OrdersA(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, pocustomerid, txtPullOutNo.Text, "Return", dtpPullOutDate.Value, Now.Date, _
-                           cboCustomerName.Text, txtComments.Text, txtStatus.Text, Math.Round(poitotalprice, 2), Me)
+                    M_I_OrdersA(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, pocustomerid, txtPullOutNo.Text, "Return", dtpPullOutDate.Value, Now.Date,
+                           cboCustomerName.Text, txtComments.Text, txtStatus.Text, Math.Round(poitotalprice, 2), cboDRNo.Text, Me)
                     poorderid = globalorderidsp
                     If dgPullOutItems.Rows.Count <> 0 Then
                         For a = 0 To dgPullOutItems.Rows.Count - 1

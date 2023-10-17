@@ -2139,8 +2139,8 @@ Public Class ReturnForm
                         errProvider.SetError(txtReturnOrderNo, "Return no. and customer name has been created already, please type a new one.")
                         Exit Try
                     End If
-                    M_I_OrdersA(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, pocustomerid, txtReturnOrderNo.Text, "Return", dtpReturnOrderDate.Value, Now.Date, _
-                           cboCustomerName.Text, txtComments.Text, txtStatus.Text, Math.Round(poitotalprice, 2), Me)
+                    M_I_OrdersA(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, pocustomerid, txtReturnOrderNo.Text, "Return", dtpReturnOrderDate.Value, Now.Date,
+                           cboCustomerName.Text, txtComments.Text, txtStatus.Text, Math.Round(poitotalprice, 2), "", Me)
                     poorderid = globalorderidsp
                     If dgReturnOrderItems.Rows.Count <> 0 Then
                         For a = 0 To dgReturnOrderItems.Rows.Count - 1
