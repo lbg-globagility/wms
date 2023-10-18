@@ -51,6 +51,7 @@ Partial Class ViewEditLineUpDeliveryForm
         Me.Label21 = New System.Windows.Forms.Label()
         Me.tabSearch = New System.Windows.Forms.TabControl()
         Me.tabSimple = New System.Windows.Forms.TabPage()
+        Me.Button1 = New System.Windows.Forms.Button()
         Me.txtSimpleSearch = New System.Windows.Forms.TextBox()
         Me.Label30 = New System.Windows.Forms.Label()
         Me.tabCommon = New System.Windows.Forms.TabPage()
@@ -146,7 +147,6 @@ Partial Class ViewEditLineUpDeliveryForm
         Me.lblsavemsg = New System.Windows.Forms.Label()
         Me.errProvider = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.lblTitle = New System.Windows.Forms.Label()
-        Me.Button1 = New System.Windows.Forms.Button()
         CType(Me.dgLineUpList, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ToolStrip3.SuspendLayout()
         Me.gbLineUpList.SuspendLayout()
@@ -437,6 +437,15 @@ Partial Class ViewEditLineUpDeliveryForm
         Me.tabSimple.TabIndex = 1
         Me.tabSimple.Text = "       Simple       "
         Me.tabSimple.UseVisualStyleBackColor = True
+        '
+        'Button1
+        '
+        Me.Button1.Location = New System.Drawing.Point(96, 71)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(75, 23)
+        Me.Button1.TabIndex = 7
+        Me.Button1.Text = "Button1"
+        Me.Button1.UseVisualStyleBackColor = True
         '
         'txtSimpleSearch
         '
@@ -1284,11 +1293,11 @@ Partial Class ViewEditLineUpDeliveryForm
         Me.Label5.AutoSize = True
         Me.Label5.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label5.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label5.Location = New System.Drawing.Point(161, 51)
+        Me.Label5.Location = New System.Drawing.Point(179, 51)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(114, 15)
+        Me.Label5.Size = New System.Drawing.Size(93, 15)
         Me.Label5.TabIndex = 553
-        Me.Label5.Text = "Truck And Shift Info:"
+        Me.Label5.Text = "Truck Plate No.:"
         '
         'cboTruckShiftInfo
         '
@@ -1446,15 +1455,6 @@ Partial Class ViewEditLineUpDeliveryForm
         Me.lblTitle.TabIndex = 234
         Me.lblTitle.Text = "View / Edit Line-Up And Delivery"
         Me.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'Button1
-        '
-        Me.Button1.Location = New System.Drawing.Point(96, 71)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(75, 23)
-        Me.Button1.TabIndex = 7
-        Me.Button1.Text = "Button1"
-        Me.Button1.UseVisualStyleBackColor = True
         '
         'ViewEditLineUpDeliveryForm
         '

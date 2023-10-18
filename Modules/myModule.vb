@@ -1019,7 +1019,7 @@ Module myModule
         Try
             globalicombobox.Items.Clear()
             If globalconn.State = ConnectionState.Open Then globalconn.Close()
-            Dim sql1 As String = "SELECT COALESCE(CONCAT(COALESCE(dt.truckname,''),' - ',COALESCE(dt.truckno,''),' / ',COALESCE(s.shiftname,'')),'') AS 'truckshiftinfo' FROM deliverytruckshifts dts " &
+            Dim sql1 As String = "SELECT COALESCE(dt.plateno,'') AS 'truckshiftinfo' FROM deliverytruckshifts dts " &
                     "LEFT JOIN deliverytrucks dt ON dts.deliverytruckid = dt.rowid LEFT JOIN shifts s ON dts.shiftid = s.rowid WHERE dts.organizationid = " & Z_OrganizationID & " AND dts.`status` = 'Active' GROUP BY dts.rowid ORDER BY dt.truckname,s.shiftname DESC "
             If globalconn.State = ConnectionState.Closed Then globalconn.Open()
             Dim cmd1 As New MySqlCommand(sql1, globalconn)
