@@ -45,11 +45,13 @@ namespace WarehouseManagementSystem.Core.Entities
 
         public ICollection<MovementHistory> MovementHistoriesFrom => MovementHistories?
             .Where(t => t.ProductInventoryLocation?.RackShelfColumn?.InventoryLocationID == StockTransferFromInventoryLocationId)
+            .Where(t => t.IsTransactionTypeIsFrom)
             .OrderBy(t => t.ProductCode)
             .ToList();
 
         public ICollection<MovementHistory> MovementHistoriesTo => MovementHistories?
             .Where(t => t.ProductInventoryLocation?.RackShelfColumn?.InventoryLocationID == StockTransferToInventoryLocationId)
+            .Where(t => t.IsTransactionTypeIsTo)
             .OrderBy(t => t.ProductCode)
             .ToList();
 
