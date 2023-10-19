@@ -52,6 +52,7 @@ namespace WarehouseManagementSystem.Core.Entities
         public virtual ICollection<OrderItem> OrderItems { get; set; }
         public virtual ICollection<MovementHistory> MovementHistories { get; set; }
         public bool HasMovementHistories => MovementHistories?.Any(t => (t.QtyToApply ?? 0) != 0) ?? false;
+        public bool HasNewMovementHistories => MovementHistories?.Any(t => t.IsNewEntity) ?? false;
 
         public bool IsCustomerOrderType => OrderType == OrderType.CO;
         public bool IsPurchaseOrderType => OrderType == OrderType.PO;

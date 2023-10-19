@@ -1,9 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class ProductSelectorDialog
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -20,11 +20,11 @@ Partial Class ProductSelectorDialog
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle9 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle7 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle8 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.grid = New DevComponents.DotNetBar.Controls.DataGridViewX()
         Me.isSelectedColumn = New System.Windows.Forms.DataGridViewCheckBoxColumn()
@@ -39,6 +39,8 @@ Partial Class ProductSelectorDialog
         Me.Column11 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column12 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column13 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Panel4 = New System.Windows.Forms.Panel()
+        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.ButtonCancel = New System.Windows.Forms.Button()
@@ -47,8 +49,11 @@ Partial Class ProductSelectorDialog
         Me.Panel3 = New System.Windows.Forms.Panel()
         Me.LinkLabelReset = New System.Windows.Forms.LinkLabel()
         Me.Label1 = New System.Windows.Forms.Label()
+        Me.Button1 = New System.Windows.Forms.Button()
         Me.Panel1.SuspendLayout()
         CType(Me.grid, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.Panel4.SuspendLayout()
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel2.SuspendLayout()
         Me.Panel3.SuspendLayout()
         Me.SuspendLayout()
@@ -56,10 +61,11 @@ Partial Class ProductSelectorDialog
         'Panel1
         '
         Me.Panel1.Controls.Add(Me.grid)
+        Me.Panel1.Controls.Add(Me.Panel4)
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel1.Location = New System.Drawing.Point(0, 79)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(800, 335)
+        Me.Panel1.Size = New System.Drawing.Size(1013, 318)
         Me.Panel1.TabIndex = 1
         '
         'grid
@@ -68,19 +74,19 @@ Partial Class ProductSelectorDialog
         Me.grid.AllowUserToDeleteRows = False
         Me.grid.BackgroundColor = System.Drawing.Color.White
         Me.grid.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.isSelectedColumn, Me.Column3, Me.Column1, Me.Column6, Me.Column2, Me.Column8, Me.Column9, Me.Column7, Me.Column10, Me.Column11, Me.Column12, Me.Column13})
-        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle3.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.grid.DefaultCellStyle = DataGridViewCellStyle3
+        DataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle9.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.grid.DefaultCellStyle = DataGridViewCellStyle9
         Me.grid.Dock = System.Windows.Forms.DockStyle.Fill
         Me.grid.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
         Me.grid.Location = New System.Drawing.Point(0, 0)
         Me.grid.Name = "grid"
-        Me.grid.Size = New System.Drawing.Size(800, 335)
+        Me.grid.Size = New System.Drawing.Size(841, 318)
         Me.grid.TabIndex = 1
         '
         'isSelectedColumn
@@ -121,8 +127,8 @@ Partial Class ProductSelectorDialog
         'Column8
         '
         Me.Column8.DataPropertyName = "UnitOfMeasure"
-        DataGridViewCellStyle1.NullValue = Nothing
-        Me.Column8.DefaultCellStyle = DataGridViewCellStyle1
+        DataGridViewCellStyle7.NullValue = Nothing
+        Me.Column8.DefaultCellStyle = DataGridViewCellStyle7
         Me.Column8.HeaderText = "UnitOfMeasure"
         Me.Column8.Name = "Column8"
         Me.Column8.ReadOnly = True
@@ -130,8 +136,8 @@ Partial Class ProductSelectorDialog
         'Column9
         '
         Me.Column9.DataPropertyName = "Description"
-        DataGridViewCellStyle2.NullValue = Nothing
-        Me.Column9.DefaultCellStyle = DataGridViewCellStyle2
+        DataGridViewCellStyle8.NullValue = Nothing
+        Me.Column9.DefaultCellStyle = DataGridViewCellStyle8
         Me.Column9.HeaderText = "Description"
         Me.Column9.Name = "Column9"
         Me.Column9.ReadOnly = True
@@ -171,15 +177,33 @@ Partial Class ProductSelectorDialog
         Me.Column13.Name = "Column13"
         Me.Column13.ReadOnly = True
         '
+        'Panel4
+        '
+        Me.Panel4.Controls.Add(Me.PictureBox1)
+        Me.Panel4.Dock = System.Windows.Forms.DockStyle.Right
+        Me.Panel4.Location = New System.Drawing.Point(841, 0)
+        Me.Panel4.Name = "Panel4"
+        Me.Panel4.Size = New System.Drawing.Size(172, 318)
+        Me.Panel4.TabIndex = 2
+        '
+        'PictureBox1
+        '
+        Me.PictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.PictureBox1.Location = New System.Drawing.Point(6, 6)
+        Me.PictureBox1.Name = "PictureBox1"
+        Me.PictureBox1.Size = New System.Drawing.Size(159, 215)
+        Me.PictureBox1.TabIndex = 2
+        Me.PictureBox1.TabStop = False
+        '
         'Panel2
         '
         Me.Panel2.Controls.Add(Me.Label2)
         Me.Panel2.Controls.Add(Me.ButtonCancel)
         Me.Panel2.Controls.Add(Me.ButtonOK)
         Me.Panel2.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Panel2.Location = New System.Drawing.Point(0, 414)
+        Me.Panel2.Location = New System.Drawing.Point(0, 397)
         Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(800, 36)
+        Me.Panel2.Size = New System.Drawing.Size(1013, 53)
         Me.Panel2.TabIndex = 2
         '
         'Label2
@@ -193,7 +217,8 @@ Partial Class ProductSelectorDialog
         '
         'ButtonCancel
         '
-        Me.ButtonCancel.Location = New System.Drawing.Point(713, 6)
+        Me.ButtonCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ButtonCancel.Location = New System.Drawing.Point(926, 19)
         Me.ButtonCancel.Name = "ButtonCancel"
         Me.ButtonCancel.Size = New System.Drawing.Size(75, 23)
         Me.ButtonCancel.TabIndex = 1
@@ -202,7 +227,8 @@ Partial Class ProductSelectorDialog
         '
         'ButtonOK
         '
-        Me.ButtonOK.Location = New System.Drawing.Point(632, 6)
+        Me.ButtonOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ButtonOK.Location = New System.Drawing.Point(845, 19)
         Me.ButtonOK.Name = "ButtonOK"
         Me.ButtonOK.Size = New System.Drawing.Size(75, 23)
         Me.ButtonOK.TabIndex = 0
@@ -218,13 +244,14 @@ Partial Class ProductSelectorDialog
         '
         'Panel3
         '
+        Me.Panel3.Controls.Add(Me.Button1)
         Me.Panel3.Controls.Add(Me.LinkLabelReset)
         Me.Panel3.Controls.Add(Me.Label1)
         Me.Panel3.Controls.Add(Me.txtSearch)
         Me.Panel3.Dock = System.Windows.Forms.DockStyle.Top
         Me.Panel3.Location = New System.Drawing.Point(0, 0)
         Me.Panel3.Name = "Panel3"
-        Me.Panel3.Size = New System.Drawing.Size(800, 79)
+        Me.Panel3.Size = New System.Drawing.Size(1013, 79)
         Me.Panel3.TabIndex = 0
         '
         'LinkLabelReset
@@ -248,12 +275,21 @@ Partial Class ProductSelectorDialog
         Me.Label1.TabIndex = 2
         Me.Label1.Text = "Search"
         '
+        'Button1
+        '
+        Me.Button1.Location = New System.Drawing.Point(732, 20)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(75, 23)
+        Me.Button1.TabIndex = 3
+        Me.Button1.Text = "Button1"
+        Me.Button1.UseVisualStyleBackColor = True
+        '
         'ProductSelectorDialog
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.White
-        Me.ClientSize = New System.Drawing.Size(800, 450)
+        Me.ClientSize = New System.Drawing.Size(1013, 450)
         Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.Panel3)
         Me.Controls.Add(Me.Panel2)
@@ -266,6 +302,8 @@ Partial Class ProductSelectorDialog
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Panel1.ResumeLayout(False)
         CType(Me.grid, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.Panel4.ResumeLayout(False)
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel2.ResumeLayout(False)
         Me.Panel2.PerformLayout()
         Me.Panel3.ResumeLayout(False)
@@ -295,4 +333,7 @@ Partial Class ProductSelectorDialog
     Friend WithEvents Column12 As DataGridViewTextBoxColumn
     Friend WithEvents Column13 As DataGridViewTextBoxColumn
     Friend WithEvents Label2 As Label
+    Friend WithEvents PictureBox1 As PictureBox
+    Friend WithEvents Panel4 As Panel
+    Friend WithEvents Button1 As Button
 End Class

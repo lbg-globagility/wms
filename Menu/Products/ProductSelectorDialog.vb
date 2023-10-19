@@ -1,5 +1,9 @@
-﻿Imports Microsoft.Extensions.DependencyInjection
+﻿Imports System.IO
+Imports IniParser
+Imports IniParser.Model
+Imports Microsoft.Extensions.DependencyInjection
 Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
+Imports WarehouseManagementSystem.Utilities.Extensions
 
 Public Class ProductSelectorDialog
     Private _baseSource As List(Of ProductColorSizeModel)
@@ -113,6 +117,38 @@ Public Class ProductSelectorDialog
         txtSearch.Clear()
         txtSearch_TextChanged(txtSearch, New EventArgs)
         ShowSelectedStatus()
+    End Sub
+
+    Private Sub grid_SelectionChanged(sender As Object, e As EventArgs) Handles grid.SelectionChanged
+        If grid.Rows.Count() = 0 AndAlso grid.CurrentRow Is Nothing Then Return
+
+        Dim parser = New FileIniDataParser()
+        Dim iniParse = parser.ReadFile(filePath:="C:\ConnectionString\config.ini")
+
+        Dim boundData = CType(grid.CurrentRow.DataBoundItem, ProductColorSizeModel)
+
+        'Dim section = iniParse.Sections.OfType(Of SectionData).Where(Function(t) t.SectionName = "prod-img").FirstOrDefault()
+        'Dim keys As IEnumerable(Of KeyData) = section?.Keys.OfType(Of KeyData)
+        'Dim server = keys?.FirstOrDefault(Function(t) t.KeyName = "server")?.Value
+        'Dim photoDir = keys?.FirstOrDefault(Function(t) t.KeyName = "photoDir")?.Value
+        Dim server = iniParse.Sections("prod-img").GetKeyData("server").Value
+        Dim photoDir = iniParse.Sections("prod-img").GetKeyData("photoDir").Value
+
+        PictureBox1.LoadAsync(url:=$"\\{server}{photoDir}\{boundData.ProductCode}.jpg")
+    End Sub
+
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+
+        '"C:\ConnectionString\config.ini"
+        Dim parser = New FileIniDataParser()
+        Dim data = New IniData() 'parser.ReadFile(filePath:="C:\ConnectionString\config.ini")
+
+        'Add a New section And some keys
+        data.Sections.AddSection("prod-img")
+        data("prod-img").AddKey(keyName:="server", keyValue:="lambrrrt")
+        data("prod-img").AddKey(keyName:="photoDir", keyValue:="\Users\Public\prod-img")
+
+        parser.WriteFile(filePath:="C:\ConnectionString\config.ini", parsedData:=data)
     End Sub
 
 End Class

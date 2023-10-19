@@ -46,6 +46,7 @@ namespace WarehouseManagementSystem.Core.Entities
             int userId,
             List<ProductColorSize> nonExistentProductColorSizes)
         {
+            int[] fsdfsd = { 16550, 16202 };
             if (!nonExistentProductColorSizes?.Any() ?? true) return;
 
             var thisRackShelfColumns = new List<RackShelfColumn>();

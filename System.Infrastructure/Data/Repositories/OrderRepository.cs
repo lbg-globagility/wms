@@ -38,22 +38,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
                 .Where(o => o.OrganizationID == organizationId)
                 .AsQueryable();
 
-            if (orderType == OrderType.ST)
-                query = query
-                    .Include(o => o.MovementHistories)
-                        .ThenInclude(m => m.ProductInventoryLocation)
-                            .ThenInclude(pil => pil.ProductColorSize)
-                                .ThenInclude(pcs => pcs.ProductColor)
-                                    .ThenInclude(pc => pc.Product)
-                    .Include(o => o.MovementHistories)
-                        .ThenInclude(m => m.ProductInventoryLocation)
-                            .ThenInclude(pil => pil.ProductColorSize)
-                                .ThenInclude(pcs => pcs.ProductColor)
-                                    .ThenInclude(pc => pc.Color)
-                    .Include(o => o.MovementHistories)
-                        .ThenInclude(m => m.ProductInventoryLocation)
-                            .ThenInclude(pil => pil.RackShelfColumn)
-                    ;
+            query = StockTransferNavMapping(orderType, query);
 
             return Task.FromResult(
                 query
@@ -84,6 +69,33 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
                 .Where(o => o.OrganizationID == organizationId)
                 .AsQueryable();
 
+            query = StockTransferNavMapping(orderType, query);
+
+            return query;
+        }
+
+        public async Task<Order> GetOrderAsync(int id)
+        {
+            var order = await GetByIdAsync(id);
+
+            return await GetOrderAsync(order);
+        }
+
+        public async Task<Order> GetOrderAsync(Order order)
+        {
+            var query = _context.Orders
+                .Include(o => o.OrderItems)
+                .AsNoTracking()
+                .Where(o => o.RowID == order.RowID)
+                .AsQueryable();
+
+            query = StockTransferNavMapping(order.OrderType, query);
+
+            return await query.FirstOrDefaultAsync();
+        }
+
+        private IQueryable<Order> StockTransferNavMapping(OrderType orderType, IQueryable<Order> query)
+        {
             if (orderType == OrderType.ST)
                 query = query
                     .Include(o => o.MovementHistories)
@@ -99,7 +111,6 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
                     .Include(o => o.MovementHistories)
                         .ThenInclude(m => m.ProductInventoryLocation)
                             .ThenInclude(pil => pil.RackShelfColumn);
-
             return query;
         }
     }

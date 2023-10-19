@@ -92,14 +92,16 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
             //BusinessLogicException
             if ((order?.IsApproved) ?? false) throw new BusinessLogicException(message: "Stock Transfer already `Approved`");
 
+            if (order.HasNewMovementHistories) await SaveAsync(order);
+
             var pilIds = order.MovementHistories
                 .Select(t => t.ProductInventoryLocationIDA.Value)
                 .ToArray();
             var productInventoryLocations = await _productInventoryLocationRepository.GetManyByIdsAsync(pilIds);
 
-            foreach (var productInventoryLocation in productInventoryLocations)
+            foreach (var movementHistory in order.MovementHistories)
             {
-                var movementHistory = order.MovementHistories.FirstOrDefault(t => t.ProductInventoryLocationIDA == productInventoryLocation.RowID);
+                var productInventoryLocation = productInventoryLocations.FirstOrDefault(x => x.RowID == movementHistory.ProductInventoryLocationIDA);
                 if (movementHistory == null) continue;
                 productInventoryLocation.TotalAvailableQty = (productInventoryLocation.TotalAvailableQty ?? 0) + movementHistory.FormulatedQtyToApply;
             }
@@ -113,5 +115,9 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
 
         public async Task<List<Order>> SearchStockTransferOrdersAsync(int organizationId, string searchText) =>
             await _orderRepository.SearchOrdersAsync(organizationId: organizationId, orderType: OrderType.ST, searchText: searchText);
+
+        public async Task<Order> GetOrderAsync(int id) => await _orderRepository.GetOrderAsync(id: id);
+
+        public async Task<Order> GetOrderAsync(Order order) => await _orderRepository.GetOrderAsync(order: order);
     }
 }

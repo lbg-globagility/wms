@@ -114,8 +114,12 @@ Public Class StockTransferForm2
 
         Dim action As Action =
             Async Sub()
-                Await LoadStockTransferOrders()
-                SplitContainer1.Panel1.Enabled = True
+                LinkLabelRefresh_LinkClicked(LinkLabelRefresh,
+                    New LinkLabelLinkClickedEventArgs(LinkLabelRefresh.Links.OfType(Of Link).FirstOrDefault()))
+
+                If ToolStripButtonNew.Enabled = False Then ToolStripButtonNew.Enabled = True
+
+                If SplitContainer1.Panel1.Enabled = False Then SplitContainer1.Panel1.Enabled = True
             End Sub
 
         Await FunctionUtils.TryCatchFunctionAsync("Save Stock Transfer changes",
@@ -125,6 +129,7 @@ Public Class StockTransferForm2
                 Await orderDataService.SaveAsync(_selectedOrder)
 
                 action()
+
             End Function,
             errorCallBack:=action)
     End Sub
@@ -150,6 +155,7 @@ Public Class StockTransferForm2
                     Await orderRepository.DeleteAsync(_selectedOrder)
 
                     cancelButtonAction()
+
                 End Function,
                 errorCallBack:=cancelButtonAction)
 
@@ -372,8 +378,14 @@ Public Class StockTransferForm2
 
         Dim action As Action =
             Async Sub()
-                Await LoadStockTransferOrders()
-                SplitContainer1.Panel1.Enabled = True
+                LinkLabelRefresh_LinkClicked(LinkLabelRefresh,
+                    New LinkLabelLinkClickedEventArgs(LinkLabelRefresh.Links.OfType(Of Link).FirstOrDefault()))
+
+                If ToolStripButtonNew.Enabled = False Then ToolStripButtonNew.Enabled = True
+
+                If SplitContainer1.Panel1.Enabled = False Then SplitContainer1.Panel1.Enabled = True
+
+                ReloadDisplayForm(order:=_selectedOrder)
             End Sub
 
         Await FunctionUtils.TryCatchFunctionAsync("Approve Stock Transfer",
@@ -382,7 +394,10 @@ Public Class StockTransferForm2
 
                 Await orderDataService.ApproveStockTransfer(_selectedOrder)
 
+                '_selectedOrder = Await orderDataService.GetOrderAsync(order:=_selectedOrder)
+
                 action()
+
             End Function,
             errorCallBack:=action)
 
@@ -413,6 +428,10 @@ Public Class StockTransferForm2
 
     Private Sub gridStockTransferOrders_DataSourceChanged(sender As Object, e As EventArgs) Handles gridStockTransferOrders.DataSourceChanged
         If If(gridStockTransferOrders.Rows?.Count(), 0) = 0 Then ReloadDisplayForm()
+    End Sub
+
+    Private Sub gridStockTransferOrdersFrom_SelectionChanged(sender As Object, e As EventArgs) Handles gridStockTransferOrdersFrom.SelectionChanged
+
     End Sub
 
 End Class

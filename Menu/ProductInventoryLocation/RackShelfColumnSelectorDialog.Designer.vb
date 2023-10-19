@@ -22,8 +22,12 @@ Partial Class RackShelfColumnSelectorDialog
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.gridRackShelfColumn = New DevComponents.DotNetBar.Controls.DataGridViewX()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.Panel2 = New System.Windows.Forms.Panel()
+        Me.ButtonCancel = New System.Windows.Forms.Button()
+        Me.ButtonOK = New System.Windows.Forms.Button()
         Me.Column1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -37,11 +41,7 @@ Partial Class RackShelfColumnSelectorDialog
         Me.Column11 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column12 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column13 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Quantity = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.Panel2 = New System.Windows.Forms.Panel()
-        Me.ButtonCancel = New System.Windows.Forms.Button()
-        Me.ButtonOK = New System.Windows.Forms.Button()
+        Me.Quantity = New DevComponents.DotNetBar.Controls.DataGridViewIntegerInputColumn()
         CType(Me.gridRackShelfColumn, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel1.SuspendLayout()
         Me.Panel2.SuspendLayout()
@@ -53,14 +53,14 @@ Partial Class RackShelfColumnSelectorDialog
         Me.gridRackShelfColumn.AllowUserToDeleteRows = False
         Me.gridRackShelfColumn.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.gridRackShelfColumn.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column1, Me.Column2, Me.Column3, Me.Column4, Me.Column5, Me.Column6, Me.Column7, Me.Column8, Me.Column9, Me.Column10, Me.Column11, Me.Column12, Me.Column13, Me.Quantity})
-        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle2.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.gridRackShelfColumn.DefaultCellStyle = DataGridViewCellStyle2
+        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle1.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.gridRackShelfColumn.DefaultCellStyle = DataGridViewCellStyle1
         Me.gridRackShelfColumn.Dock = System.Windows.Forms.DockStyle.Fill
         Me.gridRackShelfColumn.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
         Me.gridRackShelfColumn.Location = New System.Drawing.Point(0, 0)
@@ -68,6 +68,43 @@ Partial Class RackShelfColumnSelectorDialog
         Me.gridRackShelfColumn.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.gridRackShelfColumn.Size = New System.Drawing.Size(757, 343)
         Me.gridRackShelfColumn.TabIndex = 0
+        '
+        'Panel1
+        '
+        Me.Panel1.Controls.Add(Me.gridRackShelfColumn)
+        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Panel1.Location = New System.Drawing.Point(0, 0)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(757, 343)
+        Me.Panel1.TabIndex = 0
+        '
+        'Panel2
+        '
+        Me.Panel2.Controls.Add(Me.ButtonCancel)
+        Me.Panel2.Controls.Add(Me.ButtonOK)
+        Me.Panel2.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.Panel2.Location = New System.Drawing.Point(0, 343)
+        Me.Panel2.Name = "Panel2"
+        Me.Panel2.Size = New System.Drawing.Size(757, 36)
+        Me.Panel2.TabIndex = 1
+        '
+        'ButtonCancel
+        '
+        Me.ButtonCancel.Location = New System.Drawing.Point(675, 6)
+        Me.ButtonCancel.Name = "ButtonCancel"
+        Me.ButtonCancel.Size = New System.Drawing.Size(75, 23)
+        Me.ButtonCancel.TabIndex = 1
+        Me.ButtonCancel.Text = "Cancel"
+        Me.ButtonCancel.UseVisualStyleBackColor = True
+        '
+        'ButtonOK
+        '
+        Me.ButtonOK.Location = New System.Drawing.Point(594, 6)
+        Me.ButtonOK.Name = "ButtonOK"
+        Me.ButtonOK.Size = New System.Drawing.Size(75, 23)
+        Me.ButtonOK.TabIndex = 0
+        Me.ButtonOK.Text = "OK"
+        Me.ButtonOK.UseVisualStyleBackColor = True
         '
         'Column1
         '
@@ -170,46 +207,17 @@ Partial Class RackShelfColumnSelectorDialog
         '
         'Quantity
         '
+        '
+        '
+        '
+        Me.Quantity.BackgroundStyle.Class = "DataGridViewNumericBorder"
+        Me.Quantity.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
         Me.Quantity.DataPropertyName = "Quantity"
         Me.Quantity.HeaderText = "Quantity"
+        Me.Quantity.MinValue = 0
         Me.Quantity.Name = "Quantity"
-        '
-        'Panel1
-        '
-        Me.Panel1.Controls.Add(Me.gridRackShelfColumn)
-        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel1.Location = New System.Drawing.Point(0, 0)
-        Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(757, 343)
-        Me.Panel1.TabIndex = 0
-        '
-        'Panel2
-        '
-        Me.Panel2.Controls.Add(Me.ButtonCancel)
-        Me.Panel2.Controls.Add(Me.ButtonOK)
-        Me.Panel2.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Panel2.Location = New System.Drawing.Point(0, 343)
-        Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(757, 36)
-        Me.Panel2.TabIndex = 1
-        '
-        'ButtonCancel
-        '
-        Me.ButtonCancel.Location = New System.Drawing.Point(675, 6)
-        Me.ButtonCancel.Name = "ButtonCancel"
-        Me.ButtonCancel.Size = New System.Drawing.Size(75, 23)
-        Me.ButtonCancel.TabIndex = 1
-        Me.ButtonCancel.Text = "Cancel"
-        Me.ButtonCancel.UseVisualStyleBackColor = True
-        '
-        'ButtonOK
-        '
-        Me.ButtonOK.Location = New System.Drawing.Point(594, 6)
-        Me.ButtonOK.Name = "ButtonOK"
-        Me.ButtonOK.Size = New System.Drawing.Size(75, 23)
-        Me.ButtonOK.TabIndex = 0
-        Me.ButtonOK.Text = "OK"
-        Me.ButtonOK.UseVisualStyleBackColor = True
+        Me.Quantity.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.Quantity.ShowUpDown = True
         '
         'RackShelfColumnSelectorDialog
         '
@@ -251,5 +259,5 @@ Partial Class RackShelfColumnSelectorDialog
     Friend WithEvents Column11 As DataGridViewTextBoxColumn
     Friend WithEvents Column12 As DataGridViewTextBoxColumn
     Friend WithEvents Column13 As DataGridViewTextBoxColumn
-    Friend WithEvents Quantity As DataGridViewTextBoxColumn
+    Friend WithEvents Quantity As DevComponents.DotNetBar.Controls.DataGridViewIntegerInputColumn
 End Class
