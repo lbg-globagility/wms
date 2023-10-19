@@ -22,9 +22,9 @@ Partial Class ProductSelectorDialog
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        Dim DataGridViewCellStyle9 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle7 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle8 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.grid = New DevComponents.DotNetBar.Controls.DataGridViewX()
         Me.isSelectedColumn = New System.Windows.Forms.DataGridViewCheckBoxColumn()
@@ -49,7 +49,6 @@ Partial Class ProductSelectorDialog
         Me.Panel3 = New System.Windows.Forms.Panel()
         Me.LinkLabelReset = New System.Windows.Forms.LinkLabel()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.Button1 = New System.Windows.Forms.Button()
         Me.Panel1.SuspendLayout()
         CType(Me.grid, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel4.SuspendLayout()
@@ -74,14 +73,14 @@ Partial Class ProductSelectorDialog
         Me.grid.AllowUserToDeleteRows = False
         Me.grid.BackgroundColor = System.Drawing.Color.White
         Me.grid.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.isSelectedColumn, Me.Column3, Me.Column1, Me.Column6, Me.Column2, Me.Column8, Me.Column9, Me.Column7, Me.Column10, Me.Column11, Me.Column12, Me.Column13})
-        DataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle9.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.grid.DefaultCellStyle = DataGridViewCellStyle9
+        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle3.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.grid.DefaultCellStyle = DataGridViewCellStyle3
         Me.grid.Dock = System.Windows.Forms.DockStyle.Fill
         Me.grid.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
         Me.grid.Location = New System.Drawing.Point(0, 0)
@@ -127,8 +126,8 @@ Partial Class ProductSelectorDialog
         'Column8
         '
         Me.Column8.DataPropertyName = "UnitOfMeasure"
-        DataGridViewCellStyle7.NullValue = Nothing
-        Me.Column8.DefaultCellStyle = DataGridViewCellStyle7
+        DataGridViewCellStyle1.NullValue = Nothing
+        Me.Column8.DefaultCellStyle = DataGridViewCellStyle1
         Me.Column8.HeaderText = "UnitOfMeasure"
         Me.Column8.Name = "Column8"
         Me.Column8.ReadOnly = True
@@ -136,8 +135,8 @@ Partial Class ProductSelectorDialog
         'Column9
         '
         Me.Column9.DataPropertyName = "Description"
-        DataGridViewCellStyle8.NullValue = Nothing
-        Me.Column9.DefaultCellStyle = DataGridViewCellStyle8
+        DataGridViewCellStyle2.NullValue = Nothing
+        Me.Column9.DefaultCellStyle = DataGridViewCellStyle2
         Me.Column9.HeaderText = "Description"
         Me.Column9.Name = "Column9"
         Me.Column9.ReadOnly = True
@@ -189,7 +188,7 @@ Partial Class ProductSelectorDialog
         'PictureBox1
         '
         Me.PictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.PictureBox1.Location = New System.Drawing.Point(6, 6)
+        Me.PictureBox1.Location = New System.Drawing.Point(6, 0)
         Me.PictureBox1.Name = "PictureBox1"
         Me.PictureBox1.Size = New System.Drawing.Size(159, 215)
         Me.PictureBox1.TabIndex = 2
@@ -244,7 +243,6 @@ Partial Class ProductSelectorDialog
         '
         'Panel3
         '
-        Me.Panel3.Controls.Add(Me.Button1)
         Me.Panel3.Controls.Add(Me.LinkLabelReset)
         Me.Panel3.Controls.Add(Me.Label1)
         Me.Panel3.Controls.Add(Me.txtSearch)
@@ -274,15 +272,6 @@ Partial Class ProductSelectorDialog
         Me.Label1.Size = New System.Drawing.Size(41, 13)
         Me.Label1.TabIndex = 2
         Me.Label1.Text = "Search"
-        '
-        'Button1
-        '
-        Me.Button1.Location = New System.Drawing.Point(732, 20)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(75, 23)
-        Me.Button1.TabIndex = 3
-        Me.Button1.Text = "Button1"
-        Me.Button1.UseVisualStyleBackColor = True
         '
         'ProductSelectorDialog
         '
@@ -335,5 +324,4 @@ Partial Class ProductSelectorDialog
     Friend WithEvents Label2 As Label
     Friend WithEvents PictureBox1 As PictureBox
     Friend WithEvents Panel4 As Panel
-    Friend WithEvents Button1 As Button
 End Class

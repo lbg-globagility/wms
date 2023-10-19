@@ -1,13 +1,13 @@
-﻿Imports System.IO
-Imports IniParser
-Imports IniParser.Model
+﻿Option Strict On
+
 Imports Microsoft.Extensions.DependencyInjection
 Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
-Imports WarehouseManagementSystem.Utilities.Extensions
 
 Public Class ProductSelectorDialog
+    Private Const CONFIG_FILE_PATH As String = "C:\ConnectionString\config.ini"
     Private _baseSource As List(Of ProductColorSizeModel)
     Private ReadOnly _inventoryLocationId As Integer
+    Private ReadOnly _picp As ProductImageConfigParser
 
     Public ReadOnly Property SelectedProductColorSizeModels As List(Of ProductColorSizeModel)
         Get
@@ -26,6 +26,8 @@ Public Class ProductSelectorDialog
 
         ' Add any initialization after the InitializeComponent() call.
         _inventoryLocationId = inventoryLocationId
+
+        _picp = New ProductImageConfigParser(filePath:=CONFIG_FILE_PATH)
     End Sub
 
     Private Async Sub ProductSelectorDialog_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -73,15 +75,20 @@ Public Class ProductSelectorDialog
 
         Dim dataSource = _baseSource
 
+        Dim absoluteBool =
+            Function(boolValue As Boolean?)
+                Return If(boolValue, False)
+            End Function
+
         If Not String.IsNullOrEmpty(searchText) Then
             dataSource = _baseSource.
                 Where(Function(t) t.ProductCode.ToLower.Contains(searchText) Or
                     (Not String.IsNullOrEmpty(t.BrandName) AndAlso t.BrandName.ToLower.Contains(searchText)) Or
-                    t.Category?.ToLower.Contains(searchText) Or
-                    t.UnitOfMeasure?.ToLower.Contains(searchText) Or
-                    t.Description?.ToLower.Contains(searchText) Or
-                    t.Colors?.ToLower.Contains(searchText) Or
-                    t.SeasonCode?.ToLower.Contains(searchText)).
+                    absoluteBool(t.Category?.ToLower.Contains(searchText)) Or
+                    absoluteBool(t.UnitOfMeasure?.ToLower.Contains(searchText)) Or
+                    absoluteBool(t.Description?.ToLower.Contains(searchText)) Or
+                    absoluteBool(t.Colors?.ToLower.Contains(searchText)) Or
+                    absoluteBool(t.SeasonCode?.ToLower.Contains(searchText))).
                 ToList()
         End If
 
@@ -122,33 +129,9 @@ Public Class ProductSelectorDialog
     Private Sub grid_SelectionChanged(sender As Object, e As EventArgs) Handles grid.SelectionChanged
         If grid.Rows.Count() = 0 AndAlso grid.CurrentRow Is Nothing Then Return
 
-        Dim parser = New FileIniDataParser()
-        Dim iniParse = parser.ReadFile(filePath:="C:\ConnectionString\config.ini")
-
         Dim boundData = CType(grid.CurrentRow.DataBoundItem, ProductColorSizeModel)
 
-        'Dim section = iniParse.Sections.OfType(Of SectionData).Where(Function(t) t.SectionName = "prod-img").FirstOrDefault()
-        'Dim keys As IEnumerable(Of KeyData) = section?.Keys.OfType(Of KeyData)
-        'Dim server = keys?.FirstOrDefault(Function(t) t.KeyName = "server")?.Value
-        'Dim photoDir = keys?.FirstOrDefault(Function(t) t.KeyName = "photoDir")?.Value
-        Dim server = iniParse.Sections("prod-img").GetKeyData("server").Value
-        Dim photoDir = iniParse.Sections("prod-img").GetKeyData("photoDir").Value
-
-        PictureBox1.LoadAsync(url:=$"\\{server}{photoDir}\{boundData.ProductCode}.jpg")
-    End Sub
-
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-
-        '"C:\ConnectionString\config.ini"
-        Dim parser = New FileIniDataParser()
-        Dim data = New IniData() 'parser.ReadFile(filePath:="C:\ConnectionString\config.ini")
-
-        'Add a New section And some keys
-        data.Sections.AddSection("prod-img")
-        data("prod-img").AddKey(keyName:="server", keyValue:="lambrrrt")
-        data("prod-img").AddKey(keyName:="photoDir", keyValue:="\Users\Public\prod-img")
-
-        parser.WriteFile(filePath:="C:\ConnectionString\config.ini", parsedData:=data)
+        PictureBox1.LoadAsync(url:=$"\\{_picp.Server}{_picp.PhotoDir}\{boundData.ProductCode}.jpg")
     End Sub
 
 End Class

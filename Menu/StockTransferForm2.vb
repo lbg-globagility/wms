@@ -1,4 +1,6 @@
-﻿Imports System.Windows.Forms.LinkLabel
+﻿Option Strict On
+
+Imports System.Windows.Forms.LinkLabel
 Imports Microsoft.Extensions.DependencyInjection
 Imports WarehouseManagementSystem.Core.Dto
 Imports WarehouseManagementSystem.Core.Entities
@@ -269,7 +271,7 @@ Public Class StockTransferForm2
         txtStockTransferNo.Text = order?.OrderNumber
         txtStockTransferNo.DataBindings.Add("Text", order, "OrderNumber", True, DataSourceUpdateMode.OnPropertyChanged)
 
-        txtStatus.Text = order?.Status
+        txtStatus.Text = $"{order?.Status}"
         txtStatus.DataBindings.Add("Text", order, "Status", True, DataSourceUpdateMode.OnPropertyChanged)
 
         txtTransferedBy.Text = String.Empty
@@ -329,9 +331,9 @@ Public Class StockTransferForm2
             For Each productColorSizeModel In selectedProductColorSizeModels
                 Dim newMovementHistoryFrom = MovementHistory.NewMovementHistory(organizationId:=Z_OrganizationID,
                     userId:=Z_UserID,
-                    productColorSizeID:=productColorSizeModel.ProductColorSize.RowID,
+                    productColorSizeID:=productColorSizeModel.ProductColorSize.RowID.Value,
                     orderId:=_selectedOrder.RowID,
-                    productInventoryLocationId:=productColorSizeModel.ProductInventoryLocation.RowID,
+                    productInventoryLocationId:=productColorSizeModel.ProductInventoryLocation.RowID.Value,
                     currentQty:=0,
                     qtyToApply:=0,
                     transactionType:=$"{OrderType.ST} - From")
@@ -340,14 +342,14 @@ Public Class StockTransferForm2
                 _selectedOrder.AddMovementHistories(New List(Of MovementHistory) From {newMovementHistoryFrom})
 
                 Dim toProductInventoryLocation = productInventoryLocations.
-                    Where(Function(t) t.ProductColorSizeID = productColorSizeModel.ProductColorSize.RowID).
+                    Where(Function(t) t.ProductColorSizeID = productColorSizeModel.ProductColorSize.RowID.Value).
                     Where(Function(t) t.RackShelfColumn.InventoryLocationID = inventoryLocationIdTo).
                     FirstOrDefault()
                 Dim newMovementHistoryTo = MovementHistory.NewMovementHistory(organizationId:=Z_OrganizationID,
                     userId:=Z_UserID,
-                    productColorSizeID:=productColorSizeModel.ProductColorSize.RowID,
+                    productColorSizeID:=productColorSizeModel.ProductColorSize.RowID.Value,
                     orderId:=_selectedOrder.RowID,
-                    productInventoryLocationId:=toProductInventoryLocation.RowID,
+                    productInventoryLocationId:=toProductInventoryLocation.RowID.Value,
                     currentQty:=0,
                     qtyToApply:=0,
                     transactionType:=$"{OrderType.ST} - To")

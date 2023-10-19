@@ -1,4 +1,6 @@
-﻿Imports WarehouseManagementSystem.Core.Entities
+﻿Option Strict On
+
+Imports WarehouseManagementSystem.Core.Entities
 
 Public Class ProductColorSizeModel
     Private ReadOnly _productInventoryLocation As ProductInventoryLocation
