@@ -23,7 +23,8 @@ namespace WarehouseManagementSystem.Core.Entities
                     .Where(t => t.IsTransactionTypeIsFrom == movementHistory.IsTransactionTypeIsFrom)
                     .Where(t => t.IsTransactionTypeIsTo == movementHistory.IsTransactionTypeIsTo)
                     .FirstOrDefault();
-                if (existingMovementHistory == null) MovementHistories.Add(movementHistory);
+                if (existingMovementHistory == null)
+                    MovementHistories.Add(movementHistory);
                 else
                 {
                     existingMovementHistory.QtyToApply = movementHistory.QtyToApply;
