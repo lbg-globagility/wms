@@ -53,12 +53,12 @@ Public Class ProductSelectorDialog
         If ProductColorSizeExceptionIds IsNot Nothing AndAlso ProductColorSizeExceptionIds.Any() Then
             Return productInventoryLocations.
                 Where(Function(t) Not ProductColorSizeExceptionIds.Contains(t.ProductColorSizeID)).
-                Select(Function(t) New ProductColorSizeModel(productInventoryLocation:=t, productColorSize:=t.ProductColorSize)).
+                Select(Function(t) New ProductColorSizeModel(productInventoryLocation:=t, productColorSize:=t.ProductColorSize, _picp)).
                 ToList()
         End If
 
         Return productInventoryLocations.
-            Select(Function(t) New ProductColorSizeModel(productInventoryLocation:=t, productColorSize:=t.ProductColorSize)).
+            Select(Function(t) New ProductColorSizeModel(productInventoryLocation:=t, productColorSize:=t.ProductColorSize, _picp)).
             ToList()
     End Function
 
@@ -131,7 +131,7 @@ Public Class ProductSelectorDialog
 
         Dim boundData = CType(grid.CurrentRow.DataBoundItem, ProductColorSizeModel)
 
-        PictureBox1.LoadAsync(url:=$"\\{_picp.Server}{_picp.PhotoDir}\{boundData.ProductCode}.jpg")
+        PictureBox1.LoadAsync(url:=boundData.Photo)
     End Sub
 
 End Class

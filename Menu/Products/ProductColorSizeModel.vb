@@ -6,12 +6,16 @@ Public Class ProductColorSizeModel
     Private ReadOnly _productInventoryLocation As ProductInventoryLocation
     Private ReadOnly _productColorSize As ProductColorSize
     Private ReadOnly _productColor As ProductColor
+    Private ReadOnly _productImageConfigParser As ProductImageConfigParser
 
     Public Sub New(productInventoryLocation As ProductInventoryLocation,
-        productColorSize As ProductColorSize)
+        productColorSize As ProductColorSize,
+        productImageConfigParser As ProductImageConfigParser)
+
         _productInventoryLocation = productInventoryLocation
         _productColorSize = productColorSize
         _productColor = productColorSize.ProductColor
+        _productImageConfigParser = productImageConfigParser
     End Sub
 
     Public Property IsSelected As Boolean
@@ -79,6 +83,12 @@ Public Class ProductColorSizeModel
     Public ReadOnly Property ProductInventoryLocation As ProductInventoryLocation
         Get
             Return _productInventoryLocation
+        End Get
+    End Property
+
+    Public ReadOnly Property Photo As String
+        Get
+            Return $"\\{_productImageConfigParser.Server}{_productImageConfigParser.PhotoDir}\{ProductCode}.jpg"
         End Get
     End Property
 
