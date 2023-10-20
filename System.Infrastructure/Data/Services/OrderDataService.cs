@@ -57,7 +57,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
             return stockTransferOrder;
         }
 
-        public async Task SaveAsync(Order order)
+        public async Task SaveChangesAsync(Order order, int userId)
         {
             if (order.IsStockTransferType)
             {
@@ -84,15 +84,17 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
                 await _context.SaveChangesAsync();
             }
 
+            order.AuditUser(userId);
+
             await _orderRepository.SaveAsync(order);
         }
 
-        public async Task ApproveStockTransfer(Order order)
+        public async Task ApproveStockTransfer(Order order, int userId)
         {
             //BusinessLogicException
             if ((order?.IsApproved) ?? false) throw new BusinessLogicException(message: "Stock Transfer already `Approved`");
 
-            if (order.HasNewMovementHistories) await SaveAsync(order);
+            if (order.HasNewMovementHistories) await SaveAsync(order, userId);
 
             var pilIds = order.MovementHistories
                 .Select(t => t.ProductInventoryLocationIDA.Value)

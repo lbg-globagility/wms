@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using WarehouseManagementSystem.Core.Dto;
 using WarehouseManagementSystem.Core.Entities.Base;
 using WarehouseManagementSystem.Core.Enums;
 
@@ -83,7 +82,7 @@ namespace WarehouseManagementSystem.Core.Entities
             DateTime orderDate)
         {
             OrganizationID = organizationId;
-            CreatedBy = userId;
+            AuditUser(userId);
             OrderType = orderType;
             OrderNumber = orderNumber;
             Status = status;

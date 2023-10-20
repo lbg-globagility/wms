@@ -40,7 +40,7 @@ namespace WarehouseManagementSystem.Core.Entities
             int inventoryLocationId)
         {
             OrganizationID = organizationId;
-            CreatedBy = userId;
+            AuditUser(userId);
             InventoryLocationID = inventoryLocationId;
             Status = RackShelfColumnStatus.Active;
             PickOrderNo = (PickOrderNo ?? 0) == 0 ? 1 : PickOrderNo;

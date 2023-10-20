@@ -1,5 +1,8 @@
-﻿Imports MySql.Data.MySqlClient
+﻿Imports Microsoft.Extensions.DependencyInjection
+Imports MySql.Data.MySqlClient
+Imports WarehouseManagementSystem.Core.Entities
 Imports WarehouseManagementSystem.Core.Enums
+Imports WarehouseManagementSystem.Core.Interfaces
 
 Public Class PrimaryForm
     Dim manager As New sqlModule.Manager
@@ -40,8 +43,12 @@ Public Class PrimaryForm
     Public DlvryPrfmForm As Boolean = False
     Public StkLvlForm As Boolean = False
     Public PckLstRForm As Boolean = False
+    Private _systemOwner As SystemOwner
 
-    Private Sub PrimaryForm_Load(sender As Object, e As EventArgs) Handles Me.Load
+    Private Async Sub PrimaryForm_Load(sender As Object, e As EventArgs) Handles Me.Load
+        Dim _systemOwnerService = MainServiceProvider.GetRequiredService(Of ISystemOwnerService)
+        _systemOwner = Await _systemOwnerService.GetCurrentSystemOwnerEntityAsync()
+
         Me.Cursor = Cursors.WaitCursor
         Try
             Me.Text = "Warehouse Management System"
@@ -936,6 +943,12 @@ Public Class PrimaryForm
     End Sub
 
     Private Sub mStockTransfer_Click(sender As Object, e As EventArgs) Handles mStockTransfer.Click
+        If IsThurston Then
+            Dim form As New StockTransferForm2(userId:=Z_UserID)
+            form.ShowDialog()
+            Return
+        End If
+
         Me.Cursor = Cursors.WaitCursor
         Try
             getPositionID(Me)
@@ -1551,9 +1564,10 @@ Public Class PrimaryForm
         form.ShowDialog()
     End Sub
 
-    Private Sub FasdfsdfToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles FasdfsdfToolStripMenuItem.Click
-        Dim form As New StockTransferForm2()
-        form.ShowDialog()
-    End Sub
+    Private ReadOnly Property IsThurston As Boolean
+        Get
+            Return _systemOwner.IsThurston
+        End Get
+    End Property
 
 End Class

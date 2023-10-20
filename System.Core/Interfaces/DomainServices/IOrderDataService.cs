@@ -14,9 +14,9 @@ namespace WarehouseManagementSystem.Core.Interfaces.DomainServices
 
         Task<List<Order>> GetStockTransferOrdersAsync(int organizationId);
 
-        Task SaveAsync(Order order);
+        Task SaveChangesAsync(Order order, int userId);
 
-        Task ApproveStockTransfer(Order order);
+        Task ApproveStockTransfer(Order order, int userId);
 
         Task<List<Order>> SearchStockTransferOrdersAsync(int organizationId, string searchText);
 

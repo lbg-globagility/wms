@@ -13,17 +13,22 @@ Public Class StockTransferForm2
     Private _selectedOrder As Order
     Private _inventoryLocations As List(Of InventoryLocation)
     Private _isNew As Boolean
+    Private _positionView As PositionView
+    Private ReadOnly _userId As Integer
+    Private Const VIEW_NAME = View.STOCK_TRANSFER_VIEW
 
-    Public Sub New()
+    Public Sub New(userId As Integer)
 
         ' This call is required by the designer.
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
-
+        _userId = userId
     End Sub
 
     Private Async Sub StockTransferForm2_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Await LoadUserPrivilege()
+
         gridStockTransferOrders.AutoGenerateColumns = False
         gridStockTransferOrdersFrom.AutoGenerateColumns = False
         gridStockTransferOrdersTo.AutoGenerateColumns = False
@@ -42,6 +47,31 @@ Public Class StockTransferForm2
 
         Await LoadStockTransferOrders()
     End Sub
+
+    Private Async Function LoadUserPrivilege() As Task
+        Dim positionViewDataService = MainServiceProvider.GetRequiredService(Of IPositionViewDataService)
+        _positionView = Await positionViewDataService.GetByUserIdAndViewNameAsync(organizationId:=Z_OrganizationID,
+            userId:=_userId,
+            viewName:=VIEW_NAME)
+
+        If _positionView.Disable Then
+            Dim toolStripItems = ToolStrip1.Items.
+                OfType(Of ToolStripItem).
+                Where(Function(t) t.Name = ToolStripButtonClose.Name).
+                ToList()
+
+            For Each item In toolStripItems
+                item.Visible = False
+            Next
+
+            Return
+        End If
+
+        ToolStripButtonNew.Visible = _positionView.Creates
+        ToolStripButtonSave.Visible = _positionView.Updates
+        ToolStripButtonApproved.Visible = _positionView.Updates
+
+    End Function
 
     Private Async Function LoadStockTransferOrders() As Task
         gridStockTransferOrders.DataSource = Await GetStockTransferOrders()
@@ -97,7 +127,7 @@ Public Class StockTransferForm2
         Await FunctionUtils.TryCatchFunctionAsync("Quick create stock transfer",
             Async Function()
                 Dim orderDataService = MainServiceProvider.GetRequiredService(Of IOrderDataService)
-                Dim newOrder = Await orderDataService.QuickCreateStockTransferOrderAsync(organizationId:=Z_OrganizationID, userId:=Z_UserID)
+                Dim newOrder = Await orderDataService.QuickCreateStockTransferOrderAsync(organizationId:=Z_OrganizationID, userId:=_userId)
 
                 _selectedOrder = newOrder
 
@@ -128,7 +158,7 @@ Public Class StockTransferForm2
             action:=
             Async Function()
                 Dim orderDataService = MainServiceProvider.GetRequiredService(Of IOrderDataService)
-                Await orderDataService.SaveAsync(_selectedOrder)
+                Await orderDataService.SaveChangesAsync(_selectedOrder, _userId)
 
                 action()
 
@@ -330,7 +360,7 @@ Public Class StockTransferForm2
 
             For Each productColorSizeModel In selectedProductColorSizeModels
                 Dim newMovementHistoryFrom = MovementHistory.NewMovementHistory(organizationId:=Z_OrganizationID,
-                    userId:=Z_UserID,
+                    userId:=_userId,
                     productColorSizeID:=productColorSizeModel.ProductColorSize.RowID.Value,
                     orderId:=_selectedOrder.RowID,
                     productInventoryLocationId:=productColorSizeModel.ProductInventoryLocation.RowID.Value,
@@ -346,7 +376,7 @@ Public Class StockTransferForm2
                     Where(Function(t) t.RackShelfColumn.InventoryLocationID = inventoryLocationIdTo).
                     FirstOrDefault()
                 Dim newMovementHistoryTo = MovementHistory.NewMovementHistory(organizationId:=Z_OrganizationID,
-                    userId:=Z_UserID,
+                    userId:=_userId,
                     productColorSizeID:=productColorSizeModel.ProductColorSize.RowID.Value,
                     orderId:=_selectedOrder.RowID,
                     productInventoryLocationId:=toProductInventoryLocation.RowID.Value,
@@ -394,7 +424,7 @@ Public Class StockTransferForm2
             Async Function()
                 Dim orderDataService = MainServiceProvider.GetRequiredService(Of IOrderDataService)
 
-                Await orderDataService.ApproveStockTransfer(_selectedOrder)
+                Await orderDataService.ApproveStockTransfer(_selectedOrder, _userId)
 
                 '_selectedOrder = Await orderDataService.GetOrderAsync(order:=_selectedOrder)
 

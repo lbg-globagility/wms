@@ -31,6 +31,8 @@ namespace WarehouseManagementSystem.Infrastructure.Data
         internal virtual DbSet<Organization> Organizations { get; set; }
         internal virtual DbSet<PickListOrder> PickListOrders { get; set; }
         internal virtual DbSet<PickListOrderItem> PickListOrderItems { get; set; }
+        internal virtual DbSet<Position> Positions { get; set; }
+        internal virtual DbSet<PositionView> PositionViews { get; set; }
         internal virtual DbSet<PrintOrder> PrintOrders { get; set; }
         internal virtual DbSet<Product> Products { get; set; }
         internal virtual DbSet<ProductBundle> ProductBundles { get; set; }
@@ -42,8 +44,10 @@ namespace WarehouseManagementSystem.Infrastructure.Data
         internal virtual DbSet<ProductShipmentHistory> ProductShipmentHistories { get; set; }
         internal virtual DbSet<RackShelfColumn> RackShelfColumns { get; set; }
         internal virtual DbSet<SystemOwner> SystemOwners { get; set; }
+        internal virtual DbSet<User> Users { get; set; }
         internal virtual DbSet<UserActivity> UserActivities { get; set; }
         internal virtual DbSet<UserActivityItem> UserActivityItems { get; set; }
+        internal virtual DbSet<View> Views { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -183,6 +187,44 @@ namespace WarehouseManagementSystem.Infrastructure.Data
 
                 t.Property(x => x.Status)
                     .HasConversion(converter);
+            });
+
+            modelBuilder.Entity<Position>(t =>
+            {
+                t.HasMany(x => x.PositionViews)
+                    .WithOne(x => x.Position);
+            });
+
+            modelBuilder.Entity<PositionView>(t =>
+            {
+                var converter = new ValueConverter<bool, string>(convertToProviderExpression: b => b ? "Y" : "N",
+                    convertFromProviderExpression: s => s == "Y" ? true : false);
+
+                t.Property(x => x.Creates)
+                    .HasConversion(converter);
+
+                t.Property(x => x.ReadOnly)
+                    .HasConversion(converter);
+
+                t.Property(x => x.Updates)
+                    .HasConversion(converter);
+
+                t.Property(x => x.Disable)
+                    .HasConversion(converter);
+            });
+
+            modelBuilder.Entity<User>(t =>
+            {
+                t.HasOne(x => x.Position)
+                    .WithOne(x => x.User);
+            });
+
+            modelBuilder.Entity<View>(t =>
+            {
+                t.HasKey(x => x.RowID);
+
+                t.HasMany(x => x.PositionViews)
+                    .WithOne(x => x.View);
             });
         }
     }

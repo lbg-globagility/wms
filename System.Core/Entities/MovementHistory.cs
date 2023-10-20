@@ -53,7 +53,7 @@ namespace WarehouseManagementSystem.Core.Entities
             string columnName = "TotalAvailableQty")
         {
             OrganizationID = organizationId;
-            CreatedBy = userId;
+            AuditUser(userId);
             ProductColorSizeID = productColorSizeID;
             OrderID = orderId;
             ProductInventoryLocationIDA = productInventoryLocationId;
