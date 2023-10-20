@@ -4,7 +4,6 @@ Imports Microsoft.Extensions.DependencyInjection
 Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
 
 Public Class ProductSelectorDialog
-    Private Const CONFIG_FILE_PATH As String = "C:\ConnectionString\config.ini"
     Private _baseSource As List(Of ProductColorSizeModel)
     Private ReadOnly _inventoryLocationId As Integer
     Private ReadOnly _picp As ProductImageConfigParser
