@@ -40,15 +40,9 @@ Public Class ProductSelectorDialog
     End Sub
 
     Private Async Function GetProductColorSizes() As Task(Of List(Of ProductColorSizeModel))
-        'Dim productColorSizeRepository = MainServiceProvider.GetRequiredService(Of IProductColorSizeRepository)
-        'Dim productColorSizes = Await productColorSizeRepository.GetManyByOrganizationIdsAsync(organizationId:=Z_OrganizationID)
-
         Dim productInventoryLocationDataService = MainServiceProvider.GetRequiredService(Of IProductInventoryLocationDataService)
         Dim productInventoryLocations = Await productInventoryLocationDataService.GetByInventoryLocationIdAsync(inventoryLocationId:=_inventoryLocationId)
 
-        'Return productColorSizes.
-        '    Select(Function(t) New ProductColorSizeModel(t)).
-        '    ToList()
         If ProductColorSizeExceptionIds IsNot Nothing AndAlso ProductColorSizeExceptionIds.Any() Then
             Return productInventoryLocations.
                 Where(Function(t) Not ProductColorSizeExceptionIds.Contains(t.ProductColorSizeID)).
@@ -111,13 +105,8 @@ Public Class ProductSelectorDialog
     End Sub
 
     Private Sub ShowSelectedStatus()
-        'Dim models = GetModels()
         Label2.Text = $"{_baseSource.Where(Function(t) t.IsSelected).Count()}/{_baseSource.Count()} selected"
     End Sub
-
-    Private Function GetModels() As List(Of ProductColorSizeModel)
-        Return grid.Rows.OfType(Of DataGridViewRow).Select(Function(r) CType(r.DataBoundItem, ProductColorSizeModel)).ToList()
-    End Function
 
     Private Sub LinkLabelReset_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabelReset.LinkClicked
         txtSearch.Clear()
