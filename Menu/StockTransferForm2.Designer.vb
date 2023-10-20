@@ -31,6 +31,8 @@ Partial Class StockTransferForm2
         Me.Column5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column6 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column7 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column8 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.LinkLabelRefresh = New System.Windows.Forms.LinkLabel()
@@ -102,8 +104,9 @@ Partial Class StockTransferForm2
         '
         Me.gridStockTransferOrders.AllowUserToAddRows = False
         Me.gridStockTransferOrders.AllowUserToDeleteRows = False
+        Me.gridStockTransferOrders.AllowUserToResizeRows = False
         Me.gridStockTransferOrders.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.gridStockTransferOrders.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column5, Me.Column6, Me.Column7})
+        Me.gridStockTransferOrders.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column5, Me.Column6, Me.Column7, Me.Column4, Me.Column8})
         DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
         DataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window
         DataGridViewCellStyle1.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -118,7 +121,7 @@ Partial Class StockTransferForm2
         Me.gridStockTransferOrders.Name = "gridStockTransferOrders"
         Me.gridStockTransferOrders.ReadOnly = True
         Me.gridStockTransferOrders.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.gridStockTransferOrders.Size = New System.Drawing.Size(206, 412)
+        Me.gridStockTransferOrders.Size = New System.Drawing.Size(206, 450)
         Me.gridStockTransferOrders.TabIndex = 12
         '
         'Column5
@@ -142,6 +145,20 @@ Partial Class StockTransferForm2
         Me.Column7.Name = "Column7"
         Me.Column7.ReadOnly = True
         '
+        'Column4
+        '
+        Me.Column4.DataPropertyName = "UserCreateFullName"
+        Me.Column4.HeaderText = "Created By"
+        Me.Column4.Name = "Column4"
+        Me.Column4.ReadOnly = True
+        '
+        'Column8
+        '
+        Me.Column8.DataPropertyName = "UserUpdateFullName"
+        Me.Column8.HeaderText = "Last Updated By"
+        Me.Column8.Name = "Column8"
+        Me.Column8.ReadOnly = True
+        '
         'SplitContainer1
         '
         Me.SplitContainer1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
@@ -159,7 +176,7 @@ Partial Class StockTransferForm2
         '
         Me.SplitContainer1.Panel2.Controls.Add(Me.SplitContainer2)
         Me.SplitContainer1.Panel2.Controls.Add(Me.ToolStrip1)
-        Me.SplitContainer1.Size = New System.Drawing.Size(1065, 523)
+        Me.SplitContainer1.Size = New System.Drawing.Size(1065, 561)
         Me.SplitContainer1.SplitterDistance = 208
         Me.SplitContainer1.TabIndex = 13
         '
@@ -231,8 +248,8 @@ Partial Class StockTransferForm2
         'SplitContainer2.Panel2
         '
         Me.SplitContainer2.Panel2.Controls.Add(Me.SplitContainer3)
-        Me.SplitContainer2.Size = New System.Drawing.Size(853, 498)
-        Me.SplitContainer2.SplitterDistance = 144
+        Me.SplitContainer2.Size = New System.Drawing.Size(853, 536)
+        Me.SplitContainer2.SplitterDistance = 154
         Me.SplitContainer2.TabIndex = 2
         '
         'Label5
@@ -341,7 +358,7 @@ Partial Class StockTransferForm2
         '
         Me.SplitContainer3.Panel2.Controls.Add(Me.gridStockTransferOrdersTo)
         Me.SplitContainer3.Panel2.Controls.Add(Me.Panel3)
-        Me.SplitContainer3.Size = New System.Drawing.Size(853, 350)
+        Me.SplitContainer3.Size = New System.Drawing.Size(853, 378)
         Me.SplitContainer3.SplitterDistance = 424
         Me.SplitContainer3.TabIndex = 0
         '
@@ -349,6 +366,7 @@ Partial Class StockTransferForm2
         '
         Me.gridStockTransferOrdersFrom.AllowUserToAddRows = False
         Me.gridStockTransferOrdersFrom.AllowUserToDeleteRows = False
+        Me.gridStockTransferOrdersFrom.AllowUserToResizeRows = False
         Me.gridStockTransferOrdersFrom.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.gridStockTransferOrdersFrom.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column1, Me.Column2, Me.pickFromRackShelfColumn, Me.Column3, Me.rackShelfColumnFrom, Me.deleteProductColorSize})
         DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
@@ -363,7 +381,7 @@ Partial Class StockTransferForm2
         Me.gridStockTransferOrdersFrom.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
         Me.gridStockTransferOrdersFrom.Location = New System.Drawing.Point(0, 100)
         Me.gridStockTransferOrdersFrom.Name = "gridStockTransferOrdersFrom"
-        Me.gridStockTransferOrdersFrom.Size = New System.Drawing.Size(422, 248)
+        Me.gridStockTransferOrdersFrom.Size = New System.Drawing.Size(422, 276)
         Me.gridStockTransferOrdersFrom.TabIndex = 2
         '
         'Column1
@@ -461,6 +479,7 @@ Partial Class StockTransferForm2
         '
         Me.gridStockTransferOrdersTo.AllowUserToAddRows = False
         Me.gridStockTransferOrdersTo.AllowUserToDeleteRows = False
+        Me.gridStockTransferOrdersTo.AllowUserToResizeRows = False
         Me.gridStockTransferOrdersTo.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.gridStockTransferOrdersTo.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.DataGridViewTextBoxColumn1, Me.DataGridViewTextBoxColumn2, Me.pickToRackShelfColumn, Me.DataGridViewTextBoxColumn3, Me.rackShelfColumnTo})
         DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
@@ -475,7 +494,7 @@ Partial Class StockTransferForm2
         Me.gridStockTransferOrdersTo.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
         Me.gridStockTransferOrdersTo.Location = New System.Drawing.Point(0, 100)
         Me.gridStockTransferOrdersTo.Name = "gridStockTransferOrdersTo"
-        Me.gridStockTransferOrdersTo.Size = New System.Drawing.Size(423, 248)
+        Me.gridStockTransferOrdersTo.Size = New System.Drawing.Size(423, 276)
         Me.gridStockTransferOrdersTo.TabIndex = 1
         '
         'DataGridViewTextBoxColumn1
@@ -613,10 +632,11 @@ Partial Class StockTransferForm2
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.White
-        Me.ClientSize = New System.Drawing.Size(1065, 523)
+        Me.ClientSize = New System.Drawing.Size(1065, 561)
         Me.Controls.Add(Me.SplitContainer1)
         Me.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
+        Me.MinimizeBox = False
         Me.Name = "StockTransferForm2"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         CType(Me.gridStockTransferOrders, System.ComponentModel.ISupportInitialize).EndInit()
@@ -681,9 +701,6 @@ Partial Class StockTransferForm2
     Friend WithEvents ToolTip1 As ToolTip
     Friend WithEvents ToolStripLabel1 As ToolStripLabel
     Friend WithEvents ToolStripButtonCancel As ToolStripButton
-    Friend WithEvents Column5 As DataGridViewTextBoxColumn
-    Friend WithEvents Column6 As DataGridViewTextBoxColumn
-    Friend WithEvents Column7 As DataGridViewTextBoxColumn
     Friend WithEvents LinkLabelRefresh As LinkLabel
     Friend WithEvents DataGridViewTextBoxColumn1 As DataGridViewTextBoxColumn
     Friend WithEvents DataGridViewTextBoxColumn2 As DataGridViewTextBoxColumn
@@ -698,4 +715,9 @@ Partial Class StockTransferForm2
     Friend WithEvents deleteProductColorSize As DevComponents.DotNetBar.Controls.DataGridViewButtonXColumn
     Friend WithEvents ToolStripButtonApproved As ToolStripButton
     Friend WithEvents ToolStripLabel2 As ToolStripLabel
+    Friend WithEvents Column5 As DataGridViewTextBoxColumn
+    Friend WithEvents Column6 As DataGridViewTextBoxColumn
+    Friend WithEvents Column7 As DataGridViewTextBoxColumn
+    Friend WithEvents Column4 As DataGridViewTextBoxColumn
+    Friend WithEvents Column8 As DataGridViewTextBoxColumn
 End Class

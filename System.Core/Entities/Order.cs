@@ -8,7 +8,7 @@ using WarehouseManagementSystem.Core.Enums;
 namespace WarehouseManagementSystem.Core.Entities
 {
     [Table("orders")]
-    public partial class Order : AuditableEntity
+    public partial class Order : CreateUpdateAuditableEntity
     {
         public int? RelatedOrderID { get; set; }
         public int? InventoryLocationID { get; set; }
@@ -99,5 +99,11 @@ namespace WarehouseManagementSystem.Core.Entities
                 orderNumber: orderNumber,
                 status: status,
                 orderDate: orderDate);
+
+        public string ViewName => IsCustomerOrderType ? View.CUSTOMER_ORDERS_VIEW :
+            IsPurchaseOrderType ? View.PURCHASE_ORDERS_VIEW :
+            IsReceivingReportType ? View.RECEIVING_VIEW :
+            IsStockAdjustType ? View.STOCK_ADJUSTMENT_VIEW :
+            IsStockTransferType ? View.STOCK_TRANSFER_VIEW : string.Empty;
     }
 }

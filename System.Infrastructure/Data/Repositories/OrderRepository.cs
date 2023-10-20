@@ -85,6 +85,8 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
         {
             var query = _context.Orders
                 .Include(o => o.OrderItems)
+                .Include(o => o.UserCreate)
+                .Include(o => o.UserUpdate)
                 .AsNoTracking()
                 .Where(o => o.RowID == order.RowID)
                 .AsQueryable();

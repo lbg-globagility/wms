@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using WarehouseManagementSystem.Core.Entities.Base;
 
 namespace WarehouseManagementSystem.Core.Entities
@@ -24,5 +25,7 @@ namespace WarehouseManagementSystem.Core.Entities
         }
 
         public virtual Position Position { get; set; }
+        public virtual ICollection<Order> OrdersCreate { get; set; }
+        public virtual ICollection<Order> OrdersUpdate { get; set; }
     }
 }

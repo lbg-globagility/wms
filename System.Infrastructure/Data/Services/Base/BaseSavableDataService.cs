@@ -48,7 +48,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services.Base
             var entity = await _repository.GetByIdAsync(id);
 
             if (entity == null)
-                throw new BusinessLogicException($"{_entityName} does not exists.");
+                BusinessLogicException.Throw($"{_entityName} does not exists.");
 
             await AdditionalDeleteValidation(entity: entity);
 
@@ -72,7 +72,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services.Base
                 oldEntity = await _repository.GetByIdAsync(entity.RowID.Value);
 
                 if (oldEntity == null)
-                    throw new BusinessLogicException($"{_entityName} no longer exists.");
+                    BusinessLogicException.Throw($"{_entityName} no longer exists.");
             }
 
             await SanitizeEntity(entity, oldEntity, userId);
@@ -93,7 +93,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services.Base
             List<T> deleted = null)
         {
             if (added == null && updated == null && deleted == null)
-                throw new BusinessLogicException($"No {_entityNamePlural} to be saved.");
+                BusinessLogicException.Throw($"No {_entityNamePlural} to be saved.");
 
             var allEntities = new List<T>();
             if (added != null && added.Any()) allEntities.AddRange(added);
@@ -125,7 +125,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services.Base
         public async Task SaveManyAsync(List<T> entities, int userId)
         {
             if (entities == null)
-                throw new BusinessLogicException($"No {_entityNamePlural} to be saved.");
+                BusinessLogicException.Throw($"No {_entityNamePlural} to be saved.");
 
             var insertEntities = entities.Where(x => x.IsNewEntity).ToList();
             var updateEntities = entities.Where(x => !x.IsNewEntity).ToList();
@@ -154,10 +154,10 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services.Base
         private Task SanitizeEntity(T entity, T oldEntity, int userId)
         {
             if (entity == null)
-                throw new BusinessLogicException($"Invalid {_entityName}.");
+                BusinessLogicException.Throw($"Invalid {_entityName}.");
 
             if (entity.IsNewEntity && oldEntity != null)
-                throw new BusinessLogicException("Your data is no longer up to date. Please refresh the form/page.");
+                BusinessLogicException.Throw("Your data is no longer up to date. Please refresh the form/page.");
 
             return Task.CompletedTask;
         }
@@ -214,7 +214,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services.Base
                     var oldEntity = GetOldEntity(oldEntities: oldEntities, entity);
 
                     if (oldEntity == null)
-                        throw new BusinessLogicException($"One of the {_entityNamePlural} no longer exists.");
+                        BusinessLogicException.Throw($"One of the {_entityNamePlural} no longer exists.");
 
                     await SanitizeEntity(entity, oldEntity, userId);
                 }
@@ -225,12 +225,12 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services.Base
                 foreach (var entity in deleted)
                 {
                     if (entity == null)
-                        throw new BusinessLogicException("Invalid data.");
+                        BusinessLogicException.Throw("Invalid data.");
 
                     var oldEntity = oldEntities.FirstOrDefault(x => x.RowID == entity.RowID);
 
                     if (oldEntity == null)
-                        throw new BusinessLogicException($"One of the {_entityNamePlural} no longer exists.");
+                        BusinessLogicException.Throw($"One of the {_entityNamePlural} no longer exists.");
                 }
             }
 

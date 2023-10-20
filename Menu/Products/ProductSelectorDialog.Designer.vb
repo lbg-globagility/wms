@@ -71,6 +71,7 @@ Partial Class ProductSelectorDialog
         '
         Me.grid.AllowUserToAddRows = False
         Me.grid.AllowUserToDeleteRows = False
+        Me.grid.AllowUserToResizeRows = False
         Me.grid.BackgroundColor = System.Drawing.Color.White
         Me.grid.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.isSelectedColumn, Me.Column3, Me.Column1, Me.Column6, Me.Column2, Me.Column8, Me.Column9, Me.Column7, Me.Column10, Me.Column11, Me.Column12, Me.Column13})
         DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft

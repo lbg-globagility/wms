@@ -17,12 +17,14 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IProductInventoryLocationRepository _productInventoryLocationRepository;
+        private readonly IPositionViewDataService _positionViewDataService;
 
         public OrderDataService(IOrderRepository orderRepository,
             IUserActivityRepository userActivityRepository,
             SystemContext context,
             IPolicyHelper policy,
-            IProductInventoryLocationRepository productInventoryLocationRepository) :
+            IProductInventoryLocationRepository productInventoryLocationRepository,
+            IPositionViewDataService positionViewDataService) :
 
             base(orderRepository,
                 userActivityRepository,
@@ -32,6 +34,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
         {
             _orderRepository = orderRepository;
             _productInventoryLocationRepository = productInventoryLocationRepository;
+            _positionViewDataService = positionViewDataService;
         }
 
         public async Task<List<Order>> GetOrdersByOrderTypeAsync(int organizationId, OrderType orderType) =>
@@ -59,7 +62,9 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
 
         public async Task SaveChangesAsync(Order order, int userId)
         {
-            if (order.IsStockTransferType)
+            await ScrutinateUserPrivilegeAsync(order, userId);
+
+            if (order.IsStockTransferType && order.IsOpen)
             {
                 order.MovementHistories?.ToList().ForEach(movementHistory =>
                 {
@@ -91,10 +96,11 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
 
         public async Task ApproveStockTransfer(Order order, int userId)
         {
-            //BusinessLogicException
-            if ((order?.IsApproved) ?? false) throw new BusinessLogicException(message: "Stock Transfer already `Approved`");
+            await ScrutinateUserPrivilegeAsync(order, userId);
 
-            if (order.HasNewMovementHistories) await SaveAsync(order, userId);
+            if (order.IsStockTransferType && (order?.IsApproved ?? false)) BusinessLogicException.Throw(message: "Stock Transfer already `Approved`");
+
+            if (order.HasNewMovementHistories) await SaveChangesAsync(order, userId);
 
             var pilIds = order.MovementHistories
                 .Select(t => t.ProductInventoryLocationIDA.Value)
@@ -121,5 +127,14 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
         public async Task<Order> GetOrderAsync(int id) => await _orderRepository.GetOrderAsync(id: id);
 
         public async Task<Order> GetOrderAsync(Order order) => await _orderRepository.GetOrderAsync(order: order);
+
+        private async Task ScrutinateUserPrivilegeAsync(Order order, int userId)
+        {
+            var positionView = await _positionViewDataService.GetByUserIdAndViewNameAsync(organizationId: order.OrganizationID.Value,
+                userId: userId,
+                viewName: order.ViewName);
+
+            if (positionView.Disable || positionView.ReadOnly) BusinessLogicException.Throw(message: "The user has insufficient privilege to perform this command.");
+        }
     }
 }

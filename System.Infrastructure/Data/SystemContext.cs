@@ -1,8 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using System;
 using System.Linq.Expressions;
-using WarehouseManagementSystem.Core.Dto;
 using WarehouseManagementSystem.Core.Entities;
+using WarehouseManagementSystem.Core.Entities.Base;
 using WarehouseManagementSystem.Core.Enums;
 
 namespace WarehouseManagementSystem.Infrastructure.Data
@@ -49,8 +51,97 @@ namespace WarehouseManagementSystem.Infrastructure.Data
         internal virtual DbSet<UserActivityItem> UserActivityItems { get; set; }
         internal virtual DbSet<View> Views { get; set; }
 
+        private static void SetGeneratedColumnsToReadOnly(ModelBuilder modelBuilder)
+        {
+            var created = GetPropertyName<AuditableEntity>(x => x.Created);
+            var lastUpd = GetPropertyName<AuditableEntity>(x => x.LastUpd);
+            var createdBy = GetPropertyName<AuditableEntity>(x => x.CreatedBy);
+            var lastUpdBy = GetPropertyName<AuditableEntity>(x => x.LastUpdBy);
+
+            foreach (var t in modelBuilder.Model.GetEntityTypes())
+            {
+                if (CheckIfDerivableByAuditableEntity(t.ClrType.BaseType))
+                {
+                    // Even if the LastUpd and Created columns are private
+                    // they are still included in the update query.
+                    // If we strictly want them to be never be altered by
+                    // ef core and only the database can update them,
+                    // we can use the code below:
+                    var createdMetaData = modelBuilder
+                        .Entity(t.ClrType)
+                        .Property(created)
+                        .ValueGeneratedOnAddOrUpdate()
+                        .Metadata;
+
+                    createdMetaData.BeforeSaveBehavior = PropertySaveBehavior.Ignore;
+                    createdMetaData.AfterSaveBehavior = PropertySaveBehavior.Ignore;
+
+                    var lastupdMetaData = modelBuilder
+                        .Entity(t.ClrType)
+                        .Property(lastUpd)
+                        .ValueGeneratedOnAddOrUpdate()
+                        .Metadata;
+
+                    lastupdMetaData.BeforeSaveBehavior = PropertySaveBehavior.Ignore;
+                    lastupdMetaData.AfterSaveBehavior = PropertySaveBehavior.Ignore;
+
+                    // CreatedBy can only be modified by ef core when EntityState is EntityState.Added
+                    var createdByMetaData = modelBuilder
+                        .Entity(t.ClrType)
+                        .Property(createdBy)
+                        .ValueGeneratedOnAddOrUpdate()
+                        .Metadata;
+
+                    createdByMetaData.BeforeSaveBehavior = PropertySaveBehavior.Save;
+                    createdByMetaData.AfterSaveBehavior = PropertySaveBehavior.Ignore;
+
+                    // LastUpdBy can only be modified by ef core when EntityState is not EntityState.Added
+                    var lastUpdByMetaData = modelBuilder
+                        .Entity(t.ClrType)
+                        .Property(lastUpdBy)
+                        .ValueGeneratedOnAddOrUpdate()
+                        .Metadata;
+
+                    lastUpdByMetaData.BeforeSaveBehavior = PropertySaveBehavior.Ignore;
+                    lastUpdByMetaData.AfterSaveBehavior = PropertySaveBehavior.Save;
+                }
+            }
+        }
+
+        private static bool CheckIfDerivableByAuditableEntity(Type baseType)
+        {
+            while (baseType != null)
+            {
+                if (baseType == typeof(AuditableEntity))
+                {
+                    return true;
+                }
+                else
+                {
+                    baseType = baseType?.BaseType;
+                }
+            }
+
+            return false;
+        }
+
+        private static string GetPropertyName<T>(Expression<Func<T, object>> expression)
+        {
+            if (expression.Body is MemberExpression)
+            {
+                return ((MemberExpression)expression.Body).Member.Name;
+            }
+            else
+            {
+                var op = ((UnaryExpression)expression.Body).Operand;
+                return ((MemberExpression)op).Member.Name;
+            }
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            SetGeneratedColumnsToReadOnly(modelBuilder);
+
             modelBuilder.Entity<Category>(t =>
             {
                 t.Property(x => x.Status)
@@ -91,6 +182,16 @@ namespace WarehouseManagementSystem.Infrastructure.Data
 
                 t.Property(x => x.Status)
                     .HasConversion(new EnumToStringConverter<OrderStatus>());
+
+                t.HasOne(o => o.UserCreate)
+                    .WithMany(u => u.OrdersCreate)
+                    .HasForeignKey(o => o.CreatedBy)
+                    .HasPrincipalKey(u => u.RowID);
+
+                t.HasOne(o => o.UserUpdate)
+                    .WithMany(u => u.OrdersUpdate)
+                    .HasForeignKey(o => o.LastUpdBy)
+                    .HasPrincipalKey(u => u.RowID);
             });
 
             modelBuilder.Entity<Product>(t =>
@@ -171,13 +272,13 @@ namespace WarehouseManagementSystem.Infrastructure.Data
             modelBuilder.Entity<Lineup>(t =>
             {
                 // entity value
-                Expression<System.Func<string, LineupStatus>> stringToLineupStatus()
+                Expression<Func<string, LineupStatus>> stringToLineupStatus()
                 {
                     return s => s == LineupStatus.Cancelled.ToString() ? LineupStatus.Cancelled : s == LineupStatus.Delivered.ToString() ? LineupStatus.Delivered : LineupStatus.ConfirmedDelivery;
                 }
 
                 // database value
-                Expression<System.Func<LineupStatus, string>> lineupStatusToString()
+                Expression<Func<LineupStatus, string>> lineupStatusToString()
                 {
                     return l => l == LineupStatus.Cancelled ? LineupStatus.Cancelled.ToString() : l == LineupStatus.Delivered ? LineupStatus.Delivered.ToString() : "Confirmed Delivery";
                 }
@@ -217,6 +318,16 @@ namespace WarehouseManagementSystem.Infrastructure.Data
             {
                 t.HasOne(x => x.Position)
                     .WithOne(x => x.User);
+
+                //t.HasMany(u => u.OrdersCreate)
+                //    .WithOne(o => o.UserCreate)
+                //    .HasForeignKey(o => o.CreatedBy)
+                //    .HasPrincipalKey(u => u.RowID);
+
+                //t.HasMany(u => u.OrdersUpdate)
+                //    .WithOne(o => o.UserUpdate)
+                //    .HasForeignKey(o => o.LastUpdBy)
+                //    .HasPrincipalKey(u => u.RowID);
             });
 
             modelBuilder.Entity<View>(t =>

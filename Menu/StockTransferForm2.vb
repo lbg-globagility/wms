@@ -46,6 +46,9 @@ Public Class StockTransferForm2
         cboToInventory.DataSource = _inventoryLocations
 
         Await LoadStockTransferOrders()
+
+        AddHandler gridStockTransferOrders.SelectionChanged, AddressOf gridStockTransferOrders_SelectionChanged
+        gridStockTransferOrders_SelectionChanged(gridStockTransferOrders, New EventArgs)
     End Sub
 
     Private Async Function LoadUserPrivilege() As Task
@@ -55,9 +58,15 @@ Public Class StockTransferForm2
             viewName:=VIEW_NAME)
 
         If _positionView.Disable Then
+            MessageBox.Show(text:="The user has insufficient privilege to access this module.", caption:="Insufficient Privilege", icon:=MessageBoxIcon.Error, buttons:=MessageBoxButtons.OK)
+
+            Close()
+
+            Return
+        ElseIf _positionView.ReadOnly Then
             Dim toolStripItems = ToolStrip1.Items.
                 OfType(Of ToolStripItem).
-                Where(Function(t) t.Name = ToolStripButtonClose.Name).
+                Where(Function(t) Not t.Name = ToolStripButtonClose.Name).
                 ToList()
 
             For Each item In toolStripItems
@@ -93,7 +102,7 @@ Public Class StockTransferForm2
 
     End Sub
 
-    Private Sub gridStockTransferOrders_SelectionChanged(sender As Object, e As EventArgs) Handles gridStockTransferOrders.SelectionChanged
+    Private Sub gridStockTransferOrders_SelectionChanged(sender As Object, e As EventArgs) 'Handles gridStockTransferOrders.SelectionChanged
         Dim currentRow = gridStockTransferOrders.CurrentRow
         If currentRow Is Nothing Then
             _selectedOrder = Nothing
@@ -108,6 +117,8 @@ Public Class StockTransferForm2
     End Sub
 
     Private Async Sub txtSearch_TextChanged(sender As Object, e As EventArgs) Handles txtSearch.TextChanged
+        RemoveStockTransferSelectionChangedEvent()
+
         If String.IsNullOrEmpty(txtSearch.Text.Trim()) Then
             LinkLabelRefresh_LinkClicked(LinkLabelRefresh,
                 New LinkLabelLinkClickedEventArgs(LinkLabelRefresh.Links.OfType(Of Link).FirstOrDefault()))
@@ -119,6 +130,9 @@ Public Class StockTransferForm2
             searchText:=txtSearch.Text)).
             OrderByDescending(Function(t) t.Created).
             ToList()
+
+        AddStockTransferSelectionChangedEvent()
+        gridStockTransferOrders_SelectionChanged(gridStockTransferOrders, New EventArgs)
     End Sub
 
     Private Async Sub ToolStripButtonNew_Click(sender As Object, e As EventArgs) Handles ToolStripButtonNew.Click
@@ -135,7 +149,7 @@ Public Class StockTransferForm2
 
                 SplitContainer1.Panel1.Enabled = False
 
-                DisEnableButtons(True, ignoreToolStripButton:=ToolStripButtonApproved)
+                DisEnableButtons(True)
             End Function)
 
     End Sub
@@ -145,14 +159,14 @@ Public Class StockTransferForm2
         txtStockTransferNo.Focus()
 
         Dim action As Action =
-            Async Sub()
-                LinkLabelRefresh_LinkClicked(LinkLabelRefresh,
+             Sub()
+                 LinkLabelRefresh_LinkClicked(LinkLabelRefresh,
                     New LinkLabelLinkClickedEventArgs(LinkLabelRefresh.Links.OfType(Of Link).FirstOrDefault()))
 
-                If ToolStripButtonNew.Enabled = False Then ToolStripButtonNew.Enabled = True
+                 If ToolStripButtonNew.Enabled = False Then ToolStripButtonNew.Enabled = True
 
-                If SplitContainer1.Panel1.Enabled = False Then SplitContainer1.Panel1.Enabled = True
-            End Sub
+                 If SplitContainer1.Panel1.Enabled = False Then SplitContainer1.Panel1.Enabled = True
+             End Sub
 
         Await FunctionUtils.TryCatchFunctionAsync("Save Stock Transfer changes",
             action:=
@@ -169,12 +183,12 @@ Public Class StockTransferForm2
     Private Async Sub ToolStripButtonCancel_Click(sender As Object, e As EventArgs) Handles ToolStripButtonCancel.Click
         Dim cancelButtonAction As Action =
             Sub()
-                LinkLabelRefresh_LinkClicked(LinkLabelRefresh,
-                    New LinkLabelLinkClickedEventArgs(LinkLabelRefresh.Links.OfType(Of Link).FirstOrDefault()))
-
                 If ToolStripButtonNew.Enabled = False Then ToolStripButtonNew.Enabled = True
 
                 If SplitContainer1.Panel1.Enabled = False Then SplitContainer1.Panel1.Enabled = True
+
+                LinkLabelRefresh_LinkClicked(LinkLabelRefresh,
+                    New LinkLabelLinkClickedEventArgs(LinkLabelRefresh.Links.OfType(Of Link).FirstOrDefault()))
             End Sub
 
         If _isNew Then
@@ -393,9 +407,22 @@ Public Class StockTransferForm2
     End Sub
 
     Private Async Sub LinkLabelRefresh_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabelRefresh.LinkClicked
+        RemoveStockTransferSelectionChangedEvent()
+
         LinkLabelRefresh.Enabled = False
         Await LoadStockTransferOrders()
         LinkLabelRefresh.Enabled = True
+
+        AddStockTransferSelectionChangedEvent()
+        gridStockTransferOrders_SelectionChanged(gridStockTransferOrders, New EventArgs)
+    End Sub
+
+    Private Sub AddStockTransferSelectionChangedEvent()
+        AddHandler gridStockTransferOrders.SelectionChanged, AddressOf gridStockTransferOrders_SelectionChanged
+    End Sub
+
+    Private Sub RemoveStockTransferSelectionChangedEvent()
+        RemoveHandler gridStockTransferOrders.SelectionChanged, AddressOf gridStockTransferOrders_SelectionChanged
     End Sub
 
     Private Sub ToolStripButtonNew_EnabledChanged(sender As Object, e As EventArgs) Handles ToolStripButtonNew.EnabledChanged
@@ -409,16 +436,16 @@ Public Class StockTransferForm2
         SplitContainer1.Panel1.Enabled = False
 
         Dim action As Action =
-            Async Sub()
-                LinkLabelRefresh_LinkClicked(LinkLabelRefresh,
+             Sub()
+                 If ToolStripButtonNew.Enabled = False Then ToolStripButtonNew.Enabled = True
+
+                 If SplitContainer1.Panel1.Enabled = False Then SplitContainer1.Panel1.Enabled = True
+
+                 LinkLabelRefresh_LinkClicked(LinkLabelRefresh,
                     New LinkLabelLinkClickedEventArgs(LinkLabelRefresh.Links.OfType(Of Link).FirstOrDefault()))
 
-                If ToolStripButtonNew.Enabled = False Then ToolStripButtonNew.Enabled = True
-
-                If SplitContainer1.Panel1.Enabled = False Then SplitContainer1.Panel1.Enabled = True
-
-                ReloadDisplayForm(order:=_selectedOrder)
-            End Sub
+                 'ReloadDisplayForm(order:=_selectedOrder)
+             End Sub
 
         Await FunctionUtils.TryCatchFunctionAsync("Approve Stock Transfer",
             Async Function()
@@ -442,13 +469,11 @@ Public Class StockTransferForm2
         DisEnableButtons(enabled)
     End Sub
 
-    Private Sub DisEnableButtons(enabled As Boolean,
-        Optional ignoreToolStripButton As ToolStripButton = Nothing)
+    Private Sub DisEnableButtons(enabled As Boolean)
 
         Dim names = {ToolStripButtonSave.Name,
                     ToolStripButtonApproved.Name,
                     ToolStripButtonCancel.Name}
-        If ignoreToolStripButton IsNot Nothing Then names = names.Where(Function(t) Not t = ignoreToolStripButton.Name).ToArray()
 
         Dim toolStripButtons = ToolStrip1.Items.OfType(Of ToolStripButton).
             Where(Function(t) names.Contains(t.Name)).
@@ -456,6 +481,8 @@ Public Class StockTransferForm2
         For Each button In toolStripButtons
             button.Enabled = enabled
         Next
+
+        If _selectedOrder IsNot Nothing AndAlso _selectedOrder.IsApproved Then ToolStripButtonApproved.Enabled = False
     End Sub
 
     Private Sub gridStockTransferOrders_DataSourceChanged(sender As Object, e As EventArgs) Handles gridStockTransferOrders.DataSourceChanged

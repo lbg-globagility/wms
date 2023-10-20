@@ -74,7 +74,7 @@ namespace WarehouseManagementSystem.Core.Entities
 
         public void DeleteMovementHistoryByProductColorSizeId(int productColorSizeId)
         {
-            if (IsApproved) throw new BusinessLogicException("Invalid Command. Stock Transfer already `Approved`.");
+            if (IsApproved) BusinessLogicException.Throw("Invalid Command. This Stock Transfer already `Approved`.");
 
             var deleteItems = MovementHistories?.Where(t => t.ProductColorSizeID.Value == productColorSizeId).ToList();
             if (DeletedMovementHistories == null) DeletedMovementHistories = new List<MovementHistory>();
