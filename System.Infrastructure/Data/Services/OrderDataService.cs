@@ -134,7 +134,24 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
                 userId: userId,
                 viewName: order.ViewName);
 
-            if (positionView.Disable || positionView.ReadOnly) BusinessLogicException.Throw(message: "The user has insufficient privilege to perform this command.");
+            if (positionView.Restricted || positionView.ReadOnly) ThrowError();
+
+            var isDoingUpdateWithNoUpdatePrivilege = !order.IsNewEntity && !positionView.Updates;
+
+            if (order.IsStockTransferType &&
+                isDoingUpdateWithNoUpdatePrivilege)
+            {
+                var originOrder = await _orderRepository.GetOrderAsync(order);
+
+                if (!originOrder.HasMovementHistories && order.HasNewMovementHistories) return;
+
+                ThrowError();
+            }
+
+            if (isDoingUpdateWithNoUpdatePrivilege)
+                ThrowError();
+
+            void ThrowError() => BusinessLogicException.Throw(message: "The user has insufficient privilege to perform this command.");
         }
     }
 }

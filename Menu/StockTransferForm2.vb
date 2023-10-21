@@ -57,8 +57,11 @@ Public Class StockTransferForm2
             userId:=_userId,
             viewName:=VIEW_NAME)
 
-        If _positionView.Disable Then
-            MessageBox.Show(text:="The user has insufficient privilege to access this module.", caption:="Insufficient Privilege", icon:=MessageBoxIcon.Error, buttons:=MessageBoxButtons.OK)
+        If _positionView.Restricted Then
+            MessageBox.Show(text:="The user has insufficient privilege to access this module.",
+                caption:="Insufficient Privilege",
+                icon:=MessageBoxIcon.Error,
+                buttons:=MessageBoxButtons.OK)
 
             Close()
 
@@ -77,7 +80,7 @@ Public Class StockTransferForm2
         End If
 
         ToolStripButtonNew.Visible = _positionView.Creates
-        ToolStripButtonSave.Visible = _positionView.Updates
+        ToolStripButtonSave.Visible = _positionView.Updates Or _positionView.Creates
         ToolStripButtonApproved.Visible = _positionView.Updates
 
     End Function

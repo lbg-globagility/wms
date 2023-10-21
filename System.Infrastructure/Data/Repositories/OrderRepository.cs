@@ -38,7 +38,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
                 .Where(o => o.OrganizationID == organizationId)
                 .AsQueryable();
 
-            query = StockTransferNavMapping(orderType, query);
+            query = StockTransferNavMapping(query, orderType);
 
             return Task.FromResult(
                 query
@@ -69,7 +69,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
                 .Where(o => o.OrganizationID == organizationId)
                 .AsQueryable();
 
-            query = StockTransferNavMapping(orderType, query);
+            query = StockTransferNavMapping(query, orderType);
 
             return query;
         }
@@ -91,12 +91,12 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
                 .Where(o => o.RowID == order.RowID)
                 .AsQueryable();
 
-            query = StockTransferNavMapping(order.OrderType, query);
+            query = StockTransferNavMapping(query, order.OrderType);
 
             return await query.FirstOrDefaultAsync();
         }
 
-        private IQueryable<Order> StockTransferNavMapping(OrderType orderType, IQueryable<Order> query)
+        private IQueryable<Order> StockTransferNavMapping(IQueryable<Order> query, OrderType orderType = default)
         {
             if (orderType == OrderType.ST)
                 query = query
