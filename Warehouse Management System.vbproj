@@ -879,6 +879,12 @@
     <Compile Include="SubForms\EditCartonForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="SubForms\EditContactForm.Designer.vb">
+      <DependentUpon>EditContactForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="SubForms\EditContactForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="SubForms\EditRackShelfColumnForm.Designer.vb">
       <DependentUpon>EditRackShelfColumnForm.vb</DependentUpon>
     </Compile>
@@ -1271,6 +1277,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SubForms\EditCartonForm.resx">
       <DependentUpon>EditCartonForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SubForms\EditContactForm.resx">
+      <DependentUpon>EditContactForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SubForms\EditRackShelfColumnForm.resx">
       <DependentUpon>EditRackShelfColumnForm.vb</DependentUpon>

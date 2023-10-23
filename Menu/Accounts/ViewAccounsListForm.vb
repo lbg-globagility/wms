@@ -43,13 +43,15 @@ Public Class ViewAccounsListForm
 
         _dataSource = New List(Of Contact)
 
+        Dim radioButton = Panel1.Controls.OfType(Of RadioButton).FirstOrDefault(Function(t) t.Checked)
+
         Dim senderName = CType(sender, RadioButton).Name
-        If senderName = rbAll.Name AndAlso rbAll.Checked Then
+        If radioButton Is rbAll Then
             _dataSource.AddRange(agents)
             _dataSource.AddRange(helpers)
-        ElseIf senderName = rbAgent.Name AndAlso rbAgent.Checked Then
+        ElseIf radioButton Is rbAgent Then
             _dataSource.AddRange(agents)
-        ElseIf senderName = rbHelper.Name AndAlso rbHelper.Checked Then
+        ElseIf radioButton Is rbHelper Then
             _dataSource.AddRange(helpers)
         End If
 
@@ -73,6 +75,20 @@ Public Class ViewAccounsListForm
             OrderBy(Function(t) t.LastName).
             ThenBy(Function(t) t.FirstName).
             ToList()
+    End Sub
+
+    Private Sub gridContacts_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles gridContacts.CellContentClick
+
+    End Sub
+
+    Private Sub gridContacts_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles gridContacts.CellDoubleClick
+        If gridContacts.Rows.Count() = 0 Then Return
+
+        Dim data = CType(gridContacts.CurrentRow.DataBoundItem, Contact)
+        Dim form = New EditContactForm(data)
+        If form.ShowDialog() = DialogResult.OK Then
+            CheckedChanged(rbAll, New EventArgs)
+        End If
     End Sub
 
 End Class
