@@ -71,7 +71,11 @@ Public Class ProductImportation
                                     categoryId:=category.RowID.Value,
                                     productCode:=productItem.FirstOrDefault().ProductCode,
                                     description:=productItem.FirstOrDefault().Description,
-                                    unitPrice:=productItem.FirstOrDefault().SRP),
+                                    unitOfMeasure:=productItem.FirstOrDefault().UnitOfMeasure,
+                                    unitPrice:=productItem.FirstOrDefault().SRP,
+                                    brandName:=productItem.FirstOrDefault().BrandName,
+                                    sku:=productItem.FirstOrDefault().SKU,
+                                    sku2:=productItem.FirstOrDefault().SKU2),
                                 userId:=Z_UserID)
                         End If
 

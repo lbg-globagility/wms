@@ -47,7 +47,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
                         entity.ProductInventoryLocations.ToList().ForEach(t =>
                         {
                             if (t.IsNewEntity) _context.ProductInventoryLocations.Add(t);
-                            else _context.Entry(t).State = EntityState.Added;
+                            else _context.Entry(t).State = EntityState.Modified;
                         });
 
                     DetachNavigationProperties(entity);

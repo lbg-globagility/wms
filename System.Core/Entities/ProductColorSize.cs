@@ -47,6 +47,7 @@ namespace WarehouseManagementSystem.Core.Entities
         }
 
         public virtual ProductColor ProductColor { get; set; }
+        public virtual ICollection<MovementHistory> MovementHistories { get; set; }
 
         public virtual ICollection<ProductInventoryLocation> ProductInventoryLocations { get; set; }
 

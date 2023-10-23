@@ -10,6 +10,6 @@ namespace WarehouseManagementSystem.Core.Entities
         public bool IsCurrentOwner { get; set; }
 
         private const string TEXT_THURSTON = "Thurston";
-        public bool IsThurston => Name == TEXT_THURSTON;
+        public bool IsThurston => Name == TEXT_THURSTON && IsCurrentOwner;
     }
 }

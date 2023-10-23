@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System.Linq.Expressions;
+using WarehouseManagementSystem.Core.Dto;
 using WarehouseManagementSystem.Core.Entities;
 using WarehouseManagementSystem.Core.Enums;
 
@@ -23,6 +24,8 @@ namespace WarehouseManagementSystem.Infrastructure.Data
         internal virtual DbSet<InvoiceItem> InvoiceItems { get; set; }
         internal virtual DbSet<InvoicePayment> InvoicePayments { get; set; }
         internal virtual DbSet<Lineup> Lineups { get; set; }
+        internal virtual DbSet<MovementHistory> MovementHistories { get; set; }
+
         internal virtual DbSet<Order> Orders { get; set; }
         internal virtual DbSet<OrderItem> OrderItems { get; set; }
         internal virtual DbSet<Organization> Organizations { get; set; }
@@ -35,7 +38,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data
         internal virtual DbSet<ProductColor> ProductColors { get; set; }
         internal virtual DbSet<ProductColorSize> ProductColorSizes { get; set; }
         internal virtual DbSet<ProductInventoryLocation> ProductInventoryLocations { get; set; }
-        internal virtual DbSet<ProductMovementHistory> ProductMovementHistories { get; set; }
+        internal virtual DbSet<MovementHistory> ProductMovementHistories { get; set; }
         internal virtual DbSet<ProductShipmentHistory> ProductShipmentHistories { get; set; }
         internal virtual DbSet<RackShelfColumn> RackShelfColumns { get; set; }
         internal virtual DbSet<SystemOwner> SystemOwners { get; set; }
@@ -76,8 +79,14 @@ namespace WarehouseManagementSystem.Infrastructure.Data
                 t.HasMany(x => x.OrderItems)
                     .WithOne(x => x.Order);
 
+                t.HasMany(x => x.MovementHistories)
+                    .WithOne(x => x.Order);
+
                 t.Property(x => x.OrderType)
                     .HasConversion(new EnumToStringConverter<OrderType>());
+
+                t.Property(x => x.Status)
+                    .HasConversion(new EnumToStringConverter<OrderStatus>());
             });
 
             modelBuilder.Entity<Product>(t =>
@@ -114,6 +123,9 @@ namespace WarehouseManagementSystem.Infrastructure.Data
 
                 t.HasOne(x => x.ProductColor)
                     .WithMany(x => x.ProductColorSizes);
+
+                t.HasMany(x => x.MovementHistories)
+                    .WithOne(x => x.ProductColorSize);
             });
 
             modelBuilder.Entity<ProductInventoryLocation>(t =>
@@ -123,6 +135,9 @@ namespace WarehouseManagementSystem.Infrastructure.Data
 
                 t.HasOne(x => x.RackShelfColumn)
                     .WithMany(x => x.ProductInventoryLocations);
+
+                t.HasMany(x => x.MovementHistories)
+                    .WithOne(x => x.ProductInventoryLocation);
             });
 
             modelBuilder.Entity<RackShelfColumn>(t =>

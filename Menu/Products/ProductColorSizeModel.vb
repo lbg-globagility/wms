@@ -1,0 +1,95 @@
+﻿Option Strict On
+
+Imports WarehouseManagementSystem.Core.Entities
+
+Public Class ProductColorSizeModel
+    Private ReadOnly _productInventoryLocation As ProductInventoryLocation
+    Private ReadOnly _productColorSize As ProductColorSize
+    Private ReadOnly _productColor As ProductColor
+    Private ReadOnly _productImageConfigParser As ProductImageConfigParser
+
+    Public Sub New(productInventoryLocation As ProductInventoryLocation,
+        productColorSize As ProductColorSize,
+        productImageConfigParser As ProductImageConfigParser)
+
+        _productInventoryLocation = productInventoryLocation
+        _productColorSize = productColorSize
+        _productColor = productColorSize.ProductColor
+        _productImageConfigParser = productImageConfigParser
+    End Sub
+
+    Public Property IsSelected As Boolean
+
+    Public ReadOnly Property ProductCode As String
+        Get
+            Return _productColor?.Product?.ProductCode
+        End Get
+    End Property
+
+    Public ReadOnly Property BrandName As String
+        Get
+            Return _productColor?.Product?.BrandName
+        End Get
+    End Property
+
+    Public ReadOnly Property Category As String
+        Get
+            Return _productColor?.Product?.Category.CategoryName
+        End Get
+    End Property
+
+    Public ReadOnly Property SRP As String
+        Get
+            Return _productColor?.Product?.UnitPrice.Value.ToString("N2")
+        End Get
+    End Property
+
+    Public ReadOnly Property UnitOfMeasure As String
+        Get
+            Return _productColor?.Product?.UnitOfMeasure
+        End Get
+    End Property
+
+    Public ReadOnly Property Description As String
+        Get
+            Return _productColor?.Product?.Description
+        End Get
+    End Property
+
+    Public ReadOnly Property Colors As String
+        Get
+            Return _productColor.Color.ColorName
+        End Get
+    End Property
+
+    Public ReadOnly Property Style As String
+        Get
+            Return $"{_productColorSize.Size}"
+        End Get
+    End Property
+
+    Public ReadOnly Property SeasonCode As String
+        Get
+            Return $"{_productColorSize.SeasonCode}"
+        End Get
+    End Property
+
+    Public ReadOnly Property ProductColorSize As ProductColorSize
+        Get
+            Return _productColorSize
+        End Get
+    End Property
+
+    Public ReadOnly Property ProductInventoryLocation As ProductInventoryLocation
+        Get
+            Return _productInventoryLocation
+        End Get
+    End Property
+
+    Public ReadOnly Property Photo As String
+        Get
+            Return $"\\{_productImageConfigParser.Server}{_productImageConfigParser.PhotoDir}\{ProductCode}.jpg"
+        End Get
+    End Property
+
+End Class

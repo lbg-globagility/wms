@@ -14,6 +14,19 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
         {
         }
 
+        public async Task<List<ProductInventoryLocation>> GetByInventoryLocationIdAsync(int inventoryLocationId) => await _context.ProductInventoryLocations
+            .Include(t => t.RackShelfColumn)
+            .Include(t => t.ProductColorSize)
+                .ThenInclude(t => t.ProductColor)
+                    .ThenInclude(t => t.Color)
+            .Include(t => t.ProductColorSize)
+                .ThenInclude(t => t.ProductColor)
+                    .ThenInclude(t => t.Product)
+                        .ThenInclude(t => t.Category)
+            .AsNoTracking()
+            .Where(t => t.RackShelfColumn.InventoryLocationID == inventoryLocationId)
+            .ToListAsync();
+
         public async Task<List<ProductInventoryLocation>> GetProductColorSizesByInventoryLocationIdAsync(int inventoryLocationId) => await _context.ProductInventoryLocations
             .AsNoTracking()
             .Include(t => t.RackShelfColumn)

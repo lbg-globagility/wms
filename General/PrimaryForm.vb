@@ -1551,4 +1551,9 @@ Public Class PrimaryForm
         form.ShowDialog()
     End Sub
 
+    Private Sub FasdfsdfToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles FasdfsdfToolStripMenuItem.Click
+        Dim form As New StockTransferForm2()
+        form.ShowDialog()
+    End Sub
+
 End Class
