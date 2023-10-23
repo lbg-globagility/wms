@@ -1,6 +1,7 @@
 ﻿Imports Microsoft.Extensions.DependencyInjection
 Imports MySql.Data.MySqlClient
 Imports WarehouseManagementSystem.Core.Enums
+Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
 Imports WarehouseManagementSystem.Core.Interfaces.Repositories
 
 Public Class CustomerOrdersForm
@@ -22,7 +23,7 @@ Public Class CustomerOrdersForm
     Dim simplesearchphrase, datephrase, commonphrase, pagefilter1, pagefilter2, pagefilter3, pagefilter4 As String
     Dim cototalqtyordered, coqtyordered, coitotalqtyordered, coiqtyordered, cototalqtydelivered, cototalqtypicked As Integer
     Dim cocustomerid, coorderid, coproductcolorsizesid, coproductid, coproductbundleid, coorderitemid, cobranchid, covendorid, cocombinecodingid As Integer
-
+    Private _agents As List(Of WarehouseManagementSystem.Core.Entities.Contact)
     Private Async Sub CustomerOrdersForm_Load(sender As Object, e As EventArgs) Handles Me.Load
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -42,6 +43,19 @@ Public Class CustomerOrdersForm
 
         Await LoadInventoryLocations()
     End Sub
+
+    Private Async Function GetAgentsAsync() As Task
+        Dim contactDataService = MainServiceProvider.GetRequiredService(Of IContactDataService)
+
+        _agents = Await contactDataService.GetAgentsAsync(organizationId:=Z_OrganizationID)
+
+        Dim agentDataSource = New List(Of WarehouseManagementSystem.Core.Entities.Contact) From {WarehouseManagementSystem.Core.Entities.Contact.NewContact(organizationId:=Z_OrganizationID, lastName:=String.Empty, firstName:=String.Empty, workPhone:=String.Empty, type:=ContactType.Agent)}
+        agentDataSource.AddRange(_agents)
+        cboAgent.ValueMember = "RowID"
+        cboAgent.DisplayMember = "FullNameLastNameFirst"
+        cboAgent.DataSource = agentDataSource
+
+    End Function
 
     Private Sub CustomerOrdersForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
         Me.Cursor = Cursors.WaitCursor
@@ -74,6 +88,8 @@ Public Class CustomerOrdersForm
         globalautopopulateClassDescription(cboClassDescription, Me)
         globalautopopulateListOfValues(cboTags, "Tags", Me)
         autopopulateTags()
+        autoPopulateCustomerOrderType()
+        GetAgentsAsync()
     End Sub
 
 #Region "Clear/Enable/Visible"
@@ -182,6 +198,8 @@ Public Class CustomerOrdersForm
             cboBranchCodeNameInfo.SelectedItem = Nothing
             cboVendorCodeNameInfo.SelectedItem = Nothing
             cboClassDescription.SelectedItem = Nothing
+            cboCustomerOrderType.SelectedItem = Nothing
+            cboAgent.SelectedItem = Nothing
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -908,6 +926,14 @@ Public Class CustomerOrdersForm
         End Try
     End Sub
 
+    Sub autoPopulateCustomerOrderType()
+        Dim CustomerOrderTypes = [Enum].GetValues(GetType(CustomerOrderType))
+        cboCustomerOrderType.Items.Clear()
+        For Each type In CustomerOrderTypes
+            cboCustomerOrderType.Items.Add(type)
+        Next
+    End Sub
+
     Private Async Function LoadInventoryLocations() As Task
         Dim inventoryLocationRepository = MainServiceProvider.GetRequiredService(Of IInventoryLocationRepository)
         Dim inventoryLocations = Await inventoryLocationRepository.GetAllByOrganizationIdAsync(Z_OrganizationID)
@@ -1080,7 +1106,7 @@ Public Class CustomerOrdersForm
             Dim sql1 As String = "SELECT COALESCE(co.ordernumber,''),COALESCE(co.referencenumber,''),COALESCE(co.drnumber,''),COALESCE(co.status,''),COALESCE(DATE_FORMAT(co.orderdate,'%d-%b-%Y'),''),COALESCE(DATE_FORMAT(co.targetdate,'%d-%b-%Y'),''),COALESCE(DATE_FORMAT(co.enddate,'%d-%b-%Y'),'')," &
                         "COALESCE(DATE_FORMAT(co.datesubmitted,'%d-%b-%Y'),''),COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),''),COALESCE(co.customeraddress,''),COALESCE(CONCAT(COALESCE(bc.branchcode,''),' - ',COALESCE(bc.branchname,'')),'')," &
                         "COALESCE(CONCAT(COALESCE(ve.companyname,''),' - ',COALESCE(ve.companycode,'')),''),COALESCE(CONCAT(COALESCE(cc.codename,''),' / ',COALESCE(c1.codeno,''),'-',COALESCE(c2.codeno,''),'-',COALESCE(c3.codeno,'')),''),COALESCE(co.deliveryhours,'')," &
-                        "COALESCE(co.comments,''), InventoryLocationID FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid LEFT JOIN branches bc ON co.branchid = bc.rowid LEFT JOIN companies ve ON co.companyid = ve.rowid LEFT JOIN combinecodings cc ON co.combinecodingid = cc.rowid " &
+                        "COALESCE(co.comments,''), InventoryLocationID,COALESCE(IF(co.AgentID!=0,co.AgentID,''),''),COALESCE(co.CustomerOrderType,'') FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid LEFT JOIN branches bc ON co.branchid = bc.rowid LEFT JOIN companies ve ON co.companyid = ve.rowid LEFT JOIN combinecodings cc ON co.combinecodingid = cc.rowid " &
                         "LEFT JOIN codings c1 ON cc.codingida = c1.rowid LEFT JOIN codings c2 ON cc.codingidb = c2.rowid LEFT JOIN codings c3 ON cc.codingidc = c3.rowid WHERE co.rowid = " & icustomerorderid & " "
             Dim cmd1 As New MySqlCommand(sql1, conn1)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -1101,6 +1127,8 @@ Public Class CustomerOrdersForm
                     cboClassDescription.Text = reader1(12)
                     txtDeliveryHours.Text = reader1(13)
                     txtComments.Text = reader1(14)
+                    cboAgent.Text = reader1(16)
+                    cboCustomerOrderType.Text = reader1(17)
                     getPickListNoB(icustomerorderid, Me)
                     If globalpicklistno = 0 Then
                         txtPickListNo.Text = ""
@@ -2011,11 +2039,11 @@ Public Class CustomerOrdersForm
             Dim dtDco As New DataTable
             dtDco = getDataTableForSQL("SELECT co.accountid,COALESCE(co.referencenumber,''),DATE_FORMAT(co.orderdate,'%d-%b-%Y'),DATE_FORMAT(co.targetdate,'%d-%b-%Y'),COALESCE(co.customername)," &
                         "COALESCE(co.comments,''),COALESCE(co.totalamount,0),COALESCE(co.deliveryhours,''),COALESCE(co.customeraddress,''),COALESCE(co.branchid,0),COALESCE(co.companyid,0)," &
-                        "COALESCE(co.combinecodingid,0),DATE_FORMAT(co.enddate,'%d-%b-%Y') FROM orders co WHERE co.rowid = " & icustomerorderid & " ")
+                        "COALESCE(co.combinecodingid,0),DATE_FORMAT(co.enddate,'%d-%b-%Y'),COALESCE(co.Agentid,0),COALESCE(co.CustomerOrderType,'') FROM orders co WHERE co.rowid = " & icustomerorderid & " ")
             If dtDco.Rows.Count <> 0 Then
                 getOrderNo(globaliordertype:=OrderType.CO.ToString(), Me)
                 I_Orders(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, CInt(dtDco.Rows(0)(0)), If(CInt(dtDco.Rows(0)(9)) = 0, DBNull.Value, CInt(dtDco.Rows(0)(9))), If(CInt(dtDco.Rows(0)(10)) = 0, DBNull.Value, CInt(dtDco.Rows(0)(10))),
-                    If(CInt(dtDco.Rows(0)(11)) = 0, DBNull.Value, CInt(dtDco.Rows(0)(11))), CStr(globalorderno), "", "", OrderType:=OrderType.CO.ToString(), dtDco.Rows(0)(2), dtDco.Rows(0)(3), dtDco.Rows(0)(12), dtDco.Rows(0)(4), dtDco.Rows(0)(5), "New", CDec(dtDco.Rows(0)(6)), CStr(dtDco.Rows(0)(7)), CStr(dtDco.Rows(0)(8)), Me)
+                    If(CInt(dtDco.Rows(0)(11)) = 0, DBNull.Value, CInt(dtDco.Rows(0)(11))), CStr(globalorderno), "", "", OrderType:=OrderType.CO.ToString(), dtDco.Rows(0)(2), dtDco.Rows(0)(3), dtDco.Rows(0)(12), dtDco.Rows(0)(4), dtDco.Rows(0)(5), "New", CDec(dtDco.Rows(0)(6)), CStr(dtDco.Rows(0)(7)), CStr(dtDco.Rows(0)(8)), CStr(dtDco.Rows(0)(14)), Me, AgentId:=CInt(dtDco.Rows(0)(13)))
                 coorderid = globalorderidsp
             End If
         Catch ex As Exception
@@ -3499,8 +3527,9 @@ Public Class CustomerOrdersForm
                     '    End If
                     'End If
                     getOrderNo(globaliordertype:=OrderType.CO.ToString(), Me)
+
                     I_Orders(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, cocustomerid, If(cobranchid = 0, DBNull.Value, cobranchid), If(covendorid = 0, DBNull.Value, covendorid), If(cocombinecodingid = 0, DBNull.Value, cocombinecodingid),
-                            CStr(globalorderno), txtPONo.Text, txtSIDRNo.Text, OrderType:=OrderType.CO.ToString(), dtpCustomerOrderDate.Value, dtpDeliveryDate.Value, dtpEndDate.Value, cboCustomerName.Text, txtComments.Text, txtStatus.Text, Math.Round(coitotalprice, 2), txtDeliveryHours.Text, txtDeliveryAddress.Text, Me, cboInventoryLocation.SelectedValue)
+                            CStr(globalorderno), txtPONo.Text, txtSIDRNo.Text, OrderType:=OrderType.CO.ToString(), dtpCustomerOrderDate.Value, dtpDeliveryDate.Value, dtpEndDate.Value, cboCustomerName.Text, txtComments.Text, txtStatus.Text, Math.Round(coitotalprice, 2), txtDeliveryHours.Text, txtDeliveryAddress.Text, cboCustomerOrderType.Text, Me, AgentId:=CInt(cboAgent.SelectedValue))
                     coorderid = globalorderidsp
                     If dgCustomerOrderItems.Rows.Count <> 0 Then
                         For a = 0 To dgCustomerOrderItems.Rows.Count - 1
@@ -3573,7 +3602,7 @@ Public Class CustomerOrdersForm
                         '    End If
                         'End If
                         U_Orders(CInt(dgCustomerOrderList.CurrentRow.Cells("co_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, cocustomerid, If(cobranchid = 0, DBNull.Value, cobranchid), If(covendorid = 0, DBNull.Value, covendorid), If(cocombinecodingid = 0, DBNull.Value, cocombinecodingid),
-                             txtCustomerOrderNo.Text, txtPONo.Text, txtSIDRNo.Text, dtpCustomerOrderDate.Value, dtpDeliveryDate.Value, dtpEndDate.Value, txtComments.Text, Math.Round(coitotalprice, 2), txtDeliveryHours.Text, txtDeliveryAddress.Text, Me, cboInventoryLocation.SelectedValue)
+                             txtCustomerOrderNo.Text, txtPONo.Text, txtSIDRNo.Text, dtpCustomerOrderDate.Value, dtpDeliveryDate.Value, dtpEndDate.Value, txtComments.Text, Math.Round(coitotalprice, 2), txtDeliveryHours.Text, txtDeliveryAddress.Text, cboCustomerOrderType.Text, Me, cboCustomerOrderType.SelectedValue, AgentId:=CInt(cboAgent.SelectedValue))
                         If dgCustomerOrderItems.Rows.Count <> 0 Then
                             For a = 0 To dgCustomerOrderItems.Rows.Count - 1
                                 If myModule.systemerrorfound = False Then
@@ -3857,7 +3886,7 @@ Public Class CustomerOrdersForm
                     '    End If
                     'End If
                     U_Orders(CInt(dgCustomerOrderList.CurrentRow.Cells("co_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, cocustomerid, If(cobranchid = 0, DBNull.Value, cobranchid), If(covendorid = 0, DBNull.Value, covendorid), If(cocombinecodingid = 0, DBNull.Value, cocombinecodingid),
-                                txtCustomerOrderNo.Text, txtPONo.Text, txtSIDRNo.Text, dtpCustomerOrderDate.Value, dtpDeliveryDate.Value, dtpEndDate.Value, txtComments.Text, Math.Round(coitotalprice, 2), txtDeliveryHours.Text, txtDeliveryAddress.Text, Me)
+                                txtCustomerOrderNo.Text, txtPONo.Text, txtSIDRNo.Text, dtpCustomerOrderDate.Value, dtpDeliveryDate.Value, dtpEndDate.Value, txtComments.Text, Math.Round(coitotalprice, 2), txtDeliveryHours.Text, txtDeliveryAddress.Text, cboCustomerOrderType.Text, Me, AgentId:=CInt(cboAgent.SelectedValue))
                     U_OrderStatus(CInt(dgCustomerOrderList.CurrentRow.Cells("co_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, "Submitted To Warehouse", Me)
                     U_OrderDateSubmitted(CInt(dgCustomerOrderList.CurrentRow.Cells("co_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Date.Now.ToString("yyyy/MM/dd"), Me)
                     If dgCustomerOrderItems.Rows.Count <> 0 Then
