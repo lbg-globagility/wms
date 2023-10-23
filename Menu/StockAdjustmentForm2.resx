@@ -213,6 +213,14 @@
   <metadata name="rackShelfColumnTo.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
+  <data name="btnAddItem2.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        wwAADsMBx2+oZAAAAF9JREFUOE9jgIFv3779R8ZQYeIBSJNFlwkYk2QAsq3IBsAwVBlugKwRHVPFAEKY
+        oBecnJxwYpA81B2YgYhNAzrGMAAZgxR8eP8RK8ZqAAzANI8aQCUDCGHaGUA8/vYfAI2gFOcxgis9AAAA
+        AElFTkSuQmCC
+</value>
+  </data>
   <metadata name="ToolStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>

@@ -7,5 +7,7 @@ namespace WarehouseManagementSystem.Core.Exceptions
         public BusinessLogicException(string message) : base(message)
         {
         }
+
+        public static void Throw(string message) => throw new BusinessLogicException(message: message);
     }
 }

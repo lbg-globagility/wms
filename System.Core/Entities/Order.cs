@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using WarehouseManagementSystem.Core.Dto;
 using WarehouseManagementSystem.Core.Entities.Base;
 using WarehouseManagementSystem.Core.Enums;
 
 namespace WarehouseManagementSystem.Core.Entities
 {
     [Table("orders")]
-    public partial class Order : AuditableEntity
+    public partial class Order : CreateUpdateAuditableEntity
     {
         public int? RelatedOrderID { get; set; }
         public int? InventoryLocationID { get; set; }
@@ -84,22 +83,17 @@ namespace WarehouseManagementSystem.Core.Entities
             DateTime orderDate)
         {
             OrganizationID = organizationId;
-            CreatedBy = userId;
+            AuditUser(userId);
             OrderType = orderType;
             OrderNumber = orderNumber;
             Status = status;
             OrderDate = orderDate;
         }
 
-        public static Order NewStockTransferOrder(int organizationId,
-            int userId,
-            string orderNumber,
-            OrderStatus status,
-            DateTime orderDate) => new Order(organizationId: organizationId,
-                userId: userId,
-                orderType: OrderType.ST,
-                orderNumber: orderNumber,
-                status: status,
-                orderDate: orderDate);
+        public string ViewName => IsCustomerOrderType ? View.CUSTOMER_ORDERS_VIEW :
+            IsPurchaseOrderType ? View.PURCHASE_ORDERS_VIEW :
+            IsReceivingReportType ? View.RECEIVING_VIEW :
+            IsStockAdjustType ? View.STOCK_ADJUSTMENT_VIEW :
+            IsStockTransferType ? View.STOCK_TRANSFER_VIEW : string.Empty;
     }
 }

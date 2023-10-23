@@ -16,5 +16,7 @@ namespace WarehouseManagementSystem.Core.Interfaces.Repositories
         Task<Order> GetOrderAsync(int id);
 
         Task<Order> GetOrderAsync(Order order);
+
+        //Task<Order> GetOrderByIdAsync(int id);
     }
 }

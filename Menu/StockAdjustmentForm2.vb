@@ -9,13 +9,13 @@ Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
 Imports WarehouseManagementSystem.Core.Interfaces.Repositories
 Imports WarehouseManagementSystem.Desktop.Utilities
 
-Public Class StockTransferForm2
+Public Class StockAdjustmentForm2
     Private _selectedOrder As Order
     Private _inventoryLocations As List(Of InventoryLocation)
     Private _isNew As Boolean
     Private _positionView As PositionView
     Private ReadOnly _userId As Integer
-    Private Const VIEW_NAME = View.STOCK_TRANSFER_VIEW
+    Private Const VIEW_NAME = View.STOCK_ADJUSTMENT_VIEW
 
     Public Sub New(userId As Integer)
 
@@ -23,15 +23,18 @@ Public Class StockTransferForm2
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
+
+        SplitContainer3.Panel1Collapsed = True
+
         _userId = userId
     End Sub
 
-    Private Async Sub StockTransferForm2_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    Private Async Sub StockAdjustmentForm2_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Await LoadUserPrivilege()
 
-        gridStockTransferOrders.AutoGenerateColumns = False
-        gridStockTransferOrdersFrom.AutoGenerateColumns = False
-        gridStockTransferOrdersTo.AutoGenerateColumns = False
+        gridStockAdjustmentOrders.AutoGenerateColumns = False
+        gridStockAdjustmentOrdersFrom.AutoGenerateColumns = False
+        gridStockAdjustmentOrdersTo.AutoGenerateColumns = False
 
         cboFromInventory.ValueMember = "RowID"
         cboFromInventory.DisplayMember = "Name"
@@ -45,10 +48,10 @@ Public Class StockTransferForm2
         cboToInventory.BindingContext = New BindingContext()
         cboToInventory.DataSource = _inventoryLocations
 
-        Await LoadStockTransferOrders()
+        Await LoadStockAdjustmentOrders()
 
-        AddHandler gridStockTransferOrders.SelectionChanged, AddressOf gridStockTransferOrders_SelectionChanged
-        gridStockTransferOrders_SelectionChanged(gridStockTransferOrders, New EventArgs)
+        AddHandler gridStockAdjustmentOrders.SelectionChanged, AddressOf gridStockAdjustmentOrders_SelectionChanged
+        gridStockAdjustmentOrders_SelectionChanged(gridStockAdjustmentOrders, New EventArgs)
     End Sub
 
     Private Async Function LoadUserPrivilege() As Task
@@ -85,13 +88,13 @@ Public Class StockTransferForm2
 
     End Function
 
-    Private Async Function LoadStockTransferOrders() As Task
-        gridStockTransferOrders.DataSource = Await GetStockTransferOrders()
+    Private Async Function LoadStockAdjustmentOrders() As Task
+        gridStockAdjustmentOrders.DataSource = Await GetStockAdjustmentOrders()
     End Function
 
-    Private Async Function GetStockTransferOrders() As Task(Of List(Of Order))
+    Private Async Function GetStockAdjustmentOrders() As Task(Of List(Of Order))
         Dim orderDataService = MainServiceProvider.GetRequiredService(Of IOrderDataService)
-        Return (Await orderDataService.GetStockTransferOrdersAsync(Z_OrganizationID)).
+        Return (Await orderDataService.GetStockAdjustmentOrdersAsync(organizationId:=Z_OrganizationID)).
             OrderByDescending(Function(t) t.Created).
             ToList()
     End Function
@@ -101,12 +104,12 @@ Public Class StockTransferForm2
         Return Await inventoryLocationRepository.GetAllByOrganizationIdAsync(Z_OrganizationID)
     End Function
 
-    Private Sub gridStockTransferOrders_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles gridStockTransferOrders.CellContentClick
+    Private Sub gridStockAdjustmentOrders_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles gridStockAdjustmentOrders.CellContentClick
 
     End Sub
 
-    Private Sub gridStockTransferOrders_SelectionChanged(sender As Object, e As EventArgs) 'Handles gridStockTransferOrders.SelectionChanged
-        Dim currentRow = gridStockTransferOrders.CurrentRow
+    Private Sub gridStockAdjustmentOrders_SelectionChanged(sender As Object, e As EventArgs) 'Handles gridStockAdjustmentOrders.SelectionChanged
+        Dim currentRow = gridStockAdjustmentOrders.CurrentRow
         If currentRow Is Nothing Then
             _selectedOrder = Nothing
             ReloadDisplayForm()
@@ -120,7 +123,7 @@ Public Class StockTransferForm2
     End Sub
 
     Private Async Sub txtSearch_TextChanged(sender As Object, e As EventArgs) Handles txtSearch.TextChanged
-        RemoveStockTransferSelectionChangedEvent()
+        RemoveStockAdjustmentSelectionChangedEvent()
 
         If String.IsNullOrEmpty(txtSearch.Text.Trim()) Then
             LinkLabelRefresh_LinkClicked(LinkLabelRefresh,
@@ -129,22 +132,22 @@ Public Class StockTransferForm2
         End If
 
         Dim orderDataService = MainServiceProvider.GetRequiredService(Of IOrderDataService)
-        gridStockTransferOrders.DataSource = (Await orderDataService.SearchStockTransferOrdersAsync(organizationId:=Z_OrganizationID,
+        gridStockAdjustmentOrders.DataSource = (Await orderDataService.SearchStockAdjustmentOrdersAsync(organizationId:=Z_OrganizationID,
             searchText:=txtSearch.Text)).
             OrderByDescending(Function(t) t.Created).
             ToList()
 
-        AddStockTransferSelectionChangedEvent()
-        gridStockTransferOrders_SelectionChanged(gridStockTransferOrders, New EventArgs)
+        AddStockAdjustmentSelectionChangedEvent()
+        gridStockAdjustmentOrders_SelectionChanged(gridStockAdjustmentOrders, New EventArgs)
     End Sub
 
     Private Async Sub ToolStripButtonNew_Click(sender As Object, e As EventArgs) Handles ToolStripButtonNew.Click
         ToolStripButtonNew.Enabled = False
 
-        Await FunctionUtils.TryCatchFunctionAsync("Quick create stock transfer",
+        Await FunctionUtils.TryCatchFunctionAsync("Quick create stock adjustment",
             Async Function()
                 Dim orderDataService = MainServiceProvider.GetRequiredService(Of IOrderDataService)
-                Dim newOrder = Await orderDataService.QuickCreateStockTransferOrderAsync(organizationId:=Z_OrganizationID, userId:=_userId)
+                Dim newOrder = Await orderDataService.QuickCreateStockAdjustmentOrderAsync(organizationId:=Z_OrganizationID, userId:=_userId)
 
                 _selectedOrder = newOrder
 
@@ -159,7 +162,7 @@ Public Class StockTransferForm2
 
     Private Async Sub ToolStripButtonSave_Click(sender As Object, e As EventArgs) Handles ToolStripButtonSave.Click
         SplitContainer1.Panel1.Enabled = False
-        txtStockTransferNo.Focus()
+        txtStockAdjustmentNo.Focus()
 
         Dim action As Action =
              Sub()
@@ -171,7 +174,7 @@ Public Class StockTransferForm2
                  If SplitContainer1.Panel1.Enabled = False Then SplitContainer1.Panel1.Enabled = True
              End Sub
 
-        Await FunctionUtils.TryCatchFunctionAsync("Save Stock Transfer changes",
+        Await FunctionUtils.TryCatchFunctionAsync("Save Stock Adjustment changes",
             action:=
             Async Function()
                 Dim orderDataService = MainServiceProvider.GetRequiredService(Of IOrderDataService)
@@ -197,7 +200,7 @@ Public Class StockTransferForm2
         If _isNew Then
             SplitContainer1.Panel1.Enabled = False
 
-            Await FunctionUtils.TryCatchFunctionAsync("Delete order after quick create stock transfer",
+            Await FunctionUtils.TryCatchFunctionAsync("Delete order after quick create stock adjustment",
                 action:=
                 Async Function()
                     Dim orderRepository = MainServiceProvider.GetRequiredService(Of IOrderRepository)
@@ -232,15 +235,20 @@ Public Class StockTransferForm2
     End Sub
 
     Private Sub cboToInventory_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboToInventory.SelectedIndexChanged
+        If cboToInventory.SelectedIndex = -1 Then Return
+
+        Dim value = cboToInventory.SelectedValue
+        cboFromInventory.SelectedValue = value
+
         EnOrDisableAddItemButton()
     End Sub
 
-    Private Async Sub gridStockTransferOrdersFrom_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles gridStockTransferOrdersFrom.CellContentClick
+    Private Async Sub gridStockAdjustmentOrdersFrom_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles gridStockAdjustmentOrdersFrom.CellContentClick
 
         If pickFromRackShelfColumn.Index = e.ColumnIndex Then
-            Dim movementHistoryGroupByProductColorSizeModel = CType(gridStockTransferOrdersFrom.Rows(e.RowIndex).DataBoundItem, MovementHistoryGroupByProductColorSizeModel)
+            Dim movementHistoryGroupByProductColorSizeModel = CType(gridStockAdjustmentOrdersFrom.Rows(e.RowIndex).DataBoundItem, MovementHistoryGroupByProductColorSizeModel)
             Dim form As New RackShelfColumnSelectorDialog(orderId:=_selectedOrder.RowID,
-                inventoryLocationId:=_selectedOrder.StockTransferFromInventoryLocationId,
+                inventoryLocationId:=_selectedOrder.StockAdjustmentFromInventoryLocationId,
                 movementHistoryGroupByProductColorSizeModel:=movementHistoryGroupByProductColorSizeModel,
                 inventoryLocationName:=cboFromInventory.Text)
             If form.ShowDialog() = DialogResult.OK Then
@@ -251,9 +259,9 @@ Public Class StockTransferForm2
                 ReloadDisplayForm(_selectedOrder)
             End If
         ElseIf deleteProductColorSize.Index = e.ColumnIndex Then
-            Dim movementHistoryGroupByProductColorSizeModel = CType(gridStockTransferOrdersFrom.Rows(e.RowIndex).DataBoundItem, MovementHistoryGroupByProductColorSizeModel)
+            Dim movementHistoryGroupByProductColorSizeModel = CType(gridStockAdjustmentOrdersFrom.Rows(e.RowIndex).DataBoundItem, MovementHistoryGroupByProductColorSizeModel)
 
-            Await FunctionUtils.TryCatchFunctionAsync("Delete Stock Transfer Item",
+            Await FunctionUtils.TryCatchFunctionAsync("Delete Stock Adjustment Item",
                 Function()
                     _selectedOrder.DeleteMovementHistoryByProductColorSizeId(productColorSizeId:=movementHistoryGroupByProductColorSizeModel.ProductColorSizeId)
 
@@ -264,12 +272,12 @@ Public Class StockTransferForm2
         End If
     End Sub
 
-    Private Sub gridStockTransferOrdersTo_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles gridStockTransferOrdersTo.CellContentClick
+    Private Sub gridStockAdjustmentOrdersTo_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles gridStockAdjustmentOrdersTo.CellContentClick
         'pickToRackShelfColumn
         If pickToRackShelfColumn.Index = e.ColumnIndex Then
-            Dim movementHistoryGroupByProductColorSizeModel = CType(gridStockTransferOrdersTo.Rows(e.RowIndex).DataBoundItem, MovementHistoryGroupByProductColorSizeModel)
+            Dim movementHistoryGroupByProductColorSizeModel = CType(gridStockAdjustmentOrdersTo.Rows(e.RowIndex).DataBoundItem, MovementHistoryGroupByProductColorSizeModel)
             Dim form As New RackShelfColumnSelectorDialog(orderId:=_selectedOrder.RowID,
-                inventoryLocationId:=_selectedOrder.StockTransferToInventoryLocationId,
+                inventoryLocationId:=_selectedOrder.StockAdjustmentToInventoryLocationId,
                 movementHistoryGroupByProductColorSizeModel:=movementHistoryGroupByProductColorSizeModel,
                 inventoryLocationName:=cboToInventory.Text)
             If form.ShowDialog() = DialogResult.OK Then
@@ -283,10 +291,10 @@ Public Class StockTransferForm2
     End Sub
 
     Private Sub ReloadDisplayForm(Optional order As Order = Nothing)
-        txtStockTransferNo.DataBindings.Clear()
+        txtStockAdjustmentNo.DataBindings.Clear()
         txtStatus.DataBindings.Clear()
         txtTransferedBy.DataBindings.Clear()
-        dtpStockTransferDate.DataBindings.Clear()
+        dtpStockAdjustmentDate.DataBindings.Clear()
         txtComments.DataBindings.Clear()
 
         If order Is Nothing Then
@@ -296,8 +304,8 @@ Public Class StockTransferForm2
             For Each txtBox In txtBoxes
                 txtBox.Clear()
             Next
-            dtpStockTransferDate.ResetText()
-            dtpStockTransferDate.Value = Date.Now
+            dtpStockAdjustmentDate.ResetText()
+            dtpStockAdjustmentDate.Value = Date.Now
 
             cboFromInventory.SelectedIndex = -1
             cboToInventory.SelectedIndex = -1
@@ -305,18 +313,18 @@ Public Class StockTransferForm2
             ToolStripButtonApproved.Enabled = False
 
             Dim emptyDataSource = MovementHistoryGroupByProductColorSizeModel.EmptyDataSource()
-            gridStockTransferOrdersFrom.DataSource = emptyDataSource
+            gridStockAdjustmentOrdersFrom.DataSource = emptyDataSource
 
-            gridStockTransferOrdersTo.BindingContext = New BindingContext()
-            gridStockTransferOrdersTo.DataSource = emptyDataSource
+            gridStockAdjustmentOrdersTo.BindingContext = New BindingContext()
+            gridStockAdjustmentOrdersTo.DataSource = emptyDataSource
 
             Return
         End If
 
         ToolStripButtonApproved.Enabled = order.IsOpen AndAlso order.HasMovementHistories
 
-        txtStockTransferNo.Text = order?.OrderNumber
-        txtStockTransferNo.DataBindings.Add("Text", order, "OrderNumber", True, DataSourceUpdateMode.OnPropertyChanged)
+        txtStockAdjustmentNo.Text = order?.OrderNumber
+        txtStockAdjustmentNo.DataBindings.Add("Text", order, "OrderNumber", True, DataSourceUpdateMode.OnPropertyChanged)
 
         txtStatus.Text = $"{order?.Status}"
         txtStatus.DataBindings.Add("Text", order, "Status", True, DataSourceUpdateMode.OnPropertyChanged)
@@ -324,32 +332,32 @@ Public Class StockTransferForm2
         txtTransferedBy.Text = String.Empty
         'txtTransferedBy.DataBindings.Add("Text", order, "LoanNumber", True, DataSourceUpdateMode.OnPropertyChanged)
 
-        dtpStockTransferDate.Value = If(order?.OrderDate.Date, Date.Now)
+        dtpStockAdjustmentDate.Value = If(order?.OrderDate.Date, Date.Now)
         Dim dtpDatePickerBinding = New Binding("Value", order, "OrderDate") With {
             .DataSourceUpdateMode = DataSourceUpdateMode.OnPropertyChanged}
-        dtpStockTransferDate.DataBindings.Add(dtpDatePickerBinding)
+        dtpStockAdjustmentDate.DataBindings.Add(dtpDatePickerBinding)
 
         txtComments.Text = order?.Comments
         txtComments.DataBindings.Add("Text", order, "Comments", True, DataSourceUpdateMode.OnPropertyChanged)
 
-        Dim inventoryLocationIdFrom = If(order.StockTransferFromInventoryLocationId, -1)
-        Dim inventoryLocationIdTo = If(order.StockTransferToInventoryLocationId, -1)
+        Dim inventoryLocationIdFrom = If(order.StockAdjustmentFromInventoryLocationId, -1)
+        Dim inventoryLocationIdTo = If(order.StockAdjustmentToInventoryLocationId, -1)
 
         cboFromInventory.SelectedValue = inventoryLocationIdFrom
         cboToInventory.SelectedValue = inventoryLocationIdTo
 
-        gridStockTransferOrdersFrom.DataSource = order.MovementHistoriesFromGroupByProductColorSize?.
+        gridStockAdjustmentOrdersFrom.DataSource = order.MovementHistoriesFromGroupByProductColorSize?.
             Select(Function(t) New MovementHistoryGroupByProductColorSizeModel(group:=t)).
             ToList()
 
-        gridStockTransferOrdersTo.BindingContext = New BindingContext()
-        gridStockTransferOrdersTo.DataSource = order.MovementHistoriesToGroupByProductColorSize?.
+        gridStockAdjustmentOrdersTo.BindingContext = New BindingContext()
+        gridStockAdjustmentOrdersTo.DataSource = order.MovementHistoriesToGroupByProductColorSize?.
             Select(Function(t) New MovementHistoryGroupByProductColorSizeModel(group:=t)).
             ToList()
         'New(group As IGrouping(Of Integer?, MovementHistory))
     End Sub
 
-    Private Async Sub btnAddItem_Click(sender As Object, e As EventArgs) Handles btnAddItem.Click
+    Private Async Sub btnAddItem_Click(sender As Object, e As EventArgs) Handles btnAddItem.Click, btnAddItem2.Click
         Dim inventoryLocationIdFrom = CInt(cboFromInventory.SelectedValue)
         Dim inventoryLocationIdTo = CInt(cboToInventory.SelectedValue)
 
@@ -410,22 +418,22 @@ Public Class StockTransferForm2
     End Sub
 
     Private Async Sub LinkLabelRefresh_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabelRefresh.LinkClicked
-        RemoveStockTransferSelectionChangedEvent()
+        RemoveStockAdjustmentSelectionChangedEvent()
 
         LinkLabelRefresh.Enabled = False
-        Await LoadStockTransferOrders()
+        Await LoadStockAdjustmentOrders()
         LinkLabelRefresh.Enabled = True
 
-        AddStockTransferSelectionChangedEvent()
-        gridStockTransferOrders_SelectionChanged(gridStockTransferOrders, New EventArgs)
+        AddStockAdjustmentSelectionChangedEvent()
+        gridStockAdjustmentOrders_SelectionChanged(gridStockAdjustmentOrders, New EventArgs)
     End Sub
 
-    Private Sub AddStockTransferSelectionChangedEvent()
-        AddHandler gridStockTransferOrders.SelectionChanged, AddressOf gridStockTransferOrders_SelectionChanged
+    Private Sub AddStockAdjustmentSelectionChangedEvent()
+        AddHandler gridStockAdjustmentOrders.SelectionChanged, AddressOf gridStockAdjustmentOrders_SelectionChanged
     End Sub
 
-    Private Sub RemoveStockTransferSelectionChangedEvent()
-        RemoveHandler gridStockTransferOrders.SelectionChanged, AddressOf gridStockTransferOrders_SelectionChanged
+    Private Sub RemoveStockAdjustmentSelectionChangedEvent()
+        RemoveHandler gridStockAdjustmentOrders.SelectionChanged, AddressOf gridStockAdjustmentOrders_SelectionChanged
     End Sub
 
     Private Sub ToolStripButtonNew_EnabledChanged(sender As Object, e As EventArgs) Handles ToolStripButtonNew.EnabledChanged
@@ -433,20 +441,18 @@ Public Class StockTransferForm2
     End Sub
 
     Private Async Sub ToolStripButtonApproved_Click(sender As Object, e As EventArgs) Handles ToolStripButtonApproved.Click
-        Dim inventoryLocationIdFrom = CInt(cboFromInventory.SelectedValue)
         Dim inventoryLocationIdTo = CInt(cboToInventory.SelectedValue)
 
-        If inventoryLocationIdFrom = 0 Or
-            inventoryLocationIdTo = 0 Then
+        If inventoryLocationIdTo = 0 Then
 
-            MessageBox.Show(text:="Please select a value for `From Inventory` or `To Inventory`.",
+            MessageBox.Show(text:="Please select a value for `Inventory Location`.",
                 caption:="Select Inventory Location",
                 icon:=MessageBoxIcon.Error,
                 buttons:=MessageBoxButtons.OK)
             Return
         End If
 
-        Dim prompt = MessageBox.Show(text:="Are you sure you want to `Approve` this Stock Transfer?", caption:="Approve Stock Transfer", icon:=MessageBoxIcon.Question, buttons:=MessageBoxButtons.YesNoCancel)
+        Dim prompt = MessageBox.Show(text:="Are you sure you want to `Approve` this Stock Adjustment?", caption:="Approve Stock Adjustment", icon:=MessageBoxIcon.Question, buttons:=MessageBoxButtons.YesNoCancel)
         If Not prompt = DialogResult.Yes Then Return
 
         SplitContainer1.Panel1.Enabled = False
@@ -463,11 +469,11 @@ Public Class StockTransferForm2
                  'ReloadDisplayForm(order:=_selectedOrder)
              End Sub
 
-        Await FunctionUtils.TryCatchFunctionAsync("Approve Stock Transfer",
+        Await FunctionUtils.TryCatchFunctionAsync("Approve Stock Adjustment",
             Async Function()
                 Dim orderDataService = MainServiceProvider.GetRequiredService(Of IOrderDataService)
 
-                Await orderDataService.ApproveStockTransfer(_selectedOrder, _userId)
+                Await orderDataService.ApproveStockAdjustment(order:=_selectedOrder, userId:=_userId)
 
                 '_selectedOrder = Await orderDataService.GetOrderAsync(order:=_selectedOrder)
 
@@ -501,12 +507,16 @@ Public Class StockTransferForm2
         If _selectedOrder IsNot Nothing AndAlso _selectedOrder.IsApproved Then ToolStripButtonApproved.Enabled = False
     End Sub
 
-    Private Sub gridStockTransferOrders_DataSourceChanged(sender As Object, e As EventArgs) Handles gridStockTransferOrders.DataSourceChanged
-        If If(gridStockTransferOrders.Rows?.Count(), 0) = 0 Then ReloadDisplayForm()
+    Private Sub gridStockAdjustmentOrders_DataSourceChanged(sender As Object, e As EventArgs) Handles gridStockAdjustmentOrders.DataSourceChanged
+        If If(gridStockAdjustmentOrders.Rows?.Count(), 0) = 0 Then ReloadDisplayForm()
     End Sub
 
-    Private Sub gridStockTransferOrdersFrom_SelectionChanged(sender As Object, e As EventArgs) Handles gridStockTransferOrdersFrom.SelectionChanged
+    Private Sub gridStockAdjustmentOrdersFrom_SelectionChanged(sender As Object, e As EventArgs) Handles gridStockAdjustmentOrdersFrom.SelectionChanged
 
+    End Sub
+
+    Private Sub btnAddItem_EnabledChanged(sender As Object, e As EventArgs) Handles btnAddItem.EnabledChanged
+        btnAddItem2.Enabled = btnAddItem.Enabled
     End Sub
 
 End Class

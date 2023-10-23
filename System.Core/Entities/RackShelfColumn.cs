@@ -40,7 +40,7 @@ namespace WarehouseManagementSystem.Core.Entities
             int inventoryLocationId)
         {
             OrganizationID = organizationId;
-            CreatedBy = userId;
+            AuditUser(userId);
             InventoryLocationID = inventoryLocationId;
             Status = RackShelfColumnStatus.Active;
             PickOrderNo = (PickOrderNo ?? 0) == 0 ? 1 : PickOrderNo;
@@ -72,5 +72,7 @@ namespace WarehouseManagementSystem.Core.Entities
                     continue;
             }
         }
+
+        public int LogicalAvailableQty => AvailableQty ?? 0 - ReservedQty ?? 0;
     }
 }

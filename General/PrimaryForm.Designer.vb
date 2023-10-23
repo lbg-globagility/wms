@@ -1,9 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class PrimaryForm
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -20,7 +20,7 @@ Partial Class PrimaryForm
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(PrimaryForm))
@@ -240,7 +240,6 @@ Partial Class PrimaryForm
         Me.PictureBox2 = New System.Windows.Forms.PictureBox()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.MainLoadingBar = New System.Windows.Forms.ProgressBar()
-        Me.FasdfsdfToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.msHome.SuspendLayout()
         Me.tsInformation.SuspendLayout()
         CType(Me.pbPin, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -414,7 +413,7 @@ Partial Class PrimaryForm
         '
         'msInventoryManagement
         '
-        Me.msInventoryManagement.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.msInventoryLocations, Me.mStockTransfer, Me.msStockAdjustment, Me.FasdfsdfToolStripMenuItem})
+        Me.msInventoryManagement.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.msInventoryLocations, Me.mStockTransfer, Me.msStockAdjustment})
         Me.msInventoryManagement.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.msInventoryManagement.Image = CType(resources.GetObject("msInventoryManagement.Image"), System.Drawing.Image)
         Me.msInventoryManagement.Name = "msInventoryManagement"
@@ -2125,13 +2124,6 @@ Partial Class PrimaryForm
         Me.MainLoadingBar.Size = New System.Drawing.Size(160, 21)
         Me.MainLoadingBar.TabIndex = 10
         '
-        'FasdfsdfToolStripMenuItem
-        '
-        Me.FasdfsdfToolStripMenuItem.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.FasdfsdfToolStripMenuItem.Name = "FasdfsdfToolStripMenuItem"
-        Me.FasdfsdfToolStripMenuItem.Size = New System.Drawing.Size(206, 22)
-        Me.FasdfsdfToolStripMenuItem.Text = "fasdfsdf"
-        '
         'PrimaryForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -2390,5 +2382,4 @@ Partial Class PrimaryForm
     Friend WithEvents rt_customername As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents rt_createdby As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents AgentHelperToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents FasdfsdfToolStripMenuItem As ToolStripMenuItem
 End Class
