@@ -11,7 +11,6 @@ Imports WarehouseManagementSystem.Desktop.Utilities
 
 Public Class StockAdjustmentForm2
     Private _selectedOrder As Order
-    Private _inventoryLocations As List(Of InventoryLocation)
     Private _isNew As Boolean
     Private _positionView As PositionView
     Private ReadOnly _userId As Integer
@@ -42,17 +41,21 @@ Public Class StockAdjustmentForm2
         cboToInventory.ValueMember = "RowID"
         cboToInventory.DisplayMember = "Name"
 
-        _inventoryLocations = Await GetInventoryLocations()
-        cboFromInventory.DataSource = _inventoryLocations
-
-        cboToInventory.BindingContext = New BindingContext()
-        cboToInventory.DataSource = _inventoryLocations
+        Await LoadInventoryLocations()
 
         Await LoadStockAdjustmentOrders()
 
         AddHandler gridStockAdjustmentOrders.SelectionChanged, AddressOf gridStockAdjustmentOrders_SelectionChanged
         gridStockAdjustmentOrders_SelectionChanged(gridStockAdjustmentOrders, New EventArgs)
     End Sub
+
+    Private Async Function LoadInventoryLocations() As Task
+        Dim inventoryLocations = Await GetInventoryLocations()
+        cboFromInventory.DataSource = inventoryLocations
+
+        cboToInventory.BindingContext = New BindingContext()
+        cboToInventory.DataSource = inventoryLocations
+    End Function
 
     Private Async Function LoadUserPrivilege() As Task
         Dim positionViewDataService = MainServiceProvider.GetRequiredService(Of IPositionViewDataService)

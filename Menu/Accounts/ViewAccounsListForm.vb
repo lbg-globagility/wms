@@ -37,13 +37,18 @@ Public Class ViewAccounsListForm
     End Sub
 
     Private Async Sub CheckedChanged(sender As Object, e As EventArgs) Handles rbAll.CheckedChanged, rbAgent.CheckedChanged, rbHelper.CheckedChanged
+        Dim radioButton = Panel1.Controls.OfType(Of RadioButton).FirstOrDefault(Function(t) t.Checked)
+
+        If radioButton Is Nothing Then
+            gridContacts.DataSource = Enumerable.Empty(Of Contact)()
+            Return
+        End If
+
         Dim contactDataService = MainServiceProvider.GetRequiredService(Of IContactDataService)
         Dim agents = Await contactDataService.GetAgentsAsync(organizationId:=Z_OrganizationID)
         Dim helpers = Await contactDataService.GetHelpersAsync(organizationId:=Z_OrganizationID)
 
         _dataSource = New List(Of Contact)
-
-        Dim radioButton = Panel1.Controls.OfType(Of RadioButton).FirstOrDefault(Function(t) t.Checked)
 
         Dim senderName = CType(sender, RadioButton).Name
         If radioButton Is rbAll Then
