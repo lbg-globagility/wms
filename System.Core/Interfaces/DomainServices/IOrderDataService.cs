@@ -23,5 +23,13 @@ namespace WarehouseManagementSystem.Core.Interfaces.DomainServices
         Task<Order> GetOrderAsync(int id);
 
         Task<Order> GetOrderAsync(Order order);
+
+        Task<List<Order>> GetStockAdjustmentOrdersAsync(int organizationId);
+
+        Task<List<Order>> SearchStockAdjustmentOrdersAsync(int organizationId, string searchText);
+
+        Task<Order> QuickCreateStockAdjustmentOrderAsync(int organizationId, int userId);
+
+        Task ApproveStockAdjustment(Order order, int userId);
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using WarehouseManagementSystem.Core.Enums;
@@ -9,6 +10,17 @@ namespace WarehouseManagementSystem.Core.Entities
 {
     public partial class Order
     {
+        public static Order NewStockTransferOrder(int organizationId,
+            int userId,
+            string orderNumber,
+            OrderStatus status,
+            DateTime orderDate) => new Order(organizationId: organizationId,
+                userId: userId,
+                orderType: OrderType.ST,
+                orderNumber: orderNumber,
+                status: status,
+                orderDate: orderDate);
+
         public void AddMovementHistories(List<MovementHistory> movementHistories)
         {
             if (MovementHistories == null) MovementHistories = new List<MovementHistory>();

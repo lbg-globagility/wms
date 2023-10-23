@@ -436,6 +436,12 @@
     <Compile Include="Menu\StockAdjustmentForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Menu\StockAdjustmentForm2.Designer.vb">
+      <DependentUpon>StockAdjustmentForm2.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Menu\StockAdjustmentForm2.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Menu\StockTransferForm.Designer.vb">
       <DependentUpon>StockTransferForm.vb</DependentUpon>
     </Compile>
@@ -1021,6 +1027,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Menu\StockAdjustmentForm.resx">
       <DependentUpon>StockAdjustmentForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Menu\StockAdjustmentForm2.resx">
+      <DependentUpon>StockAdjustmentForm2.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Menu\StockTransferForm.resx">
       <DependentUpon>StockTransferForm.vb</DependentUpon>

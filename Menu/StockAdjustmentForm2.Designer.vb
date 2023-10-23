@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
-Partial Class StockTransferForm2
+Partial Class StockAdjustmentForm2
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
@@ -24,10 +24,10 @@ Partial Class StockTransferForm2
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(StockTransferForm2))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(StockAdjustmentForm2))
         Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Me.gridStockTransferOrders = New DevComponents.DotNetBar.Controls.DataGridViewX()
+        Me.gridStockAdjustmentOrders = New DevComponents.DotNetBar.Controls.DataGridViewX()
         Me.Column5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column6 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column7 = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -44,13 +44,13 @@ Partial Class StockTransferForm2
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.txtStockTransferNo = New System.Windows.Forms.TextBox()
+        Me.txtStockAdjustmentNo = New System.Windows.Forms.TextBox()
         Me.txtStatus = New System.Windows.Forms.TextBox()
         Me.txtTransferedBy = New System.Windows.Forms.TextBox()
         Me.txtComments = New System.Windows.Forms.TextBox()
-        Me.dtpStockTransferDate = New System.Windows.Forms.DateTimePicker()
+        Me.dtpStockAdjustmentDate = New System.Windows.Forms.DateTimePicker()
         Me.SplitContainer3 = New System.Windows.Forms.SplitContainer()
-        Me.gridStockTransferOrdersFrom = New DevComponents.DotNetBar.Controls.DataGridViewX()
+        Me.gridStockAdjustmentOrdersFrom = New DevComponents.DotNetBar.Controls.DataGridViewX()
         Me.Column1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.pickFromRackShelfColumn = New DevComponents.DotNetBar.Controls.DataGridViewButtonXColumn()
@@ -61,13 +61,14 @@ Partial Class StockTransferForm2
         Me.btnAddItem = New System.Windows.Forms.Button()
         Me.Label6 = New System.Windows.Forms.Label()
         Me.cboFromInventory = New System.Windows.Forms.ComboBox()
-        Me.gridStockTransferOrdersTo = New DevComponents.DotNetBar.Controls.DataGridViewX()
+        Me.gridStockAdjustmentOrdersTo = New DevComponents.DotNetBar.Controls.DataGridViewX()
         Me.DataGridViewTextBoxColumn1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DataGridViewTextBoxColumn2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.pickToRackShelfColumn = New DevComponents.DotNetBar.Controls.DataGridViewButtonXColumn()
         Me.DataGridViewTextBoxColumn3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.rackShelfColumnTo = New System.Windows.Forms.DataGridViewButtonColumn()
         Me.Panel3 = New System.Windows.Forms.Panel()
+        Me.btnAddItem2 = New System.Windows.Forms.Button()
         Me.cboToInventory = New System.Windows.Forms.ComboBox()
         Me.Label8 = New System.Windows.Forms.Label()
         Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
@@ -79,7 +80,7 @@ Partial Class StockTransferForm2
         Me.ToolStripButtonCancel = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButtonClose = New System.Windows.Forms.ToolStripButton()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
-        CType(Me.gridStockTransferOrders, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.gridStockAdjustmentOrders, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
@@ -93,20 +94,20 @@ Partial Class StockTransferForm2
         Me.SplitContainer3.Panel1.SuspendLayout()
         Me.SplitContainer3.Panel2.SuspendLayout()
         Me.SplitContainer3.SuspendLayout()
-        CType(Me.gridStockTransferOrdersFrom, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.gridStockAdjustmentOrdersFrom, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel2.SuspendLayout()
-        CType(Me.gridStockTransferOrdersTo, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.gridStockAdjustmentOrdersTo, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel3.SuspendLayout()
         Me.ToolStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
-        'gridStockTransferOrders
+        'gridStockAdjustmentOrders
         '
-        Me.gridStockTransferOrders.AllowUserToAddRows = False
-        Me.gridStockTransferOrders.AllowUserToDeleteRows = False
-        Me.gridStockTransferOrders.AllowUserToResizeRows = False
-        Me.gridStockTransferOrders.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.gridStockTransferOrders.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column5, Me.Column6, Me.Column7, Me.Column4, Me.Column8})
+        Me.gridStockAdjustmentOrders.AllowUserToAddRows = False
+        Me.gridStockAdjustmentOrders.AllowUserToDeleteRows = False
+        Me.gridStockAdjustmentOrders.AllowUserToResizeRows = False
+        Me.gridStockAdjustmentOrders.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.gridStockAdjustmentOrders.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column5, Me.Column6, Me.Column7, Me.Column4, Me.Column8})
         DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
         DataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window
         DataGridViewCellStyle1.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -114,20 +115,20 @@ Partial Class StockTransferForm2
         DataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight
         DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.ControlText
         DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.gridStockTransferOrders.DefaultCellStyle = DataGridViewCellStyle1
-        Me.gridStockTransferOrders.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.gridStockTransferOrders.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
-        Me.gridStockTransferOrders.Location = New System.Drawing.Point(0, 109)
-        Me.gridStockTransferOrders.Name = "gridStockTransferOrders"
-        Me.gridStockTransferOrders.ReadOnly = True
-        Me.gridStockTransferOrders.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.gridStockTransferOrders.Size = New System.Drawing.Size(206, 450)
-        Me.gridStockTransferOrders.TabIndex = 12
+        Me.gridStockAdjustmentOrders.DefaultCellStyle = DataGridViewCellStyle1
+        Me.gridStockAdjustmentOrders.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.gridStockAdjustmentOrders.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
+        Me.gridStockAdjustmentOrders.Location = New System.Drawing.Point(0, 109)
+        Me.gridStockAdjustmentOrders.Name = "gridStockAdjustmentOrders"
+        Me.gridStockAdjustmentOrders.ReadOnly = True
+        Me.gridStockAdjustmentOrders.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
+        Me.gridStockAdjustmentOrders.Size = New System.Drawing.Size(206, 450)
+        Me.gridStockAdjustmentOrders.TabIndex = 12
         '
         'Column5
         '
         Me.Column5.DataPropertyName = "OrderNumber"
-        Me.Column5.HeaderText = "Stock Transfer No."
+        Me.Column5.HeaderText = "Stock Adjustment No."
         Me.Column5.Name = "Column5"
         Me.Column5.ReadOnly = True
         '
@@ -141,7 +142,7 @@ Partial Class StockTransferForm2
         'Column7
         '
         Me.Column7.DataPropertyName = "OrderDate"
-        Me.Column7.HeaderText = "Stock Transfter Date"
+        Me.Column7.HeaderText = "Stock Adjustment Date"
         Me.Column7.Name = "Column7"
         Me.Column7.ReadOnly = True
         '
@@ -169,7 +170,7 @@ Partial Class StockTransferForm2
         '
         'SplitContainer1.Panel1
         '
-        Me.SplitContainer1.Panel1.Controls.Add(Me.gridStockTransferOrders)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.gridStockAdjustmentOrders)
         Me.SplitContainer1.Panel1.Controls.Add(Me.Panel1)
         '
         'SplitContainer1.Panel2
@@ -239,11 +240,11 @@ Partial Class StockTransferForm2
         Me.SplitContainer2.Panel1.Controls.Add(Me.Label3)
         Me.SplitContainer2.Panel1.Controls.Add(Me.Label2)
         Me.SplitContainer2.Panel1.Controls.Add(Me.Label1)
-        Me.SplitContainer2.Panel1.Controls.Add(Me.txtStockTransferNo)
+        Me.SplitContainer2.Panel1.Controls.Add(Me.txtStockAdjustmentNo)
         Me.SplitContainer2.Panel1.Controls.Add(Me.txtStatus)
         Me.SplitContainer2.Panel1.Controls.Add(Me.txtTransferedBy)
         Me.SplitContainer2.Panel1.Controls.Add(Me.txtComments)
-        Me.SplitContainer2.Panel1.Controls.Add(Me.dtpStockTransferDate)
+        Me.SplitContainer2.Panel1.Controls.Add(Me.dtpStockAdjustmentDate)
         '
         'SplitContainer2.Panel2
         '
@@ -257,14 +258,14 @@ Partial Class StockTransferForm2
         Me.Label5.AutoSize = True
         Me.Label5.Location = New System.Drawing.Point(21, 112)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(106, 13)
+        Me.Label5.Size = New System.Drawing.Size(124, 13)
         Me.Label5.TabIndex = 5
-        Me.Label5.Text = "Stock Transfer Date"
+        Me.Label5.Text = "Stock Adjustment Date"
         '
         'Label4
         '
         Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(239, 28)
+        Me.Label4.Location = New System.Drawing.Point(257, 28)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(61, 13)
         Me.Label4.TabIndex = 5
@@ -275,9 +276,9 @@ Partial Class StockTransferForm2
         Me.Label3.AutoSize = True
         Me.Label3.Location = New System.Drawing.Point(21, 84)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(75, 13)
+        Me.Label3.Size = New System.Drawing.Size(67, 13)
         Me.Label3.TabIndex = 5
-        Me.Label3.Text = "Transfered By"
+        Me.Label3.Text = "Adjusted By"
         '
         'Label2
         '
@@ -293,23 +294,23 @@ Partial Class StockTransferForm2
         Me.Label1.AutoSize = True
         Me.Label1.Location = New System.Drawing.Point(21, 28)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(100, 13)
+        Me.Label1.Size = New System.Drawing.Size(118, 13)
         Me.Label1.TabIndex = 5
-        Me.Label1.Text = "Stock Transfer No."
+        Me.Label1.Text = "Stock Adjustment No."
         '
-        'txtStockTransferNo
+        'txtStockAdjustmentNo
         '
-        Me.txtStockTransferNo.BackColor = System.Drawing.Color.White
-        Me.txtStockTransferNo.Location = New System.Drawing.Point(133, 19)
-        Me.txtStockTransferNo.Name = "txtStockTransferNo"
-        Me.txtStockTransferNo.ReadOnly = True
-        Me.txtStockTransferNo.Size = New System.Drawing.Size(100, 22)
-        Me.txtStockTransferNo.TabIndex = 0
+        Me.txtStockAdjustmentNo.BackColor = System.Drawing.Color.White
+        Me.txtStockAdjustmentNo.Location = New System.Drawing.Point(151, 19)
+        Me.txtStockAdjustmentNo.Name = "txtStockAdjustmentNo"
+        Me.txtStockAdjustmentNo.ReadOnly = True
+        Me.txtStockAdjustmentNo.Size = New System.Drawing.Size(100, 22)
+        Me.txtStockAdjustmentNo.TabIndex = 0
         '
         'txtStatus
         '
         Me.txtStatus.BackColor = System.Drawing.Color.White
-        Me.txtStatus.Location = New System.Drawing.Point(133, 47)
+        Me.txtStatus.Location = New System.Drawing.Point(151, 47)
         Me.txtStatus.Name = "txtStatus"
         Me.txtStatus.ReadOnly = True
         Me.txtStatus.Size = New System.Drawing.Size(100, 22)
@@ -318,7 +319,7 @@ Partial Class StockTransferForm2
         'txtTransferedBy
         '
         Me.txtTransferedBy.BackColor = System.Drawing.Color.White
-        Me.txtTransferedBy.Location = New System.Drawing.Point(133, 75)
+        Me.txtTransferedBy.Location = New System.Drawing.Point(151, 75)
         Me.txtTransferedBy.Name = "txtTransferedBy"
         Me.txtTransferedBy.ReadOnly = True
         Me.txtTransferedBy.Size = New System.Drawing.Size(100, 22)
@@ -326,7 +327,7 @@ Partial Class StockTransferForm2
         '
         'txtComments
         '
-        Me.txtComments.Location = New System.Drawing.Point(306, 19)
+        Me.txtComments.Location = New System.Drawing.Point(324, 19)
         Me.txtComments.MaxLength = 255
         Me.txtComments.Multiline = True
         Me.txtComments.Name = "txtComments"
@@ -334,41 +335,41 @@ Partial Class StockTransferForm2
         Me.txtComments.Size = New System.Drawing.Size(301, 106)
         Me.txtComments.TabIndex = 4
         '
-        'dtpStockTransferDate
+        'dtpStockAdjustmentDate
         '
-        Me.dtpStockTransferDate.Format = System.Windows.Forms.DateTimePickerFormat.[Short]
-        Me.dtpStockTransferDate.Location = New System.Drawing.Point(133, 103)
-        Me.dtpStockTransferDate.Name = "dtpStockTransferDate"
-        Me.dtpStockTransferDate.Size = New System.Drawing.Size(100, 22)
-        Me.dtpStockTransferDate.TabIndex = 3
+        Me.dtpStockAdjustmentDate.Format = System.Windows.Forms.DateTimePickerFormat.[Short]
+        Me.dtpStockAdjustmentDate.Location = New System.Drawing.Point(151, 103)
+        Me.dtpStockAdjustmentDate.Name = "dtpStockAdjustmentDate"
+        Me.dtpStockAdjustmentDate.Size = New System.Drawing.Size(100, 22)
+        Me.dtpStockAdjustmentDate.TabIndex = 3
         '
         'SplitContainer3
         '
-        Me.SplitContainer3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.SplitContainer3.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SplitContainer3.FixedPanel = System.Windows.Forms.FixedPanel.Panel1
         Me.SplitContainer3.Location = New System.Drawing.Point(0, 0)
         Me.SplitContainer3.Name = "SplitContainer3"
         '
         'SplitContainer3.Panel1
         '
-        Me.SplitContainer3.Panel1.Controls.Add(Me.gridStockTransferOrdersFrom)
+        Me.SplitContainer3.Panel1.Controls.Add(Me.gridStockAdjustmentOrdersFrom)
         Me.SplitContainer3.Panel1.Controls.Add(Me.Panel2)
         '
         'SplitContainer3.Panel2
         '
-        Me.SplitContainer3.Panel2.Controls.Add(Me.gridStockTransferOrdersTo)
+        Me.SplitContainer3.Panel2.Controls.Add(Me.gridStockAdjustmentOrdersTo)
         Me.SplitContainer3.Panel2.Controls.Add(Me.Panel3)
-        Me.SplitContainer3.Size = New System.Drawing.Size(853, 378)
-        Me.SplitContainer3.SplitterDistance = 424
+        Me.SplitContainer3.Size = New System.Drawing.Size(851, 376)
+        Me.SplitContainer3.SplitterDistance = 426
         Me.SplitContainer3.TabIndex = 0
         '
-        'gridStockTransferOrdersFrom
+        'gridStockAdjustmentOrdersFrom
         '
-        Me.gridStockTransferOrdersFrom.AllowUserToAddRows = False
-        Me.gridStockTransferOrdersFrom.AllowUserToDeleteRows = False
-        Me.gridStockTransferOrdersFrom.AllowUserToResizeRows = False
-        Me.gridStockTransferOrdersFrom.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.gridStockTransferOrdersFrom.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column1, Me.Column2, Me.pickFromRackShelfColumn, Me.Column3, Me.rackShelfColumnFrom, Me.deleteProductColorSize})
+        Me.gridStockAdjustmentOrdersFrom.AllowUserToAddRows = False
+        Me.gridStockAdjustmentOrdersFrom.AllowUserToDeleteRows = False
+        Me.gridStockAdjustmentOrdersFrom.AllowUserToResizeRows = False
+        Me.gridStockAdjustmentOrdersFrom.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.gridStockAdjustmentOrdersFrom.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column1, Me.Column2, Me.pickFromRackShelfColumn, Me.Column3, Me.rackShelfColumnFrom, Me.deleteProductColorSize})
         DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
         DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window
         DataGridViewCellStyle2.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -376,13 +377,13 @@ Partial Class StockTransferForm2
         DataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight
         DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.ControlText
         DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.gridStockTransferOrdersFrom.DefaultCellStyle = DataGridViewCellStyle2
-        Me.gridStockTransferOrdersFrom.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.gridStockTransferOrdersFrom.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
-        Me.gridStockTransferOrdersFrom.Location = New System.Drawing.Point(0, 100)
-        Me.gridStockTransferOrdersFrom.Name = "gridStockTransferOrdersFrom"
-        Me.gridStockTransferOrdersFrom.Size = New System.Drawing.Size(422, 276)
-        Me.gridStockTransferOrdersFrom.TabIndex = 2
+        Me.gridStockAdjustmentOrdersFrom.DefaultCellStyle = DataGridViewCellStyle2
+        Me.gridStockAdjustmentOrdersFrom.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.gridStockAdjustmentOrdersFrom.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
+        Me.gridStockAdjustmentOrdersFrom.Location = New System.Drawing.Point(0, 100)
+        Me.gridStockAdjustmentOrdersFrom.Name = "gridStockAdjustmentOrdersFrom"
+        Me.gridStockAdjustmentOrdersFrom.Size = New System.Drawing.Size(426, 276)
+        Me.gridStockAdjustmentOrdersFrom.TabIndex = 2
         '
         'Column1
         '
@@ -441,7 +442,7 @@ Partial Class StockTransferForm2
         Me.Panel2.Dock = System.Windows.Forms.DockStyle.Top
         Me.Panel2.Location = New System.Drawing.Point(0, 0)
         Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(422, 100)
+        Me.Panel2.Size = New System.Drawing.Size(426, 100)
         Me.Panel2.TabIndex = 0
         '
         'btnAddItem
@@ -460,7 +461,7 @@ Partial Class StockTransferForm2
         'Label6
         '
         Me.Label6.AutoSize = True
-        Me.Label6.Location = New System.Drawing.Point(21, 29)
+        Me.Label6.Location = New System.Drawing.Point(14, 29)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(84, 13)
         Me.Label6.TabIndex = 5
@@ -470,18 +471,18 @@ Partial Class StockTransferForm2
         '
         Me.cboFromInventory.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cboFromInventory.FormattingEnabled = True
-        Me.cboFromInventory.Location = New System.Drawing.Point(133, 21)
+        Me.cboFromInventory.Location = New System.Drawing.Point(104, 21)
         Me.cboFromInventory.Name = "cboFromInventory"
         Me.cboFromInventory.Size = New System.Drawing.Size(192, 21)
         Me.cboFromInventory.TabIndex = 0
         '
-        'gridStockTransferOrdersTo
+        'gridStockAdjustmentOrdersTo
         '
-        Me.gridStockTransferOrdersTo.AllowUserToAddRows = False
-        Me.gridStockTransferOrdersTo.AllowUserToDeleteRows = False
-        Me.gridStockTransferOrdersTo.AllowUserToResizeRows = False
-        Me.gridStockTransferOrdersTo.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.gridStockTransferOrdersTo.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.DataGridViewTextBoxColumn1, Me.DataGridViewTextBoxColumn2, Me.pickToRackShelfColumn, Me.DataGridViewTextBoxColumn3, Me.rackShelfColumnTo})
+        Me.gridStockAdjustmentOrdersTo.AllowUserToAddRows = False
+        Me.gridStockAdjustmentOrdersTo.AllowUserToDeleteRows = False
+        Me.gridStockAdjustmentOrdersTo.AllowUserToResizeRows = False
+        Me.gridStockAdjustmentOrdersTo.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.gridStockAdjustmentOrdersTo.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.DataGridViewTextBoxColumn1, Me.DataGridViewTextBoxColumn2, Me.pickToRackShelfColumn, Me.DataGridViewTextBoxColumn3, Me.rackShelfColumnTo})
         DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
         DataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window
         DataGridViewCellStyle3.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -489,13 +490,13 @@ Partial Class StockTransferForm2
         DataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight
         DataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.ControlText
         DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.gridStockTransferOrdersTo.DefaultCellStyle = DataGridViewCellStyle3
-        Me.gridStockTransferOrdersTo.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.gridStockTransferOrdersTo.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
-        Me.gridStockTransferOrdersTo.Location = New System.Drawing.Point(0, 100)
-        Me.gridStockTransferOrdersTo.Name = "gridStockTransferOrdersTo"
-        Me.gridStockTransferOrdersTo.Size = New System.Drawing.Size(423, 276)
-        Me.gridStockTransferOrdersTo.TabIndex = 1
+        Me.gridStockAdjustmentOrdersTo.DefaultCellStyle = DataGridViewCellStyle3
+        Me.gridStockAdjustmentOrdersTo.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.gridStockAdjustmentOrdersTo.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
+        Me.gridStockAdjustmentOrdersTo.Location = New System.Drawing.Point(0, 100)
+        Me.gridStockAdjustmentOrdersTo.Name = "gridStockAdjustmentOrdersTo"
+        Me.gridStockAdjustmentOrdersTo.Size = New System.Drawing.Size(421, 276)
+        Me.gridStockAdjustmentOrdersTo.TabIndex = 1
         '
         'DataGridViewTextBoxColumn1
         '
@@ -507,7 +508,7 @@ Partial Class StockTransferForm2
         'DataGridViewTextBoxColumn2
         '
         Me.DataGridViewTextBoxColumn2.DataPropertyName = "QtyToApply"
-        Me.DataGridViewTextBoxColumn2.HeaderText = "Incoming Quantity"
+        Me.DataGridViewTextBoxColumn2.HeaderText = "Adjustment Quantity"
         Me.DataGridViewTextBoxColumn2.Name = "DataGridViewTextBoxColumn2"
         Me.DataGridViewTextBoxColumn2.ReadOnly = True
         '
@@ -535,19 +536,33 @@ Partial Class StockTransferForm2
         '
         'Panel3
         '
+        Me.Panel3.Controls.Add(Me.btnAddItem2)
         Me.Panel3.Controls.Add(Me.cboToInventory)
         Me.Panel3.Controls.Add(Me.Label8)
         Me.Panel3.Dock = System.Windows.Forms.DockStyle.Top
         Me.Panel3.Location = New System.Drawing.Point(0, 0)
         Me.Panel3.Name = "Panel3"
-        Me.Panel3.Size = New System.Drawing.Size(423, 100)
+        Me.Panel3.Size = New System.Drawing.Size(421, 100)
         Me.Panel3.TabIndex = 1
+        '
+        'btnAddItem2
+        '
+        Me.btnAddItem2.Image = CType(resources.GetObject("btnAddItem2.Image"), System.Drawing.Image)
+        Me.btnAddItem2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.btnAddItem2.Location = New System.Drawing.Point(7, 71)
+        Me.btnAddItem2.Name = "btnAddItem2"
+        Me.btnAddItem2.Size = New System.Drawing.Size(56, 23)
+        Me.btnAddItem2.TabIndex = 6
+        Me.btnAddItem2.Text = "Add"
+        Me.btnAddItem2.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.ToolTip1.SetToolTip(Me.btnAddItem2, "Add Product Code-Color-Size")
+        Me.btnAddItem2.UseVisualStyleBackColor = True
         '
         'cboToInventory
         '
         Me.cboToInventory.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cboToInventory.FormattingEnabled = True
-        Me.cboToInventory.Location = New System.Drawing.Point(133, 21)
+        Me.cboToInventory.Location = New System.Drawing.Point(146, 21)
         Me.cboToInventory.Name = "cboToInventory"
         Me.cboToInventory.Size = New System.Drawing.Size(192, 21)
         Me.cboToInventory.TabIndex = 0
@@ -555,11 +570,11 @@ Partial Class StockTransferForm2
         'Label8
         '
         Me.Label8.AutoSize = True
-        Me.Label8.Location = New System.Drawing.Point(21, 29)
+        Me.Label8.Location = New System.Drawing.Point(16, 29)
         Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(70, 13)
+        Me.Label8.Size = New System.Drawing.Size(102, 13)
         Me.Label8.TabIndex = 5
-        Me.Label8.Text = "To Inventory"
+        Me.Label8.Text = "Inventory Location"
         '
         'ToolStrip1
         '
@@ -599,9 +614,9 @@ Partial Class StockTransferForm2
         Me.ToolStripButtonApproved.Image = CType(resources.GetObject("ToolStripButtonApproved.Image"), System.Drawing.Image)
         Me.ToolStripButtonApproved.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.ToolStripButtonApproved.Name = "ToolStripButtonApproved"
-        Me.ToolStripButtonApproved.Size = New System.Drawing.Size(148, 22)
-        Me.ToolStripButtonApproved.Text = "Approve Stock Transfer"
-        Me.ToolStripButtonApproved.ToolTipText = "Approve Stock Transfer"
+        Me.ToolStripButtonApproved.Size = New System.Drawing.Size(169, 22)
+        Me.ToolStripButtonApproved.Text = "Approve Stock Adjustment"
+        Me.ToolStripButtonApproved.ToolTipText = "Approve Stock Adjustment"
         '
         'ToolStripLabel2
         '
@@ -627,7 +642,7 @@ Partial Class StockTransferForm2
         Me.ToolStripButtonClose.Size = New System.Drawing.Size(56, 22)
         Me.ToolStripButtonClose.Text = "Close"
         '
-        'StockTransferForm2
+        'StockAdjustmentForm2
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
@@ -637,9 +652,9 @@ Partial Class StockTransferForm2
         Me.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
         Me.MinimizeBox = False
-        Me.Name = "StockTransferForm2"
+        Me.Name = "StockAdjustmentForm2"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        CType(Me.gridStockTransferOrders, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.gridStockAdjustmentOrders, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SplitContainer1.Panel1.ResumeLayout(False)
         Me.SplitContainer1.Panel2.ResumeLayout(False)
         Me.SplitContainer1.Panel2.PerformLayout()
@@ -656,10 +671,10 @@ Partial Class StockTransferForm2
         Me.SplitContainer3.Panel2.ResumeLayout(False)
         CType(Me.SplitContainer3, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SplitContainer3.ResumeLayout(False)
-        CType(Me.gridStockTransferOrdersFrom, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.gridStockAdjustmentOrdersFrom, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel2.ResumeLayout(False)
         Me.Panel2.PerformLayout()
-        CType(Me.gridStockTransferOrdersTo, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.gridStockAdjustmentOrdersTo, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel3.ResumeLayout(False)
         Me.Panel3.PerformLayout()
         Me.ToolStrip1.ResumeLayout(False)
@@ -668,18 +683,18 @@ Partial Class StockTransferForm2
 
     End Sub
 
-    Friend WithEvents gridStockTransferOrders As DevComponents.DotNetBar.Controls.DataGridViewX
+    Friend WithEvents gridStockAdjustmentOrders As DevComponents.DotNetBar.Controls.DataGridViewX
     Friend WithEvents SplitContainer1 As SplitContainer
     Friend WithEvents Panel1 As Panel
     Friend WithEvents ToolStrip1 As ToolStrip
     Friend WithEvents ToolStripButtonNew As ToolStripButton
     Friend WithEvents ToolStripButtonSave As ToolStripButton
     Friend WithEvents ToolStripButtonClose As ToolStripButton
-    Friend WithEvents dtpStockTransferDate As DateTimePicker
+    Friend WithEvents dtpStockAdjustmentDate As DateTimePicker
     Friend WithEvents txtComments As TextBox
     Friend WithEvents txtTransferedBy As TextBox
     Friend WithEvents txtStatus As TextBox
-    Friend WithEvents txtStockTransferNo As TextBox
+    Friend WithEvents txtStockAdjustmentNo As TextBox
     Friend WithEvents Label5 As Label
     Friend WithEvents Label4 As Label
     Friend WithEvents Label3 As Label
@@ -688,10 +703,10 @@ Partial Class StockTransferForm2
     Friend WithEvents SplitContainer2 As SplitContainer
     Friend WithEvents Label6 As Label
     Friend WithEvents cboFromInventory As ComboBox
-    Friend WithEvents gridStockTransferOrdersFrom As DevComponents.DotNetBar.Controls.DataGridViewX
+    Friend WithEvents gridStockAdjustmentOrdersFrom As DevComponents.DotNetBar.Controls.DataGridViewX
     Friend WithEvents Label8 As Label
     Friend WithEvents cboToInventory As ComboBox
-    Friend WithEvents gridStockTransferOrdersTo As DevComponents.DotNetBar.Controls.DataGridViewX
+    Friend WithEvents gridStockAdjustmentOrdersTo As DevComponents.DotNetBar.Controls.DataGridViewX
     Friend WithEvents SplitContainer3 As SplitContainer
     Friend WithEvents Panel2 As Panel
     Friend WithEvents Panel3 As Panel
@@ -702,11 +717,6 @@ Partial Class StockTransferForm2
     Friend WithEvents ToolStripLabel1 As ToolStripLabel
     Friend WithEvents ToolStripButtonCancel As ToolStripButton
     Friend WithEvents LinkLabelRefresh As LinkLabel
-    Friend WithEvents DataGridViewTextBoxColumn1 As DataGridViewTextBoxColumn
-    Friend WithEvents DataGridViewTextBoxColumn2 As DataGridViewTextBoxColumn
-    Friend WithEvents pickToRackShelfColumn As DevComponents.DotNetBar.Controls.DataGridViewButtonXColumn
-    Friend WithEvents DataGridViewTextBoxColumn3 As DataGridViewTextBoxColumn
-    Friend WithEvents rackShelfColumnTo As DataGridViewButtonColumn
     Friend WithEvents Column1 As DataGridViewTextBoxColumn
     Friend WithEvents Column2 As DataGridViewTextBoxColumn
     Friend WithEvents pickFromRackShelfColumn As DevComponents.DotNetBar.Controls.DataGridViewButtonXColumn
@@ -720,4 +730,10 @@ Partial Class StockTransferForm2
     Friend WithEvents Column7 As DataGridViewTextBoxColumn
     Friend WithEvents Column4 As DataGridViewTextBoxColumn
     Friend WithEvents Column8 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn1 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn2 As DataGridViewTextBoxColumn
+    Friend WithEvents pickToRackShelfColumn As DevComponents.DotNetBar.Controls.DataGridViewButtonXColumn
+    Friend WithEvents DataGridViewTextBoxColumn3 As DataGridViewTextBoxColumn
+    Friend WithEvents rackShelfColumnTo As DataGridViewButtonColumn
+    Friend WithEvents btnAddItem2 As Button
 End Class

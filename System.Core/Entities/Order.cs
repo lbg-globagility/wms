@@ -89,17 +89,6 @@ namespace WarehouseManagementSystem.Core.Entities
             OrderDate = orderDate;
         }
 
-        public static Order NewStockTransferOrder(int organizationId,
-            int userId,
-            string orderNumber,
-            OrderStatus status,
-            DateTime orderDate) => new Order(organizationId: organizationId,
-                userId: userId,
-                orderType: OrderType.ST,
-                orderNumber: orderNumber,
-                status: status,
-                orderDate: orderDate);
-
         public string ViewName => IsCustomerOrderType ? View.CUSTOMER_ORDERS_VIEW :
             IsPurchaseOrderType ? View.PURCHASE_ORDERS_VIEW :
             IsReceivingReportType ? View.RECEIVING_VIEW :

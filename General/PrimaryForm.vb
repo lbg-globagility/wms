@@ -975,6 +975,12 @@ Public Class PrimaryForm
     End Sub
 
     Private Sub msStockAdjustment_Click(sender As Object, e As EventArgs) Handles msStockAdjustment.Click
+        If IsThurston Then
+            Dim form As New StockAdjustmentForm2(userId:=Z_UserID)
+            form.ShowDialog()
+            Return
+        End If
+
         Me.Cursor = Cursors.WaitCursor
         Try
             getPositionID(Me)
