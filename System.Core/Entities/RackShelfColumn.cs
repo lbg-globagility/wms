@@ -72,5 +72,7 @@ namespace WarehouseManagementSystem.Core.Entities
                     continue;
             }
         }
+
+        public int LogicalAvailableQty => AvailableQty ?? 0 - ReservedQty ?? 0;
     }
 }

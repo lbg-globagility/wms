@@ -1,9 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class RackShelfColumnSelectorDialog
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -20,7 +20,7 @@ Partial Class RackShelfColumnSelectorDialog
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.gridRackShelfColumn = New DevComponents.DotNetBar.Controls.DataGridViewX()
@@ -42,6 +42,7 @@ Partial Class RackShelfColumnSelectorDialog
         Me.Column12 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column13 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Quantity = New DevComponents.DotNetBar.Controls.DataGridViewIntegerInputColumn()
+        Me.Column14 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         CType(Me.gridRackShelfColumn, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel1.SuspendLayout()
         Me.Panel2.SuspendLayout()
@@ -52,7 +53,7 @@ Partial Class RackShelfColumnSelectorDialog
         Me.gridRackShelfColumn.AllowUserToAddRows = False
         Me.gridRackShelfColumn.AllowUserToDeleteRows = False
         Me.gridRackShelfColumn.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.gridRackShelfColumn.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column1, Me.Column2, Me.Column3, Me.Column4, Me.Column5, Me.Column6, Me.Column7, Me.Column8, Me.Column9, Me.Column10, Me.Column11, Me.Column12, Me.Column13, Me.Quantity})
+        Me.gridRackShelfColumn.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column1, Me.Column2, Me.Column3, Me.Column4, Me.Column5, Me.Column6, Me.Column7, Me.Column8, Me.Column9, Me.Column10, Me.Column11, Me.Column12, Me.Column13, Me.Quantity, Me.Column14})
         DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
         DataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window
         DataGridViewCellStyle1.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -219,6 +220,13 @@ Partial Class RackShelfColumnSelectorDialog
         Me.Quantity.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
         Me.Quantity.ShowUpDown = True
         '
+        'Column14
+        '
+        Me.Column14.DataPropertyName = "ErrorMessage"
+        Me.Column14.HeaderText = ""
+        Me.Column14.Name = "Column14"
+        Me.Column14.Width = 255
+        '
         'RackShelfColumnSelectorDialog
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -260,4 +268,5 @@ Partial Class RackShelfColumnSelectorDialog
     Friend WithEvents Column12 As DataGridViewTextBoxColumn
     Friend WithEvents Column13 As DataGridViewTextBoxColumn
     Friend WithEvents Quantity As DevComponents.DotNetBar.Controls.DataGridViewIntegerInputColumn
+    Friend WithEvents Column14 As DataGridViewTextBoxColumn
 End Class
