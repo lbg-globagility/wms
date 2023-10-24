@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WarehouseManagementSystem.Core.Entities;
+using WarehouseManagementSystem.Core.Enums;
 using WarehouseManagementSystem.Core.Interfaces;
 using WarehouseManagementSystem.Core.Interfaces.DomainServices;
 using WarehouseManagementSystem.Core.Interfaces.Repositories;
@@ -92,5 +93,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
             await _rackShelfColumnRepository.SaveManyAsync(added: inventoryLocation.RackShelfColumns.Where(i => i.IsNewEntity).ToList(),
                 updated: inventoryLocation.RackShelfColumns.Where(i => !i.IsNewEntity).ToList());
         }
+
+        public async Task<List<InventoryLocation>> GetManyByTypeAsync(int organizationId, InventoryLocationType inventoryLocationType) => await _inventoryLocationRepository.GetManyByTypeAsync(organizationId: organizationId, inventoryLocationType: inventoryLocationType);
     }
 }

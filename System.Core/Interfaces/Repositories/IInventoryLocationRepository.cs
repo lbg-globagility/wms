@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using WarehouseManagementSystem.Core.Entities;
+using WarehouseManagementSystem.Core.Enums;
 
 namespace WarehouseManagementSystem.Core.Interfaces.Repositories
 {
@@ -9,5 +10,6 @@ namespace WarehouseManagementSystem.Core.Interfaces.Repositories
         Task<InventoryLocation> GetByNameAsync(string name);
 
         Task<List<InventoryLocation>> GetAllByOrganizationIdAsync(int organizationId);
+        Task<List<InventoryLocation>> GetManyByTypeAsync(int organizationId, InventoryLocationType inventoryLocationType);
     }
 }
