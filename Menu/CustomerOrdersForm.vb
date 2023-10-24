@@ -1,9 +1,9 @@
 ﻿Imports Microsoft.Extensions.DependencyInjection
 Imports MySql.Data.MySqlClient
+Imports WarehouseManagementSystem.Core.Entities
 Imports WarehouseManagementSystem.Core.Enums
 Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
 Imports WarehouseManagementSystem.Core.Interfaces.Repositories
-Imports WarehouseManagementSystem.Desktop.Utilities
 
 Public Class CustomerOrdersForm
     Dim manager As New sqlModule.Manager
@@ -32,7 +32,7 @@ Public Class CustomerOrdersForm
             errProvider.Clear()
             clearfields()
             callAutoComplete()
-            callAutoPopulate()
+            Await CallAutoPopulate()
             displayCustomerOrderList(spagenum)
             pageSetup()
             txtPageNo.Text = "" & numofpages & " of " & validpages & " "
@@ -51,12 +51,12 @@ Public Class CustomerOrdersForm
 
         _agents = Await contactDataService.GetAgentsAsync(organizationId:=Z_OrganizationID)
 
-        Dim agentDataSource = New List(Of WarehouseManagementSystem.Core.Entities.Contact) From {WarehouseManagementSystem.Core.Entities.Contact.NewContact(organizationId:=Z_OrganizationID, lastName:=String.Empty, firstName:=String.Empty, workPhone:=String.Empty, type:=ContactType.Agent)}
+        Dim agentDataSource = New List(Of Contact) From {Contact.NewContact(organizationId:=Z_OrganizationID, lastName:="NO AGENT", firstName:=String.Empty, workPhone:=String.Empty, type:=ContactType.Agent)}
         agentDataSource.AddRange(_agents)
+
         cboAgent.ValueMember = "RowID"
         cboAgent.DisplayMember = "FullNameLastNameFirst"
         cboAgent.DataSource = agentDataSource
-
     End Function
 
     Private Sub CustomerOrdersForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
@@ -81,7 +81,7 @@ Public Class CustomerOrdersForm
         globalautocompleteListOfValues(cboTags, "Tags", Me)
     End Sub
 
-    Sub callAutoPopulate()
+    Private Async Function CallAutoPopulate() As Task
         autopopulatecboSearch()
         autopopulatecboBy()
         globalautopopulateAccountName(cboCustomerName, "Customer", "AND a.status = 'Active'", Me)
@@ -91,8 +91,8 @@ Public Class CustomerOrdersForm
         globalautopopulateListOfValues(cboTags, "Tags", Me)
         autopopulateTags()
         autoPopulateCustomerOrderType()
-        GetAgentsAsync()
-    End Sub
+        Await GetAgentsAsync()
+    End Function
 
 #Region "Clear/Enable/Visible"
 
@@ -339,12 +339,12 @@ Public Class CustomerOrdersForm
 
 #Region "Click"
 
-    Sub tsrefreshperformclick()
+    Private Async Sub tsrefreshperformclick()
         Try
             errProvider.Clear()
             clearfields()
             callAutoComplete()
-            callAutoPopulate()
+            Await CallAutoPopulate()
             displayCustomerOrderList(spagenum)
             pageSetup()
             txtPageNo.Text = "" & numofpages & " of " & validpages & " "
@@ -941,12 +941,13 @@ Public Class CustomerOrdersForm
     Private Async Function LoadInventoryLocations() As Task
         Dim inventoryLocationRepository = GetRequiredService(Of IInventoryLocationRepository)()
         Dim inventoryLocations = Await inventoryLocationRepository.GetAllByOrganizationIdAsync(Z_OrganizationID)
-        Dim dataSource = New List(Of WarehouseManagementSystem.Core.Entities.InventoryLocation) From {WarehouseManagementSystem.Core.Entities.InventoryLocation.NewInventoryLocation(organizationId:=Z_OrganizationID, name:=String.Empty, type:=InventoryLocationType.Damage)}
-        dataSource.AddRange(inventoryLocations)
+
+        'Dim dataSource = New List(Of WarehouseManagementSystem.Core.Entities.InventoryLocation) From {WarehouseManagementSystem.Core.Entities.InventoryLocation.NewInventoryLocation(organizationId:=Z_OrganizationID, name:=String.Empty, type:=InventoryLocationType.Damage)}
+        'dataSource.AddRange(inventoryLocations)
 
         cboInventoryLocation.ValueMember = "RowID"
         cboInventoryLocation.DisplayMember = "Name"
-        cboInventoryLocation.DataSource = dataSource
+        cboInventoryLocation.DataSource = inventoryLocations
     End Function
 
 #End Region
@@ -1488,7 +1489,7 @@ Public Class CustomerOrdersForm
             If dgCustomerOrderItems.Rows.Count <> 0 Then
                 For i As Integer = 0 To dgCustomerOrderItems.Rows.Count - 1
                     If dgCustomerOrderItems.Rows(i).Cells(ci_type.Index).Value = "B" Then
-                        dgCustomerOrderItems.Rows(i).DefaultCellStyle.BackColor = Color.PaleGreen
+                        dgCustomerOrderItems.Rows(i).DefaultCellStyle.BackColor = Drawing.Color.PaleGreen
                     Else
                         If CStr(dgCustomerOrderItems.Rows(i).Cells("ci_colorvalue").Value) <> "" Then
                             readcolor = colorconverter.ConvertFromString(CStr(dgCustomerOrderItems.Rows(i).Cells("ci_colorvalue").Value))
@@ -2043,11 +2044,11 @@ Public Class CustomerOrdersForm
             Dim dtDco As New DataTable
             dtDco = getDataTableForSQL("SELECT co.accountid,COALESCE(co.referencenumber,''),DATE_FORMAT(co.orderdate,'%d-%b-%Y'),DATE_FORMAT(co.targetdate,'%d-%b-%Y'),COALESCE(co.customername)," &
                         "COALESCE(co.comments,''),COALESCE(co.totalamount,0),COALESCE(co.deliveryhours,''),COALESCE(co.customeraddress,''),COALESCE(co.branchid,0),COALESCE(co.companyid,0)," &
-                        "COALESCE(co.combinecodingid,0),DATE_FORMAT(co.enddate,'%d-%b-%Y'),COALESCE(co.Agentid,0),COALESCE(co.CustomerOrderType,'') FROM orders co WHERE co.rowid = " & icustomerorderid & " ")
+                        "COALESCE(co.combinecodingid,0),DATE_FORMAT(co.enddate,'%d-%b-%Y'),COALESCE(co.Agentid,0),COALESCE(co.CustomerOrderType,''),IFNULL(co.InventoryLocationID,0) FROM orders co WHERE co.rowid = " & icustomerorderid & " ")
             If dtDco.Rows.Count <> 0 Then
                 getOrderNo(globaliordertype:=OrderType.CO.ToString(), Me)
                 I_Orders(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, CInt(dtDco.Rows(0)(0)), If(CInt(dtDco.Rows(0)(9)) = 0, DBNull.Value, CInt(dtDco.Rows(0)(9))), If(CInt(dtDco.Rows(0)(10)) = 0, DBNull.Value, CInt(dtDco.Rows(0)(10))),
-                    If(CInt(dtDco.Rows(0)(11)) = 0, DBNull.Value, CInt(dtDco.Rows(0)(11))), CStr(globalorderno), "", "", OrderType:=OrderType.CO.ToString(), dtDco.Rows(0)(2), dtDco.Rows(0)(3), dtDco.Rows(0)(12), dtDco.Rows(0)(4), dtDco.Rows(0)(5), "New", CDec(dtDco.Rows(0)(6)), CStr(dtDco.Rows(0)(7)), CStr(dtDco.Rows(0)(8)), CStr(dtDco.Rows(0)(14)), Me, AgentId:=CInt(dtDco.Rows(0)(13)))
+                    If(CInt(dtDco.Rows(0)(11)) = 0, DBNull.Value, CInt(dtDco.Rows(0)(11))), CStr(globalorderno), "", "", OrderType:=OrderType.CO.ToString(), dtDco.Rows(0)(2), dtDco.Rows(0)(3), dtDco.Rows(0)(12), dtDco.Rows(0)(4), dtDco.Rows(0)(5), "New", CDec(dtDco.Rows(0)(6)), CStr(dtDco.Rows(0)(7)), CStr(dtDco.Rows(0)(8)), CStr(dtDco.Rows(0)(14)), Me, InventoryLocationId:=CInt(dtDco.Rows(0)(15)), AgentId:=CInt(dtDco.Rows(0)(13)))
                 coorderid = globalorderidsp
             End If
         Catch ex As Exception
@@ -3187,7 +3188,7 @@ Public Class CustomerOrdersForm
 
     Private Sub pbAddCustomer_MouseEnter(sender As Object, e As EventArgs) Handles pbAddCustomer.MouseEnter
         Try
-            pbAddCustomer.BackColor = Color.MediumSpringGreen
+            pbAddCustomer.BackColor = Drawing.Color.MediumSpringGreen
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -3197,7 +3198,7 @@ Public Class CustomerOrdersForm
 
     Private Sub pbAddCustomer_MouseLeave(sender As Object, e As EventArgs) Handles pbAddCustomer.MouseLeave
         Try
-            pbAddCustomer.BackColor = Color.Transparent
+            pbAddCustomer.BackColor = Drawing.Color.Transparent
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -3455,6 +3456,11 @@ Public Class CustomerOrdersForm
                 '        Exit Try
                 '    End If
                 'End If
+                If cboCustomerOrderType.SelectedValue Is Nothing Then
+                    errProvider.SetError(cboCustomerOrderType, "Please select an `Order Type` value")
+                    Cursor = Cursors.Default
+                    Return
+                End If
             ElseIf cue = "Edit" Then
                 If globalcreateflg = "Y" Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
@@ -3533,7 +3539,7 @@ Public Class CustomerOrdersForm
                     getOrderNo(globaliordertype:=OrderType.CO.ToString(), Me)
 
                     I_Orders(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, cocustomerid, If(cobranchid = 0, DBNull.Value, cobranchid), If(covendorid = 0, DBNull.Value, covendorid), If(cocombinecodingid = 0, DBNull.Value, cocombinecodingid),
-                            CStr(globalorderno), txtPONo.Text, txtSIDRNo.Text, OrderType:=OrderType.CO.ToString(), dtpCustomerOrderDate.Value, dtpDeliveryDate.Value, dtpEndDate.Value, cboCustomerName.Text, txtComments.Text, txtStatus.Text, Math.Round(coitotalprice, 2), txtDeliveryHours.Text, txtDeliveryAddress.Text, cboCustomerOrderType.Text, Me, AgentId:=CInt(cboAgent.SelectedValue))
+                            CStr(globalorderno), txtPONo.Text, txtSIDRNo.Text, OrderType:=OrderType.CO.ToString(), dtpCustomerOrderDate.Value, dtpDeliveryDate.Value, dtpEndDate.Value, cboCustomerName.Text, txtComments.Text, txtStatus.Text, Math.Round(coitotalprice, 2), txtDeliveryHours.Text, txtDeliveryAddress.Text, cboCustomerOrderType.Text, Me, InventoryLocationId:=CInt(cboInventoryLocation.SelectedValue), AgentId:=CInt(cboAgent.SelectedValue))
                     coorderid = globalorderidsp
                     If dgCustomerOrderItems.Rows.Count <> 0 Then
                         For a = 0 To dgCustomerOrderItems.Rows.Count - 1
@@ -4041,7 +4047,7 @@ Public Class CustomerOrdersForm
 
     Private Sub pbSaveSIDR_MouseEnter(sender As Object, e As EventArgs) Handles pbSaveSIDRNo.MouseEnter
         Try
-            pbSaveSIDRNo.BackColor = Color.MediumSpringGreen
+            pbSaveSIDRNo.BackColor = Drawing.Color.MediumSpringGreen
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -4051,7 +4057,7 @@ Public Class CustomerOrdersForm
 
     Private Sub pbSaveSIDR_MouseLeave(sender As Object, e As EventArgs) Handles pbSaveSIDRNo.MouseLeave
         Try
-            pbSaveSIDRNo.BackColor = Color.Transparent
+            pbSaveSIDRNo.BackColor = Drawing.Color.Transparent
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -4150,7 +4156,7 @@ Public Class CustomerOrdersForm
 
     Private Sub pbAddBranchCodeName_MouseEnter(sender As Object, e As EventArgs) Handles pbAddBranchCodeName.MouseEnter
         Try
-            pbAddBranchCodeName.BackColor = Color.MediumSpringGreen
+            pbAddBranchCodeName.BackColor = Drawing.Color.MediumSpringGreen
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -4162,24 +4168,55 @@ Public Class CustomerOrdersForm
 
     End Sub
 
-    Private Async Sub cboCustomerOrderType_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboCustomerOrderType.SelectedIndexChanged
-        If msNew.Enabled Then Return
+    Private Sub cboCustomerOrderType_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboCustomerOrderType.SelectedIndexChanged
+        If cboCustomerOrderType.SelectedValue IsNot Nothing Then errProvider.SetError(cboCustomerOrderType, String.Empty)
+
+        If msNew.Enabled AndAlso Not cboCustomerOrderType.SelectedIndex = -1 Then Return
 
         Dim inventoryLocationType = CType(cboCustomerOrderType.SelectedValue, InventoryLocationType)
-        Console.WriteLine("InventoryLocationType: {0}", inventoryLocationType)
 
-        Await FunctionUtils.TryCatchFunctionAsync("Approve Stock Adjustment",
-            Async Function()
-                Dim inventoryLocationDataService = GetRequiredService(Of IInventoryLocationDataService)()
-                Dim inventoryLocations = Await inventoryLocationDataService.GetManyByTypeAsync(organizationId:=Z_OrganizationID, inventoryLocationType:=inventoryLocationType)
+        Dim dataSource = cboInventoryLocation.Items.
+            OfType(Of Object).
+            Select(Function(t) CType(t, InventoryLocation)).
+            Where(Function(t) t.Type = inventoryLocationType).
+            ToList()
 
-                MsgBox("Success!")
-            End Function)
+        If Not dataSource.Any() Then
+            MessageBox.Show(text:=$"No Inventory Location for type `{inventoryLocationType}`.{Environment.NewLine}You need to create a new Inventory Location with type `{inventoryLocationType}`.{Environment.NewLine}{Environment.NewLine}Go to `Menu` > `Inventory Management` > `(L) Inventory Locations`",
+                caption:="No Inventory Location",
+                icon:=MessageBoxIcon.Error,
+                buttons:=MessageBoxButtons.OK)
+
+            cboCustomerOrderType.SelectedIndex = -1
+            Return
+        End If
+
+        If dataSource.Count() > 1 Then
+            Dim form = New CustomerOrderInventoryLocationSelectorDialog(inventoryLocations:=dataSource)
+            If form.ShowDialog() = DialogResult.OK Then
+                cboInventoryLocation.SelectedValue = form.InventoryLocationId
+            Else
+                cboCustomerOrderType.SelectedIndex = -1
+            End If
+        Else
+            cboInventoryLocation.SelectedValue = dataSource.FirstOrDefault().RowID.Value
+        End If
+    End Sub
+
+    Private Sub cboAgent_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboAgent.SelectedIndexChanged
+
+    End Sub
+
+    Private Async Sub btnAddAgent_Click(sender As Object, e As EventArgs) Handles btnAddAgent.Click
+        Dim form As New AddContactForm(contactType:=ContactType.Agent, True)
+        If form.ShowDialog() = DialogResult.OK Then
+            Await GetAgentsAsync()
+        End If
     End Sub
 
     Private Sub pbAddBranchCodeName_MouseLeave(sender As Object, e As EventArgs) Handles pbAddBranchCodeName.MouseLeave
         Try
-            pbAddBranchCodeName.BackColor = Color.Transparent
+            pbAddBranchCodeName.BackColor = Drawing.Color.Transparent
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -4223,7 +4260,7 @@ Public Class CustomerOrdersForm
 
     Private Sub pbAddVendorCodeName_MouseEnter(sender As Object, e As EventArgs) Handles pbAddVendorCodeName.MouseEnter
         Try
-            pbAddVendorCodeName.BackColor = Color.MediumSpringGreen
+            pbAddVendorCodeName.BackColor = Drawing.Color.MediumSpringGreen
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -4233,7 +4270,7 @@ Public Class CustomerOrdersForm
 
     Private Sub pbAddVendorCodeName_MouseLeave(sender As Object, e As EventArgs) Handles pbAddVendorCodeName.MouseLeave
         Try
-            pbAddVendorCodeName.BackColor = Color.Transparent
+            pbAddVendorCodeName.BackColor = Drawing.Color.Transparent
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -4277,7 +4314,7 @@ Public Class CustomerOrdersForm
 
     Private Sub pbAddClassDescription_MouseEnter(sender As Object, e As EventArgs) Handles pbAddClassDescription.MouseEnter
         Try
-            pbAddClassDescription.BackColor = Color.MediumSpringGreen
+            pbAddClassDescription.BackColor = Drawing.Color.MediumSpringGreen
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -4287,7 +4324,7 @@ Public Class CustomerOrdersForm
 
     Private Sub pbAddClassDescription_MouseLeave(sender As Object, e As EventArgs) Handles pbAddClassDescription.MouseLeave
         Try
-            pbAddClassDescription.BackColor = Color.Transparent
+            pbAddClassDescription.BackColor = Drawing.Color.Transparent
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -4331,7 +4368,7 @@ Public Class CustomerOrdersForm
 
     Private Sub pbAddTags_MouseEnter(sender As Object, e As EventArgs) Handles pbAddTags.MouseEnter
         Try
-            pbAddTags.BackColor = Color.MediumSpringGreen
+            pbAddTags.BackColor = Drawing.Color.MediumSpringGreen
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -4341,7 +4378,7 @@ Public Class CustomerOrdersForm
 
     Private Sub pbAddTags_MouseLeave(sender As Object, e As EventArgs) Handles pbAddTags.MouseLeave
         Try
-            pbAddTags.BackColor = Color.Transparent
+            pbAddTags.BackColor = Drawing.Color.Transparent
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally

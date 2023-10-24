@@ -342,6 +342,12 @@
     <Compile Include="Menu\Accounts\AccountsForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Menu\CustomerOrder\CustomerOrderInventoryLocationSelectorDialog.Designer.vb">
+      <DependentUpon>CustomerOrderInventoryLocationSelectorDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Menu\CustomerOrder\CustomerOrderInventoryLocationSelectorDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Menu\InventoryLocationsForm.Designer.vb">
       <DependentUpon>InventoryLocationsForm.vb</DependentUpon>
     </Compile>
@@ -988,6 +994,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Menu\Accounts\AccountsForm.resx">
       <DependentUpon>AccountsForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Menu\CustomerOrder\CustomerOrderInventoryLocationSelectorDialog.resx">
+      <DependentUpon>CustomerOrderInventoryLocationSelectorDialog.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Menu\InventoryLocationsForm.resx">
       <DependentUpon>InventoryLocationsForm.vb</DependentUpon>
