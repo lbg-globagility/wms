@@ -71,6 +71,7 @@ Public Class RackShelfColumnSelectorDialog
                        Dim qtyToApply = If(movementHistory.QtyToApply, 0)
 
                        Return New RackShelfColumnModel(order:=_order,
+                        productInventoryLocation:=t,
                         rackShelfColumn:=t.RackShelfColumn,
                         qtyToApply:=qtyToApply,
                         movementHistory:=movementHistory)

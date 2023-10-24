@@ -8,6 +8,7 @@ Friend Class RackShelfColumnModel
     Private ReadOnly _origQuantity As Integer
 
     Public Sub New(order As Order,
+            productInventoryLocation As ProductInventoryLocation,
             rackShelfColumn As RackShelfColumn,
             qtyToApply As Integer,
             movementHistory As MovementHistory)
@@ -17,6 +18,7 @@ Friend Class RackShelfColumnModel
         _origQuantity = qtyToApply
         Quantity = qtyToApply
         _movementHistory = movementHistory
+        _productInventoryLocation = productInventoryLocation
     End Sub
 
     Public ReadOnly Property RowID As Integer?
@@ -51,7 +53,7 @@ Friend Class RackShelfColumnModel
 
     Public ReadOnly Property AvailableQty As Integer
         Get
-            Return If(_rackShelfColumn.AvailableQty, 0)
+            Return If(_productInventoryLocation.TotalAvailableQty, 0)
         End Get
     End Property
 
@@ -63,25 +65,25 @@ Friend Class RackShelfColumnModel
 
     Public ReadOnly Property ReservedQty As Integer
         Get
-            Return If(_rackShelfColumn.ReservedQty, 0)
+            Return If(_productInventoryLocation.TotalReserveQty, 0)
         End Get
     End Property
 
     Public ReadOnly Property DamagedQty As Integer
         Get
-            Return If(_rackShelfColumn.DamagedQty, 0)
+            Return If(_productInventoryLocation.TotalDamageQty, 0)
         End Get
     End Property
 
     Public ReadOnly Property InRepairQty As Integer
         Get
-            Return If(_rackShelfColumn.InRepairQty, 0)
+            Return If(_productInventoryLocation.TotalInRepairQty, 0)
         End Get
     End Property
 
     Public ReadOnly Property SupplierProblemQty As Integer
         Get
-            Return If(_rackShelfColumn.SupplierProblemQty, 0)
+            Return If(_productInventoryLocation.TotalSupplierProblemQty, 0)
         End Get
     End Property
 
@@ -105,6 +107,7 @@ Friend Class RackShelfColumnModel
 
     Public Property Quantity As Integer
     Private ReadOnly _movementHistory As MovementHistory
+    Private ReadOnly _productInventoryLocation As ProductInventoryLocation
 
     Public ReadOnly Property HasChangedQuantity As Boolean
         Get
@@ -114,7 +117,7 @@ Friend Class RackShelfColumnModel
 
     Public ReadOnly Property IsTooMuchQuantity As Boolean
         Get
-            If _order.IsStockTransferType AndAlso _movementHistory.IsTransactionTypeIsFrom Then Return Quantity > If(_rackShelfColumn.AvailableQty, 0)
+            If _order.IsStockTransferType AndAlso _movementHistory.IsTransactionTypeIsFrom Then Return Quantity > If(_productInventoryLocation.TotalAvailableQty, 0)
 
             Return False
         End Get
