@@ -46,7 +46,7 @@ Public Class PrimaryForm
     Private _systemOwner As SystemOwner
 
     Private Async Sub PrimaryForm_Load(sender As Object, e As EventArgs) Handles Me.Load
-        Dim _systemOwnerService = MainServiceProvider.GetRequiredService(Of ISystemOwnerService)
+        Dim _systemOwnerService = GetRequiredService(Of ISystemOwnerService)()
         _systemOwner = Await _systemOwnerService.GetCurrentSystemOwnerEntityAsync()
 
         Me.Cursor = Cursors.WaitCursor

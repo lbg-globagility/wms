@@ -44,7 +44,7 @@ Public Class AddContactForm
         tsbtnSave.Enabled = False
         Await FunctionUtils.TryCatchFunctionAsync(messageTitle:=String.Empty,
             Async Function()
-                Dim contactDataService = MainServiceProvider.GetRequiredService(Of IContactDataService)
+                Dim contactDataService = GetRequiredService(Of IContactDataService)()
 
                 Dim contact = Entities.Contact.NewContact(organizationId:=Z_OrganizationID,
                     lastName:=txtLastName.Text.Trim,

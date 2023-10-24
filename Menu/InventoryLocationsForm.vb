@@ -24,7 +24,7 @@ Public Class InventoryLocationsForm
     Private _systemOwner As WarehouseManagementSystem.Core.Entities.SystemOwner
 
     Private Async Sub InventoryLocationsForm_Load(sender As Object, e As EventArgs) Handles Me.Load
-        Dim _systemOwnerService = MainServiceProvider.GetRequiredService(Of ISystemOwnerService)
+        Dim _systemOwnerService = GetRequiredService(Of ISystemOwnerService)()
         _systemOwner = Await _systemOwnerService.GetCurrentSystemOwnerEntityAsync()
 
         Me.Cursor = Cursors.WaitCursor
@@ -2066,7 +2066,7 @@ Public Class InventoryLocationsForm
         Return Async Function()
                    Await FunctionUtils.TryCatchFunctionAsync("Save changes Inventory Location",
                 Async Function()
-                    Dim inventoryLocationDataService = MainServiceProvider.GetRequiredService(Of IInventoryLocationDataService)
+                    Dim inventoryLocationDataService = GetRequiredService(Of IInventoryLocationDataService)()
 
                     Await inventoryLocationDataService.PopulateWithProductColorSizesAsync(
                         inventoryLocationName:=txtLocationName.Text.Trim,

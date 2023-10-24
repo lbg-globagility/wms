@@ -18,7 +18,7 @@ Public Class DeliveryTimestampTrackingForm
     End Sub
 
     Private Async Sub DeliveryTimestampTrackingForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Dim lineupRepository = MainServiceProvider.GetRequiredService(Of ILineupRepository)
+        Dim lineupRepository = GetRequiredService(Of ILineupRepository)()
         _lineup = Await lineupRepository.GetByIdAsync(id:=_lineupId)
         If _lineup IsNot Nothing Then
             dtpTime.Checked = _lineup.ConfirmedDeliveryTimeStamp IsNot Nothing
@@ -49,7 +49,7 @@ Public Class DeliveryTimestampTrackingForm
                     _lineup.SetConfirmedDeliveryTimeStamp(dateTime:=value)
                 End If
 
-                Dim lineupRepository = MainServiceProvider.GetRequiredService(Of ILineupRepository)
+                Dim lineupRepository = GetRequiredService(Of ILineupRepository)()
                 Await lineupRepository.SaveAsync(entity:=_lineup)
 
                 DialogResult = DialogResult.OK

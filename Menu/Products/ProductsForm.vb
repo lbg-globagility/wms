@@ -26,7 +26,7 @@ Public Class ProductsForm
     Private _picp As ProductImageConfigParser
 
     Private Async Sub ProductManagementForm_Load(sender As Object, e As EventArgs) Handles Me.Load
-        Dim _systemOwnerService = MainServiceProvider.GetRequiredService(Of ISystemOwnerService)
+        Dim _systemOwnerService = GetRequiredService(Of ISystemOwnerService)()
         _systemOwner = Await _systemOwnerService.GetCurrentSystemOwnerEntityAsync()
 
         _picp = New ProductImageConfigParser(filePath:=CONFIG_FILE_PATH)

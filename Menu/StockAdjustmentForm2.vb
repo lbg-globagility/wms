@@ -26,6 +26,8 @@ Public Class StockAdjustmentForm2
         SplitContainer3.Panel1Collapsed = True
 
         _userId = userId
+
+        ToolStripButtonClose.Visible = Not FormBorderStyle = FormBorderStyle.FixedDialog
     End Sub
 
     Private Async Sub StockAdjustmentForm2_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -58,7 +60,7 @@ Public Class StockAdjustmentForm2
     End Function
 
     Private Async Function LoadUserPrivilege() As Task
-        Dim positionViewDataService = MainServiceProvider.GetRequiredService(Of IPositionViewDataService)
+        Dim positionViewDataService = GetRequiredService(Of IPositionViewDataService)()
         _positionView = Await positionViewDataService.GetByUserIdAndViewNameAsync(organizationId:=Z_OrganizationID,
             userId:=_userId,
             viewName:=VIEW_NAME)
@@ -96,14 +98,14 @@ Public Class StockAdjustmentForm2
     End Function
 
     Private Async Function GetStockAdjustmentOrders() As Task(Of List(Of Order))
-        Dim orderDataService = MainServiceProvider.GetRequiredService(Of IOrderDataService)
+        Dim orderDataService = GetRequiredService(Of IOrderDataService)()
         Return (Await orderDataService.GetStockAdjustmentOrdersAsync(organizationId:=Z_OrganizationID)).
             OrderByDescending(Function(t) t.Created).
             ToList()
     End Function
 
     Private Async Function GetInventoryLocations() As Task(Of List(Of InventoryLocation))
-        Dim inventoryLocationRepository = MainServiceProvider.GetRequiredService(Of IInventoryLocationRepository)
+        Dim inventoryLocationRepository = GetRequiredService(Of IInventoryLocationRepository)()
         Return Await inventoryLocationRepository.GetAllByOrganizationIdAsync(Z_OrganizationID)
     End Function
 
@@ -134,7 +136,7 @@ Public Class StockAdjustmentForm2
             Return
         End If
 
-        Dim orderDataService = MainServiceProvider.GetRequiredService(Of IOrderDataService)
+        Dim orderDataService = GetRequiredService(Of IOrderDataService)()
         gridStockAdjustmentOrders.DataSource = (Await orderDataService.SearchStockAdjustmentOrdersAsync(organizationId:=Z_OrganizationID,
             searchText:=txtSearch.Text)).
             OrderByDescending(Function(t) t.Created).
@@ -149,7 +151,7 @@ Public Class StockAdjustmentForm2
 
         Await FunctionUtils.TryCatchFunctionAsync("Quick create stock adjustment",
             Async Function()
-                Dim orderDataService = MainServiceProvider.GetRequiredService(Of IOrderDataService)
+                Dim orderDataService = GetRequiredService(Of IOrderDataService)()
                 Dim newOrder = Await orderDataService.QuickCreateStockAdjustmentOrderAsync(organizationId:=Z_OrganizationID, userId:=_userId)
 
                 _selectedOrder = newOrder
@@ -180,8 +182,13 @@ Public Class StockAdjustmentForm2
         Await FunctionUtils.TryCatchFunctionAsync("Save Stock Adjustment changes",
             action:=
             Async Function()
-                Dim orderDataService = MainServiceProvider.GetRequiredService(Of IOrderDataService)
+                Dim orderDataService = GetRequiredService(Of IOrderDataService)()
                 Await orderDataService.SaveChangesAsync(_selectedOrder, _userId)
+
+                MessageBox.Show(text:="Changes saved successfully!",
+                    caption:="Success",
+                    icon:=MessageBoxIcon.Information,
+                    buttons:=MessageBoxButtons.OK)
 
                 action()
 
@@ -206,7 +213,7 @@ Public Class StockAdjustmentForm2
             Await FunctionUtils.TryCatchFunctionAsync("Delete order after quick create stock adjustment",
                 action:=
                 Async Function()
-                    Dim orderRepository = MainServiceProvider.GetRequiredService(Of IOrderRepository)
+                    Dim orderRepository = GetRequiredService(Of IOrderRepository)()
                     Await orderRepository.DeleteAsync(_selectedOrder)
 
                     cancelButtonAction()
@@ -383,7 +390,7 @@ Public Class StockAdjustmentForm2
         If hasOrder AndAlso form.ShowDialog() = Global.System.Windows.Forms.DialogResult.OK Then
             Dim selectedProductColorSizeModels = form.SelectedProductColorSizeModels
 
-            Dim productInventoryLocationDataService = MainServiceProvider.GetRequiredService(Of IProductInventoryLocationDataService)
+            Dim productInventoryLocationDataService = GetRequiredService(Of IProductInventoryLocationDataService)()
             Dim productInventoryLocations = Await productInventoryLocationDataService.GetByInventoryLocationIdAsync(inventoryLocationId:=inventoryLocationIdTo)
 
             For Each productColorSizeModel In selectedProductColorSizeModels
@@ -474,9 +481,14 @@ Public Class StockAdjustmentForm2
 
         Await FunctionUtils.TryCatchFunctionAsync("Approve Stock Adjustment",
             Async Function()
-                Dim orderDataService = MainServiceProvider.GetRequiredService(Of IOrderDataService)
+                Dim orderDataService = GetRequiredService(Of IOrderDataService)()
 
                 Await orderDataService.ApproveStockAdjustment(order:=_selectedOrder, userId:=_userId)
+
+                MessageBox.Show(text:="Stock Transfer approved!",
+                    caption:="Approved",
+                    icon:=MessageBoxIcon.Information,
+                    buttons:=MessageBoxButtons.OK)
 
                 '_selectedOrder = Await orderDataService.GetOrderAsync(order:=_selectedOrder)
 

@@ -3348,4 +3348,7 @@ Module myModule
 
 #End Region
 
+    Public Function GetRequiredService(Of T)() As T
+        Return MainServiceProvider.GetRequiredService(Of T)
+    End Function
 End Module

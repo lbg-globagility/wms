@@ -60,7 +60,7 @@ Public Class ViewEditLineUpDeliveryForm
     End Function
 
     Private Async Function GetAgentsAsync() As Task
-        Dim contactDataService = MainServiceProvider.GetRequiredService(Of IContactDataService)
+        Dim contactDataService = GetRequiredService(Of IContactDataService)()
 
         _agents = Await contactDataService.GetAgentsAsync(organizationId:=Z_OrganizationID)
 
@@ -73,7 +73,7 @@ Public Class ViewEditLineUpDeliveryForm
     End Function
 
     Private Async Function GetHelpersAsync() As Task
-        Dim contactDataService = MainServiceProvider.GetRequiredService(Of IContactDataService)
+        Dim contactDataService = GetRequiredService(Of IContactDataService)()
 
         _helpers = Await contactDataService.GetHelpersAsync(organizationId:=Z_OrganizationID)
 

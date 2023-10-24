@@ -40,7 +40,7 @@ Public Class ProductSelectorDialog
     End Sub
 
     Private Async Function GetProductColorSizes() As Task(Of List(Of ProductColorSizeModel))
-        Dim productInventoryLocationDataService = MainServiceProvider.GetRequiredService(Of IProductInventoryLocationDataService)
+        Dim productInventoryLocationDataService = GetRequiredService(Of IProductInventoryLocationDataService)()
         Dim productInventoryLocations = Await productInventoryLocationDataService.GetByInventoryLocationIdAsync(inventoryLocationId:=_inventoryLocationId)
 
         If ProductColorSizeExceptionIds IsNot Nothing AndAlso ProductColorSizeExceptionIds.Any() Then

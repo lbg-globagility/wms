@@ -24,6 +24,8 @@ Public Class StockTransferForm2
 
         ' Add any initialization after the InitializeComponent() call.
         _userId = userId
+
+        ToolStripButtonClose.Visible = Not FormBorderStyle = FormBorderStyle.FixedDialog
     End Sub
 
     Private Async Sub StockTransferForm2_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -52,7 +54,7 @@ Public Class StockTransferForm2
     End Sub
 
     Private Async Function LoadUserPrivilege() As Task
-        Dim positionViewDataService = MainServiceProvider.GetRequiredService(Of IPositionViewDataService)
+        Dim positionViewDataService = GetRequiredService(Of IPositionViewDataService)()
         _positionView = Await positionViewDataService.GetByUserIdAndViewNameAsync(organizationId:=Z_OrganizationID,
             userId:=_userId,
             viewName:=VIEW_NAME)
@@ -90,14 +92,14 @@ Public Class StockTransferForm2
     End Function
 
     Private Async Function GetStockTransferOrders() As Task(Of List(Of Order))
-        Dim orderDataService = MainServiceProvider.GetRequiredService(Of IOrderDataService)
+        Dim orderDataService = GetRequiredService(Of IOrderDataService)()
         Return (Await orderDataService.GetStockTransferOrdersAsync(Z_OrganizationID)).
             OrderByDescending(Function(t) t.Created).
             ToList()
     End Function
 
     Private Async Function GetInventoryLocations() As Task(Of List(Of InventoryLocation))
-        Dim inventoryLocationRepository = MainServiceProvider.GetRequiredService(Of IInventoryLocationRepository)
+        Dim inventoryLocationRepository = GetRequiredService(Of IInventoryLocationRepository)()
         Return Await inventoryLocationRepository.GetAllByOrganizationIdAsync(Z_OrganizationID)
     End Function
 
@@ -128,7 +130,7 @@ Public Class StockTransferForm2
             Return
         End If
 
-        Dim orderDataService = MainServiceProvider.GetRequiredService(Of IOrderDataService)
+        Dim orderDataService = GetRequiredService(Of IOrderDataService)()
         gridStockTransferOrders.DataSource = (Await orderDataService.SearchStockTransferOrdersAsync(organizationId:=Z_OrganizationID,
             searchText:=txtSearch.Text)).
             OrderByDescending(Function(t) t.Created).
@@ -143,7 +145,7 @@ Public Class StockTransferForm2
 
         Await FunctionUtils.TryCatchFunctionAsync("Quick create stock transfer",
             Async Function()
-                Dim orderDataService = MainServiceProvider.GetRequiredService(Of IOrderDataService)
+                Dim orderDataService = GetRequiredService(Of IOrderDataService)()
                 Dim newOrder = Await orderDataService.QuickCreateStockTransferOrderAsync(organizationId:=Z_OrganizationID, userId:=_userId)
 
                 _selectedOrder = newOrder
@@ -174,8 +176,13 @@ Public Class StockTransferForm2
         Await FunctionUtils.TryCatchFunctionAsync("Save Stock Transfer changes",
             action:=
             Async Function()
-                Dim orderDataService = MainServiceProvider.GetRequiredService(Of IOrderDataService)
+                Dim orderDataService = GetRequiredService(Of IOrderDataService)()
                 Await orderDataService.SaveChangesAsync(_selectedOrder, _userId)
+
+                MessageBox.Show(text:="Changes saved successfully!",
+                    caption:="Success",
+                    icon:=MessageBoxIcon.Information,
+                    buttons:=MessageBoxButtons.OK)
 
                 action()
 
@@ -200,7 +207,7 @@ Public Class StockTransferForm2
             Await FunctionUtils.TryCatchFunctionAsync("Delete order after quick create stock transfer",
                 action:=
                 Async Function()
-                    Dim orderRepository = MainServiceProvider.GetRequiredService(Of IOrderRepository)
+                    Dim orderRepository = GetRequiredService(Of IOrderRepository)()
                     Await orderRepository.DeleteAsync(_selectedOrder)
 
                     cancelButtonAction()
@@ -372,7 +379,7 @@ Public Class StockTransferForm2
         If hasOrder AndAlso form.ShowDialog() = Global.System.Windows.Forms.DialogResult.OK Then
             Dim selectedProductColorSizeModels = form.SelectedProductColorSizeModels
 
-            Dim productInventoryLocationDataService = MainServiceProvider.GetRequiredService(Of IProductInventoryLocationDataService)
+            Dim productInventoryLocationDataService = GetRequiredService(Of IProductInventoryLocationDataService)()
             Dim productInventoryLocations = Await productInventoryLocationDataService.GetByInventoryLocationIdAsync(inventoryLocationId:=inventoryLocationIdTo)
 
             For Each productColorSizeModel In selectedProductColorSizeModels
@@ -465,9 +472,14 @@ Public Class StockTransferForm2
 
         Await FunctionUtils.TryCatchFunctionAsync("Approve Stock Transfer",
             Async Function()
-                Dim orderDataService = MainServiceProvider.GetRequiredService(Of IOrderDataService)
+                Dim orderDataService = GetRequiredService(Of IOrderDataService)()
 
                 Await orderDataService.ApproveStockTransfer(_selectedOrder, _userId)
+
+                MessageBox.Show(text:="Stock Transfer approved!",
+                    caption:="Approved",
+                    icon:=MessageBoxIcon.Information,
+                    buttons:=MessageBoxButtons.OK)
 
                 '_selectedOrder = Await orderDataService.GetOrderAsync(order:=_selectedOrder)
 

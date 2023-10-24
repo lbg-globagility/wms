@@ -55,7 +55,7 @@ Public Class EditContactForm
 
         Await FunctionUtils.TryCatchFunctionAsync(messageTitle:=String.Empty,
             Async Function()
-                Dim contactDataService = MainServiceProvider.GetRequiredService(Of IContactDataService)
+                Dim contactDataService = GetRequiredService(Of IContactDataService)()
 
                 _contact.LastName = txtLastName.Text
 

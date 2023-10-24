@@ -44,7 +44,7 @@ Public Class RackShelfColumnSelectorDialog
     Private Async Sub RackShelfColumnSelectorDialog_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         gridRackShelfColumn.AutoGenerateColumns = False
 
-        Dim orderDataService = MainServiceProvider.GetRequiredService(Of IOrderDataService)
+        Dim orderDataService = GetRequiredService(Of IOrderDataService)()
         _order = Await orderDataService.GetOrderAsync(_orderId)
 
         If _order.IsStockTransferType Then
@@ -58,7 +58,7 @@ Public Class RackShelfColumnSelectorDialog
                         "Quantity"))
         End If
 
-        Dim productInventoryLocationDataService = MainServiceProvider.GetRequiredService(Of IProductInventoryLocationDataService)
+        Dim productInventoryLocationDataService = GetRequiredService(Of IProductInventoryLocationDataService)()
         Dim productInventoryLocations = Await productInventoryLocationDataService.GetByInventoryLocationIdAsync(_inventoryLocationId)
 
         Dim dataSource = productInventoryLocations.

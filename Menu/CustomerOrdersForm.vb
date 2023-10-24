@@ -3,6 +3,7 @@ Imports MySql.Data.MySqlClient
 Imports WarehouseManagementSystem.Core.Enums
 Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
 Imports WarehouseManagementSystem.Core.Interfaces.Repositories
+Imports WarehouseManagementSystem.Desktop.Utilities
 
 Public Class CustomerOrdersForm
     Dim manager As New sqlModule.Manager
@@ -24,6 +25,7 @@ Public Class CustomerOrdersForm
     Dim cototalqtyordered, coqtyordered, coitotalqtyordered, coiqtyordered, cototalqtydelivered, cototalqtypicked As Integer
     Dim cocustomerid, coorderid, coproductcolorsizesid, coproductid, coproductbundleid, coorderitemid, cobranchid, covendorid, cocombinecodingid As Integer
     Private _agents As List(Of WarehouseManagementSystem.Core.Entities.Contact)
+
     Private Async Sub CustomerOrdersForm_Load(sender As Object, e As EventArgs) Handles Me.Load
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -45,7 +47,7 @@ Public Class CustomerOrdersForm
     End Sub
 
     Private Async Function GetAgentsAsync() As Task
-        Dim contactDataService = MainServiceProvider.GetRequiredService(Of IContactDataService)
+        Dim contactDataService = GetRequiredService(Of IContactDataService)()
 
         _agents = Await contactDataService.GetAgentsAsync(organizationId:=Z_OrganizationID)
 
@@ -927,17 +929,19 @@ Public Class CustomerOrdersForm
     End Sub
 
     Sub autoPopulateCustomerOrderType()
-        Dim CustomerOrderTypes = [Enum].GetValues(GetType(CustomerOrderType))
-        cboCustomerOrderType.Items.Clear()
-        For Each type In CustomerOrderTypes
-            cboCustomerOrderType.Items.Add(type)
-        Next
+        Dim customerOrderTypes = [Enum].GetValues(GetType(InventoryLocationType))
+        cboCustomerOrderType.DataSource = customerOrderTypes
+
+        'cboCustomerOrderType.Items.Clear()
+        'For Each type In customerOrderTypes
+        '    cboCustomerOrderType.Items.Add(type)
+        'Next
     End Sub
 
     Private Async Function LoadInventoryLocations() As Task
-        Dim inventoryLocationRepository = MainServiceProvider.GetRequiredService(Of IInventoryLocationRepository)
+        Dim inventoryLocationRepository = GetRequiredService(Of IInventoryLocationRepository)()
         Dim inventoryLocations = Await inventoryLocationRepository.GetAllByOrganizationIdAsync(Z_OrganizationID)
-        Dim dataSource = New List(Of WarehouseManagementSystem.Core.Entities.InventoryLocation) From {WarehouseManagementSystem.Core.Entities.InventoryLocation.NewInventoryLocation(organizationId:=Z_OrganizationID, name:=String.Empty, type:=WarehouseManagementSystem.Core.Enums.InventoryLocationType.Damage)}
+        Dim dataSource = New List(Of WarehouseManagementSystem.Core.Entities.InventoryLocation) From {WarehouseManagementSystem.Core.Entities.InventoryLocation.NewInventoryLocation(organizationId:=Z_OrganizationID, name:=String.Empty, type:=InventoryLocationType.Damage)}
         dataSource.AddRange(inventoryLocations)
 
         cboInventoryLocation.ValueMember = "RowID"
@@ -4156,6 +4160,21 @@ Public Class CustomerOrdersForm
 
     Private Sub cboInventoryLocation_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboInventoryLocation.SelectedIndexChanged
 
+    End Sub
+
+    Private Async Sub cboCustomerOrderType_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboCustomerOrderType.SelectedIndexChanged
+        If msNew.Enabled Then Return
+
+        Dim inventoryLocationType = CType(cboCustomerOrderType.SelectedValue, InventoryLocationType)
+        Console.WriteLine("InventoryLocationType: {0}", inventoryLocationType)
+
+        Await FunctionUtils.TryCatchFunctionAsync("Approve Stock Adjustment",
+            Async Function()
+                Dim inventoryLocationDataService = GetRequiredService(Of IInventoryLocationDataService)()
+                Dim inventoryLocations = Await inventoryLocationDataService.GetManyByTypeAsync(organizationId:=Z_OrganizationID, inventoryLocationType:=inventoryLocationType)
+
+                MsgBox("Success!")
+            End Function)
     End Sub
 
     Private Sub pbAddBranchCodeName_MouseLeave(sender As Object, e As EventArgs) Handles pbAddBranchCodeName.MouseLeave

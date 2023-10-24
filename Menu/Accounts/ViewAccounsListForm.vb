@@ -44,7 +44,7 @@ Public Class ViewAccounsListForm
             Return
         End If
 
-        Dim contactDataService = MainServiceProvider.GetRequiredService(Of IContactDataService)
+        Dim contactDataService = GetRequiredService(Of IContactDataService)()
         Dim agents = Await contactDataService.GetAgentsAsync(organizationId:=Z_OrganizationID)
         Dim helpers = Await contactDataService.GetHelpersAsync(organizationId:=Z_OrganizationID)
 
