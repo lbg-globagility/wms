@@ -180,8 +180,47 @@ namespace WarehouseManagementSystem.Infrastructure.Data
                 t.Property(x => x.OrderType)
                     .HasConversion(new EnumToStringConverter<OrderType>());
 
+                // entity value
+                Expression<Func<string, OrderStatus>> stringToOrderStatus()
+                {
+                    return s => s == OrderStatus.Open.ToString() ? OrderStatus.Open :
+                        s == OrderStatus.Close.ToString() ? OrderStatus.Close :
+                        s == OrderStatus.Approved.ToString() ? OrderStatus.Approved :
+                        s == OrderStatus.Delivery.ToString() ? OrderStatus.Delivery :
+                        s == OrderStatus.Packing.ToString() ? OrderStatus.Packing :
+                        s == "For Packing" ? OrderStatus.ForPacking :
+                        s == "Pick Listed" ? OrderStatus.PickListed :
+                        s == OrderStatus.New.ToString() ? OrderStatus.New :
+                        s == "Lined Up" ? OrderStatus.LinedUp :
+                        s == OrderStatus.Cancelled.ToString() ? OrderStatus.Cancelled :
+                        s == OrderStatus.Received.ToString() ? OrderStatus.Received :
+                        s == "For Approval" ? OrderStatus.ForApproval :
+                        s == "Submitted To Warehouse" ? OrderStatus.SubmittedToWarehouse : default;
+                }
+
+                // database value
+                Expression<Func<OrderStatus, string>> orderStatusToString()
+                {
+                    return os => os == OrderStatus.Open ? OrderStatus.Open.ToString() :
+                        os == OrderStatus.Close ? OrderStatus.Close.ToString() :
+                        os == OrderStatus.Approved ? OrderStatus.Approved.ToString() :
+                        os == OrderStatus.Delivery ? OrderStatus.Delivery.ToString() :
+                        os == OrderStatus.Packing ? OrderStatus.Packing.ToString() :
+                        os == OrderStatus.ForPacking ? "For Packing" :
+                        os == OrderStatus.PickListed ? "Pick Listed" :
+                        os == OrderStatus.New ? OrderStatus.New.ToString() :
+                        os == OrderStatus.LinedUp ? "Lined Up" :
+                        os == OrderStatus.Cancelled ? OrderStatus.Cancelled.ToString() :
+                        os == OrderStatus.Received ? OrderStatus.Received.ToString() :
+                        os == OrderStatus.ForApproval ? "For Approval" :
+                        os == OrderStatus.SubmittedToWarehouse ? "Submitted To Warehouse" : default;
+                }
+
+                var orderStatusConverter = new ValueConverter<OrderStatus, string>(convertToProviderExpression: orderStatusToString(),
+                    convertFromProviderExpression: stringToOrderStatus());
+
                 t.Property(x => x.Status)
-                    .HasConversion(new EnumToStringConverter<OrderStatus>());
+                    .HasConversion(orderStatusConverter);
 
                 t.HasOne(o => o.UserCreate)
                     .WithMany(u => u.OrdersCreate)
