@@ -44,6 +44,7 @@ namespace WarehouseManagementSystem.Core.Entities
             SKU = sku;
             SKU2 = sku2;
             SeasonCode = seasonCode;
+            Status = "Active";
         }
 
         public virtual ProductColor ProductColor { get; set; }
