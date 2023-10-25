@@ -1798,7 +1798,7 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("I_DeliveryHours", DeliveryHours)
                 .Parameters.AddWithValue("I_CustomerAddress", CustomerAddress)
                 .Parameters.AddWithValue("I_InventoryLocationID", If(InventoryLocationId Is Nothing, DBNull.Value, InventoryLocationId))
-                .Parameters.AddWithValue("I_AgentID", If(AgentId Is Nothing, DBNull.Value, AgentId))
+                .Parameters.AddWithValue("I_AgentID", If(AgentId Is Nothing OrElse AgentId = 0, DBNull.Value, AgentId))
                 .Parameters.AddWithValue("I_CustomerOrderType", CustomerOrderType)
                 .Parameters("newOrdersID").Direction = ParameterDirection.ReturnValue
                 globaldatareader = .ExecuteReader
@@ -1860,7 +1860,7 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_DeliveryHours", DeliveryHours)
                 .Parameters.AddWithValue("U_CustomerAddress", CustomerAddress)
                 .Parameters.AddWithValue("U_InventoryLocationID", If(InventoryLocationId Is Nothing, DBNull.Value, InventoryLocationId))
-                .Parameters.AddWithValue("U_AgentID", If(AgentId Is Nothing, DBNull.Value, AgentId))
+                .Parameters.AddWithValue("U_AgentID", If(AgentId Is Nothing OrElse AgentId = 0, DBNull.Value, AgentId))
                 .Parameters.AddWithValue("U_CustomerOrderType", CustomerOrderType)
 
                 .CommandType = CommandType.StoredProcedure

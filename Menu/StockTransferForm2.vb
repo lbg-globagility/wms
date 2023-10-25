@@ -93,7 +93,8 @@ Public Class StockTransferForm2
 
     Private Async Function GetStockTransferOrders() As Task(Of List(Of Order))
         Dim orderDataService = GetRequiredService(Of IOrderDataService)()
-        Return (Await orderDataService.GetStockTransferOrdersAsync(Z_OrganizationID)).
+        Dim result = Await orderDataService.GetStockTransferOrdersAsync(Z_OrganizationID)
+        Return result.
             OrderByDescending(Function(t) t.Created).
             ToList()
     End Function
@@ -331,7 +332,7 @@ Public Class StockTransferForm2
         txtTransferedBy.Text = String.Empty
         'txtTransferedBy.DataBindings.Add("Text", order, "LoanNumber", True, DataSourceUpdateMode.OnPropertyChanged)
 
-        dtpStockTransferDate.Value = If(order?.OrderDate.Date, Date.Now)
+        dtpStockTransferDate.Value = If(order?.OrderDate.Value.Date, Date.Now)
         Dim dtpDatePickerBinding = New Binding("Value", order, "OrderDate") With {
             .DataSourceUpdateMode = DataSourceUpdateMode.OnPropertyChanged}
         dtpStockTransferDate.DataBindings.Add(dtpDatePickerBinding)

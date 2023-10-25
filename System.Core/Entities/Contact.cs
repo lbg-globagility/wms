@@ -91,5 +91,20 @@ namespace WarehouseManagementSystem.Core.Entities
                 email: email,
                 comments: comments,
                 status: status);
+
+        public static Contact BlankAgent(int organizationId)
+        {
+            var blankAgent = new Contact(organizationId: organizationId,
+                lastName: "NO AGENT",
+                firstName: string.Empty,
+                type: ContactType.Agent,
+                workPhone: string.Empty,
+                email: string.Empty,
+                comments: string.Empty);
+            
+            blankAgent.RowID = 0;
+
+            return blankAgent;
+        }
     }
 }

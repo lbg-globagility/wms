@@ -24,7 +24,8 @@ Public Class CustomerOrdersForm
     Dim simplesearchphrase, datephrase, commonphrase, pagefilter1, pagefilter2, pagefilter3, pagefilter4 As String
     Dim cototalqtyordered, coqtyordered, coitotalqtyordered, coiqtyordered, cototalqtydelivered, cototalqtypicked As Integer
     Dim cocustomerid, coorderid, coproductcolorsizesid, coproductid, coproductbundleid, coorderitemid, cobranchid, covendorid, cocombinecodingid As Integer
-    Private _agents As List(Of WarehouseManagementSystem.Core.Entities.Contact)
+    Private _agents As List(Of Contact)
+    Private ReadOnly _noAgent As Contact = Contact.BlankAgent(organizationId:=Z_OrganizationID)
 
     Private Async Sub CustomerOrdersForm_Load(sender As Object, e As EventArgs) Handles Me.Load
         Me.Cursor = Cursors.WaitCursor
@@ -51,7 +52,7 @@ Public Class CustomerOrdersForm
 
         _agents = Await contactDataService.GetAgentsAsync(organizationId:=Z_OrganizationID)
 
-        Dim agentDataSource = New List(Of Contact) From {Contact.NewContact(organizationId:=Z_OrganizationID, lastName:="NO AGENT", firstName:=String.Empty, workPhone:=String.Empty, type:=ContactType.Agent)}
+        Dim agentDataSource = New List(Of Contact) From {_noAgent}
         agentDataSource.AddRange(_agents)
 
         cboAgent.ValueMember = "RowID"
@@ -1111,8 +1112,8 @@ Public Class CustomerOrdersForm
             Dim sql1 As String = "SELECT COALESCE(co.ordernumber,''),COALESCE(co.referencenumber,''),COALESCE(co.drnumber,''),COALESCE(co.status,''),COALESCE(DATE_FORMAT(co.orderdate,'%d-%b-%Y'),''),COALESCE(DATE_FORMAT(co.targetdate,'%d-%b-%Y'),''),COALESCE(DATE_FORMAT(co.enddate,'%d-%b-%Y'),'')," &
                         "COALESCE(DATE_FORMAT(co.datesubmitted,'%d-%b-%Y'),''),COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),''),COALESCE(co.customeraddress,''),COALESCE(CONCAT(COALESCE(bc.branchcode,''),' - ',COALESCE(bc.branchname,'')),'')," &
                         "COALESCE(CONCAT(COALESCE(ve.companyname,''),' - ',COALESCE(ve.companycode,'')),''),COALESCE(CONCAT(COALESCE(cc.codename,''),' / ',COALESCE(c1.codeno,''),'-',COALESCE(c2.codeno,''),'-',COALESCE(c3.codeno,'')),''),COALESCE(co.deliveryhours,'')," &
-                        "COALESCE(co.comments,''), InventoryLocationID,COALESCE(IF(co.AgentID!=0,co.AgentID,''),''),COALESCE(co.CustomerOrderType,'') FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid LEFT JOIN branches bc ON co.branchid = bc.rowid LEFT JOIN companies ve ON co.companyid = ve.rowid LEFT JOIN combinecodings cc ON co.combinecodingid = cc.rowid " &
-                        "LEFT JOIN codings c1 ON cc.codingida = c1.rowid LEFT JOIN codings c2 ON cc.codingidb = c2.rowid LEFT JOIN codings c3 ON cc.codingidc = c3.rowid WHERE co.rowid = " & icustomerorderid & " "
+                        "COALESCE(co.comments,''),co.InventoryLocationID,co.AgentID,COALESCE(co.CustomerOrderType,''),IFNULL(il.`Type`,'') FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid LEFT JOIN branches bc ON co.branchid = bc.rowid LEFT JOIN companies ve ON co.companyid = ve.rowid LEFT JOIN combinecodings cc ON co.combinecodingid = cc.rowid " &
+                        "LEFT JOIN codings c1 ON cc.codingida = c1.rowid LEFT JOIN codings c2 ON cc.codingidb = c2.rowid LEFT JOIN codings c3 ON cc.codingidc = c3.rowid LEFT JOIN inventorylocations il ON il.RowID=co.InventoryLocationID WHERE co.rowid = " & icustomerorderid & " "
             Dim cmd1 As New MySqlCommand(sql1, conn1)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             While reader1.Read()
@@ -1132,8 +1133,8 @@ Public Class CustomerOrdersForm
                     cboClassDescription.Text = reader1(12)
                     txtDeliveryHours.Text = reader1(13)
                     txtComments.Text = reader1(14)
-                    cboAgent.Text = reader1(16)
-                    cboCustomerOrderType.Text = reader1(17)
+                    cboAgent.SelectedValue = If(IsDBNull(reader1(16)), _noAgent.RowID, reader1(16))
+                    cboCustomerOrderType.Text = reader1(18)
                     getPickListNoB(icustomerorderid, Me)
                     If globalpicklistno = 0 Then
                         txtPickListNo.Text = ""

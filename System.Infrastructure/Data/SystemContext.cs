@@ -142,6 +142,19 @@ namespace WarehouseManagementSystem.Infrastructure.Data
         {
             SetGeneratedColumnsToReadOnly(modelBuilder);
 
+            //modelBuilder.Entity<Agent>(t =>
+            //{
+            //    t.ToTable("agents");
+
+            //    t.HasKey("RowID");
+            //});
+
+            //modelBuilder.Entity<Contact>(t =>
+            //{
+            //    t.ToTable("contacts");
+            //    t.HasKey("RowID");
+            //});
+
             modelBuilder.Entity<Category>(t =>
             {
                 t.Property(x => x.Status)
@@ -171,6 +184,10 @@ namespace WarehouseManagementSystem.Infrastructure.Data
 
             modelBuilder.Entity<Order>(t =>
             {
+                //t.ToTable("orders");
+
+                //t.HasKey("RowID");
+
                 t.HasMany(x => x.OrderItems)
                     .WithOne(x => x.Order);
 
@@ -231,6 +248,10 @@ namespace WarehouseManagementSystem.Infrastructure.Data
                     .WithMany(u => u.OrdersUpdate)
                     .HasForeignKey(o => o.LastUpdBy)
                     .HasPrincipalKey(u => u.RowID);
+
+                //t.Property(x => x.AgentId).HasColumnName("AgentID");
+
+                //t.Ignore(o => o.DeletedMovementHistories);
             });
 
             modelBuilder.Entity<Product>(t =>
@@ -262,6 +283,10 @@ namespace WarehouseManagementSystem.Infrastructure.Data
 
             modelBuilder.Entity<ProductColorSize>(t =>
             {
+                //t.ToTable("productcolorsizes");
+
+                t.HasKey("RowID");
+
                 t.HasMany(x => x.ProductInventoryLocations)
                     .WithOne(x => x.ProductColorSize);
 

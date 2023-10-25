@@ -21,10 +21,10 @@ namespace WarehouseManagementSystem.Core.Entities
         public string OrderNumber { get; set; }
         public string ReferenceNumber { get; set; }
         public string DRNumber { get; set; }
-        public DateTime OrderDate { get; set; }
-        public DateTime TargetDate { get; set; }
-        public DateTime EndDate { get; set; }
-        public DateTime DateSubmitted { get; set; }
+        public DateTime? OrderDate { get; set; }
+        public DateTime? TargetDate { get; set; }
+        public DateTime? EndDate { get; set; }
+        public DateTime? DateSubmitted { get; set; }
         public DateTime? TimeArrived { get; set; }
         public string CustomerName { get; set; }
         public string CustomerAddress { get; set; }
@@ -40,6 +40,7 @@ namespace WarehouseManagementSystem.Core.Entities
         public decimal? TotalDownPayment { get; set; }
         public decimal? TotalPayment { get; set; }
         public decimal? TotalBalance { get; set; }
+        public int? AgentID { get; set; }
     }
 
     public partial class Order
@@ -49,7 +50,6 @@ namespace WarehouseManagementSystem.Core.Entities
         }
 
         public virtual ICollection<OrderItem> OrderItems { get; set; }
-        public int? AgentId { get; set; }
         public virtual ICollection<MovementHistory> MovementHistories { get; set; }
         public bool HasMovementHistories => MovementHistories?.Any(t => (t.QtyToApply ?? 0) != 0) ?? false;
         public bool HasNewMovementHistories => MovementHistories?.Any(t => t.IsNewEntity) ?? false;
@@ -59,7 +59,15 @@ namespace WarehouseManagementSystem.Core.Entities
         public bool IsReceivingReportType => OrderType == OrderType.RR;
         public bool IsStockAdjustType => OrderType == OrderType.SA;
         public bool IsStockTransferType => OrderType == OrderType.ST;
-        public int OrderNumberInt => int.Parse(OrderNumber);
+        public int OrderNumberInt
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(OrderNumber)) return 0;
+
+                return int.Parse(OrderNumber);
+            }
+        }
 
         public bool IsOpen => Status == OrderStatus.Open;
         public bool IsClose => Status == OrderStatus.Close;

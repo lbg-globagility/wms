@@ -342,7 +342,7 @@ Public Class StockAdjustmentForm2
         txtTransferedBy.Text = String.Empty
         'txtTransferedBy.DataBindings.Add("Text", order, "LoanNumber", True, DataSourceUpdateMode.OnPropertyChanged)
 
-        dtpStockAdjustmentDate.Value = If(order?.OrderDate.Date, Date.Now)
+        dtpStockAdjustmentDate.Value = If(order?.OrderDate.Value.Date, Date.Now)
         Dim dtpDatePickerBinding = New Binding("Value", order, "OrderDate") With {
             .DataSourceUpdateMode = DataSourceUpdateMode.OnPropertyChanged}
         dtpStockAdjustmentDate.DataBindings.Add(dtpDatePickerBinding)
