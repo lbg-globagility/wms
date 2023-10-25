@@ -258,9 +258,9 @@ Public Class StockAdjustmentForm2
         If pickFromRackShelfColumn.Index = e.ColumnIndex Then
             Dim movementHistoryGroupByProductColorSizeModel = CType(gridStockAdjustmentOrdersFrom.Rows(e.RowIndex).DataBoundItem, MovementHistoryGroupByProductColorSizeModel)
             Dim form As New RackShelfColumnSelectorDialog(orderId:=_selectedOrder.RowID,
-                inventoryLocationId:=_selectedOrder.StockAdjustmentFromInventoryLocationId,
+                inventoryLocationId:=_selectedOrder.StockAdjustmentToInventoryLocationId,
                 movementHistoryGroupByProductColorSizeModel:=movementHistoryGroupByProductColorSizeModel,
-                inventoryLocationName:=cboFromInventory.Text)
+                inventoryLocationName:=cboToInventory.Text)
             If form.ShowDialog() = DialogResult.OK Then
                 For Each movementHistory In form.GeneratedMovementHistories
                     _selectedOrder.AddMovementHistories(New List(Of MovementHistory) From {movementHistory})

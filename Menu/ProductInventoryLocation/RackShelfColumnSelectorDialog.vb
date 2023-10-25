@@ -56,6 +56,11 @@ Public Class RackShelfColumnSelectorDialog
                     If(_isStockTransferToInventoryLocation,
                         "Incoming Quantity",
                         "Quantity"))
+        ElseIf _order.IsStockAdjustType Then
+            Quantity.MinValue = Integer.MinValue
+            FlowLayoutPanel1.Visible = True
+            FlowLayoutPanel1.FlowDirection = FlowDirection.LeftToRight
+            FlowLayoutPanel1.WrapContents = True
         End If
 
         Dim productInventoryLocationDataService = GetRequiredService(Of IProductInventoryLocationDataService)()
@@ -133,6 +138,14 @@ Public Class RackShelfColumnSelectorDialog
 
     Private Sub ButtonCancel_Click(sender As Object, e As EventArgs) Handles ButtonCancel.Click
         DialogResult = DialogResult.Cancel
+    End Sub
+
+    Private Sub LinkLabelSeeSample_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabelSeeSample.LinkClicked
+        Dim newLine = Environment.NewLine
+        MessageBox.Show(text:=$"Ex #1.{newLine}An item has [60] `Available Qty`, but the actual count is [45].{newLine}The user need to input negative fiffteen [-15] in the `Quantity` column.{newLine}{newLine}Ex #2.{newLine}An item has [192] `Available Qty`, but the actual count is [248].{newLine}The user need to input fifty six [56] in the `Quantity` column.",
+            caption:="How Adjustment works",
+            icon:=MessageBoxIcon.Information,
+            buttons:=MessageBoxButtons.OK)
     End Sub
 
 End Class
