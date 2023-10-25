@@ -7,11 +7,10 @@ using WarehouseManagementSystem.Core.Enums;
 using WarehouseManagementSystem.Core.Interfaces;
 using WarehouseManagementSystem.Core.Interfaces.DomainServices;
 using WarehouseManagementSystem.Core.Interfaces.Repositories;
-using WarehouseManagementSystem.Infrastructure.Data.Services.Base;
 
 namespace WarehouseManagementSystem.Infrastructure.Data.Services
 {
-    public class InventoryLocationDataService : BaseSavableDataService<InventoryLocation>, IInventoryLocationDataService
+    public class InventoryLocationDataService : AuditableDataService<InventoryLocation>, IInventoryLocationDataService
     {
         private readonly IProductColorSizeRepository _productColorSizeRepository;
         private readonly IInventoryLocationRepository _inventoryLocationRepository;
@@ -95,5 +94,9 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
         }
 
         public async Task<List<InventoryLocation>> GetManyByTypeAsync(int organizationId, InventoryLocationType inventoryLocationType) => await _inventoryLocationRepository.GetManyByTypeAsync(organizationId: organizationId, inventoryLocationType: inventoryLocationType);
+
+        protected override string CreateUserActivitySuffixIdentifier(InventoryLocation entity) => $" with `name` '{entity.Name}', `type` '{entity.Type}' and `status` is '{entity.Status}'";
+
+        protected override string GetUserActivityName(InventoryLocation entity) => _entityName;
     }
 }

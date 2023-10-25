@@ -5,11 +5,10 @@ using WarehouseManagementSystem.Core.Entities;
 using WarehouseManagementSystem.Core.Interfaces;
 using WarehouseManagementSystem.Core.Interfaces.DomainServices;
 using WarehouseManagementSystem.Core.Interfaces.Repositories;
-using WarehouseManagementSystem.Infrastructure.Data.Services.Base;
 
 namespace WarehouseManagementSystem.Infrastructure.Data.Services
 {
-    public class PositionViewDataService : BaseSavableDataService<PositionView>, IPositionViewDataService
+    public class PositionViewDataService : AuditableDataService<PositionView>, IPositionViewDataService
     {
         private readonly IPositionViewRepository _positionViewRepository;
         private readonly IUserRepository _userRepository;
@@ -47,5 +46,9 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
 
             return positionViews.FirstOrDefault(t => t.ViewName == viewName);
         }
+
+        protected override string CreateUserActivitySuffixIdentifier(PositionView entity) => $" with `name` '{entity.ViewName}' for `position` '{(string.IsNullOrEmpty(entity.PositionName) ? $"{entity.PositionID}" : entity.PositionName)}'";
+
+        protected override string GetUserActivityName(PositionView entity) => _entityName;
     }
 }

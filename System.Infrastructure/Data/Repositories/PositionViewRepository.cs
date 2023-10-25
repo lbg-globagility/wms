@@ -17,7 +17,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
         public async Task<List<PositionView>> GetManyByPositionIdAsync(int organizationId, int positionId) => await _context.PositionViews
             .Include(t => t.Position)
             .Include(t => t.View)
-            .Where(t => t.OrganizationID == organizationId)
+            .Where(t => t.OrganizationID == organizationId)// soon this maybe not a criteria anymore
             .Where(t => t.PositionID == positionId)
             .ToListAsync();
     }

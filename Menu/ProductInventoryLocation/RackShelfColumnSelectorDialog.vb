@@ -142,7 +142,7 @@ Public Class RackShelfColumnSelectorDialog
 
     Private Sub LinkLabelSeeSample_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabelSeeSample.LinkClicked
         Dim newLine = Environment.NewLine
-        MessageBox.Show(text:=$"Ex #1.{newLine}An item has [60] `Available Qty`, but the actual count is [45].{newLine}The user need to input negative fiffteen [-15] in the `Quantity` column.{newLine}{newLine}Ex #2.{newLine}An item has [192] `Available Qty`, but the actual count is [248].{newLine}The user need to input fifty six [56] in the `Quantity` column.",
+        MessageBox.Show(text:=$"Ex #1.{newLine}An item has [60] `Available Qty`, but the actual count is [45].{newLine}The user need to input negative fifteen [-15] in the `Quantity` column.{newLine}{newLine}Ex #2.{newLine}An item has [192] `Available Qty`, but the actual count is [248].{newLine}The user need to input fifty six [56] in the `Quantity` column.",
             caption:="How Adjustment works",
             icon:=MessageBoxIcon.Information,
             buttons:=MessageBoxButtons.OK)

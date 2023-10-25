@@ -9,7 +9,7 @@ using WarehouseManagementSystem.Core.Interfaces;
 using WarehouseManagementSystem.Core.Interfaces.DomainServices.Base;
 using WarehouseManagementSystem.Core.Interfaces.Repositories;
 
-namespace WarehouseManagementSystem.Infrastructure.Data.Services.Base
+namespace WarehouseManagementSystem.Infrastructure.Data
 {
     public abstract partial class BaseSavableDataService<T> : BaseDataService, IBaseSavableDataService<T> where T : BaseEntity
     {
@@ -43,7 +43,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services.Base
             _entityNamePlural = entityNamePlural ?? entityName + "s";
         }
 
-        public async Task DeleteAsync(int id, int userId)
+        public virtual async Task DeleteAsync(int id, int userId)
         {
             var entity = await _repository.GetByIdAsync(id);
 
@@ -57,12 +57,12 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services.Base
             await PostDeleteAction(entity: entity, userId: userId);
         }
 
-        public async Task DeleteManyAsync(int[] ids, int userId)
+        public virtual async Task DeleteManyAsync(int[] ids, int userId)
         {
             await _repository.DeleteManyAsync(ids);
         }
 
-        public async Task<T> SaveAsync(T entity, int userId)
+        public virtual async Task<T> SaveAsync(T entity, int userId)
         {
             bool isNew = entity.IsNewEntity;
 
@@ -87,7 +87,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services.Base
             return entity;
         }
 
-        public async Task SaveManyAsync(int userId,
+        public virtual async Task SaveManyAsync(int userId,
             List<T> added = null,
             List<T> updated = null,
             List<T> deleted = null)
@@ -122,7 +122,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services.Base
             await CallPostSaveManyAction(entities: deleted, oldEntities, SaveType.Delete, userId);
         }
 
-        public async Task SaveManyAsync(List<T> entities, int userId)
+        public virtual async Task SaveManyAsync(List<T> entities, int userId)
         {
             if (entities == null)
                 BusinessLogicException.Throw($"No {_entityNamePlural} to be saved.");
@@ -139,7 +139,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services.Base
 
     public abstract partial class BaseSavableDataService<T>
     {
-        private Task PostSaveAction(T entity, T oldEntity, SaveType saveType) => Task.CompletedTask;
+        protected virtual Task PostSaveAction(T entity, T oldEntity, SaveType saveType) => Task.CompletedTask;
 
         private void DetachOldEntity(T oldEntity)
         {
@@ -149,9 +149,9 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services.Base
             }
         }
 
-        private Task AdditionalSaveValidation(T entity, T oldEntity) => Task.CompletedTask;
+        protected virtual Task AdditionalSaveValidation(T entity, T oldEntity) => Task.CompletedTask;
 
-        private Task SanitizeEntity(T entity, T oldEntity, int userId)
+        protected virtual Task SanitizeEntity(T entity, T oldEntity, int userId)
         {
             if (entity == null)
                 BusinessLogicException.Throw($"Invalid {_entityName}.");
@@ -168,7 +168,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services.Base
                 await PostSaveManyAction(entities, GetOldEntitiesOfPassedEntities(entities, oldEntities), saveType, userId);
         }
 
-        private Task PostSaveManyAction(List<T> entities, List<T> ts, SaveType saveType, int userId) => Task.CompletedTask;
+        protected virtual Task PostSaveManyAction(IReadOnlyCollection<T> entities, IReadOnlyCollection<T> ts, SaveType saveType, int userId) => Task.CompletedTask;
 
         private void DetachOldEntities(ICollection<T> oldEntities)
         {
@@ -187,7 +187,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services.Base
                 await AdditionalSaveManyValidation(entities, GetOldEntitiesOfPassedEntities(entities, oldEntities), saveType);
         }
 
-        private Task AdditionalSaveManyValidation(List<T> entities, List<T> ts, SaveType saveType) => Task.CompletedTask;
+        protected virtual Task AdditionalSaveManyValidation(List<T> entities, List<T> ts, SaveType saveType) => Task.CompletedTask;
 
         private async Task<ICollection<T>> ValidateMultipleEntities(int userId, List<T> added, List<T> updated, List<T> deleted)
         {
@@ -237,9 +237,9 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services.Base
             return oldEntities;
         }
 
-        private T GetOldEntity(ICollection<T> oldEntities, T entity) => oldEntities.FirstOrDefault(x => x.RowID == entity?.RowID);
+        protected T GetOldEntity(ICollection<T> oldEntities, T entity) => oldEntities.FirstOrDefault(x => x.RowID == entity?.RowID);
 
-        private async Task<ICollection<T>> GetOldEntitiesAsync(List<T> oldEntities)
+        protected async Task<ICollection<T>> GetOldEntitiesAsync(List<T> oldEntities)
         {
             var updatedEntityIds = oldEntities
                 .Where(x => !x.IsNewEntity)
@@ -250,9 +250,9 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services.Base
             return await _repository.GetManyByIdsAsync(updatedEntityIds);
         }
 
-        private Task PostDeleteAction(T entity, int userId) => Task.CompletedTask;
+        protected virtual Task PostDeleteAction(T entity, int userId) => Task.CompletedTask;
 
-        private Task AdditionalDeleteValidation(T entity) => Task.CompletedTask;
+        protected virtual Task AdditionalDeleteValidation(T entity) => Task.CompletedTask;
 
         private static List<T> GetOldEntitiesOfPassedEntities(List<T> entities, ICollection<T> oldEntities)
         {

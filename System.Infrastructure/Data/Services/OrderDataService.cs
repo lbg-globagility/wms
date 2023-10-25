@@ -8,11 +8,10 @@ using WarehouseManagementSystem.Core.Exceptions;
 using WarehouseManagementSystem.Core.Interfaces;
 using WarehouseManagementSystem.Core.Interfaces.DomainServices;
 using WarehouseManagementSystem.Core.Interfaces.Repositories;
-using WarehouseManagementSystem.Infrastructure.Data.Services.Base;
 
 namespace WarehouseManagementSystem.Infrastructure.Data.Services
 {
-    public partial class OrderDataService : BaseSavableDataService<Order>, IOrderDataService
+    public partial class OrderDataService : AuditableDataService<Order>, IOrderDataService
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IProductInventoryLocationRepository _productInventoryLocationRepository;
@@ -71,7 +70,8 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
 
             order.AuditUser(userId);
 
-            await _orderRepository.SaveAsync(order);
+            //await _orderRepository.SaveAsync(order);
+            await SaveManyAsync(entities: new List<Order>() { order }, userId: userId);
         }
 
         public async Task<Order> GetOrderAsync(int id) => await _orderRepository.GetOrderAsync(id: id);
@@ -103,5 +103,35 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
 
             void ThrowError() => BusinessLogicException.Throw(message: "The user has insufficient privilege to perform this command.");
         }
+
+        protected override string CreateUserActivitySuffixIdentifier(Order entity) => $" #{entity.OrderNumber} {entity.OrderType}, `date` { (entity.OrderDate != null ? entity.OrderDate?.ToShortDateString() : "[nodate]") }, and `status` is '{entity.Status}'";
+
+        protected override string GetUserActivityName(Order entity) => _entityName;
+
+        //RecordUpdate
+        protected async override Task RecordUpdate(Order entity, Order oldEntity)
+        {
+            if (oldEntity == null) return;
+
+            var userActivityItems = new List<UserActivityItem>();
+            var entityName = _entityName.ToLower();
+
+            //var suffixIdentifier = $"of {entityName}{CreateUserActivitySuffixIdentifier(oldEntity)}.";
+
+            StockAdjustmentRecordUpdate(entity, oldEntity, userActivityItems);
+
+            StockTransferRecordUpdate(entity, oldEntity, userActivityItems);
+
+            if (userActivityItems.Any())
+            {
+                await _userActivityRepository.CreateRecordAsync(
+                    entity.LastUpdBy.Value,
+                    entityName,
+                    entity.OrganizationID.Value,
+                    UserActivity.RecordTypeEdit,
+                    userActivityItems);
+            }
+        }
+
     }
 }

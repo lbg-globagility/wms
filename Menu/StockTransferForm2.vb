@@ -179,6 +179,7 @@ Public Class StockTransferForm2
             Async Function()
                 Dim orderDataService = GetRequiredService(Of IOrderDataService)()
                 Await orderDataService.SaveChangesAsync(_selectedOrder, _userId)
+                'Await orderDataService.SaveManyAsync(New List(Of Order) From {_selectedOrder}, userId:=_userId)
 
                 MessageBox.Show(text:="Changes saved successfully!",
                     caption:="Success",
