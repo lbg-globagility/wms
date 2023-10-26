@@ -68,7 +68,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
                 organizationId: organizationId,
                 RecordTypeAdd,
                 changedEmployeeId: changedEmployeeId,
-                changedByUserId: changedUserId);
+                changedByUserId: changedUserId ?? currentlyLoggedInUserId);
         }
 
         public async Task RecordDeleteAsync(
@@ -89,7 +89,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
                 organizationId: organizationId,
                 RecordTypeDelete,
                 changedEmployeeId: changedEmployeeId,
-                changedByUserId: changedUserId);
+                changedByUserId: changedUserId ?? currentlyLoggedInUserId);
         }
 
         private async Task RecordSimpleAsync(

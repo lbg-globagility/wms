@@ -209,8 +209,9 @@ Public Class StockTransferForm2
             Await FunctionUtils.TryCatchFunctionAsync("Delete order after quick create stock transfer",
                 action:=
                 Async Function()
-                    Dim orderRepository = GetRequiredService(Of IOrderRepository)()
-                    Await orderRepository.DeleteAsync(_selectedOrder)
+                    Dim orderDataService = GetRequiredService(Of IOrderDataService)()
+                    Await orderDataService.SaveManyAsync(userId:=Z_UserID,
+                        deleted:=New List(Of Order) From {_selectedOrder})
 
                     cancelButtonAction()
 

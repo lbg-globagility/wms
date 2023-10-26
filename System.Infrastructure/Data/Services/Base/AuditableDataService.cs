@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using WarehouseManagementSystem.Core.Entities.Base;
 using WarehouseManagementSystem.Core.Exceptions;
 using WarehouseManagementSystem.Core.Interfaces;
@@ -31,7 +33,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data
             entity.AuditUser(currentlyLoggedInUserId);
 
             if (entity.OrganizationID == null)
-                throw new BusinessLogicException("Organization is required.");
+                BusinessLogicException.Throw("Organization is required.");
         }
 
         protected override async Task RecordDelete(T entity, int currentlyLoggedInUserId)
@@ -52,6 +54,17 @@ namespace WarehouseManagementSystem.Infrastructure.Data
                 entityName: GetUserActivityName(entity),
                 suffixIdentifier: CreateUserActivitySuffixIdentifier(entity),
                 organizationId: entity.OrganizationID.Value);
+        }
+        protected override Task PostSaveManyAction(IReadOnlyCollection<T> entities, IReadOnlyCollection<T> oldEntities, SaveType saveType, int currentlyLoggedInUserId)
+        {
+            if(saveType == SaveType.Update ||
+                saveType == SaveType.Delete)
+            {
+                var entitiesWithNoLastUpdateBy = entities.Where(t => t.LastUpdBy == null);
+                entitiesWithNoLastUpdateBy.ToList().ForEach(t => t.AuditUser(userId: currentlyLoggedInUserId));
+            }
+
+            return base.PostSaveManyAction(entities, oldEntities, saveType, currentlyLoggedInUserId);
         }
     }
 }

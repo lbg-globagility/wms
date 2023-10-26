@@ -16,13 +16,15 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
         private readonly IOrderRepository _orderRepository;
         private readonly IProductInventoryLocationRepository _productInventoryLocationRepository;
         private readonly IPositionViewDataService _positionViewDataService;
+        private readonly IMovementHistoryDataService _movementHistoryDataService;
 
         public OrderDataService(IOrderRepository orderRepository,
             IUserActivityRepository userActivityRepository,
             SystemContext context,
             IPolicyHelper policy,
             IProductInventoryLocationRepository productInventoryLocationRepository,
-            IPositionViewDataService positionViewDataService) :
+            IPositionViewDataService positionViewDataService,
+            IMovementHistoryDataService movementHistoryDataService) :
 
             base(orderRepository,
                 userActivityRepository,
@@ -33,6 +35,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
             _orderRepository = orderRepository;
             _productInventoryLocationRepository = productInventoryLocationRepository;
             _positionViewDataService = positionViewDataService;
+            _movementHistoryDataService = movementHistoryDataService;
         }
 
         public async Task<List<Order>> GetOrdersByOrderTypeAsync(int organizationId, OrderType orderType) =>
@@ -59,18 +62,17 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
                         movementHistory.ProductInventoryLocation = null;
                     }
 
-                    if (movementHistory.IsNewEntity) _context.MovementHistories.Add(movementHistory);
-                    else _context.Entry(movementHistory).State = EntityState.Modified;
+                    if (!movementHistory.IsNewEntity) _context.Entry(movementHistory).State = EntityState.Modified;
                 });
 
-                if (order.DeletedMovementHistories != null && order.DeletedMovementHistories.Any(t => !t.IsNewEntity)) _context.MovementHistories.RemoveRange(order.DeletedMovementHistories.Where(t => !t.IsNewEntity));
-
-                await _context.SaveChangesAsync();
+                await _movementHistoryDataService.SaveManyAsync(userId: userId,
+                    added: order.MovementHistories?.Where(t => t.IsNewEntity).ToList(),
+                    updated: order.MovementHistories?.Where(t => !t.IsNewEntity).ToList(),
+                    deleted: order.DeletedMovementHistories?.Where(t => !t.IsNewEntity).ToList());
             }
 
             order.AuditUser(userId);
 
-            //await _orderRepository.SaveAsync(order);
             await SaveManyAsync(entities: new List<Order>() { order }, userId: userId);
         }
 
@@ -104,12 +106,11 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
             void ThrowError() => BusinessLogicException.Throw(message: "The user has insufficient privilege to perform this command.");
         }
 
-        protected override string CreateUserActivitySuffixIdentifier(Order entity) => $" #{entity.OrderNumber} {entity.OrderType}, `date` { (entity.OrderDate != null ? entity.OrderDate?.ToShortDateString() : "[nodate]") }, and `status` is '{entity.Status}'";
+        protected override string CreateUserActivitySuffixIdentifier(Order entity) => $" #{entity.OrderNumber}{entity.OrderTypeText}, `date` { (entity.OrderDate != null ? entity.OrderDate?.ToShortDateString() : "[nodate]") }, and `status` is '{entity.Status}'";
 
         protected override string GetUserActivityName(Order entity) => _entityName;
 
-        //RecordUpdate
-        protected async override Task RecordUpdate(Order entity, Order oldEntity)
+        protected override async Task RecordUpdate(Order entity, Order oldEntity)
         {
             if (oldEntity == null) return;
 
@@ -133,5 +134,9 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
             }
         }
 
+        protected override Task RecordAdd(Order entity)
+        {
+            return base.RecordAdd(entity);
+        }
     }
 }

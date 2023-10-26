@@ -25,7 +25,7 @@ namespace WarehouseManagementSystem.Core.Entities
         public DateTime? TargetDate { get; set; }
         public DateTime? EndDate { get; set; }
         public DateTime? DateSubmitted { get; set; }
-        public DateTime? TimeArrived { get; set; }
+        public TimeSpan? TimeArrived { get; set; }
         public string CustomerName { get; set; }
         public string CustomerAddress { get; set; }
         public string DeliveryHours { get; set; }
@@ -59,6 +59,7 @@ namespace WarehouseManagementSystem.Core.Entities
         public bool IsReceivingReportType => OrderType == OrderType.RR;
         public bool IsStockAdjustType => OrderType == OrderType.SA;
         public bool IsStockTransferType => OrderType == OrderType.ST;
+
         public int OrderNumberInt
         {
             get
@@ -103,5 +104,11 @@ namespace WarehouseManagementSystem.Core.Entities
             IsReceivingReportType ? View.RECEIVING_VIEW :
             IsStockAdjustType ? View.STOCK_ADJUSTMENT_VIEW :
             IsStockTransferType ? View.STOCK_TRANSFER_VIEW : string.Empty;
+
+        public string OrderTypeText => IsCustomerOrderType ? "Customer Order" :
+            IsPurchaseOrderType ? "Purchase Order" :
+            IsReceivingReportType ? "Receiving Report" :
+            IsStockAdjustType ? "Stock Adjust" :
+            IsStockTransferType ? "Stock Transfer" : string.Empty;
     }
 }

@@ -28,7 +28,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
                 status: OrderStatus.Open,
                 orderDate: DateTime.Now);
 
-            await _orderRepository.SaveAsync(entity: stockAdjustmentOrder);
+            await SaveManyAsync(entities: new List<Order>() { stockAdjustmentOrder }, userId: userId);
 
             return stockAdjustmentOrder;
         }
@@ -60,7 +60,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
 
             order.SetApproveStockTransfer();
 
-            await _orderRepository.SaveAsync(order);
+            await SaveManyAsync(entities: new List<Order>() { order }, userId: userId);
         }
 
         private void StockAdjustmentRecordUpdate(Order entity, Order oldEntity, List<UserActivityItem> userActivityItems)
