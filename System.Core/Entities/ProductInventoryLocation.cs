@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using WarehouseManagementSystem.Core.Entities.Base;
 
@@ -23,6 +24,7 @@ namespace WarehouseManagementSystem.Core.Entities
         public int? RunningTotalQty { get; set; }
         public decimal? UnitPrice { get; set; }
         public DateTime? LastInventoryCount { get; set; }
+        public string UnitOfMeasure { get; set; }
     }
 
     public partial class ProductInventoryLocation
@@ -34,23 +36,30 @@ namespace WarehouseManagementSystem.Core.Entities
         public ProductInventoryLocation(int organizationId,
             int userId,
             int productColorSizeId,
+            string unitOfMeasure,
             decimal? unitPrice = null)
         {
             OrganizationID = organizationId;
             CreatedBy = userId;
             ProductColorSizeID = productColorSizeId;
             UnitPrice = unitPrice;
+            UnitOfMeasure = unitOfMeasure;
         }
 
         public virtual ProductColorSize ProductColorSize { get; set; }
         public virtual RackShelfColumn RackShelfColumn { get; set; }
+        public virtual ICollection<MovementHistory> MovementHistories { get; set; }
 
         public static ProductInventoryLocation NewProductInventoryLocation(int organizationId,
             int userId,
             int productColorSizeId,
+            string unitOfMeasure,
             decimal? unitPrice = null) => new ProductInventoryLocation(organizationId: organizationId,
                 userId: userId,
                 productColorSizeId: productColorSizeId,
+                unitOfMeasure: unitOfMeasure,
                 unitPrice: unitPrice);
+
+        public int QtyOrderable => (TotalReserveQty - TotalAllocatedQty) ?? 0;
     }
 }

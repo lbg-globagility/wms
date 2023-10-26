@@ -1,9 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class InventoryLocationsForm
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -20,7 +20,7 @@ Partial Class InventoryLocationsForm
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
@@ -53,7 +53,6 @@ Partial Class InventoryLocationsForm
         Me.Label52 = New System.Windows.Forms.Label()
         Me.Label55 = New System.Windows.Forms.Label()
         Me.gbInventoryLocationInformation = New System.Windows.Forms.GroupBox()
-        Me.cboType = New System.Windows.Forms.ComboBox()
         Me.pbEditAddress = New System.Windows.Forms.PictureBox()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
@@ -61,7 +60,6 @@ Partial Class InventoryLocationsForm
         Me.txtFaxNo = New System.Windows.Forms.TextBox()
         Me.txtMainPhone = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.Label20 = New System.Windows.Forms.Label()
         Me.Label51 = New System.Windows.Forms.Label()
         Me.Label15 = New System.Windows.Forms.Label()
         Me.Label21 = New System.Windows.Forms.Label()
@@ -106,20 +104,6 @@ Partial Class InventoryLocationsForm
         Me.txtTotalQtyAvailable = New System.Windows.Forms.TextBox()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.dgProducts = New DevComponents.DotNetBar.Controls.DataGridViewX()
-        Me.p_rowid = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.p_colorvalue = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.p_qtyreserve = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.p_qtydamage = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.p_seqno = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.p_productcode = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.p_colorname = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.p_color = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.p_size = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.p_qtyavailable = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.p_qtyallocated = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.p_qtyorderable = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.p_seasoncode = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.p_sku = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Label6 = New System.Windows.Forms.Label()
         Me.txtTotalQtyReserve = New System.Windows.Forms.TextBox()
         Me.Label10 = New System.Windows.Forms.Label()
@@ -160,6 +144,22 @@ Partial Class InventoryLocationsForm
         Me.cmsOptions = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.cmsEdit = New System.Windows.Forms.ToolStripMenuItem()
         Me.cmsDelete = New System.Windows.Forms.ToolStripMenuItem()
+        Me.p_rowid = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.p_colorvalue = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.p_qtyreserve = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.p_qtydamage = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.p_seqno = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.p_productcode = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.p_colorname = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.p_color = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.p_size = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.p_unitOfMeasure = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.p_qtyavailable = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.p_qtyallocated = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.p_qtyorderable = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.p_seasoncode = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.p_sku = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.p_sku2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         CType(Me.dgRackShelfColumn, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.gbInventoryLocationInformation.SuspendLayout()
         CType(Me.pbEditAddress, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -400,7 +400,6 @@ Partial Class InventoryLocationsForm
         '
         'gbInventoryLocationInformation
         '
-        Me.gbInventoryLocationInformation.Controls.Add(Me.cboType)
         Me.gbInventoryLocationInformation.Controls.Add(Me.pbEditAddress)
         Me.gbInventoryLocationInformation.Controls.Add(Me.Label2)
         Me.gbInventoryLocationInformation.Controls.Add(Me.Label3)
@@ -413,7 +412,6 @@ Partial Class InventoryLocationsForm
         Me.gbInventoryLocationInformation.Controls.Add(Me.cboLocationType)
         Me.gbInventoryLocationInformation.Controls.Add(Me.txtComments)
         Me.gbInventoryLocationInformation.Controls.Add(Me.Label40)
-        Me.gbInventoryLocationInformation.Controls.Add(Me.Label20)
         Me.gbInventoryLocationInformation.Controls.Add(Me.Label42)
         Me.gbInventoryLocationInformation.Controls.Add(Me.txtLocationName)
         Me.gbInventoryLocationInformation.Controls.Add(Me.Label46)
@@ -427,15 +425,6 @@ Partial Class InventoryLocationsForm
         Me.gbInventoryLocationInformation.Size = New System.Drawing.Size(780, 152)
         Me.gbInventoryLocationInformation.TabIndex = 3
         Me.gbInventoryLocationInformation.TabStop = False
-        '
-        'cboType
-        '
-        Me.cboType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cboType.FormattingEnabled = True
-        Me.cboType.Location = New System.Drawing.Point(116, 108)
-        Me.cboType.Name = "cboType"
-        Me.cboType.Size = New System.Drawing.Size(163, 21)
-        Me.cboType.TabIndex = 307
         '
         'pbEditAddress
         '
@@ -506,16 +495,6 @@ Partial Class InventoryLocationsForm
         Me.Label1.TabIndex = 301
         Me.Label1.Text = "*"
         '
-        'Label20
-        '
-        Me.Label20.AutoSize = True
-        Me.Label20.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label20.Location = New System.Drawing.Point(6, 109)
-        Me.Label20.Name = "Label20"
-        Me.Label20.Size = New System.Drawing.Size(36, 15)
-        Me.Label20.TabIndex = 292
-        Me.Label20.Text = "Type:"
-        '
         'Label51
         '
         Me.Label51.AutoSize = True
@@ -523,9 +502,9 @@ Partial Class InventoryLocationsForm
         Me.Label51.ForeColor = System.Drawing.SystemColors.ControlText
         Me.Label51.Location = New System.Drawing.Point(5, 54)
         Me.Label51.Name = "Label51"
-        Me.Label51.Size = New System.Drawing.Size(86, 15)
+        Me.Label51.Size = New System.Drawing.Size(36, 15)
         Me.Label51.TabIndex = 273
-        Me.Label51.Text = "Location Type:"
+        Me.Label51.Text = "Type:"
         '
         'Label15
         '
@@ -1033,7 +1012,7 @@ Partial Class InventoryLocationsForm
         DataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
         Me.dgProducts.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle6
         Me.dgProducts.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgProducts.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.p_rowid, Me.p_colorvalue, Me.p_qtyreserve, Me.p_qtydamage, Me.p_seqno, Me.p_productcode, Me.p_colorname, Me.p_color, Me.p_size, Me.p_qtyavailable, Me.p_qtyallocated, Me.p_qtyorderable, Me.p_seasoncode, Me.p_sku})
+        Me.dgProducts.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.p_rowid, Me.p_colorvalue, Me.p_qtyreserve, Me.p_qtydamage, Me.p_seqno, Me.p_productcode, Me.p_colorname, Me.p_color, Me.p_size, Me.p_unitOfMeasure, Me.p_qtyavailable, Me.p_qtyallocated, Me.p_qtyorderable, Me.p_seasoncode, Me.p_sku, Me.p_sku2})
         DataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
         DataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Window
         DataGridViewCellStyle7.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -1059,104 +1038,6 @@ Partial Class InventoryLocationsForm
         Me.dgProducts.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.dgProducts.Size = New System.Drawing.Size(365, 390)
         Me.dgProducts.TabIndex = 36
-        '
-        'p_rowid
-        '
-        Me.p_rowid.HeaderText = "rowid"
-        Me.p_rowid.Name = "p_rowid"
-        Me.p_rowid.ReadOnly = True
-        Me.p_rowid.Visible = False
-        '
-        'p_colorvalue
-        '
-        Me.p_colorvalue.HeaderText = "colorvalue"
-        Me.p_colorvalue.Name = "p_colorvalue"
-        Me.p_colorvalue.ReadOnly = True
-        Me.p_colorvalue.Visible = False
-        '
-        'p_qtyreserve
-        '
-        Me.p_qtyreserve.HeaderText = "qty. reserve"
-        Me.p_qtyreserve.Name = "p_qtyreserve"
-        Me.p_qtyreserve.ReadOnly = True
-        Me.p_qtyreserve.Visible = False
-        Me.p_qtyreserve.Width = 60
-        '
-        'p_qtydamage
-        '
-        Me.p_qtydamage.HeaderText = "qty. damage"
-        Me.p_qtydamage.Name = "p_qtydamage"
-        Me.p_qtydamage.ReadOnly = True
-        Me.p_qtydamage.Visible = False
-        Me.p_qtydamage.Width = 60
-        '
-        'p_seqno
-        '
-        Me.p_seqno.HeaderText = "Seq. No."
-        Me.p_seqno.Name = "p_seqno"
-        Me.p_seqno.ReadOnly = True
-        Me.p_seqno.Width = 40
-        '
-        'p_productcode
-        '
-        Me.p_productcode.HeaderText = "Product Code"
-        Me.p_productcode.Name = "p_productcode"
-        Me.p_productcode.ReadOnly = True
-        '
-        'p_colorname
-        '
-        Me.p_colorname.HeaderText = "Color Name"
-        Me.p_colorname.Name = "p_colorname"
-        Me.p_colorname.ReadOnly = True
-        Me.p_colorname.Width = 60
-        '
-        'p_color
-        '
-        Me.p_color.HeaderText = ""
-        Me.p_color.Name = "p_color"
-        Me.p_color.ReadOnly = True
-        Me.p_color.Width = 20
-        '
-        'p_size
-        '
-        Me.p_size.HeaderText = "Size"
-        Me.p_size.Name = "p_size"
-        Me.p_size.ReadOnly = True
-        Me.p_size.Width = 50
-        '
-        'p_qtyavailable
-        '
-        Me.p_qtyavailable.HeaderText = "Qty. Available"
-        Me.p_qtyavailable.Name = "p_qtyavailable"
-        Me.p_qtyavailable.ReadOnly = True
-        Me.p_qtyavailable.Width = 60
-        '
-        'p_qtyallocated
-        '
-        Me.p_qtyallocated.HeaderText = "Qty. Allocated"
-        Me.p_qtyallocated.Name = "p_qtyallocated"
-        Me.p_qtyallocated.ReadOnly = True
-        Me.p_qtyallocated.Width = 60
-        '
-        'p_qtyorderable
-        '
-        Me.p_qtyorderable.HeaderText = "Qty. Orderable"
-        Me.p_qtyorderable.Name = "p_qtyorderable"
-        Me.p_qtyorderable.ReadOnly = True
-        Me.p_qtyorderable.Width = 60
-        '
-        'p_seasoncode
-        '
-        Me.p_seasoncode.HeaderText = "Season Code"
-        Me.p_seasoncode.Name = "p_seasoncode"
-        Me.p_seasoncode.ReadOnly = True
-        Me.p_seasoncode.Width = 70
-        '
-        'p_sku
-        '
-        Me.p_sku.HeaderText = "SKU"
-        Me.p_sku.Name = "p_sku"
-        Me.p_sku.ReadOnly = True
         '
         'Label6
         '
@@ -1582,6 +1463,116 @@ Partial Class InventoryLocationsForm
         Me.cmsDelete.Size = New System.Drawing.Size(107, 22)
         Me.cmsDelete.Text = "Delete"
         '
+        'p_rowid
+        '
+        Me.p_rowid.HeaderText = "rowid"
+        Me.p_rowid.Name = "p_rowid"
+        Me.p_rowid.ReadOnly = True
+        Me.p_rowid.Visible = False
+        '
+        'p_colorvalue
+        '
+        Me.p_colorvalue.HeaderText = "colorvalue"
+        Me.p_colorvalue.Name = "p_colorvalue"
+        Me.p_colorvalue.ReadOnly = True
+        Me.p_colorvalue.Visible = False
+        '
+        'p_qtyreserve
+        '
+        Me.p_qtyreserve.HeaderText = "qty. reserve"
+        Me.p_qtyreserve.Name = "p_qtyreserve"
+        Me.p_qtyreserve.ReadOnly = True
+        Me.p_qtyreserve.Visible = False
+        Me.p_qtyreserve.Width = 60
+        '
+        'p_qtydamage
+        '
+        Me.p_qtydamage.HeaderText = "qty. damage"
+        Me.p_qtydamage.Name = "p_qtydamage"
+        Me.p_qtydamage.ReadOnly = True
+        Me.p_qtydamage.Visible = False
+        Me.p_qtydamage.Width = 60
+        '
+        'p_seqno
+        '
+        Me.p_seqno.HeaderText = "Seq. No."
+        Me.p_seqno.Name = "p_seqno"
+        Me.p_seqno.ReadOnly = True
+        Me.p_seqno.Width = 40
+        '
+        'p_productcode
+        '
+        Me.p_productcode.HeaderText = "Product Code"
+        Me.p_productcode.Name = "p_productcode"
+        Me.p_productcode.ReadOnly = True
+        '
+        'p_colorname
+        '
+        Me.p_colorname.HeaderText = "Color Name"
+        Me.p_colorname.Name = "p_colorname"
+        Me.p_colorname.ReadOnly = True
+        Me.p_colorname.Width = 60
+        '
+        'p_color
+        '
+        Me.p_color.HeaderText = ""
+        Me.p_color.Name = "p_color"
+        Me.p_color.ReadOnly = True
+        Me.p_color.Width = 20
+        '
+        'p_size
+        '
+        Me.p_size.HeaderText = "Size"
+        Me.p_size.Name = "p_size"
+        Me.p_size.ReadOnly = True
+        Me.p_size.Width = 50
+        '
+        'p_unitOfMeasure
+        '
+        Me.p_unitOfMeasure.HeaderText = "Unit of Measure"
+        Me.p_unitOfMeasure.Name = "p_unitOfMeasure"
+        Me.p_unitOfMeasure.ReadOnly = True
+        '
+        'p_qtyavailable
+        '
+        Me.p_qtyavailable.HeaderText = "Qty. Available"
+        Me.p_qtyavailable.Name = "p_qtyavailable"
+        Me.p_qtyavailable.ReadOnly = True
+        Me.p_qtyavailable.Width = 60
+        '
+        'p_qtyallocated
+        '
+        Me.p_qtyallocated.HeaderText = "Qty. Allocated"
+        Me.p_qtyallocated.Name = "p_qtyallocated"
+        Me.p_qtyallocated.ReadOnly = True
+        Me.p_qtyallocated.Width = 60
+        '
+        'p_qtyorderable
+        '
+        Me.p_qtyorderable.HeaderText = "Qty. Orderable"
+        Me.p_qtyorderable.Name = "p_qtyorderable"
+        Me.p_qtyorderable.ReadOnly = True
+        Me.p_qtyorderable.Width = 60
+        '
+        'p_seasoncode
+        '
+        Me.p_seasoncode.HeaderText = "Season Code"
+        Me.p_seasoncode.Name = "p_seasoncode"
+        Me.p_seasoncode.ReadOnly = True
+        Me.p_seasoncode.Width = 70
+        '
+        'p_sku
+        '
+        Me.p_sku.HeaderText = "SKU"
+        Me.p_sku.Name = "p_sku"
+        Me.p_sku.ReadOnly = True
+        '
+        'p_sku2
+        '
+        Me.p_sku2.HeaderText = "SKU2"
+        Me.p_sku2.Name = "p_sku2"
+        Me.p_sku2.ReadOnly = True
+        '
         'InventoryLocationsForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -1751,20 +1742,20 @@ Partial Class InventoryLocationsForm
     Friend WithEvents rsc_remarks As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents rsc_option As System.Windows.Forms.DataGridViewButtonColumn
     Friend WithEvents chkOtherInfo As System.Windows.Forms.CheckBox
-    Friend WithEvents p_rowid As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents p_colorvalue As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents p_qtyreserve As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents p_qtydamage As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents p_seqno As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents p_productcode As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents p_colorname As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents p_color As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents p_size As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents p_qtyavailable As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents p_qtyallocated As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents p_qtyorderable As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents p_seasoncode As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents p_sku As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents cboType As ComboBox
-    Friend WithEvents Label20 As Label
+    Friend WithEvents p_rowid As DataGridViewTextBoxColumn
+    Friend WithEvents p_colorvalue As DataGridViewTextBoxColumn
+    Friend WithEvents p_qtyreserve As DataGridViewTextBoxColumn
+    Friend WithEvents p_qtydamage As DataGridViewTextBoxColumn
+    Friend WithEvents p_seqno As DataGridViewTextBoxColumn
+    Friend WithEvents p_productcode As DataGridViewTextBoxColumn
+    Friend WithEvents p_colorname As DataGridViewTextBoxColumn
+    Friend WithEvents p_color As DataGridViewTextBoxColumn
+    Friend WithEvents p_size As DataGridViewTextBoxColumn
+    Friend WithEvents p_unitOfMeasure As DataGridViewTextBoxColumn
+    Friend WithEvents p_qtyavailable As DataGridViewTextBoxColumn
+    Friend WithEvents p_qtyallocated As DataGridViewTextBoxColumn
+    Friend WithEvents p_qtyorderable As DataGridViewTextBoxColumn
+    Friend WithEvents p_seasoncode As DataGridViewTextBoxColumn
+    Friend WithEvents p_sku As DataGridViewTextBoxColumn
+    Friend WithEvents p_sku2 As DataGridViewTextBoxColumn
 End Class

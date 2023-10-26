@@ -75,8 +75,6 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
                 .Select(t => t.ProductColorSizeID)
                 .ToArray();
 
-            var addedProductInventoryLocation = new List<ProductInventoryLocation>();
-
             var addedRackShelfColumn = new List<RackShelfColumn>();
 
             var nonExistentProductColorSizes = allProductColorSizes.ToList();

@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using WarehouseManagementSystem.Core.Entities;
 using WarehouseManagementSystem.Core.Interfaces;
@@ -12,6 +10,8 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
 {
     public class ProductInventoryLocationDataService : BaseSavableDataService<ProductInventoryLocation>, IProductInventoryLocationDataService
     {
+        private readonly IProductInventoryLocationRepository _productInventoryLocationRepository;
+
         public ProductInventoryLocationDataService(IProductInventoryLocationRepository productInventoryLocationRepository,
             IUserActivityRepository userActivityRepository,
             SystemContext context,
@@ -23,6 +23,10 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
                 policy,
                 entityName: "ProductInventoryLocation")
         {
+            _productInventoryLocationRepository = productInventoryLocationRepository;
         }
+
+        public async Task<List<ProductInventoryLocation>> GetByInventoryLocationIdAsync(int inventoryLocationId) =>
+            await _productInventoryLocationRepository.GetByInventoryLocationIdAsync(inventoryLocationId: inventoryLocationId);
     }
 }

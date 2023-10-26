@@ -1,5 +1,8 @@
 ﻿Imports System.IO
+Imports Microsoft.Extensions.DependencyInjection
 Imports MySql.Data.MySqlClient
+Imports OfficeOpenXml.FormulaParsing.Excel.Functions.Math
+Imports WarehouseManagementSystem.Core.Interfaces
 
 Public Class ProductsForm
     Dim manager As New sqlModule.Manager
@@ -20,8 +23,15 @@ Public Class ProductsForm
     Dim pfproductid, pfcategoryid, pfbrandid, pfcompanyid, pfskuid, pfSKU2id, pfproductcolorsizeid As Integer
     Dim pftotalqtyavailable, pftotalqtyallocated, pftotalqtyreserve As Integer
     Dim simplesearchphrase, commonphrase, pagefilter1, pagefilter2, pagefilter3 As String
+    Private _systemOwner As WarehouseManagementSystem.Core.Entities.SystemOwner
+    Private _picp As ProductImageConfigParser
 
-    Private Sub ProductManagementForm_Load(sender As Object, e As EventArgs) Handles Me.Load
+    Private Async Sub ProductManagementForm_Load(sender As Object, e As EventArgs) Handles Me.Load
+        Dim _systemOwnerService = MainServiceProvider.GetRequiredService(Of ISystemOwnerService)
+        _systemOwner = Await _systemOwnerService.GetCurrentSystemOwnerEntityAsync()
+
+        _picp = New ProductImageConfigParser(filePath:=CONFIG_FILE_PATH)
+
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
@@ -734,6 +744,7 @@ Public Class ProductsForm
 
     Sub displayProductInformation(ByVal iproductid As Integer)
         Try
+            Console.WriteLine("test")
             productimage = Nothing
             If conn1.State = ConnectionState.Closed Then conn1.Open()
             Dim sql1 As String = "SELECT COALESCE(p.productcode,''),COALESCE(b.brandname,''),COALESCE(ct.categoryname,''),COALESCE(cm.companyname,''),COALESCE(p.unitprice,0.0)," &
@@ -754,7 +765,8 @@ Public Class ProductsForm
                     If IsDBNull(productimage) Then
                         pbProductImage.Image = Nothing
                     Else
-                        pbProductImage.Image = ConvertByteToImage(productimage)
+                        pbProductImage.ImageLocation = System.IO.Path.Combine("c:\AttachedImages", reader1(7))
+                        'pbProductImage.ImageLocation = reader1(7)
                     End If
                 End If
             End While
@@ -1479,6 +1491,13 @@ Public Class ProductsForm
     End Sub
 
     Private Sub btnChangeImage_Click(sender As Object, e As EventArgs) Handles btnChangeImage.Click
+        If IsThurston Then
+            ' TODO: Code here
+            ' Dim code = New YourCode(productImageConfigParser:=_picp, product:=product)
+            ' code.ChangeImage()
+            Return
+        End If
+
         Me.Cursor = Cursors.WaitCursor
         Try
             getPositionID(Me)
@@ -1515,6 +1534,13 @@ Public Class ProductsForm
     End Sub
 
     Private Sub btnDeleteImage_Click(sender As Object, e As EventArgs) Handles btnDeleteImage.Click
+        If IsThurston Then
+            ' TODO: Code here
+            ' Dim code = New YourCode(productImageConfigParser:=_picp, product:=product)
+            ' code.DeleteImage()
+            Return
+        End If
+
         Me.Cursor = Cursors.WaitCursor
         Try
             If Not IsDBNull(productimage) Then
@@ -1561,6 +1587,13 @@ Public Class ProductsForm
     End Sub
 
     Private Sub btnDownloadImage_Click(sender As Object, e As EventArgs) Handles btnDownloadImage.Click
+        If IsThurston Then
+            ' TODO: Code here
+            ' Dim code = New YourCode(productImageConfigParser:=_picp, product:=product)
+            ' code.DownloadImage()
+            Return
+        End If
+
         Me.Cursor = Cursors.WaitCursor
         Try
             If Not IsDBNull(productimage) Then
@@ -2534,5 +2567,11 @@ Public Class ProductsForm
     End Sub
 
 #End Region
+
+    Private ReadOnly Property IsThurston As Boolean
+        Get
+            Return _systemOwner.IsThurston
+        End Get
+    End Property
 
 End Class

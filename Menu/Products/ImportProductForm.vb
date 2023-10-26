@@ -79,9 +79,6 @@ Public Class ImportProductForm
             OrderBy(Function(t) t.LineNumber).
             ToList()
 
-        ParsedTabControl.Text = $"Ok ({validParse.Count})"
-        ErrorsTabControl.Text = $"Errors ({invalidParse.Count})"
-
         SaveButton.Enabled = validParse.Count > 0
 
         ValidRecordsGrid.DataSource = validParse
@@ -92,6 +89,9 @@ Public Class ImportProductForm
                     End Sub)
         invalidParse.AddRange(alreadyExistsParse)
         RejectedRecordsGrid.DataSource = invalidParse.OrderBy(Function(t) t.LineNumber).ToList()
+
+        ParsedTabControl.Text = $"Ok ({validParse.Count()})"
+        ErrorsTabControl.Text = $"Errors ({invalidParse.Count()})"
     End Sub
 
     Private Sub btnDownloadTemplate_Click(sender As Object, e As EventArgs) Handles btnDownloadTemplate.Click

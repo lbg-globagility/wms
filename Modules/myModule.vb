@@ -47,6 +47,7 @@ Module myModule
     Public globallineupnos, globalbranchname, globalbranchaddress, globalvendorname, globalorderclassdescription, globalorderpono, globalordersidrno, globalordercanceldate As String
 
     Public MainServiceProvider As ServiceProvider
+    Public Const CONFIG_FILE_PATH As String = "C:\ConnectionString\config.ini"
 
 #Region "Module Functions"
 

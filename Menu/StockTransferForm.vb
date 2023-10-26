@@ -261,7 +261,7 @@ Public Class StockTransferForm
             countpagenum = 0
             If conn.State = ConnectionState.Open Then conn.Close()
             Dim dtCid As New DataTable
-            dtCid = getDataTableForSQL("SELECT COUNT(po.rowid) FROM orders po WHERE po.organizationid = " & Z_OrganizationID & " AND po.ordertype = 'Stock Trans.' ")
+            dtCid = getDataTableForSQL("SELECT COUNT(po.rowid) FROM orders po WHERE po.organizationid = " & Z_OrganizationID & $" AND po.ordertype = '{OrderType.ST.ToString()}' ")
             If dtCid.Rows.Count <> 0 Then
                 countpagenum = dtCid.Rows(0)(0)
             Else
@@ -300,7 +300,7 @@ Public Class StockTransferForm
             countpagenum = 0
             If conn.State = ConnectionState.Open Then conn.Close()
             Dim dtCid As New DataTable
-            dtCid = getDataTableForSQL("SELECT COALESCE(COUNT(po.rowid),0) FROM orders po WHERE po.organizationid = " & Z_OrganizationID & " AND po.ordertype = 'Stock Trans.' " &
+            dtCid = getDataTableForSQL("SELECT COALESCE(COUNT(po.rowid),0) FROM orders po WHERE po.organizationid = " & Z_OrganizationID & $" AND po.ordertype = '{OrderType.ST.ToString()}' " &
                             " AND (po.ordernumber LIKE ""%" & esearchstring & "%"" OR po.status LIKE ""%" & esearchstring & "%"") ")
             If dtCid.Rows.Count <> 0 Then
                 countpagenum = dtCid.Rows(0)(0)
@@ -423,7 +423,7 @@ Public Class StockTransferForm
             dgStockTransferList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
             Dim sql1 As String = "SELECT s.rowid,COALESCE(s.ordernumber,''),DATE_FORMAT(s.orderdate,'%d-%b-%Y'),COALESCE(s.status,'') FROM orders s " &
-                        "WHERE s.organizationid = " & Z_OrganizationID & " AND s.ordertype = 'Stock Trans.' ORDER BY s.orderdate DESC LIMIT " & istartpage & "," & pagedivisor & " "
+                        "WHERE s.organizationid = " & Z_OrganizationID & $" AND s.ordertype = '{OrderType.ST.ToString()}' ORDER BY s.orderdate DESC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             Dim n As Integer = 0
@@ -456,7 +456,7 @@ Public Class StockTransferForm
             dgStockTransferList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
             Dim sql1 As String = "SELECT s.rowid,COALESCE(s.ordernumber,''),DATE_FORMAT(s.orderdate,'%d-%b-%Y'),COALESCE(s.status,'') FROM orders s " &
-                        "WHERE s.organizationid = " & Z_OrganizationID & " AND s.ordertype = 'Stock Trans.' AND (s.ordernumber LIKE ""%" & isearchphrase & "%"" OR s.status LIKE ""%" & isearchphrase & "%"") " &
+                        "WHERE s.organizationid = " & Z_OrganizationID & $" AND s.ordertype = '{OrderType.ST.ToString()}' AND (s.ordernumber LIKE ""%" & isearchphrase & "%"" OR s.status LIKE ""%" & isearchphrase & "%"") " &
                         "ORDER BY s.orderdate DESC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -868,7 +868,7 @@ Public Class StockTransferForm
             End If
             cboFrom.Enabled = legit : btnAddStockFrom.Enabled = legit
             cboTo.Enabled = legit : btnAddRackShelfColumn.Enabled = legit
-            getOrderNo("Stock Trans.", Me)
+            getOrderNo(globaliordertype:=OrderType.ST.ToString(), Me)
             txtStockTransferNo.Text = CStr(globalorderno)
             txtStatus.Text = "Approved"
             txtTransferedBy.Text = Z_UserName
@@ -1124,8 +1124,8 @@ Public Class StockTransferForm
                             End If
                         Next
                     End If
-                    getOrderNo("Stock Trans.", Me)
-                    M_I_Orders(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, DBNull.Value, CStr(globalorderno), "Stock Trans.",
+                    getOrderNo(globaliordertype:=OrderType.ST.ToString(), Me)
+                    M_I_Orders(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, DBNull.Value, CStr(globalorderno), OrderType.ST.ToString(),
                             dtpStockTransferDate.Value, DBNull.Value, "", txtComments.Text, txtStatus.Text, 0, txtTransferedBy.Text, DBNull.Value, DBNull.Value, DBNull.Value, "", "", "", "", Me)
                     storderid = globalorderidsp
                     If dgRackShelfColumnFrom.Rows.Count <> 0 Then
