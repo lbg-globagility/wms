@@ -1244,6 +1244,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SubForms\AddLineUpForm.resx">
       <DependentUpon>AddLineUpForm.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="SubForms\AddPackerForm.resx">
       <DependentUpon>AddPackerForm.vb</DependentUpon>

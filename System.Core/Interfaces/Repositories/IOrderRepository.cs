@@ -7,6 +7,8 @@ namespace WarehouseManagementSystem.Core.Interfaces.Repositories
 {
     public interface IOrderRepository : ISavableRepository<Order>
     {
+        Task<Order> GetById(int orderId);
+        
         Task<Order> GetLastOrderOfThisTypeAsync(int organizationId, OrderType orderType);
 
         Task<List<Order>> GetOrdersByOrderTypeAsync(int organizationId, OrderType orderType);

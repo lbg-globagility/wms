@@ -43,6 +43,10 @@ Partial Class AddTruckForm
         Me.pbAutoAddB = New System.Windows.Forms.PictureBox()
         Me.txtCBM = New System.Windows.Forms.TextBox()
         Me.Label7 = New System.Windows.Forms.Label()
+        Me.txtMaxCapacity = New System.Windows.Forms.TextBox()
+        Me.Label8 = New System.Windows.Forms.Label()
+        Me.txtYearModel = New System.Windows.Forms.TextBox()
+        Me.Label9 = New System.Windows.Forms.Label()
         Me.msMenu.SuspendLayout()
         CType(Me.errProvider, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbAutoAddA, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -232,13 +236,53 @@ Partial Class AddTruckForm
         Me.Label7.TabIndex = 13
         Me.Label7.Text = "CBM:"
         '
+        'txtMaxCapacity
+        '
+        Me.txtMaxCapacity.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtMaxCapacity.Location = New System.Drawing.Point(101, 141)
+        Me.txtMaxCapacity.Name = "txtMaxCapacity"
+        Me.txtMaxCapacity.Size = New System.Drawing.Size(146, 21)
+        Me.txtMaxCapacity.TabIndex = 534
+        '
+        'Label8
+        '
+        Me.Label8.AutoSize = True
+        Me.Label8.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label8.Location = New System.Drawing.Point(9, 143)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(83, 15)
+        Me.Label8.TabIndex = 535
+        Me.Label8.Text = "Max Capacity:"
+        '
+        'txtYearModel
+        '
+        Me.txtYearModel.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtYearModel.Location = New System.Drawing.Point(367, 141)
+        Me.txtYearModel.Name = "txtYearModel"
+        Me.txtYearModel.Size = New System.Drawing.Size(103, 21)
+        Me.txtYearModel.TabIndex = 536
+        '
+        'Label9
+        '
+        Me.Label9.AutoSize = True
+        Me.Label9.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label9.Location = New System.Drawing.Point(264, 144)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(97, 15)
+        Me.Label9.TabIndex = 537
+        Me.Label9.Text = "Year And Model:"
+        '
         'AddTruckForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.AutoScroll = True
         Me.BackColor = System.Drawing.Color.White
-        Me.ClientSize = New System.Drawing.Size(484, 142)
+        Me.ClientSize = New System.Drawing.Size(484, 174)
+        Me.Controls.Add(Me.txtYearModel)
+        Me.Controls.Add(Me.Label9)
+        Me.Controls.Add(Me.txtMaxCapacity)
+        Me.Controls.Add(Me.Label8)
         Me.Controls.Add(Me.txtCBM)
         Me.Controls.Add(Me.Label7)
         Me.Controls.Add(Me.pbAutoAddB)
@@ -291,4 +335,8 @@ Partial Class AddTruckForm
     Friend WithEvents pbAutoAddA As System.Windows.Forms.PictureBox
     Friend WithEvents txtCBM As System.Windows.Forms.TextBox
     Friend WithEvents Label7 As System.Windows.Forms.Label
+    Friend WithEvents txtYearModel As TextBox
+    Friend WithEvents Label9 As Label
+    Friend WithEvents txtMaxCapacity As TextBox
+    Friend WithEvents Label8 As Label
 End Class

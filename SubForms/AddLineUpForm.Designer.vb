@@ -953,18 +953,18 @@ Partial Class AddLineUpForm
         Me.Label5.ForeColor = System.Drawing.SystemColors.ControlText
         Me.Label5.Location = New System.Drawing.Point(9, 53)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(114, 15)
+        Me.Label5.Size = New System.Drawing.Size(90, 15)
         Me.Label5.TabIndex = 553
-        Me.Label5.Text = "Truck And Shift Info:"
+        Me.Label5.Text = "Truck Plate No:"
         '
         'cboTruckShiftInfo
         '
         Me.cboTruckShiftInfo.BackColor = System.Drawing.SystemColors.Window
         Me.cboTruckShiftInfo.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cboTruckShiftInfo.FormattingEnabled = True
-        Me.cboTruckShiftInfo.Location = New System.Drawing.Point(137, 50)
+        Me.cboTruckShiftInfo.Location = New System.Drawing.Point(124, 50)
         Me.cboTruckShiftInfo.Name = "cboTruckShiftInfo"
-        Me.cboTruckShiftInfo.Size = New System.Drawing.Size(191, 23)
+        Me.cboTruckShiftInfo.Size = New System.Drawing.Size(204, 23)
         Me.cboTruckShiftInfo.TabIndex = 7
         '
         'dtpLineUpDate
@@ -1015,7 +1015,7 @@ Partial Class AddLineUpForm
         Me.Label3.AutoSize = True
         Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label3.ForeColor = System.Drawing.Color.Red
-        Me.Label3.Location = New System.Drawing.Point(121, 49)
+        Me.Label3.Location = New System.Drawing.Point(102, 49)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(16, 20)
         Me.Label3.TabIndex = 564
