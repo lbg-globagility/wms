@@ -1,8 +1,13 @@
-﻿Imports System.IO
+﻿Imports System.Buffers
+Imports System.IO
+Imports System.Net
+Imports System.Net.Http
 Imports Microsoft.Extensions.DependencyInjection
 Imports MySql.Data.MySqlClient
+Imports Newtonsoft.Json
 Imports OfficeOpenXml.FormulaParsing.Excel.Functions.Math
 Imports WarehouseManagementSystem.Core.Interfaces
+Imports Xenocode
 
 Public Class ProductsForm
     Dim manager As New sqlModule.Manager
@@ -23,6 +28,7 @@ Public Class ProductsForm
     Dim pfproductid, pfcategoryid, pfbrandid, pfcompanyid, pfskuid, pfSKU2id, pfproductcolorsizeid As Integer
     Dim pftotalqtyavailable, pftotalqtyallocated, pftotalqtyreserve As Integer
     Dim simplesearchphrase, commonphrase, pagefilter1, pagefilter2, pagefilter3 As String
+    Dim productImageFilePath As String
     Private _systemOwner As WarehouseManagementSystem.Core.Entities.SystemOwner
     Private _picp As ProductImageConfigParser
 
@@ -634,6 +640,7 @@ Public Class ProductsForm
                     seqno = seqno + 1
                     n = n + 1
                 End If
+
             End While
             reader1.Close()
             dgProductList.Columns("p_seqno").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
@@ -744,7 +751,6 @@ Public Class ProductsForm
 
     Sub displayProductInformation(ByVal iproductid As Integer)
         Try
-            Console.WriteLine("test")
             productimage = Nothing
             If conn1.State = ConnectionState.Closed Then conn1.Open()
             Dim sql1 As String = "SELECT COALESCE(p.productcode,''),COALESCE(b.brandname,''),COALESCE(ct.categoryname,''),COALESCE(cm.companyname,''),COALESCE(p.unitprice,0.0)," &
@@ -762,10 +768,12 @@ Public Class ProductsForm
                     cboUnitOfMeasure.Text = reader1(5)
                     txtDescription.Text = reader1(6)
                     productimage = reader1(7)
+                    productImageFilePath = reader1(7)
                     If IsDBNull(productimage) Then
                         pbProductImage.Image = Nothing
                     Else
                         pbProductImage.ImageLocation = System.IO.Path.Combine("c:\AttachedImages", reader1(7))
+
                         'pbProductImage.ImageLocation = reader1(7)
                     End If
                 End If
@@ -1495,6 +1503,11 @@ Public Class ProductsForm
             ' TODO: Code here
             ' Dim code = New YourCode(productImageConfigParser:=_picp, product:=product)
             ' code.ChangeImage()
+            fileOpener.Filter = "Image files (*.bmp;*.jpg;*.jpeg;*.png)|*.bmp;*.jpg;*.jpeg;*.png"
+            If fileOpener.ShowDialog() = Windows.Forms.DialogResult.OK Then
+                pbProductImage.Image = Image.FromFile(fileOpener.FileName)
+                txtImagePath.Text = fileOpener.FileName
+            End If
             Return
         End If
 
@@ -1538,6 +1551,10 @@ Public Class ProductsForm
             ' TODO: Code here
             ' Dim code = New YourCode(productImageConfigParser:=_picp, product:=product)
             ' code.DeleteImage()
+            If MessageBox.Show("Would you like to permanently delete this image?", "Deleting", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
+                productImageFilePath = ""
+                pbProductImage.Image = Nothing
+            End If
             Return
         End If
 
@@ -1588,9 +1605,15 @@ Public Class ProductsForm
 
     Private Sub btnDownloadImage_Click(sender As Object, e As EventArgs) Handles btnDownloadImage.Click
         If IsThurston Then
-            ' TODO: Code here
-            ' Dim code = New YourCode(productImageConfigParser:=_picp, product:=product)
-            ' code.DownloadImage()
+            If MessageBox.Show("Would you like to Download this image?", "Downloading", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
+                Dim path As String = System.IO.Path.Combine("c:\AttachedImages", productImageFilePath)
+                Dim ext As String = ".jpeg"
+                Dim url = System.Guid.NewGuid().ToString() + ext
+                Dim Client As New WebClient
+                Client.DownloadFile(path, System.IO.Path.Combine("c:\AttachedImages\download\", url))
+                Client.Dispose()
+                MessageBox.Show("Image saved to c:\AttachedImages\download as " & url, "System Message")
+            End If
             Return
         End If
 
@@ -1877,11 +1900,33 @@ Public Class ProductsForm
                 If MessageBox.Show("Would you like to save the changes in this page?", "Saving", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
                     Me.Cursor = Cursors.WaitCursor
                     If txtImagePath.Text <> "" Then
-                        fs = New FileStream(txtImagePath.Text, FileMode.Open, FileAccess.Read)
-                        br = New BinaryReader(fs)
-                        ImageData = br.ReadBytes(CType(fs.Length, Integer))
-                        br.Close()
-                        fs.Close()
+
+                        Dim filePathNameToMove = txtImagePath.Text
+                        Dim directoryPathToMove = "c:\AttachedImages\"
+                        productImageFilePath = "prod-img\" + System.Guid.NewGuid().ToString() + ".jpg"
+                        If (File.Exists(txtImagePath.Text)) Then
+
+                            Dim fileToCopy = Path.Combine(directoryPathToMove, productImageFilePath)
+                            If (File.Exists(fileToCopy) = False) Then
+
+                                Try
+                                    File.Copy(filePathNameToMove, fileToCopy)
+                                    Console.WriteLine("File Moved!")
+                                    Exit Try
+
+                                Catch ex As Exception
+                                    MsgBox(getErrExcptn(ex, Me.Name))
+
+
+                                End Try
+
+                            End If
+                        End If
+                        'fs = New FileStream(txtImagePath.Text, FileMode.Open, FileAccess.Read)
+                        '            br = New BinaryReader(fs)
+                        '            ImageData = br.ReadBytes(CType(fs.Length, Integer))
+                        '            br.Close()
+                        '            fs.Close()
                     End If
                     If LTrim(cboCategory.Text) <> "" Then
                         getCategoryID(cboCategory.Text, "", Me) : pfcategoryid = globalcategoryid
@@ -1929,7 +1974,7 @@ Public Class ProductsForm
                     getProductIDA(CInt(dgProductList.CurrentRow.Cells("p_rowid").Value), txtProductCode.Text, Me)
                     If pfproductid = 0 Then
                         U_Products(CInt(dgProductList.CurrentRow.Cells("p_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, If(pfcategoryid = 0, DBNull.Value, pfcategoryid), If(pfbrandid = 0, DBNull.Value, pfbrandid), If(pfcompanyid = 0, DBNull.Value, pfcompanyid),
-                         txtProductCode.Text, txtProductCode.Text, cboUnitOfMeasure.Text, cboBrandName.Text, cboCategory.Text, cboCompany.Text, txtDescription.Text, If(IsNumeric(txtSRP.Text), CDec(txtSRP.Text), 0.0), If(txtImagePath.Text <> "", ImageData, DBNull.Value), Me)
+txtProductCode.Text, txtProductCode.Text, cboUnitOfMeasure.Text, cboBrandName.Text, cboCategory.Text, cboCompany.Text, txtDescription.Text, If(IsNumeric(txtSRP.Text), CDec(txtSRP.Text), 0.0), productImageFilePath, Me)
                     End If
                     If myModule.systemerrorfound = True Then
                         Exit Try

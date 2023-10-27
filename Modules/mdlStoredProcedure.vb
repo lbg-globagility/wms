@@ -3199,7 +3199,7 @@ Module mdlStoredProcedure
                             ByVal Company As String,
                             ByVal Description As String,
                             ByVal UnitPrice As Decimal,
-                            ByVal Image As Object,
+                            ByVal Image As String,
                             ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
