@@ -47,11 +47,13 @@ Public Class ProductSelectorDialog
             Return productInventoryLocations.
                 Where(Function(t) Not ProductColorSizeExceptionIds.Contains(t.ProductColorSizeID)).
                 Select(Function(t) New ProductColorSizeModel(productInventoryLocation:=t, productColorSize:=t.ProductColorSize, _picp)).
+                OrderBy(Function(t) t.ProductCode).
                 ToList()
         End If
 
         Return productInventoryLocations.
             Select(Function(t) New ProductColorSizeModel(productInventoryLocation:=t, productColorSize:=t.ProductColorSize, _picp)).
+            OrderBy(Function(t) t.ProductCode).
             ToList()
     End Function
 
