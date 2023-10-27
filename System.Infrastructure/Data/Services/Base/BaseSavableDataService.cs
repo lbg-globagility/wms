@@ -260,5 +260,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data
 
             return oldEntities.Where(x => entityIds.Contains(x.RowID)).ToList();
         }
+
+        public async Task<T> GetByIdAsync(int id) => await _repository.GetByIdAsync(id: id);
     }
 }

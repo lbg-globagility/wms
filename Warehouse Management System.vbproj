@@ -387,6 +387,7 @@
     </Compile>
     <Compile Include="Menu\Products\ProductColorSizeModel.vb" />
     <Compile Include="Menu\Products\ProductImageConfigParser.vb" />
+    <Compile Include="Menu\Products\ProductImageManager.vb" />
     <Compile Include="Menu\Products\ProductImportation.vb" />
     <Compile Include="Menu\Products\ProductSelectorDialog.Designer.vb">
       <DependentUpon>ProductSelectorDialog.vb</DependentUpon>
