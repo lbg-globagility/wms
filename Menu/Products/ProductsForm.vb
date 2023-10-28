@@ -637,6 +637,7 @@ Public Class ProductsForm
                     dgProductList.Item(p_brandname.Index, n).Value = reader1(2)
                     dgProductList.Item(p_category.Index, n).Value = reader1(3)
                     dgProductList.Item(p_company.Index, n).Value = reader1(4)
+                    dgProductList.Item(PhotoResourceLocation.Index, n).Value = _pim.GetPhotoUrl(productCode:=reader1(1))
                     seqno = seqno + 1
                     n = n + 1
                 End If
@@ -772,8 +773,6 @@ Public Class ProductsForm
                     Else
                         pbProductImage.Image = ConvertByteToImage(productimage)
                     End If
-
-                    PictureBox1.LoadAsync(url:=_pim.GetPhotoUrl(productCode:=reader1(0)?.ToString()))
                 End If
             End While
             reader1.Close()
@@ -781,6 +780,7 @@ Public Class ProductsForm
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
             conn1.Close()
+            PictureBox1.LoadAsync(url:=dgProductList.CurrentRow?.Cells(PhotoResourceLocation.Name).Value)
         End Try
     End Sub
 
@@ -1283,6 +1283,10 @@ Public Class ProductsForm
         Finally
             conn.Close()
         End Try
+    End Sub
+
+    Private Sub dgProductList_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgProductList.CellContentClick
+
     End Sub
 
     Private Sub dgProductList_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgProductList.CellClick
