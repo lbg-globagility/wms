@@ -6,7 +6,6 @@ Public Class ProductColorSizeModel
     Private ReadOnly _productInventoryLocation As ProductInventoryLocation
     Private ReadOnly _productColorSize As ProductColorSize
     Private ReadOnly _productColor As ProductColor
-    Private ReadOnly _productImageConfigParser As ProductImageConfigParser
     Private ReadOnly _pim As ProductImageManager
 
     Public Sub New(productInventoryLocation As ProductInventoryLocation,
@@ -16,7 +15,6 @@ Public Class ProductColorSizeModel
         _productInventoryLocation = productInventoryLocation
         _productColorSize = productColorSize
         _productColor = productColorSize.ProductColor
-        _productImageConfigParser = productImageConfigParser
 
         _pim = New ProductImageManager(productImageConfigParser)
     End Sub

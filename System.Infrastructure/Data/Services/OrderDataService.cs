@@ -103,7 +103,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
             if (isDoingUpdateWithNoUpdatePrivilege)
                 ThrowError();
 
-            void ThrowError() => BusinessLogicException.Throw(message: "The user has insufficient privilege to perform this command.");
+            void ThrowError() => BusinessLogicException.ThrowInsufficientPrivilege();
         }
 
         protected override string CreateUserActivitySuffixIdentifier(Order entity) => $" #{entity.OrderNumber}{entity.OrderTypeText}, `date` { (entity.OrderDate != null ? entity.OrderDate?.ToShortDateString() : "[nodate]") }, and `status` is '{entity.Status}'";

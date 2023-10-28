@@ -1,7 +1,6 @@
 ﻿Imports System.IO
 Imports MySql.Data.MySqlClient
 Imports WarehouseManagementSystem.Core.Interfaces
-Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
 Imports WarehouseManagementSystem.Desktop.Utilities
 
 Public Class ProductsForm
@@ -26,6 +25,7 @@ Public Class ProductsForm
     Private _systemOwner As WarehouseManagementSystem.Core.Entities.SystemOwner
     Private _picp As ProductImageConfigParser
     Private _pim As ProductImageManager
+    Public Const VIEW_NAME As String = "Products"
 
     Private Async Sub ProductManagementForm_Load(sender As Object, e As EventArgs) Handles Me.Load
         Dim _systemOwnerService = GetRequiredService(Of ISystemOwnerService)()
@@ -33,7 +33,10 @@ Public Class ProductsForm
 
         _picp = New ProductImageConfigParser(filePath:=CONFIG_FILE_PATH)
 
-        _pim = New ProductImageManager(_picp)
+        _pim = New ProductImageManager(_picp,
+            organizationId:=Z_OrganizationID,
+            userId:=Z_UserID,
+            viewName:=VIEW_NAME)
 
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1535,7 +1538,8 @@ Public Class ProductsForm
                     Await FunctionUtils.TryCatchFunctionAsync("Change Product Image",
                         action:=
                         Async Function()
-                            Await _pim.ChangeAsync(productId:=CInt(dgProductList.CurrentRow?.Cells("p_rowid").Value), fileDialog:=fileOpener)
+                            Await _pim.ChangeAsync(productId:=CInt(dgProductList.CurrentRow?.Cells("p_rowid").Value),
+                                sourceFileName:=fileOpener.FileName)
 
                             errorCallback()
                         End Function,
