@@ -93,9 +93,11 @@ Public Class ProductImageManager
 
         Dim url = GetPhotoUrl(product.ProductCode)
         If File.Exists(url) Then
+            Dim destFileName = $"{Path.GetTempPath}\{product.ProductCode}{Path.GetExtension(url)}"
             File.Copy(sourceFileName:=url,
-                destFileName:=$"{Path.GetTempPath}\{product.ProductCode}{Path.GetExtension(url)}",
+                destFileName:=destFileName,
                 overwrite:=True)
+            Process.Start(destFileName)
         End If
     End Function
 
