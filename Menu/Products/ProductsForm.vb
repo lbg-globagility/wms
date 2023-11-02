@@ -1545,6 +1545,9 @@ Public Class ProductsForm
                             Await _pim.ChangeAsync(productId:=CInt(dgProductList.CurrentRow?.Cells("p_rowid").Value),
                                 sourceFileName:=fileOpener.FileName)
 
+                            PictureBox1.LoadAsync(url:=dgProductList.CurrentRow?.Cells(PhotoResourceLocation.Name).Value)
+                            PictureBox1.Refresh()
+
                             errorCallback()
                         End Function,
                         errorCallBack:=errorCallback)
