@@ -49,8 +49,7 @@ Public Class ProductImageManager
 
         If positionView.Restricted OrElse
             positionView.ReadOnly OrElse
-            positionView.Creates OrElse
-            Not positionView.Updates Then
+            (positionView.Creates AndAlso Not positionView.Updates) Then
 
             BusinessLogicException.ThrowInsufficientPrivilege()
             Return

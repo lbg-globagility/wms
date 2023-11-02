@@ -1369,7 +1369,7 @@ Public Class PickListForm
             If conn3.State = ConnectionState.Closed Then conn3.Open()
             Dim sql1 As String = "SELECT pil.rowid,COALESCE(pil.totalavailableqty,0),COALESCE(pil.totalallocatedqty,0) FROM productinventorylocation pil LEFT JOIN rackshelfcolumn rsc ON pil.rackshelfcolumnid = rsc.rowid " &
                     "WHERE pil.organizationid = " & Z_OrganizationID & " AND rsc.inventorylocationid = " & iinventorylocationid & " AND pil.productcolorsizeid = " & iproductcolorsizeid & " " &
-                    "AND pil.totalavailableqty - pil.totalallocatedqty > 0 ORDER BY pil.totalavailableqty ASC "
+                    "AND ((IFNULL(pil.totalavailableqty,0) - IFNULL(pil.totalallocatedqty,0)) > 0) ORDER BY pil.totalavailableqty ASC "
             Dim cmd1 As New MySqlCommand(sql1, conn3)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             While reader1.Read()

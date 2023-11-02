@@ -556,6 +556,7 @@ Partial Class AddLineUpForm
         Me.btnAddAgent.TabIndex = 602
         Me.btnAddAgent.TabStop = False
         Me.btnAddAgent.Tag = ""
+        Me.btnAddAgent.Visible = False
         '
         'Label32
         '
@@ -586,6 +587,7 @@ Partial Class AddLineUpForm
         Me.Label26.Size = New System.Drawing.Size(41, 15)
         Me.Label26.TabIndex = 601
         Me.Label26.Text = "Agent:"
+        Me.Label26.Visible = False
         '
         'cboHelper2
         '
@@ -616,6 +618,7 @@ Partial Class AddLineUpForm
         Me.cboAgent.Name = "cboAgent"
         Me.cboAgent.Size = New System.Drawing.Size(243, 23)
         Me.cboAgent.TabIndex = 598
+        Me.cboAgent.Visible = False
         '
         'txtCBM
         '

@@ -1547,8 +1547,7 @@ Public Class ProductsForm
                             Await _pim.ChangeAsync(productId:=CInt(dgProductList.CurrentRow?.Cells("p_rowid").Value),
                                 sourceFileName:=fileOpener.FileName)
 
-                            PictureBox1.LoadAsync(url:=dgProductList.CurrentRow?.Cells(PhotoResourceLocation.Name).Value)
-                            PictureBox1.Refresh()
+                            ReloadPictureBox()
 
                             errorCallback()
                         End Function,
@@ -1564,11 +1563,17 @@ Public Class ProductsForm
         Me.Cursor = Cursors.Default
     End Sub
 
+    Private Sub ReloadPictureBox()
+        PictureBox1.LoadAsync(url:=dgProductList.CurrentRow?.Cells(PhotoResourceLocation.Name).Value)
+        PictureBox1.Refresh()
+    End Sub
+
     Private Async Sub btnDeleteImage_Click(sender As Object, e As EventArgs) Handles btnDeleteImage.Click
         If dgProductList.CurrentRow IsNot Nothing AndAlso
             IsThurston Then
 
             Dim errorCallback = Sub()
+                                    ReloadPictureBox()
                                     Me.Cursor = Cursors.Default
                                 End Sub
 
@@ -1576,7 +1581,11 @@ Public Class ProductsForm
                 action:=
                     Async Function()
 
-                        Await _pim.DeleteAsync(productId:=CInt(dgProductList.CurrentRow?.Cells("p_rowid").Value))
+                        If MessageBox.Show("Would you like to permanently delete this image?",
+                            "Deleting",
+                            MessageBoxButtons.YesNo,
+                            MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then _
+                                Await _pim.DeleteAsync(productId:=CInt(dgProductList.CurrentRow?.Cells("p_rowid").Value))
 
                         errorCallback()
                     End Function,

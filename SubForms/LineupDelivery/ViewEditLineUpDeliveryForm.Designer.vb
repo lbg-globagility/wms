@@ -889,6 +889,7 @@ Partial Class ViewEditLineUpDeliveryForm
         Me.btnAddAgent.TabIndex = 603
         Me.btnAddAgent.TabStop = False
         Me.btnAddAgent.Tag = ""
+        Me.btnAddAgent.Visible = False
         '
         'Label32
         '
@@ -919,6 +920,7 @@ Partial Class ViewEditLineUpDeliveryForm
         Me.Label26.Size = New System.Drawing.Size(41, 15)
         Me.Label26.TabIndex = 595
         Me.Label26.Text = "Agent:"
+        Me.Label26.Visible = False
         '
         'cboHelper2
         '
@@ -949,6 +951,7 @@ Partial Class ViewEditLineUpDeliveryForm
         Me.cboAgent.Name = "cboAgent"
         Me.cboAgent.Size = New System.Drawing.Size(238, 23)
         Me.cboAgent.TabIndex = 594
+        Me.cboAgent.Visible = False
         '
         'txtClassDescription
         '
