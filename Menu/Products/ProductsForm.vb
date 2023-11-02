@@ -38,6 +38,8 @@ Public Class ProductsForm
             userId:=Z_UserID,
             viewName:=VIEW_NAME)
 
+        PictureBox1.Visible = IsThurston
+
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
