@@ -1,6 +1,7 @@
 ﻿Imports Microsoft.Extensions.DependencyInjection
 Imports MySql.Data.MySqlClient
 Imports WarehouseManagementSystem.Core.Enums
+Imports WarehouseManagementSystem.Core.Interfaces
 Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
 
 Public Class ViewEditLineUpDeliveryForm
@@ -21,16 +22,24 @@ Public Class ViewEditLineUpDeliveryForm
     Dim simplesearchphrase, datephrase, commonphrase, pagefilter1, pagefilter2, pagefilter3, pagefilter4 As String
     Dim veludtotalqtyincarton, veludqtyincartonbalance, veludqtytodeliver As Integer
     Dim veludcustomerid, veludcontactid, veluddeliverytruckshiftid, veludpackinglistid, veludlineupid, veludorderid, veluddeliverytruckid, veludpackinglistcartonid, veludlineupcbmid As Integer
+    Dim printdatatable As New DataTable
+    Dim printdatasetHthurston As New DataSetA.SetHDataTable
+    Dim printdatasetJthurston As New DataSetA.SetJDataTable
+    Dim printdatasetIthurston As New DataSetA.SetIDataTable
     Public veludpublicdeliverydate As String
     Public veludpublicdeliverytruckshiftid As Integer
     Public vieweditlineupdeliverycue As Boolean = False
     Public veludpublicselectedcellcue As Boolean = False
     Private _agents As List(Of WarehouseManagementSystem.Core.Entities.Contact)
     Private _helpers As List(Of WarehouseManagementSystem.Core.Entities.Contact)
+    Private _systemOwner As WarehouseManagementSystem.Core.Entities.SystemOwner
 
     Private Async Function ViewEditLineUpDeliveryForm_LoadAsync(sender As Object, e As EventArgs) As Task Handles Me.Load
         Me.Cursor = Cursors.WaitCursor
         Try
+            Dim _systemOwnerService = MainServiceProvider.GetRequiredService(Of ISystemOwnerService)
+            _systemOwner = Await _systemOwnerService.GetCurrentSystemOwnerEntityAsync()
+
             errProvider.Clear()
             clearfields()
             callAutoComplete()
@@ -1609,6 +1618,142 @@ Public Class ViewEditLineUpDeliveryForm
             conn.Close()
         End Try
         Me.Cursor = Cursors.Default
+    End Sub
+
+
+    Sub printDeliveryScheduleThurston(ByVal lineUpNo As Integer)
+        Try
+            printdatasetHthurston.Clear()
+            If conn.State = ConnectionState.Closed Then conn.Open()
+            Dim sql1 As String = "SELECT 
+	                                CONCAT(COALESCE(c.FirstName, ''), ' ', COALESCE(c.MiddleName, ''), ' ', COALESCE(c.LastName, '')) AS Driver,
+	                                CONCAT_WS(
+                                        ' ',
+                                        COALESCE(c2.FirstName, ''),
+                                        NULLIF(COALESCE(c2.MiddleName, ''), ''),
+                                        COALESCE(c2.LastName, '')
+                                    ) AS Helper,
+	                                lu.LineUpDate AS 'Date',
+	                                o.CustomerName AS Customer,
+	                                o.ReferenceNumber AS 'P.O. NO.',
+	                                SUM(plci.QtyInCarton) AS Qty,
+	                                GROUP_CONCAT(pcs.SKU, '/', plci.QtyInCarton SEPARATOR' , ') AS 'Item / Description'
+	
+		                                FROM
+		                                lineups lu
+		
+		                                JOIN lineupcartons lc ON lu.RowID = lc.LineUpID
+		                                LEFT JOIN contacts c  ON lu.ContactID = c.RowID
+		                                LEFT JOIN contacts c2 ON lu.Helper1Id = c2.RowID
+		                                JOIN orders o ON lu.OrderID = o.RowID
+ 		                                JOIN packinglistcartonitems plci ON lc.PackingListCartonID = plci.PackingListCartonID
+ 		                                JOIN orderitems oi ON plci.OrderItemID = oi.RowID
+ 		                                JOIN productcolorsizes pcs ON oi.ProductColorSizeID = pcs.RowID
+		
+			                                WHERE lu.LineUpNo = " & lineUpNo & " AND plci.`Status` = 'Lined Up'
+				                                GROUP BY lc.RowID"
+            Dim cmd1 As New MySqlCommand(sql1, conn)
+            cmd1.CommandTimeout = commantimeoutlimit
+            Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
+            While reader1.Read()
+                If reader1.HasRows Then
+                    printdatasetHthurston.AddSetHRow(CStr(reader1(0)), CStr(reader1(1)), CStr(reader1(2)), CStr(reader1(3)), CStr(reader1(4)), CStr(reader1(5)), CStr(reader1(6)), "")
+                End If
+            End While
+            reader1.Close()
+        Catch ex As Exception
+            MsgBox(getErrExcptn(ex, Me.Name))
+        Finally
+            conn.Close()
+        End Try
+    End Sub
+
+    Sub printTripTicketThurston(ByVal lineUpNo As Integer)
+        Try
+            printdatasetHthurston.Clear()
+            If conn.State = ConnectionState.Closed Then conn.Open()
+            Dim sql1 As String = "SELECT 
+	                                lu.LineUpDate AS 'Date',
+	                                o.CustomerName AS Customer,
+	                                o.DRNumber AS 'DR No',
+	                                SUM(plci.QtyInCarton) AS Qty,
+	                                CONCAT(COALESCE(c.FirstName, ''), ' ', COALESCE(c.MiddleName, ''), ' ', COALESCE(c.LastName, '')) AS Driver,
+	                                CONCAT_WS(
+                                        ' ',
+                                        COALESCE(c2.FirstName, ''),
+                                        NULLIF(COALESCE(c2.MiddleName, ''), ''),
+                                        COALESCE(c2.LastName, '')
+                                    ) AS Helper
+	
+		                                FROM	
+			                                lineups lu
+			                                JOIN orders o ON lu.OrderID = o.RowID
+			                                JOIN lineupcartons lc ON lu.RowID = lc.LineUpID
+ 			                                JOIN packinglistcartonitems plci ON lc.PackingListCartonID = plci.PackingListCartonID
+			                                LEFT JOIN contacts c  ON lu.ContactID = c.RowID
+			                                LEFT JOIN contacts c2 ON lu.Helper1Id = c2.RowID
+				                                WHERE
+					                                lu.RowID = " & lineUpNo & " AND
+					                                plci.`Status` = 'Lined Up'"
+            Dim cmd1 As New MySqlCommand(sql1, conn)
+            cmd1.CommandTimeout = commantimeoutlimit
+            Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
+            While reader1.Read()
+                If reader1.HasRows Then
+                    printdatasetJthurston.AddSetJRow(CStr(reader1(0)), CStr(reader1(1)), CStr(reader1(2)), CStr(reader1(3)), "", CStr(reader1(4)), CStr(reader1(5)), "", "", "", "")
+                End If
+            End While
+            reader1.Close()
+        Catch ex As Exception
+            MsgBox(getErrExcptn(ex, Me.Name))
+        Finally
+            conn.Close()
+        End Try
+    End Sub
+
+    Private Sub DeliveryScheduleToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeliveryScheduleToolStripMenuItem.Click
+        If _systemOwner.IsThurston Then
+            printDeliveryScheduleThurston(CInt(dgLineUpList.CurrentRow.Cells("lu_lineupno").Value))
+            Dim printreport As New DeliverySchedule
+            Dim openreportviewer As New ReportViewer
+            openreportviewer.CrystalReportViewer.ReportSource = printreport
+            printdatatable = printdatasetHthurston
+            printreport.SetDataSource(printdatatable)
+            openreportviewer.Show()
+            printdatatable.Dispose()
+            printdatatable = Nothing
+            printdatasetHthurston.Clear()
+        End If
+    End Sub
+
+    Private Sub TripTicketToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles TripTicketToolStripMenuItem.Click
+        If _systemOwner.IsThurston Then
+            printTripTicketThurston(CInt(dgLineUpList.CurrentRow.Cells("lu_lineupno").Value))
+            Dim printreport As New TripTicket
+            Dim openreportviewer As New ReportViewer
+            openreportviewer.CrystalReportViewer.ReportSource = printreport
+            printdatatable = printdatasetJthurston
+            printreport.SetDataSource(printdatatable)
+            openreportviewer.Show()
+            printdatatable.Dispose()
+            printdatatable = Nothing
+            printdatasetJthurston.Clear()
+        End If
+    End Sub
+
+    Private Sub GatePassToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles GatePassToolStripMenuItem.Click
+        If _systemOwner.IsThurston Then
+            printGatePassThurston(CInt(dgLineUpList.CurrentRow.Cells("lu_lineupno").Value))
+            Dim printreport As New GatePass
+            Dim openreportviewer As New ReportViewer
+            openreportviewer.CrystalReportViewer.ReportSource = printreport
+            printdatatable = printdatasetIthurston
+            printreport.SetDataSource(printdatatable)
+            openreportviewer.Show()
+            printdatatable.Dispose()
+            printdatatable = Nothing
+            printdatasetIthurston.Clear()
+        End If
     End Sub
 
     Private Sub dgLineUpList_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgLineUpList.CellClick

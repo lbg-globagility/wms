@@ -93,10 +93,10 @@
     <Reference Include="AutoMapper, Version=6.2.2.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <HintPath>packages\AutoMapper.6.2.2\lib\net45\AutoMapper.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
-    <Reference Include="CrystalDecisions.ReportSource, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
-    <Reference Include="CrystalDecisions.Shared, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
-    <Reference Include="CrystalDecisions.Windows.Forms, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.ReportSource, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.Shared, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.Windows.Forms, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
     <Reference Include="DevComponents.DotNetBar2, Version=10.0.0.3, Culture=neutral, PublicKeyToken=7eb7c3a35b91de04, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\Debug\DevComponents.DotNetBar2.dll</HintPath>
@@ -308,12 +308,6 @@
     <Compile Include="Information\SystemIllustrationForm.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Menu\Accounts\ViewAccounsListForm.Designer.vb">
-      <DependentUpon>ViewAccounsListForm.vb</DependentUpon>
-    </Compile>
-    <Compile Include="Menu\Accounts\ViewAccounsListForm.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Menu\BundlesForm.Designer.vb">
       <DependentUpon>BundlesForm.vb</DependentUpon>
     </Compile>
@@ -332,10 +326,10 @@
     <Compile Include="Menu\CustomerOrdersForm.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Menu\Accounts\AccountsForm.Designer.vb">
+    <Compile Include="Menu\AccountsForm.Designer.vb">
       <DependentUpon>AccountsForm.vb</DependentUpon>
     </Compile>
-    <Compile Include="Menu\Accounts\AccountsForm.vb">
+    <Compile Include="Menu\AccountsForm.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Menu\InventoryLocationsForm.Designer.vb">
@@ -638,29 +632,10 @@
       <DependentUpon>VerifyPickListPrintB.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Report Files\DeliverySchedule.vb">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>DeliverySchedule.rpt</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Report Files\GatePass.vb">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>GatePass.rpt</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Report Files\PickList.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>PickList.rpt</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Report Files\TripTicket.vb">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>TripTicket.rpt</DependentUpon>
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\AgingReportForm.Designer.vb">
       <DependentUpon>AgingReportForm.vb</DependentUpon>
@@ -756,12 +731,6 @@
       <DependentUpon>AddCodeForm.vb</DependentUpon>
     </Compile>
     <Compile Include="SubForms\AddCodeForm.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SubForms\AddContactForm.Designer.vb">
-      <DependentUpon>AddContactForm.vb</DependentUpon>
-    </Compile>
-    <Compile Include="SubForms\AddContactForm.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="SubForms\AddCycleCountForm.Designer.vb">
@@ -955,9 +924,6 @@
     <EmbeddedResource Include="Information\SystemIllustrationForm.resx">
       <DependentUpon>SystemIllustrationForm.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Menu\Accounts\ViewAccounsListForm.resx">
-      <DependentUpon>ViewAccounsListForm.vb</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Menu\BundlesForm.resx">
       <DependentUpon>BundlesForm.vb</DependentUpon>
     </EmbeddedResource>
@@ -967,7 +933,7 @@
     <EmbeddedResource Include="Menu\CustomerOrdersForm.resx">
       <DependentUpon>CustomerOrdersForm.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Menu\Accounts\AccountsForm.resx">
+    <EmbeddedResource Include="Menu\AccountsForm.resx">
       <DependentUpon>AccountsForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Menu\InventoryLocationsForm.resx">
@@ -1141,21 +1107,9 @@
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>VerifyPickListPrintB.vb</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Report Files\DeliverySchedule.rpt">
-      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>DeliverySchedule.vb</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Report Files\GatePass.rpt">
-      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>GatePass.vb</LastGenOutput>
-    </EmbeddedResource>
     <EmbeddedResource Include="Report Files\PickList.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>PickList.vb</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Report Files\TripTicket.rpt">
-      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>TripTicket.vb</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\AgingReportForm.resx">
       <DependentUpon>AgingReportForm.vb</DependentUpon>
@@ -1205,9 +1159,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SubForms\AddCodeForm.resx">
       <DependentUpon>AddCodeForm.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SubForms\AddContactForm.resx">
-      <DependentUpon>AddContactForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SubForms\AddCycleCountForm.resx">
       <DependentUpon>AddCycleCountForm.vb</DependentUpon>
