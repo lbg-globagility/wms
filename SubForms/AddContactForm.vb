@@ -1,7 +1,9 @@
 ﻿Imports Microsoft.Extensions.DependencyInjection
 Imports WarehouseManagementSystem.Core
+Imports WarehouseManagementSystem.Core.Entities
 Imports WarehouseManagementSystem.Core.Enums
 Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
+Imports WarehouseManagementSystem.Core.Interfaces.Repositories
 Imports WarehouseManagementSystem.Desktop.Utilities
 
 Public Class AddContactForm
@@ -12,6 +14,8 @@ Public Class AddContactForm
 
         ' This call is required by the designer.
         InitializeComponent()
+        autoPopulateRegion()
+
 
         ' Add any initialization after the InitializeComponent() call.
 
@@ -45,13 +49,22 @@ Public Class AddContactForm
         Await FunctionUtils.TryCatchFunctionAsync(messageTitle:=String.Empty,
             Async Function()
                 Dim contactDataService = MainServiceProvider.GetRequiredService(Of IContactDataService)
-
+                Console.Write("citiiesListBox.SelectedValue")
+                Dim cities = New List(Of Entities.ContactCity)
+                For Each itemChecked In citiesListBox.CheckedItems
+                    Dim city = New ContactCity()
+                    city.CityID = itemChecked.RowId
+                    cities.Add(city)
+                Next
                 Dim contact = Entities.Contact.NewContact(organizationId:=Z_OrganizationID,
                     lastName:=txtLastName.Text.Trim,
                     firstName:=txtFirstName.Text.Trim,
                     workPhone:=txtContactNo.Text.Trim,
                     email:=txtEmail.Text.Trim,
                     comments:=txtComments.Text.Trim,
+                    regionId:=cboRegion.SelectedValue,
+                    provinceId:=cboProvince.SelectedValue,
+                    cities:=cities,
                     type:=_contactType)
 
                 Await contactDataService.SaveManyAsync(entities:=New List(Of Entities.Contact) From {contact},
@@ -80,4 +93,42 @@ Public Class AddContactForm
         btnSave.Enabled = bool
     End Sub
 
+
+    Private Sub cboRegion_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboRegion.SelectedIndexChanged
+        autoPopulateChild(cboProvince, cboRegion.SelectedValue)
+    End Sub
+
+    Private Sub cboProvince_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboProvince.SelectedIndexChanged
+        autoPopulateCities(citiesListBox, cboProvince.SelectedValue)
+    End Sub
+
+    Async Sub autoPopulateRegion()
+        cboRegion.Items.Clear()
+        Dim listOfValue = MainServiceProvider.GetRequiredService(Of IListOfValueRepository)
+        Dim listOfValues = Await listOfValue.GetManyByTypeAsync(Z_OrganizationID, "Region")
+        For Each type In listOfValues
+            cboRegion.ValueMember = "RowId"
+            cboRegion.DisplayMember = "DisplayValue"
+            cboRegion.DataSource = listOfValues
+        Next
+    End Sub
+
+    Async Sub autoPopulateChild(ByVal cbo As ComboBox, parentid As Integer)
+        Dim listOfValue = MainServiceProvider.GetRequiredService(Of IListOfValueRepository)
+        Dim listOfValues = Await listOfValue.GetManyByParentIdAsync(Z_OrganizationID, parentid)
+        For Each type In listOfValues
+            cbo.ValueMember = "RowId"
+            cbo.DisplayMember = "DisplayValue"
+            cbo.DataSource = listOfValues
+        Next
+    End Sub
+    Async Sub autoPopulateCities(ByVal clb As CheckedListBox, parentid As Integer)
+        Dim listOfValue = MainServiceProvider.GetRequiredService(Of IListOfValueRepository)
+        Dim listOfValues = Await listOfValue.GetManyByParentIdAsync(Z_OrganizationID, parentid)
+        For Each type In listOfValues
+            clb.ValueMember = "RowId"
+            clb.DisplayMember = "DisplayValue"
+            clb.DataSource = listOfValues
+        Next
+    End Sub
 End Class

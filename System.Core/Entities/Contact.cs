@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using WarehouseManagementSystem.Core.Entities.Base;
@@ -32,6 +33,9 @@ namespace WarehouseManagementSystem.Core.Entities
         public string CivilStatus { get; set; }
         public string Status { get; set; }
         public string Comments { get; set; }
+        public int? ProvinceID { get; set; }
+        public int? RegionID { get; set; }
+        public List<ContactCity> Cities { get; set; }
         //public char? EmployeeFlg { get; set; }
     }
 
@@ -47,7 +51,11 @@ namespace WarehouseManagementSystem.Core.Entities
             string workPhone,
             string email,
             string comments,
-            string status = "Active")
+            int regionId,
+            int provinceId,
+            List<ContactCity> cities,
+            string status = "Active"
+            )
         {
             OrganizationID = organizationId;
             LastName = lastName;
@@ -56,7 +64,10 @@ namespace WarehouseManagementSystem.Core.Entities
             WorkPhone = workPhone;
             EmailAddress = email;
             Comments = comments;
+            RegionID = regionId;
+            ProvinceID = provinceId;
             Status = status;
+            Cities = cities;
         }
 
         public bool IsAgent => Type == ContactType.Agent;
@@ -83,6 +94,9 @@ namespace WarehouseManagementSystem.Core.Entities
             string workPhone,
             string email = "",
             string comments = "",
+            int regionId = 0,
+            int provinceId = 0,
+            List<ContactCity> cities = null,
             string status = "Active") => new Contact(organizationId: organizationId,
                 lastName: lastName,
                 firstName: firstName,
@@ -90,6 +104,9 @@ namespace WarehouseManagementSystem.Core.Entities
                 workPhone: workPhone,
                 email: email,
                 comments: comments,
-                status: status);
+                regionId: regionId,
+                provinceId: provinceId,
+                status: status,
+                cities: cities);
     }
 }

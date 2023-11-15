@@ -44,6 +44,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data
         internal virtual DbSet<SystemOwner> SystemOwners { get; set; }
         internal virtual DbSet<UserActivity> UserActivities { get; set; }
         internal virtual DbSet<UserActivityItem> UserActivityItems { get; set; }
+        internal virtual DbSet<ListOfValue> ListOfValues { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -168,6 +169,14 @@ namespace WarehouseManagementSystem.Infrastructure.Data
             {
                 t.Property(x => x.Type)
                     .HasConversion(new EnumToStringConverter<ContactType>());
+
+                t.HasMany(x => x.Cities)
+                  .WithOne(x => x.Contact);
+            });
+
+            modelBuilder.Entity<ContactCity>(t =>
+            {
+                t.HasKey(x => x.RowId);
             });
 
             modelBuilder.Entity<Lineup>(t =>
