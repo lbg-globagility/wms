@@ -1,6 +1,7 @@
 ﻿Imports Microsoft.Extensions.DependencyInjection
 Imports MySql.Data.MySqlClient
 Imports WarehouseManagementSystem.Core.Enums
+Imports WarehouseManagementSystem.Core.Interfaces
 Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
 
 Public Class AddLineUpForm
@@ -17,8 +18,12 @@ Public Class AddLineUpForm
     Public addlineupdeliverycue As Boolean = False
     Private _agents As List(Of WarehouseManagementSystem.Core.Entities.Contact)
     Private _helpers As List(Of WarehouseManagementSystem.Core.Entities.Contact)
+    Private _systemOwner As WarehouseManagementSystem.Core.Entities.SystemOwner
 
     Private Async Sub AddLineUpForm_Load(sender As Object, e As EventArgs) Handles Me.Load
+        Dim _systemOwnerService = GetRequiredService(Of ISystemOwnerService)()
+        _systemOwner = Await _systemOwnerService.GetCurrentSystemOwnerEntityAsync()
+
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
@@ -387,7 +392,7 @@ Public Class AddLineUpForm
 #End Region
 
     Private Async Function GetAgentsAsync() As Task
-        Dim contactDataService = MainServiceProvider.GetRequiredService(Of IContactDataService)
+        Dim contactDataService = GetRequiredService(Of IContactDataService)()
 
         _agents = Await contactDataService.GetAgentsAsync(organizationId:=Z_OrganizationID)
 
@@ -400,7 +405,7 @@ Public Class AddLineUpForm
     End Function
 
     Private Async Function GetHelpersAsync() As Task
-        Dim contactDataService = MainServiceProvider.GetRequiredService(Of IContactDataService)
+        Dim contactDataService = GetRequiredService(Of IContactDataService)()
 
         _helpers = Await contactDataService.GetHelpersAsync(organizationId:=Z_OrganizationID)
 
@@ -868,7 +873,7 @@ Public Class AddLineUpForm
         End Try
     End Sub
 
-    Private Sub pbAddTruckShiftInfo_Click(sender As Object, e As EventArgs) Handles pbAddTruckShiftInfo.Click
+    Private Async Sub pbAddTruckShiftInfo_Click(sender As Object, e As EventArgs) Handles pbAddTruckShiftInfo.Click
         Me.Cursor = Cursors.WaitCursor
         Try
             If globalpositionid <> 0 Then
@@ -885,13 +890,31 @@ Public Class AddLineUpForm
                 MessageBox.Show("System cannot find the position of the user.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                 Exit Try
             End If
-            Dim addtruckshiftlinkform As New AddTruckShiftForm
-            addtruckshiftlinkform.ShowInTaskbar = False
-            addtruckshiftlinkform.ShowDialog()
-            If addtruckshiftlinkform.addtruckshiftcue = legit Then
-                globalautocompleteTruckShiftInfo(cboTruckShiftInfo, Me)
-                globalautopopulateTruckShiftInfo(cboTruckShiftInfo, Me)
-                addlineupdeliverycue = legit
+
+            If IsThurston Then
+                Dim form As New AddTruckForm
+                If form.ShowDialog() = DialogResult.OK Then
+                    Dim truckId = form.TruckId
+
+                    Using cmd As New MySqlCommand(commandText:=$"INSERT INTO `deliverytruckshifts` (`OrganizationID`, `Created`, `CreatedBy`, `LastUpd`, `LastUpdBy`, `DeliveryTruckID`, `ShiftID`, `Status`) VALUES ({Z_OrganizationID}, CURRENT_TIMESTAMP(), 1, CURRENT_TIMESTAMP(), 1, {truckId}, 1, 'Active');
+") _
+                        With {.Connection = connection}
+                        If cmd.Connection.State = ConnectionState.Closed Then Await cmd.Connection.OpenAsync()
+                        Await cmd.ExecuteNonQueryAsync()
+                    End Using
+
+                    globalautocompleteTruckShiftInfo(cboTruckShiftInfo, Me)
+                    globalautopopulateTruckShiftInfo(cboTruckShiftInfo, Me)
+                End If
+            Else
+                Dim addtruckshiftlinkform As New AddTruckShiftForm
+                addtruckshiftlinkform.ShowInTaskbar = False
+                addtruckshiftlinkform.ShowDialog()
+                If addtruckshiftlinkform.addtruckshiftcue = legit Then
+                    globalautocompleteTruckShiftInfo(cboTruckShiftInfo, Me)
+                    globalautopopulateTruckShiftInfo(cboTruckShiftInfo, Me)
+                    addlineupdeliverycue = legit
+                End If
             End If
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
@@ -1281,4 +1304,9 @@ Public Class AddLineUpForm
         End If
     End Sub
 
+    Private ReadOnly Property IsThurston As Boolean
+        Get
+            Return _systemOwner.IsThurston
+        End Get
+    End Property
 End Class

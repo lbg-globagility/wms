@@ -23,7 +23,7 @@ namespace WarehouseManagementSystem.Core.Entities
             string value)
         {
             OrganizationID = organizationId;
-            CreatedBy = userId;
+            AuditUser(userId);
             ColorName = name;
             ColorValue = value;
         }

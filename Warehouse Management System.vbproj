@@ -342,6 +342,12 @@
     <Compile Include="Menu\Accounts\AccountsForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Menu\CustomerOrder\CustomerOrderInventoryLocationSelectorDialog.Designer.vb">
+      <DependentUpon>CustomerOrderInventoryLocationSelectorDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Menu\CustomerOrder\CustomerOrderInventoryLocationSelectorDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Menu\InventoryLocationsForm.Designer.vb">
       <DependentUpon>InventoryLocationsForm.vb</DependentUpon>
     </Compile>
@@ -381,6 +387,7 @@
     </Compile>
     <Compile Include="Menu\Products\ProductColorSizeModel.vb" />
     <Compile Include="Menu\Products\ProductImageConfigParser.vb" />
+    <Compile Include="Menu\Products\ProductImageManager.vb" />
     <Compile Include="Menu\Products\ProductImportation.vb" />
     <Compile Include="Menu\Products\ProductSelectorDialog.Designer.vb">
       <DependentUpon>ProductSelectorDialog.vb</DependentUpon>
@@ -434,6 +441,12 @@
       <DependentUpon>StockAdjustmentForm.vb</DependentUpon>
     </Compile>
     <Compile Include="Menu\StockAdjustmentForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Menu\StockAdjustmentForm2.Designer.vb">
+      <DependentUpon>StockAdjustmentForm2.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Menu\StockAdjustmentForm2.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Menu\StockTransferForm.Designer.vb">
@@ -873,6 +886,12 @@
     <Compile Include="SubForms\EditCartonForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="SubForms\EditContactForm.Designer.vb">
+      <DependentUpon>EditContactForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="SubForms\EditContactForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="SubForms\EditRackShelfColumnForm.Designer.vb">
       <DependentUpon>EditRackShelfColumnForm.vb</DependentUpon>
     </Compile>
@@ -977,6 +996,9 @@
     <EmbeddedResource Include="Menu\Accounts\AccountsForm.resx">
       <DependentUpon>AccountsForm.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Menu\CustomerOrder\CustomerOrderInventoryLocationSelectorDialog.resx">
+      <DependentUpon>CustomerOrderInventoryLocationSelectorDialog.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Menu\InventoryLocationsForm.resx">
       <DependentUpon>InventoryLocationsForm.vb</DependentUpon>
     </EmbeddedResource>
@@ -1021,6 +1043,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Menu\StockAdjustmentForm.resx">
       <DependentUpon>StockAdjustmentForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Menu\StockAdjustmentForm2.resx">
+      <DependentUpon>StockAdjustmentForm2.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Menu\StockTransferForm.resx">
       <DependentUpon>StockTransferForm.vb</DependentUpon>
@@ -1263,6 +1288,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SubForms\EditCartonForm.resx">
       <DependentUpon>EditCartonForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SubForms\EditContactForm.resx">
+      <DependentUpon>EditContactForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SubForms\EditRackShelfColumnForm.resx">
       <DependentUpon>EditRackShelfColumnForm.vb</DependentUpon>

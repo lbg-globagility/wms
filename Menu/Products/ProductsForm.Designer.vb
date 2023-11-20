@@ -54,12 +54,6 @@ Partial Class ProductsForm
         Me.txtPage = New System.Windows.Forms.TextBox()
         Me.txtPageNo = New System.Windows.Forms.TextBox()
         Me.dgProductList = New DevComponents.DotNetBar.Controls.DataGridViewX()
-        Me.p_rowid = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.p_seqno = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.p_productcode = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.p_brandname = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.p_category = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.p_company = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Label16 = New System.Windows.Forms.Label()
         Me.gbSearch = New System.Windows.Forms.GroupBox()
         Me.Label21 = New System.Windows.Forms.Label()
@@ -107,6 +101,7 @@ Partial Class ProductsForm
         Me.rsc_qtyorderable = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Label15 = New System.Windows.Forms.Label()
         Me.gbProductImage = New System.Windows.Forms.GroupBox()
+        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.btnDownloadImage = New System.Windows.Forms.Button()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.txtImagePath = New System.Windows.Forms.TextBox()
@@ -173,6 +168,13 @@ Partial Class ProductsForm
         Me.msSave = New System.Windows.Forms.ToolStripMenuItem()
         Me.lblsavemsg = New System.Windows.Forms.Label()
         Me.errProvider = New System.Windows.Forms.ErrorProvider(Me.components)
+        Me.p_rowid = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.p_seqno = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.p_productcode = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.p_brandname = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.p_category = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.p_company = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.PhotoResourceLocation = New System.Windows.Forms.DataGridViewTextBoxColumn()
         CType(Me.pbClose, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
@@ -192,6 +194,7 @@ Partial Class ProductsForm
         Me.gbRackShelfColumn.SuspendLayout()
         CType(Me.dgRackShelfColumn, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.gbProductImage.SuspendLayout()
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbProductImage, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.gbProductSize.SuspendLayout()
         CType(Me.dgProductSizes, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -397,7 +400,7 @@ Partial Class ProductsForm
         DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
         Me.dgProductList.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
         Me.dgProductList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgProductList.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.p_rowid, Me.p_seqno, Me.p_productcode, Me.p_brandname, Me.p_category, Me.p_company})
+        Me.dgProductList.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.p_rowid, Me.p_seqno, Me.p_productcode, Me.p_brandname, Me.p_category, Me.p_company, Me.PhotoResourceLocation})
         DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
         DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window
         DataGridViewCellStyle2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -414,45 +417,6 @@ Partial Class ProductsForm
         Me.dgProductList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.dgProductList.Size = New System.Drawing.Size(324, 295)
         Me.dgProductList.TabIndex = 18
-        '
-        'p_rowid
-        '
-        Me.p_rowid.HeaderText = "rowid"
-        Me.p_rowid.Name = "p_rowid"
-        Me.p_rowid.ReadOnly = True
-        Me.p_rowid.Visible = False
-        '
-        'p_seqno
-        '
-        Me.p_seqno.HeaderText = "Seq. No."
-        Me.p_seqno.Name = "p_seqno"
-        Me.p_seqno.ReadOnly = True
-        Me.p_seqno.Width = 50
-        '
-        'p_productcode
-        '
-        Me.p_productcode.HeaderText = "Product Code"
-        Me.p_productcode.Name = "p_productcode"
-        Me.p_productcode.ReadOnly = True
-        Me.p_productcode.Width = 120
-        '
-        'p_brandname
-        '
-        Me.p_brandname.HeaderText = "Brand Name"
-        Me.p_brandname.Name = "p_brandname"
-        Me.p_brandname.ReadOnly = True
-        '
-        'p_category
-        '
-        Me.p_category.HeaderText = "Category"
-        Me.p_category.Name = "p_category"
-        Me.p_category.ReadOnly = True
-        '
-        'p_company
-        '
-        Me.p_company.HeaderText = "Vendor Name"
-        Me.p_company.Name = "p_company"
-        Me.p_company.ReadOnly = True
         '
         'Label16
         '
@@ -618,7 +582,7 @@ Partial Class ProductsForm
         Me.gbInventoryLocation.Controls.Add(Me.Label3)
         Me.gbInventoryLocation.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.gbInventoryLocation.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.gbInventoryLocation.Location = New System.Drawing.Point(419, 150)
+        Me.gbInventoryLocation.Location = New System.Drawing.Point(419, 258)
         Me.gbInventoryLocation.Name = "gbInventoryLocation"
         Me.gbInventoryLocation.Size = New System.Drawing.Size(397, 175)
         Me.gbInventoryLocation.TabIndex = 7
@@ -748,7 +712,7 @@ Partial Class ProductsForm
         Me.gbRackShelfColumn.Controls.Add(Me.Label15)
         Me.gbRackShelfColumn.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.gbRackShelfColumn.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.gbRackShelfColumn.Location = New System.Drawing.Point(419, 328)
+        Me.gbRackShelfColumn.Location = New System.Drawing.Point(419, 456)
         Me.gbRackShelfColumn.Name = "gbRackShelfColumn"
         Me.gbRackShelfColumn.Size = New System.Drawing.Size(397, 314)
         Me.gbRackShelfColumn.TabIndex = 8
@@ -963,6 +927,7 @@ Partial Class ProductsForm
         '
         'gbProductImage
         '
+        Me.gbProductImage.Controls.Add(Me.PictureBox1)
         Me.gbProductImage.Controls.Add(Me.btnDownloadImage)
         Me.gbProductImage.Controls.Add(Me.Label2)
         Me.gbProductImage.Controls.Add(Me.txtImagePath)
@@ -973,9 +938,18 @@ Partial Class ProductsForm
         Me.gbProductImage.ForeColor = System.Drawing.SystemColors.ControlText
         Me.gbProductImage.Location = New System.Drawing.Point(581, 5)
         Me.gbProductImage.Name = "gbProductImage"
-        Me.gbProductImage.Size = New System.Drawing.Size(235, 139)
+        Me.gbProductImage.Size = New System.Drawing.Size(264, 247)
         Me.gbProductImage.TabIndex = 4
         Me.gbProductImage.TabStop = False
+        '
+        'PictureBox1
+        '
+        Me.PictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.PictureBox1.Location = New System.Drawing.Point(94, 21)
+        Me.PictureBox1.Name = "PictureBox1"
+        Me.PictureBox1.Size = New System.Drawing.Size(159, 215)
+        Me.PictureBox1.TabIndex = 398
+        Me.PictureBox1.TabStop = False
         '
         'btnDownloadImage
         '
@@ -1062,7 +1036,7 @@ Partial Class ProductsForm
         Me.gbProductSize.Controls.Add(Me.txtSKU)
         Me.gbProductSize.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.gbProductSize.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.gbProductSize.Location = New System.Drawing.Point(175, 150)
+        Me.gbProductSize.Location = New System.Drawing.Point(175, 258)
         Me.gbProductSize.Name = "gbProductSize"
         Me.gbProductSize.Size = New System.Drawing.Size(240, 492)
         Me.gbProductSize.TabIndex = 6
@@ -1338,7 +1312,7 @@ Partial Class ProductsForm
         Me.gbProductColor.Controls.Add(Me.Label6)
         Me.gbProductColor.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.gbProductColor.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.gbProductColor.Location = New System.Drawing.Point(6, 150)
+        Me.gbProductColor.Location = New System.Drawing.Point(6, 258)
         Me.gbProductColor.Name = "gbProductColor"
         Me.gbProductColor.Size = New System.Drawing.Size(165, 492)
         Me.gbProductColor.TabIndex = 5
@@ -1461,7 +1435,7 @@ Partial Class ProductsForm
         Me.gbProductInformation.ForeColor = System.Drawing.SystemColors.ControlText
         Me.gbProductInformation.Location = New System.Drawing.Point(6, 5)
         Me.gbProductInformation.Name = "gbProductInformation"
-        Me.gbProductInformation.Size = New System.Drawing.Size(569, 139)
+        Me.gbProductInformation.Size = New System.Drawing.Size(569, 247)
         Me.gbProductInformation.TabIndex = 3
         Me.gbProductInformation.TabStop = False
         '
@@ -1714,6 +1688,52 @@ Partial Class ProductsForm
         '
         Me.errProvider.ContainerControl = Me
         '
+        'p_rowid
+        '
+        Me.p_rowid.HeaderText = "rowid"
+        Me.p_rowid.Name = "p_rowid"
+        Me.p_rowid.ReadOnly = True
+        Me.p_rowid.Visible = False
+        '
+        'p_seqno
+        '
+        Me.p_seqno.HeaderText = "Seq. No."
+        Me.p_seqno.Name = "p_seqno"
+        Me.p_seqno.ReadOnly = True
+        Me.p_seqno.Width = 50
+        '
+        'p_productcode
+        '
+        Me.p_productcode.HeaderText = "Product Code"
+        Me.p_productcode.Name = "p_productcode"
+        Me.p_productcode.ReadOnly = True
+        Me.p_productcode.Width = 120
+        '
+        'p_brandname
+        '
+        Me.p_brandname.HeaderText = "Brand Name"
+        Me.p_brandname.Name = "p_brandname"
+        Me.p_brandname.ReadOnly = True
+        '
+        'p_category
+        '
+        Me.p_category.HeaderText = "Category"
+        Me.p_category.Name = "p_category"
+        Me.p_category.ReadOnly = True
+        '
+        'p_company
+        '
+        Me.p_company.HeaderText = "Vendor Name"
+        Me.p_company.Name = "p_company"
+        Me.p_company.ReadOnly = True
+        '
+        'PhotoResourceLocation
+        '
+        Me.PhotoResourceLocation.HeaderText = "ProductPhotoColumn"
+        Me.PhotoResourceLocation.Name = "PhotoResourceLocation"
+        Me.PhotoResourceLocation.ReadOnly = True
+        Me.PhotoResourceLocation.Visible = False
+        '
         'ProductsForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -1756,6 +1776,7 @@ Partial Class ProductsForm
         CType(Me.dgRackShelfColumn, System.ComponentModel.ISupportInitialize).EndInit()
         Me.gbProductImage.ResumeLayout(False)
         Me.gbProductImage.PerformLayout()
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.pbProductImage, System.ComponentModel.ISupportInitialize).EndInit()
         Me.gbProductSize.ResumeLayout(False)
         Me.gbProductSize.PerformLayout()
@@ -1873,23 +1894,10 @@ Partial Class ProductsForm
     Friend WithEvents pbAutoAddB As System.Windows.Forms.PictureBox
     Friend WithEvents pbAutoAddD As System.Windows.Forms.PictureBox
     Friend WithEvents tsColors As System.Windows.Forms.ToolStripButton
-    Friend WithEvents p_rowid As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents p_seqno As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents p_productcode As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents p_brandname As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents p_category As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents p_company As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents txtSumQtyAllocated As System.Windows.Forms.TextBox
     Friend WithEvents Label20 As System.Windows.Forms.Label
     Friend WithEvents lblSeasonCode As System.Windows.Forms.Label
     Friend WithEvents txtEditSeasonCode As System.Windows.Forms.TextBox
-    Friend WithEvents s_rowid As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents s_sizes As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents s_seasoncode As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents s_totalqtyavailable As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents s_totalqtyallocated As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents s_totalqtyreserve As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents s_active As System.Windows.Forms.DataGridViewCheckBoxColumn
     Friend WithEvents il_rowid As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents il_seqno As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents il_locationname As System.Windows.Forms.DataGridViewTextBoxColumn
@@ -1910,4 +1918,19 @@ Partial Class ProductsForm
     Friend WithEvents rsc_qtyorderable As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents lblSKU2 As Label
     Friend WithEvents txtSKU2 As TextBox
+    Friend WithEvents PictureBox1 As PictureBox
+    Friend WithEvents s_rowid As DataGridViewTextBoxColumn
+    Friend WithEvents s_sizes As DataGridViewTextBoxColumn
+    Friend WithEvents s_seasoncode As DataGridViewTextBoxColumn
+    Friend WithEvents s_totalqtyavailable As DataGridViewTextBoxColumn
+    Friend WithEvents s_totalqtyallocated As DataGridViewTextBoxColumn
+    Friend WithEvents s_totalqtyreserve As DataGridViewTextBoxColumn
+    Friend WithEvents s_active As DataGridViewCheckBoxColumn
+    Friend WithEvents p_rowid As DataGridViewTextBoxColumn
+    Friend WithEvents p_seqno As DataGridViewTextBoxColumn
+    Friend WithEvents p_productcode As DataGridViewTextBoxColumn
+    Friend WithEvents p_brandname As DataGridViewTextBoxColumn
+    Friend WithEvents p_category As DataGridViewTextBoxColumn
+    Friend WithEvents p_company As DataGridViewTextBoxColumn
+    Friend WithEvents PhotoResourceLocation As DataGridViewTextBoxColumn
 End Class

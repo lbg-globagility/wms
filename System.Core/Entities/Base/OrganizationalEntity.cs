@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace WarehouseManagementSystem.Core.Entities.Base
+﻿namespace WarehouseManagementSystem.Core.Entities.Base
 {
     public abstract class OrganizationalEntity : BaseEntity
     {

@@ -552,7 +552,9 @@ Module myModule
     Sub globalautocompleteTruckShiftInfo(ByVal globalicombobox As ComboBox, ByVal globalformname As Object)
         Try
             Dim truckshiftinfo As New AutoCompleteStringCollection
-            Dim cmd As New MySqlCommand("SELECT COALESCE(CONCAT(COALESCE(dt.truckname,''),' - ',COALESCE(dt.truckno,''),' / ',COALESCE(s.shiftname,'')),'') AS 'truckshiftinfo' FROM deliverytruckshifts dts " &
+            'COALESCE(CONCAT(COALESCE(dt.truckname,''),' - ',COALESCE(dt.truckno,''),' / ',COALESCE(s.shiftname,'')),'')
+            'CONCAT_WS(' - ', dt.YearAndModel, dt.truckno, s.shiftname)
+            Dim cmd As New MySqlCommand("SELECT CONCAT_WS(' - ', dt.YearAndModel, dt.PlateNo) AS 'truckshiftinfo' FROM deliverytruckshifts dts " &
                             "LEFT JOIN deliverytrucks dt ON dts.deliverytruckid = dt.rowid LEFT JOIN shifts s ON dts.shiftid = s.rowid WHERE dts.organizationid = " & Z_OrganizationID & " AND dts.`status` = 'Active' GROUP BY dts.rowid ", globalconn)
             Dim ds As New DataSet
             Dim da As New MySqlDataAdapter(cmd)
@@ -1020,7 +1022,9 @@ Module myModule
         Try
             globalicombobox.Items.Clear()
             If globalconn.State = ConnectionState.Open Then globalconn.Close()
-            Dim sql1 As String = "SELECT COALESCE(dt.plateno,'') AS 'truckshiftinfo' FROM deliverytruckshifts dts " &
+            'COALESCE(CONCAT(COALESCE(dt.truckname,''),' - ',COALESCE(dt.truckno,''),' / ',COALESCE(s.shiftname,'')),'')
+            'CONCAT_WS(' - ', dt.truckname, dt.truckno, s.shiftname)
+            Dim sql1 As String = "SELECT CONCAT_WS(' - ', dt.YearAndModel, dt.PlateNo) AS 'truckshiftinfo' FROM deliverytruckshifts dts " &
                     "LEFT JOIN deliverytrucks dt ON dts.deliverytruckid = dt.rowid LEFT JOIN shifts s ON dts.shiftid = s.rowid WHERE dts.organizationid = " & Z_OrganizationID & " AND dts.`status` = 'Active' GROUP BY dts.rowid ORDER BY dt.truckname,s.shiftname DESC "
             If globalconn.State = ConnectionState.Closed Then globalconn.Open()
             Dim cmd1 As New MySqlCommand(sql1, globalconn)
@@ -2868,7 +2872,8 @@ Module myModule
             globaldeliverytruckshiftid = 0 : globaldeliverytruckid = 0
             If globalconn.State = ConnectionState.Open Then globalconn.Close()
             Dim dtGid As New DataTable
-            dtGid = getDataTableForSQL("SELECT COALESCE(dts.rowid,0),COALESCE(dts.deliverytruckid,0)  FROM deliverytruckshifts dts LEFT JOIN deliverytrucks dt ON dts.deliverytruckid = dt.rowid LEFT JOIN shifts s ON dts.shiftid = s.rowid WHERE COALESCE(CONCAT(COALESCE(dt.truckname,''),' - ',COALESCE(dt.truckno,''),' / ',COALESCE(s.shiftname,'')),'') = """ & globaltruckshiftinfo & """ AND dts.organizationid = " & Z_OrganizationID & " " & globalistatuscondition & " ")
+            'COALESCE(CONCAT(COALESCE(dt.truckname,''),' - ',COALESCE(dt.truckno,''),' / ',COALESCE(s.shiftname,'')),'')
+            dtGid = getDataTableForSQL("SELECT COALESCE(dts.rowid,0),COALESCE(dts.deliverytruckid,0)  FROM deliverytruckshifts dts LEFT JOIN deliverytrucks dt ON dts.deliverytruckid = dt.rowid LEFT JOIN shifts s ON dts.shiftid = s.rowid WHERE CONCAT_WS(' - ', dt.YearAndModel, dt.PlateNo) = '" & globaltruckshiftinfo & "' AND dts.organizationid = " & Z_OrganizationID & " " & globalistatuscondition & " ")
             If dtGid.Rows.Count <> 0 Then
                 globaldeliverytruckshiftid = dtGid.Rows(0)(0)
                 globaldeliverytruckid = dtGid.Rows(0)(1)
@@ -3349,4 +3354,7 @@ Module myModule
 
 #End Region
 
+    Public Function GetRequiredService(Of T)() As T
+        Return MainServiceProvider.GetRequiredService(Of T)
+    End Function
 End Module

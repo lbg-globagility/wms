@@ -28,7 +28,7 @@ namespace WarehouseManagementSystem.Core.Entities
             int productId)
         {
             OrganizationID = organizationId;
-            CreatedBy = userId;
+            AuditUser(userId);
             ColorID = colorId;
             ProductID = productId;
         }

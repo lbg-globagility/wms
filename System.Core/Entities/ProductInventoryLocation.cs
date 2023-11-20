@@ -40,7 +40,7 @@ namespace WarehouseManagementSystem.Core.Entities
             decimal? unitPrice = null)
         {
             OrganizationID = organizationId;
-            CreatedBy = userId;
+            AuditUser(userId);
             ProductColorSizeID = productColorSizeId;
             UnitPrice = unitPrice;
             UnitOfMeasure = unitOfMeasure;

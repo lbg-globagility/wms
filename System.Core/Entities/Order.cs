@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using WarehouseManagementSystem.Core.Dto;
 using WarehouseManagementSystem.Core.Entities.Base;
 using WarehouseManagementSystem.Core.Enums;
 
 namespace WarehouseManagementSystem.Core.Entities
 {
     [Table("orders")]
-    public partial class Order : AuditableEntity
+    public partial class Order : CreateUpdateAuditableEntity
     {
         public int? RelatedOrderID { get; set; }
         public int? InventoryLocationID { get; set; }
@@ -22,11 +21,11 @@ namespace WarehouseManagementSystem.Core.Entities
         public string OrderNumber { get; set; }
         public string ReferenceNumber { get; set; }
         public string DRNumber { get; set; }
-        public DateTime OrderDate { get; set; }
-        public DateTime TargetDate { get; set; }
-        public DateTime EndDate { get; set; }
-        public DateTime DateSubmitted { get; set; }
-        public DateTime? TimeArrived { get; set; }
+        public DateTime? OrderDate { get; set; }
+        public DateTime? TargetDate { get; set; }
+        public DateTime? EndDate { get; set; }
+        public DateTime? DateSubmitted { get; set; }
+        public TimeSpan? TimeArrived { get; set; }
         public string CustomerName { get; set; }
         public string CustomerAddress { get; set; }
         public string DeliveryHours { get; set; }
@@ -41,6 +40,7 @@ namespace WarehouseManagementSystem.Core.Entities
         public decimal? TotalDownPayment { get; set; }
         public decimal? TotalPayment { get; set; }
         public decimal? TotalBalance { get; set; }
+        public int? AgentID { get; set; }
     }
 
     public partial class Order
@@ -50,10 +50,7 @@ namespace WarehouseManagementSystem.Core.Entities
         }
 
         public virtual ICollection<OrderItem> OrderItems { get; set; }
-        
         public virtual ICollection<Lineup> Lineups { get; set; }
-        public int? AgentId { get; set; }
-
         public virtual ICollection<MovementHistory> MovementHistories { get; set; }
         public bool HasMovementHistories => MovementHistories?.Any(t => (t.QtyToApply ?? 0) != 0) ?? false;
         public bool HasNewMovementHistories => MovementHistories?.Any(t => t.IsNewEntity) ?? false;
@@ -63,7 +60,16 @@ namespace WarehouseManagementSystem.Core.Entities
         public bool IsReceivingReportType => OrderType == OrderType.RR;
         public bool IsStockAdjustType => OrderType == OrderType.SA;
         public bool IsStockTransferType => OrderType == OrderType.ST;
-        public int OrderNumberInt => int.Parse(OrderNumber);
+
+        public int OrderNumberInt
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(OrderNumber)) return 0;
+
+                return int.Parse(OrderNumber);
+            }
+        }
 
         public bool IsOpen => Status == OrderStatus.Open;
         public bool IsClose => Status == OrderStatus.Close;
@@ -87,22 +93,23 @@ namespace WarehouseManagementSystem.Core.Entities
             DateTime orderDate)
         {
             OrganizationID = organizationId;
-            CreatedBy = userId;
+            AuditUser(userId);
             OrderType = orderType;
             OrderNumber = orderNumber;
             Status = status;
             OrderDate = orderDate;
         }
 
-        public static Order NewStockTransferOrder(int organizationId,
-            int userId,
-            string orderNumber,
-            OrderStatus status,
-            DateTime orderDate) => new Order(organizationId: organizationId,
-                userId: userId,
-                orderType: OrderType.ST,
-                orderNumber: orderNumber,
-                status: status,
-                orderDate: orderDate);
+        public string ViewName => IsCustomerOrderType ? View.CUSTOMER_ORDERS_VIEW :
+            IsPurchaseOrderType ? View.PURCHASE_ORDERS_VIEW :
+            IsReceivingReportType ? View.RECEIVING_VIEW :
+            IsStockAdjustType ? View.STOCK_ADJUSTMENT_VIEW :
+            IsStockTransferType ? View.STOCK_TRANSFER_VIEW : string.Empty;
+
+        public string OrderTypeText => IsCustomerOrderType ? "Customer Order" :
+            IsPurchaseOrderType ? "Purchase Order" :
+            IsReceivingReportType ? "Receiving Report" :
+            IsStockAdjustType ? "Stock Adjust" :
+            IsStockTransferType ? "Stock Transfer" : string.Empty;
     }
 }

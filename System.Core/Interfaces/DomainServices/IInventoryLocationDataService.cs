@@ -1,5 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using WarehouseManagementSystem.Core.Entities;
+using WarehouseManagementSystem.Core.Enums;
 using WarehouseManagementSystem.Core.Interfaces.DomainServices.Base;
 
 namespace WarehouseManagementSystem.Core.Interfaces.DomainServices
@@ -11,5 +13,7 @@ namespace WarehouseManagementSystem.Core.Interfaces.DomainServices
         Task PopulateWithProductColorSizesAsync(int inventoryLocationId, int userId);
 
         Task PopulateAllInventoryLocationWithProductColorSizesAsync(int organizationId, int userId, string[] productCodes);
+
+        Task<List<InventoryLocation>> GetManyByTypeAsync(int organizationId, InventoryLocationType inventoryLocationType);
     }
 }

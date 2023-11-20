@@ -1194,9 +1194,9 @@ Module mdlStoredProcedure
                          ByVal Status As String,
                          ByVal MaxCapacity As String,
                          ByVal YearAndModel As String,
-                         ByVal globalformname As Object) As Boolean
+                         ByVal globalformname As Object) As Integer
 
-        Dim F_return As Boolean = False
+        Dim F_return As Integer = 0
         Dim SQL_command As MySqlCommand =
                   New MySqlCommand("I_deliverytrucks", connection)
         With SQL_command
@@ -1217,7 +1217,10 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("I_MaxCapacity", MaxCapacity)
                 .Parameters.AddWithValue("I_YearAndModel", YearAndModel)
                 .CommandType = CommandType.StoredProcedure
-                F_return = (.ExecuteNonQuery > 0)
+                Dim fs = New MySqlParameter("returnValue", MySqlDbType.Int32) With {.Direction = ParameterDirection.ReturnValue}
+                .Parameters.Add(fs)
+                .ExecuteNonQuery()
+                F_return = CInt(fs.Value)
             Catch ex As Exception
                 MsgBox(getErrExcptn(ex, globalformname.Name))
             Finally
@@ -1806,7 +1809,7 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("I_DeliveryHours", DeliveryHours)
                 .Parameters.AddWithValue("I_CustomerAddress", CustomerAddress)
                 .Parameters.AddWithValue("I_InventoryLocationID", If(InventoryLocationId Is Nothing, DBNull.Value, InventoryLocationId))
-                .Parameters.AddWithValue("I_AgentID", If(AgentId Is Nothing, DBNull.Value, AgentId))
+                .Parameters.AddWithValue("I_AgentID", If(AgentId Is Nothing OrElse AgentId = 0, DBNull.Value, AgentId))
                 .Parameters.AddWithValue("I_CustomerOrderType", CustomerOrderType)
                 .Parameters("newOrdersID").Direction = ParameterDirection.ReturnValue
                 globaldatareader = .ExecuteReader
@@ -1868,7 +1871,7 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_DeliveryHours", DeliveryHours)
                 .Parameters.AddWithValue("U_CustomerAddress", CustomerAddress)
                 .Parameters.AddWithValue("U_InventoryLocationID", If(InventoryLocationId Is Nothing, DBNull.Value, InventoryLocationId))
-                .Parameters.AddWithValue("U_AgentID", If(AgentId Is Nothing, DBNull.Value, AgentId))
+                .Parameters.AddWithValue("U_AgentID", If(AgentId Is Nothing OrElse AgentId = 0, DBNull.Value, AgentId))
                 .Parameters.AddWithValue("U_CustomerOrderType", CustomerOrderType)
 
                 .CommandType = CommandType.StoredProcedure

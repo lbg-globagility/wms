@@ -4,11 +4,10 @@ using WarehouseManagementSystem.Core.Entities;
 using WarehouseManagementSystem.Core.Interfaces;
 using WarehouseManagementSystem.Core.Interfaces.DomainServices;
 using WarehouseManagementSystem.Core.Interfaces.Repositories;
-using WarehouseManagementSystem.Infrastructure.Data.Services.Base;
 
 namespace WarehouseManagementSystem.Infrastructure.Data.Services
 {
-    public class ProductInventoryLocationDataService : BaseSavableDataService<ProductInventoryLocation>, IProductInventoryLocationDataService
+    public class ProductInventoryLocationDataService : AuditableDataService<ProductInventoryLocation>, IProductInventoryLocationDataService
     {
         private readonly IProductInventoryLocationRepository _productInventoryLocationRepository;
 
@@ -28,5 +27,9 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
 
         public async Task<List<ProductInventoryLocation>> GetByInventoryLocationIdAsync(int inventoryLocationId) =>
             await _productInventoryLocationRepository.GetByInventoryLocationIdAsync(inventoryLocationId: inventoryLocationId);
+
+        protected override string CreateUserActivitySuffixIdentifier(ProductInventoryLocation entity) => string.Empty;
+
+        protected override string GetUserActivityName(ProductInventoryLocation entity) => _entityName;
     }
 }
