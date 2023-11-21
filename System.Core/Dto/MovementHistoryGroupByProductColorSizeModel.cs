@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using WarehouseManagementSystem.Core.Entities;
-using WarehouseManagementSystem.Core.Exceptions;
 
 namespace WarehouseManagementSystem.Core.Dto
 {
