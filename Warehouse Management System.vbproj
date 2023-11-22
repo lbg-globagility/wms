@@ -666,9 +666,9 @@
     </Compile>
     <Compile Include="Print\VerifyPickListPrint.vb">
       <DependentUpon>VerifyPickListPrint.rpt</DependentUpon>
-      <SubType>Component</SubType>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Print\VerifyPickListPrintB.vb">
       <AutoGen>True</AutoGen>
@@ -1361,6 +1361,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SubForms\LineupDelivery\ViewEditLineUpDeliveryForm.resx">
       <DependentUpon>ViewEditLineUpDeliveryForm.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
