@@ -11,20 +11,16 @@ namespace WarehouseManagementSystem.Core.Entities.Base
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime? LastUpd { get; private set; }
 
-        public int? CreatedBy { get; set; }
+        public int? CreatedBy { get; private set; }
 
-        public int? LastUpdBy { get; set; }
+        public int? LastUpdBy { get; private set; }
 
-        public void AuditUser(int currentlyLoggedInUserId)
+        public void AuditUser(int userId)
         {
             if (IsNewEntity)
-            {
-                CreatedBy = currentlyLoggedInUserId;
-            }
+                CreatedBy = userId;
             else
-            {
-                LastUpdBy = currentlyLoggedInUserId;
-            }
+                LastUpdBy = userId;
         }
     }
 }

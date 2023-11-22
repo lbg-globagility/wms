@@ -135,6 +135,8 @@ Public Class ReferencesForm
             cboMadeIn.Text = ""
             txtCBM.Text = ""
             cboTruckStatus.Text = ""
+            txtYearModel.Text = ""
+            txtMaxCapacity.Text = ""
             cboBrandName.SelectedItem = Nothing
             cboMadeIn.SelectedItem = Nothing
             cboTruckStatus.SelectedItem = Nothing
@@ -784,8 +786,8 @@ Public Class ReferencesForm
     Sub getTruckInfo(ByVal itruckid As Integer)
         Try
             Dim dtTin As New DataTable
-            dtTin = getDataTableForSQL("SELECT COALESCE(dt.truckno,''),COALESCE(dt.plateno,''),COALESCE(dt.truckname,''),COALESCE(dt.brandname,'')," & _
-                            "COALESCE(dt.madein,''),COALESCE(dt.cbm,0.0),COALESCE(dt.`status`,'') FROM deliverytrucks dt WHERE dt.rowid = " & itruckid & " ")
+            dtTin = getDataTableForSQL("SELECT COALESCE(dt.truckno,''),COALESCE(dt.plateno,''),COALESCE(dt.truckname,''),COALESCE(dt.brandname,'')," &
+                            "COALESCE(dt.madein,''),COALESCE(dt.cbm,0.0),COALESCE(dt.`status`,''),COALESCE(dt.`maxcapacity`,''),COALESCE(dt.`yearandmodel`,'') FROM deliverytrucks dt WHERE dt.rowid = " & itruckid & " ")
             If dtTin.Rows.Count <> 0 Then
                 txtTruckNo.Text = dtTin.Rows(0)(0)
                 txtPlateNo.Text = dtTin.Rows(0)(1)
@@ -794,6 +796,8 @@ Public Class ReferencesForm
                 cboMadeIn.Text = dtTin.Rows(0)(4)
                 txtCBM.Text = dtTin.Rows(0)(5)
                 cboTruckStatus.Text = dtTin.Rows(0)(6)
+                txtMaxCapacity.Text = dtTin.Rows(0)(7)
+                txtYearModel.Text = dtTin.Rows(0)(8)
             Else
                 clearTruckInfo()
             End If
@@ -1716,6 +1720,7 @@ Public Class ReferencesForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgVendors_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgVendors.CellClick
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2004,7 +2009,7 @@ Public Class ReferencesForm
                         U_Shifts(CInt(dgShifts.CurrentRow.Cells("sh_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, txtShiftName.Text, dtpTimeFrom.Value, dtpTimeTo.Value, cboShiftStatus.Text, Me)
                     End If
                 ElseIf cboReferenceType.Text = "Trucks" Then
-                    U_DeliveryTrucks(CInt(dgTrucks.CurrentRow.Cells("tr_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, txtTruckName.Text, txtPlateNo.Text, cboBrandName.Text, cboMadeIn.Text, If(IsNumeric(txtCBM.Text), CDec(txtCBM.Text), 0.0), cboShiftStatus.Text, Me)
+                    U_DeliveryTrucks(CInt(dgTrucks.CurrentRow.Cells("tr_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, txtTruckName.Text, txtPlateNo.Text, cboBrandName.Text, cboMadeIn.Text, If(IsNumeric(txtCBM.Text), CDec(txtCBM.Text), 0.0), cboTruckStatus.Text, txtMaxCapacity.Text, txtYearModel.Text, Me)
                 ElseIf cboReferenceType.Text = "Truck And Shift" Then
                     getDeliveryTruckIDB(cboTruckInfo.Text, Me)
                     rfdeliverytruckid = globaldeliverytruckid

@@ -5,6 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Entities\MovementHistory\**" />
+    <EmbeddedResource Remove="Entities\MovementHistory\**" />
+    <None Remove="Entities\MovementHistory\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\System.Utilities\WarehouseManagementSystem.Utilities.csproj" />
   </ItemGroup>
 

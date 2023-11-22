@@ -1,0 +1,3 @@
+
+ALTER TABLE `orders`
+	CHANGE COLUMN `Comments` `Comments` VARCHAR(255) NULL DEFAULT NULL COLLATE 'latin1_swedish_ci' AFTER `DeliveryHours`;

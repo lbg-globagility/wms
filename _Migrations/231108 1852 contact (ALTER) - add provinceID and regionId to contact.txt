@@ -1,0 +1,3 @@
+ALTER TABLE `contacts`
+	ADD COLUMN `RegionID` INT(11) NULL AFTER `EmployeeFlg`,
+	ADD COLUMN `ProvinceID` INT(11) NULL AFTER `RegionID`;

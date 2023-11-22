@@ -20,6 +20,8 @@ namespace WarehouseManagementSystem.Core.Entities
         public LineupStatus Status { get; set; }
         public string Comments { get; set; }
         public string DeliveryAddress { get; set; }
+        public DateTime? ConfirmedDeliveryTimeStamp { get; private set; }
+        public Order Order { get; set; }
     }
 
     public partial class Lineup
@@ -27,5 +29,10 @@ namespace WarehouseManagementSystem.Core.Entities
         public bool IsConfirmedDelivery => Status == LineupStatus.ConfirmedDelivery;
         public bool IsDelivered => Status == LineupStatus.Delivered;
         public bool IsCancelled => Status == LineupStatus.Cancelled;
+
+        public void SetConfirmedDeliveryTimeStamp(DateTime? dateTime)
+        {
+            ConfirmedDeliveryTimeStamp = dateTime;
+        }
     }
 }

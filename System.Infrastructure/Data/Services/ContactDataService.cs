@@ -5,11 +5,10 @@ using WarehouseManagementSystem.Core.Enums;
 using WarehouseManagementSystem.Core.Interfaces;
 using WarehouseManagementSystem.Core.Interfaces.DomainServices;
 using WarehouseManagementSystem.Core.Interfaces.Repositories;
-using WarehouseManagementSystem.Infrastructure.Data.Services.Base;
 
 namespace WarehouseManagementSystem.Infrastructure.Data.Services
 {
-    public class ContactDataService : BaseSavableDataService<Contact>, IContactDataService
+    public class ContactDataService : AuditableDataService<Contact>, IContactDataService
     {
         private readonly IContactRepository _contactRepository;
 
@@ -38,5 +37,9 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
         public async Task<List<Contact>> GetPackersAsync(int organizationId) => await _contactRepository.GetManyByTypeAsync(organizationId: organizationId, contactType: ContactType.Packer);
 
         public async Task<List<Contact>> GetPickersAsync(int organizationId) => await _contactRepository.GetManyByTypeAsync(organizationId: organizationId, contactType: ContactType.Picker);
+
+        protected override string CreateUserActivitySuffixIdentifier(Contact entity) => $" with `name` '{entity.FullNameLastNameFirst}' and `status` is '{entity.Status}'";
+
+        protected override string GetUserActivityName(Contact entity) => _entityName;
     }
 }

@@ -104,6 +104,9 @@
     <Reference Include="EPPlus, Version=4.5.3.3, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
       <HintPath>packages\EPPlus.4.5.3.3\lib\net40\EPPlus.dll</HintPath>
     </Reference>
+    <Reference Include="INIFileParser, Version=2.5.2.0, Culture=neutral, PublicKeyToken=79af7b307b65cf3c, processorArchitecture=MSIL">
+      <HintPath>packages\ini-parser.2.5.2\lib\net20\INIFileParser.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=2.0.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>packages\log4net.2.0.15\lib\net45\log4net.dll</HintPath>
     </Reference>
@@ -228,6 +231,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Import Include="Microsoft.VisualBasic" />
@@ -338,6 +342,12 @@
     <Compile Include="Menu\Accounts\AccountsForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Menu\CustomerOrder\CustomerOrderInventoryLocationSelectorDialog.Designer.vb">
+      <DependentUpon>CustomerOrderInventoryLocationSelectorDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Menu\CustomerOrder\CustomerOrderInventoryLocationSelectorDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Menu\InventoryLocationsForm.Designer.vb">
       <DependentUpon>InventoryLocationsForm.vb</DependentUpon>
     </Compile>
@@ -362,13 +372,29 @@
     <Compile Include="Menu\PickListForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Menu\ProductInventoryLocation\RackShelfColumnModel.vb" />
+    <Compile Include="Menu\ProductInventoryLocation\RackShelfColumnSelectorDialog.Designer.vb">
+      <DependentUpon>RackShelfColumnSelectorDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Menu\ProductInventoryLocation\RackShelfColumnSelectorDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Menu\Products\ImportProductForm.Designer.vb">
       <DependentUpon>ImportProductForm.vb</DependentUpon>
     </Compile>
     <Compile Include="Menu\Products\ImportProductForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Menu\Products\ProductColorSizeModel.vb" />
+    <Compile Include="Menu\Products\ProductImageConfigParser.vb" />
+    <Compile Include="Menu\Products\ProductImageManager.vb" />
     <Compile Include="Menu\Products\ProductImportation.vb" />
+    <Compile Include="Menu\Products\ProductSelectorDialog.Designer.vb">
+      <DependentUpon>ProductSelectorDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Menu\Products\ProductSelectorDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Menu\Products\ProductsForm.Designer.vb">
       <DependentUpon>ProductsForm.vb</DependentUpon>
     </Compile>
@@ -417,10 +443,22 @@
     <Compile Include="Menu\StockAdjustmentForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Menu\StockAdjustmentForm2.Designer.vb">
+      <DependentUpon>StockAdjustmentForm2.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Menu\StockAdjustmentForm2.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Menu\StockTransferForm.Designer.vb">
       <DependentUpon>StockTransferForm.vb</DependentUpon>
     </Compile>
     <Compile Include="Menu\StockTransferForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Menu\StockTransferForm2.Designer.vb">
+      <DependentUpon>StockTransferForm2.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Menu\StockTransferForm2.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Menu\VerifyPickListForm.Designer.vb">
@@ -872,6 +910,12 @@
     <Compile Include="SubForms\EditCartonForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="SubForms\EditContactForm.Designer.vb">
+      <DependentUpon>EditContactForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="SubForms\EditContactForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="SubForms\EditRackShelfColumnForm.Designer.vb">
       <DependentUpon>EditRackShelfColumnForm.vb</DependentUpon>
     </Compile>
@@ -882,6 +926,12 @@
       <DependentUpon>ImportProductsForm.vb</DependentUpon>
     </Compile>
     <Compile Include="SubForms\ImportProductsForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SubForms\LineupDelivery\DeliveryTimestampTrackingForm.Designer.vb">
+      <DependentUpon>DeliveryTimestampTrackingForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="SubForms\LineupDelivery\DeliveryTimestampTrackingForm.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="SubForms\NewRR.Designer.vb">
@@ -920,10 +970,10 @@
     <Compile Include="SubForms\ViewCartonsForm.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SubForms\ViewEditLineUpDeliveryForm.Designer.vb">
+    <Compile Include="SubForms\LineupDelivery\ViewEditLineUpDeliveryForm.Designer.vb">
       <DependentUpon>ViewEditLineUpDeliveryForm.vb</DependentUpon>
     </Compile>
-    <Compile Include="SubForms\ViewEditLineUpDeliveryForm.vb">
+    <Compile Include="SubForms\LineupDelivery\ViewEditLineUpDeliveryForm.vb">
       <SubType>Form</SubType>
     </Compile>
   </ItemGroup>
@@ -970,6 +1020,9 @@
     <EmbeddedResource Include="Menu\Accounts\AccountsForm.resx">
       <DependentUpon>AccountsForm.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Menu\CustomerOrder\CustomerOrderInventoryLocationSelectorDialog.resx">
+      <DependentUpon>CustomerOrderInventoryLocationSelectorDialog.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Menu\InventoryLocationsForm.resx">
       <DependentUpon>InventoryLocationsForm.vb</DependentUpon>
     </EmbeddedResource>
@@ -982,8 +1035,14 @@
     <EmbeddedResource Include="Menu\PickListForm.resx">
       <DependentUpon>PickListForm.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Menu\ProductInventoryLocation\RackShelfColumnSelectorDialog.resx">
+      <DependentUpon>RackShelfColumnSelectorDialog.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Menu\Products\ImportProductForm.resx">
       <DependentUpon>ImportProductForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Menu\Products\ProductSelectorDialog.resx">
+      <DependentUpon>ProductSelectorDialog.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Menu\Products\ProductsForm.resx">
       <DependentUpon>ProductsForm.vb</DependentUpon>
@@ -1009,8 +1068,14 @@
     <EmbeddedResource Include="Menu\StockAdjustmentForm.resx">
       <DependentUpon>StockAdjustmentForm.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Menu\StockAdjustmentForm2.resx">
+      <DependentUpon>StockAdjustmentForm2.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Menu\StockTransferForm.resx">
       <DependentUpon>StockTransferForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Menu\StockTransferForm2.resx">
+      <DependentUpon>StockTransferForm2.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Menu\VerifyPickListForm.resx">
       <DependentUpon>VerifyPickListForm.vb</DependentUpon>
@@ -1220,6 +1285,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SubForms\AddLineUpForm.resx">
       <DependentUpon>AddLineUpForm.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="SubForms\AddPackerForm.resx">
       <DependentUpon>AddPackerForm.vb</DependentUpon>
@@ -1263,11 +1329,17 @@
     <EmbeddedResource Include="SubForms\EditCartonForm.resx">
       <DependentUpon>EditCartonForm.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="SubForms\EditContactForm.resx">
+      <DependentUpon>EditContactForm.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SubForms\EditRackShelfColumnForm.resx">
       <DependentUpon>EditRackShelfColumnForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SubForms\ImportProductsForm.resx">
       <DependentUpon>ImportProductsForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SubForms\LineupDelivery\DeliveryTimestampTrackingForm.resx">
+      <DependentUpon>DeliveryTimestampTrackingForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SubForms\NewRR.resx">
       <DependentUpon>NewRR.vb</DependentUpon>
@@ -1287,13 +1359,16 @@
     <EmbeddedResource Include="SubForms\ViewCartonsForm.resx">
       <DependentUpon>ViewCartonsForm.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SubForms\ViewEditLineUpDeliveryForm.resx">
+    <EmbeddedResource Include="SubForms\LineupDelivery\ViewEditLineUpDeliveryForm.resx">
       <DependentUpon>ViewEditLineUpDeliveryForm.vb</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />
     <None Include="Import Templates\product-color-size-template.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="log4.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="My Project\app.manifest" />
@@ -1369,7 +1444,9 @@
       <Name>WarehouseManagementSystem.Utilities</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="UserControls\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -7,5 +7,7 @@ namespace WarehouseManagementSystem.Core.Interfaces.Repositories
     public interface IListOfValueRepository : ISavableRepository<ListOfValue>
     {
         Task<List<ListOfValue>> GetManyByTypeAsync(int organizationId, string type);
+
+        Task<List<ListOfValue>> GetManyByParentIdAsync(int organizationId, string parentId);
     }
 }

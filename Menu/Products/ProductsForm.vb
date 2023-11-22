@@ -1,5 +1,7 @@
 ﻿Imports System.IO
 Imports MySql.Data.MySqlClient
+Imports WarehouseManagementSystem.Core.Interfaces
+Imports WarehouseManagementSystem.Desktop.Utilities
 
 Public Class ProductsForm
     Dim manager As New sqlModule.Manager
@@ -20,8 +22,24 @@ Public Class ProductsForm
     Dim pfproductid, pfcategoryid, pfbrandid, pfcompanyid, pfskuid, pfSKU2id, pfproductcolorsizeid As Integer
     Dim pftotalqtyavailable, pftotalqtyallocated, pftotalqtyreserve As Integer
     Dim simplesearchphrase, commonphrase, pagefilter1, pagefilter2, pagefilter3 As String
+    Private _systemOwner As WarehouseManagementSystem.Core.Entities.SystemOwner
+    Private _picp As ProductImageConfigParser
+    Private _pim As ProductImageManager
+    Public Const VIEW_NAME As String = "Products"
 
-    Private Sub ProductManagementForm_Load(sender As Object, e As EventArgs) Handles Me.Load
+    Private Async Sub ProductManagementForm_Load(sender As Object, e As EventArgs) Handles Me.Load
+        Dim _systemOwnerService = GetRequiredService(Of ISystemOwnerService)()
+        _systemOwner = Await _systemOwnerService.GetCurrentSystemOwnerEntityAsync()
+
+        _picp = New ProductImageConfigParser(filePath:=CONFIG_FILE_PATH)
+
+        _pim = New ProductImageManager(_picp,
+            organizationId:=Z_OrganizationID,
+            userId:=Z_UserID,
+            viewName:=VIEW_NAME)
+
+        PictureBox1.Visible = IsThurston
+
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
@@ -621,6 +639,7 @@ Public Class ProductsForm
                     dgProductList.Item(p_brandname.Index, n).Value = reader1(2)
                     dgProductList.Item(p_category.Index, n).Value = reader1(3)
                     dgProductList.Item(p_company.Index, n).Value = reader1(4)
+                    dgProductList.Item(PhotoResourceLocation.Index, n).Value = _pim.GetPhotoUrl(productCode:=reader1(1))
                     seqno = seqno + 1
                     n = n + 1
                 End If
@@ -763,6 +782,7 @@ Public Class ProductsForm
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
             conn1.Close()
+            PictureBox1.LoadAsync(url:=dgProductList.CurrentRow?.Cells(PhotoResourceLocation.Name).Value)
         End Try
     End Sub
 
@@ -805,7 +825,7 @@ Public Class ProductsForm
         Try
             dgProductSizes.Rows.Clear()
             If conn1.State = ConnectionState.Closed Then conn1.Open()
-            Dim sql1 As String = "SELECT pcs.rowid,COALESCE(pcs.size,''),COALESCE(pcs.status,''),COALESCE(pcs.seasoncode,'') FROM productcolorsizes pcs WHERE pcs.organizationid = " & Z_OrganizationID & " AND pcs.productcolorid = " & iproductcolorid & " ORDER BY pcs.size ASC "
+            Dim sql1 As String = $"SELECT pcs.rowid,COALESCE(pcs.size,''),COALESCE(pcs.status,''),COALESCE(pcs.seasoncode,''), p.ProductCode FROM productcolorsizes pcs INNER JOIN productcolors pc ON pc.RowID=pcs.ProductColorID INNER JOIN products p ON p.RowID=pc.ProductID WHERE pcs.organizationid = {Z_OrganizationID} AND pcs.productcolorid = {iproductcolorid} ORDER BY pcs.size ASC;"
             Dim cmd1 As New MySqlCommand(sql1, conn1)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             Dim n As Integer = 0
@@ -838,6 +858,7 @@ Public Class ProductsForm
             If dgProductSizes.Rows.Count <> 0 Then
                 dgProductSizes.CurrentRow.Selected = False
             End If
+
             colorCoding()
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
@@ -1266,6 +1287,10 @@ Public Class ProductsForm
         End Try
     End Sub
 
+    Private Sub dgProductList_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgProductList.CellContentClick
+
+    End Sub
+
     Private Sub dgProductList_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgProductList.CellClick
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1478,7 +1503,7 @@ Public Class ProductsForm
         Me.Cursor = Cursors.Default
     End Sub
 
-    Private Sub btnChangeImage_Click(sender As Object, e As EventArgs) Handles btnChangeImage.Click
+    Private Async Sub btnChangeImage_Click(sender As Object, e As EventArgs) Handles btnChangeImage.Click
         Me.Cursor = Cursors.WaitCursor
         Try
             getPositionID(Me)
@@ -1502,9 +1527,33 @@ Public Class ProductsForm
                 Exit Try
             End If
             fileOpener.Filter = "Image files (*.bmp;*.jpg;*.jpeg;*.png)|*.bmp;*.jpg;*.jpeg;*.png"
+
+            If IsThurston Then fileOpener.Filter = "Image files (*.jpg)|*.jpg"
+
             If fileOpener.ShowDialog() = Windows.Forms.DialogResult.OK Then
                 pbProductImage.Image = Image.FromFile(fileOpener.FileName)
                 txtImagePath.Text = fileOpener.FileName
+
+                If dgProductList.CurrentRow IsNot Nothing AndAlso
+                    IsThurston Then
+
+                    Dim errorCallback = Sub()
+                                            Me.Cursor = Cursors.Default
+                                        End Sub
+
+                    Await FunctionUtils.TryCatchFunctionAsync("Change Product Image",
+                        action:=
+                        Async Function()
+                            Await _pim.ChangeAsync(productId:=CInt(dgProductList.CurrentRow?.Cells("p_rowid").Value),
+                                sourceFileName:=fileOpener.FileName)
+
+                            ReloadPictureBox()
+
+                            errorCallback()
+                        End Function,
+                        errorCallBack:=errorCallback)
+                End If
+
             End If
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
@@ -1514,7 +1563,36 @@ Public Class ProductsForm
         Me.Cursor = Cursors.Default
     End Sub
 
-    Private Sub btnDeleteImage_Click(sender As Object, e As EventArgs) Handles btnDeleteImage.Click
+    Private Sub ReloadPictureBox()
+        PictureBox1.LoadAsync(url:=dgProductList.CurrentRow?.Cells(PhotoResourceLocation.Name).Value)
+        PictureBox1.Refresh()
+    End Sub
+
+    Private Async Sub btnDeleteImage_Click(sender As Object, e As EventArgs) Handles btnDeleteImage.Click
+        If dgProductList.CurrentRow IsNot Nothing AndAlso
+            IsThurston Then
+
+            Dim errorCallback = Sub()
+                                    ReloadPictureBox()
+                                    Me.Cursor = Cursors.Default
+                                End Sub
+
+            Await FunctionUtils.TryCatchFunctionAsync("Delete Product Image",
+                action:=
+                    Async Function()
+
+                        If MessageBox.Show("Would you like to permanently delete this image?",
+                            "Deleting",
+                            MessageBoxButtons.YesNo,
+                            MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then _
+                                Await _pim.DeleteAsync(productId:=CInt(dgProductList.CurrentRow?.Cells("p_rowid").Value))
+
+                        errorCallback()
+                    End Function,
+                errorCallBack:=errorCallback)
+            Return
+        End If
+
         Me.Cursor = Cursors.WaitCursor
         Try
             If Not IsDBNull(productimage) Then
@@ -1544,13 +1622,13 @@ Public Class ProductsForm
                     U_ProductImage(CInt(dgProductList.CurrentRow.Cells("p_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, DBNull.Value, Me)
                     If myModule.systemerrorfound = False Then
                         myBalloon("Successfully Deleted Image", "Delete", lblsavemsg, -15, -65)
-                        pbProductImage.Image = Nothing
+
                     End If
                 End If
             End If
             If txtImagePath.Text <> "" Then
                 txtImagePath.Clear()
-                pbProductImage.Image = Nothing
+
             End If
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
@@ -1560,7 +1638,26 @@ Public Class ProductsForm
         Me.Cursor = Cursors.Default
     End Sub
 
-    Private Sub btnDownloadImage_Click(sender As Object, e As EventArgs) Handles btnDownloadImage.Click
+    Private Async Sub btnDownloadImage_Click(sender As Object, e As EventArgs) Handles btnDownloadImage.Click
+        If dgProductList.CurrentRow IsNot Nothing AndAlso
+            IsThurston Then
+
+            Dim errorCallback = Sub()
+                                    Me.Cursor = Cursors.Default
+                                End Sub
+
+            Await FunctionUtils.TryCatchFunctionAsync("Download Product Image",
+                action:=
+                    Async Function()
+
+                        Await _pim.DownloadAsync(productId:=CInt(dgProductList.CurrentRow?.Cells("p_rowid").Value))
+
+                        errorCallback()
+                    End Function,
+                errorCallBack:=errorCallback)
+            Return
+        End If
+
         Me.Cursor = Cursors.WaitCursor
         Try
             If Not IsDBNull(productimage) Then
@@ -1625,6 +1722,10 @@ Public Class ProductsForm
             conn.Close()
         End Try
         Me.Cursor = Cursors.Default
+    End Sub
+
+    Private Sub dgProductSizes_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgProductSizes.CellContentClick
+
     End Sub
 
     'Private Sub txtProductCode_TextChanged(sender As Object, e As EventArgs) Handles txtProductCode.TextChanged
@@ -2534,5 +2635,11 @@ Public Class ProductsForm
     End Sub
 
 #End Region
+
+    Private ReadOnly Property IsThurston As Boolean
+        Get
+            Return _systemOwner.IsThurston
+        End Get
+    End Property
 
 End Class

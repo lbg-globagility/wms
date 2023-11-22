@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using WarehouseManagementSystem.Core.Entities.Base;
@@ -32,6 +33,9 @@ namespace WarehouseManagementSystem.Core.Entities
         public string CivilStatus { get; set; }
         public string Status { get; set; }
         public string Comments { get; set; }
+        public int? ProvinceID { get; set; }
+        public int? RegionID { get; set; }
+        public List<ContactCity> Cities { get; set; }
         //public char? EmployeeFlg { get; set; }
     }
 
@@ -39,6 +43,31 @@ namespace WarehouseManagementSystem.Core.Entities
     {
         private Contact()
         { }
+
+        public Contact(int organizationId,
+            string lastName,
+            string firstName,
+            ContactType type,
+            string workPhone,
+            string email,
+            string comments,
+            int regionId,
+            int provinceId,
+            List<ContactCity> cities,
+            string status = "Active")
+        {
+            OrganizationID = organizationId;
+            LastName = lastName;
+            FirstName = firstName;
+            Type = type;
+            WorkPhone = workPhone;
+            EmailAddress = email;
+            Comments = comments;
+            RegionID = regionId;
+            ProvinceID = provinceId;
+            Status = status;
+            Cities = cities;
+        }
 
         public Contact(int organizationId,
             string lastName,
@@ -83,6 +112,9 @@ namespace WarehouseManagementSystem.Core.Entities
             string workPhone,
             string email = "",
             string comments = "",
+            int regionId = 0,
+            int provinceId = 0,
+            List<ContactCity> cities = null,
             string status = "Active") => new Contact(organizationId: organizationId,
                 lastName: lastName,
                 firstName: firstName,
@@ -90,6 +122,24 @@ namespace WarehouseManagementSystem.Core.Entities
                 workPhone: workPhone,
                 email: email,
                 comments: comments,
-                status: status);
+                regionId: regionId,
+                provinceId: provinceId,
+                status: status,
+                cities: cities);
+
+        public static Contact BlankAgent(int organizationId)
+        {
+            var blankAgent = new Contact(organizationId: organizationId,
+                lastName: "NO AGENT",
+                firstName: string.Empty,
+                type: ContactType.Agent,
+                workPhone: string.Empty,
+                email: string.Empty,
+                comments: string.Empty);
+            
+            blankAgent.RowID = 0;
+
+            return blankAgent;
+        }
     }
 }

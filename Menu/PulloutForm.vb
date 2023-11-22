@@ -2018,8 +2018,8 @@ Public Class PulloutForm
                         errProvider.SetError(txtPullOutNo, "Pull-Out No. has been created already, please type a new one.")
                         Exit Try
                     End If
-                    M_I_OrdersA(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, pocustomerid, txtPullOutNo.Text, "Pull-Out", dtpPullOutDate.Value, Now.Date, _
-                           cboCustomerName.Text, txtComments.Text, txtStatus.Text, Math.Round(poitotalprice, 2), Me)
+                    M_I_OrdersA(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, pocustomerid, txtPullOutNo.Text, "Pull-Out", dtpPullOutDate.Value, Now.Date,
+                           cboCustomerName.Text, txtComments.Text, txtStatus.Text, Math.Round(poitotalprice, 2), "", Me)
                     poorderid = globalorderidsp
                     If dgPullOutItems.Rows.Count <> 0 Then
                         For a = 0 To dgPullOutItems.Rows.Count - 1

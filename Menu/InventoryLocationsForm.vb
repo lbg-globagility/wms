@@ -3,6 +3,7 @@
 Imports Microsoft.Extensions.DependencyInjection
 Imports MySql.Data.MySqlClient
 Imports WarehouseManagementSystem.Core.Enums
+Imports WarehouseManagementSystem.Core.Interfaces
 Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
 Imports WarehouseManagementSystem.Desktop.Utilities
 
@@ -20,8 +21,12 @@ Public Class InventoryLocationsForm
     Dim simplesearchphrase, commonphrase, pagefilter1, pagefilter2, pagefilter3 As String
     Dim spagenum, countpagenum, numofpages, validpages, rcspagenum, rcscountpagenum, rcsnumofpages, rcsvalidpages As Integer
     Dim iltotalqtyavailable, iltotalqtyreserve, iltotalqtydamage, iltotalqtyallocated, iltotalqtyorderable, ilinventorylocationid, iladdressid, ilrackshelfcolumnid As Integer
+    Private _systemOwner As WarehouseManagementSystem.Core.Entities.SystemOwner
 
-    Private Sub InventoryLocationsForm_Load(sender As Object, e As EventArgs) Handles Me.Load
+    Private Async Sub InventoryLocationsForm_Load(sender As Object, e As EventArgs) Handles Me.Load
+        Dim _systemOwnerService = GetRequiredService(Of ISystemOwnerService)()
+        _systemOwner = Await _systemOwnerService.GetCurrentSystemOwnerEntityAsync()
+
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
@@ -193,13 +198,13 @@ Public Class InventoryLocationsForm
         End Try
     End Sub
 
-    Sub enableGB(ByVal enable1 As Boolean, ByVal enable2 As Boolean, ByVal enable3 As Boolean, ByVal enable4 As Boolean)
+    Private Sub enableGB(ByVal enable1 As Boolean, ByVal enable2 As Boolean, ByVal enable3 As Boolean, ByVal enable4 As Boolean)
         Try
             gbSearch.Enabled = enable1
             gbInventoryLocationList.Enabled = enable1
             gbInventoryLocationInformation.Enabled = enable2
-            gbRackShelfColumn.Enabled = enable3
-            gbProducts.Enabled = enable4
+            'gbRackShelfColumn.Enabled = enable3
+            'gbProducts.Enabled = enable4
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -728,6 +733,15 @@ Public Class InventoryLocationsForm
     End Sub
 
     Sub autopopulateLocationTypeB(ByVal icombobox As ComboBox)
+        If IsThurston Then
+            Dim inventoryLocationTypes = [Enum].GetValues(GetType(InventoryLocationType))
+            icombobox.Items.Clear()
+            For Each item In inventoryLocationTypes
+                icombobox.Items.Add(item)
+            Next
+            Return
+        End If
+
         Try
             icombobox.Items.Clear()
             If conn.State = ConnectionState.Open Then conn.Close()
@@ -1018,7 +1032,7 @@ Public Class InventoryLocationsForm
         Try
             dgProducts.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT pil.rowid,COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(c.colorname,''),COALESCE(pcs.size,''),COALESCE(pil.totalavailableqty,0),COALESCE(pil.totalreserveqty,0),COALESCE(pil.totaldamageqty,0),COALESCE(pcs.sku,''),COALESCE(pcs.seasoncode,'')," &
+            Dim sql1 As String = "SELECT pil.rowid,COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(c.colorname,''),COALESCE(pcs.size,''),IFNULL(pil.UnitOfMeasure, ''),COALESCE(pil.totalavailableqty,0),COALESCE(pil.totalreserveqty,0),COALESCE(pil.totaldamageqty,0),COALESCE(pcs.sku,''),COALESCE(pcs.sku2,''),COALESCE(pcs.seasoncode,'')," &
                         "COALESCE(pil.totalallocatedqty,0) FROM productinventorylocation pil LEFT JOIN productcolorsizes pcs ON pil.productcolorsizeid = pcs.rowid LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN colors c ON pc.colorid = c.rowid " &
                         "LEFT JOIN products p ON pc.productid = p.rowid WHERE pil.organizationid = " & Z_OrganizationID & " AND pil.rackshelfcolumnid = " & irackshelfcolumnid & " ORDER BY p.productcode ASC,c.colorname ASC "
             Dim cmd1 As New MySqlCommand(sql1, conn)
@@ -1034,13 +1048,15 @@ Public Class InventoryLocationsForm
                     dgProducts.Item(p_productcode.Index, n).Value = reader1(2)
                     dgProducts.Item(p_colorname.Index, n).Value = reader1(3)
                     dgProducts.Item(p_size.Index, n).Value = reader1(4)
-                    dgProducts.Item(p_qtyavailable.Index, n).Value = reader1(5)
-                    dgProducts.Item(p_qtyreserve.Index, n).Value = reader1(6)
-                    dgProducts.Item(p_qtydamage.Index, n).Value = reader1(7)
-                    dgProducts.Item(p_sku.Index, n).Value = reader1(8)
-                    dgProducts.Item(p_seasoncode.Index, n).Value = reader1(9)
-                    dgProducts.Item(p_qtyallocated.Index, n).Value = reader1(10)
-                    dgProducts.Item(p_qtyorderable.Index, n).Value = CInt(reader1(5)) - CInt(reader1(10))
+                    dgProducts.Item(p_unitOfMeasure.Index, n).Value = reader1(5)
+                    dgProducts.Item(p_qtyavailable.Index, n).Value = reader1(6)
+                    dgProducts.Item(p_qtyreserve.Index, n).Value = reader1(7)
+                    dgProducts.Item(p_qtydamage.Index, n).Value = reader1(8)
+                    dgProducts.Item(p_sku.Index, n).Value = reader1(9)
+                    dgProducts.Item(p_sku2.Index, n).Value = reader1(10)
+                    dgProducts.Item(p_seasoncode.Index, n).Value = reader1(11)
+                    dgProducts.Item(p_qtyallocated.Index, n).Value = reader1(12)
+                    dgProducts.Item(p_qtyorderable.Index, n).Value = CInt(reader1(7)) - CInt(reader1(12))
                     seqno = seqno + 1
                     n = n + 1
                 End If
@@ -1397,6 +1413,10 @@ Public Class InventoryLocationsForm
         Me.Cursor = Cursors.Default
     End Sub
 
+    Private Sub dgInventoryLocationList_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgInventoryLocationList.CellContentClick
+
+    End Sub
+
     Private Sub dgInventoryLocationList_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgInventoryLocationList.CellClick
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1412,6 +1432,7 @@ Public Class InventoryLocationsForm
                 displayInventoryLocationInformation(CInt(dgInventoryLocationList.CurrentRow.Cells("il_rowid").Value))
                 rcspagenum = neutralpage : rcsnumofpages = startingpage
                 displayRackShelfColumn(CInt(dgInventoryLocationList.CurrentRow.Cells("il_rowid").Value), rcspagenum)
+                LoadProductColorSizesBasedOnRackShelfColumn()
                 pageSetupRCS(CInt(dgInventoryLocationList.CurrentRow.Cells("il_rowid").Value))
                 txtPageNoRCS.Text = "" & rcsnumofpages & " of " & rcsvalidpages & " " : txtLocationName.Focus()
             End If
@@ -1421,6 +1442,15 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
         Me.Cursor = Cursors.Default
+    End Sub
+
+    Private Sub LoadProductColorSizesBasedOnRackShelfColumn()
+        If Not IsThurston Then Return
+
+        Dim row = dgRackShelfColumn.Rows.OfType(Of DataGridViewRow).FirstOrDefault()
+
+        If row Is Nothing Then Return
+        displayProducts(irackshelfcolumnid:=CInt(row.Cells(rsc_rowid.Name).Value))
     End Sub
 
     Private Sub dgInventoryLocationList_KeyUp(sender As Object, e As KeyEventArgs) Handles dgInventoryLocationList.KeyUp
@@ -2036,7 +2066,7 @@ Public Class InventoryLocationsForm
         Return Async Function()
                    Await FunctionUtils.TryCatchFunctionAsync("Save changes Inventory Location",
                 Async Function()
-                    Dim inventoryLocationDataService = MainServiceProvider.GetRequiredService(Of IInventoryLocationDataService)
+                    Dim inventoryLocationDataService = GetRequiredService(Of IInventoryLocationDataService)()
 
                     Await inventoryLocationDataService.PopulateWithProductColorSizesAsync(
                         inventoryLocationName:=txtLocationName.Text.Trim,
@@ -2498,5 +2528,11 @@ Public Class InventoryLocationsForm
     End Sub
 
 #End Region
+
+    Private ReadOnly Property IsThurston As Boolean
+        Get
+            Return _systemOwner.IsThurston
+        End Get
+    End Property
 
 End Class

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using WarehouseManagementSystem.Core.Entities.Base;
 using WarehouseManagementSystem.Core.Enums;
 
@@ -39,9 +40,10 @@ namespace WarehouseManagementSystem.Core.Entities
             int inventoryLocationId)
         {
             OrganizationID = organizationId;
-            CreatedBy = userId;
+            AuditUser(userId);
             InventoryLocationID = inventoryLocationId;
             Status = RackShelfColumnStatus.Active;
+            PickOrderNo = (PickOrderNo ?? 0) == 0 ? 1 : PickOrderNo;
         }
 
         public virtual InventoryLocation InventoryLocation { get; set; }
@@ -55,10 +57,22 @@ namespace WarehouseManagementSystem.Core.Entities
 
         public void AddProductInventoryLocations(List<ProductInventoryLocation> productInventoryLocations)
         {
+            if (productInventoryLocations == null) return;
+
             if (ProductInventoryLocations == null) ProductInventoryLocations = new List<ProductInventoryLocation>();
 
             foreach (var productInventoryLocation in productInventoryLocations)
-                ProductInventoryLocations.Add(productInventoryLocation);
+            {
+                var exitingProductInventoryLocation = ProductInventoryLocations?
+                    .FirstOrDefault(t => t.ProductColorSizeID == productInventoryLocation.ProductColorSizeID);
+
+                if (exitingProductInventoryLocation == null)
+                    ProductInventoryLocations.Add(productInventoryLocation);
+                else
+                    continue;
+            }
         }
+
+        public int LogicalAvailableQty => AvailableQty ?? 0 - ReservedQty ?? 0;
     }
 }

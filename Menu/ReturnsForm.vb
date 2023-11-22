@@ -1,18 +1,11 @@
-﻿Imports MySql.Data.MySqlClient
-Imports System.IO
-Imports System.Windows.Forms
-Imports CrystalDecisions.CrystalReports.Engine
-Imports System.Linq
-Imports System.Collections
-Imports System.Collections.Generic
-Imports System.Data
-Imports System.Diagnostics
-Imports System.Runtime.InteropServices
-Imports System.Text.RegularExpressions
+﻿Imports Microsoft.Extensions.DependencyInjection
+Imports MySql.Data.MySqlClient
+Imports WarehouseManagementSystem.Core.Interfaces.Repositories
+
 Public Class ReturnsForm
     Dim manager As New sqlModule.Manager
-    Dim conn As New MySqlConnection(Manager.GetConnString)
-    Dim conn1 As New MySqlConnection(Manager.GetConnString)
+    Dim conn As New MySqlConnection(manager.GetConnString)
+    Dim conn1 As New MySqlConnection(manager.GetConnString)
     Dim sqlcmd As MySqlCommand
     Dim sqlrd As MySqlDataReader
     Dim printdataset As New DataSetA.SetDDataTable
@@ -26,6 +19,7 @@ Public Class ReturnsForm
     Dim pototalqtyordered, poqtyordered, poitotalqtyordered, poiqtyordered As Integer
     Dim pocustomerid, poorderid, poproductcolorsizesid, poproductid, poproductbundleid As Integer
     Dim simplesearchphrase, datephrase, commonphrase, pagefilter1, pagefilter2, pagefilter3, pagefilter4 As String
+
     Private Sub ReturnsForm_Load(sender As Object, e As EventArgs) Handles Me.Load
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -43,6 +37,7 @@ Public Class ReturnsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub ReturnsForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -54,16 +49,22 @@ Public Class ReturnsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #Region "Functions"
+
     Sub callAutoComplete()
         globalautocompleteAccountName(cboCustomerName, "Customer", "AND a.`status` = 'Active'", Me)
     End Sub
+
     Sub callAutoPopulate()
         autopopulatecboSearch()
         autopopulatecboBy()
         globalautopopulateAccountName(cboCustomerName, "Customer", "AND a.`status` = 'Active'", Me)
+        autopopulateDeliveryLineUp()
     End Sub
+
 #Region "Clear/Enable/Visible"
+
     Sub clearfields()
         Try
             cue = ""
@@ -85,6 +86,7 @@ Public Class ReturnsForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearRightPage()
         Try
             cue = ""
@@ -103,6 +105,7 @@ Public Class ReturnsForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearSearchItems()
         Try
             txtSimpleSearch.Text = ""
@@ -122,6 +125,7 @@ Public Class ReturnsForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearcboSearch()
         Try
             txtPage.Text = ""
@@ -139,6 +143,7 @@ Public Class ReturnsForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearPullOutInformation()
         Try
             txtPullOutNo.Text = ""
@@ -148,12 +153,14 @@ Public Class ReturnsForm
             txtRRNo.Text = ""
             cboCustomerName.SelectedItem = Nothing
             dtpPullOutDate.Value = Now.Date
+            cboDRNo.SelectedItem = Nothing
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
             conn.Close()
         End Try
     End Sub
+
     Sub clearAddProductA()
         Try
             cboByPhrase.Text = ""
@@ -166,6 +173,7 @@ Public Class ReturnsForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearAddProductB()
         Try
             txtOverallQty.Text = ""
@@ -176,6 +184,7 @@ Public Class ReturnsForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearPullOutItems()
         Try
             chkOtherInfo.Checked = fraud
@@ -188,6 +197,7 @@ Public Class ReturnsForm
             conn.Close()
         End Try
     End Sub
+
     Sub clearDatagrids()
         Try
             dgProductColorSizes.Rows.Clear()
@@ -200,6 +210,7 @@ Public Class ReturnsForm
             conn.Close()
         End Try
     End Sub
+
     Sub enableGB(ByVal enable1 As Boolean, ByVal enable2 As Boolean, ByVal enable3 As Boolean)
         Try
             gbSearch.Enabled = enable1
@@ -213,6 +224,7 @@ Public Class ReturnsForm
             conn.Close()
         End Try
     End Sub
+
     Sub enableANDvisibleMS(ByVal enable1 As Boolean, ByVal enable2 As Boolean, ByVal visible1 As Boolean, ByVal visible2 As Boolean)
         Try
             msNew.Enabled = enable1
@@ -225,6 +237,7 @@ Public Class ReturnsForm
             conn.Close()
         End Try
     End Sub
+
     Sub visiblePullOutItems(ByVal visible1 As Boolean)
         Try
             ci_unitofmeasure.Visible = visible1
@@ -237,6 +250,7 @@ Public Class ReturnsForm
             conn.Close()
         End Try
     End Sub
+
     Sub visibleGB(ByVal visible1 As Boolean, ByVal visible2 As Boolean, ByVal visible3 As Boolean, ByVal visible4 As Boolean, ByVal visible5 As Boolean)
         Try
             dgProductColorSizes.Visible = visible1
@@ -253,8 +267,11 @@ Public Class ReturnsForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Click"
+
     Sub tsrefreshperformclick()
         Try
             errProvider.Clear()
@@ -270,6 +287,7 @@ Public Class ReturnsForm
             conn.Close()
         End Try
     End Sub
+
     Sub btnAddperformclick()
         Try
             errProvider.Clear()
@@ -323,8 +341,11 @@ Public Class ReturnsForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Computations"
+
     Sub addproductcomputations()
         Try
             pototalqtyordered = 0 : poqtyordered = 0 : pooverallsrp = 0.0 : pototalsrp = 0.0
@@ -370,6 +391,7 @@ Public Class ReturnsForm
             conn.Close()
         End Try
     End Sub
+
     Sub pulloutitemscomputations()
         Try
             poitotalqtyordered = 0 : poiqtyordered = 0 : poitotalprice = 0.0
@@ -400,8 +422,11 @@ Public Class ReturnsForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Page Setup"
+
     Sub pageSetup()
         Try
             getCountPageNum()
@@ -422,6 +447,7 @@ Public Class ReturnsForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCountPageNum()
         Try
             countpagenum = 0
@@ -439,6 +465,7 @@ Public Class ReturnsForm
             conn.Close()
         End Try
     End Sub
+
     Sub pageSetup1(ByVal isearchstring As String)
         Try
             getCountPageNum1(isearchstring)
@@ -459,12 +486,13 @@ Public Class ReturnsForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCountPageNum1(ByVal esearchstring As String)
         Try
             countpagenum = 0
             If conn.State = ConnectionState.Open Then conn.Close()
             Dim dtCid As New DataTable
-            dtCid = getDataTableForSQL("SELECT COALESCE(COUNT(po.rowid),0) FROM orders po LEFT JOIN accounts su ON po.accountid = su.rowid WHERE po.organizationid = " & Z_OrganizationID & " AND po.ordertype = 'Return' " & _
+            dtCid = getDataTableForSQL("SELECT COALESCE(COUNT(po.rowid),0) FROM orders po LEFT JOIN accounts su ON po.accountid = su.rowid WHERE po.organizationid = " & Z_OrganizationID & " AND po.ordertype = 'Return' " &
                             "AND (po.ordernumber LIKE '%" & esearchstring & "%' OR po.status LIKE '%" & esearchstring & "%' OR su.companyname LIKE '%" & esearchstring & "%') ")
             If dtCid.Rows.Count <> 0 Then
                 countpagenum = dtCid.Rows(0)(0)
@@ -477,6 +505,7 @@ Public Class ReturnsForm
             conn.Close()
         End Try
     End Sub
+
     Sub pageSetup2(ByVal idatesearch As String)
         Try
             getCountPageNum2(idatesearch)
@@ -497,13 +526,14 @@ Public Class ReturnsForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCountPageNum2(ByVal edatesearch As String)
         Try
             countpagenum = 0
             If conn.State = ConnectionState.Open Then conn.Close()
             Dim dtCid As New DataTable
-            dtCid = getDataTableForSQL("SELECT COALESCE(COUNT(po.rowid),0) FROM orders po WHERE po.organizationid = " & Z_OrganizationID & " AND po.ordertype = 'Return' AND " & _
-                            "(" & edatesearch & " >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " & _
+            dtCid = getDataTableForSQL("SELECT COALESCE(COUNT(po.rowid),0) FROM orders po WHERE po.organizationid = " & Z_OrganizationID & " AND po.ordertype = 'Return' AND " &
+                            "(" & edatesearch & " >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " &
                             "" & edatesearch & " <= '" & dtpToSearch.Value.Year & "-" & dtpToSearch.Value.Month & "-" & dtpToSearch.Value.Day & "' ) ")
             If dtCid.Rows.Count <> 0 Then
                 countpagenum = dtCid.Rows(0)(0)
@@ -516,6 +546,7 @@ Public Class ReturnsForm
             conn.Close()
         End Try
     End Sub
+
     Sub pageSetup3(ByVal icommonstring As String, ByVal idatesearch As String)
         Try
             getCountPageNum3(icommonstring, idatesearch)
@@ -536,6 +567,7 @@ Public Class ReturnsForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCountPageNum3(ByVal ecommonstring As String, ByVal edatesearch As String)
         Try
             countpagenum = 0
@@ -553,6 +585,7 @@ Public Class ReturnsForm
             conn.Close()
         End Try
     End Sub
+
     Sub getCommonPhrase(ByVal icommonbox As ComboBox, ByVal icommonstring As String)
         Try
             commonphrase = ""
@@ -569,9 +602,13 @@ Public Class ReturnsForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Display"
+
 #Region "AutoComplete"
+
     Sub autocompleteCustomerName(ByVal icombobox As ComboBox)
         Try
             Dim customername As New AutoCompleteStringCollection
@@ -592,6 +629,7 @@ Public Class ReturnsForm
             conn.Close()
         End Try
     End Sub
+
     Sub autocompleteStatus(ByVal icombobox As ComboBox)
         Try
             Dim costatus As New AutoCompleteStringCollection
@@ -612,8 +650,11 @@ Public Class ReturnsForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "AutoPopulate"
+
     Sub autopopulatecboSearch()
         Try
             cboSearch1.Items.Clear()
@@ -630,6 +671,7 @@ Public Class ReturnsForm
             conn.Close()
         End Try
     End Sub
+
     Sub autopopulatecboBy()
         Try
             cboBy.Items.Clear()
@@ -643,6 +685,7 @@ Public Class ReturnsForm
             conn.Close()
         End Try
     End Sub
+
     Sub autopopulateCustomerName(ByVal icombobox As ComboBox)
         Try
             icombobox.Items.Clear()
@@ -663,6 +706,7 @@ Public Class ReturnsForm
             conn.Close()
         End Try
     End Sub
+
     Sub autopopulateStatus(ByVal icombobox As ComboBox)
         Try
             icombobox.Items.Clear()
@@ -683,14 +727,27 @@ Public Class ReturnsForm
             conn.Close()
         End Try
     End Sub
+
+    Private Async Sub autopopulateDeliveryLineUp()
+        cboDRNo.Items.Clear()
+        Dim lineUpRepository = MainServiceProvider.GetRequiredService(Of ILineupRepository)
+        Dim lineUps = Await lineUpRepository.GetAllByOrganizationIdAsync(Z_OrganizationID)
+        For Each lineUp In lineUps
+            cboDRNo.Items.Add(lineUp.RowID)
+        Next
+        cboDRNo.Items.Add("")
+    End Sub
+
 #End Region
+
 #Region "Datagrids"
+
     Sub displayPullOutList(ByVal istartpage As Integer)
         Try
             dgPullOutList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT po.rowid,COALESCE(po.ordernumber,''),DATE_FORMAT(po.orderdate,'%d-%b-%Y'),COALESCE(CONCAT(COALESCE(su.companyname,''),' - ',COALESCE(su.accountno,'')),'')," & _
-                        "COALESCE(po.status,'') FROM orders po LEFT JOIN accounts su ON po.accountid = su.rowid WHERE po.organizationid = " & Z_OrganizationID & " AND po.ordertype = 'Return' " & _
+            Dim sql1 As String = "SELECT po.rowid,COALESCE(po.ordernumber,''),DATE_FORMAT(po.orderdate,'%d-%b-%Y'),COALESCE(CONCAT(COALESCE(su.companyname,''),' - ',COALESCE(su.accountno,'')),'')," &
+                        "COALESCE(po.status,'') FROM orders po LEFT JOIN accounts su ON po.accountid = su.rowid WHERE po.organizationid = " & Z_OrganizationID & " AND po.ordertype = 'Return' " &
                         "ORDER BY po.orderdate DESC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -719,13 +776,14 @@ Public Class ReturnsForm
             conn.Close()
         End Try
     End Sub
+
     Sub displaySearchPhrase(ByVal isearchphrase As String, ByVal istartpage As Integer)
         Try
             dgPullOutList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT po.rowid,COALESCE(po.ordernumber,''),DATE_FORMAT(po.orderdate,'%d-%b-%Y'),COALESCE(CONCAT(COALESCE(su.companyname,''),' - ',COALESCE(su.accountno,'')),'')," & _
-                        "COALESCE(po.status,'') FROM orders po LEFT JOIN accounts su ON po.accountid = su.rowid WHERE po.organizationid = " & Z_OrganizationID & " AND po.ordertype = 'Return' AND " & _
-                        "(po.ordernumber LIKE '%" & isearchphrase & "%' OR po.status LIKE '%" & isearchphrase & "%' OR cu.companyname LIKE '%" & isearchphrase & "%') " & _
+            Dim sql1 As String = "SELECT po.rowid,COALESCE(po.ordernumber,''),DATE_FORMAT(po.orderdate,'%d-%b-%Y'),COALESCE(CONCAT(COALESCE(su.companyname,''),' - ',COALESCE(su.accountno,'')),'')," &
+                        "COALESCE(po.status,'') FROM orders po LEFT JOIN accounts su ON po.accountid = su.rowid WHERE po.organizationid = " & Z_OrganizationID & " AND po.ordertype = 'Return' AND " &
+                        "(po.ordernumber LIKE '%" & isearchphrase & "%' OR po.status LIKE '%" & isearchphrase & "%' OR cu.companyname LIKE '%" & isearchphrase & "%') " &
                         "ORDER BY po.orderdate DESC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -734,8 +792,8 @@ Public Class ReturnsForm
                 If reader1.HasRows Then
                     dgPullOutList.Rows.Add()
                     dgPullOutList.Item(so_rowid.Index, n).Value = reader1(0)
-                    dgPullOutList.Item(so_PullOutno.Index, n).Value = reader1(1)
-                    dgPullOutList.Item(so_PullOutdate.Index, n).Value = reader1(2)
+                    dgPullOutList.Item(so_pulloutno.Index, n).Value = reader1(1)
+                    dgPullOutList.Item(so_pulloutdate.Index, n).Value = reader1(2)
                     dgPullOutList.Item(so_customername.Index, n).Value = reader1(3)
                     dgPullOutList.Item(so_status.Index, n).Value = reader1(4)
                     n = n + 1
@@ -754,14 +812,15 @@ Public Class ReturnsForm
             conn.Close()
         End Try
     End Sub
+
     Sub displayDateSearch(ByVal istartpage As Integer, ByVal idatesearch As String)
         Try
             dgPullOutList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT po.rowid,COALESCE(po.ordernumber,''),DATE_FORMAT(po.orderdate,'%d-%b-%Y'),COALESCE(CONCAT(COALESCE(su.companyname,''),' - ',COALESCE(su.accountno,'')),'')," & _
-                        "COALESCE(po.status,'') FROM orders po LEFT JOIN accounts su ON po.accountid = su.rowid WHERE po.organizationid = " & Z_OrganizationID & " AND po.ordertype = 'Return' AND " & _
-                        "(" & idatesearch & " >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " & _
-                        "" & idatesearch & " <= '" & dtpToSearch.Value.Year & "-" & dtpToSearch.Value.Month & "-" & dtpToSearch.Value.Day & "' ) " & _
+            Dim sql1 As String = "SELECT po.rowid,COALESCE(po.ordernumber,''),DATE_FORMAT(po.orderdate,'%d-%b-%Y'),COALESCE(CONCAT(COALESCE(su.companyname,''),' - ',COALESCE(su.accountno,'')),'')," &
+                        "COALESCE(po.status,'') FROM orders po LEFT JOIN accounts su ON po.accountid = su.rowid WHERE po.organizationid = " & Z_OrganizationID & " AND po.ordertype = 'Return' AND " &
+                        "(" & idatesearch & " >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " &
+                        "" & idatesearch & " <= '" & dtpToSearch.Value.Year & "-" & dtpToSearch.Value.Month & "-" & dtpToSearch.Value.Day & "' ) " &
                         "GROUP BY po.rowid ORDER BY po.orderdate DESC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -770,8 +829,8 @@ Public Class ReturnsForm
                 If reader1.HasRows Then
                     dgPullOutList.Rows.Add()
                     dgPullOutList.Item(so_rowid.Index, n).Value = reader1(0)
-                    dgPullOutList.Item(so_PullOutno.Index, n).Value = reader1(1)
-                    dgPullOutList.Item(so_PullOutdate.Index, n).Value = reader1(2)
+                    dgPullOutList.Item(so_pulloutno.Index, n).Value = reader1(1)
+                    dgPullOutList.Item(so_pulloutdate.Index, n).Value = reader1(2)
                     dgPullOutList.Item(so_customername.Index, n).Value = reader1(3)
                     dgPullOutList.Item(so_status.Index, n).Value = reader1(4)
                     n = n + 1
@@ -790,12 +849,13 @@ Public Class ReturnsForm
             conn.Close()
         End Try
     End Sub
+
     Sub displayCommonPhrase(ByVal icommonphrase As String, ByVal idatesearch As String, ByVal istartpage As Integer)
         Try
             dgPullOutList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT po.rowid,COALESCE(po.ordernumber,''),DATE_FORMAT(po.orderdate,'%d-%b-%Y'),COALESCE(CONCAT(COALESCE(su.companyname,''),' - ',COALESCE(su.accountno,'')),'')," & _
-                        "COALESCE(po.status,'') FROM orders po LEFT JOIN accounts su ON po.accountid = su.rowid WHERE po.organizationid = " & Z_OrganizationID & " AND po.ordertype = 'Return' " & _
+            Dim sql1 As String = "SELECT po.rowid,COALESCE(po.ordernumber,''),DATE_FORMAT(po.orderdate,'%d-%b-%Y'),COALESCE(CONCAT(COALESCE(su.companyname,''),' - ',COALESCE(su.accountno,'')),'')," &
+                        "COALESCE(po.status,'') FROM orders po LEFT JOIN accounts su ON po.accountid = su.rowid WHERE po.organizationid = " & Z_OrganizationID & " AND po.ordertype = 'Return' " &
                         "AND " & icommonphrase & " " & idatesearch & " GROUP BY po.rowid ORDER BY po.orderdate DESC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -804,8 +864,8 @@ Public Class ReturnsForm
                 If reader1.HasRows Then
                     dgPullOutList.Rows.Add()
                     dgPullOutList.Item(so_rowid.Index, n).Value = reader1(0)
-                    dgPullOutList.Item(so_PullOutno.Index, n).Value = reader1(1)
-                    dgPullOutList.Item(so_PullOutdate.Index, n).Value = reader1(2)
+                    dgPullOutList.Item(so_pulloutno.Index, n).Value = reader1(1)
+                    dgPullOutList.Item(so_pulloutdate.Index, n).Value = reader1(2)
                     dgPullOutList.Item(so_customername.Index, n).Value = reader1(3)
                     dgPullOutList.Item(so_status.Index, n).Value = reader1(4)
                     n = n + 1
@@ -824,11 +884,12 @@ Public Class ReturnsForm
             conn.Close()
         End Try
     End Sub
+
     Sub displayPullOutInformation(ByVal ipulloutid As Integer)
         Try
             If conn1.State = ConnectionState.Closed Then conn1.Open()
-            Dim sql1 As String = "SELECT COALESCE(po.ordernumber,''),DATE_FORMAT(po.orderdate,'%d-%b-%Y'),COALESCE(CONCAT(COALESCE(su.companyname,''),' - ',COALESCE(su.accountno,'')),'')," & _
-                        "COALESCE(po.comments,''),COALESCE(po.status,'') FROM orders po LEFT JOIN accounts su ON po.accountid = su.rowid WHERE po.rowid = " & ipulloutid & " "
+            Dim sql1 As String = "SELECT COALESCE(po.ordernumber,''),DATE_FORMAT(po.orderdate,'%d-%b-%Y'),COALESCE(CONCAT(COALESCE(su.companyname,''),' - ',COALESCE(su.accountno,'')),'')," &
+                        "COALESCE(po.comments,''),COALESCE(po.status,''),COALESCE(po.lineUpId,'') FROM orders po LEFT JOIN accounts su ON po.accountid = su.rowid WHERE po.rowid = " & ipulloutid & " "
             Dim cmd1 As New MySqlCommand(sql1, conn1)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             While reader1.Read()
@@ -838,6 +899,7 @@ Public Class ReturnsForm
                     cboCustomerName.Text = reader1(2)
                     txtComments.Text = reader1(3)
                     txtStatus.Text = reader1(4)
+                    cboDRNo.Text = reader1(5)
                     getRRInfo(ipulloutid, Me)
                     txtRRNo.Text = gloRRNo
                 End If
@@ -849,14 +911,15 @@ Public Class ReturnsForm
             conn1.Close()
         End Try
     End Sub
+
     Sub displayPullOutItems(ByVal iPullOutid As Integer)
         Try
             dgPullOutItems.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT ci.rowid,COALESCE(ci.productcolorsizeid,0),COALESCE(ci.productbundleid,0),COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(b.bundlename,''),COALESCE(c.colorname,''),COALESCE(pcs.size,'')," & _
-                    "COALESCE(pcs.seasoncode,''),COALESCE(ci.unitofmeasure,''),COALESCE(ci.qtyordered,0),COALESCE(ci.srp,0.0),COALESCE(pcs.sku,''),COALESCE(b.sku,''),COALESCE(ci.itemtype,''),COALESCE(ci.remarks,''),COALESCE(ci.qtyreceived,0)," & _
-                    "COALESCE(ci.qtydamaged,0),COALESCE(ci.reasons,'') FROM orderitems ci LEFT JOIN productbundles b ON ci.productbundleid = b.rowid LEFT JOIN productcolorsizes pcs ON ci.productcolorsizeid = pcs.rowid LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid " & _
-                    "LEFT JOIN colors c ON pc.colorid = c.rowid LEFT JOIN products p ON pc.productid = p.rowid WHERE ci.orderid = " & iPullOutid & " AND ci.organizationid = " & Z_OrganizationID & " " & _
+            Dim sql1 As String = "SELECT ci.rowid,COALESCE(ci.productcolorsizeid,0),COALESCE(ci.productbundleid,0),COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(b.bundlename,''),COALESCE(c.colorname,''),COALESCE(pcs.size,'')," &
+                    "COALESCE(pcs.seasoncode,''),COALESCE(ci.unitofmeasure,''),COALESCE(ci.qtyordered,0),COALESCE(ci.srp,0.0),COALESCE(pcs.sku,''),COALESCE(b.sku,''),COALESCE(ci.itemtype,''),COALESCE(ci.remarks,''),COALESCE(ci.qtyreceived,0)," &
+                    "COALESCE(ci.qtydamaged,0),COALESCE(ci.reasons,'') FROM orderitems ci LEFT JOIN productbundles b ON ci.productbundleid = b.rowid LEFT JOIN productcolorsizes pcs ON ci.productcolorsizeid = pcs.rowid LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid " &
+                    "LEFT JOIN colors c ON pc.colorid = c.rowid LEFT JOIN products p ON pc.productid = p.rowid WHERE ci.orderid = " & iPullOutid & " AND ci.organizationid = " & Z_OrganizationID & " " &
                     "AND ci.status != 'Inactive' AND ci.itemtype != 'BI' ORDER BY ci.rowid "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -917,11 +980,12 @@ Public Class ReturnsForm
             conn.Close()
         End Try
     End Sub
+
     Sub displayProductsA(ByVal iproductcolorsizeid As Integer)
         Try
             dgProductColorSizes.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT pcs.rowid,COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(c.colorname,''),COALESCE(pcs.size,''),COALESCE(pcs.seasoncode,''),COALESCE(pcs.sku,''),COALESCE(p.unitprice,0.00) " & _
+            Dim sql1 As String = "SELECT pcs.rowid,COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(c.colorname,''),COALESCE(pcs.size,''),COALESCE(pcs.seasoncode,''),COALESCE(pcs.sku,''),COALESCE(p.unitprice,0.00) " &
                 "FROM productcolorsizes pcs LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN colors c ON pc.colorid = c.rowid LEFT JOIN products p ON pc.productid = p.rowid WHERE pcs.rowid = " & iproductcolorsizeid & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -959,11 +1023,12 @@ Public Class ReturnsForm
             conn.Close()
         End Try
     End Sub
+
     Sub displayProductsB(ByVal iproductid As Integer)
         Try
             dgProductColors.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT pc.rowid,COALESCE(c.colorvalue,''),COALESCE(c.colorname,'') FROM productcolors pc LEFT JOIN colors c ON pc.colorid = c.rowid " & _
+            Dim sql1 As String = "SELECT pc.rowid,COALESCE(c.colorvalue,''),COALESCE(c.colorname,'') FROM productcolors pc LEFT JOIN colors c ON pc.colorid = c.rowid " &
                             "WHERE pc.organizationid = " & Z_OrganizationID & " AND pc.productid = " & iproductid & " ORDER BY c.colorname ASC "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -993,11 +1058,12 @@ Public Class ReturnsForm
             conn.Close()
         End Try
     End Sub
+
     Sub displayProductsC(ByVal iproductcolorid As Integer)
         Try
             dgProductSizes.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT pcs.rowid,COALESCE(pcs.size,0.0),COALESCE(pcs.seasoncode,''),COALESCE(p.unitprice,0.00),COALESCE(pcs.sku,'') FROM productcolorsizes pcs LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid " & _
+            Dim sql1 As String = "SELECT pcs.rowid,COALESCE(pcs.size,0.0),COALESCE(pcs.seasoncode,''),COALESCE(p.unitprice,0.00),COALESCE(pcs.sku,'') FROM productcolorsizes pcs LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid " &
                         "LEFT JOIN products p ON pc.productid = p.rowid WHERE pcs.organizationid = " & Z_OrganizationID & " AND pcs.productcolorid = " & iproductcolorid & " AND pcs.status = 'Active' ORDER BY pcs.size ASC "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -1034,8 +1100,11 @@ Public Class ReturnsForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Colors"
+
     Sub colorCoding()
         Try
             If dgProductColorSizes.Rows.Count <> 0 Then
@@ -1068,9 +1137,13 @@ Public Class ReturnsForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #End Region
+
 #Region "Adding Functions"
+
     Sub checkPullOutItemsA()
         Try
             If dgProductColorSizes.Rows.Count <> 0 Then
@@ -1109,7 +1182,7 @@ Public Class ReturnsForm
                         cboByPhrase.Text = "" : cboByPhrase.SelectedItem = Nothing : txtQtyOrdered.Text = "" : cboByPhrase.Focus() : dgProductColorSizes.Rows.Clear()
                     End If
                 Next
-                itemno = 1 : colorCoding() : addproductcomputations() : PullOutitemscomputations()
+                itemno = 1 : colorCoding() : addproductcomputations() : pulloutitemscomputations()
                 For i As Integer = 0 To dgPullOutItems.Rows.Count - 1
                     dgPullOutItems.Rows(i).Cells("ci_seqno").Value = itemno
                     itemno = itemno + 1
@@ -1121,6 +1194,7 @@ Public Class ReturnsForm
             conn.Close()
         End Try
     End Sub
+
     Sub checkPullOutItemsB()
         Try
             If dgProductSizes.Rows.Count <> 0 Then
@@ -1143,7 +1217,7 @@ Public Class ReturnsForm
                         End If
                     End If
                 Next
-                itemno = 1 : colorCoding() : addproductcomputations() : PullOutitemscomputations()
+                itemno = 1 : colorCoding() : addproductcomputations() : pulloutitemscomputations()
                 For i As Integer = 0 To dgPullOutItems.Rows.Count - 1
                     dgPullOutItems.Rows(i).Cells("ci_seqno").Value = itemno
                     itemno = itemno + 1
@@ -1161,10 +1235,11 @@ Public Class ReturnsForm
             conn.Close()
         End Try
     End Sub
+
     Sub addPullOutItemA(ByVal iproductcolorsizeid As Integer, ByVal iqtyordered As Integer, ByVal isrp As Decimal)
         Try
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT pcs.rowid,COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(c.colorname,''),COALESCE(pcs.size,''),COALESCE(p.unitofmeasure,''),COALESCE(pcs.sku,''),COALESCE(pcs.seasoncode,'') " & _
+            Dim sql1 As String = "SELECT pcs.rowid,COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(c.colorname,''),COALESCE(pcs.size,''),COALESCE(p.unitofmeasure,''),COALESCE(pcs.sku,''),COALESCE(pcs.seasoncode,'') " &
                 "FROM productcolorsizes pcs LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN colors c ON pc.colorid = c.rowid LEFT JOIN products p ON pc.productid = p.rowid WHERE pcs.rowid = " & iproductcolorsizeid & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -1209,8 +1284,11 @@ Public Class ReturnsForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #End Region
+
     Private Sub tabMain_DrawItem(sender As Object, e As DrawItemEventArgs) Handles tabMain.DrawItem
         Try
             TabControlColor(tabMain, e)
@@ -1220,6 +1298,7 @@ Public Class ReturnsForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbClose_Click(sender As Object, e As EventArgs) Handles pbClose.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1234,6 +1313,7 @@ Public Class ReturnsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub btnAddProduct_Leave(sender As Object, e As EventArgs) Handles btnAddProduct.Leave
         Try
             cboByPhrase.Focus()
@@ -1243,6 +1323,7 @@ Public Class ReturnsForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub tsRefresh_Click(sender As Object, e As EventArgs) Handles tsRefresh.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1255,6 +1336,7 @@ Public Class ReturnsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msNew_Click(sender As Object, e As EventArgs) Handles msNew.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1289,6 +1371,7 @@ Public Class ReturnsForm
             txtPullOutNo.Text = CStr(globalorderno)
             txtStatus.Text = "New"
             txtPullOutNo.Focus()
+            cboDRNo.Enabled = True
             If dgPullOutList.Rows.Count <> 0 Then
                 dgPullOutList.CurrentRow.Selected = False
             End If
@@ -1299,6 +1382,7 @@ Public Class ReturnsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msCancel_Click(sender As Object, e As EventArgs) Handles msCancel.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1315,7 +1399,7 @@ Public Class ReturnsForm
                 dgPullOutList.CurrentRow.Selected = True
                 displayPullOutInformation(CInt(dgPullOutList.CurrentRow.Cells("so_rowid").Value))
                 displayPullOutItems(CInt(dgPullOutList.CurrentRow.Cells("so_rowid").Value))
-                PullOutitemscomputations() : colorCoding()
+                pulloutitemscomputations() : colorCoding()
                 If txtStatus.Text = "New" Then
                     enableGB(legit, legit, legit)
                     enableANDvisibleMS(legit, legit, fraud, legit)
@@ -1342,6 +1426,7 @@ Public Class ReturnsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgPullOutList_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgPullOutList.CellClick
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1355,6 +1440,7 @@ Public Class ReturnsForm
                 clearDatagrids()
                 visiblePullOutItems(fraud)
                 visibleGB(fraud, fraud, fraud, fraud, fraud)
+                cboDRNo.Enabled = False
                 displayPullOutInformation(CInt(dgPullOutList.CurrentRow.Cells("so_rowid").Value))
                 displayPullOutItems(CInt(dgPullOutList.CurrentRow.Cells("so_rowid").Value))
                 pulloutitemscomputations() : colorCoding()
@@ -1382,6 +1468,7 @@ Public Class ReturnsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgPullOutList_KeyUp(sender As Object, e As KeyEventArgs) Handles dgPullOutList.KeyUp
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1398,7 +1485,7 @@ Public Class ReturnsForm
                     visibleGB(fraud, fraud, fraud, fraud, fraud)
                     displayPullOutInformation(CInt(dgPullOutList.CurrentRow.Cells("so_rowid").Value))
                     displayPullOutItems(CInt(dgPullOutList.CurrentRow.Cells("so_rowid").Value))
-                    PullOutitemscomputations() : colorCoding()
+                    pulloutitemscomputations() : colorCoding()
                     If txtStatus.Text = "New" Then
                         enableGB(legit, legit, legit)
                         enableANDvisibleMS(legit, legit, fraud, legit)
@@ -1424,6 +1511,7 @@ Public Class ReturnsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub chkOtherInfo_CheckedChanged(sender As Object, e As EventArgs) Handles chkOtherInfo.CheckedChanged
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1439,6 +1527,7 @@ Public Class ReturnsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub txtPullOutNo_Leave(sender As Object, e As EventArgs) Handles txtPullOutNo.Leave
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1469,6 +1558,7 @@ Public Class ReturnsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     'Private Sub txtPullOutNo_TextChanged(sender As Object, e As EventArgs) Handles txtPullOutNo.TextChanged
     '    Me.Cursor = Cursors.WaitCursor
     '    Try
@@ -1532,6 +1622,7 @@ Public Class ReturnsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboByPhrase_Leave(sender As Object, e As EventArgs) Handles cboByPhrase.Leave
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1582,6 +1673,7 @@ Public Class ReturnsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     'Private Sub cboByPhrase_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboByPhrase.SelectedIndexChanged
     '    Try
     '        errProvider.Clear()
@@ -1688,6 +1780,7 @@ Public Class ReturnsForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub dgProductColors_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgProductColors.CellClick
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1701,6 +1794,7 @@ Public Class ReturnsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgProductColors_KeyUp(sender As Object, e As KeyEventArgs) Handles dgProductColors.KeyUp
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1716,6 +1810,7 @@ Public Class ReturnsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgProductSizes_CellEndEdit(sender As Object, e As DataGridViewCellEventArgs) Handles dgProductSizes.CellEndEdit
         Try
             addproductcomputations()
@@ -1725,6 +1820,7 @@ Public Class ReturnsForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub dgProductSizes_KeyDown(sender As Object, e As KeyEventArgs) Handles dgProductSizes.KeyDown
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1740,6 +1836,7 @@ Public Class ReturnsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub btnAddProduct_Click(sender As Object, e As EventArgs) Handles btnAddProduct.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1751,6 +1848,7 @@ Public Class ReturnsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub txtQtyOrdered_KeyDown(sender As Object, e As KeyEventArgs) Handles txtQtyOrdered.KeyDown
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1764,6 +1862,7 @@ Public Class ReturnsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub pbAddCustomer_MouseEnter(sender As Object, e As EventArgs) Handles pbAddCustomer.MouseEnter
         Try
             pbAddCustomer.BackColor = Color.MediumSpringGreen
@@ -1773,6 +1872,7 @@ Public Class ReturnsForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbAddCustomer_MouseLeave(sender As Object, e As EventArgs) Handles pbAddCustomer.MouseLeave
         Try
             pbAddCustomer.BackColor = Color.Transparent
@@ -1782,6 +1882,56 @@ Public Class ReturnsForm
             conn.Close()
         End Try
     End Sub
+
+    Private Async Sub cboDRNo_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboDRNo.SelectedIndexChanged
+        dgPullOutItems.Rows.Clear()
+        Console.WriteLine(cue)
+        If cue = "New" Then
+            If (cboDRNo.Text <> "") Then
+
+                Dim ask As MsgBoxResult = MsgBox("Add Order Items from Delivery Lineup?", MsgBoxStyle.YesNo)
+
+                If ask = MsgBoxResult.Yes Then
+                    Dim lineUpRepository = MainServiceProvider.GetRequiredService(Of ILineupRepository)
+                    Dim lineUp = Await lineUpRepository.GetById(cboDRNo.Text)
+                    Dim orderRepository = MainServiceProvider.GetRequiredService(Of IOrderRepository)
+                    Dim order = Await orderRepository.GetById(lineUp.OrderID)
+                    Dim n As Integer = 0
+                    Dim seqno As Integer = 1
+
+                    For Each item In order.OrderItems
+                        dgPullOutItems.Rows.Add()
+                        dgPullOutItems.Item(ci_seqno.Index, n).Value = seqno
+                        'dgPullOutItems.Item(ci_rowid.Index, n).Value = item.RowID
+                        dgPullOutItems.Item(ci_pcsrowid.Index, n).Value = item.ProductColorSizeID
+                        dgPullOutItems.Item(ci_bid.Index, n).Value = item.ProductBundleID
+                        dgPullOutItems.Item(ci_colorvalue.Index, n).Value = item.ProductColorSize.ProductColor.Color.ColorValue
+                        dgPullOutItems.Item(ci_productcode.Index, n).Value = item.ProductColorSize.ProductColor.Product.ProductCode
+
+                        dgPullOutItems.Item(ci_colorname.Index, n).Value = item.ProductColorSize.ProductColor.Color.ColorName
+                        dgPullOutItems.Item(ci_size.Index, n).Value = item.ProductColorSize.Size
+                        dgPullOutItems.Item(ci_seasoncode.Index, n).Value = item.ProductColorSize.SeasonCode
+                        dgPullOutItems.Item(ci_unitofmeasure.Index, n).Value = item.UnitOfMeasure
+                        dgPullOutItems.Item(ci_qtyordered.Index, n).Value = item.QtyOrdered
+                        dgPullOutItems.Item(ci_srp.Index, n).Value = item.SRP
+                        dgPullOutItems.Item(ci_sku.Index, n).Value = item.SKU
+                        dgPullOutItems.Item(ci_remarks.Index, n).Value = item.Remarks
+                        dgPullOutItems.Item(ci_qtyreceived.Index, n).Value = item.QtyReceived
+                        dgPullOutItems.Item(ci_qtybad.Index, n).Value = item.QtyDamaged
+                        dgPullOutItems.Item(ci_reason.Index, n).Value = item.Reasons
+
+                        seqno = seqno + 1
+                        n = n + 1
+                    Next
+                    colorCoding()
+
+                End If
+            End If
+
+        End If
+        pulloutitemscomputations()
+    End Sub
+
     Private Sub pbAddCustomer_Click(sender As Object, e As EventArgs) Handles pbAddCustomer.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1815,6 +1965,7 @@ Public Class ReturnsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgPullOutItems_CellEndEdit(sender As Object, e As DataGridViewCellEventArgs) Handles dgPullOutItems.CellEndEdit
         Try
             pulloutitemscomputations()
@@ -1824,6 +1975,7 @@ Public Class ReturnsForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub msOrder_Click(sender As Object, e As EventArgs) Handles msOrder.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1895,6 +2047,7 @@ Public Class ReturnsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub msSave_Click(sender As Object, e As EventArgs) Handles msSave.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1992,8 +2145,8 @@ Public Class ReturnsForm
                         errProvider.SetError(txtPullOutNo, "Return No. has been created already, please type a new one.")
                         Exit Try
                     End If
-                    M_I_OrdersA(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, pocustomerid, txtPullOutNo.Text, "Return", dtpPullOutDate.Value, Now.Date, _
-                           cboCustomerName.Text, txtComments.Text, txtStatus.Text, Math.Round(poitotalprice, 2), Me)
+                    M_I_OrdersA(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, pocustomerid, txtPullOutNo.Text, "Return", dtpPullOutDate.Value, Now.Date,
+                           cboCustomerName.Text, txtComments.Text, txtStatus.Text, Math.Round(poitotalprice, 2), cboDRNo.Text, Me)
                     poorderid = globalorderidsp
                     If dgPullOutItems.Rows.Count <> 0 Then
                         For a = 0 To dgPullOutItems.Rows.Count - 1
@@ -2001,16 +2154,16 @@ Public Class ReturnsForm
                                 If IsNumeric(dgPullOutItems.Rows(a).Cells("ci_pcsrowid").Value) Then
                                     If CInt(dgPullOutItems.Rows(a).Cells("ci_pcsrowid").Value) <> 0 Then
                                         getTotalQtyAvailableA(CInt(dgPullOutItems.Rows(a).Cells("ci_pcsrowid").Value), Me)
-                                        M_I_OrderItemsA(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, pocustomerid, poorderid, CInt(dgPullOutItems.Rows(a).Cells("ci_pcsrowid").Value), DBNull.Value, _
-                                            If(IsNumeric(dgPullOutItems.Rows(a).Cells("ci_qtyordered").Value), CInt(dgPullOutItems.Rows(a).Cells("ci_qtyordered").Value), 0), globaltotalqtyavailable, "S", _
-                                            "" & CStr(dgPullOutItems.Rows(a).Cells("ci_productcode").Value) & " / " & CStr(dgPullOutItems.Rows(a).Cells("ci_colorname").Value) & " / " & CStr(dgPullOutItems.Rows(a).Cells("ci_size").Value) & " / " & CStr(dgPullOutItems.Rows(a).Cells("ci_seasoncode").Value) & "", _
+                                        M_I_OrderItemsA(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, pocustomerid, poorderid, CInt(dgPullOutItems.Rows(a).Cells("ci_pcsrowid").Value), DBNull.Value,
+                                            If(IsNumeric(dgPullOutItems.Rows(a).Cells("ci_qtyordered").Value), CInt(dgPullOutItems.Rows(a).Cells("ci_qtyordered").Value), 0), globaltotalqtyavailable, "S",
+                                            "" & CStr(dgPullOutItems.Rows(a).Cells("ci_productcode").Value) & " / " & CStr(dgPullOutItems.Rows(a).Cells("ci_colorname").Value) & " / " & CStr(dgPullOutItems.Rows(a).Cells("ci_size").Value) & " / " & CStr(dgPullOutItems.Rows(a).Cells("ci_seasoncode").Value) & "",
                                             CStr(dgPullOutItems.Rows(a).Cells("ci_sku").Value), CStr(dgPullOutItems.Rows(a).Cells("ci_unitofmeasure").Value), CStr(dgPullOutItems.Rows(a).Cells("ci_remarks").Value), If(IsNumeric(dgPullOutItems.Rows(a).Cells("ci_srp").Value), CDec(dgPullOutItems.Rows(a).Cells("ci_srp").Value), 0.0), "Active", Me)
                                     End If
                                 End If
                                 If IsNumeric(dgPullOutItems.Rows(a).Cells("ci_bid").Value) Then
                                     If CInt(dgPullOutItems.Rows(a).Cells("ci_bid").Value) <> 0 Then
-                                        M_I_OrderItemsA(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, pocustomerid, poorderid, DBNull.Value, CInt(dgPullOutItems.Rows(a).Cells("ci_bid").Value), If(IsNumeric(dgPullOutItems.Rows(a).Cells("ci_qtyordered").Value), CInt(dgPullOutItems.Rows(a).Cells("ci_qtyordered").Value), 0), _
-                                            0, "S", CStr(dgPullOutItems.Rows(a).Cells("ci_productcode").Value), CStr(dgPullOutItems.Rows(a).Cells("ci_sku").Value), CStr(dgPullOutItems.Rows(a).Cells("ci_unitofmeasure").Value), CStr(dgPullOutItems.Rows(a).Cells("ci_remarks").Value), _
+                                        M_I_OrderItemsA(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, pocustomerid, poorderid, DBNull.Value, CInt(dgPullOutItems.Rows(a).Cells("ci_bid").Value), If(IsNumeric(dgPullOutItems.Rows(a).Cells("ci_qtyordered").Value), CInt(dgPullOutItems.Rows(a).Cells("ci_qtyordered").Value), 0),
+                                            0, "S", CStr(dgPullOutItems.Rows(a).Cells("ci_productcode").Value), CStr(dgPullOutItems.Rows(a).Cells("ci_sku").Value), CStr(dgPullOutItems.Rows(a).Cells("ci_unitofmeasure").Value), CStr(dgPullOutItems.Rows(a).Cells("ci_remarks").Value),
                                             If(IsNumeric(dgPullOutItems.Rows(a).Cells("ci_srp").Value), CDec(dgPullOutItems.Rows(a).Cells("ci_srp").Value), 0.0), "Active", Me)
                                     End If
                                 End If
@@ -2032,30 +2185,30 @@ Public Class ReturnsForm
                             errProvider.SetError(txtPullOutNo, "Return No. has been created already, please type a new one.")
                             Exit Try
                         End If
-                        M_U_OrderA(CInt(dgPullOutList.CurrentRow.Cells("so_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, pocustomerid, txtPullOutNo.Text, dtpPullOutDate.Value, _
+                        M_U_OrderA(CInt(dgPullOutList.CurrentRow.Cells("so_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, pocustomerid, txtPullOutNo.Text, dtpPullOutDate.Value,
                            Now.Date, txtComments.Text, Math.Round(poitotalprice, 2), Me)
                         If dgPullOutItems.Rows.Count <> 0 Then
                             For a = 0 To dgPullOutItems.Rows.Count - 1
                                 If myModule.systemerrorfound = False Then
                                     If IsNumeric(dgPullOutItems.Rows(a).Cells("ci_rowid").Value) Then
                                         If CInt(dgPullOutItems.Rows(a).Cells("ci_rowid").Value) <> 0 Then
-                                            MB_U_OrderItemsA(CInt(dgPullOutItems.Rows(a).Cells("ci_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, If(IsNumeric(dgPullOutItems.Rows(a).Cells("ci_qtyordered").Value), CInt(dgPullOutItems.Rows(a).Cells("ci_qtyordered").Value), 0), _
+                                            MB_U_OrderItemsA(CInt(dgPullOutItems.Rows(a).Cells("ci_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, If(IsNumeric(dgPullOutItems.Rows(a).Cells("ci_qtyordered").Value), CInt(dgPullOutItems.Rows(a).Cells("ci_qtyordered").Value), 0),
                                                     If(IsNumeric(dgPullOutItems.Rows(a).Cells("ci_srp").Value), CDec(dgPullOutItems.Rows(a).Cells("ci_srp").Value), 0.0), CStr(dgPullOutItems.Rows(a).Cells("ci_unitofmeasure").Value), CStr(dgPullOutItems.Rows(a).Cells("ci_remarks").Value), Me)
                                         End If
                                     Else
                                         If IsNumeric(dgPullOutItems.Rows(a).Cells("ci_pcsrowid").Value) Then
                                             If CInt(dgPullOutItems.Rows(a).Cells("ci_pcsrowid").Value) <> 0 Then
                                                 getTotalQtyAvailableA(CInt(dgPullOutItems.Rows(a).Cells("ci_pcsrowid").Value), Me)
-                                                M_I_OrderItemsA(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, pocustomerid, CInt(dgPullOutList.CurrentRow.Cells("so_rowid").Value), CInt(dgPullOutItems.Rows(a).Cells("ci_pcsrowid").Value), DBNull.Value, _
-                                                    If(IsNumeric(dgPullOutItems.Rows(a).Cells("ci_qtyordered").Value), CInt(dgPullOutItems.Rows(a).Cells("ci_qtyordered").Value), 0), globaltotalqtyavailable, "S", _
-                                                    "" & CStr(dgPullOutItems.Rows(a).Cells("ci_productcode").Value) & " / " & CStr(dgPullOutItems.Rows(a).Cells("ci_colorname").Value) & " / " & CStr(dgPullOutItems.Rows(a).Cells("ci_size").Value) & " / " & CStr(dgPullOutItems.Rows(a).Cells("ci_seasoncode").Value) & "", _
+                                                M_I_OrderItemsA(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, pocustomerid, CInt(dgPullOutList.CurrentRow.Cells("so_rowid").Value), CInt(dgPullOutItems.Rows(a).Cells("ci_pcsrowid").Value), DBNull.Value,
+                                                    If(IsNumeric(dgPullOutItems.Rows(a).Cells("ci_qtyordered").Value), CInt(dgPullOutItems.Rows(a).Cells("ci_qtyordered").Value), 0), globaltotalqtyavailable, "S",
+                                                    "" & CStr(dgPullOutItems.Rows(a).Cells("ci_productcode").Value) & " / " & CStr(dgPullOutItems.Rows(a).Cells("ci_colorname").Value) & " / " & CStr(dgPullOutItems.Rows(a).Cells("ci_size").Value) & " / " & CStr(dgPullOutItems.Rows(a).Cells("ci_seasoncode").Value) & "",
                                                     CStr(dgPullOutItems.Rows(a).Cells("ci_sku").Value), CStr(dgPullOutItems.Rows(a).Cells("ci_unitofmeasure").Value), CStr(dgPullOutItems.Rows(a).Cells("ci_remarks").Value), If(IsNumeric(dgPullOutItems.Rows(a).Cells("ci_srp").Value), CDec(dgPullOutItems.Rows(a).Cells("ci_srp").Value), 0.0), "Active", Me)
                                             End If
                                         End If
                                         If IsNumeric(dgPullOutItems.Rows(a).Cells("ci_bid").Value) Then
                                             If CInt(dgPullOutItems.Rows(a).Cells("ci_bid").Value) <> 0 Then
-                                                M_I_OrderItemsA(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, pocustomerid, CInt(dgPullOutList.CurrentRow.Cells("so_rowid").Value), DBNull.Value, CInt(dgPullOutItems.Rows(a).Cells("ci_bid").Value), If(IsNumeric(dgPullOutItems.Rows(a).Cells("ci_qtyordered").Value), CInt(dgPullOutItems.Rows(a).Cells("ci_qtyordered").Value), 0), _
-                                                    0, "S", CStr(dgPullOutItems.Rows(a).Cells("ci_productcode").Value), CStr(dgPullOutItems.Rows(a).Cells("ci_sku").Value), CStr(dgPullOutItems.Rows(a).Cells("ci_unitofmeasure").Value), CStr(dgPullOutItems.Rows(a).Cells("ci_remarks").Value), _
+                                                M_I_OrderItemsA(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, pocustomerid, CInt(dgPullOutList.CurrentRow.Cells("so_rowid").Value), DBNull.Value, CInt(dgPullOutItems.Rows(a).Cells("ci_bid").Value), If(IsNumeric(dgPullOutItems.Rows(a).Cells("ci_qtyordered").Value), CInt(dgPullOutItems.Rows(a).Cells("ci_qtyordered").Value), 0),
+                                                    0, "S", CStr(dgPullOutItems.Rows(a).Cells("ci_productcode").Value), CStr(dgPullOutItems.Rows(a).Cells("ci_sku").Value), CStr(dgPullOutItems.Rows(a).Cells("ci_unitofmeasure").Value), CStr(dgPullOutItems.Rows(a).Cells("ci_remarks").Value),
                                                     If(IsNumeric(dgPullOutItems.Rows(a).Cells("ci_srp").Value), CDec(dgPullOutItems.Rows(a).Cells("ci_srp").Value), 0.0), "Active", Me)
                                             End If
                                         End If
@@ -2082,6 +2235,7 @@ Public Class ReturnsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgPullOutItems_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgPullOutItems.CellContentClick
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2166,7 +2320,9 @@ Public Class ReturnsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #Region "Search/Page Setup"
+
     Private Sub txtSimpleSearch_KeyDown(sender As Object, e As KeyEventArgs) Handles txtSimpleSearch.KeyDown
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2191,6 +2347,7 @@ Public Class ReturnsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboSearch1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboSearch1.SelectedIndexChanged
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2211,6 +2368,7 @@ Public Class ReturnsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboSearch3_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboSearch3.SelectedIndexChanged
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2231,6 +2389,7 @@ Public Class ReturnsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboSearch2_KeyDown(sender As Object, e As KeyEventArgs) Handles cboSearch2.KeyDown
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2276,7 +2435,7 @@ Public Class ReturnsForm
                     Else
                         pagefilter3 = "" & pagefilter1 & " AND " & pagefilter2 & ""
                     End If
-                    pagefilter4 = " AND (po.orderdate >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " & _
+                    pagefilter4 = " AND (po.orderdate >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " &
                             "po.orderdate <= '" & dtpToSearch.Value.Year & "-" & dtpToSearch.Value.Month & "-" & dtpToSearch.Value.Day & "') "
                     spagenum = neutralpage : numofpages = startingpage
                     displayCommonPhrase(pagefilter3, pagefilter4, spagenum)
@@ -2291,6 +2450,7 @@ Public Class ReturnsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cboSearch4_KeyDown(sender As Object, e As KeyEventArgs) Handles cboSearch4.KeyDown
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2336,7 +2496,7 @@ Public Class ReturnsForm
                     Else
                         pagefilter3 = "" & pagefilter1 & " AND " & pagefilter2 & ""
                     End If
-                    pagefilter4 = " AND (po.orderdate >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " & _
+                    pagefilter4 = " AND (po.orderdate >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " &
                             "po.orderdate <= '" & dtpToSearch.Value.Year & "-" & dtpToSearch.Value.Month & "-" & dtpToSearch.Value.Day & "') "
                     spagenum = neutralpage : numofpages = startingpage
                     displayCommonPhrase(pagefilter3, pagefilter4, spagenum)
@@ -2351,6 +2511,7 @@ Public Class ReturnsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdFirst_Click(sender As Object, e As EventArgs) Handles cmdFirst.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2374,6 +2535,7 @@ Public Class ReturnsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdPrev_Click(sender As Object, e As EventArgs) Handles cmdPrev.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2405,6 +2567,7 @@ Public Class ReturnsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdNext_Click(sender As Object, e As EventArgs) Handles cmdNext.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2432,6 +2595,7 @@ Public Class ReturnsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub cmdLast_Click(sender As Object, e As EventArgs) Handles cmdLast.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2459,6 +2623,7 @@ Public Class ReturnsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub txtPage_KeyDown(sender As Object, e As KeyEventArgs) Handles txtPage.KeyDown
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2503,8 +2668,11 @@ Public Class ReturnsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #End Region
+
 #Region "Datagrid MouseUp"
+
     Private Sub dgProductColorSizes_MouseUp(sender As Object, e As MouseEventArgs) Handles dgProductColorSizes.MouseUp
         Try
             Dim hitTestinfo As DataGridView.HitTestInfo
@@ -2522,6 +2690,7 @@ Public Class ReturnsForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub dgProductSizes_MouseUp(sender As Object, e As MouseEventArgs) Handles dgProductSizes.MouseUp
         Try
             Dim hitTestinfo As DataGridView.HitTestInfo
@@ -2539,6 +2708,7 @@ Public Class ReturnsForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub dgPullOutItems_MouseUp(sender As Object, e As MouseEventArgs) Handles dgPullOutItems.MouseUp
         Try
             Dim hitTestinfo As DataGridView.HitTestInfo
@@ -2556,8 +2726,11 @@ Public Class ReturnsForm
             conn.Close()
         End Try
     End Sub
+
 #End Region
+
 #Region "Datagrid Errors"
+
     Private Sub dgPullOutList_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgPullOutList.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2598,6 +2771,7 @@ Public Class ReturnsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgProductColorSizes_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgProductColorSizes.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2638,6 +2812,7 @@ Public Class ReturnsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgProductColors_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgProductColors.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2678,6 +2853,7 @@ Public Class ReturnsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgProductSizes_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgProductSizes.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2718,6 +2894,7 @@ Public Class ReturnsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub dgPullOutItems_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgPullOutItems.DataError
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2758,5 +2935,7 @@ Public Class ReturnsForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
 #End Region
+
 End Class

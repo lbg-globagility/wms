@@ -27,7 +27,8 @@ CREATE PROCEDURE `U_orders`(
 	IN `U_TotalAmount` DECIMAL(10,2),
 	IN `U_DeliveryHours` VARCHAR(100),
 	IN `U_CustomerAddress` VARCHAR(150),
-	IN `U_InventoryLocationID` INT
+	IN `U_InventoryLocationID` INT,
+	IN `U_AgentID` INT
 )
 BEGIN
 UPDATE orders SET
@@ -47,7 +48,8 @@ UPDATE orders SET
 	TotalAmount = U_TotalAmount,
 	DeliveryHours = U_DeliveryHours,
 	CustomerAddress = U_CustomerAddress,
-	InventoryLocationID = U_InventoryLocationID
+	InventoryLocationID = U_InventoryLocationID,
+	AgentID=U_AgentID
 WHERE RowID = U_RowID;
 END//
 DELIMITER ;

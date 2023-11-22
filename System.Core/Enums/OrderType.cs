@@ -20,6 +20,16 @@
         /// <summary>
         /// Stock Adjust
         /// </summary>
-        SA
+        SA,
+
+        /// <summary>
+        /// Stock Transfer
+        /// </summary>
+        ST// Stock Trans.
     }
+
+    //Stock Adj.
+    //CO
+    //RR
+    //PO
 }

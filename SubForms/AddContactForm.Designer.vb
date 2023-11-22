@@ -24,6 +24,12 @@ Partial Class AddContactForm
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(AddContactForm))
         Me.Panel2 = New System.Windows.Forms.Panel()
+        Me.citiesListBox = New System.Windows.Forms.CheckedListBox()
+        Me.Label10 = New System.Windows.Forms.Label()
+        Me.Label9 = New System.Windows.Forms.Label()
+        Me.cboProvince = New System.Windows.Forms.ComboBox()
+        Me.Label8 = New System.Windows.Forms.Label()
+        Me.cboRegion = New System.Windows.Forms.ComboBox()
         Me.txtComments = New System.Windows.Forms.TextBox()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.txtEmail = New System.Windows.Forms.TextBox()
@@ -33,6 +39,8 @@ Partial Class AddContactForm
         Me.txtFirstName = New System.Windows.Forms.TextBox()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.txtLastName = New System.Windows.Forms.TextBox()
+        Me.Label7 = New System.Windows.Forms.Label()
+        Me.Label6 = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
@@ -42,8 +50,6 @@ Partial Class AddContactForm
         Me.Panel3 = New System.Windows.Forms.Panel()
         Me.btnCancel = New System.Windows.Forms.Button()
         Me.btnSave = New System.Windows.Forms.Button()
-        Me.Label6 = New System.Windows.Forms.Label()
-        Me.Label7 = New System.Windows.Forms.Label()
         Me.Panel2.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.ToolStrip1.SuspendLayout()
@@ -52,6 +58,12 @@ Partial Class AddContactForm
         '
         'Panel2
         '
+        Me.Panel2.Controls.Add(Me.citiesListBox)
+        Me.Panel2.Controls.Add(Me.Label10)
+        Me.Panel2.Controls.Add(Me.Label9)
+        Me.Panel2.Controls.Add(Me.cboProvince)
+        Me.Panel2.Controls.Add(Me.Label8)
+        Me.Panel2.Controls.Add(Me.cboRegion)
         Me.Panel2.Controls.Add(Me.txtComments)
         Me.Panel2.Controls.Add(Me.Label5)
         Me.Panel2.Controls.Add(Me.txtEmail)
@@ -67,8 +79,59 @@ Partial Class AddContactForm
         Me.Panel2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel2.Location = New System.Drawing.Point(0, 44)
         Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(336, 185)
+        Me.Panel2.Size = New System.Drawing.Size(667, 185)
         Me.Panel2.TabIndex = 0
+        '
+        'citiesListBox
+        '
+        Me.citiesListBox.FormattingEnabled = True
+        Me.citiesListBox.Location = New System.Drawing.Point(454, 67)
+        Me.citiesListBox.Name = "citiesListBox"
+        Me.citiesListBox.Size = New System.Drawing.Size(179, 106)
+        Me.citiesListBox.TabIndex = 11
+        '
+        'Label10
+        '
+        Me.Label10.AutoSize = True
+        Me.Label10.Location = New System.Drawing.Point(364, 73)
+        Me.Label10.Name = "Label10"
+        Me.Label10.Size = New System.Drawing.Size(35, 13)
+        Me.Label10.TabIndex = 10
+        Me.Label10.Text = "Cities"
+        '
+        'Label9
+        '
+        Me.Label9.AutoSize = True
+        Me.Label9.Location = New System.Drawing.Point(364, 45)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(50, 13)
+        Me.Label9.TabIndex = 8
+        Me.Label9.Text = "Province"
+        '
+        'cboProvince
+        '
+        Me.cboProvince.FormattingEnabled = True
+        Me.cboProvince.Location = New System.Drawing.Point(454, 37)
+        Me.cboProvince.Name = "cboProvince"
+        Me.cboProvince.Size = New System.Drawing.Size(179, 21)
+        Me.cboProvince.TabIndex = 7
+        '
+        'Label8
+        '
+        Me.Label8.AutoSize = True
+        Me.Label8.Location = New System.Drawing.Point(364, 17)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(44, 13)
+        Me.Label8.TabIndex = 6
+        Me.Label8.Text = "Region"
+        '
+        'cboRegion
+        '
+        Me.cboRegion.FormattingEnabled = True
+        Me.cboRegion.Location = New System.Drawing.Point(454, 9)
+        Me.cboRegion.Name = "cboRegion"
+        Me.cboRegion.Size = New System.Drawing.Size(179, 21)
+        Me.cboRegion.TabIndex = 5
         '
         'txtComments
         '
@@ -147,6 +210,28 @@ Partial Class AddContactForm
         Me.txtLastName.Size = New System.Drawing.Size(179, 22)
         Me.txtLastName.TabIndex = 0
         '
+        'Label7
+        '
+        Me.Label7.AutoSize = True
+        Me.Label7.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label7.ForeColor = System.Drawing.Color.Red
+        Me.Label7.Location = New System.Drawing.Point(105, 37)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(17, 21)
+        Me.Label7.TabIndex = 0
+        Me.Label7.Text = "*"
+        '
+        'Label6
+        '
+        Me.Label6.AutoSize = True
+        Me.Label6.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label6.ForeColor = System.Drawing.Color.Red
+        Me.Label6.Location = New System.Drawing.Point(105, 9)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(17, 21)
+        Me.Label6.TabIndex = 0
+        Me.Label6.Text = "*"
+        '
         'Label1
         '
         Me.Label1.AutoSize = True
@@ -162,7 +247,7 @@ Partial Class AddContactForm
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
         Me.Panel1.Location = New System.Drawing.Point(0, 0)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(336, 44)
+        Me.Panel1.Size = New System.Drawing.Size(667, 44)
         Me.Panel1.TabIndex = 3
         '
         'ToolStrip1
@@ -172,7 +257,7 @@ Partial Class AddContactForm
         Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsbtnSave, Me.ToolStripLabel1, Me.tsbtnCancel})
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
-        Me.ToolStrip1.Size = New System.Drawing.Size(336, 25)
+        Me.ToolStrip1.Size = New System.Drawing.Size(667, 25)
         Me.ToolStrip1.TabIndex = 0
         Me.ToolStrip1.Text = "ToolStrip1"
         '
@@ -208,13 +293,13 @@ Partial Class AddContactForm
         Me.Panel3.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.Panel3.Location = New System.Drawing.Point(0, 229)
         Me.Panel3.Name = "Panel3"
-        Me.Panel3.Size = New System.Drawing.Size(336, 36)
+        Me.Panel3.Size = New System.Drawing.Size(667, 36)
         Me.Panel3.TabIndex = 1
         '
         'btnCancel
         '
         Me.btnCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnCancel.Location = New System.Drawing.Point(258, 6)
+        Me.btnCancel.Location = New System.Drawing.Point(589, 6)
         Me.btnCancel.Name = "btnCancel"
         Me.btnCancel.Size = New System.Drawing.Size(75, 23)
         Me.btnCancel.TabIndex = 1
@@ -225,41 +310,19 @@ Partial Class AddContactForm
         '
         Me.btnSave.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnSave.Enabled = False
-        Me.btnSave.Location = New System.Drawing.Point(177, 6)
+        Me.btnSave.Location = New System.Drawing.Point(508, 6)
         Me.btnSave.Name = "btnSave"
         Me.btnSave.Size = New System.Drawing.Size(75, 23)
         Me.btnSave.TabIndex = 0
         Me.btnSave.Text = "OK"
         Me.btnSave.UseVisualStyleBackColor = True
         '
-        'Label6
-        '
-        Me.Label6.AutoSize = True
-        Me.Label6.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label6.ForeColor = System.Drawing.Color.Red
-        Me.Label6.Location = New System.Drawing.Point(105, 9)
-        Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(17, 21)
-        Me.Label6.TabIndex = 0
-        Me.Label6.Text = "*"
-        '
-        'Label7
-        '
-        Me.Label7.AutoSize = True
-        Me.Label7.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label7.ForeColor = System.Drawing.Color.Red
-        Me.Label7.Location = New System.Drawing.Point(105, 37)
-        Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(17, 21)
-        Me.Label7.TabIndex = 0
-        Me.Label7.Text = "*"
-        '
         'AddContactForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.White
-        Me.ClientSize = New System.Drawing.Size(336, 265)
+        Me.ClientSize = New System.Drawing.Size(667, 265)
         Me.Controls.Add(Me.Panel2)
         Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.Panel3)
@@ -302,4 +365,10 @@ Partial Class AddContactForm
     Friend WithEvents Label4 As Label
     Friend WithEvents Label7 As Label
     Friend WithEvents Label6 As Label
+    Friend WithEvents Label8 As Label
+    Friend WithEvents cboRegion As ComboBox
+    Friend WithEvents Label9 As Label
+    Friend WithEvents cboProvince As ComboBox
+    Friend WithEvents Label10 As Label
+    Friend WithEvents citiesListBox As CheckedListBox
 End Class

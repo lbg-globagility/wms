@@ -31,7 +31,8 @@ CREATE FUNCTION `I_orders`(
 	`I_TotalAmount` DECIMAL(10,2),
 	`I_DeliveryHours` VARCHAR(100),
 	`I_CustomerAddress` VARCHAR(150),
-	`I_InventoryLocationID` INT
+	`I_InventoryLocationID` INT,
+	`I_AgentID` INT
 ) RETURNS int(10)
 BEGIN
 
@@ -60,7 +61,8 @@ INSERT INTO orders
 	TotalAmount,
 	DeliveryHours,
 	CustomerAddress,
-	InventoryLocationID
+	InventoryLocationID,
+	AgentID
 )
 VALUES
 (
@@ -85,7 +87,8 @@ VALUES
 	I_TotalAmount,
 	I_DeliveryHours,
 	I_CustomerAddress,
-	I_InventoryLocationID
+	I_InventoryLocationID,
+	I_AgentID
 );
 
 SELECT @@Identity AS ID INTO newOrdersID;

@@ -39,14 +39,16 @@ namespace WarehouseManagementSystem.Core.Entities
             string seasonCode)
         {
             OrganizationID = organizationId;
-            CreatedBy = userId;
+            AuditUser(userId);
             Size = size;
             SKU = sku;
             SKU2 = sku2;
             SeasonCode = seasonCode;
+            Status = "Active";
         }
 
         public virtual ProductColor ProductColor { get; set; }
+        public virtual ICollection<MovementHistory> MovementHistories { get; set; }
 
         public virtual ICollection<ProductInventoryLocation> ProductInventoryLocations { get; set; }
 

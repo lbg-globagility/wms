@@ -1,7 +1,5 @@
-﻿Imports Microsoft.Extensions.DependencyInjection
-Imports MySql.Data.MySqlClient
+﻿Imports MySql.Data.MySqlClient
 Imports WarehouseManagementSystem.Core.Enums
-Imports WarehouseManagementSystem.Core.Interfaces
 
 Public Class ReceivingForm
     Dim manager As New sqlModule.Manager
