@@ -4183,7 +4183,7 @@ Public Class CustomerOrdersForm
             ToList()
 
         If Not dataSource.Any() Then
-            MessageBox.Show(text:=$"No Inventory Location for type `{inventoryLocationType}`.{Environment.NewLine}You need to create a new Inventory Location with type `{inventoryLocationType}`.{Environment.NewLine}{Environment.NewLine}Go to `Menu` > `Inventory Management` > `(L) Inventory Locations`",
+            MessageBox.Show(text:=$"No Inventory Location for type `{inventoryLocationType}`.{Environment.NewLine}{Environment.NewLine}You need to create a new Inventory Location with type `{inventoryLocationType}`.{Environment.NewLine}{Environment.NewLine}Go to `Menu` > `Inventory Management` > `(L) Inventory Locations`",
                 caption:="No Inventory Location",
                 icon:=MessageBoxIcon.Error,
                 buttons:=MessageBoxButtons.OK)
