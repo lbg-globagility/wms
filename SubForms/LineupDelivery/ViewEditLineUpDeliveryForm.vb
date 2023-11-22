@@ -1747,7 +1747,8 @@ Public Class ViewEditLineUpDeliveryForm
 
     Private Sub GatePassToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles GatePassToolStripMenuItem.Click
         If _systemOwner.IsThurston Then
-            printGatePassThurston(CInt(dgLineUpList.CurrentRow.Cells("lu_lineupno").Value))
+            Return
+            'printGatePassThurston(CInt(dgLineUpList.CurrentRow.Cells("lu_lineupno").Value))
             Dim printreport As New GatePass
             Dim openreportviewer As New ReportViewer
             openreportviewer.CrystalReportViewer.ReportSource = printreport
