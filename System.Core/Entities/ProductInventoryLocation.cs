@@ -60,6 +60,6 @@ namespace WarehouseManagementSystem.Core.Entities
                 unitOfMeasure: unitOfMeasure,
                 unitPrice: unitPrice);
 
-        public int TotalOrderableQty => (TotalAvailableQty - TotalAllocatedQty) ?? 0;
+        public int TotalOrderableQty => (TotalAvailableQty ?? 0) - (TotalAllocatedQty ?? 0);
     }
 }
