@@ -242,11 +242,11 @@ Public Class PickListForm
         End Try
     End Sub
 
-    Sub enableANDvisibleMS(ByVal enable1 As Boolean, ByVal enable2 As Boolean, ByVal enable3 As Boolean, ByVal visible1 As Boolean)
+    Private Sub enableANDvisibleMS(ByVal enable1 As Boolean, ByVal enable2 As Boolean, ByVal enable3 As Boolean, ByVal visible1 As Boolean)
         Try
             msNew.Enabled = enable1
             msSave.Enabled = enable2
-            msPrint.Enabled = enable3
+            'msPrint.Enabled = enable3
             msOrder.Visible = visible1
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
