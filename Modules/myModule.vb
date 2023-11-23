@@ -1,4 +1,5 @@
 ﻿Imports System.IO
+Imports log4net
 Imports Microsoft.Extensions.DependencyInjection
 Imports MySql.Data.MySqlClient
 
@@ -48,6 +49,7 @@ Module myModule
 
     Public MainServiceProvider As ServiceProvider
     Public Const CONFIG_FILE_PATH As String = "C:\ConnectionString\config.ini"
+    Private ReadOnly _logger As ILog = LogManager.GetLogger("ExceptionLogger")
 
 #Region "Module Functions"
 
@@ -108,6 +110,7 @@ Module myModule
     End Function
 
     Public Function getErrExcptn(ByVal ex As Exception, Optional FormNam As String = Nothing) As String
+        _logger.Error(message:=FormNam, exception:=ex)
         Dim st As StackTrace = New StackTrace(ex, True)
         Dim sf As StackFrame = st.GetFrame(st.FrameCount - 1)
         Dim op_FrmNam As String = If(FormNam = Nothing, "", FormNam & ".")
