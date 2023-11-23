@@ -104,6 +104,22 @@ Partial Class InventoryLocationsForm
         Me.txtTotalQtyAvailable = New System.Windows.Forms.TextBox()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.dgProducts = New DevComponents.DotNetBar.Controls.DataGridViewX()
+        Me.p_rowid = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.p_colorvalue = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.p_qtyreserve = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.p_qtydamage = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.p_seqno = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.p_productcode = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.p_colorname = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.p_color = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.p_size = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.p_unitOfMeasure = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.p_qtyavailable = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.p_qtyallocated = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.p_qtyorderable = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.p_seasoncode = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.p_sku = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.p_sku2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Label6 = New System.Windows.Forms.Label()
         Me.txtTotalQtyReserve = New System.Windows.Forms.TextBox()
         Me.Label10 = New System.Windows.Forms.Label()
@@ -144,22 +160,6 @@ Partial Class InventoryLocationsForm
         Me.cmsOptions = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.cmsEdit = New System.Windows.Forms.ToolStripMenuItem()
         Me.cmsDelete = New System.Windows.Forms.ToolStripMenuItem()
-        Me.p_rowid = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.p_colorvalue = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.p_qtyreserve = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.p_qtydamage = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.p_seqno = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.p_productcode = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.p_colorname = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.p_color = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.p_size = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.p_unitOfMeasure = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.p_qtyavailable = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.p_qtyallocated = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.p_qtyorderable = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.p_seasoncode = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.p_sku = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.p_sku2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         CType(Me.dgRackShelfColumn, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.gbInventoryLocationInformation.SuspendLayout()
         CType(Me.pbEditAddress, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -1039,6 +1039,116 @@ Partial Class InventoryLocationsForm
         Me.dgProducts.Size = New System.Drawing.Size(365, 390)
         Me.dgProducts.TabIndex = 36
         '
+        'p_rowid
+        '
+        Me.p_rowid.HeaderText = "rowid"
+        Me.p_rowid.Name = "p_rowid"
+        Me.p_rowid.ReadOnly = True
+        Me.p_rowid.Visible = False
+        '
+        'p_colorvalue
+        '
+        Me.p_colorvalue.HeaderText = "colorvalue"
+        Me.p_colorvalue.Name = "p_colorvalue"
+        Me.p_colorvalue.ReadOnly = True
+        Me.p_colorvalue.Visible = False
+        '
+        'p_qtyreserve
+        '
+        Me.p_qtyreserve.HeaderText = "qty. reserve"
+        Me.p_qtyreserve.Name = "p_qtyreserve"
+        Me.p_qtyreserve.ReadOnly = True
+        Me.p_qtyreserve.Visible = False
+        Me.p_qtyreserve.Width = 60
+        '
+        'p_qtydamage
+        '
+        Me.p_qtydamage.HeaderText = "qty. damage"
+        Me.p_qtydamage.Name = "p_qtydamage"
+        Me.p_qtydamage.ReadOnly = True
+        Me.p_qtydamage.Visible = False
+        Me.p_qtydamage.Width = 60
+        '
+        'p_seqno
+        '
+        Me.p_seqno.HeaderText = "Seq. No."
+        Me.p_seqno.Name = "p_seqno"
+        Me.p_seqno.ReadOnly = True
+        Me.p_seqno.Width = 40
+        '
+        'p_productcode
+        '
+        Me.p_productcode.HeaderText = "Product Code"
+        Me.p_productcode.Name = "p_productcode"
+        Me.p_productcode.ReadOnly = True
+        '
+        'p_colorname
+        '
+        Me.p_colorname.HeaderText = "Color Name"
+        Me.p_colorname.Name = "p_colorname"
+        Me.p_colorname.ReadOnly = True
+        Me.p_colorname.Width = 60
+        '
+        'p_color
+        '
+        Me.p_color.HeaderText = ""
+        Me.p_color.Name = "p_color"
+        Me.p_color.ReadOnly = True
+        Me.p_color.Width = 20
+        '
+        'p_size
+        '
+        Me.p_size.HeaderText = "Size"
+        Me.p_size.Name = "p_size"
+        Me.p_size.ReadOnly = True
+        Me.p_size.Width = 50
+        '
+        'p_unitOfMeasure
+        '
+        Me.p_unitOfMeasure.HeaderText = "Unit of Measure"
+        Me.p_unitOfMeasure.Name = "p_unitOfMeasure"
+        Me.p_unitOfMeasure.ReadOnly = True
+        '
+        'p_qtyavailable
+        '
+        Me.p_qtyavailable.HeaderText = "Qty. Available"
+        Me.p_qtyavailable.Name = "p_qtyavailable"
+        Me.p_qtyavailable.ReadOnly = True
+        Me.p_qtyavailable.Width = 60
+        '
+        'p_qtyallocated
+        '
+        Me.p_qtyallocated.HeaderText = "Qty. Allocated"
+        Me.p_qtyallocated.Name = "p_qtyallocated"
+        Me.p_qtyallocated.ReadOnly = True
+        Me.p_qtyallocated.Width = 60
+        '
+        'p_qtyorderable
+        '
+        Me.p_qtyorderable.HeaderText = "Qty. Orderable"
+        Me.p_qtyorderable.Name = "p_qtyorderable"
+        Me.p_qtyorderable.ReadOnly = True
+        Me.p_qtyorderable.Width = 60
+        '
+        'p_seasoncode
+        '
+        Me.p_seasoncode.HeaderText = "Season Code"
+        Me.p_seasoncode.Name = "p_seasoncode"
+        Me.p_seasoncode.ReadOnly = True
+        Me.p_seasoncode.Width = 70
+        '
+        'p_sku
+        '
+        Me.p_sku.HeaderText = "SKU"
+        Me.p_sku.Name = "p_sku"
+        Me.p_sku.ReadOnly = True
+        '
+        'p_sku2
+        '
+        Me.p_sku2.HeaderText = "SKU2"
+        Me.p_sku2.Name = "p_sku2"
+        Me.p_sku2.ReadOnly = True
+        '
         'Label6
         '
         Me.Label6.AutoSize = True
@@ -1462,116 +1572,6 @@ Partial Class InventoryLocationsForm
         Me.cmsDelete.Name = "cmsDelete"
         Me.cmsDelete.Size = New System.Drawing.Size(107, 22)
         Me.cmsDelete.Text = "Delete"
-        '
-        'p_rowid
-        '
-        Me.p_rowid.HeaderText = "rowid"
-        Me.p_rowid.Name = "p_rowid"
-        Me.p_rowid.ReadOnly = True
-        Me.p_rowid.Visible = False
-        '
-        'p_colorvalue
-        '
-        Me.p_colorvalue.HeaderText = "colorvalue"
-        Me.p_colorvalue.Name = "p_colorvalue"
-        Me.p_colorvalue.ReadOnly = True
-        Me.p_colorvalue.Visible = False
-        '
-        'p_qtyreserve
-        '
-        Me.p_qtyreserve.HeaderText = "qty. reserve"
-        Me.p_qtyreserve.Name = "p_qtyreserve"
-        Me.p_qtyreserve.ReadOnly = True
-        Me.p_qtyreserve.Visible = False
-        Me.p_qtyreserve.Width = 60
-        '
-        'p_qtydamage
-        '
-        Me.p_qtydamage.HeaderText = "qty. damage"
-        Me.p_qtydamage.Name = "p_qtydamage"
-        Me.p_qtydamage.ReadOnly = True
-        Me.p_qtydamage.Visible = False
-        Me.p_qtydamage.Width = 60
-        '
-        'p_seqno
-        '
-        Me.p_seqno.HeaderText = "Seq. No."
-        Me.p_seqno.Name = "p_seqno"
-        Me.p_seqno.ReadOnly = True
-        Me.p_seqno.Width = 40
-        '
-        'p_productcode
-        '
-        Me.p_productcode.HeaderText = "Product Code"
-        Me.p_productcode.Name = "p_productcode"
-        Me.p_productcode.ReadOnly = True
-        '
-        'p_colorname
-        '
-        Me.p_colorname.HeaderText = "Color Name"
-        Me.p_colorname.Name = "p_colorname"
-        Me.p_colorname.ReadOnly = True
-        Me.p_colorname.Width = 60
-        '
-        'p_color
-        '
-        Me.p_color.HeaderText = ""
-        Me.p_color.Name = "p_color"
-        Me.p_color.ReadOnly = True
-        Me.p_color.Width = 20
-        '
-        'p_size
-        '
-        Me.p_size.HeaderText = "Size"
-        Me.p_size.Name = "p_size"
-        Me.p_size.ReadOnly = True
-        Me.p_size.Width = 50
-        '
-        'p_unitOfMeasure
-        '
-        Me.p_unitOfMeasure.HeaderText = "Unit of Measure"
-        Me.p_unitOfMeasure.Name = "p_unitOfMeasure"
-        Me.p_unitOfMeasure.ReadOnly = True
-        '
-        'p_qtyavailable
-        '
-        Me.p_qtyavailable.HeaderText = "Qty. Available"
-        Me.p_qtyavailable.Name = "p_qtyavailable"
-        Me.p_qtyavailable.ReadOnly = True
-        Me.p_qtyavailable.Width = 60
-        '
-        'p_qtyallocated
-        '
-        Me.p_qtyallocated.HeaderText = "Qty. Allocated"
-        Me.p_qtyallocated.Name = "p_qtyallocated"
-        Me.p_qtyallocated.ReadOnly = True
-        Me.p_qtyallocated.Width = 60
-        '
-        'p_qtyorderable
-        '
-        Me.p_qtyorderable.HeaderText = "Qty. Orderable"
-        Me.p_qtyorderable.Name = "p_qtyorderable"
-        Me.p_qtyorderable.ReadOnly = True
-        Me.p_qtyorderable.Width = 60
-        '
-        'p_seasoncode
-        '
-        Me.p_seasoncode.HeaderText = "Season Code"
-        Me.p_seasoncode.Name = "p_seasoncode"
-        Me.p_seasoncode.ReadOnly = True
-        Me.p_seasoncode.Width = 70
-        '
-        'p_sku
-        '
-        Me.p_sku.HeaderText = "SKU"
-        Me.p_sku.Name = "p_sku"
-        Me.p_sku.ReadOnly = True
-        '
-        'p_sku2
-        '
-        Me.p_sku2.HeaderText = "SKU2"
-        Me.p_sku2.Name = "p_sku2"
-        Me.p_sku2.ReadOnly = True
         '
         'InventoryLocationsForm
         '

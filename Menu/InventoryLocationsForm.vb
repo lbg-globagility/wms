@@ -5,7 +5,9 @@ Imports MySql.Data.MySqlClient
 Imports WarehouseManagementSystem.Core.Enums
 Imports WarehouseManagementSystem.Core.Interfaces
 Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
+Imports WarehouseManagementSystem.Core.Interfaces.Repositories
 Imports WarehouseManagementSystem.Desktop.Utilities
+Imports WarehouseManagementSystem.Infrastructure.Data.Repositories
 
 Public Class InventoryLocationsForm
     Dim manager As New sqlModule.Manager
@@ -1725,6 +1727,29 @@ Public Class InventoryLocationsForm
         Finally
             conn.Close()
         End Try
+    End Sub
+
+    Private Sub dgProducts_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgProducts.CellContentClick
+
+    End Sub
+
+    Private Async Sub dgProducts_SelectionChanged(sender As Object, e As EventArgs) Handles dgProducts.SelectionChanged
+        Dim productInventoryLocationId = CInt(If(dgProducts.CurrentRow?.Cells(p_rowid.Name).Value, 0))
+        If productInventoryLocationId = 0 Then
+            txtTotalQtyAvailable.Text = "0"
+            txtTotalQtyAllocated.Text = "0"
+            txtTotalQtyOrderable.Text = "0"
+
+            Return
+        End If
+
+        Dim productInventoryLocationDataService = GetRequiredService(Of IProductInventoryLocationDataService)()
+
+        Dim productInventoryLocation = Await productInventoryLocationDataService.GetByIdAsync(productInventoryLocationId)
+
+        txtTotalQtyAvailable.Text = $"{If(productInventoryLocation.TotalAvailableQty, 0)}"
+        txtTotalQtyAllocated.Text = $"{If(productInventoryLocation.TotalAllocatedQty, 0)}"
+        txtTotalQtyOrderable.Text = $"{productInventoryLocation.TotalOrderableQty}"
     End Sub
 
     Private Sub cboColumn_TextChanged(sender As Object, e As EventArgs) Handles cboColumn.TextChanged
