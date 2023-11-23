@@ -38,7 +38,7 @@ Module myModule
     Public globalcustomerid, globalaccountno, globalproductbundleid, globalproductbundleitemid, globalorderno, globalorderid As Integer
     Public globalbranchid, globalcombinecodingid, globalcodingid, globalcartonsizeid, globallistofvaluesid, globalorderitemid As Integer
     Public globaltotalqtyavailable, globaltotalqtyreserve, globaltotalqtydamage, globalpackinglistid, globalpackinglistcartonid As Integer
-    Public globalinventorylocationid, globalrackshelfcolumnid, globalproductid, globalcategoryid, globalbrandid, globalcompanyid As Integer
+    Public globalinventorylocationid, globalrackshelfcolumnid, globalproductid, globalcategoryid, globalbrandid, globalcompanyid, globalagentid As Integer
     Public globalpicklistorderstatus, globalorderitemstatus, globalorderdate, globaltargetdate, globalpackername, globalpackeddate As String
     Public globalpackedweightuom, globalpackedsizeinfo, globalpackingliststatus, globalpackinglistcartonitemstatus, globalboxsizename As String
     Public globaladdressname, globalcontactname, globalorderstatus, globalpickliststatus, globalusername, globalpicklistorderitemremarks As String
@@ -2888,11 +2888,12 @@ Module myModule
             If globalconn.State = ConnectionState.Open Then globalconn.Close()
             Dim dtGinfo As New DataTable
             dtGinfo = getDataTableForSQL("SELECT COALESCE(c.deliveryhours,''),CONCAT(COALESCE(ad.streetaddress1,''),' ',COALESCE(ad.streetaddress2,''),' ',COALESCE(ad.barangay,''),' ',COALESCE(ad.citytown,''),' ',COALESCE(ad.province,''),' ',COALESCE(ad.state,''),' ',COALESCE(ad.zipcode,''),' ',COALESCE(ad.country,''))," &
-                            "COALESCE(CONCAT(COALESCE(bc.branchcode,''),' - ',COALESCE(bc.branchname,'')),'') FROM accounts c LEFT JOIN address ad ON c.primaryaddressid = ad.rowid LEFT JOIN branches bc ON c.branchid = bc.rowid WHERE c.rowid = " & globaliaccountid & " ")
+                            "COALESCE(CONCAT(COALESCE(bc.branchcode,''),' - ',COALESCE(bc.branchname,'')),''),COALESCE(c.agentid,'') FROM accounts c LEFT JOIN address ad ON c.primaryaddressid = ad.rowid LEFT JOIN branches bc ON c.branchid = bc.rowid WHERE c.rowid = " & globaliaccountid & " ")
             If dtGinfo.Rows.Count <> 0 Then
                 globaldeliveryhours = dtGinfo.Rows(0)(0)
                 globaladdressname = dtGinfo.Rows(0)(1)
                 globalbranchname = dtGinfo.Rows(0)(2)
+                globalAgentId = dtGinfo.Rows(0)(3)
             Else
                 globaldeliveryhours = "" : globaladdressname = "" : globalbranchname = ""
             End If

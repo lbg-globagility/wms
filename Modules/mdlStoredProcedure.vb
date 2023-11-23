@@ -33,6 +33,7 @@ Module mdlStoredProcedure
                           ByVal DeliveryHours As String,
                           ByVal Comments As String,
                           ByVal Status As String,
+                          ByVal AgentID As Integer,
                           ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
@@ -63,6 +64,7 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("I_DeliveryHours", DeliveryHours)
                 .Parameters.AddWithValue("I_Comments", Comments)
                 .Parameters.AddWithValue("I_Status", Status)
+                .Parameters.AddWithValue("I_AgentID", AgentID)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
             Catch ex As Exception
@@ -92,6 +94,7 @@ Module mdlStoredProcedure
                    ByVal DeliveryHours As String,
                    ByVal Comments As String,
                    ByVal Status As String,
+                   ByVal AgentID As Integer,
                    ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
@@ -118,6 +121,7 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_DeliveryHours", DeliveryHours)
                 .Parameters.AddWithValue("U_Comments", Comments)
                 .Parameters.AddWithValue("U_Status", Status)
+                .Parameters.AddWithValue("U_AgentID", AgentID)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
             Catch ex As Exception

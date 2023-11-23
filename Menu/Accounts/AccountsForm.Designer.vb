@@ -216,6 +216,8 @@ Partial Class AccountsForm
         Me.msSave = New System.Windows.Forms.ToolStripMenuItem()
         Me.msCancel = New System.Windows.Forms.ToolStripMenuItem()
         Me.lblsavemsg = New System.Windows.Forms.Label()
+        Me.Label43 = New System.Windows.Forms.Label()
+        Me.cboAgent = New System.Windows.Forms.ComboBox()
         CType(Me.errProvider, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbClose, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.tabAccounts.SuspendLayout()
@@ -688,9 +690,9 @@ Partial Class AccountsForm
         Me.gbCustomerOrders.Controls.Add(Me.Label15)
         Me.gbCustomerOrders.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.gbCustomerOrders.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.gbCustomerOrders.Location = New System.Drawing.Point(8, 229)
+        Me.gbCustomerOrders.Location = New System.Drawing.Point(8, 231)
         Me.gbCustomerOrders.Name = "gbCustomerOrders"
-        Me.gbCustomerOrders.Size = New System.Drawing.Size(795, 200)
+        Me.gbCustomerOrders.Size = New System.Drawing.Size(795, 198)
         Me.gbCustomerOrders.TabIndex = 4
         Me.gbCustomerOrders.TabStop = False
         '
@@ -736,7 +738,7 @@ Partial Class AccountsForm
         Me.dgCustomerOrderItems.RowHeadersDefaultCellStyle = DataGridViewCellStyle5
         Me.dgCustomerOrderItems.RowHeadersVisible = False
         Me.dgCustomerOrderItems.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgCustomerOrderItems.Size = New System.Drawing.Size(366, 172)
+        Me.dgCustomerOrderItems.Size = New System.Drawing.Size(366, 170)
         Me.dgCustomerOrderItems.TabIndex = 33
         '
         'ci_rowid
@@ -978,7 +980,7 @@ Partial Class AccountsForm
         Me.dgCustomerOrders.RowHeadersDefaultCellStyle = DataGridViewCellStyle8
         Me.dgCustomerOrders.RowHeadersVisible = False
         Me.dgCustomerOrders.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgCustomerOrders.Size = New System.Drawing.Size(399, 145)
+        Me.dgCustomerOrders.Size = New System.Drawing.Size(399, 143)
         Me.dgCustomerOrders.TabIndex = 32
         '
         'co_rowid
@@ -1043,6 +1045,8 @@ Partial Class AccountsForm
         '
         'gbCustomerInformation
         '
+        Me.gbCustomerInformation.Controls.Add(Me.Label43)
+        Me.gbCustomerInformation.Controls.Add(Me.cboAgent)
         Me.gbCustomerInformation.Controls.Add(Me.pbAutoAddA)
         Me.gbCustomerInformation.Controls.Add(Me.pbAddBranchCodeName)
         Me.gbCustomerInformation.Controls.Add(Me.cboBranchCodeNameInfo)
@@ -1276,7 +1280,7 @@ Partial Class AccountsForm
         '
         Me.Label8.AutoSize = True
         Me.Label8.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label8.Location = New System.Drawing.Point(405, 53)
+        Me.Label8.Location = New System.Drawing.Point(567, 53)
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(54, 15)
         Me.Label8.TabIndex = 314
@@ -1295,9 +1299,9 @@ Partial Class AccountsForm
         'txtWebsiteA
         '
         Me.txtWebsiteA.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtWebsiteA.Location = New System.Drawing.Point(459, 49)
+        Me.txtWebsiteA.Location = New System.Drawing.Point(627, 49)
         Me.txtWebsiteA.Name = "txtWebsiteA"
-        Me.txtWebsiteA.Size = New System.Drawing.Size(315, 21)
+        Me.txtWebsiteA.Size = New System.Drawing.Size(147, 21)
         Me.txtWebsiteA.TabIndex = 23
         '
         'Label7
@@ -2219,6 +2223,27 @@ Partial Class AccountsForm
         Me.lblsavemsg.Size = New System.Drawing.Size(0, 13)
         Me.lblsavemsg.TabIndex = 193
         '
+        'Label43
+        '
+        Me.Label43.AutoSize = True
+        Me.Label43.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label43.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.Label43.Location = New System.Drawing.Point(403, 53)
+        Me.Label43.Name = "Label43"
+        Me.Label43.Size = New System.Drawing.Size(41, 15)
+        Me.Label43.TabIndex = 535
+        Me.Label43.Text = "Agent:"
+        '
+        'cboAgent
+        '
+        Me.cboAgent.BackColor = System.Drawing.SystemColors.Window
+        Me.cboAgent.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cboAgent.FormattingEnabled = True
+        Me.cboAgent.Location = New System.Drawing.Point(445, 47)
+        Me.cboAgent.Name = "cboAgent"
+        Me.cboAgent.Size = New System.Drawing.Size(118, 23)
+        Me.cboAgent.TabIndex = 534
+        '
         'AccountsForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -2477,4 +2502,6 @@ Partial Class AccountsForm
     Friend WithEvents c_customername As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents c_mainphone As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents c_parentcustomer As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents Label43 As Label
+    Friend WithEvents cboAgent As ComboBox
 End Class

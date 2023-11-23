@@ -65,6 +65,8 @@ Partial Class AddCustomersForm
         Me.cboBranchCodeNameInfo = New System.Windows.Forms.ComboBox()
         Me.Label41 = New System.Windows.Forms.Label()
         Me.pbAutoAddA = New System.Windows.Forms.PictureBox()
+        Me.cboAgent = New System.Windows.Forms.ComboBox()
+        Me.Label9 = New System.Windows.Forms.Label()
         Me.msMenu.SuspendLayout()
         CType(Me.pbEditContactPerson, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbEditDeliveryAddress, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -200,7 +202,7 @@ Partial Class AddCustomersForm
         '
         Me.Label8.AutoSize = True
         Me.Label8.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label8.Location = New System.Drawing.Point(407, 94)
+        Me.Label8.Location = New System.Drawing.Point(569, 94)
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(54, 15)
         Me.Label8.TabIndex = 314
@@ -219,9 +221,9 @@ Partial Class AddCustomersForm
         'txtWebsite
         '
         Me.txtWebsite.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtWebsite.Location = New System.Drawing.Point(461, 90)
+        Me.txtWebsite.Location = New System.Drawing.Point(623, 90)
         Me.txtWebsite.Name = "txtWebsite"
-        Me.txtWebsite.Size = New System.Drawing.Size(315, 21)
+        Me.txtWebsite.Size = New System.Drawing.Size(153, 21)
         Me.txtWebsite.TabIndex = 23
         '
         'Label7
@@ -477,13 +479,36 @@ Partial Class AddCustomersForm
         Me.pbAutoAddA.TabStop = False
         Me.pbAutoAddA.Tag = ""
         '
+        'cboAgent
+        '
+        Me.cboAgent.BackColor = System.Drawing.SystemColors.Window
+        Me.cboAgent.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cboAgent.FormattingEnabled = True
+        Me.cboAgent.Location = New System.Drawing.Point(446, 88)
+        Me.cboAgent.Name = "cboAgent"
+        Me.cboAgent.Size = New System.Drawing.Size(117, 23)
+        Me.cboAgent.TabIndex = 532
+        '
+        'Label9
+        '
+        Me.Label9.AutoSize = True
+        Me.Label9.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label9.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.Label9.Location = New System.Drawing.Point(404, 92)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(41, 15)
+        Me.Label9.TabIndex = 533
+        Me.Label9.Text = "Agent:"
+        '
         'AddCustomersForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.AutoScroll = True
         Me.BackColor = System.Drawing.Color.White
-        Me.ClientSize = New System.Drawing.Size(789, 261)
+        Me.ClientSize = New System.Drawing.Size(789, 263)
+        Me.Controls.Add(Me.cboAgent)
+        Me.Controls.Add(Me.Label9)
         Me.Controls.Add(Me.pbAutoAddA)
         Me.Controls.Add(Me.pbAddBranchCodeName)
         Me.Controls.Add(Me.cboBranchCodeNameInfo)
@@ -582,4 +607,6 @@ Partial Class AddCustomersForm
     Friend WithEvents cboBranchCodeNameInfo As System.Windows.Forms.ComboBox
     Friend WithEvents Label41 As System.Windows.Forms.Label
     Friend WithEvents pbAutoAddA As System.Windows.Forms.PictureBox
+    Friend WithEvents cboAgent As ComboBox
+    Friend WithEvents Label9 As Label
 End Class

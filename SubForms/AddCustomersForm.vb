@@ -9,14 +9,18 @@ Imports System.Data
 Imports System.Diagnostics
 Imports System.Runtime.InteropServices
 Imports System.Text.RegularExpressions
+Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
+Imports Microsoft.Extensions.DependencyInjection
+
 Public Class AddCustomersForm
     Dim manager As New sqlModule.Manager
-    Dim conn As New MySqlConnection(Manager.GetConnString)
+    Dim conn As New MySqlConnection(manager.GetConnString)
     Dim sqlcmd As MySqlCommand
     Dim sqlrd As MySqlDataReader
     Dim sqlquery As String
     Dim acfdeliveryaddressid, acfcontactpersonid, acfparentcustomerid, acfpicklistgroupid, acfbranchid As Integer
     Public addcustomerformcue As Boolean = False
+    Private _agents As List(Of WarehouseManagementSystem.Core.Entities.Contact)
     Private Sub AddCustomersForm_Load(sender As Object, e As EventArgs) Handles Me.Load
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -57,6 +61,7 @@ Public Class AddCustomersForm
         autopopulateParentCustomerA(cboParentCustomer)
         autopopulatePickingGroup(cboPickingGroup)
         globalautopopulateBranchCodeName(cboBranchCodeNameInfo, Me)
+        autopopulateAgent(cboAgent)
     End Sub
 #Region "Clear/Enable/Visible"
     Sub clearfields()
@@ -178,6 +183,17 @@ Public Class AddCustomersForm
             conn.Close()
         End Try
     End Sub
+    Async Sub autopopulateAgent(ByVal icombobox As ComboBox)
+        Dim contactDataService = MainServiceProvider.GetRequiredService(Of IContactDataService)
+
+        _agents = Await contactDataService.GetAgentsAsync(organizationId:=Z_OrganizationID)
+
+        Dim agentDataSource = New List(Of WarehouseManagementSystem.Core.Entities.Contact) From {WarehouseManagementSystem.Core.Entities.Contact.NewContact(organizationId:=Z_OrganizationID, lastName:=String.Empty, firstName:=String.Empty, workPhone:=String.Empty, type:=1)}
+        agentDataSource.AddRange(_agents)
+        icombobox.ValueMember = "RowID"
+        icombobox.DisplayMember = "FullNameLastNameFirst"
+        icombobox.DataSource = agentDataSource
+    End Sub
 #End Region
 #End Region
 #End Region
@@ -290,6 +306,7 @@ Public Class AddCustomersForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
     Private Sub pbAutoAddA_MouseEnter(sender As Object, e As EventArgs) Handles pbAutoAddA.MouseEnter
         Try
             pbAutoAddA.BackColor = Color.MediumSpringGreen
@@ -342,8 +359,8 @@ Public Class AddCustomersForm
                         acfpicklistgroupid = 0
                     End If
                     getAccountNo("Customer", Me)
-                    I_Accounts(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, If(acfcontactpersonid = 0, DBNull.Value, acfcontactpersonid), If(acfdeliveryaddressid = 0, DBNull.Value, acfdeliveryaddressid), If(acfparentcustomerid = 0, DBNull.Value, acfparentcustomerid), If(acfpicklistgroupid = 0, DBNull.Value, acfpicklistgroupid), _
-                            If(acfbranchid = 0, DBNull.Value, acfbranchid), globalaccountno, "Customer", txtCustomerName.Text, txtCustomerName.Text, txtMainPhone.Text, txtAlternatePhone.Text, txtFaxNo.Text, txtEmailAddress.Text, txtTIN.Text, txtWebsite.Text, txtDeliveryHours.Text, txtComments.Text, txtStatus.Text, Me)
+                    I_Accounts(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, If(acfcontactpersonid = 0, DBNull.Value, acfcontactpersonid), If(acfdeliveryaddressid = 0, DBNull.Value, acfdeliveryaddressid), If(acfparentcustomerid = 0, DBNull.Value, acfparentcustomerid), If(acfpicklistgroupid = 0, DBNull.Value, acfpicklistgroupid),
+                            If(acfbranchid = 0, DBNull.Value, acfbranchid), globalaccountno, "Customer", txtCustomerName.Text, txtCustomerName.Text, txtMainPhone.Text, txtAlternatePhone.Text, txtFaxNo.Text, txtEmailAddress.Text, txtTIN.Text, txtWebsite.Text, txtDeliveryHours.Text, txtComments.Text, txtStatus.Text, cboAgent.SelectedValue, Me)
                     If CInt(txtCustomerNo.Text) <> globalaccountno Then
                         MessageBox.Show("Please take note that the Customer No. will change from " & CInt(txtCustomerNo.Text) & " to " & globalaccountno & "." & vbNewLine & "Another user used Customer No. " & CInt(txtCustomerNo.Text) & " for its new customer", "Note:", MessageBoxButtons.OK, MessageBoxIcon.Information)
                         txtCustomerNo.Text = globalaccountno

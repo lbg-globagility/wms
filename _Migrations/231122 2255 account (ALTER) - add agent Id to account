@@ -1,0 +1,2 @@
+ALTER TABLE `accounts`
+	ADD COLUMN `AgentID` INT(11) NULL DEFAULT NULL AFTER `Image`;
