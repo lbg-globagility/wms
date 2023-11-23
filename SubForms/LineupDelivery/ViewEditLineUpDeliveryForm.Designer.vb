@@ -143,10 +143,13 @@ Partial Class ViewEditLineUpDeliveryForm
         Me.msToDeliver = New System.Windows.Forms.ToolStripMenuItem()
         Me.msOrder = New System.Windows.Forms.ToolStripMenuItem()
         Me.msPrint = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DeliveryScheduleToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.TripTicketToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.msConfirm = New System.Windows.Forms.ToolStripMenuItem()
         Me.lblsavemsg = New System.Windows.Forms.Label()
         Me.errProvider = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.lblTitle = New System.Windows.Forms.Label()
+        Me.GatePassToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         CType(Me.dgLineUpList, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ToolStrip3.SuspendLayout()
         Me.gbLineUpList.SuspendLayout()
@@ -1422,10 +1425,23 @@ Partial Class ViewEditLineUpDeliveryForm
         '
         'msPrint
         '
+        Me.msPrint.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DeliveryScheduleToolStripMenuItem, Me.TripTicketToolStripMenuItem, Me.GatePassToolStripMenuItem})
         Me.msPrint.Image = CType(resources.GetObject("msPrint.Image"), System.Drawing.Image)
         Me.msPrint.Name = "msPrint"
         Me.msPrint.Size = New System.Drawing.Size(62, 20)
         Me.msPrint.Text = "&Print"
+        '
+        'DeliveryScheduleToolStripMenuItem
+        '
+        Me.DeliveryScheduleToolStripMenuItem.Name = "DeliveryScheduleToolStripMenuItem"
+        Me.DeliveryScheduleToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.DeliveryScheduleToolStripMenuItem.Text = "Delivery Schedule"
+        '
+        'TripTicketToolStripMenuItem
+        '
+        Me.TripTicketToolStripMenuItem.Name = "TripTicketToolStripMenuItem"
+        Me.TripTicketToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.TripTicketToolStripMenuItem.Text = "Trip Ticket"
         '
         'msConfirm
         '
@@ -1458,6 +1474,12 @@ Partial Class ViewEditLineUpDeliveryForm
         Me.lblTitle.TabIndex = 234
         Me.lblTitle.Text = "View / Edit Line-Up And Delivery"
         Me.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'GatePassToolStripMenuItem
+        '
+        Me.GatePassToolStripMenuItem.Name = "GatePassToolStripMenuItem"
+        Me.GatePassToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.GatePassToolStripMenuItem.Text = "Gate Pass"
         '
         'ViewEditLineUpDeliveryForm
         '
@@ -1627,5 +1649,8 @@ Partial Class ViewEditLineUpDeliveryForm
     Friend WithEvents btnAddAgent As PictureBox
     Friend WithEvents btnAddHelper1 As PictureBox
     Friend WithEvents btnAddHelper2 As PictureBox
+    Friend WithEvents DeliveryScheduleToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents TripTicketToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents GatePassToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents Button1 As Button
 End Class
