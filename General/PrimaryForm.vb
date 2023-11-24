@@ -1,4 +1,5 @@
-﻿Imports Microsoft.Extensions.DependencyInjection
+﻿Imports System.Collections.ObjectModel
+Imports Microsoft.Extensions.DependencyInjection
 Imports MySql.Data.MySqlClient
 Imports WarehouseManagementSystem.Core.Entities
 Imports WarehouseManagementSystem.Core.Enums
@@ -1575,5 +1576,12 @@ Public Class PrimaryForm
             Return _systemOwner.IsThurston
         End Get
     End Property
+
+    Private Async Sub SampleToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SampleToolStripMenuItem.Click
+        Dim providers = New Collection(Of IReportProvider) From {
+            New DeliveryPerformanceReportProvider()}
+
+        Await providers.FirstOrDefault().RunAsync()
+    End Sub
 
 End Class

@@ -240,6 +240,7 @@ Partial Class PrimaryForm
         Me.PictureBox2 = New System.Windows.Forms.PictureBox()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.MainLoadingBar = New System.Windows.Forms.ProgressBar()
+        Me.SampleToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.msHome.SuspendLayout()
         Me.tsInformation.SuspendLayout()
         CType(Me.pbPin, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -400,7 +401,7 @@ Partial Class PrimaryForm
         Me.msProducts.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.msProducts.Image = CType(resources.GetObject("msProducts.Image"), System.Drawing.Image)
         Me.msProducts.Name = "msProducts"
-        Me.msProducts.Size = New System.Drawing.Size(180, 22)
+        Me.msProducts.Size = New System.Drawing.Size(144, 22)
         Me.msProducts.Text = "(&J) Products"
         '
         'msBundles
@@ -408,7 +409,7 @@ Partial Class PrimaryForm
         Me.msBundles.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.msBundles.Image = CType(resources.GetObject("msBundles.Image"), System.Drawing.Image)
         Me.msBundles.Name = "msBundles"
-        Me.msBundles.Size = New System.Drawing.Size(180, 22)
+        Me.msBundles.Size = New System.Drawing.Size(144, 22)
         Me.msBundles.Text = "(&K) Bundles"
         '
         'msInventoryManagement
@@ -486,7 +487,7 @@ Partial Class PrimaryForm
         '
         'msReports
         '
-        Me.msReports.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.msCycleCount, Me.msBrokenSizes, Me.msSellThrough, Me.msAging, Me.msSalesAndQty, Me.msDeliveryPerformance, Me.msStockLevel, Me.msPickListed})
+        Me.msReports.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.msCycleCount, Me.msBrokenSizes, Me.msSellThrough, Me.msAging, Me.msSalesAndQty, Me.msDeliveryPerformance, Me.msStockLevel, Me.msPickListed, Me.SampleToolStripMenuItem})
         Me.msReports.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.msReports.Image = CType(resources.GetObject("msReports.Image"), System.Drawing.Image)
         Me.msReports.Name = "msReports"
@@ -2124,6 +2125,12 @@ Partial Class PrimaryForm
         Me.MainLoadingBar.Size = New System.Drawing.Size(160, 21)
         Me.MainLoadingBar.TabIndex = 10
         '
+        'SampleToolStripMenuItem
+        '
+        Me.SampleToolStripMenuItem.Name = "SampleToolStripMenuItem"
+        Me.SampleToolStripMenuItem.Size = New System.Drawing.Size(224, 22)
+        Me.SampleToolStripMenuItem.Text = "Sample"
+        '
         'PrimaryForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -2382,4 +2389,5 @@ Partial Class PrimaryForm
     Friend WithEvents rt_customername As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents rt_createdby As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents AgentHelperToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents SampleToolStripMenuItem As ToolStripMenuItem
 End Class

@@ -93,10 +93,10 @@
     <Reference Include="AutoMapper, Version=6.2.2.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <HintPath>packages\AutoMapper.6.2.2\lib\net45\AutoMapper.dll</HintPath>
     </Reference>
-    <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
-    <Reference Include="CrystalDecisions.ReportSource, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
-    <Reference Include="CrystalDecisions.Shared, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
-    <Reference Include="CrystalDecisions.Windows.Forms, Version=13.0.4000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.ReportSource, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.Shared, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
+    <Reference Include="CrystalDecisions.Windows.Forms, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
     <Reference Include="DevComponents.DotNetBar2, Version=10.0.0.3, Culture=neutral, PublicKeyToken=7eb7c3a35b91de04, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\Debug\DevComponents.DotNetBar2.dll</HintPath>
@@ -276,6 +276,28 @@
     <Compile Include="Core\Utilities\Helper\SaveFileDialogHelper.vb" />
     <Compile Include="Core\Utilities\Helper\TemplatesHelper.vb" />
     <Compile Include="Core\Utilities\MessageBoxHelper.vb" />
+    <Compile Include="CrystalReports\DataSet\ReportDataTableCollection.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ReportDataTableCollection.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSet\ReportDataTableCollection.vb">
+      <DependentUpon>ReportDataTableCollection.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DefaultReportViewer.Designer.vb">
+      <DependentUpon>DefaultReportViewer.vb</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DefaultReportViewer.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CrystalReports\DeliveryPerformanceReport.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DeliveryPerformanceReport.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="CrystalReports\ReportProviders\IReportProvider.vb" />
+    <Compile Include="CrystalReports\ReportProviders\DeliveryPerformanceReportProvider.vb" />
     <Compile Include="General\DummyForm.Designer.vb">
       <DependentUpon>DummyForm.vb</DependentUpon>
     </Compile>
@@ -987,6 +1009,13 @@
     <EmbeddedResource Include="Admin\UserForm.resx">
       <DependentUpon>UserForm.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="CrystalReports\DefaultReportViewer.resx">
+      <DependentUpon>DefaultReportViewer.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CrystalReports\DeliveryPerformanceReport.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>DeliveryPerformanceReport.vb</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="General\DummyForm.resx">
       <DependentUpon>DummyForm.vb</DependentUpon>
     </EmbeddedResource>
@@ -1366,6 +1395,17 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />
+    <None Include="CrystalReports\DataSet\ReportDataTableCollection.xsc">
+      <DependentUpon>ReportDataTableCollection.xsd</DependentUpon>
+    </None>
+    <None Include="CrystalReports\DataSet\ReportDataTableCollection.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>ReportDataTableCollection.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="CrystalReports\DataSet\ReportDataTableCollection.xss">
+      <DependentUpon>ReportDataTableCollection.xsd</DependentUpon>
+    </None>
     <None Include="Import Templates\product-color-size-template.xlsx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

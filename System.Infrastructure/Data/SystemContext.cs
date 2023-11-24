@@ -20,6 +20,8 @@ namespace WarehouseManagementSystem.Infrastructure.Data
         internal virtual DbSet<Category> Categories { get; set; }
         internal virtual DbSet<Color> Colors { get; set; }
         internal virtual DbSet<Contact> Contacts { get; set; }
+        internal virtual DbSet<DeliveryTruck> DeliveryTrucks { get; set; }
+        internal virtual DbSet<DeliveryTruckShift> DeliveryTruckShifts { get; set; }
         internal virtual DbSet<Helper> Helpers { get; set; }
         internal virtual DbSet<InventoryLocation> InventoryLocations { get; set; }
         internal virtual DbSet<Invoice> Invoices { get; set; }
@@ -31,6 +33,9 @@ namespace WarehouseManagementSystem.Infrastructure.Data
         internal virtual DbSet<Order> Orders { get; set; }
         internal virtual DbSet<OrderItem> OrderItems { get; set; }
         internal virtual DbSet<Organization> Organizations { get; set; }
+        internal virtual DbSet<PackingList> PackingLists { get; set; }
+        internal virtual DbSet<PackingListCarton> PackingListCartons { get; set; }
+        internal virtual DbSet<PackingListCartonItem> PackingListCartonItems { get; set; }
         internal virtual DbSet<PickListOrder> PickListOrders { get; set; }
         internal virtual DbSet<PickListOrderItem> PickListOrderItems { get; set; }
         internal virtual DbSet<Position> Positions { get; set; }
@@ -45,6 +50,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data
         internal virtual DbSet<MovementHistory> ProductMovementHistories { get; set; }
         internal virtual DbSet<ProductShipmentHistory> ProductShipmentHistories { get; set; }
         internal virtual DbSet<RackShelfColumn> RackShelfColumns { get; set; }
+        internal virtual DbSet<Shift> Shifts { get; set; }
         internal virtual DbSet<SystemOwner> SystemOwners { get; set; }
         internal virtual DbSet<User> Users { get; set; }
         internal virtual DbSet<UserActivity> UserActivities { get; set; }
@@ -415,6 +421,22 @@ namespace WarehouseManagementSystem.Infrastructure.Data
 
                 t.HasMany(x => x.PositionViews)
                     .WithOne(x => x.View);
+            });
+
+            modelBuilder.Entity<PackingList>(t =>
+            {
+            });
+
+            modelBuilder.Entity<PackingListCarton>(t =>
+            {
+                t.Property(x => x.Status)
+                    .HasConversion(new EnumToStringConverter<PackingListCartonStatus>());
+            });
+
+            modelBuilder.Entity<PackingListCartonItem>(t =>
+            {
+                t.Property(x => x.Status)
+                    .HasConversion(new EnumToStringConverter<PackingListCartonItemStatus>());
             });
         }
     }
