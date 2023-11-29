@@ -1,0 +1,8 @@
+Position ID 36
+INSERT INTO `views` (`ViewName`) VALUES ('Show Quantity to Receive');
+
+INSERT INTO `positionviews` (`OrganizationID`, `Created`, `CreatedBy`, `LastUpd`, `LastUpdBy`, `PositionID`, `ViewID`, `Creates`, `ReadOnly`, `Updates`, `Disable`) VALUES ('1', '2023-11-29 13:09:58', '1', '2023-11-29 13:10:01', '1', '1', '36', 'N', 'N', 'N', 'N');
+INSERT INTO `positionviews` (`OrganizationID`, `Created`, `CreatedBy`, `LastUpd`, `LastUpdBy`, `PositionID`, `ViewID`, `Creates`, `ReadOnly`, `Updates`, `Disable`) VALUES ('1', '2023-11-29 13:09:58', '1', '2023-11-29 13:10:01', '1', '2', '36', 'N', 'N', 'N', 'N');
+INSERT INTO `positionviews` (`OrganizationID`, `Created`, `CreatedBy`, `LastUpd`, `LastUpdBy`, `PositionID`, `ViewID`, `Creates`, `ReadOnly`, `Updates`, `Disable`) VALUES ('1', '2023-11-29 13:09:58', '1', '2023-11-29 13:10:01', '1', '3', '36', 'N', 'N', 'N', 'N');
+
+set UpdateFLag (`Updates`) = 'Y' to sir Erwin based on his positionId
