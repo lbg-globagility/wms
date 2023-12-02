@@ -63,6 +63,12 @@ Public Class RackShelfColumnSelectorDialog
             FlowLayoutPanel1.WrapContents = True
         End If
 
+        Await LoadDataSourceAsync()
+
+        DisEnableOKButton()
+    End Sub
+
+    Private Async Function LoadDataSourceAsync() As Task
         Dim productInventoryLocationDataService = GetRequiredService(Of IProductInventoryLocationDataService)()
         Dim productInventoryLocations = Await productInventoryLocationDataService.GetByInventoryLocationIdAsync(_inventoryLocationId)
 
@@ -71,9 +77,9 @@ Public Class RackShelfColumnSelectorDialog
             Select(Function(t)
                        Dim movementHistory = _movementHistories?.
                         Where(Function(f) f.ProductColorSizeID = _productColorSizeId).
-                        Where(Function(f) f.ProductInventoryLocationIDA = _productInventoryLocationId).
+                        Where(Function(f) f.ProductInventoryLocationIDA = t.RowID).
                         FirstOrDefault()
-                       Dim qtyToApply = If(movementHistory.QtyToApply, 0)
+                       Dim qtyToApply = If(movementHistory?.QtyToApply, 0)
 
                        Return New RackShelfColumnModel(order:=_order,
                         productInventoryLocation:=t,
@@ -83,9 +89,7 @@ Public Class RackShelfColumnSelectorDialog
                    End Function).
             ToList()
         gridRackShelfColumn.DataSource = dataSource
-
-        DisEnableOKButton()
-    End Sub
+    End Function
 
     Private Sub gridRackShelfColumn_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles gridRackShelfColumn.CellContentClick
 
@@ -118,7 +122,7 @@ Public Class RackShelfColumnSelectorDialog
                 userId:=Z_UserID,
                 productColorSizeID:=_productColorSizeId,
                 orderId:=_orderId,
-                productInventoryLocationId:=_productInventoryLocationId,
+                productInventoryLocationId:=t.ProductInventoryLocationId,
                 currentQty:=t.AvailableQty,
                 qtyToApply:=t.Quantity,
                 transactionType:=$"{OrderType.ST} - {fromOrToText}")).
@@ -147,5 +151,4 @@ Public Class RackShelfColumnSelectorDialog
             icon:=MessageBoxIcon.Information,
             buttons:=MessageBoxButtons.OK)
     End Sub
-
 End Class

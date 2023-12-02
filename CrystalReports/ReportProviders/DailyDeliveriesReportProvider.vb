@@ -1,25 +1,27 @@
 ﻿Option Strict On
+
 Imports log4net
 Imports MySql.Data.MySqlClient
 
-Public Class DeliveryPerformanceReportProvider
+Public Class DailyDeliveriesReportProvider
     Implements IReportProvider
 
     Dim manager As New Manager()
 
     Private Shared ReadOnly _logger As ILog = LogManager.GetLogger("ExceptionLogger")
 
-    Private Const REPORT_NAME As String = "Delivery Performance Report"
+    Private Const REPORT_NAME As String = "Daily Deliveries Report"
 
     Public Property Name As String = REPORT_NAME Implements IReportProvider.Name
 
     Public Property IsHidden As Boolean = False Implements IReportProvider.IsHidden
 
     Public Async Function RunAsync() As Task Implements IReportProvider.RunAsync
-        Dim userDatePickerForm = New UserDatePickerForm()
+        Dim userDatePickerForm = New UserDatePickerForm(isDateOnlyConfig:=True)
         If Not userDatePickerForm.ShowDialog() = DialogResult.OK Then Return
 
-        Dim connectionText = manager.GetConnString()
+        Dim connectionText = "server=localhost;user id=root;database=dreamheartsdb;port=3307;password=globagility;"
+        'manager.GetConnString()
 
         Dim strQuery = <![CDATA[
             SELECT
@@ -50,8 +52,10 @@ Public Class DeliveryPerformanceReportProvider
             pcs.Size,
             pli.QtyInCarton,
             IFNULL(pil.UnitOfMeasure, '') `UnitOfMeasure`
+            
+            ,lu.DeliveryNo
+            ,IFNULL(pil.TotalAvailableQty, 0) `TotalAvailableQty`
 
-            #,lu.*
             FROM lineups lu
 
             INNER JOIN deliverytruckshifts ts ON ts.RowID=lu.DeliveryTruckShiftID
@@ -94,7 +98,9 @@ Public Class DeliveryPerformanceReportProvider
 
             With command.Parameters
                 .AddWithValue("@orgId", Z_OrganizationID)
-                .AddWithValue("@startDate", userDatePickerForm.StartDate)
+                '.AddWithValue("@startDate", userDatePickerForm.StartDate)
+                .AddWithValue("@startDate", New Date(2017, 1, 24))
+                '2017-01-24
                 .AddWithValue("@endDate", userDatePickerForm.EndDate?.Date)
                 .AddWithValue("@condition", userDatePickerForm.IsDateOnly)
             End With
@@ -108,7 +114,7 @@ Public Class DeliveryPerformanceReportProvider
                 Dim dataSet As New DataSet
                 adapter.Fill(dataSet)
 
-                Dim report = New DeliveryPerformanceReport()
+                Dim report = New DailyDeliveriesReport()
                 Dim datasource = dataSet.Tables.OfType(Of DataTable).FirstOrDefault()
                 report.SetDataSource(datasource)
 
@@ -116,7 +122,7 @@ Public Class DeliveryPerformanceReportProvider
                 form.CrystalReportViewer1.ReportSource = report
                 form.Show()
             Catch ex As Exception
-                _logger.Error("DeliveryPerformanceReportProvider", ex)
+                _logger.Error("DailyDeliveriesReportProvider", ex)
 
                 MessageBox.Show(String.Concat("Oops! something went wrong, please contact Globagility Inc."),
                     String.Empty,

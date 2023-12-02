@@ -47,16 +47,19 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
             var pilIds = order.MovementHistories
                 .Select(t => t.ProductInventoryLocationIDA.Value)
                 .ToArray();
-            var productInventoryLocations = await _productInventoryLocationRepository.GetManyByIdsAsync(pilIds);
+            var productInventoryLocations = await _productInventoryLocationDataService.GetManyByIdsAsync(pilIds);
 
             foreach (var movementHistory in order.MovementHistories)
             {
                 var productInventoryLocation = productInventoryLocations.FirstOrDefault(x => x.RowID == movementHistory.ProductInventoryLocationIDA);
                 if (movementHistory == null) continue;
-                productInventoryLocation.TotalAvailableQty = (productInventoryLocation.TotalAvailableQty ?? 0) + movementHistory.FormulatedQtyToApply;
+                
+                var quantity = (productInventoryLocation.TotalAvailableQty ?? 0) + movementHistory.FormulatedQtyToApply;
+                productInventoryLocation.TotalAvailableQty = quantity;
+                productInventoryLocation.RackShelfColumn.AvailableQty = quantity;
             }
 
-            await _productInventoryLocationRepository.SaveManyAsync(updated: productInventoryLocations.ToList());
+            await _productInventoryLocationDataService.SaveManyAsync(userId: userId, updated: productInventoryLocations.ToList());
 
             order.SetApproveStockTransfer();
 

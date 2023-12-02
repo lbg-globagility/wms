@@ -9,5 +9,6 @@ namespace WarehouseManagementSystem.Core.Interfaces.Repositories
         Task<List<ProductInventoryLocation>> GetProductColorSizesByInventoryLocationIdAsync(int inventoryLocationId);
 
         Task<List<ProductInventoryLocation>> GetByInventoryLocationIdAsync(int inventoryLocationId);
+        Task<ProductInventoryLocation> GetByInventoryLocationIdAndProductColorSizeIdAsync(int inventoryLocationId, int productColorSizeId);
     }
 }

@@ -42,6 +42,7 @@ Public Class DependencyInjectionHelper
             .AddTransient(Of IProductDataService, ProductDataService)
             .AddTransient(Of IProductColorDataService, ProductColorDataService)
             .AddTransient(Of IProductInventoryLocationDataService, ProductInventoryLocationDataService)
+            .AddTransient(Of IRackShelfColumnDataService, RackShelfColumnDataService)
             .AddTransient(Of ISystemOwnerService, SystemOwnerService)
 
             ' Repositories

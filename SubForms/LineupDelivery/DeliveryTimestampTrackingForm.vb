@@ -1,4 +1,6 @@
-﻿Imports Microsoft.Extensions.DependencyInjection
+﻿Option Strict On
+Imports Microsoft.Extensions.DependencyInjection
+Imports WarehouseManagementSystem.Core.Entities
 Imports WarehouseManagementSystem.Core.Interfaces.Repositories
 Imports WarehouseManagementSystem.Desktop.Utilities
 
@@ -21,24 +23,25 @@ Public Class DeliveryTimestampTrackingForm
         Dim lineupRepository = GetRequiredService(Of ILineupRepository)()
         _lineup = Await lineupRepository.GetByIdAsync(id:=_lineupId)
         If _lineup IsNot Nothing Then
-            dtpTime.Checked = _lineup.ConfirmedDeliveryTimeStamp IsNot Nothing
-            dtpDate.MinDate = If(_lineup.LineUpDate, Date.Now)
+            Dim hasValue = _lineup.ConfirmedDeliveryTimeStamp IsNot Nothing
+            dtpTime.Checked = hasValue
+            'dtpDate.MinDate = If(_lineup.LineUpDate, Date.Now)
 
-            dtpDate.Value = _lineup.ConfirmedDeliveryTimeStamp.Value.Date
-            dtpTime.Value = _lineup.ConfirmedDeliveryTimeStamp.Value
+            If hasValue Then
+                dtpDate.Value = _lineup.ConfirmedDeliveryTimeStamp.Value.Date
+                dtpTime.Value = _lineup.ConfirmedDeliveryTimeStamp.Value
+            End If
         End If
     End Sub
 
     Private Async Sub btnSave_Click(sender As Object, e As EventArgs) Handles btnSave.Click
-        Dim value = dtpDate.Value.Date.
-            AddSeconds(0).
-            AddMinutes(dtpTime.Value.Minute).
-            AddHours(dtpTime.Value.Hour)
+        Dim value = dtpDate.Value
         If Not MessageBox.Show(
-                text:=$"Are you sure the delivery that time is {value.ToShortDateString()} {value.ToShortTimeString()}?",
+                text:=$"Are you sure that the delivery date/time is{Environment.NewLine}{value:MMM d, yyyy h:mm tt}?",
                 caption:="Confirm Delivery Time",
-                buttons:=MessageBoxButtons.YesNo,
-                icon:=MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
+                buttons:=MessageBoxButtons.YesNoCancel,
+                defaultButton:=MessageBoxDefaultButton.Button2,
+                icon:=MessageBoxIcon.Question) = DialogResult.Yes Then
             Return
         End If
 
@@ -50,7 +53,7 @@ Public Class DeliveryTimestampTrackingForm
                 End If
 
                 Dim lineupRepository = GetRequiredService(Of ILineupRepository)()
-                Await lineupRepository.SaveAsync(entity:=_lineup)
+                Await lineupRepository.SaveManyAsync(updated:=New List(Of Lineup) From {_lineup})
 
                 DialogResult = DialogResult.OK
                 Panel2.Enabled = True

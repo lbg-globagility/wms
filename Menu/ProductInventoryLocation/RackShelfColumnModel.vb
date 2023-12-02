@@ -138,4 +138,9 @@ Friend Class RackShelfColumnModel
         End Get
     End Property
 
+    Public ReadOnly Property ProductInventoryLocationId As Integer
+        Get
+            Return If(_productInventoryLocation?.RowID, 0)
+        End Get
+    End Property
 End Class

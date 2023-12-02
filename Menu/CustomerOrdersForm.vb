@@ -2,6 +2,7 @@
 Imports MySql.Data.MySqlClient
 Imports WarehouseManagementSystem.Core.Entities
 Imports WarehouseManagementSystem.Core.Enums
+Imports WarehouseManagementSystem.Core.Interfaces
 Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
 Imports WarehouseManagementSystem.Core.Interfaces.Repositories
 
@@ -25,9 +26,18 @@ Public Class CustomerOrdersForm
     Dim cototalqtyordered, coqtyordered, coitotalqtyordered, coiqtyordered, cototalqtydelivered, cototalqtypicked As Integer
     Dim cocustomerid, coorderid, coproductcolorsizesid, coproductid, coproductbundleid, coorderitemid, cobranchid, covendorid, cocombinecodingid As Integer
     Private _agents As List(Of Contact)
+    Private _systemOwner As SystemOwner
     Private ReadOnly _noAgent As Contact = Contact.BlankAgent(organizationId:=Z_OrganizationID)
 
     Private Async Sub CustomerOrdersForm_Load(sender As Object, e As EventArgs) Handles Me.Load
+        Dim _systemOwnerService = GetRequiredService(Of ISystemOwnerService)()
+        _systemOwner = Await _systemOwnerService.GetCurrentSystemOwnerEntityAsync()
+
+        If IsThurston Then
+            SplitContainer3.Panel1Collapsed = True
+            Panel1.Visible = True
+        End If
+
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
@@ -397,7 +407,7 @@ Public Class CustomerOrdersForm
         Me.Cursor = Cursors.Default
     End Sub
 
-    Sub btnAddperformclick()
+    Private Sub btnAddperformclick()
         Try
             errProvider.Clear()
             If cboBy.Text <> "" Then
@@ -4225,6 +4235,16 @@ Public Class CustomerOrdersForm
         End Try
     End Sub
 
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles btnAddOrderItem.Click
+        Dim inventoryLocationId = CInt(cboInventoryLocation.SelectedValue)
+
+        'btnAddperformclick()
+    End Sub
+
+    Private Sub gbCustomerOrderItems_EnabledChanged(sender As Object, e As EventArgs) Handles gbCustomerOrderItems.EnabledChanged
+        Panel1.Enabled = gbCustomerOrderItems.Enabled
+    End Sub
+
     Private Sub pbAddBranchCodeName_Click(sender As Object, e As EventArgs) Handles pbAddBranchCodeName.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -5169,4 +5189,9 @@ Public Class CustomerOrdersForm
 
 #End Region
 
+    Private ReadOnly Property IsThurston As Boolean
+        Get
+            Return _systemOwner.IsThurston
+        End Get
+    End Property
 End Class

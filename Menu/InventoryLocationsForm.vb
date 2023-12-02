@@ -2,12 +2,12 @@
 
 Imports Microsoft.Extensions.DependencyInjection
 Imports MySql.Data.MySqlClient
+Imports WarehouseManagementSystem.Core.Entities
 Imports WarehouseManagementSystem.Core.Enums
 Imports WarehouseManagementSystem.Core.Interfaces
 Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
 Imports WarehouseManagementSystem.Core.Interfaces.Repositories
 Imports WarehouseManagementSystem.Desktop.Utilities
-Imports WarehouseManagementSystem.Infrastructure.Data.Repositories
 
 Public Class InventoryLocationsForm
     Dim manager As New sqlModule.Manager
@@ -23,11 +23,26 @@ Public Class InventoryLocationsForm
     Dim simplesearchphrase, commonphrase, pagefilter1, pagefilter2, pagefilter3 As String
     Dim spagenum, countpagenum, numofpages, validpages, rcspagenum, rcscountpagenum, rcsnumofpages, rcsvalidpages As Integer
     Dim iltotalqtyavailable, iltotalqtyreserve, iltotalqtydamage, iltotalqtyallocated, iltotalqtyorderable, ilinventorylocationid, iladdressid, ilrackshelfcolumnid As Integer
-    Private _systemOwner As WarehouseManagementSystem.Core.Entities.SystemOwner
+    Private _systemOwner As SystemOwner
+    Private _picp As ProductImageConfigParser
 
     Private Async Sub InventoryLocationsForm_Load(sender As Object, e As EventArgs) Handles Me.Load
         Dim _systemOwnerService = GetRequiredService(Of ISystemOwnerService)()
         _systemOwner = Await _systemOwnerService.GetCurrentSystemOwnerEntityAsync()
+
+        gridProductColorSizes.AutoGenerateColumns = False
+        gridRackShelfColumns.AutoGenerateColumns = False
+
+        _picp = New ProductImageConfigParser(filePath:=CONFIG_FILE_PATH)
+
+        If IsThurston Then
+            SplitContainer3.Panel1Collapsed = True
+            SplitContainer3.Panel2Collapsed = False
+
+        Else
+            SplitContainer3.Panel1Collapsed = False
+            SplitContainer3.Panel2Collapsed = True
+        End If
 
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -989,8 +1004,27 @@ Public Class InventoryLocationsForm
         Try
             dgRackShelfColumn.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT rsc.rowid,COALESCE(rsc.rackno,''),COALESCE(rsc.shelfno,''),COALESCE(rsc.columnno,''),COALESCE(rsc.pickorderno,0),COALESCE(rsc.remarks,'') FROM rackshelfcolumn rsc " &
-                        "WHERE rsc.organizationid = " & Z_OrganizationID & " AND rsc.inventorylocationid = " & iinventorylocationid & " ORDER BY rsc.pickorderno ASC LIMIT " & istartpage & "," & pagedivisor & " "
+            'Dim sql1 As String = "SELECT rsc.rowid,COALESCE(rsc.rackno,''),COALESCE(rsc.shelfno,''),COALESCE(rsc.columnno,''),COALESCE(rsc.pickorderno,0),COALESCE(rsc.remarks,'') FROM rackshelfcolumn rsc " &
+            '            "WHERE rsc.organizationid = " & Z_OrganizationID & " AND rsc.inventorylocationid = " & iinventorylocationid & " ORDER BY rsc.pickorderno ASC LIMIT " & istartpage & "," & pagedivisor & " "
+
+            Dim sql1 As String = $"SELECT
+	            rsc.rowid,
+	            COALESCE(rsc.rackno, ''),
+	            COALESCE(rsc.shelfno, ''),
+	            COALESCE(rsc.columnno, ''),
+	            COALESCE(rsc.pickorderno, 0),
+	            COALESCE(rsc.remarks, '')
+            FROM
+	            rackshelfcolumn rsc
+            LEFT JOIN productinventorylocation pil ON pil.RackShelfColumnID=rsc.RowID
+            WHERE
+	            rsc.organizationid = {Z_OrganizationID}
+	            AND rsc.inventorylocationid = {iinventorylocationid}
+            GROUP BY
+	            rsc.RowID
+            ORDER BY
+	            SUM(IFNULL(pil.TotalAvailableQty, 0)) > 0 DESC, rsc.pickorderno ASC LIMIT {istartpage},{pagedivisor};"
+
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             Dim n As Integer = 0
@@ -1094,7 +1128,7 @@ Public Class InventoryLocationsForm
             If dgProducts.Rows.Count <> 0 Then
                 For i As Integer = 0 To dgProducts.Rows.Count - 1
                     If CStr(dgProducts.Rows(i).Cells("p_colorvalue").Value) <> "" Then
-                        readcolor = CType(colorconverter.ConvertFromString(CStr(dgProducts.Rows(i).Cells("p_colorvalue").Value)), Color)
+                        readcolor = CType(colorconverter.ConvertFromString(CStr(dgProducts.Rows(i).Cells("p_colorvalue").Value)), Drawing.Color)
                         dgProducts.Rows(i).Cells("p_color").Style.BackColor = readcolor
                     End If
                 Next
@@ -1184,7 +1218,7 @@ Public Class InventoryLocationsForm
 
     Private Sub pbEditAddress_MouseEnter(sender As Object, e As EventArgs) Handles pbEditAddress.MouseEnter
         Try
-            pbEditAddress.BackColor = Color.MediumSpringGreen
+            pbEditAddress.BackColor = Drawing.Color.MediumSpringGreen
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -1194,7 +1228,7 @@ Public Class InventoryLocationsForm
 
     Private Sub pbEditAddress_MouseLeave(sender As Object, e As EventArgs) Handles pbEditAddress.MouseLeave
         Try
-            pbEditAddress.BackColor = Color.Transparent
+            pbEditAddress.BackColor = Drawing.Color.Transparent
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -1245,7 +1279,7 @@ Public Class InventoryLocationsForm
 
     Private Sub pbAutoAddRack_MouseEnter(sender As Object, e As EventArgs) Handles pbAutoAddRack.MouseEnter
         Try
-            pbAutoAddRack.BackColor = Color.MediumSpringGreen
+            pbAutoAddRack.BackColor = Drawing.Color.MediumSpringGreen
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -1255,7 +1289,7 @@ Public Class InventoryLocationsForm
 
     Private Sub pbAutoAddRack_MouseLeave(sender As Object, e As EventArgs) Handles pbAutoAddRack.MouseLeave
         Try
-            pbAutoAddRack.BackColor = Color.Transparent
+            pbAutoAddRack.BackColor = Drawing.Color.Transparent
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -1275,7 +1309,7 @@ Public Class InventoryLocationsForm
 
     Private Sub pbAutoAddColumn_MouseEnter(sender As Object, e As EventArgs) Handles pbAutoAddColumn.MouseEnter
         Try
-            pbAutoAddColumn.BackColor = Color.MediumSpringGreen
+            pbAutoAddColumn.BackColor = Drawing.Color.MediumSpringGreen
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -1285,7 +1319,7 @@ Public Class InventoryLocationsForm
 
     Private Sub pbAutoAddColumn_MouseLeave(sender As Object, e As EventArgs) Handles pbAutoAddColumn.MouseLeave
         Try
-            pbAutoAddColumn.BackColor = Color.Transparent
+            pbAutoAddColumn.BackColor = Drawing.Color.Transparent
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -1305,7 +1339,7 @@ Public Class InventoryLocationsForm
 
     Private Sub pbAutoAddShelf_MouseEnter(sender As Object, e As EventArgs) Handles pbAutoAddShelf.MouseEnter
         Try
-            pbAutoAddShelf.BackColor = Color.MediumSpringGreen
+            pbAutoAddShelf.BackColor = Drawing.Color.MediumSpringGreen
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -1315,7 +1349,7 @@ Public Class InventoryLocationsForm
 
     Private Sub pbAutoAddShelf_MouseLeave(sender As Object, e As EventArgs) Handles pbAutoAddShelf.MouseLeave
         Try
-            pbAutoAddShelf.BackColor = Color.Transparent
+            pbAutoAddShelf.BackColor = Drawing.Color.Transparent
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -1419,7 +1453,7 @@ Public Class InventoryLocationsForm
 
     End Sub
 
-    Private Sub dgInventoryLocationList_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgInventoryLocationList.CellClick
+    Private Async Sub dgInventoryLocationList_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgInventoryLocationList.CellClick
         Me.Cursor = Cursors.WaitCursor
         Try
             If dgInventoryLocationList.Rows.Count <> 0 Then
@@ -1444,7 +1478,38 @@ Public Class InventoryLocationsForm
             conn.Close()
         End Try
         Me.Cursor = Cursors.Default
+
+        If IsThurston Then
+            Await LoadProductColorSizesOfInventoryLocationAsync()
+
+            Dim inventoryLocationId = GetCurrentInventoryLocationId()
+            LinkLabel1.Enabled = Not inventoryLocationId = 0
+            Return
+        End If
+
     End Sub
+
+    Private Async Function LoadProductColorSizesOfInventoryLocationAsync() As Task
+        Dim productInventoryLocationDataService = GetRequiredService(Of IProductInventoryLocationDataService)()
+        Dim inventoryLocationId = GetCurrentInventoryLocationId()
+        Dim productInventoryLocations = Await productInventoryLocationDataService.GetByInventoryLocationIdAsync(inventoryLocationId:=inventoryLocationId)
+
+        Dim productColorSizeRepository = GetRequiredService(Of IProductColorSizeRepository)()
+        Dim productColorSizes = Await productColorSizeRepository.GetManyByOrganizationIdsAsync(Z_OrganizationID)
+        Dim dataSource = productColorSizes.
+            Select(Function(t)
+                       Dim productInventoryLocationItems = productInventoryLocations.
+                        Where(Function(i) i.ProductColorSizeID = t.RowID.Value).
+                        ToList()
+                       Return New ProductColorSizeModel(productInventoryLocations:=productInventoryLocationItems,
+                            productColorSize:=t,
+                            _picp)
+                   End Function).
+            OrderBy(Function(t) t.ProductCode).
+            ToList()
+
+        gridProductColorSizes.DataSource = dataSource
+    End Function
 
     Private Sub LoadProductColorSizesBasedOnRackShelfColumn()
         If Not IsThurston Then Return
@@ -1750,6 +1815,152 @@ Public Class InventoryLocationsForm
         txtTotalQtyAvailable.Text = $"{If(productInventoryLocation.TotalAvailableQty, 0)}"
         txtTotalQtyAllocated.Text = $"{If(productInventoryLocation.TotalAllocatedQty, 0)}"
         txtTotalQtyOrderable.Text = $"{productInventoryLocation.TotalOrderableQty}"
+    End Sub
+
+    Private Sub gridProductColorSizes_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles gridProductColorSizes.CellContentClick
+
+    End Sub
+
+    Private Sub gridProductColorSizes_SelectionChanged(sender As Object, e As EventArgs) Handles gridProductColorSizes.SelectionChanged
+        If gridProductColorSizes.CurrentRow Is Nothing Then
+
+            Return
+        End If
+
+        Dim model = CType(gridProductColorSizes.CurrentRow.DataBoundItem, ProductColorSizeModel)
+        Dim productColorSizeId = GetCurrentProductColorSizeId()
+
+        Dim dataSource = model.ProductInventoryLocations.
+            Where(Function(t) t.ProductColorSizeID = productColorSizeId).
+            Select(Function(t) New RackShelfColumnSimpleModel(productColorSizeId:=productColorSizeId, t.RackShelfColumn)).
+            OrderByDescending(Function(t) t.HasAvailableQty).
+            ThenBy(Function(t) t.PickOrderNo).
+            ToList()
+
+        gridRackShelfColumns.DataSource = dataSource
+
+        LinkLabel1.Enabled = Not GetCurrentInventoryLocationId() = 0 AndAlso Not productColorSizeId = 0
+    End Sub
+
+    Private Async Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
+        Dim inventoryLocationId = GetCurrentInventoryLocationId()
+
+        Dim productColorSizeId = GetCurrentProductColorSizeId()
+
+        If inventoryLocationId = 0 Then
+            MessageBox.Show(text:="No inventory location selected.",
+                caption:="Invalid Inventory Location",
+                icon:=MessageBoxIcon.Error,
+                buttons:=MessageBoxButtons.OK)
+            Return
+        End If
+
+        If productColorSizeId = 0 Then
+            MessageBox.Show(text:="No product selected.",
+                caption:="Invalid Product",
+                icon:=MessageBoxIcon.Error,
+                buttons:=MessageBoxButtons.OK)
+            Return
+        End If
+
+        Dim rackShelfColumnDataService = GetRequiredService(Of IRackShelfColumnDataService)()
+
+        Dim rackShelfColumn = Await rackShelfColumnDataService.GenerateNew(organizationId:=Z_OrganizationID,
+            userId:=Z_UserID,
+            inventoryLocationId:=inventoryLocationId)
+
+        Dim currentRowIndex = If(gridProductColorSizes.CurrentRow?.Index, 0)
+
+        Dim form As New RackShelfColumnFormDialog(productColorSizeId:=productColorSizeId,
+            rackShelfColumn:=rackShelfColumn)
+        If Not form.IsValid AndAlso Not form.ShowDialog() = DialogResult.OK Then Return
+
+        Await FunctionUtils.TryCatchFunctionAsync("Create Rack-Shelf-Column and incorporate to Product Inventory Location",
+            Async Function()
+                Dim model = CType(gridProductColorSizes.CurrentRow.DataBoundItem, ProductColorSizeModel)
+
+                Dim newProductInventoryLocation = ProductInventoryLocation.NewProductInventoryLocation(
+                    organizationId:=Z_OrganizationID,
+                    userId:=Z_UserID,
+                    productColorSizeId:=productColorSizeId,
+                    unitOfMeasure:=model.ProductInventoryLocation.UnitOfMeasure,
+                    unitPrice:=model.ProductInventoryLocation.UnitPrice)
+
+                Dim newRackShelfColumn = form.ProcessedRackShelfColumn
+
+                newRackShelfColumn.AddProductInventoryLocations(New List(Of ProductInventoryLocation) From {newProductInventoryLocation})
+
+                Await rackShelfColumnDataService.SaveManyAsync(userId:=Z_UserID,
+                    added:=New List(Of RackShelfColumn) From {newRackShelfColumn})
+
+                Await LoadProductColorSizesOfInventoryLocationAsync()
+            End Function).
+                ContinueWith(
+                continuationAction:=Sub()
+                                        With gridProductColorSizes
+                                            If .Rows.Count() < currentRowIndex Then Return
+
+                                            .ClearSelection()
+                                            .CurrentCell = .Item(DataGridViewTextBoxColumn1.Name, currentRowIndex)
+                                            .Refresh()
+                                        End With
+
+                                        gridProductColorSizes_SelectionChanged(gridProductColorSizes, New EventArgs())
+                                    End Sub,
+                scheduler:=TaskScheduler.FromCurrentSynchronizationContext())
+
+    End Sub
+
+    Private Function GetCurrentInventoryLocationId() As Integer
+        Return CInt(If(dgInventoryLocationList.CurrentRow?.Cells(il_rowid.Name).Value, 0))
+    End Function
+
+    Private Function GetCurrentProductColorSizeId() As Integer
+        Dim model = CType(gridProductColorSizes.CurrentRow.DataBoundItem, ProductColorSizeModel)
+        Return If(model?.ProductColorSizeId, 0)
+    End Function
+
+    Private Sub LinkLabel2_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel2.LinkClicked
+        Dim inventoryLocationId = GetCurrentInventoryLocationId()
+        Dim productColorSizeId = GetCurrentProductColorSizeId()
+
+        If inventoryLocationId = 0 Then
+            MessageBox.Show(text:="No inventory location selected.",
+                caption:="Invalid Inventory Location",
+                icon:=MessageBoxIcon.Error,
+                buttons:=MessageBoxButtons.OK)
+            Return
+        End If
+
+        If productColorSizeId = 0 Then
+            MessageBox.Show(text:="No product selected.",
+                caption:="Invalid Product",
+                icon:=MessageBoxIcon.Error,
+                buttons:=MessageBoxButtons.OK)
+            Return
+        End If
+
+        Dim models = gridRackShelfColumns.Rows.OfType(Of DataGridViewRow)?.
+            Select(Function(t) CType(t.DataBoundItem, RackShelfColumnSimpleModel)).
+            ToList()
+
+        Dim form As New RackShelfColumnForm(inventoryLocationId:=inventoryLocationId,
+            productColorSizeId:=productColorSizeId,
+            rackShelfColumnIds:=models.Select(Function(t) t.RowID).ToArray())
+        If Not form.ShowDialog() = DialogResult.OK Then Return
+
+    End Sub
+
+    Private Sub gridRackShelfColumns_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles gridRackShelfColumns.CellContentClick
+
+    End Sub
+
+    Private Async Sub gridRackShelfColumns_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles gridRackShelfColumns.CellDoubleClick
+
+    End Sub
+
+    Private Sub txtSearch_TextChanged(sender As Object, e As EventArgs) Handles txtSearch.TextChanged
+
     End Sub
 
     Private Sub cboColumn_TextChanged(sender As Object, e As EventArgs) Handles cboColumn.TextChanged

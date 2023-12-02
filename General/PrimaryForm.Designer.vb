@@ -240,7 +240,9 @@ Partial Class PrimaryForm
         Me.PictureBox2 = New System.Windows.Forms.PictureBox()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.MainLoadingBar = New System.Windows.Forms.ProgressBar()
-        Me.SampleToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.OthersToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DailyDeliveriesReportToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DeliveryTrafficReportToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.msHome.SuspendLayout()
         Me.tsInformation.SuspendLayout()
         CType(Me.pbPin, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -459,7 +461,7 @@ Partial Class PrimaryForm
         Me.msAccounts.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.msAccounts.Image = CType(resources.GetObject("msAccounts.Image"), System.Drawing.Image)
         Me.msAccounts.Name = "msAccounts"
-        Me.msAccounts.Size = New System.Drawing.Size(162, 22)
+        Me.msAccounts.Size = New System.Drawing.Size(180, 22)
         Me.msAccounts.Text = "(&O) Accounts"
         '
         'msContacts
@@ -467,7 +469,7 @@ Partial Class PrimaryForm
         Me.msContacts.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.msContacts.Image = CType(resources.GetObject("msContacts.Image"), System.Drawing.Image)
         Me.msContacts.Name = "msContacts"
-        Me.msContacts.Size = New System.Drawing.Size(162, 22)
+        Me.msContacts.Size = New System.Drawing.Size(180, 22)
         Me.msContacts.Text = "(&P) Contacts"
         '
         'msReferences
@@ -475,19 +477,19 @@ Partial Class PrimaryForm
         Me.msReferences.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.msReferences.Image = CType(resources.GetObject("msReferences.Image"), System.Drawing.Image)
         Me.msReferences.Name = "msReferences"
-        Me.msReferences.Size = New System.Drawing.Size(162, 22)
+        Me.msReferences.Size = New System.Drawing.Size(180, 22)
         Me.msReferences.Text = "(&Q) References"
         '
         'AgentHelperToolStripMenuItem
         '
         Me.AgentHelperToolStripMenuItem.Font = New System.Drawing.Font("Segoe UI", 9.75!)
         Me.AgentHelperToolStripMenuItem.Name = "AgentHelperToolStripMenuItem"
-        Me.AgentHelperToolStripMenuItem.Size = New System.Drawing.Size(162, 22)
+        Me.AgentHelperToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.AgentHelperToolStripMenuItem.Text = "Agent/Helper"
         '
         'msReports
         '
-        Me.msReports.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.msCycleCount, Me.msBrokenSizes, Me.msSellThrough, Me.msAging, Me.msSalesAndQty, Me.msDeliveryPerformance, Me.msStockLevel, Me.msPickListed, Me.SampleToolStripMenuItem})
+        Me.msReports.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.msCycleCount, Me.msBrokenSizes, Me.msSellThrough, Me.msAging, Me.msSalesAndQty, Me.msDeliveryPerformance, Me.msStockLevel, Me.msPickListed, Me.OthersToolStripMenuItem})
         Me.msReports.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.msReports.Image = CType(resources.GetObject("msReports.Image"), System.Drawing.Image)
         Me.msReports.Name = "msReports"
@@ -2125,11 +2127,25 @@ Partial Class PrimaryForm
         Me.MainLoadingBar.Size = New System.Drawing.Size(160, 21)
         Me.MainLoadingBar.TabIndex = 10
         '
-        'SampleToolStripMenuItem
+        'OthersToolStripMenuItem
         '
-        Me.SampleToolStripMenuItem.Name = "SampleToolStripMenuItem"
-        Me.SampleToolStripMenuItem.Size = New System.Drawing.Size(224, 22)
-        Me.SampleToolStripMenuItem.Text = "Sample"
+        Me.OthersToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DailyDeliveriesReportToolStripMenuItem, Me.DeliveryTrafficReportToolStripMenuItem})
+        Me.OthersToolStripMenuItem.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.OthersToolStripMenuItem.Name = "OthersToolStripMenuItem"
+        Me.OthersToolStripMenuItem.Size = New System.Drawing.Size(224, 22)
+        Me.OthersToolStripMenuItem.Text = "Others"
+        '
+        'DailyDeliveriesReportToolStripMenuItem
+        '
+        Me.DailyDeliveriesReportToolStripMenuItem.Name = "DailyDeliveriesReportToolStripMenuItem"
+        Me.DailyDeliveriesReportToolStripMenuItem.Size = New System.Drawing.Size(208, 22)
+        Me.DailyDeliveriesReportToolStripMenuItem.Text = "Daily Deliveries Report"
+        '
+        'DeliveryTrafficReportToolStripMenuItem
+        '
+        Me.DeliveryTrafficReportToolStripMenuItem.Name = "DeliveryTrafficReportToolStripMenuItem"
+        Me.DeliveryTrafficReportToolStripMenuItem.Size = New System.Drawing.Size(208, 22)
+        Me.DeliveryTrafficReportToolStripMenuItem.Text = "Delivery Traffic Report"
         '
         'PrimaryForm
         '
@@ -2389,5 +2405,7 @@ Partial Class PrimaryForm
     Friend WithEvents rt_customername As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents rt_createdby As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents AgentHelperToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents SampleToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents OthersToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents DailyDeliveriesReportToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents DeliveryTrafficReportToolStripMenuItem As ToolStripMenuItem
 End Class
