@@ -33,9 +33,18 @@ Public Class CustomerOrdersForm
         Dim _systemOwnerService = GetRequiredService(Of ISystemOwnerService)()
         _systemOwner = Await _systemOwnerService.GetCurrentSystemOwnerEntityAsync()
 
-        SplitContainer3.Panel1Collapsed = IsThurston
-        SplitContainer3.Panel2Collapsed = Not IsThurston
-        Panel1.Visible = IsThurston
+        SplitContainer3.Panel1Collapsed = Not IsThurston
+        'SplitContainer3.Panel2Collapsed = IsThurston
+        'Panel1.Visible = IsThurston
+
+        Dim names = {Label3.Name, cboByPhrase.Name, btnAddProduct.Name}
+        Label3.Text = "Select Product Code"
+        For Each control In gbAddProductItem.Controls.
+            OfType(Of Control).
+            Where(Function(t) Not names.Contains(t.Name))
+
+            control.Visible = Not IsThurston
+        Next
 
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -221,12 +230,12 @@ Public Class CustomerOrdersForm
 
     Sub clearAddProductA()
         Try
-            cboBy.Text = ""
+            If Not IsThurston Then cboBy.Text = ""
             cboByPhrase.Text = ""
             txtQtyOrdered.Text = ""
             cboTags.Text = ""
             cboTags.SelectedItem = Nothing
-            cboBy.SelectedItem = Nothing
+            If Not IsThurston Then cboBy.SelectedItem = Nothing
             cboByPhrase.SelectedItem = Nothing
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
@@ -868,6 +877,12 @@ Public Class CustomerOrdersForm
             cboBy.Items.Add("ProductCode")
             cboBy.Items.Add("SKU")
             cboBy.Items.Add("")
+
+            If IsThurston Then
+                cboBy.Items.Clear()
+                cboBy.Items.Add("ProductCode")
+                cboBy.SelectedIndex = 0
+            End If
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -2291,6 +2306,7 @@ Public Class CustomerOrdersForm
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
             conn.Close()
+            If IsThurston Then cboBy_SelectedIndexChanged(cboBy, New EventArgs())
         End Try
         Me.Cursor = Cursors.Default
     End Sub
@@ -2825,6 +2841,9 @@ Public Class CustomerOrdersForm
             dgProductSizes.Rows.Clear()
             dgProductColorSizes.Rows.Clear()
             dgBundleItems.Rows.Clear()
+
+            If IsThurston Then cboBy.Text = "ProductCode"
+
             If cboBy.Text = "" Then
                 cboByPhrase.Items.Clear() : cboByPhrase.AutoCompleteCustomSource.Clear()
                 visibleGB(fraud, fraud, fraud, fraud, fraud)
