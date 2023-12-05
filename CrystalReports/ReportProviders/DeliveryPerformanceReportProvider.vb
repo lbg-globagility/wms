@@ -112,7 +112,7 @@ Public Class DeliveryPerformanceReportProvider
                 Dim datasource = dataSet.Tables.OfType(Of DataTable).FirstOrDefault()
                 report.SetDataSource(datasource)
 
-                Dim form As New DefaultReportViewer(dataSource:=datasource)
+                Dim form As New DefaultReportViewerForm(dataSource:=datasource)
                 form.CrystalReportViewer1.ReportSource = report
                 form.Show()
             Catch ex As Exception

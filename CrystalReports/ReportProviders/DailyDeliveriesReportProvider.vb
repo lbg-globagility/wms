@@ -20,8 +20,8 @@ Public Class DailyDeliveriesReportProvider
         Dim userDatePickerForm = New UserDatePickerForm(isDateOnlyConfig:=True)
         If Not userDatePickerForm.ShowDialog() = DialogResult.OK Then Return
 
-        Dim connectionText = "server=localhost;user id=root;database=dreamheartsdb;port=3307;password=globagility;"
-        'manager.GetConnString()
+        'Dim connectionText = "server=localhost;user id=root;database=dreamheartsdb;port=3307;password=globagility;"
+        Dim connectionText = manager.GetConnString()
 
         Dim strQuery = <![CDATA[
             SELECT
@@ -55,6 +55,9 @@ Public Class DailyDeliveriesReportProvider
             
             ,lu.DeliveryNo
             ,IFNULL(pil.TotalAvailableQty, 0) `TotalAvailableQty`
+            
+            ,IFNULL(i.GrantTotalAvailableQty, 0) `Balance`
+            ,i.GrantTotalAvailableQty
 
             FROM lineups lu
 
@@ -82,6 +85,17 @@ Public Class DailyDeliveriesReportProvider
 
             LEFT JOIN rackshelfcolumn rsc ON rsc.InventoryLocationID=o.InventoryLocationID
             LEFT JOIN productinventorylocation pil ON pil.RackShelfColumnID=rsc.RowID AND pil.ProductColorSizeID=oi.ProductColorSizeID
+            
+            LEFT JOIN (SELECT
+                        COUNT(pil.ROwID) `Count`,
+                        SUM(IFNULL(pil.TotalAvailableQty, 0)) `GrantTotalAvailableQty`,
+                        rsc.InventoryLocationID,
+                        pil.*
+                        FROM productinventorylocation pil
+                        INNER JOIN rackshelfcolumn rsc ON rsc.RowID=pil.RackShelfColumnID #AND rsc.InventoryLocationID=1
+                        GROUP BY pil.ProductColorSizeID, rsc.InventoryLocationID
+                        HAVING SUM(IFNULL(pil.TotalAvailableQty, 0)) > 0
+			            ) i ON i.ProductColorSizeID=oi.ProductColorSizeID AND i.InventoryLocationID=rsc.InventoryLocationID
 
             WHERE lu.`Status` IN ('Delivered', 'Confirmed Delivery')
 
@@ -118,7 +132,7 @@ Public Class DailyDeliveriesReportProvider
                 Dim datasource = dataSet.Tables.OfType(Of DataTable).FirstOrDefault()
                 report.SetDataSource(datasource)
 
-                Dim form As New DefaultReportViewer(dataSource:=datasource)
+                Dim form As New DefaultReportViewerForm(dataSource:=datasource)
                 form.CrystalReportViewer1.ReportSource = report
                 form.Show()
             Catch ex As Exception

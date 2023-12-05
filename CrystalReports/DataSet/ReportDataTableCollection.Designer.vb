@@ -331,6 +331,8 @@ Partial Public Class ReportDataTableCollection
         
         Private columnTotalAvailableQty As Global.System.Data.DataColumn
         
+        Private columnBalance As Global.System.Data.DataColumn
+        
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
         Public Sub New()
@@ -559,6 +561,14 @@ Partial Public Class ReportDataTableCollection
         End Property
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public ReadOnly Property BalanceColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnBalance
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"),  _
          Global.System.ComponentModel.Browsable(false)>  _
         Public ReadOnly Property Count() As Integer
@@ -619,9 +629,10 @@ Partial Public Class ReportDataTableCollection
                     ByVal ColorId As Integer,  _
                     ByVal PackingListId As Integer,  _
                     ByVal DeliveryNo As String,  _
-                    ByVal TotalAvailableQty As Integer) As DeliveryPerformanceRow
+                    ByVal TotalAvailableQty As Integer,  _
+                    ByVal Balance As Integer) As DeliveryPerformanceRow
             Dim rowDeliveryPerformanceRow As DeliveryPerformanceRow = CType(Me.NewRow,DeliveryPerformanceRow)
-            Dim columnValuesArray() As Object = New Object() {DriverName, TruckName, ShiftSched, PackingListNo, SizeName, ProductCode, ColorName, Size, QtyInCarton, UnitOfMeasure, LineUpDate, DeliveryDate, ConfirmedDeliveryTimeStamp, DriverId, TruckId, LineUpId, DeliveryTruckShiftID, ProductColorSizeID, CartonSizeId, ProductId, ColorId, PackingListId, DeliveryNo, TotalAvailableQty}
+            Dim columnValuesArray() As Object = New Object() {DriverName, TruckName, ShiftSched, PackingListNo, SizeName, ProductCode, ColorName, Size, QtyInCarton, UnitOfMeasure, LineUpDate, DeliveryDate, ConfirmedDeliveryTimeStamp, DriverId, TruckId, LineUpId, DeliveryTruckShiftID, ProductColorSizeID, CartonSizeId, ProductId, ColorId, PackingListId, DeliveryNo, TotalAvailableQty, Balance}
             rowDeliveryPerformanceRow.ItemArray = columnValuesArray
             Me.Rows.Add(rowDeliveryPerformanceRow)
             Return rowDeliveryPerformanceRow
@@ -668,6 +679,7 @@ Partial Public Class ReportDataTableCollection
             Me.columnPackingListId = MyBase.Columns("PackingListId")
             Me.columnDeliveryNo = MyBase.Columns("DeliveryNo")
             Me.columnTotalAvailableQty = MyBase.Columns("TotalAvailableQty")
+            Me.columnBalance = MyBase.Columns("Balance")
         End Sub
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -721,6 +733,8 @@ Partial Public Class ReportDataTableCollection
             MyBase.Columns.Add(Me.columnDeliveryNo)
             Me.columnTotalAvailableQty = New Global.System.Data.DataColumn("TotalAvailableQty", GetType(Integer), Nothing, Global.System.Data.MappingType.Element)
             MyBase.Columns.Add(Me.columnTotalAvailableQty)
+            Me.columnBalance = New Global.System.Data.DataColumn("Balance", GetType(Integer), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnBalance)
         End Sub
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -1231,6 +1245,21 @@ Partial Public Class ReportDataTableCollection
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Property Balance() As Integer
+            Get
+                Try 
+                    Return CType(Me(Me.tableDeliveryPerformance.BalanceColumn),Integer)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("The value for column 'Balance' in table 'DeliveryPerformance' is DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tableDeliveryPerformance.BalanceColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
         Public Function IsDriverNameNull() As Boolean
             Return Me.IsNull(Me.tableDeliveryPerformance.DriverNameColumn)
         End Function
@@ -1515,6 +1544,18 @@ Partial Public Class ReportDataTableCollection
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
         Public Sub SetTotalAvailableQtyNull()
             Me(Me.tableDeliveryPerformance.TotalAvailableQtyColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Function IsBalanceNull() As Boolean
+            Return Me.IsNull(Me.tableDeliveryPerformance.BalanceColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")>  _
+        Public Sub SetBalanceNull()
+            Me(Me.tableDeliveryPerformance.BalanceColumn) = Global.System.Convert.DBNull
         End Sub
     End Class
     

@@ -290,10 +290,10 @@
     <Compile Include="CrystalReports\DataSet\ReportDataTableCollection.vb">
       <DependentUpon>ReportDataTableCollection.xsd</DependentUpon>
     </Compile>
-    <Compile Include="CrystalReports\DefaultReportViewer.Designer.vb">
-      <DependentUpon>DefaultReportViewer.vb</DependentUpon>
+    <Compile Include="CrystalReports\DefaultReportViewerForm.Designer.vb">
+      <DependentUpon>DefaultReportViewerForm.vb</DependentUpon>
     </Compile>
-    <Compile Include="CrystalReports\DefaultReportViewer.vb">
+    <Compile Include="CrystalReports\DefaultReportViewerForm.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="CrystalReports\DeliveryPerformanceReport.vb">
@@ -1045,8 +1045,8 @@
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>DailyDeliveriesReport.vb</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="CrystalReports\DefaultReportViewer.resx">
-      <DependentUpon>DefaultReportViewer.vb</DependentUpon>
+    <EmbeddedResource Include="CrystalReports\DefaultReportViewerForm.resx">
+      <DependentUpon>DefaultReportViewerForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="CrystalReports\DeliveryPerformanceReport.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
