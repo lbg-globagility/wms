@@ -178,6 +178,10 @@ Partial Class InventoryLocationsForm
         Me.Column11 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column12 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column13 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Panel3 = New System.Windows.Forms.Panel()
+        Me.chkAdvanceSearch = New System.Windows.Forms.CheckBox()
+        Me.Label20 = New System.Windows.Forms.Label()
+        Me.txtSearch = New System.Windows.Forms.TextBox()
         Me.gridRackShelfColumns = New DevComponents.DotNetBar.Controls.DataGridViewX()
         Me.Column1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -200,10 +204,6 @@ Partial Class InventoryLocationsForm
         Me.cmsOptions = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.cmsEdit = New System.Windows.Forms.ToolStripMenuItem()
         Me.cmsDelete = New System.Windows.Forms.ToolStripMenuItem()
-        Me.Panel3 = New System.Windows.Forms.Panel()
-        Me.txtSearch = New System.Windows.Forms.TextBox()
-        Me.Label20 = New System.Windows.Forms.Label()
-        Me.chkAdvanceSearch = New System.Windows.Forms.CheckBox()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         CType(Me.dgRackShelfColumn, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.gbInventoryLocationInformation.SuspendLayout()
@@ -242,6 +242,7 @@ Partial Class InventoryLocationsForm
         Me.SplitContainer4.Panel2.SuspendLayout()
         Me.SplitContainer4.SuspendLayout()
         CType(Me.gridProductColorSizes, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.Panel3.SuspendLayout()
         CType(Me.gridRackShelfColumns, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel1.SuspendLayout()
         Me.Panel2.SuspendLayout()
@@ -249,7 +250,6 @@ Partial Class InventoryLocationsForm
         CType(Me.pbClose, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.errProvider, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.cmsOptions.SuspendLayout()
-        Me.Panel3.SuspendLayout()
         Me.SuspendLayout()
         '
         'dgRackShelfColumn
@@ -1781,6 +1781,44 @@ Partial Class InventoryLocationsForm
         Me.Column13.Name = "Column13"
         Me.Column13.ReadOnly = True
         '
+        'Panel3
+        '
+        Me.Panel3.Controls.Add(Me.chkAdvanceSearch)
+        Me.Panel3.Controls.Add(Me.Label20)
+        Me.Panel3.Controls.Add(Me.txtSearch)
+        Me.Panel3.Dock = System.Windows.Forms.DockStyle.Top
+        Me.Panel3.Location = New System.Drawing.Point(0, 0)
+        Me.Panel3.Name = "Panel3"
+        Me.Panel3.Size = New System.Drawing.Size(401, 28)
+        Me.Panel3.TabIndex = 6
+        Me.Panel3.Visible = False
+        '
+        'chkAdvanceSearch
+        '
+        Me.chkAdvanceSearch.AutoSize = True
+        Me.chkAdvanceSearch.Location = New System.Drawing.Point(329, 6)
+        Me.chkAdvanceSearch.Name = "chkAdvanceSearch"
+        Me.chkAdvanceSearch.Size = New System.Drawing.Size(69, 17)
+        Me.chkAdvanceSearch.TabIndex = 2
+        Me.chkAdvanceSearch.Text = "Advance"
+        Me.chkAdvanceSearch.UseVisualStyleBackColor = True
+        '
+        'Label20
+        '
+        Me.Label20.AutoSize = True
+        Me.Label20.Location = New System.Drawing.Point(5, 11)
+        Me.Label20.Name = "Label20"
+        Me.Label20.Size = New System.Drawing.Size(41, 13)
+        Me.Label20.TabIndex = 1
+        Me.Label20.Text = "Search"
+        '
+        'txtSearch
+        '
+        Me.txtSearch.Location = New System.Drawing.Point(52, 4)
+        Me.txtSearch.Name = "txtSearch"
+        Me.txtSearch.Size = New System.Drawing.Size(271, 20)
+        Me.txtSearch.TabIndex = 0
+        '
         'gridRackShelfColumns
         '
         Me.gridRackShelfColumns.AllowUserToAddRows = False
@@ -1982,43 +2020,6 @@ Partial Class InventoryLocationsForm
         Me.cmsDelete.Size = New System.Drawing.Size(107, 22)
         Me.cmsDelete.Text = "Delete"
         '
-        'Panel3
-        '
-        Me.Panel3.Controls.Add(Me.chkAdvanceSearch)
-        Me.Panel3.Controls.Add(Me.Label20)
-        Me.Panel3.Controls.Add(Me.txtSearch)
-        Me.Panel3.Dock = System.Windows.Forms.DockStyle.Top
-        Me.Panel3.Location = New System.Drawing.Point(0, 0)
-        Me.Panel3.Name = "Panel3"
-        Me.Panel3.Size = New System.Drawing.Size(401, 28)
-        Me.Panel3.TabIndex = 6
-        '
-        'txtSearch
-        '
-        Me.txtSearch.Location = New System.Drawing.Point(52, 4)
-        Me.txtSearch.Name = "txtSearch"
-        Me.txtSearch.Size = New System.Drawing.Size(271, 20)
-        Me.txtSearch.TabIndex = 0
-        '
-        'Label20
-        '
-        Me.Label20.AutoSize = True
-        Me.Label20.Location = New System.Drawing.Point(5, 11)
-        Me.Label20.Name = "Label20"
-        Me.Label20.Size = New System.Drawing.Size(41, 13)
-        Me.Label20.TabIndex = 1
-        Me.Label20.Text = "Search"
-        '
-        'chkAdvanceSearch
-        '
-        Me.chkAdvanceSearch.AutoSize = True
-        Me.chkAdvanceSearch.Location = New System.Drawing.Point(329, 6)
-        Me.chkAdvanceSearch.Name = "chkAdvanceSearch"
-        Me.chkAdvanceSearch.Size = New System.Drawing.Size(69, 17)
-        Me.chkAdvanceSearch.TabIndex = 2
-        Me.chkAdvanceSearch.Text = "Advance"
-        Me.chkAdvanceSearch.UseVisualStyleBackColor = True
-        '
         'InventoryLocationsForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -2081,6 +2082,8 @@ Partial Class InventoryLocationsForm
         CType(Me.SplitContainer4, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SplitContainer4.ResumeLayout(False)
         CType(Me.gridProductColorSizes, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.Panel3.ResumeLayout(False)
+        Me.Panel3.PerformLayout()
         CType(Me.gridRackShelfColumns, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel1.ResumeLayout(False)
         Me.Panel2.ResumeLayout(False)
@@ -2089,8 +2092,6 @@ Partial Class InventoryLocationsForm
         CType(Me.pbClose, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.errProvider, System.ComponentModel.ISupportInitialize).EndInit()
         Me.cmsOptions.ResumeLayout(False)
-        Me.Panel3.ResumeLayout(False)
-        Me.Panel3.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub

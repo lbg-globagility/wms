@@ -8,6 +8,7 @@ Imports WarehouseManagementSystem.Core.Interfaces
 Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
 Imports WarehouseManagementSystem.Core.Interfaces.Repositories
 Imports WarehouseManagementSystem.Desktop.Utilities
+Imports WarehouseManagementSystem.Infrastructure.Data.Services
 
 Public Class InventoryLocationsForm
     Dim manager As New sqlModule.Manager
@@ -1920,7 +1921,7 @@ Public Class InventoryLocationsForm
         Return If(model?.ProductColorSizeId, 0)
     End Function
 
-    Private Sub LinkLabel2_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel2.LinkClicked
+    Private Async Sub LinkLabel2_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel2.LinkClicked
         Dim inventoryLocationId = GetCurrentInventoryLocationId()
         Dim productColorSizeId = GetCurrentProductColorSizeId()
 
@@ -1944,11 +1945,47 @@ Public Class InventoryLocationsForm
             Select(Function(t) CType(t.DataBoundItem, RackShelfColumnSimpleModel)).
             ToList()
 
+        Dim currentRowIndex = If(gridProductColorSizes.CurrentRow?.Index, 0)
+
         Dim form As New RackShelfColumnForm(inventoryLocationId:=inventoryLocationId,
             productColorSizeId:=productColorSizeId,
             rackShelfColumnIds:=models.Select(Function(t) t.RowID).ToArray())
         If Not form.ShowDialog() = DialogResult.OK Then Return
 
+        Await FunctionUtils.TryCatchFunctionAsync("Select from existing Rack-Shelf-Column and incorporate to Product Inventory Location",
+            Async Function()
+                Dim model = CType(gridProductColorSizes.CurrentRow.DataBoundItem, ProductColorSizeModel)
+
+                Dim newProductInventoryLocation = ProductInventoryLocation.NewProductInventoryLocation(
+                    organizationId:=Z_OrganizationID,
+                    userId:=Z_UserID,
+                    productColorSizeId:=productColorSizeId,
+                    unitOfMeasure:=model.ProductInventoryLocation.UnitOfMeasure,
+                    unitPrice:=model.ProductInventoryLocation.UnitPrice)
+
+                Dim newRackShelfColumn = form.ProcessedRackShelfColumn
+
+                newRackShelfColumn.AddProductInventoryLocations(New List(Of ProductInventoryLocation) From {newProductInventoryLocation})
+
+                Dim rackShelfColumnDataService = GetRequiredService(Of IRackShelfColumnDataService)()
+                Await rackShelfColumnDataService.SaveManyAsync(userId:=Z_UserID,
+                    updated:=New List(Of RackShelfColumn) From {newRackShelfColumn})
+
+                Await LoadProductColorSizesOfInventoryLocationAsync()
+            End Function).
+                ContinueWith(
+                continuationAction:=Sub()
+                                        With gridProductColorSizes
+                                            If .Rows.Count() < currentRowIndex Then Return
+
+                                            .ClearSelection()
+                                            .CurrentCell = .Item(DataGridViewTextBoxColumn1.Name, currentRowIndex)
+                                            .Refresh()
+                                        End With
+
+                                        gridProductColorSizes_SelectionChanged(gridProductColorSizes, New EventArgs())
+                                    End Sub,
+                scheduler:=TaskScheduler.FromCurrentSynchronizationContext())
     End Sub
 
     Private Sub gridRackShelfColumns_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles gridRackShelfColumns.CellContentClick

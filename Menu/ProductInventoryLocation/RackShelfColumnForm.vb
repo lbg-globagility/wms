@@ -3,12 +3,12 @@
 Imports WarehouseManagementSystem.Core.Entities
 Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
 Imports WarehouseManagementSystem.Desktop.Utilities
-Imports WarehouseManagementSystem.Infrastructure.Data.Services
 
 Public Class RackShelfColumnForm
     Private ReadOnly _inventoryLocationId As Integer
     Private ReadOnly _productColorSizeId As Integer
     Private ReadOnly _rackShelfColumnIds As Integer()
+    Public ReadOnly Property ProcessedRackShelfColumn As RackShelfColumn
 
     Public Sub New(inventoryLocationId As Integer,
         productColorSizeId As Integer,
@@ -56,6 +56,7 @@ Public Class RackShelfColumnForm
                 Await rackShelfColumnDataService.SaveManyAsync(userId:=Z_UserID,
                     added:=New List(Of RackShelfColumn) From {newRackShelfColumn})
 
+                _ProcessedRackShelfColumn = form.ProcessedRackShelfColumn
             End Function).
                 ContinueWith(
                 continuationAction:=Async Sub()
@@ -65,10 +66,20 @@ Public Class RackShelfColumnForm
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        If grid.CurrentRow Is Nothing Then Return
+
+        Dim model = CType(grid.CurrentRow.DataBoundItem, RackShelfColumn)
+
+        _ProcessedRackShelfColumn = model
+
         DialogResult = DialogResult.OK
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
         DialogResult = DialogResult.Cancel
+    End Sub
+
+    Private Sub grid_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles grid.CellContentClick
+
     End Sub
 End Class
