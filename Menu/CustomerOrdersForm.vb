@@ -33,10 +33,9 @@ Public Class CustomerOrdersForm
         Dim _systemOwnerService = GetRequiredService(Of ISystemOwnerService)()
         _systemOwner = Await _systemOwnerService.GetCurrentSystemOwnerEntityAsync()
 
-        If IsThurston Then
-            SplitContainer3.Panel1Collapsed = True
-            Panel1.Visible = True
-        End If
+        SplitContainer3.Panel1Collapsed = IsThurston
+        SplitContainer3.Panel2Collapsed = Not IsThurston
+        Panel1.Visible = IsThurston
 
         Me.Cursor = Cursors.WaitCursor
         Try
