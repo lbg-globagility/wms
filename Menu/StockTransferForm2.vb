@@ -373,7 +373,7 @@ Public Class StockTransferForm2
 
         Dim hasOrder As Boolean = _selectedOrder IsNot Nothing
 
-        Dim form As New ProductSelectorDialog(inventoryLocationId:=CInt(cboFromInventory.SelectedValue))
+        Dim form As New ProductColorSizeSelectorDialog(inventoryLocationId:=CInt(cboFromInventory.SelectedValue))
         If hasOrder Then form.ProductColorSizeExceptionIds = _selectedOrder.MovementHistories?.
             GroupBy(Function(t) t.ProductColorSizeID.Value).
             Select(Function(id) id.Key).
@@ -388,7 +388,7 @@ Public Class StockTransferForm2
             For Each productColorSizeModel In selectedProductColorSizeModels
                 Dim newMovementHistoryFrom = MovementHistory.NewMovementHistory(organizationId:=Z_OrganizationID,
                     userId:=_userId,
-                    productColorSizeID:=productColorSizeModel.ProductColorSize.RowID.Value,
+                    productColorSizeID:=productColorSizeModel.ProductColorSizeId,
                     orderId:=_selectedOrder.RowID,
                     productInventoryLocationId:=productColorSizeModel.ProductInventoryLocation.RowID.Value,
                     currentQty:=0,
@@ -399,12 +399,12 @@ Public Class StockTransferForm2
                 _selectedOrder.AddMovementHistories(New List(Of MovementHistory) From {newMovementHistoryFrom})
 
                 Dim toProductInventoryLocation = productInventoryLocations.
-                    Where(Function(t) t.ProductColorSizeID = productColorSizeModel.ProductColorSize.RowID.Value).
+                    Where(Function(t) t.ProductColorSizeID = productColorSizeModel.ProductColorSizeId).
                     Where(Function(t) t.RackShelfColumn.InventoryLocationID = inventoryLocationIdTo).
                     FirstOrDefault()
                 Dim newMovementHistoryTo = MovementHistory.NewMovementHistory(organizationId:=Z_OrganizationID,
                     userId:=_userId,
-                    productColorSizeID:=productColorSizeModel.ProductColorSize.RowID.Value,
+                    productColorSizeID:=productColorSizeModel.ProductColorSizeId,
                     orderId:=_selectedOrder.RowID,
                     productInventoryLocationId:=toProductInventoryLocation.RowID.Value,
                     currentQty:=0,

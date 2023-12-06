@@ -2,6 +2,7 @@
 Imports MySql.Data.MySqlClient
 Imports WarehouseManagementSystem.Core.Entities
 Imports WarehouseManagementSystem.Core.Enums
+Imports WarehouseManagementSystem.Core.Interfaces
 Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
 Imports WarehouseManagementSystem.Core.Interfaces.Repositories
 
@@ -25,9 +26,26 @@ Public Class CustomerOrdersForm
     Dim cototalqtyordered, coqtyordered, coitotalqtyordered, coiqtyordered, cototalqtydelivered, cototalqtypicked As Integer
     Dim cocustomerid, coorderid, coproductcolorsizesid, coproductid, coproductbundleid, coorderitemid, cobranchid, covendorid, cocombinecodingid As Integer
     Private _agents As List(Of Contact)
+    Private _systemOwner As SystemOwner
     Private ReadOnly _noAgent As Contact = Contact.BlankAgent(organizationId:=Z_OrganizationID)
 
     Private Async Sub CustomerOrdersForm_Load(sender As Object, e As EventArgs) Handles Me.Load
+        Dim _systemOwnerService = GetRequiredService(Of ISystemOwnerService)()
+        _systemOwner = Await _systemOwnerService.GetCurrentSystemOwnerEntityAsync()
+
+        SplitContainer3.Panel1Collapsed = Not IsThurston
+        'SplitContainer3.Panel2Collapsed = IsThurston
+        'Panel1.Visible = IsThurston
+
+        Dim names = {Label3.Name, cboByPhrase.Name, btnAddProduct.Name}
+        Label3.Text = "Select Product Code"
+        For Each control In gbAddProductItem.Controls.
+            OfType(Of Control).
+            Where(Function(t) Not names.Contains(t.Name))
+
+            control.Visible = Not IsThurston
+        Next
+
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
@@ -212,12 +230,12 @@ Public Class CustomerOrdersForm
 
     Sub clearAddProductA()
         Try
-            cboBy.Text = ""
+            If Not IsThurston Then cboBy.Text = ""
             cboByPhrase.Text = ""
             txtQtyOrdered.Text = ""
             cboTags.Text = ""
             cboTags.SelectedItem = Nothing
-            cboBy.SelectedItem = Nothing
+            If Not IsThurston Then cboBy.SelectedItem = Nothing
             cboByPhrase.SelectedItem = Nothing
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
@@ -397,7 +415,7 @@ Public Class CustomerOrdersForm
         Me.Cursor = Cursors.Default
     End Sub
 
-    Sub btnAddperformclick()
+    Private Sub btnAddperformclick()
         Try
             errProvider.Clear()
             If cboBy.Text <> "" Then
@@ -859,6 +877,12 @@ Public Class CustomerOrdersForm
             cboBy.Items.Add("ProductCode")
             cboBy.Items.Add("SKU")
             cboBy.Items.Add("")
+
+            If IsThurston Then
+                cboBy.Items.Clear()
+                cboBy.Items.Add("ProductCode")
+                cboBy.SelectedIndex = 0
+            End If
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -2282,6 +2306,7 @@ Public Class CustomerOrdersForm
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
             conn.Close()
+            If IsThurston Then cboBy_SelectedIndexChanged(cboBy, New EventArgs())
         End Try
         Me.Cursor = Cursors.Default
     End Sub
@@ -2820,6 +2845,9 @@ Public Class CustomerOrdersForm
             dgProductSizes.Rows.Clear()
             dgProductColorSizes.Rows.Clear()
             dgBundleItems.Rows.Clear()
+
+            If IsThurston Then cboBy.Text = "ProductCode"
+
             If cboBy.Text = "" Then
                 cboByPhrase.Items.Clear() : cboByPhrase.AutoCompleteCustomSource.Clear()
                 visibleGB(fraud, fraud, fraud, fraud, fraud)
@@ -4229,6 +4257,16 @@ Public Class CustomerOrdersForm
         End Try
     End Sub
 
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles btnAddOrderItem.Click
+        Dim inventoryLocationId = CInt(cboInventoryLocation.SelectedValue)
+
+        'btnAddperformclick()
+    End Sub
+
+    Private Sub gbCustomerOrderItems_EnabledChanged(sender As Object, e As EventArgs) Handles gbCustomerOrderItems.EnabledChanged
+        Panel1.Enabled = gbCustomerOrderItems.Enabled
+    End Sub
+
     Private Sub pbAddBranchCodeName_Click(sender As Object, e As EventArgs) Handles pbAddBranchCodeName.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -5173,4 +5211,9 @@ Public Class CustomerOrdersForm
 
 #End Region
 
+    Private ReadOnly Property IsThurston As Boolean
+        Get
+            Return _systemOwner.IsThurston
+        End Get
+    End Property
 End Class

@@ -53,7 +53,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
             {
                 color = Color.NewColor(organizationId: organizationId, userId: userId, name: name, value: string.Empty);
 
-                await SaveManyAsync(entities: new List<Color>() { color }, userId: userId);
+                await SaveManyAsync(userId: userId, added: new List<Color>() { color });
             }
 
             if (color == null)

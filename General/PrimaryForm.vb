@@ -1577,11 +1577,13 @@ Public Class PrimaryForm
         End Get
     End Property
 
-    Private Async Sub SampleToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SampleToolStripMenuItem.Click
-        Dim providers = New Collection(Of IReportProvider) From {
-            New DeliveryPerformanceReportProvider()}
-
-        Await providers.FirstOrDefault().RunAsync()
+    Private Async Sub DailyDeliveriesReportToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DailyDeliveriesReportToolStripMenuItem.Click
+        Dim reportProvider As IReportProvider = New DailyDeliveriesReportProvider()
+        Await reportProvider.RunAsync()
     End Sub
 
+    Private Async Sub DeliveryTrafficReportToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeliveryTrafficReportToolStripMenuItem.Click
+        Dim reportProvider As IReportProvider = New DeliveryPerformanceReportProvider()
+        Await reportProvider.RunAsync()
+    End Sub
 End Class

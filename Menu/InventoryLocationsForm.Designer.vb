@@ -32,6 +32,10 @@ Partial Class InventoryLocationsForm
         Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle7 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle8 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle11 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle9 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle10 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle12 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.dgRackShelfColumn = New DevComponents.DotNetBar.Controls.DataGridViewX()
         Me.rsc_rowid = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.rsc_seqno = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -93,6 +97,8 @@ Partial Class InventoryLocationsForm
         Me.cboSearch1 = New System.Windows.Forms.ComboBox()
         Me.tabMain = New System.Windows.Forms.TabControl()
         Me.tabDetails = New System.Windows.Forms.TabPage()
+        Me.SplitContainer2 = New System.Windows.Forms.SplitContainer()
+        Me.SplitContainer3 = New System.Windows.Forms.SplitContainer()
         Me.gbProducts = New System.Windows.Forms.GroupBox()
         Me.chkOtherInfo = New System.Windows.Forms.CheckBox()
         Me.Label19 = New System.Windows.Forms.Label()
@@ -150,6 +156,44 @@ Partial Class InventoryLocationsForm
         Me.cboRack = New System.Windows.Forms.ComboBox()
         Me.lblQtyIssued = New System.Windows.Forms.Label()
         Me.lblQtyReceived = New System.Windows.Forms.Label()
+        Me.SplitContainer4 = New System.Windows.Forms.SplitContainer()
+        Me.gridProductColorSizes = New DevComponents.DotNetBar.Controls.DataGridViewX()
+        Me.DataGridViewTextBoxColumn1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column14 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column15 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column16 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column17 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column18 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column19 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column20 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column21 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column22 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column8 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column9 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column10 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column11 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column12 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column13 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Panel3 = New System.Windows.Forms.Panel()
+        Me.chkAdvanceSearch = New System.Windows.Forms.CheckBox()
+        Me.Label20 = New System.Windows.Forms.Label()
+        Me.txtSearch = New System.Windows.Forms.TextBox()
+        Me.gridRackShelfColumns = New DevComponents.DotNetBar.Controls.DataGridViewX()
+        Me.Column1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column6 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column7 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.LinkLabel2 = New System.Windows.Forms.LinkLabel()
+        Me.Panel2 = New System.Windows.Forms.Panel()
+        Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
         Me.msMenu = New System.Windows.Forms.MenuStrip()
         Me.msNew = New System.Windows.Forms.ToolStripMenuItem()
         Me.msSave = New System.Windows.Forms.ToolStripMenuItem()
@@ -160,6 +204,7 @@ Partial Class InventoryLocationsForm
         Me.cmsOptions = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.cmsEdit = New System.Windows.Forms.ToolStripMenuItem()
         Me.cmsDelete = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         CType(Me.dgRackShelfColumn, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.gbInventoryLocationInformation.SuspendLayout()
         CType(Me.pbEditAddress, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -176,6 +221,14 @@ Partial Class InventoryLocationsForm
         Me.tabCommon.SuspendLayout()
         Me.tabMain.SuspendLayout()
         Me.tabDetails.SuspendLayout()
+        CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.SplitContainer2.Panel1.SuspendLayout()
+        Me.SplitContainer2.Panel2.SuspendLayout()
+        Me.SplitContainer2.SuspendLayout()
+        CType(Me.SplitContainer3, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.SplitContainer3.Panel1.SuspendLayout()
+        Me.SplitContainer3.Panel2.SuspendLayout()
+        Me.SplitContainer3.SuspendLayout()
         Me.gbProducts.SuspendLayout()
         CType(Me.dgProducts, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.gbRackShelfColumn.SuspendLayout()
@@ -184,6 +237,15 @@ Partial Class InventoryLocationsForm
         CType(Me.pbAutoAddShelf, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbAutoAddColumn, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbAutoAddRack, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.SplitContainer4, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.SplitContainer4.Panel1.SuspendLayout()
+        Me.SplitContainer4.Panel2.SuspendLayout()
+        Me.SplitContainer4.SuspendLayout()
+        CType(Me.gridProductColorSizes, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.Panel3.SuspendLayout()
+        CType(Me.gridRackShelfColumns, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.Panel1.SuspendLayout()
+        Me.Panel2.SuspendLayout()
         Me.msMenu.SuspendLayout()
         CType(Me.pbClose, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.errProvider, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -418,11 +480,12 @@ Partial Class InventoryLocationsForm
         Me.gbInventoryLocationInformation.Controls.Add(Me.Label51)
         Me.gbInventoryLocationInformation.Controls.Add(Me.Label52)
         Me.gbInventoryLocationInformation.Controls.Add(Me.Label55)
+        Me.gbInventoryLocationInformation.Dock = System.Windows.Forms.DockStyle.Fill
         Me.gbInventoryLocationInformation.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.gbInventoryLocationInformation.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.gbInventoryLocationInformation.Location = New System.Drawing.Point(6, 5)
+        Me.gbInventoryLocationInformation.Location = New System.Drawing.Point(0, 0)
         Me.gbInventoryLocationInformation.Name = "gbInventoryLocationInformation"
-        Me.gbInventoryLocationInformation.Size = New System.Drawing.Size(780, 152)
+        Me.gbInventoryLocationInformation.Size = New System.Drawing.Size(810, 150)
         Me.gbInventoryLocationInformation.TabIndex = 3
         Me.gbInventoryLocationInformation.TabStop = False
         '
@@ -856,9 +919,7 @@ Partial Class InventoryLocationsForm
         'tabDetails
         '
         Me.tabDetails.AutoScroll = True
-        Me.tabDetails.Controls.Add(Me.gbProducts)
-        Me.tabDetails.Controls.Add(Me.gbRackShelfColumn)
-        Me.tabDetails.Controls.Add(Me.gbInventoryLocationInformation)
+        Me.tabDetails.Controls.Add(Me.SplitContainer2)
         Me.tabDetails.Location = New System.Drawing.Point(4, 4)
         Me.tabDetails.Name = "tabDetails"
         Me.tabDetails.Padding = New System.Windows.Forms.Padding(3)
@@ -866,6 +927,47 @@ Partial Class InventoryLocationsForm
         Me.tabDetails.TabIndex = 0
         Me.tabDetails.Text = "I.L. Details"
         Me.tabDetails.UseVisualStyleBackColor = True
+        '
+        'SplitContainer2
+        '
+        Me.SplitContainer2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.SplitContainer2.FixedPanel = System.Windows.Forms.FixedPanel.Panel1
+        Me.SplitContainer2.Location = New System.Drawing.Point(0, 0)
+        Me.SplitContainer2.Name = "SplitContainer2"
+        Me.SplitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal
+        '
+        'SplitContainer2.Panel1
+        '
+        Me.SplitContainer2.Panel1.Controls.Add(Me.gbInventoryLocationInformation)
+        Me.SplitContainer2.Panel1MinSize = 152
+        '
+        'SplitContainer2.Panel2
+        '
+        Me.SplitContainer2.Panel2.Controls.Add(Me.SplitContainer3)
+        Me.SplitContainer2.Size = New System.Drawing.Size(812, 800)
+        Me.SplitContainer2.SplitterDistance = 152
+        Me.SplitContainer2.TabIndex = 6
+        '
+        'SplitContainer3
+        '
+        Me.SplitContainer3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.SplitContainer3.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SplitContainer3.Location = New System.Drawing.Point(0, 0)
+        Me.SplitContainer3.Name = "SplitContainer3"
+        Me.SplitContainer3.Orientation = System.Windows.Forms.Orientation.Horizontal
+        '
+        'SplitContainer3.Panel1
+        '
+        Me.SplitContainer3.Panel1.Controls.Add(Me.gbProducts)
+        Me.SplitContainer3.Panel1.Controls.Add(Me.gbRackShelfColumn)
+        Me.SplitContainer3.Panel1MinSize = 478
+        '
+        'SplitContainer3.Panel2
+        '
+        Me.SplitContainer3.Panel2.Controls.Add(Me.SplitContainer4)
+        Me.SplitContainer3.Size = New System.Drawing.Size(812, 644)
+        Me.SplitContainer3.SplitterDistance = 478
+        Me.SplitContainer3.TabIndex = 0
         '
         'gbProducts
         '
@@ -886,11 +988,12 @@ Partial Class InventoryLocationsForm
         Me.gbProducts.Controls.Add(Me.Label11)
         Me.gbProducts.Controls.Add(Me.txtTotalProducts)
         Me.gbProducts.Controls.Add(Me.Label8)
+        Me.gbProducts.Dock = System.Windows.Forms.DockStyle.Fill
         Me.gbProducts.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.gbProducts.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.gbProducts.Location = New System.Drawing.Point(441, 160)
+        Me.gbProducts.Location = New System.Drawing.Point(430, 0)
         Me.gbProducts.Name = "gbProducts"
-        Me.gbProducts.Size = New System.Drawing.Size(380, 480)
+        Me.gbProducts.Size = New System.Drawing.Size(380, 476)
         Me.gbProducts.TabIndex = 5
         Me.gbProducts.TabStop = False
         Me.gbProducts.Text = " "
@@ -1238,11 +1341,12 @@ Partial Class InventoryLocationsForm
         Me.gbRackShelfColumn.Controls.Add(Me.gbAddRSC)
         Me.gbRackShelfColumn.Controls.Add(Me.dgRackShelfColumn)
         Me.gbRackShelfColumn.Controls.Add(Me.Label15)
+        Me.gbRackShelfColumn.Dock = System.Windows.Forms.DockStyle.Left
         Me.gbRackShelfColumn.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.gbRackShelfColumn.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.gbRackShelfColumn.Location = New System.Drawing.Point(6, 160)
+        Me.gbRackShelfColumn.Location = New System.Drawing.Point(0, 0)
         Me.gbRackShelfColumn.Name = "gbRackShelfColumn"
-        Me.gbRackShelfColumn.Size = New System.Drawing.Size(430, 480)
+        Me.gbRackShelfColumn.Size = New System.Drawing.Size(430, 476)
         Me.gbRackShelfColumn.TabIndex = 4
         Me.gbRackShelfColumn.TabStop = False
         '
@@ -1492,6 +1596,350 @@ Partial Class InventoryLocationsForm
         Me.lblQtyReceived.TabIndex = 370
         Me.lblQtyReceived.Text = "Rack:"
         '
+        'SplitContainer4
+        '
+        Me.SplitContainer4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.SplitContainer4.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SplitContainer4.Location = New System.Drawing.Point(0, 0)
+        Me.SplitContainer4.Name = "SplitContainer4"
+        '
+        'SplitContainer4.Panel1
+        '
+        Me.SplitContainer4.Panel1.Controls.Add(Me.gridProductColorSizes)
+        Me.SplitContainer4.Panel1.Controls.Add(Me.Panel3)
+        '
+        'SplitContainer4.Panel2
+        '
+        Me.SplitContainer4.Panel2.Controls.Add(Me.gridRackShelfColumns)
+        Me.SplitContainer4.Panel2.Controls.Add(Me.Panel1)
+        Me.SplitContainer4.Panel2.Controls.Add(Me.Panel2)
+        Me.SplitContainer4.Size = New System.Drawing.Size(812, 162)
+        Me.SplitContainer4.SplitterDistance = 403
+        Me.SplitContainer4.TabIndex = 7
+        '
+        'gridProductColorSizes
+        '
+        Me.gridProductColorSizes.AllowUserToAddRows = False
+        Me.gridProductColorSizes.AllowUserToDeleteRows = False
+        Me.gridProductColorSizes.AllowUserToResizeRows = False
+        Me.gridProductColorSizes.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.gridProductColorSizes.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.DataGridViewTextBoxColumn1, Me.Column14, Me.Column15, Me.Column16, Me.Column17, Me.DataGridViewTextBoxColumn2, Me.Column18, Me.Column19, Me.Column20, Me.Column21, Me.Column22, Me.DataGridViewTextBoxColumn3, Me.DataGridViewTextBoxColumn4, Me.Column8, Me.Column9, Me.DataGridViewTextBoxColumn5, Me.Column10, Me.Column11, Me.Column12, Me.Column13})
+        DataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle11.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle11.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle11.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle11.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle11.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.gridProductColorSizes.DefaultCellStyle = DataGridViewCellStyle11
+        Me.gridProductColorSizes.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.gridProductColorSizes.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
+        Me.gridProductColorSizes.Location = New System.Drawing.Point(0, 28)
+        Me.gridProductColorSizes.MultiSelect = False
+        Me.gridProductColorSizes.Name = "gridProductColorSizes"
+        Me.gridProductColorSizes.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
+        Me.gridProductColorSizes.Size = New System.Drawing.Size(401, 132)
+        Me.gridProductColorSizes.TabIndex = 4
+        '
+        'DataGridViewTextBoxColumn1
+        '
+        Me.DataGridViewTextBoxColumn1.DataPropertyName = "ProductCode"
+        Me.DataGridViewTextBoxColumn1.HeaderText = "ProductCode"
+        Me.DataGridViewTextBoxColumn1.Name = "DataGridViewTextBoxColumn1"
+        Me.DataGridViewTextBoxColumn1.ReadOnly = True
+        '
+        'Column14
+        '
+        Me.Column14.DataPropertyName = "TotalAvailableQty"
+        Me.Column14.HeaderText = "Total Available Qty"
+        Me.Column14.Name = "Column14"
+        '
+        'Column15
+        '
+        Me.Column15.DataPropertyName = "TotalReserveQty"
+        Me.Column15.HeaderText = "Total Reserved Qty"
+        Me.Column15.Name = "Column15"
+        '
+        'Column16
+        '
+        Me.Column16.DataPropertyName = "TotalAllocatedQty"
+        Me.Column16.HeaderText = "Total Allocated Qty"
+        Me.Column16.Name = "Column16"
+        '
+        'Column17
+        '
+        Me.Column17.DataPropertyName = "TotalOrderableQty"
+        Me.Column17.HeaderText = "Total Orderable Qty"
+        Me.Column17.Name = "Column17"
+        '
+        'DataGridViewTextBoxColumn2
+        '
+        Me.DataGridViewTextBoxColumn2.DataPropertyName = "BrandName"
+        Me.DataGridViewTextBoxColumn2.HeaderText = "BrandName"
+        Me.DataGridViewTextBoxColumn2.Name = "DataGridViewTextBoxColumn2"
+        Me.DataGridViewTextBoxColumn2.ReadOnly = True
+        '
+        'Column18
+        '
+        Me.Column18.DataPropertyName = "TotalDamageQty"
+        Me.Column18.HeaderText = "Total Damage Qty"
+        Me.Column18.Name = "Column18"
+        Me.Column18.Visible = False
+        '
+        'Column19
+        '
+        Me.Column19.DataPropertyName = "TotalSupplierProblemQty"
+        Me.Column19.HeaderText = "Total Supplier Problem Qty"
+        Me.Column19.Name = "Column19"
+        Me.Column19.Visible = False
+        '
+        'Column20
+        '
+        Me.Column20.DataPropertyName = "TotalInRepairQty"
+        Me.Column20.HeaderText = "Total InRepair Qty"
+        Me.Column20.Name = "Column20"
+        Me.Column20.Visible = False
+        '
+        'Column21
+        '
+        Me.Column21.DataPropertyName = "TotalToReceiveQty"
+        Me.Column21.HeaderText = "Total ToReceive Qty"
+        Me.Column21.Name = "Column21"
+        Me.Column21.Visible = False
+        '
+        'Column22
+        '
+        Me.Column22.DataPropertyName = "RunningTotalQty"
+        Me.Column22.HeaderText = "Total Running Qty"
+        Me.Column22.Name = "Column22"
+        Me.Column22.Visible = False
+        '
+        'DataGridViewTextBoxColumn3
+        '
+        Me.DataGridViewTextBoxColumn3.DataPropertyName = "Category"
+        Me.DataGridViewTextBoxColumn3.HeaderText = "Category"
+        Me.DataGridViewTextBoxColumn3.Name = "DataGridViewTextBoxColumn3"
+        Me.DataGridViewTextBoxColumn3.ReadOnly = True
+        '
+        'DataGridViewTextBoxColumn4
+        '
+        Me.DataGridViewTextBoxColumn4.DataPropertyName = "SRP"
+        Me.DataGridViewTextBoxColumn4.HeaderText = "SRP"
+        Me.DataGridViewTextBoxColumn4.Name = "DataGridViewTextBoxColumn4"
+        Me.DataGridViewTextBoxColumn4.ReadOnly = True
+        '
+        'Column8
+        '
+        Me.Column8.DataPropertyName = "UnitOfMeasure"
+        DataGridViewCellStyle9.NullValue = Nothing
+        Me.Column8.DefaultCellStyle = DataGridViewCellStyle9
+        Me.Column8.HeaderText = "UnitOfMeasure"
+        Me.Column8.Name = "Column8"
+        Me.Column8.ReadOnly = True
+        '
+        'Column9
+        '
+        Me.Column9.DataPropertyName = "Description"
+        DataGridViewCellStyle10.NullValue = Nothing
+        Me.Column9.DefaultCellStyle = DataGridViewCellStyle10
+        Me.Column9.HeaderText = "Description"
+        Me.Column9.Name = "Column9"
+        Me.Column9.ReadOnly = True
+        '
+        'DataGridViewTextBoxColumn5
+        '
+        Me.DataGridViewTextBoxColumn5.DataPropertyName = "Colors"
+        Me.DataGridViewTextBoxColumn5.HeaderText = "Colors"
+        Me.DataGridViewTextBoxColumn5.Name = "DataGridViewTextBoxColumn5"
+        Me.DataGridViewTextBoxColumn5.ReadOnly = True
+        '
+        'Column10
+        '
+        Me.Column10.DataPropertyName = "Style"
+        Me.Column10.HeaderText = "Style"
+        Me.Column10.Name = "Column10"
+        Me.Column10.ReadOnly = True
+        '
+        'Column11
+        '
+        Me.Column11.DataPropertyName = "SeasonCode"
+        Me.Column11.HeaderText = "SeasonCode"
+        Me.Column11.Name = "Column11"
+        Me.Column11.ReadOnly = True
+        '
+        'Column12
+        '
+        Me.Column12.DataPropertyName = "SKU"
+        Me.Column12.HeaderText = "SKU"
+        Me.Column12.Name = "Column12"
+        Me.Column12.ReadOnly = True
+        '
+        'Column13
+        '
+        Me.Column13.DataPropertyName = "SKU2"
+        Me.Column13.HeaderText = "SKU2"
+        Me.Column13.Name = "Column13"
+        Me.Column13.ReadOnly = True
+        '
+        'Panel3
+        '
+        Me.Panel3.Controls.Add(Me.chkAdvanceSearch)
+        Me.Panel3.Controls.Add(Me.Label20)
+        Me.Panel3.Controls.Add(Me.txtSearch)
+        Me.Panel3.Dock = System.Windows.Forms.DockStyle.Top
+        Me.Panel3.Location = New System.Drawing.Point(0, 0)
+        Me.Panel3.Name = "Panel3"
+        Me.Panel3.Size = New System.Drawing.Size(401, 28)
+        Me.Panel3.TabIndex = 6
+        Me.Panel3.Visible = False
+        '
+        'chkAdvanceSearch
+        '
+        Me.chkAdvanceSearch.AutoSize = True
+        Me.chkAdvanceSearch.Location = New System.Drawing.Point(329, 6)
+        Me.chkAdvanceSearch.Name = "chkAdvanceSearch"
+        Me.chkAdvanceSearch.Size = New System.Drawing.Size(69, 17)
+        Me.chkAdvanceSearch.TabIndex = 2
+        Me.chkAdvanceSearch.Text = "Advance"
+        Me.chkAdvanceSearch.UseVisualStyleBackColor = True
+        '
+        'Label20
+        '
+        Me.Label20.AutoSize = True
+        Me.Label20.Location = New System.Drawing.Point(5, 11)
+        Me.Label20.Name = "Label20"
+        Me.Label20.Size = New System.Drawing.Size(41, 13)
+        Me.Label20.TabIndex = 1
+        Me.Label20.Text = "Search"
+        '
+        'txtSearch
+        '
+        Me.txtSearch.Location = New System.Drawing.Point(52, 4)
+        Me.txtSearch.Name = "txtSearch"
+        Me.txtSearch.Size = New System.Drawing.Size(271, 20)
+        Me.txtSearch.TabIndex = 0
+        '
+        'gridRackShelfColumns
+        '
+        Me.gridRackShelfColumns.AllowUserToAddRows = False
+        Me.gridRackShelfColumns.AllowUserToDeleteRows = False
+        Me.gridRackShelfColumns.AllowUserToOrderColumns = True
+        Me.gridRackShelfColumns.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.gridRackShelfColumns.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column1, Me.Column5, Me.Column6, Me.Column2, Me.Column3, Me.Column4, Me.Column7})
+        DataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle12.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle12.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle12.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle12.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle12.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.gridRackShelfColumns.DefaultCellStyle = DataGridViewCellStyle12
+        Me.gridRackShelfColumns.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.gridRackShelfColumns.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
+        Me.gridRackShelfColumns.Location = New System.Drawing.Point(0, 28)
+        Me.gridRackShelfColumns.MultiSelect = False
+        Me.gridRackShelfColumns.Name = "gridRackShelfColumns"
+        Me.gridRackShelfColumns.ReadOnly = True
+        Me.gridRackShelfColumns.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
+        Me.gridRackShelfColumns.Size = New System.Drawing.Size(403, 104)
+        Me.gridRackShelfColumns.TabIndex = 3
+        '
+        'Column1
+        '
+        Me.Column1.DataPropertyName = "PickOrderNo"
+        Me.Column1.HeaderText = "PickOrderNo "
+        Me.Column1.Name = "Column1"
+        Me.Column1.ReadOnly = True
+        '
+        'Column5
+        '
+        Me.Column5.DataPropertyName = "AvailableQty"
+        Me.Column5.HeaderText = "AvailableQty "
+        Me.Column5.Name = "Column5"
+        Me.Column5.ReadOnly = True
+        '
+        'Column6
+        '
+        Me.Column6.DataPropertyName = "ReservedQty"
+        Me.Column6.HeaderText = "ReservedQty "
+        Me.Column6.Name = "Column6"
+        Me.Column6.ReadOnly = True
+        '
+        'Column2
+        '
+        Me.Column2.DataPropertyName = "Rack"
+        Me.Column2.HeaderText = "Rack "
+        Me.Column2.Name = "Column2"
+        Me.Column2.ReadOnly = True
+        '
+        'Column3
+        '
+        Me.Column3.DataPropertyName = "Shelf"
+        Me.Column3.HeaderText = "Shelf "
+        Me.Column3.Name = "Column3"
+        Me.Column3.ReadOnly = True
+        '
+        'Column4
+        '
+        Me.Column4.DataPropertyName = "Column"
+        Me.Column4.HeaderText = "Column"
+        Me.Column4.Name = "Column4"
+        Me.Column4.ReadOnly = True
+        '
+        'Column7
+        '
+        Me.Column7.DataPropertyName = "Remarks"
+        Me.Column7.HeaderText = "Remarks "
+        Me.Column7.Name = "Column7"
+        Me.Column7.ReadOnly = True
+        '
+        'Panel1
+        '
+        Me.Panel1.Controls.Add(Me.LinkLabel2)
+        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
+        Me.Panel1.Location = New System.Drawing.Point(0, 0)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(403, 28)
+        Me.Panel1.TabIndex = 5
+        '
+        'LinkLabel2
+        '
+        Me.LinkLabel2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.LinkLabel2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.LinkLabel2.LinkBehavior = System.Windows.Forms.LinkBehavior.AlwaysUnderline
+        Me.LinkLabel2.LinkColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(155, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.LinkLabel2.Location = New System.Drawing.Point(203, 3)
+        Me.LinkLabel2.Name = "LinkLabel2"
+        Me.LinkLabel2.Size = New System.Drawing.Size(197, 23)
+        Me.LinkLabel2.TabIndex = 3
+        Me.LinkLabel2.TabStop = True
+        Me.LinkLabel2.Text = "Select from existing Rack-Shelf-Column"
+        Me.LinkLabel2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'Panel2
+        '
+        Me.Panel2.Controls.Add(Me.LinkLabel1)
+        Me.Panel2.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.Panel2.Location = New System.Drawing.Point(0, 132)
+        Me.Panel2.Name = "Panel2"
+        Me.Panel2.Size = New System.Drawing.Size(403, 28)
+        Me.Panel2.TabIndex = 6
+        '
+        'LinkLabel1
+        '
+        Me.LinkLabel1.Enabled = False
+        Me.LinkLabel1.Image = CType(resources.GetObject("LinkLabel1.Image"), System.Drawing.Image)
+        Me.LinkLabel1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.LinkLabel1.LinkBehavior = System.Windows.Forms.LinkBehavior.AlwaysUnderline
+        Me.LinkLabel1.LinkColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(155, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.LinkLabel1.Location = New System.Drawing.Point(3, 3)
+        Me.LinkLabel1.Name = "LinkLabel1"
+        Me.LinkLabel1.Size = New System.Drawing.Size(137, 23)
+        Me.LinkLabel1.TabIndex = 2
+        Me.LinkLabel1.TabStop = True
+        Me.LinkLabel1.Text = "Add Rack-Shelf-Column"
+        Me.LinkLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
         'msMenu
         '
         Me.msMenu.BackColor = System.Drawing.Color.Transparent
@@ -1610,6 +2058,14 @@ Partial Class InventoryLocationsForm
         Me.tabCommon.ResumeLayout(False)
         Me.tabMain.ResumeLayout(False)
         Me.tabDetails.ResumeLayout(False)
+        Me.SplitContainer2.Panel1.ResumeLayout(False)
+        Me.SplitContainer2.Panel2.ResumeLayout(False)
+        CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.SplitContainer2.ResumeLayout(False)
+        Me.SplitContainer3.Panel1.ResumeLayout(False)
+        Me.SplitContainer3.Panel2.ResumeLayout(False)
+        CType(Me.SplitContainer3, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.SplitContainer3.ResumeLayout(False)
         Me.gbProducts.ResumeLayout(False)
         Me.gbProducts.PerformLayout()
         CType(Me.dgProducts, System.ComponentModel.ISupportInitialize).EndInit()
@@ -1622,6 +2078,16 @@ Partial Class InventoryLocationsForm
         CType(Me.pbAutoAddShelf, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.pbAutoAddColumn, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.pbAutoAddRack, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.SplitContainer4.Panel1.ResumeLayout(False)
+        Me.SplitContainer4.Panel2.ResumeLayout(False)
+        CType(Me.SplitContainer4, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.SplitContainer4.ResumeLayout(False)
+        CType(Me.gridProductColorSizes, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.Panel3.ResumeLayout(False)
+        Me.Panel3.PerformLayout()
+        CType(Me.gridRackShelfColumns, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.Panel1.ResumeLayout(False)
+        Me.Panel2.ResumeLayout(False)
         Me.msMenu.ResumeLayout(False)
         Me.msMenu.PerformLayout()
         CType(Me.pbClose, System.ComponentModel.ISupportInitialize).EndInit()
@@ -1758,4 +2224,45 @@ Partial Class InventoryLocationsForm
     Friend WithEvents p_seasoncode As DataGridViewTextBoxColumn
     Friend WithEvents p_sku As DataGridViewTextBoxColumn
     Friend WithEvents p_sku2 As DataGridViewTextBoxColumn
+    Friend WithEvents SplitContainer2 As SplitContainer
+    Friend WithEvents SplitContainer3 As SplitContainer
+    Friend WithEvents gridRackShelfColumns As DevComponents.DotNetBar.Controls.DataGridViewX
+    Friend WithEvents gridProductColorSizes As DevComponents.DotNetBar.Controls.DataGridViewX
+    Friend WithEvents Panel1 As Panel
+    Friend WithEvents Panel2 As Panel
+    Friend WithEvents SplitContainer4 As SplitContainer
+    Friend WithEvents LinkLabel1 As LinkLabel
+    Friend WithEvents LinkLabel2 As LinkLabel
+    Friend WithEvents DataGridViewTextBoxColumn1 As DataGridViewTextBoxColumn
+    Friend WithEvents Column14 As DataGridViewTextBoxColumn
+    Friend WithEvents Column15 As DataGridViewTextBoxColumn
+    Friend WithEvents Column16 As DataGridViewTextBoxColumn
+    Friend WithEvents Column17 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn2 As DataGridViewTextBoxColumn
+    Friend WithEvents Column18 As DataGridViewTextBoxColumn
+    Friend WithEvents Column19 As DataGridViewTextBoxColumn
+    Friend WithEvents Column20 As DataGridViewTextBoxColumn
+    Friend WithEvents Column21 As DataGridViewTextBoxColumn
+    Friend WithEvents Column22 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn3 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn4 As DataGridViewTextBoxColumn
+    Friend WithEvents Column8 As DataGridViewTextBoxColumn
+    Friend WithEvents Column9 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn5 As DataGridViewTextBoxColumn
+    Friend WithEvents Column10 As DataGridViewTextBoxColumn
+    Friend WithEvents Column11 As DataGridViewTextBoxColumn
+    Friend WithEvents Column12 As DataGridViewTextBoxColumn
+    Friend WithEvents Column13 As DataGridViewTextBoxColumn
+    Friend WithEvents Column1 As DataGridViewTextBoxColumn
+    Friend WithEvents Column5 As DataGridViewTextBoxColumn
+    Friend WithEvents Column6 As DataGridViewTextBoxColumn
+    Friend WithEvents Column2 As DataGridViewTextBoxColumn
+    Friend WithEvents Column3 As DataGridViewTextBoxColumn
+    Friend WithEvents Column4 As DataGridViewTextBoxColumn
+    Friend WithEvents Column7 As DataGridViewTextBoxColumn
+    Friend WithEvents Panel3 As Panel
+    Friend WithEvents Label20 As Label
+    Friend WithEvents txtSearch As TextBox
+    Friend WithEvents chkAdvanceSearch As CheckBox
+    Friend WithEvents ToolTip1 As ToolTip
 End Class

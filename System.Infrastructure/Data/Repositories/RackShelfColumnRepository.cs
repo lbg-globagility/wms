@@ -65,5 +65,33 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
 
             await _context.SaveChangesAsync();
         }
+
+        public async Task<List<RackShelfColumn>> GetByInventoryLocationIdAsync(int inventoryLocationId) => await _context.RackShelfColumns
+                .Include(t => t.ProductInventoryLocations)
+                .Where(t => t.InventoryLocationID == inventoryLocationId)
+                .ToListAsync();
+
+        public Task<RackShelfColumn> GenerateNew(int organizationId, int userId, int inventoryLocationId)
+        {
+            var query = _context.RackShelfColumns
+                .Where(t => t.OrganizationID == organizationId)
+                .Where(t => t.InventoryLocationID == inventoryLocationId)
+                .AsNoTracking()
+                .AsQueryable();
+
+            var preceedingRackShelfColumns = query
+                .AsEnumerable()
+                .Where(t=>t.IsActive)
+                .ToList();
+
+            var newRackShelfColumn = RackShelfColumn.NewRackShelfColumn(organizationId: organizationId,
+                userId: userId,
+                inventoryLocationId: inventoryLocationId);
+
+            newRackShelfColumn.PickOrderNo =
+                (preceedingRackShelfColumns?.OrderByDescending(t => t.PickOrderNo).FirstOrDefault().PickOrderNo ?? 0) + 1;
+
+            return Task.FromResult(newRackShelfColumn);
+        }
     }
 }

@@ -2,8 +2,9 @@
 
 Imports Microsoft.Extensions.DependencyInjection
 Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
+Imports WarehouseManagementSystem.Core.Interfaces.Repositories
 
-Public Class ProductSelectorDialog
+Public Class ProductColorSizeSelectorDialog
     Private _baseSource As List(Of ProductColorSizeModel)
     Private ReadOnly _inventoryLocationId As Integer
     Private ReadOnly _picp As ProductImageConfigParser
@@ -43,16 +44,37 @@ Public Class ProductSelectorDialog
         Dim productInventoryLocationDataService = GetRequiredService(Of IProductInventoryLocationDataService)()
         Dim productInventoryLocations = Await productInventoryLocationDataService.GetByInventoryLocationIdAsync(inventoryLocationId:=_inventoryLocationId)
 
+        Dim productColorSizeRepository = GetRequiredService(Of IProductColorSizeRepository)()
+        Dim productColorSizes = Await productColorSizeRepository.GetManyByOrganizationIdsAsync(Z_OrganizationID)
+
         If ProductColorSizeExceptionIds IsNot Nothing AndAlso ProductColorSizeExceptionIds.Any() Then
-            Return productInventoryLocations.
-                Where(Function(t) Not ProductColorSizeExceptionIds.Contains(t.ProductColorSizeID)).
-                Select(Function(t) New ProductColorSizeModel(productInventoryLocation:=t, productColorSize:=t.ProductColorSize, _picp)).
+            Return productColorSizes.
+                Where(Function(t) Not ProductColorSizeExceptionIds.Contains(t.RowID.Value)).
+                Select(Function(t)
+                           Dim productInventoryLocation = productInventoryLocations.
+                            FirstOrDefault(Function(i) i.ProductColorSizeID = t.RowID.Value)
+                           Dim productInventoryLocationItems = productInventoryLocations.
+                            Where(Function(i) i.ProductColorSizeID = t.RowID.Value).
+                            ToList() 'productInventoryLocation:=productInventoryLocation,
+                           Return New ProductColorSizeModel(productInventoryLocations:=productInventoryLocationItems,
+                            productColorSize:=t,
+                            _picp)
+                       End Function).
                 OrderBy(Function(t) t.ProductCode).
                 ToList()
         End If
 
-        Return productInventoryLocations.
-            Select(Function(t) New ProductColorSizeModel(productInventoryLocation:=t, productColorSize:=t.ProductColorSize, _picp)).
+        Return productColorSizes.
+            Select(Function(t)
+                       Dim productInventoryLocation = productInventoryLocations.
+                            FirstOrDefault(Function(i) i.ProductColorSizeID = t.RowID.Value)
+                       Dim productInventoryLocationItems = productInventoryLocations.
+                            Where(Function(i) i.ProductColorSizeID = t.RowID.Value).
+                            ToList() 'productInventoryLocation:=productInventoryLocation,
+                       Return New ProductColorSizeModel(productInventoryLocations:=productInventoryLocationItems,
+                            productColorSize:=t,
+                            _picp)
+                   End Function).
             OrderBy(Function(t) t.ProductCode).
             ToList()
     End Function
@@ -99,6 +121,21 @@ Public Class ProductSelectorDialog
             grid.Item(isSelectedColumn.Index, e.RowIndex).Selected = True
             grid.Focus()
             ShowSelectedStatus()
+
+            Return
+
+            If grid.Rows.Count() = 0 AndAlso grid.CurrentRow Is Nothing Then Return
+
+            Dim boundData = CType(grid.CurrentRow.DataBoundItem, ProductColorSizeModel)
+
+            If boundData.IsSelected AndAlso boundData.HasMoreThanOneRackShelfColumn Then
+                Dim productColorSizeId = boundData.ProductColorSizeId
+                Dim form As New ProductColorSizeSelectorSubDialog(productColorSizeId:=productColorSizeId,
+                    productInventoryLocations:=boundData.ProductInventoryLocations)
+                If Not form.ShowDialog() = DialogResult.OK Then Return
+
+                boundData.ChangeSelectedProductInventoryLocation(form.SelectedRackShelfColumnId)
+            End If
         End If
     End Sub
 

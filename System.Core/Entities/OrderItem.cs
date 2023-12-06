@@ -5,7 +5,7 @@ using WarehouseManagementSystem.Core.Entities.Base;
 namespace WarehouseManagementSystem.Core.Entities
 {
     [Table("orderitems")]
-    public class OrderItem : AuditableEntity
+    public partial class OrderItem : AuditableEntity
     {
         public int? AccountID { get; set; }
 
@@ -38,9 +38,13 @@ namespace WarehouseManagementSystem.Core.Entities
         public string Status { get; set; }
         public string Remarks { get; set; }
         public string Reasons { get; set; }
+        public int? ProductInventoryLocationId { get; set; }
+        public int? RackShelfColumnId { get; set; }
+    }
 
+    public partial class OrderItem
+    {
         public virtual Order Order { get; set; }
-
         public virtual ProductColorSize ProductColorSize { get; set; }
     }
 }

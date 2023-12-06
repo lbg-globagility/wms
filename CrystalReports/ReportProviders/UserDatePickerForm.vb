@@ -1,22 +1,23 @@
 ﻿Public Class UserDatePickerForm
-
+    Private ReadOnly _isDateOnlyConfig As Boolean
     Public ReadOnly Property IsDateOnly As Boolean
     Public ReadOnly Property IsDateRange As Boolean
     Public ReadOnly Property StartDate As Date
     Public ReadOnly Property EndDate As Date?
 
-    Public Sub New()
+    Public Sub New(Optional isDateOnlyConfig As Boolean = False)
 
         ' This call is required by the designer.
         InitializeComponent()
 
         ' Add any initialization after the InitializeComponent() call.
 
-        Label2.Text = String.Empty
+        _isDateOnlyConfig = isDateOnlyConfig
     End Sub
 
     Private Sub UserDatePickerForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-
+        DateTimePicker2.Visible = Not _isDateOnlyConfig
+        If _isDateOnlyConfig Then Label1.Text = "Pick Date"
     End Sub
 
     Private Sub DateTimePicker1_ValueChanged(sender As Object, e As EventArgs) Handles DateTimePicker1.ValueChanged
@@ -61,4 +62,5 @@
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
         DialogResult = DialogResult.Cancel
     End Sub
+
 End Class
