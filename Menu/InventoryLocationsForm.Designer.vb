@@ -1904,6 +1904,7 @@ Partial Class InventoryLocationsForm
         '
         'LinkLabel2
         '
+        Me.LinkLabel2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.LinkLabel2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.LinkLabel2.LinkBehavior = System.Windows.Forms.LinkBehavior.AlwaysUnderline
         Me.LinkLabel2.LinkColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(155, Byte), Integer), CType(CType(255, Byte), Integer))

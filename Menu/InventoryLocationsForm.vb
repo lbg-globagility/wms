@@ -8,7 +8,6 @@ Imports WarehouseManagementSystem.Core.Interfaces
 Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
 Imports WarehouseManagementSystem.Core.Interfaces.Repositories
 Imports WarehouseManagementSystem.Desktop.Utilities
-Imports WarehouseManagementSystem.Infrastructure.Data.Services
 
 Public Class InventoryLocationsForm
     Dim manager As New sqlModule.Manager
