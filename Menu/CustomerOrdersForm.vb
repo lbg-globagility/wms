@@ -2621,6 +2621,7 @@ Public Class CustomerOrdersForm
                         txtDeliveryHours.Text = globaldeliveryhours
                         txtDeliveryAddress.Text = globaladdressname
                         cboBranchCodeNameInfo.Text = globalbranchname
+                        cboAgent.SelectedValue = globalagentid
                         'getOrderIDA(txtPONo.Text, "CO", cocustomerid, "AND `status` != 'Cancelled'", Me)
                         'coorderid = globalorderid
                         'If coorderid <> 0 Then
@@ -2654,6 +2655,7 @@ Public Class CustomerOrdersForm
                             txtDeliveryHours.Text = globaldeliveryhours
                             txtDeliveryAddress.Text = globaladdressname
                             cboBranchCodeNameInfo.Text = globalbranchname
+                            cboAgent.SelectedValue = globalagentid
                             'getOrderIDB(CInt(dgCustomerOrderList.CurrentRow.Cells("co_rowid").Value), txtPONo.Text, "CO", cocustomerid, "AND `status` != 'Cancelled'", Me)
                             'coorderid = globalorderid
                             'If coorderid <> 0 Then
@@ -2701,6 +2703,7 @@ Public Class CustomerOrdersForm
                         txtDeliveryHours.Text = globaldeliveryhours
                         txtDeliveryAddress.Text = globaladdressname
                         cboBranchCodeNameInfo.Text = globalbranchname
+                        cboAgent.SelectedValue = globalagentid
                         'getOrderIDA(txtPONo.Text, "CO", cocustomerid, "AND `status` != 'Cancelled'", Me)
                         'coorderid = globalorderid
                         'If coorderid <> 0 Then
@@ -2734,6 +2737,7 @@ Public Class CustomerOrdersForm
                             txtDeliveryHours.Text = globaldeliveryhours
                             txtDeliveryAddress.Text = globaladdressname
                             cboBranchCodeNameInfo.Text = globalbranchname
+                            cboAgent.SelectedValue = globalagentid
                             'getOrderIDB(CInt(dgCustomerOrderList.CurrentRow.Cells("co_rowid").Value), txtPONo.Text, "CO", cocustomerid, "AND `status` != 'Cancelled'", Me)
                             'coorderid = globalorderid
                             'If coorderid <> 0 Then

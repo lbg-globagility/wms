@@ -1,5 +1,7 @@
-﻿Imports MySql.Data.MySqlClient
+﻿Imports Microsoft.Extensions.DependencyInjection
+Imports MySql.Data.MySqlClient
 Imports WarehouseManagementSystem.Core.Enums
+Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
 
 Public Class AccountsForm
     Dim manager As New sqlModule.Manager
@@ -14,6 +16,7 @@ Public Class AccountsForm
     Dim spagenumA, spagenumB, countpagenumA, countpagenumB, numofpagesA, numofpagesB, validpagesA, validpagesB As Integer
     Dim simplesearchphraseA, simplesearchphraseB, commonphrase, pagefilter1, pagefilter2, pagefilter3A, pagefilter3B As String
     Dim cfparentcustomerid, cfdeliveryaddressid, cfcontactpersonid, cfpicklistgroupid, cfbranchid, sfdeliveryaddressid, sfcontactpersonid As Integer
+    Private _agents As List(Of WarehouseManagementSystem.Core.Entities.Contact)
 
     Private Sub AccountsForm_Load(sender As Object, e As EventArgs) Handles Me.Load
         Me.Cursor = Cursors.WaitCursor
@@ -58,6 +61,7 @@ Public Class AccountsForm
         autopopulatecboSearch()
         autopopulateStatus(cboStatusA)
         autopopulateStatus(cboStatus)
+        autopopulateAgent(cboAgent)
     End Sub
 
 #Region "Clear/Enable/Visible"
@@ -901,6 +905,18 @@ Public Class AccountsForm
         Finally
             conn.Close()
         End Try
+    End Sub
+
+    Async Sub autopopulateAgent(ByVal icombobox As ComboBox)
+        Dim contactDataService = MainServiceProvider.GetRequiredService(Of IContactDataService)
+
+        _agents = Await contactDataService.GetAgentsAsync(organizationId:=Z_OrganizationID)
+
+        Dim agentDataSource = New List(Of WarehouseManagementSystem.Core.Entities.Contact) From {WarehouseManagementSystem.Core.Entities.Contact.NewContact(organizationId:=Z_OrganizationID, lastName:=String.Empty, firstName:=String.Empty, workPhone:=String.Empty, type:=1)}
+        agentDataSource.AddRange(_agents)
+        icombobox.ValueMember = "RowID"
+        icombobox.DisplayMember = "FullNameLastNameFirst"
+        icombobox.DataSource = agentDataSource
     End Sub
 
     Sub autopopulatePickingGroup(ByVal icombobox As ComboBox)
@@ -1837,6 +1853,7 @@ Public Class AccountsForm
     End Sub
 
     Private Sub msSaveA_Click(sender As Object, e As EventArgs) Handles msSaveA.Click
+        Console.WriteLine(cboAgent.SelectedValue)
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
@@ -1888,7 +1905,7 @@ Public Class AccountsForm
                     If cueA = "New" Then
                         getAccountNo("Customer", Me)
                         I_Accounts(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, If(cfcontactpersonid = 0, DBNull.Value, cfcontactpersonid), If(cfdeliveryaddressid = 0, DBNull.Value, cfdeliveryaddressid), If(cfparentcustomerid = 0, DBNull.Value, cfparentcustomerid), If(cfpicklistgroupid = 0, DBNull.Value, cfpicklistgroupid),
-                                If(cfbranchid = 0, DBNull.Value, cfbranchid), globalaccountno, AccountType:="Customer", txtCustomerName.Text, txtCustomerName.Text, txtMainPhoneA.Text, txtAlternatePhoneA.Text, txtFaxNoA.Text, txtEmailAddressA.Text, txtTINA.Text, txtWebsiteA.Text, txtDeliveryHours.Text, txtCommentsA.Text, cboStatusA.Text, Me)
+                                If(cfbranchid = 0, DBNull.Value, cfbranchid), globalaccountno, AccountType:="Customer", txtCustomerName.Text, txtCustomerName.Text, txtMainPhoneA.Text, txtAlternatePhoneA.Text, txtFaxNoA.Text, txtEmailAddressA.Text, txtTINA.Text, txtWebsiteA.Text, txtDeliveryHours.Text, txtCommentsA.Text, cboStatusA.Text, cboAgent.SelectedValue, Me)
                         If CInt(txtCustomerNo.Text) <> globalaccountno Then
                             MessageBox.Show("Please take note that the Customer No. will change from " & CInt(txtCustomerNo.Text) & " to " & globalaccountno & "." & vbNewLine & "Another user used the Customer No. " & CInt(txtCustomerNo.Text) & " for its new customer", "Note:", MessageBoxButtons.OK, MessageBoxIcon.Information)
                             txtCustomerNo.Text = globalaccountno
@@ -1899,7 +1916,7 @@ Public Class AccountsForm
                         End If
                     ElseIf cueA = "Edit" Then
                         U_Accounts(CInt(dgCustomerList.CurrentRow.Cells("c_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, If(cfcontactpersonid = 0, DBNull.Value, cfcontactpersonid), If(cfdeliveryaddressid = 0, DBNull.Value, cfdeliveryaddressid), If(cfparentcustomerid = 0, DBNull.Value, cfparentcustomerid),
-                                If(cfpicklistgroupid = 0, DBNull.Value, cfpicklistgroupid), If(cfbranchid = 0, DBNull.Value, cfbranchid), txtCustomerName.Text, txtMainPhoneA.Text, txtAlternatePhoneA.Text, txtFaxNoA.Text, txtEmailAddressA.Text, txtTINA.Text, txtWebsiteA.Text, txtDeliveryHours.Text, txtCommentsA.Text, cboStatusA.Text, Me)
+                                If(cfpicklistgroupid = 0, DBNull.Value, cfpicklistgroupid), If(cfbranchid = 0, DBNull.Value, cfbranchid), txtCustomerName.Text, txtMainPhoneA.Text, txtAlternatePhoneA.Text, txtFaxNoA.Text, txtEmailAddressA.Text, txtTINA.Text, txtWebsiteA.Text, txtDeliveryHours.Text, txtCommentsA.Text, cboStatusA.Text, cboAgent.SelectedValue, Me)
                         If myModule.systemerrorfound = False Then
                             myBalloon("Successfully Updated", "Update", lblsavemsgA, -15, -65)
                             tsrefreshperformclickA()

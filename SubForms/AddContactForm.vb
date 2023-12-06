@@ -23,6 +23,15 @@ Public Class AddContactForm
         _isFormDialog = isFormDialog
 
         Text = $"Add {_contactType}"
+
+        If _contactType <> 1 Then
+            cboRegion.Visible = False
+            cboProvince.Visible = False
+            citiesListBox.Visible = False
+            Size = New Size(350, 304)
+        ElseIf _contactType <> 3 Then
+            autoPopulateRegion()
+        End If
     End Sub
 
     Private Sub AddContactForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load

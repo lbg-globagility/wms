@@ -1298,7 +1298,8 @@ Public Class ReceivingForm
                 enableGB(fraud, legit)
                 normalHideReceivingItems(fraud)
                 enableANDvisibleMS(fraud, legit, fraud, legit, fraud)
-                getPositionView(globalpositionid, "Approve Receiving", Me)
+
+                getPositionView(globalpositionid, "Show Quantity to Receive", Me)
                 If globalupdateflg = "Y" Then
                     viewHideReceivingItems(legit)
                 Else
@@ -1358,7 +1359,7 @@ Public Class ReceivingForm
                 clearDatagrids()
                 enableGB(legit, legit)
                 normalHideReceivingItems(fraud)
-                getPositionView(globalpositionid, "Approve Receiving", Me)
+                getPositionView(globalpositionid, "Show Quantity to Receive", Me)
                 If globalupdateflg = "Y" Then
                     viewHideReceivingItems(legit)
                 Else
@@ -1416,7 +1417,7 @@ Public Class ReceivingForm
                 clearDatagrids()
                 enableGB(legit, legit)
                 normalHideReceivingItems(fraud)
-                getPositionView(globalpositionid, "Approve Receiving", Me)
+                getPositionView(globalpositionid, "Show Quantity to Receive", Me)
                 If globalupdateflg = "Y" Then
                     viewHideReceivingItems(legit)
                 Else
@@ -1472,7 +1473,7 @@ Public Class ReceivingForm
                     clearDatagrids()
                     enableGB(legit, legit)
                     normalHideReceivingItems(fraud)
-                    getPositionView(globalpositionid, "Approve Receiving", Me)
+                    getPositionView(globalpositionid, "Show Quantity to Receive", Me)
                     If globalupdateflg = "Y" Then
                         viewHideReceivingItems(legit)
                     Else

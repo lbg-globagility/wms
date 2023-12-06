@@ -569,7 +569,7 @@ Partial Class PackingListForm
         Me.btnAddToCarton.Name = "btnAddToCarton"
         Me.btnAddToCarton.Size = New System.Drawing.Size(95, 75)
         Me.btnAddToCarton.TabIndex = 31
-        Me.btnAddToCarton.Text = "Add To Box"
+        Me.btnAddToCarton.Text = "Add To Truck"
         Me.btnAddToCarton.UseVisualStyleBackColor = False
         '
         'txtTotalQtyInCartonSum

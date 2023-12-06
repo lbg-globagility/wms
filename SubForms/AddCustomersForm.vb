@@ -1,4 +1,16 @@
 ﻿Imports MySql.Data.MySqlClient
+Imports System.IO
+Imports System.Windows.Forms
+Imports CrystalDecisions.CrystalReports.Engine
+Imports System.Linq
+Imports System.Collections
+Imports System.Collections.Generic
+Imports System.Data
+Imports System.Diagnostics
+Imports System.Runtime.InteropServices
+Imports System.Text.RegularExpressions
+Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
+Imports Microsoft.Extensions.DependencyInjection
 
 Public Class AddCustomersForm
     Dim manager As New sqlModule.Manager
@@ -8,6 +20,7 @@ Public Class AddCustomersForm
     Dim sqlquery As String
     Dim acfdeliveryaddressid, acfcontactpersonid, acfparentcustomerid, acfpicklistgroupid, acfbranchid As Integer
     Public addcustomerformcue As Boolean = False
+    Private _agents As List(Of WarehouseManagementSystem.Core.Entities.Contact)
     Private Sub AddCustomersForm_Load(sender As Object, e As EventArgs) Handles Me.Load
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -27,7 +40,6 @@ Public Class AddCustomersForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
-
     Private Sub AddCustomersForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -39,23 +51,19 @@ Public Class AddCustomersForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
-
 #Region "Functions"
-
     Sub callAutoComplete()
         autocompleteParentCustomerA(cboParentCustomer)
         autocompletePickingGroup(cboPickingGroup)
         globalautocompleteBranchCodeName(cboBranchCodeNameInfo, Me)
     End Sub
-
     Sub callAutoPopulate()
         autopopulateParentCustomerA(cboParentCustomer)
         autopopulatePickingGroup(cboPickingGroup)
         globalautopopulateBranchCodeName(cboBranchCodeNameInfo, Me)
+        autopopulateAgent(cboAgent)
     End Sub
-
 #Region "Clear/Enable/Visible"
-
     Sub clearfields()
         Try
             clearCustomerInformation()
@@ -65,7 +73,6 @@ Public Class AddCustomersForm
             conn.Close()
         End Try
     End Sub
-
     Sub clearCustomerInformation()
         Try
             txtCustomerNo.Text = ""
@@ -91,13 +98,9 @@ Public Class AddCustomersForm
             conn.Close()
         End Try
     End Sub
-
 #End Region
-
 #Region "Display"
-
 #Region "AutoComplete"
-
     Sub autocompleteParentCustomerA(ByVal icombobox As ComboBox)
         Try
             Dim parentcustomer As New AutoCompleteStringCollection
@@ -118,7 +121,6 @@ Public Class AddCustomersForm
             conn.Close()
         End Try
     End Sub
-
     Sub autocompletePickingGroup(ByVal icombobox As ComboBox)
         Try
             Dim groupname As New AutoCompleteStringCollection
@@ -139,11 +141,8 @@ Public Class AddCustomersForm
             conn.Close()
         End Try
     End Sub
-
 #End Region
-
 #Region "AutoPopulate"
-
     Sub autopopulateParentCustomerA(ByVal icombobox As ComboBox)
         Try
             icombobox.Items.Clear()
@@ -164,7 +163,6 @@ Public Class AddCustomersForm
             conn.Close()
         End Try
     End Sub
-
     Sub autopopulatePickingGroup(ByVal icombobox As ComboBox)
         Try
             icombobox.Items.Clear()
@@ -185,13 +183,20 @@ Public Class AddCustomersForm
             conn.Close()
         End Try
     End Sub
+    Async Sub autopopulateAgent(ByVal icombobox As ComboBox)
+        Dim contactDataService = MainServiceProvider.GetRequiredService(Of IContactDataService)
 
+        _agents = Await contactDataService.GetAgentsAsync(organizationId:=Z_OrganizationID)
+
+        Dim agentDataSource = New List(Of WarehouseManagementSystem.Core.Entities.Contact) From {WarehouseManagementSystem.Core.Entities.Contact.NewContact(organizationId:=Z_OrganizationID, lastName:=String.Empty, firstName:=String.Empty, workPhone:=String.Empty, type:=1)}
+        agentDataSource.AddRange(_agents)
+        icombobox.ValueMember = "RowID"
+        icombobox.DisplayMember = "FullNameLastNameFirst"
+        icombobox.DataSource = agentDataSource
+    End Sub
 #End Region
-
 #End Region
-
 #End Region
-
     Private Sub pbEditDeliveryAddress_MouseEnter(sender As Object, e As EventArgs) Handles pbEditDeliveryAddress.MouseEnter
         Try
             pbEditDeliveryAddress.BackColor = Color.MediumSpringGreen
@@ -201,7 +206,6 @@ Public Class AddCustomersForm
             conn.Close()
         End Try
     End Sub
-
     Private Sub pbEditDeliveryAddress_MouseLeave(sender As Object, e As EventArgs) Handles pbEditDeliveryAddress.MouseLeave
         Try
             pbEditDeliveryAddress.BackColor = Color.Transparent
@@ -211,7 +215,6 @@ Public Class AddCustomersForm
             conn.Close()
         End Try
     End Sub
-
     Private Sub pbEditContactPerson_MouseEnter(sender As Object, e As EventArgs) Handles pbEditContactPerson.MouseEnter
         Try
             pbEditContactPerson.BackColor = Color.MediumSpringGreen
@@ -221,7 +224,6 @@ Public Class AddCustomersForm
             conn.Close()
         End Try
     End Sub
-
     Private Sub pbEditContactPerson_MouseLeave(sender As Object, e As EventArgs) Handles pbEditContactPerson.MouseLeave
         Try
             pbEditContactPerson.BackColor = Color.Transparent
@@ -231,7 +233,6 @@ Public Class AddCustomersForm
             conn.Close()
         End Try
     End Sub
-
     Private Sub pbEditContactPerson_Click(sender As Object, e As EventArgs) Handles pbEditContactPerson.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -251,7 +252,6 @@ Public Class AddCustomersForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
-
     Private Sub pbEditDeliveryAddress_Click(sender As Object, e As EventArgs) Handles pbEditDeliveryAddress.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -271,7 +271,6 @@ Public Class AddCustomersForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
-
     Private Sub pbAddBranchCodeName_MouseEnter(sender As Object, e As EventArgs) Handles pbAddBranchCodeName.MouseEnter
         Try
             pbAddBranchCodeName.BackColor = Color.MediumSpringGreen
@@ -281,7 +280,6 @@ Public Class AddCustomersForm
             conn.Close()
         End Try
     End Sub
-
     Private Sub pbAddBranchCodeName_MouseLeave(sender As Object, e As EventArgs) Handles pbAddBranchCodeName.MouseLeave
         Try
             pbAddBranchCodeName.BackColor = Color.Transparent
@@ -291,7 +289,6 @@ Public Class AddCustomersForm
             conn.Close()
         End Try
     End Sub
-
     Private Sub pbAddBranchCodeName_Click(sender As Object, e As EventArgs) Handles pbAddBranchCodeName.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -319,7 +316,6 @@ Public Class AddCustomersForm
             conn.Close()
         End Try
     End Sub
-
     Private Sub pbAutoAddA_MouseLeave(sender As Object, e As EventArgs) Handles pbAutoAddA.MouseLeave
         Try
             pbAutoAddA.BackColor = Color.Transparent
@@ -329,7 +325,6 @@ Public Class AddCustomersForm
             conn.Close()
         End Try
     End Sub
-
     Private Sub pbAutoAddA_Click(sender As Object, e As EventArgs) Handles pbAutoAddA.Click
         Try
             myBalloon("Automatic adding of pick list group.", "Auto-Add", pbAutoAddA, -15, -65)
@@ -339,7 +334,6 @@ Public Class AddCustomersForm
             conn.Close()
         End Try
     End Sub
-
     Private Sub msSave_Click(sender As Object, e As EventArgs) Handles msSave.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -366,7 +360,7 @@ Public Class AddCustomersForm
                     End If
                     getAccountNo("Customer", Me)
                     I_Accounts(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, If(acfcontactpersonid = 0, DBNull.Value, acfcontactpersonid), If(acfdeliveryaddressid = 0, DBNull.Value, acfdeliveryaddressid), If(acfparentcustomerid = 0, DBNull.Value, acfparentcustomerid), If(acfpicklistgroupid = 0, DBNull.Value, acfpicklistgroupid),
-                            If(acfbranchid = 0, DBNull.Value, acfbranchid), globalaccountno, "Customer", txtCustomerName.Text, txtCustomerName.Text, txtMainPhone.Text, txtAlternatePhone.Text, txtFaxNo.Text, txtEmailAddress.Text, txtTIN.Text, txtWebsite.Text, txtDeliveryHours.Text, txtComments.Text, txtStatus.Text, Me)
+                            If(acfbranchid = 0, DBNull.Value, acfbranchid), globalaccountno, "Customer", txtCustomerName.Text, txtCustomerName.Text, txtMainPhone.Text, txtAlternatePhone.Text, txtFaxNo.Text, txtEmailAddress.Text, txtTIN.Text, txtWebsite.Text, txtDeliveryHours.Text, txtComments.Text, txtStatus.Text, cboAgent.SelectedValue, Me)
                     If CInt(txtCustomerNo.Text) <> globalaccountno Then
                         MessageBox.Show("Please take note that the Customer No. will change from " & CInt(txtCustomerNo.Text) & " to " & globalaccountno & "." & vbNewLine & "Another user used Customer No. " & CInt(txtCustomerNo.Text) & " for its new customer", "Note:", MessageBoxButtons.OK, MessageBoxIcon.Information)
                         txtCustomerNo.Text = globalaccountno
@@ -382,9 +376,7 @@ Public Class AddCustomersForm
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
             conn.Close()
-            DialogResult = DialogResult.OK
         End Try
         Me.Cursor = Cursors.Default
     End Sub
-
 End Class
