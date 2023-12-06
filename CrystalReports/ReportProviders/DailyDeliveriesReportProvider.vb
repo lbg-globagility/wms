@@ -112,9 +112,7 @@ Public Class DailyDeliveriesReportProvider
 
             With command.Parameters
                 .AddWithValue("@orgId", Z_OrganizationID)
-                '.AddWithValue("@startDate", userDatePickerForm.StartDate)
-                .AddWithValue("@startDate", New Date(2017, 1, 24))
-                '2017-01-24
+                .AddWithValue("@startDate", userDatePickerForm.StartDate)
                 .AddWithValue("@endDate", userDatePickerForm.EndDate?.Date)
                 .AddWithValue("@condition", userDatePickerForm.IsDateOnly)
             End With
