@@ -35,6 +35,25 @@ Partial Class AddToCartonForm
         Me.txtCustomerOrderInfo = New System.Windows.Forms.TextBox()
         Me.Label10 = New System.Windows.Forms.Label()
         Me.dgCustomerOrderItems = New DevComponents.DotNetBar.Controls.DataGridViewX()
+        Me.ci_rowid = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ci_colorvalue = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ci_seqno = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ci_productcode = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ci_colorname = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ci_color = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ci_size = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ci_seasoncode = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ci_qtyordered = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ci_qtypicked = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ci_totalqtyincarton = New System.Windows.Forms.DataGridViewLinkColumn()
+        Me.ci_qtytopack = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ci_status = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ci_sku = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ci_unitofmeasure = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ci_remarks = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ci_tags = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ci_packedby = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ci_packeddate = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.txtTotalQtyInCartonSum = New System.Windows.Forms.TextBox()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.txtTotalItems = New System.Windows.Forms.TextBox()
@@ -69,25 +88,6 @@ Partial Class AddToCartonForm
         Me.Label9 = New System.Windows.Forms.Label()
         Me.errProvider = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.chkPackAll = New System.Windows.Forms.CheckBox()
-        Me.ci_rowid = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ci_colorvalue = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ci_seqno = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ci_productcode = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ci_colorname = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ci_color = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ci_size = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ci_seasoncode = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ci_qtyordered = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ci_qtypicked = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ci_totalqtyincarton = New System.Windows.Forms.DataGridViewLinkColumn()
-        Me.ci_qtytopack = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ci_status = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ci_sku = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ci_unitofmeasure = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ci_remarks = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ci_tags = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ci_packedby = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ci_packeddate = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.msMenu.SuspendLayout()
         CType(Me.dgCustomerOrderItems, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.gbOptions.SuspendLayout()
@@ -208,6 +208,133 @@ Partial Class AddToCartonForm
         Me.dgCustomerOrderItems.Size = New System.Drawing.Size(660, 210)
         Me.dgCustomerOrderItems.TabIndex = 4
         '
+        'ci_rowid
+        '
+        Me.ci_rowid.HeaderText = "rowid"
+        Me.ci_rowid.Name = "ci_rowid"
+        Me.ci_rowid.Visible = False
+        '
+        'ci_colorvalue
+        '
+        Me.ci_colorvalue.HeaderText = "colorvalue"
+        Me.ci_colorvalue.Name = "ci_colorvalue"
+        Me.ci_colorvalue.Visible = False
+        '
+        'ci_seqno
+        '
+        Me.ci_seqno.HeaderText = "Seq. No."
+        Me.ci_seqno.Name = "ci_seqno"
+        Me.ci_seqno.ReadOnly = True
+        Me.ci_seqno.Width = 40
+        '
+        'ci_productcode
+        '
+        Me.ci_productcode.HeaderText = "Product Code"
+        Me.ci_productcode.Name = "ci_productcode"
+        Me.ci_productcode.ReadOnly = True
+        '
+        'ci_colorname
+        '
+        Me.ci_colorname.HeaderText = "Color Name"
+        Me.ci_colorname.Name = "ci_colorname"
+        Me.ci_colorname.ReadOnly = True
+        Me.ci_colorname.Width = 60
+        '
+        'ci_color
+        '
+        Me.ci_color.HeaderText = ""
+        Me.ci_color.Name = "ci_color"
+        Me.ci_color.ReadOnly = True
+        Me.ci_color.Width = 30
+        '
+        'ci_size
+        '
+        Me.ci_size.HeaderText = "Size"
+        Me.ci_size.Name = "ci_size"
+        Me.ci_size.ReadOnly = True
+        Me.ci_size.Width = 40
+        '
+        'ci_seasoncode
+        '
+        Me.ci_seasoncode.HeaderText = "Season Code"
+        Me.ci_seasoncode.Name = "ci_seasoncode"
+        Me.ci_seasoncode.ReadOnly = True
+        Me.ci_seasoncode.Width = 70
+        '
+        'ci_qtyordered
+        '
+        Me.ci_qtyordered.HeaderText = "Qty. Ordered"
+        Me.ci_qtyordered.Name = "ci_qtyordered"
+        Me.ci_qtyordered.ReadOnly = True
+        Me.ci_qtyordered.Width = 60
+        '
+        'ci_qtypicked
+        '
+        Me.ci_qtypicked.HeaderText = "Qty. Picked"
+        Me.ci_qtypicked.Name = "ci_qtypicked"
+        Me.ci_qtypicked.ReadOnly = True
+        Me.ci_qtypicked.Width = 60
+        '
+        'ci_totalqtyincarton
+        '
+        Me.ci_totalqtyincarton.HeaderText = "Total Qty. In Box"
+        Me.ci_totalqtyincarton.Name = "ci_totalqtyincarton"
+        Me.ci_totalqtyincarton.ReadOnly = True
+        Me.ci_totalqtyincarton.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.ci_totalqtyincarton.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
+        Me.ci_totalqtyincarton.Width = 80
+        '
+        'ci_qtytopack
+        '
+        Me.ci_qtytopack.HeaderText = "Qty. To Pack"
+        Me.ci_qtytopack.Name = "ci_qtytopack"
+        Me.ci_qtytopack.Width = 68
+        '
+        'ci_status
+        '
+        Me.ci_status.HeaderText = "Status"
+        Me.ci_status.Name = "ci_status"
+        Me.ci_status.ReadOnly = True
+        Me.ci_status.Width = 80
+        '
+        'ci_sku
+        '
+        Me.ci_sku.HeaderText = "SKU"
+        Me.ci_sku.Name = "ci_sku"
+        Me.ci_sku.ReadOnly = True
+        '
+        'ci_unitofmeasure
+        '
+        Me.ci_unitofmeasure.HeaderText = "Unit Of Measure"
+        Me.ci_unitofmeasure.Name = "ci_unitofmeasure"
+        Me.ci_unitofmeasure.ReadOnly = True
+        Me.ci_unitofmeasure.Width = 70
+        '
+        'ci_remarks
+        '
+        Me.ci_remarks.HeaderText = "Remarks"
+        Me.ci_remarks.Name = "ci_remarks"
+        Me.ci_remarks.ReadOnly = True
+        '
+        'ci_tags
+        '
+        Me.ci_tags.HeaderText = "Tags"
+        Me.ci_tags.Name = "ci_tags"
+        Me.ci_tags.ReadOnly = True
+        Me.ci_tags.Width = 90
+        '
+        'ci_packedby
+        '
+        Me.ci_packedby.HeaderText = "Packed By"
+        Me.ci_packedby.Name = "ci_packedby"
+        Me.ci_packedby.ReadOnly = True
+        '
+        'ci_packeddate
+        '
+        Me.ci_packeddate.HeaderText = "Packed Date"
+        Me.ci_packeddate.Name = "ci_packeddate"
+        Me.ci_packeddate.ReadOnly = True
+        '
         'txtTotalQtyInCartonSum
         '
         Me.txtTotalQtyInCartonSum.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -307,7 +434,7 @@ Partial Class AddToCartonForm
         Me.gbOptions.ForeColor = System.Drawing.SystemColors.ControlText
         Me.gbOptions.Location = New System.Drawing.Point(33, 320)
         Me.gbOptions.Name = "gbOptions"
-        Me.gbOptions.Size = New System.Drawing.Size(620, 180)
+        Me.gbOptions.Size = New System.Drawing.Size(620, 197)
         Me.gbOptions.TabIndex = 9
         Me.gbOptions.TabStop = False
         '
@@ -591,133 +718,6 @@ Partial Class AddToCartonForm
         Me.chkPackAll.TabIndex = 5
         Me.chkPackAll.Text = "Pack All:"
         Me.chkPackAll.UseVisualStyleBackColor = True
-        '
-        'ci_rowid
-        '
-        Me.ci_rowid.HeaderText = "rowid"
-        Me.ci_rowid.Name = "ci_rowid"
-        Me.ci_rowid.Visible = False
-        '
-        'ci_colorvalue
-        '
-        Me.ci_colorvalue.HeaderText = "colorvalue"
-        Me.ci_colorvalue.Name = "ci_colorvalue"
-        Me.ci_colorvalue.Visible = False
-        '
-        'ci_seqno
-        '
-        Me.ci_seqno.HeaderText = "Seq. No."
-        Me.ci_seqno.Name = "ci_seqno"
-        Me.ci_seqno.ReadOnly = True
-        Me.ci_seqno.Width = 40
-        '
-        'ci_productcode
-        '
-        Me.ci_productcode.HeaderText = "Product Code"
-        Me.ci_productcode.Name = "ci_productcode"
-        Me.ci_productcode.ReadOnly = True
-        '
-        'ci_colorname
-        '
-        Me.ci_colorname.HeaderText = "Color Name"
-        Me.ci_colorname.Name = "ci_colorname"
-        Me.ci_colorname.ReadOnly = True
-        Me.ci_colorname.Width = 60
-        '
-        'ci_color
-        '
-        Me.ci_color.HeaderText = ""
-        Me.ci_color.Name = "ci_color"
-        Me.ci_color.ReadOnly = True
-        Me.ci_color.Width = 30
-        '
-        'ci_size
-        '
-        Me.ci_size.HeaderText = "Size"
-        Me.ci_size.Name = "ci_size"
-        Me.ci_size.ReadOnly = True
-        Me.ci_size.Width = 40
-        '
-        'ci_seasoncode
-        '
-        Me.ci_seasoncode.HeaderText = "Season Code"
-        Me.ci_seasoncode.Name = "ci_seasoncode"
-        Me.ci_seasoncode.ReadOnly = True
-        Me.ci_seasoncode.Width = 70
-        '
-        'ci_qtyordered
-        '
-        Me.ci_qtyordered.HeaderText = "Qty. Ordered"
-        Me.ci_qtyordered.Name = "ci_qtyordered"
-        Me.ci_qtyordered.ReadOnly = True
-        Me.ci_qtyordered.Width = 60
-        '
-        'ci_qtypicked
-        '
-        Me.ci_qtypicked.HeaderText = "Qty. Picked"
-        Me.ci_qtypicked.Name = "ci_qtypicked"
-        Me.ci_qtypicked.ReadOnly = True
-        Me.ci_qtypicked.Width = 60
-        '
-        'ci_totalqtyincarton
-        '
-        Me.ci_totalqtyincarton.HeaderText = "Total Qty. In Box"
-        Me.ci_totalqtyincarton.Name = "ci_totalqtyincarton"
-        Me.ci_totalqtyincarton.ReadOnly = True
-        Me.ci_totalqtyincarton.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.ci_totalqtyincarton.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
-        Me.ci_totalqtyincarton.Width = 80
-        '
-        'ci_qtytopack
-        '
-        Me.ci_qtytopack.HeaderText = "Qty. To Pack"
-        Me.ci_qtytopack.Name = "ci_qtytopack"
-        Me.ci_qtytopack.Width = 68
-        '
-        'ci_status
-        '
-        Me.ci_status.HeaderText = "Status"
-        Me.ci_status.Name = "ci_status"
-        Me.ci_status.ReadOnly = True
-        Me.ci_status.Width = 80
-        '
-        'ci_sku
-        '
-        Me.ci_sku.HeaderText = "SKU"
-        Me.ci_sku.Name = "ci_sku"
-        Me.ci_sku.ReadOnly = True
-        '
-        'ci_unitofmeasure
-        '
-        Me.ci_unitofmeasure.HeaderText = "Unit Of Measure"
-        Me.ci_unitofmeasure.Name = "ci_unitofmeasure"
-        Me.ci_unitofmeasure.ReadOnly = True
-        Me.ci_unitofmeasure.Width = 70
-        '
-        'ci_remarks
-        '
-        Me.ci_remarks.HeaderText = "Remarks"
-        Me.ci_remarks.Name = "ci_remarks"
-        Me.ci_remarks.ReadOnly = True
-        '
-        'ci_tags
-        '
-        Me.ci_tags.HeaderText = "Tags"
-        Me.ci_tags.Name = "ci_tags"
-        Me.ci_tags.ReadOnly = True
-        Me.ci_tags.Width = 90
-        '
-        'ci_packedby
-        '
-        Me.ci_packedby.HeaderText = "Packed By"
-        Me.ci_packedby.Name = "ci_packedby"
-        Me.ci_packedby.ReadOnly = True
-        '
-        'ci_packeddate
-        '
-        Me.ci_packeddate.HeaderText = "Packed Date"
-        Me.ci_packeddate.Name = "ci_packeddate"
-        Me.ci_packeddate.ReadOnly = True
         '
         'AddToCartonForm
         '
