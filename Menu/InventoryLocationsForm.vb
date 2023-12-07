@@ -8,6 +8,7 @@ Imports WarehouseManagementSystem.Core.Interfaces
 Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
 Imports WarehouseManagementSystem.Core.Interfaces.Repositories
 Imports WarehouseManagementSystem.Desktop.Utilities
+Imports WarehouseManagementSystem.Utilities.Extensions
 
 Public Class InventoryLocationsForm
     Dim manager As New sqlModule.Manager
@@ -25,6 +26,7 @@ Public Class InventoryLocationsForm
     Dim iltotalqtyavailable, iltotalqtyreserve, iltotalqtydamage, iltotalqtyallocated, iltotalqtyorderable, ilinventorylocationid, iladdressid, ilrackshelfcolumnid As Integer
     Private _systemOwner As SystemOwner
     Private _picp As ProductImageConfigParser
+    Private ReadOnly Property ProductColorSizeModels As List(Of ProductColorSizeModel)
 
     Private Async Sub InventoryLocationsForm_Load(sender As Object, e As EventArgs) Handles Me.Load
         Dim _systemOwnerService = GetRequiredService(Of ISystemOwnerService)()
@@ -1508,6 +1510,8 @@ Public Class InventoryLocationsForm
             OrderBy(Function(t) t.ProductCode).
             ToList()
 
+        _ProductColorSizeModels = dataSource
+
         gridProductColorSizes.DataSource = dataSource
     End Function
 
@@ -1916,7 +1920,7 @@ Public Class InventoryLocationsForm
     End Function
 
     Private Function GetCurrentProductColorSizeId() As Integer
-        Dim model = CType(gridProductColorSizes.CurrentRow.DataBoundItem, ProductColorSizeModel)
+        Dim model = CType(gridProductColorSizes.CurrentRow?.DataBoundItem, ProductColorSizeModel)
         Return If(model?.ProductColorSizeId, 0)
     End Function
 
@@ -1995,8 +1999,16 @@ Public Class InventoryLocationsForm
 
     End Sub
 
-    Private Sub txtSearch_TextChanged(sender As Object, e As EventArgs) Handles txtSearch.TextChanged
+    Private Async Sub txtSearch_TextChanged(sender As Object, e As EventArgs) Handles txtSearch.TextChanged
+        If txtSearch.Text.Trim().Length = 0 Then
+            Await LoadProductColorSizesOfInventoryLocationAsync()
+            Return
+        End If
 
+        Dim searchedDataSource = _ProductColorSizeModels.
+            Where(Function(t) t.ProductCode.Like(txtSearch.Text)).
+            ToList()
+        gridProductColorSizes.DataSource = searchedDataSource
     End Sub
 
     Private Sub cboColumn_TextChanged(sender As Object, e As EventArgs) Handles cboColumn.TextChanged

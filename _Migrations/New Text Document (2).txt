@@ -1,2 +1,4 @@
+# 10:17 AM 12/6/2023
+
 ALTER TABLE `inventorylocations`
 	CHANGE COLUMN `Name` `Name` VARCHAR(50) NOT NULL DEFAULT '' COLLATE 'latin1_swedish_ci' AFTER `PrimaryContactID`;

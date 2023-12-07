@@ -27,6 +27,10 @@ Partial Class RackShelfColumnForm
         Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.grid = New DevComponents.DotNetBar.Controls.DataGridViewX()
+        Me.Panel3 = New System.Windows.Forms.Panel()
+        Me.Panel2 = New System.Windows.Forms.Panel()
+        Me.Button2 = New System.Windows.Forms.Button()
+        Me.Button1 = New System.Windows.Forms.Button()
         Me.Column1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column6 = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -34,10 +38,6 @@ Partial Class RackShelfColumnForm
         Me.Column3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column7 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Panel3 = New System.Windows.Forms.Panel()
-        Me.Panel2 = New System.Windows.Forms.Panel()
-        Me.Button2 = New System.Windows.Forms.Button()
-        Me.Button1 = New System.Windows.Forms.Button()
         Me.Panel1.SuspendLayout()
         CType(Me.grid, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel3.SuspendLayout()
@@ -93,55 +93,6 @@ Partial Class RackShelfColumnForm
         Me.grid.Size = New System.Drawing.Size(642, 271)
         Me.grid.TabIndex = 0
         '
-        'Column1
-        '
-        Me.Column1.DataPropertyName = "PickOrderNo"
-        Me.Column1.HeaderText = "PickOrderNo "
-        Me.Column1.Name = "Column1"
-        Me.Column1.ReadOnly = True
-        '
-        'Column5
-        '
-        Me.Column5.DataPropertyName = "AvailableQty"
-        Me.Column5.HeaderText = "AvailableQty "
-        Me.Column5.Name = "Column5"
-        Me.Column5.ReadOnly = True
-        '
-        'Column6
-        '
-        Me.Column6.DataPropertyName = "ReservedQty"
-        Me.Column6.HeaderText = "ReservedQty "
-        Me.Column6.Name = "Column6"
-        Me.Column6.ReadOnly = True
-        '
-        'Column2
-        '
-        Me.Column2.DataPropertyName = "RackNo"
-        Me.Column2.HeaderText = "Rack "
-        Me.Column2.Name = "Column2"
-        Me.Column2.ReadOnly = True
-        '
-        'Column3
-        '
-        Me.Column3.DataPropertyName = "ShelfNo"
-        Me.Column3.HeaderText = "Shelf "
-        Me.Column3.Name = "Column3"
-        Me.Column3.ReadOnly = True
-        '
-        'Column4
-        '
-        Me.Column4.DataPropertyName = "ColumnNo"
-        Me.Column4.HeaderText = "Column"
-        Me.Column4.Name = "Column4"
-        Me.Column4.ReadOnly = True
-        '
-        'Column7
-        '
-        Me.Column7.DataPropertyName = "Remarks"
-        Me.Column7.HeaderText = "Remarks "
-        Me.Column7.Name = "Column7"
-        Me.Column7.ReadOnly = True
-        '
         'Panel3
         '
         Me.Panel3.Controls.Add(Me.LinkLabel1)
@@ -180,6 +131,58 @@ Partial Class RackShelfColumnForm
         Me.Button1.TabIndex = 0
         Me.Button1.Text = "OK"
         Me.Button1.UseVisualStyleBackColor = True
+        '
+        'Column1
+        '
+        Me.Column1.DataPropertyName = "PickOrderNo"
+        Me.Column1.HeaderText = "PickOrderNo "
+        Me.Column1.Name = "Column1"
+        Me.Column1.ReadOnly = True
+        Me.Column1.Visible = False
+        '
+        'Column5
+        '
+        Me.Column5.DataPropertyName = "AvailableQty"
+        Me.Column5.HeaderText = "AvailableQty "
+        Me.Column5.Name = "Column5"
+        Me.Column5.ReadOnly = True
+        Me.Column5.Visible = False
+        '
+        'Column6
+        '
+        Me.Column6.DataPropertyName = "ReservedQty"
+        Me.Column6.HeaderText = "ReservedQty "
+        Me.Column6.Name = "Column6"
+        Me.Column6.ReadOnly = True
+        Me.Column6.Visible = False
+        '
+        'Column2
+        '
+        Me.Column2.DataPropertyName = "RackNo"
+        Me.Column2.HeaderText = "Rack "
+        Me.Column2.Name = "Column2"
+        Me.Column2.ReadOnly = True
+        '
+        'Column3
+        '
+        Me.Column3.DataPropertyName = "ShelfNo"
+        Me.Column3.HeaderText = "Shelf "
+        Me.Column3.Name = "Column3"
+        Me.Column3.ReadOnly = True
+        '
+        'Column4
+        '
+        Me.Column4.DataPropertyName = "ColumnNo"
+        Me.Column4.HeaderText = "Column"
+        Me.Column4.Name = "Column4"
+        Me.Column4.ReadOnly = True
+        '
+        'Column7
+        '
+        Me.Column7.DataPropertyName = "Remarks"
+        Me.Column7.HeaderText = "Remarks "
+        Me.Column7.Name = "Column7"
+        Me.Column7.ReadOnly = True
         '
         'RackShelfColumnForm
         '

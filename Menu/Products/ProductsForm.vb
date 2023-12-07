@@ -1462,12 +1462,23 @@ Public Class ProductsForm
     End Sub
 
     Private Sub dgInventoryLocations_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgInventoryLocations.CellClick
+        Dim localMethod =
+            Sub()
+                displayRackShelfColumn(CInt(dgProductSizes.CurrentRow.Cells("s_rowid").Value), CInt(dgInventoryLocations.CurrentRow.Cells("il_rowid").Value))
+                txtLocation.Text = dgInventoryLocations.CurrentRow.Cells("il_locationname").Value
+            End Sub
+
+        If IsThurston Then
+            localMethod()
+            Return
+        End If
+
         Me.Cursor = Cursors.WaitCursor
         Try
+
             If dgInventoryLocations.Rows.Count <> 0 Then
                 If CStr(dgInventoryLocations.CurrentRow.Cells("il_locationtype").Value) = "Main" Then
-                    displayRackShelfColumn(CInt(dgProductSizes.CurrentRow.Cells("s_rowid").Value), CInt(dgInventoryLocations.CurrentRow.Cells("il_rowid").Value))
-                    txtLocation.Text = dgInventoryLocations.CurrentRow.Cells("il_locationname").Value
+                    localMethod()
                 Else
                     dgRackShelfColumn.Rows.Clear()
                     txtLocation.Text = ""
