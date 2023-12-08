@@ -205,6 +205,7 @@ Public Class StockTransferForm2
 
         If _isNew Then
             SplitContainer1.Panel1.Enabled = False
+            ToolStripButtonCancel.Enabled = False
 
             Await FunctionUtils.TryCatchFunctionAsync("Delete order after quick create stock transfer",
                 action:=
@@ -216,7 +217,10 @@ Public Class StockTransferForm2
                     cancelButtonAction()
 
                 End Function,
-                errorCallBack:=cancelButtonAction)
+                errorCallBack:=cancelButtonAction).
+                ContinueWith(Sub()
+                                 ToolStripButtonCancel.Enabled = True
+                             End Sub, scheduler:=TaskScheduler.FromCurrentSynchronizationContext)
 
             Return
         End If
@@ -383,22 +387,28 @@ Public Class StockTransferForm2
             Dim selectedProductColorSizeModels = form.SelectedProductColorSizeModels
 
             Dim productInventoryLocationDataService = GetRequiredService(Of IProductInventoryLocationDataService)()
-            Dim productInventoryLocations = Await productInventoryLocationDataService.GetByInventoryLocationIdAsync(inventoryLocationId:=inventoryLocationIdTo)
+            Dim productInventoryLocationsSource = Await productInventoryLocationDataService.GetByInventoryLocationIdAsync(inventoryLocationId:=inventoryLocationIdFrom)
+
+            Dim productInventoryLocationsRecepient = Await productInventoryLocationDataService.GetByInventoryLocationIdAsync(inventoryLocationId:=inventoryLocationIdTo)
 
             For Each productColorSizeModel In selectedProductColorSizeModels
+                Dim fromProductInventoryLocation = productInventoryLocationsRecepient.
+                    Where(Function(t) t.ProductColorSizeID = productColorSizeModel.ProductColorSizeId).
+                    Where(Function(t) t.RackShelfColumn.InventoryLocationID = inventoryLocationIdFrom).
+                    FirstOrDefault()
                 Dim newMovementHistoryFrom = MovementHistory.NewMovementHistory(organizationId:=Z_OrganizationID,
                     userId:=_userId,
                     productColorSizeID:=productColorSizeModel.ProductColorSizeId,
                     orderId:=_selectedOrder.RowID,
-                    productInventoryLocationId:=productColorSizeModel.ProductInventoryLocation.RowID.Value,
+                    productInventoryLocationId:=fromProductInventoryLocation.RowID.Value,
                     currentQty:=0,
                     qtyToApply:=0,
                     transactionType:=$"{OrderType.ST} - From")
-                newMovementHistoryFrom.SetProductInventoryLocation(productColorSizeModel.ProductInventoryLocation)
+                newMovementHistoryFrom.SetProductInventoryLocation(fromProductInventoryLocation)
 
                 _selectedOrder.AddMovementHistories(New List(Of MovementHistory) From {newMovementHistoryFrom})
 
-                Dim toProductInventoryLocation = productInventoryLocations.
+                Dim toProductInventoryLocation = productInventoryLocationsRecepient.
                     Where(Function(t) t.ProductColorSizeID = productColorSizeModel.ProductColorSizeId).
                     Where(Function(t) t.RackShelfColumn.InventoryLocationID = inventoryLocationIdTo).
                     FirstOrDefault()

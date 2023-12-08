@@ -1,4 +1,5 @@
 ﻿Imports Microsoft.Extensions.DependencyInjection
+Imports OfficeOpenXml.FormulaParsing.Excel.Functions.Text
 Imports WarehouseManagementSystem.Core.Dto
 Imports WarehouseManagementSystem.Core.Entities
 Imports WarehouseManagementSystem.Core.Enums
@@ -72,13 +73,18 @@ Public Class RackShelfColumnSelectorDialog
         Dim productInventoryLocationDataService = GetRequiredService(Of IProductInventoryLocationDataService)()
         Dim productInventoryLocations = Await productInventoryLocationDataService.GetByInventoryLocationIdAsync(_inventoryLocationId)
 
+        'Dim movementHistory = _movementHistories?.
+        '    Where(Function(f) f.ProductColorSizeID = _productColorSizeId).
+        '    Where(Function(f) f.ProductInventoryLocationIDA = _productInventoryLocationId).
+        '    FirstOrDefault()
         Dim dataSource = productInventoryLocations.
             Where(Function(t) t.ProductColorSizeID = _productColorSizeId).
             Select(Function(t)
                        Dim movementHistory = _movementHistories?.
                         Where(Function(f) f.ProductColorSizeID = _productColorSizeId).
                         Where(Function(f) f.ProductInventoryLocationIDA = t.RowID).
-                        FirstOrDefault()
+                        Where(Function(f) f.ProductInventoryLocationIDA = _productInventoryLocationId).
+                       FirstOrDefault()
                        Dim qtyToApply = If(movementHistory?.QtyToApply, 0)
 
                        Return New RackShelfColumnModel(order:=_order,
@@ -87,12 +93,25 @@ Public Class RackShelfColumnSelectorDialog
                         qtyToApply:=qtyToApply,
                         movementHistory:=movementHistory)
                    End Function).
+            OrderByDescending(Function(t) t.HasAvailableQty).
+            ThenBy(Function(t) t.PickOrderNo).
             ToList()
         gridRackShelfColumn.DataSource = dataSource
     End Function
 
     Private Sub gridRackShelfColumn_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles gridRackShelfColumn.CellContentClick
 
+    End Sub
+
+    Private Sub gridRackShelfColumn_SelectionChanged(sender As Object, e As EventArgs) Handles gridRackShelfColumn.SelectionChanged
+        If gridRackShelfColumn.CurrentRow Is Nothing Then Return
+
+        gridRackShelfColumn.CurrentCell = gridRackShelfColumn.CurrentRow.Cells(Quantity.Name)
+        gridRackShelfColumn.BeginEdit(selectAll:=True)
+    End Sub
+
+    Private Sub gridRackShelfColumn_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles gridRackShelfColumn.CellClick
+        gridRackShelfColumn_SelectionChanged(sender:=gridRackShelfColumn, e:=e)
     End Sub
 
     Private Sub gridRackShelfColumn_CellEndEdit(sender As Object, e As DataGridViewCellEventArgs) Handles gridRackShelfColumn.CellEndEdit
@@ -110,9 +129,20 @@ Public Class RackShelfColumnSelectorDialog
     End Sub
 
     Private Sub ButtonOK_Click(sender As Object, e As EventArgs) Handles ButtonOK.Click
+        If gridRackShelfColumn.CurrentRow IsNot Nothing Then
+            gridRackShelfColumn.CurrentCell = gridRackShelfColumn.CurrentRow.Cells(Column14.Name)
+            gridRackShelfColumn.EndEdit()
+        End If
+
         Dim models = GetModels().
             Where(Function(t) t.HasChangedQuantity).
             ToList()
+        If _movementHistoryGroupByProductColorSizeModel.IsTransactionTypeIsFrom Then
+            models = GetModels().
+                Where(Function(t) t.HasAvailableQty).
+                Where(Function(t) t.HasChangedQuantity).
+                ToList()
+        End If
 
         Dim fromOrToText = If(_inventoryLocationId = _movementHistoryGroupByProductColorSizeModel.StockTransferFromInventoryLocationId, "From",
             If(_inventoryLocationId = _movementHistoryGroupByProductColorSizeModel.StockTransferToInventoryLocationId, "To", String.Empty))
@@ -151,4 +181,5 @@ Public Class RackShelfColumnSelectorDialog
             icon:=MessageBoxIcon.Information,
             buttons:=MessageBoxButtons.OK)
     End Sub
+
 End Class

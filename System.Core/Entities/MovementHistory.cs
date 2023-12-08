@@ -83,8 +83,8 @@ namespace WarehouseManagementSystem.Core.Entities
                 transactionType: transactionType,
                 columnName: columnName);
 
-        public bool IsTransactionTypeIsFrom => TransactionType.Contains("From");
-        public bool IsTransactionTypeIsTo => TransactionType.Contains("To");
+        public bool IsTransactionTypeIsFrom => TransactionType?.Contains("From") ?? false;
+        public bool IsTransactionTypeIsTo => TransactionType?.Contains("To") ?? false;
 
         public void RecomputeNewQty()
         {

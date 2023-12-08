@@ -35,6 +35,7 @@ Public Class RackShelfColumnForm
 
         grid.DataSource = rackShelfColumnList.
             Where(Function(t) Not _rackShelfColumnIds.Contains(t.RowID.Value)).
+            Select(Function(t) New RackShelfColumnSimpleModel(productColorSizeId:=_productColorSizeId, rackShelfColumn:=t)).
             OrderBy(Function(t) t.PickOrderNo).
             ToList()
     End Function
@@ -68,9 +69,9 @@ Public Class RackShelfColumnForm
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         If grid.CurrentRow Is Nothing Then Return
 
-        Dim model = CType(grid.CurrentRow.DataBoundItem, RackShelfColumn)
+        Dim model = CType(grid.CurrentRow.DataBoundItem, RackShelfColumnSimpleModel)
 
-        _ProcessedRackShelfColumn = model
+        _ProcessedRackShelfColumn = model.RackShelfColumn
 
         DialogResult = DialogResult.OK
     End Sub

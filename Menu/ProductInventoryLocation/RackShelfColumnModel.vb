@@ -117,7 +117,7 @@ Friend Class RackShelfColumnModel
 
     Public ReadOnly Property IsTooMuchQuantity As Boolean
         Get
-            If _order.IsStockTransferType AndAlso _movementHistory.IsTransactionTypeIsFrom Then Return Quantity > If(_productInventoryLocation.TotalAvailableQty, 0)
+            If _order.IsStockTransferType AndAlso If(_movementHistory?.IsTransactionTypeIsFrom, False) Then Return Quantity > If(_productInventoryLocation.TotalAvailableQty, 0)
 
             Return False
         End Get
@@ -141,6 +141,12 @@ Friend Class RackShelfColumnModel
     Public ReadOnly Property ProductInventoryLocationId As Integer
         Get
             Return If(_productInventoryLocation?.RowID, 0)
+        End Get
+    End Property
+
+    Public ReadOnly Property HasAvailableQty As Boolean
+        Get
+            Return Not AvailableQty <= 0
         End Get
     End Property
 End Class

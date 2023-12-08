@@ -2011,6 +2011,12 @@ Public Class InventoryLocationsForm
         gridProductColorSizes.DataSource = searchedDataSource
     End Sub
 
+    Private Sub txtSearch_KeyDown(sender As Object, e As KeyEventArgs) Handles txtSearch.KeyDown
+        If e.KeyCode = Keys.Enter Then
+            txtSearch_TextChanged(txtSearch, New EventArgs())
+        End If
+    End Sub
+
     Private Sub cboColumn_TextChanged(sender As Object, e As EventArgs) Handles cboColumn.TextChanged
         Try
             errProvider.Clear()

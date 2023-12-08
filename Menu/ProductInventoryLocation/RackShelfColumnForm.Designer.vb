@@ -158,21 +158,21 @@ Partial Class RackShelfColumnForm
         '
         'Column2
         '
-        Me.Column2.DataPropertyName = "RackNo"
+        Me.Column2.DataPropertyName = "Rack"
         Me.Column2.HeaderText = "Rack "
         Me.Column2.Name = "Column2"
         Me.Column2.ReadOnly = True
         '
         'Column3
         '
-        Me.Column3.DataPropertyName = "ShelfNo"
+        Me.Column3.DataPropertyName = "Shelf"
         Me.Column3.HeaderText = "Shelf "
         Me.Column3.Name = "Column3"
         Me.Column3.ReadOnly = True
         '
         'Column4
         '
-        Me.Column4.DataPropertyName = "ColumnNo"
+        Me.Column4.DataPropertyName = "Column"
         Me.Column4.HeaderText = "Column"
         Me.Column4.Name = "Column4"
         Me.Column4.ReadOnly = True

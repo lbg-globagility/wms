@@ -3,6 +3,7 @@
 Public Class RackShelfColumnSimpleModel
     Private ReadOnly _rackShelfColumn As RackShelfColumn
     Private ReadOnly _productColorSizeId As Integer
+    Private Const DEFAULT_DISPLAY_TEXT As String = "[Default]"
 
     Public Sub New(productColorSizeId As Integer,
         rackShelfColumn As RackShelfColumn)
@@ -10,9 +11,9 @@ Public Class RackShelfColumnSimpleModel
         _productColorSizeId = productColorSizeId
         _RowID = rackShelfColumn.RowID.Value
         _PickOrderNo = rackShelfColumn.PickOrderNo.Value
-        _Rack = rackShelfColumn.RackNo
-        _Shelf = rackShelfColumn.ShelfNo
-        _Column = rackShelfColumn.ColumnNo
+        _Rack = If(String.IsNullOrEmpty(rackShelfColumn.RackNo) AndAlso String.IsNullOrEmpty(rackShelfColumn.ShelfNo) AndAlso String.IsNullOrEmpty(rackShelfColumn.ColumnNo), DEFAULT_DISPLAY_TEXT, rackShelfColumn.RackNo)
+        _Shelf = If(_Rack = DEFAULT_DISPLAY_TEXT AndAlso String.IsNullOrEmpty(rackShelfColumn.ShelfNo), DEFAULT_DISPLAY_TEXT, rackShelfColumn.ShelfNo)
+        _Column = If(_Rack = DEFAULT_DISPLAY_TEXT AndAlso String.IsNullOrEmpty(rackShelfColumn.ColumnNo), DEFAULT_DISPLAY_TEXT, rackShelfColumn.ColumnNo)
 
         Dim aQty = If(rackShelfColumn.AvailableQty, 0)
         _AvailableQty = aQty

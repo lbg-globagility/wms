@@ -3,7 +3,7 @@
 Imports Microsoft.Extensions.DependencyInjection
 Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
 Imports WarehouseManagementSystem.Core.Interfaces.Repositories
-
+Imports WarehouseManagementSystem.Utilities.Extensions
 Public Class ProductColorSizeSelectorDialog
     Private _baseSource As List(Of ProductColorSizeModel)
     Private ReadOnly _inventoryLocationId As Integer
@@ -88,7 +88,7 @@ Public Class ProductColorSizeSelectorDialog
     End Sub
 
     Private Sub txtSearch_TextChanged(sender As Object, e As EventArgs) Handles txtSearch.TextChanged
-        Dim searchText = txtSearch.Text.ToLower()
+        Dim searchText = txtSearch.Text
 
         Dim dataSource = _baseSource
 
@@ -97,16 +97,21 @@ Public Class ProductColorSizeSelectorDialog
                 Return If(boolValue, False)
             End Function
 
-        If Not String.IsNullOrEmpty(searchText) Then
+        If Not String.IsNullOrEmpty(searchText) AndAlso
+            _baseSource IsNot Nothing Then
+
+            '(Not String.IsNullOrEmpty(t.BrandName) AndAlso t.BrandName.ToLower.Contains(searchText)) Or
             dataSource = _baseSource.
-                Where(Function(t) t.ProductCode.ToLower.Contains(searchText) Or
-                    (Not String.IsNullOrEmpty(t.BrandName) AndAlso t.BrandName.ToLower.Contains(searchText)) Or
-                    absoluteBool(t.Category?.ToLower.Contains(searchText)) Or
-                    absoluteBool(t.UnitOfMeasure?.ToLower.Contains(searchText)) Or
-                    absoluteBool(t.Description?.ToLower.Contains(searchText)) Or
-                    absoluteBool(t.Colors?.ToLower.Contains(searchText)) Or
-                    absoluteBool(t.SeasonCode?.ToLower.Contains(searchText))).
+                Where(Function(t) t.ProductCode.Like(searchText) Or
+                    absoluteBool(t.BrandName?.Like(searchText)) Or
+                    absoluteBool(t.Category?.Like(searchText)) Or
+                    absoluteBool(t.UnitOfMeasure?.Like(searchText)) Or
+                    absoluteBool(t.Description?.Like(searchText)) Or
+                    absoluteBool(t.Colors?.Like(searchText)) Or
+                    absoluteBool(t.SeasonCode?.Like(searchText))).
                 ToList()
+        Else
+            dataSource = Enumerable.Empty(Of ProductColorSizeModel)().ToList()
         End If
 
         grid.DataSource = dataSource
