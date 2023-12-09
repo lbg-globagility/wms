@@ -2013,7 +2013,13 @@ Public Class PickListForm
                     Else
                         msSaveRSC.Enabled = fraud
                     End If
-                    getInventorylocationIDA(cboLocationName.Text, Me)
+
+                    If IsThurston Then
+                        getInventorylocationIDA(If(dgCustomerOrders.CurrentRow?.Cells(co_inventorylocation.Name).Value, cboLocationName.Text), Me)
+                    Else
+                        getInventorylocationIDA(cboLocationName.Text, Me)
+                    End If
+
                     plinventorylocationdid = globalinventorylocationid
                     If plinventorylocationdid <> 0 Then
                         displayRackShelfColumn(CInt(dgCustomerOrderItems.CurrentRow.Cells("ci_pcsrowid").Value), plinventorylocationdid)

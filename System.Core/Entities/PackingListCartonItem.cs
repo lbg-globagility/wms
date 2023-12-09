@@ -14,9 +14,32 @@ namespace WarehouseManagementSystem.Core.Entities
     }
     public partial class PackingListCartonItem
     {
-        private PackingListCartonItem() { }
-        private bool IsActive => Status == PackingListCartonItemStatus.Active;
-        private bool IsDelivered => Status == PackingListCartonItemStatus.Delivered;
-        private bool IsInactive => Status == PackingListCartonItemStatus.Inactive;
+        private PackingListCartonItem()
+        {
+        }
+
+        public PackingListCartonItem(int organizationId,
+            int userId,
+            int orderItemId,
+            int quantity)
+        {
+            OrganizationID = organizationId;
+            AuditUser(userId);
+            OrderItemID = orderItemId;
+            QtyInCarton = quantity;
+        }
+
+        public bool IsActive => Status == PackingListCartonItemStatus.Active;
+        public bool IsDelivered => Status == PackingListCartonItemStatus.Delivered;
+        public bool IsInactive => Status == PackingListCartonItemStatus.Inactive;
+        public virtual PackingListCarton PackingListCarton { get; set; }
+
+        public static PackingListCartonItem NewPackingListCartonItem(int organizationId,
+            int userId,
+            int orderItemId,
+            int quantity) => new PackingListCartonItem(organizationId: organizationId,
+                userId: userId,
+                orderItemId: orderItemId,
+                quantity: quantity);
     }
 }

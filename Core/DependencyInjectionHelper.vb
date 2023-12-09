@@ -32,12 +32,15 @@ Public Class DependencyInjectionHelper
 
         With services
             'Data Services
+            .AddTransient(Of ICartonSizeDataService, CartonSizeDataService)
             .AddTransient(Of ICategoryDataService, CategoryDataService)
             .AddTransient(Of IColorDataService, ColorDataService)
             .AddTransient(Of IContactDataService, ContactDataService)
             .AddTransient(Of IInventoryLocationDataService, InventoryLocationDataService)
             .AddTransient(Of IMovementHistoryDataService, MovementHistoryDataService)
             .AddTransient(Of IOrderDataService, OrderDataService)
+            .AddTransient(Of IPackingListDataService, PackingListDataService)
+            .AddTransient(Of IPackingListCartonDataService, PackingListCartonDataService)
             .AddTransient(Of IPositionViewDataService, PositionViewDataService)
             .AddTransient(Of IProductDataService, ProductDataService)
             .AddTransient(Of IProductColorDataService, ProductColorDataService)
@@ -46,6 +49,7 @@ Public Class DependencyInjectionHelper
             .AddTransient(Of ISystemOwnerService, SystemOwnerService)
 
             ' Repositories
+            .AddTransient(Of ICartonSizeRepository, CartonSizeRepository)
             .AddTransient(Of ICategoryRepository, CategoryRepository)
             .AddTransient(Of IColorRepository, ColorRepository)
             .AddTransient(Of IContactRepository, ContactRepository)
@@ -53,6 +57,8 @@ Public Class DependencyInjectionHelper
             .AddTransient(Of ILineupRepository, LineupRepository)
             .AddTransient(Of IMovementHistoryRepository, MovementHistoryRepository)
             .AddTransient(Of IOrderRepository, OrderRepository)
+            .AddTransient(Of IPackingListRepository, PackingListRepository)
+            .AddTransient(Of IPackingListCartonRepository, PackingListCartonRepository)
             .AddTransient(Of IPositionViewRepository, PositionViewRepository)
             .AddTransient(Of IProductColorRepository, ProductColorRepository)
             .AddTransient(Of IProductColorSizeRepository, ProductColorSizeRepository)

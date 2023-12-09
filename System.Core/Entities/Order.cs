@@ -111,5 +111,7 @@ namespace WarehouseManagementSystem.Core.Entities
             IsReceivingReportType ? "Receiving Report" :
             IsStockAdjustType ? "Stock Adjust" :
             IsStockTransferType ? "Stock Transfer" : string.Empty;
+
+        public virtual PackingList PackingList { get; set; }
     }
 }

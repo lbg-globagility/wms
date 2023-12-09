@@ -46,5 +46,11 @@ namespace WarehouseManagementSystem.Core.Entities
     {
         public virtual Order Order { get; set; }
         public virtual ProductColorSize ProductColorSize { get; set; }
+        public decimal OrderedGross => (QtyOrdered ?? 0) * (SRP ?? 0);
+        public decimal AvailableGross => (QtyAvailable ?? 0) * (SRP ?? 0);
+        public decimal DeliveredGross => (QtyDelivered ?? 0) * (SRP ?? 0);
+        public decimal DamagedGross => (QtyDamaged ?? 0) * (SRP ?? 0);
+        public decimal ReceivedGross => (QtyReceived ?? 0) * (SRP ?? 0);
+        public decimal TotalItemGross => OrderedGross + AvailableGross + DeliveredGross + DamagedGross + ReceivedGross;
     }
 }

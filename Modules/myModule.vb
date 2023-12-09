@@ -2896,12 +2896,13 @@ Module myModule
             If globalconn.State = ConnectionState.Open Then globalconn.Close()
             Dim dtGinfo As New DataTable
             dtGinfo = getDataTableForSQL("SELECT COALESCE(c.deliveryhours,''),CONCAT(COALESCE(ad.streetaddress1,''),' ',COALESCE(ad.streetaddress2,''),' ',COALESCE(ad.barangay,''),' ',COALESCE(ad.citytown,''),' ',COALESCE(ad.province,''),' ',COALESCE(ad.state,''),' ',COALESCE(ad.zipcode,''),' ',COALESCE(ad.country,''))," &
-                            "COALESCE(CONCAT(COALESCE(bc.branchcode,''),' - ',COALESCE(bc.branchname,'')),''),COALESCE(c.agentid,'') FROM accounts c LEFT JOIN address ad ON c.primaryaddressid = ad.rowid LEFT JOIN branches bc ON c.branchid = bc.rowid WHERE c.rowid = " & globaliaccountid & " ")
+                            "COALESCE(CONCAT(COALESCE(bc.branchcode,''),' - ',COALESCE(bc.branchname,'')),''),c.agentid FROM accounts c LEFT JOIN address ad ON c.primaryaddressid = ad.rowid LEFT JOIN branches bc ON c.branchid = bc.rowid WHERE c.rowid = " & globaliaccountid & " ")
             If dtGinfo.Rows.Count <> 0 Then
                 globaldeliveryhours = dtGinfo.Rows(0)(0)
                 globaladdressname = dtGinfo.Rows(0)(1)
                 globalbranchname = dtGinfo.Rows(0)(2)
-                globalAgentId = dtGinfo.Rows(0)(3)
+                Dim agentId = dtGinfo.Rows(0)(3)
+                globalagentid = If(IsDBNull(agentId), 0, CInt(agentId))
             Else
                 globaldeliveryhours = "" : globaladdressname = "" : globalbranchname = ""
             End If

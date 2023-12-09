@@ -41,6 +41,7 @@ namespace WarehouseManagementSystem.Core.Entities
 
     public partial class Contact
     {
+        public static string DEFAULT_NAME = "DEFAULT";
         private Contact()
         { }
 

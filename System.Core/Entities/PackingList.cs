@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using WarehouseManagementSystem.Core.Entities.Base;
 
 namespace WarehouseManagementSystem.Core.Entities
@@ -17,5 +20,9 @@ namespace WarehouseManagementSystem.Core.Entities
     public partial class PackingList
     {
         private PackingList() { }
+
+        public virtual Order Order { get; set; }
+
+        public decimal GrandTotalItemGross => Order?.OrderItems?.Sum(t => t.TotalItemGross) ?? 0M;
     }
 }

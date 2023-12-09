@@ -17,6 +17,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data
         }
 
         internal virtual DbSet<Agent> Agents { get; set; }
+        internal virtual DbSet<CartonSize> CartonSizes { get; set; }
         internal virtual DbSet<Category> Categories { get; set; }
         internal virtual DbSet<Color> Colors { get; set; }
         internal virtual DbSet<Contact> Contacts { get; set; }
@@ -425,18 +426,28 @@ namespace WarehouseManagementSystem.Infrastructure.Data
 
             modelBuilder.Entity<PackingList>(t =>
             {
+                t.HasOne(x => x.Order)
+                    .WithOne(x => x.PackingList);
             });
 
             modelBuilder.Entity<PackingListCarton>(t =>
             {
                 t.Property(x => x.Status)
                     .HasConversion(new EnumToStringConverter<PackingListCartonStatus>());
+
+                t.HasMany(x => x.PackingListCartonItems)
+                    .WithOne(x => x.PackingListCarton);
             });
 
             modelBuilder.Entity<PackingListCartonItem>(t =>
             {
                 t.Property(x => x.Status)
                     .HasConversion(new EnumToStringConverter<PackingListCartonItemStatus>());
+            });
+
+            modelBuilder.Entity<CartonSize>(t => {
+                t.HasMany(x => x.PackingListCartons)
+                    .WithOne(x => x.CartonSize);
             });
         }
     }

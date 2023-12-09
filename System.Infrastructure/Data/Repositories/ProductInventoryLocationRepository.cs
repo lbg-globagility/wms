@@ -50,5 +50,19 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
             .Where(t => t.ProductColorSizeID == productColorSizeId)
             .Where(t => t.RackShelfColumn.InventoryLocationID == inventoryLocationId)
             .FirstOrDefaultAsync();
+
+        public async Task<ICollection<ProductInventoryLocation>> GetManyByCompositeKeysAsync(int organizationId, int inventoryLocationId, int productColorId) => await _context.ProductInventoryLocations
+            .Include(t => t.ProductColorSize)
+                .ThenInclude(p => p.ProductColor)
+                    .ThenInclude(p => p.Color)
+            .Include(t => t.ProductColorSize)
+                .ThenInclude(p => p.ProductColor)
+                    .ThenInclude(p => p.Product)
+            .Include(t => t.RackShelfColumn)
+            .AsNoTracking()
+            .Where(x => x.OrganizationID == organizationId)
+            .Where(x => x.ProductColorSize.ProductColorID == productColorId)
+            .Where(x => x.RackShelfColumn.InventoryLocationID == inventoryLocationId)
+            .ToListAsync();
     }
 }

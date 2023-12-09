@@ -3123,7 +3123,47 @@ Public Class CustomerOrdersForm
         End Try
     End Sub
 
-    Private Sub dgProductColors_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgProductColors.CellClick
+    Private Async Sub dgProductColors_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgProductColors.CellClick
+        If IsThurston Then
+            Dim inventoryLocationId = CInt(cboInventoryLocation.SelectedValue)
+            Dim productColorId As Integer = If(dgProductColors.CurrentRow?.Cells(c_rowid.Name).Value, 0)
+
+            Dim productInventoryLocationRepository = GetRequiredService(Of IProductInventoryLocationRepository)()
+            Dim productInventoryLocations = Await productInventoryLocationRepository.GetManyByCompositeKeysAsync(organizationId:=Z_OrganizationID,
+                inventoryLocationId:=inventoryLocationId,
+                productColorId:=productColorId)
+
+            Dim sfdfsd = productInventoryLocations.
+                GroupBy(Function(t) t.ProductColorSizeID).
+                Select(Function(t) New ProductColorSizeOrderModel(dataSource:=t)).
+                ToList()
+
+            dgProductSizes.Rows.Clear()
+
+            For Each item In sfdfsd
+                Dim rowIndex = dgProductSizes.Rows.Add()
+                With dgProductSizes
+                    .Item(s_rowid.Index, rowIndex).Value = item.ProductColorSizeId
+                    .Item(s_colorvalue.Index, rowIndex).Value = item.ColorValue
+                    .Item(s_productcode.Index, rowIndex).Value = item.ProductCode
+                    .Item(s_colorname.Index, rowIndex).Value = item.ColorName
+                    .Item(s_sizes.Index, rowIndex).Value = item.Size
+                    .Item(s_seasoncode.Index, rowIndex).Value = item.SeasonCode
+                    '.Item(s_qtyordered.Index, rowIndex).Value = ""
+                    .Item(s_srp.Index, rowIndex).Value = item.UnitPrice
+                    '.Item(s_totalprice.Index, rowIndex).Value = ""
+                    .Item(s_sku.Index, rowIndex).Value = String.Join(", ", {item.SKU, item.SKU2}.Where(Function(t) Not String.IsNullOrEmpty(t)))
+                    .Item(s_qtyavailable.Index, rowIndex).Value = item.TotalAvailableQty
+                    .Item(s_qtyallocated.Index, rowIndex).Value = item.TotalAllocatedQty
+                    .Item(s_qtyreserve.Index, rowIndex).Value = item.TotalReserveQty
+                    .Item(s_qtyorderable.Index, rowIndex).Value = item.TotalOrderableQty
+                    .Item(s_unitofmeasure.Index, rowIndex).Value = item.UnitOfMeasure
+                End With
+            Next
+
+            Return
+        End If
+
         Me.Cursor = Cursors.WaitCursor
         Try
             If dgProductColors.Rows.Count <> 0 Then
@@ -3135,6 +3175,10 @@ Public Class CustomerOrdersForm
             conn.Close()
         End Try
         Me.Cursor = Cursors.Default
+    End Sub
+
+    Private Sub dgProductColors_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgProductColors.CellContentClick
+
     End Sub
 
     Private Sub dgProductColors_KeyUp(sender As Object, e As KeyEventArgs) Handles dgProductColors.KeyUp
@@ -3929,7 +3973,7 @@ Public Class CustomerOrdersForm
                     '    End If
                     'End If
                     U_Orders(CInt(dgCustomerOrderList.CurrentRow.Cells("co_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, cocustomerid, If(cobranchid = 0, DBNull.Value, cobranchid), If(covendorid = 0, DBNull.Value, covendorid), If(cocombinecodingid = 0, DBNull.Value, cocombinecodingid),
-                                txtCustomerOrderNo.Text, txtPONo.Text, txtSIDRNo.Text, dtpCustomerOrderDate.Value, dtpDeliveryDate.Value, dtpEndDate.Value, txtComments.Text, Math.Round(coitotalprice, 2), txtDeliveryHours.Text, txtDeliveryAddress.Text, cboCustomerOrderType.Text, Me, AgentId:=CInt(cboAgent.SelectedValue))
+                                txtCustomerOrderNo.Text, txtPONo.Text, txtSIDRNo.Text, dtpCustomerOrderDate.Value, dtpDeliveryDate.Value, dtpEndDate.Value, txtComments.Text, Math.Round(coitotalprice, 2), txtDeliveryHours.Text, txtDeliveryAddress.Text, cboCustomerOrderType.Text, Me, InventoryLocationId:=CInt(cboInventoryLocation.SelectedValue), AgentId:=CInt(cboAgent.SelectedValue))
                     U_OrderStatus(CInt(dgCustomerOrderList.CurrentRow.Cells("co_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, "Submitted To Warehouse", Me)
                     U_OrderDateSubmitted(CInt(dgCustomerOrderList.CurrentRow.Cells("co_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Date.Now.ToString("yyyy/MM/dd"), Me)
                     If dgCustomerOrderItems.Rows.Count <> 0 Then

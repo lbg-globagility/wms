@@ -1,4 +1,0 @@
-
-ALTER TABLE `orderitems`
-	ADD COLUMN IF NOT EXISTS `ProductInventoryLocationId` INT(11) NULL DEFAULT NULL AFTER `Reasons`,
-	ADD COLUMN IF NOT EXISTS `RackShelfColumnId` INT(11) NULL DEFAULT NULL AFTER `ProductInventoryLocationId`;
