@@ -1,5 +1,10 @@
-﻿Imports MySql.Data.MySqlClient
+﻿Imports System.IO
+Imports Microsoft.Extensions.DependencyInjection
+Imports MySql.Data.MySqlClient
+Imports OfficeOpenXml
+Imports OfficeOpenXml.FormulaParsing.Excel.Functions.Logical
 Imports WarehouseManagementSystem.Core.Enums
+Imports WarehouseManagementSystem.Core.Interfaces.Repositories
 
 Public Class PrimaryForm
     Dim manager As New sqlModule.Manager
@@ -1247,7 +1252,7 @@ Public Class PrimaryForm
         Me.Cursor = Cursors.Default
     End Sub
 
-    Private Sub msPickListed_Click(sender As Object, e As EventArgs) Handles msPickListed.Click
+    Private Sub msPickListed_Click(sender As Object, e As EventArgs)
         Me.Cursor = Cursors.WaitCursor
         Try
             getPositionID(Me)
@@ -1265,7 +1270,7 @@ Public Class PrimaryForm
                 PickListReportForm.BringToFront()
             Else
                 PckLstRForm = True
-                ChangeDisplayForm(PickListReportForm, msPickListed.Image, "P.L.Rprt.", "Pick List Report")
+                ChangeDisplayForm(PickListReportForm, ms_AvailableQty.Image, "P.L.Rprt.", "Pick List Report")
             End If
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
@@ -1556,4 +1561,61 @@ Public Class PrimaryForm
         form.ShowDialog()
     End Sub
 
+    Private Async Sub ms_AvailableQty_Click_1(sender As Object, e As EventArgs) Handles ms_AvailableQty.Click
+        If MessageBox.Show("Download Available Qty. Report? ", "Download", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
+            Using excel As New ExcelPackage
+
+                excel.Workbook.Worksheets.Add("Zero Qty.")
+                Dim worksheet = excel.Workbook.Worksheets("Zero Qty.")
+
+                worksheet.Cells("A1").Value = "Product Inventory Report"
+                worksheet.Cells("A2").Value = "Available Qty."
+
+                Dim dateNow = DateTime.Now.ToString("MMM dd, yyyy")
+                worksheet.Cells("A3").Value = $"Date Exported: {dateNow}"
+
+                Dim productInventoryLocationDataRepository = MainServiceProvider.GetRequiredService(Of IProductInventoryLocationRepository)
+                Dim productInventoryLocations = Await productInventoryLocationDataRepository.GetProductInventoryLocationsZeroQtyAsync()
+
+                worksheet.Cells("A5").Value = $"Product Code"
+                worksheet.Cells("B5").Value = $"Product Name"
+                worksheet.Cells("C5").Value = $"Product Size"
+                worksheet.Cells("D5").Value = $"Unit measure"
+                worksheet.Cells("E5").Value = $"Qty. Orderable"
+                worksheet.Cells("F5").Value = $"Season Code"
+                worksheet.Cells("G5").Value = $"SKU"
+                worksheet.Cells("H5").Value = $"SKU2"
+                worksheet.Cells("A5:H5").Style.Font.Bold = True
+                Dim index = 6
+                For Each item In productInventoryLocations
+                    worksheet.Cells($"A{index}").Value = {item.ProductColorSize.ProductColor.Product.ProductCode}
+                    worksheet.Cells($"B{index}").Value = {item.ProductColorSize.ProductColor.Product.ProductName}
+                    worksheet.Cells($"C{index}").Value = {item.ProductColorSize.Size}
+                    worksheet.Cells($"D{index}").Value = {item.UnitOfMeasure}
+                    worksheet.Cells($"E{index}").Value = {item.TotalAvailableQty}
+                    worksheet.Cells($"E{index}").Style.Numberformat.Format = "#,##0.00"
+                    worksheet.Cells($"F{index}").Value = {item.ProductColorSize.SeasonCode}
+                    worksheet.Cells($"G{index}").Value = {item.ProductColorSize.SKU}
+                    worksheet.Cells($"H{index}").Value = {item.ProductColorSize.SKU2}
+                    index += 1
+                Next
+                worksheet.Cells.AutoFitColumns()
+                Dim directory = "c:\AttachedFiles\ProductInventory"
+                If System.IO.Directory.Exists(directory) Then
+                    System.IO.Directory.CreateDirectory(directory)
+                End If
+
+                Dim unixTimestamp = Int(DateTime.Now.Subtract(New DateTime(1970, 1, 1)).TotalSeconds)
+                Dim fileName = $"AvailableQuantity_({unixTimestamp}).xlsx"
+                Dim path = System.IO.Path.Combine(directory, fileName)
+                Dim info As IO.FileInfo = My.Computer.FileSystem.GetFileInfo(path)
+                excel.SaveAs(info)
+
+                Process.Start("EXCEL.EXE", $"{directory}\{fileName}")
+                'MessageBox.Show($"Location:{directory}\{fileName}", "File Downloaded", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            End Using
+
+        End If
+
+    End Sub
 End Class
