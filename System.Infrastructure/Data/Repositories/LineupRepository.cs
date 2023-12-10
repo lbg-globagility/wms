@@ -21,6 +21,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
 
         public async Task<Lineup> GetById(int lineUpId) => await _context.Lineups
           .Where(c => c.RowID == lineUpId)
-          .AsNoTracking().FirstOrDefaultAsync();
+          .AsNoTracking().
+            FirstOrDefaultAsync();
     }
 }

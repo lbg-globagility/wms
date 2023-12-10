@@ -2539,83 +2539,83 @@ Public Class ViewEditLineUpDeliveryForm
                 Return
             End If
 
-            If MessageBox.Show("NOTE: Once you confirmed this delivery, you cannot undo the process again." & vbNewLine & "" & vbNewLine & "Do you want to proceed confirming this delivery?", "Confirm Delivery", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
-                Me.Cursor = Cursors.WaitCursor
-                PrimaryForm.MainLoadingBar.Visible = legit
-                PrimaryForm.MainLoadingBar.Maximum = vplloadingbar
-                If dgLineUpList.Rows.Count <> 0 Then
-                    getLineUpStatus(CInt(dgLineUpList.CurrentRow.Cells("lu_rowid").Value), Me)
-                    If globallineupstatus <> "Lined Up" Then
-                        If globallineupstatus <> "Delivered" Then
-                            errProvider.SetError(txtStatus, "The line up has been confirmed or cancelled already.")
-                            Exit Try
-                        End If
+            Me.Cursor = Cursors.WaitCursor
+            PrimaryForm.MainLoadingBar.Visible = legit
+            PrimaryForm.MainLoadingBar.Maximum = vplloadingbar
+            If dgLineUpList.Rows.Count <> 0 Then
+                getLineUpStatus(CInt(dgLineUpList.CurrentRow.Cells("lu_rowid").Value), Me)
+                If globallineupstatus <> "Lined Up" Then
+                    If globallineupstatus <> "Delivered" Then
+                        errProvider.SetError(txtStatus, "The line up has been confirmed or cancelled already.")
+                        Exit Try
                     End If
-                Else
-                    errProvider.SetError(txtLineUpNo, "System cannot find the line up.")
-                    Exit Try
                 End If
-                getOrderStatus(veludorderid, Me)
-                If globalorderstatus <> "Lined Up" Then
-                    errProvider.SetError(txtCustomerOrderInfo, "The customer order has been updated, please check the status of the customer order.")
-                    Exit Try
-                End If
-                If LTrim(cboTruckShiftInfo.Text) <> "" Then
-                    getDeliveryTruckShiftIDB(cboTruckShiftInfo.Text, "AND dts.`status` = 'Active'", Me)
-                    veluddeliverytruckshiftid = globaldeliverytruckshiftid
-                    veluddeliverytruckid = globaldeliverytruckid
-                    cbmcomputation(veluddeliverytruckid, veluddeliverytruckshiftid, Format(dtpLineUpDate.Value, "yyyy-MM-dd"))
-                    If veluddeliverytruckshiftid <> 0 Then
-                        veludlineupdate = Format(dtpLineUpDate.Value, "yyyy-MM-dd")
-                        getLineUpIDC(CInt(dgLineUpList.CurrentRow.Cells("lu_rowid").Value), veluddeliverytruckshiftid, veludorderid, veludlineupdate, Me)
-                        veludlineupid = globallineupid
-                        If veludlineupid <> 0 Then
-                            errProvider.SetError(dtpLineUpDate, "The line-up has been created already, please choose a new combination of line-up.")
-                            errProvider.SetError(txtCustomerOrderInfo, "The line-up has been created already, please choose a new combination of line-up.")
-                            errProvider.SetError(pbAddTruckShiftInfo, "The line-up has been created already, please choose a new combination of line-up.")
-                            Exit Try
-                        End If
-                    Else
-                        errProvider.SetError(pbAddTruckShiftInfo, "System cannot find the track and shift info.")
+            Else
+                errProvider.SetError(txtLineUpNo, "System cannot find the line up.")
+                Exit Try
+            End If
+            getOrderStatus(veludorderid, Me)
+            If globalorderstatus <> "Lined Up" Then
+                errProvider.SetError(txtCustomerOrderInfo, "The customer order has been updated, please check the status of the customer order.")
+                Exit Try
+            End If
+            If LTrim(cboTruckShiftInfo.Text) <> "" Then
+                getDeliveryTruckShiftIDB(cboTruckShiftInfo.Text, "AND dts.`status` = 'Active'", Me)
+                veluddeliverytruckshiftid = globaldeliverytruckshiftid
+                veluddeliverytruckid = globaldeliverytruckid
+                cbmcomputation(veluddeliverytruckid, veluddeliverytruckshiftid, Format(dtpLineUpDate.Value, "yyyy-MM-dd"))
+                If veluddeliverytruckshiftid <> 0 Then
+                    veludlineupdate = Format(dtpLineUpDate.Value, "yyyy-MM-dd")
+                    getLineUpIDC(CInt(dgLineUpList.CurrentRow.Cells("lu_rowid").Value), veluddeliverytruckshiftid, veludorderid, veludlineupdate, Me)
+                    veludlineupid = globallineupid
+                    If veludlineupid <> 0 Then
+                        errProvider.SetError(dtpLineUpDate, "The line-up has been created already, please choose a new combination of line-up.")
+                        errProvider.SetError(txtCustomerOrderInfo, "The line-up has been created already, please choose a new combination of line-up.")
+                        errProvider.SetError(pbAddTruckShiftInfo, "The line-up has been created already, please choose a new combination of line-up.")
                         Exit Try
                     End If
                 Else
-                    errProvider.SetError(pbAddTruckShiftInfo, "Please choose the track and shift info.")
+                    errProvider.SetError(pbAddTruckShiftInfo, "System cannot find the track and shift info.")
                     Exit Try
                 End If
-                getContactID(cboDriverName.Text, "Driver", Me)
-                veludcontactid = globalcontactid
-                U_LineUps(CInt(dgLineUpList.CurrentRow.Cells("lu_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, If(veludcontactid = 0, DBNull.Value, veludcontactid), veluddeliverytruckshiftid, dtpLineUpDate.Value, txtSIDRNo.Text, txtComments.Text, Me,
-                    AgentId:=cboAgent.SelectedValue,
-                    Helper1Id:=cboHelper1.SelectedValue,
-                    Helper2Id:=cboHelper2.SelectedValue)
-                If PrimaryForm.MainLoadingBar.Value < vplloadingbar Then
-                    PrimaryForm.MainLoadingBar.Value = PrimaryForm.MainLoadingBar.Value + startingpage
-                End If
-                If myModule.systemerrorfound = False Then
-                    confirmLineUpCartons(CInt(dgLineUpList.CurrentRow.Cells("lu_rowid").Value))
-                End If
-                If PrimaryForm.MainLoadingBar.Value < vplloadingbar Then
-                    PrimaryForm.MainLoadingBar.Value = PrimaryForm.MainLoadingBar.Value + startingpage
-                End If
-                If myModule.systemerrorfound = False Then
-                    U_OrderStatus(veludorderid, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, "Delivery", Me)
-                End If
-                If PrimaryForm.MainLoadingBar.Value < vplloadingbar Then
-                    PrimaryForm.MainLoadingBar.Value = PrimaryForm.MainLoadingBar.Value + startingpage
-                End If
-                If myModule.systemerrorfound = False Then
-                    U_LineUpStatus(CInt(dgLineUpList.CurrentRow.Cells("lu_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, "Confirmed Delivery", Me)
-                End If
-                If PrimaryForm.MainLoadingBar.Value < vplloadingbar Then
-                    PrimaryForm.MainLoadingBar.Value = PrimaryForm.MainLoadingBar.Value + startingpage
-                End If
-                If myModule.systemerrorfound = False Then
-                    myBalloon("Successfully Confirmed", "Confirm Delivery", lblsavemsg, -15, -65)
-                    vieweditlineupdeliverycue = legit
-                    tsrefreshperformclick()
-                End If
+            Else
+                errProvider.SetError(pbAddTruckShiftInfo, "Please choose the track and shift info.")
+                Exit Try
             End If
+            getContactID(cboDriverName.Text, "Driver", Me)
+            veludcontactid = globalcontactid
+            U_LineUps(CInt(dgLineUpList.CurrentRow.Cells("lu_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, If(veludcontactid = 0, DBNull.Value, veludcontactid), veluddeliverytruckshiftid, dtpLineUpDate.Value, txtSIDRNo.Text, txtComments.Text, Me,
+        AgentId:=cboAgent.SelectedValue,
+        Helper1Id:=cboHelper1.SelectedValue,
+        Helper2Id:=cboHelper2.SelectedValue)
+            If PrimaryForm.MainLoadingBar.Value < vplloadingbar Then
+                PrimaryForm.MainLoadingBar.Value = PrimaryForm.MainLoadingBar.Value + startingpage
+            End If
+            If myModule.systemerrorfound = False Then
+                confirmLineUpCartons(CInt(dgLineUpList.CurrentRow.Cells("lu_rowid").Value))
+            End If
+            If PrimaryForm.MainLoadingBar.Value < vplloadingbar Then
+                PrimaryForm.MainLoadingBar.Value = PrimaryForm.MainLoadingBar.Value + startingpage
+            End If
+            If myModule.systemerrorfound = False Then
+                U_OrderStatus(veludorderid, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, "Delivery", Me)
+            End If
+            If PrimaryForm.MainLoadingBar.Value < vplloadingbar Then
+                PrimaryForm.MainLoadingBar.Value = PrimaryForm.MainLoadingBar.Value + startingpage
+            End If
+            If myModule.systemerrorfound = False Then
+                U_LineUpStatus(CInt(dgLineUpList.CurrentRow.Cells("lu_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, "Confirmed Delivery", Me)
+            End If
+            If PrimaryForm.MainLoadingBar.Value < vplloadingbar Then
+                PrimaryForm.MainLoadingBar.Value = PrimaryForm.MainLoadingBar.Value + startingpage
+            End If
+            If myModule.systemerrorfound = False Then
+                myBalloon("Successfully Confirmed", "Confirm Delivery", lblsavemsg, -15, -65)
+                vieweditlineupdeliverycue = legit
+                tsrefreshperformclick()
+            End If
+
+
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally

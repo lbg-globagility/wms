@@ -76,7 +76,7 @@ Public Class ViewCartonItemsForm
                         dgCartonItems.Rows(i).Cells("cai_color").Style.BackColor = readcolor
                     End If
                     If dgCartonItems.Rows(i).Cells(cai_type.Index).Value = "BI" Then
-                        dgCartonItems.Rows(i).DefaultCellStyle.BackColor = Color.PaleGreen
+                        dgCartonItems.Rows(i).DefaultCellStyle.BackColor = Drawing.Color.PaleGreen
                     End If
                 Next
             End If

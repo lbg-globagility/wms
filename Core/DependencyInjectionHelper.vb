@@ -37,6 +37,7 @@ Public Class DependencyInjectionHelper
             .AddTransient(Of IColorDataService, ColorDataService)
             .AddTransient(Of IContactDataService, ContactDataService)
             .AddTransient(Of IInventoryLocationDataService, InventoryLocationDataService)
+            .AddTransient(Of ILineupDataService, LineupDataService)
             .AddTransient(Of IMovementHistoryDataService, MovementHistoryDataService)
             .AddTransient(Of IOrderDataService, OrderDataService)
             .AddTransient(Of IPackingListDataService, PackingListDataService)
