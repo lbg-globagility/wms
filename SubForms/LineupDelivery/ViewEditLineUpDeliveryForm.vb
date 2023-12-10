@@ -35,11 +35,21 @@ Public Class ViewEditLineUpDeliveryForm
     Private _systemOwner As WarehouseManagementSystem.Core.Entities.SystemOwner
 
     Private Async Function ViewEditLineUpDeliveryForm_LoadAsync(sender As Object, e As EventArgs) As Task Handles Me.Load
+        Dim _systemOwnerService = GetRequiredService(Of ISystemOwnerService)()
+        _systemOwner = Await _systemOwnerService.GetCurrentSystemOwnerEntityAsync()
+
+        If IsThurston Then
+            Label9.Visible = False
+            txtCBM.Visible = False
+            Label23.Visible = False
+            txtBoxCBM.Visible = False
+            Label15.Text = "Contents"
+            lblCartonNoE.Text = "Select Contents: "
+            ca_cartonno.HeaderText = String.Empty
+        End If
+
         Me.Cursor = Cursors.WaitCursor
         Try
-            Dim _systemOwnerService = MainServiceProvider.GetRequiredService(Of ISystemOwnerService)
-            _systemOwner = Await _systemOwnerService.GetCurrentSystemOwnerEntityAsync()
-
             errProvider.Clear()
             clearfields()
             callAutoComplete()
@@ -195,7 +205,7 @@ Public Class ViewEditLineUpDeliveryForm
             If veluddeliverytruckshiftid <> 0 Then
                 veludlineupdate = Format(dtpLineUpDate.Value, "yyyy-MM-dd")
                 cbmcomputation(veluddeliverytruckid, veluddeliverytruckshiftid, veludlineupdate)
-                If veluddeliverytruckcbm - (veludlineupboxescbmsum + If(IsNumeric(txtBoxCBM.Text), CDec(txtBoxCBM.Text), 0.0)) < neutralpage Then
+                If Not IsThurston AndAlso veluddeliverytruckcbm - (veludlineupboxescbmsum + If(IsNumeric(txtBoxCBM.Text), CDec(txtBoxCBM.Text), 0.0)) < neutralpage Then
                     errProvider.SetError(txtCBM, "System detected that the truck is full already.")
                     Exit Try
                 End If
@@ -1716,7 +1726,7 @@ Public Class ViewEditLineUpDeliveryForm
     End Sub
 
     Private Sub DeliveryScheduleToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeliveryScheduleToolStripMenuItem.Click
-        If _systemOwner.IsThurston Then
+        If IsThurston Then
             printDeliveryScheduleThurston(CInt(dgLineUpList.CurrentRow.Cells("lu_lineupno").Value))
             Dim printreport As New DeliverySchedule
             Dim openreportviewer As New ReportViewer
@@ -1731,7 +1741,7 @@ Public Class ViewEditLineUpDeliveryForm
     End Sub
 
     Private Sub TripTicketToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles TripTicketToolStripMenuItem.Click
-        If _systemOwner.IsThurston Then
+        If IsThurston Then
             printTripTicketThurston(CInt(dgLineUpList.CurrentRow.Cells("lu_lineupno").Value))
             Dim printreport As New TripTicket
             Dim openreportviewer As New ReportViewer
@@ -1746,7 +1756,7 @@ Public Class ViewEditLineUpDeliveryForm
     End Sub
 
     Private Sub GatePassToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles GatePassToolStripMenuItem.Click
-        If _systemOwner.IsThurston Then
+        If IsThurston Then
             Return
             'printGatePassThurston(CInt(dgLineUpList.CurrentRow.Cells("lu_lineupno").Value))
             Dim printreport As New GatePass
@@ -3170,4 +3180,9 @@ Public Class ViewEditLineUpDeliveryForm
         End If
     End Sub
 
+    Private ReadOnly Property IsThurston As Boolean
+        Get
+            Return _systemOwner.IsThurston
+        End Get
+    End Property
 End Class

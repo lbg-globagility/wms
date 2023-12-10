@@ -10,15 +10,28 @@ Imports System.Diagnostics
 Imports System.Runtime.InteropServices
 Imports System.Text.RegularExpressions
 Imports System.ComponentModel
+Imports WarehouseManagementSystem.Core.Entities
+Imports WarehouseManagementSystem.Core.Interfaces
 Public Class ViewCartonItemsForm
     Dim manager As New sqlModule.Manager
-    Dim conn As New MySqlConnection(Manager.GetConnString)
+    Dim conn As New MySqlConnection(manager.GetConnString)
     Dim sqlquery As String
     Dim sqlcmd As MySqlCommand
     Dim sqlrd As MySqlDataReader
     Dim vciqtyincartonsum As Integer
     Public vcicartonid As Integer
-    Private Sub ViewCartonItemsForm_Load(sender As Object, e As EventArgs) Handles Me.Load
+    Private _systemOwner As SystemOwner
+
+    Private Async Sub ViewCartonItemsForm_Load(sender As Object, e As EventArgs) Handles Me.Load
+        Dim _systemOwnerService = GetRequiredService(Of ISystemOwnerService)()
+        _systemOwner = Await _systemOwnerService.GetCurrentSystemOwnerEntityAsync()
+
+        If IsThurston Then
+            lblTitle.Text = "View Contents"
+            Label4.Text = "Total Quantity (Sum):"
+            cai_qtyincarton.HeaderText = "Quantity"
+        End If
+
         Me.Cursor = Cursors.WaitCursor
         Try
             displayPackingListCartonItems(vcicartonid)
@@ -127,4 +140,10 @@ Public Class ViewCartonItemsForm
     End Sub
 #End Region
 #End Region
+
+    Private ReadOnly Property IsThurston As Boolean
+        Get
+            Return _systemOwner.IsThurston
+        End Get
+    End Property
 End Class

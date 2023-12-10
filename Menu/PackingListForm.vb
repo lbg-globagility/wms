@@ -2594,57 +2594,11 @@ Public Class PackingListForm
                         U_OrderStatus(palorderid, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, "Packing", Me)
                     End If
                     If myModule.systemerrorfound = False Then
-                        Await FunctionUtils.TryCatchFunctionAsync("Assign this packing list to default carton size",
-                            action:=
-                            Async Function()
-                                Dim packingListCartonDataService = GetRequiredService(Of IPackingListCartonDataService)()
-
-                                Dim cartonSizeDataService = GetRequiredService(Of ICartonSizeDataService)()
-                                Dim cartonSize = Await cartonSizeDataService.GetOrCreateDefaultAsync(organizationId:=Z_OrganizationID, userId:=Z_UserID)
-                                Dim cartonSizeId = cartonSize.RowID.Value
-                                Dim cartonNo = cartonSize.SizeName
-
-                                Dim contactDataService = GetRequiredService(Of IContactDataService)()
-                                Dim defaultPacker = Await contactDataService.GetOrCreateDefaultAsync(organizationId:=Z_OrganizationID,
-                                    userId:=Z_UserID,
-                                    contactType:=ContactType.Packer)
-                                Dim packerId = defaultPacker.RowID.Value
-
-                                'Dim orderDataService = GetRequiredService(Of IOrderDataService)()
-                                'Dim baseOrder = Await orderDataService.GetByIdAsync(id:=palorderid)
-
-                                Dim packingListDataService = GetRequiredService(Of IPackingListDataService)()
-                                Dim packingList = Await packingListDataService.GetPackingListByOrderIdAsync(orderId:=palorderid)
-                                Dim packingListId = packingList.RowID.Value
-                                Dim packedDate = If(packingList.PackingListDate, Date.Now)
-                                Dim amount = packingList.GrandTotalItemGross
-
-                                Dim newPackingListCarton = PackingListCarton.NewPackingListCarton(organizationId:=Z_OrganizationID,
-                                    userId:=Z_UserID,
-                                    cartonSizeId:=cartonSizeId,
-                                    contactId:=packerId,
-                                    packingListId:=packingListId,
-                                    packedDate:=packedDate,
-                                    cartonNo:=cartonNo,
-                                    amount:=amount)
-
-                                Dim orderItems = packingList.Order.OrderItems
-                                For Each item In orderItems
-                                    Dim newPackingListCartonItem = PackingListCartonItem.NewPackingListCartonItem(organizationId:=Z_OrganizationID,
-                                        userId:=Z_UserID,
-                                        orderItemId:=item.RowID.Value,
-                                        quantity:=item.QtyOrdered)
-
-                                    newPackingListCarton.AddPackingListCartonItems(New List(Of PackingListCartonItem) From {newPackingListCartonItem})
-                                Next
-
-                                Await packingListCartonDataService.SaveManyAsync(userId:=Z_UserID, added:=New List(Of PackingListCarton) From {newPackingListCarton})
-                            End Function).
+                        Await AutomateContainPackingListToDefaultCartonAsync().
                             ContinueWith(
                             continuationAction:=Sub()
                                                     myBalloon("Successfully Save", "Save", lblsavemsg, -15, -65)
                                                     tsrefreshperformclick()
-
                                                 End Sub, scheduler:=TaskScheduler.FromCurrentSynchronizationContext)
                     End If
                 ElseIf cue = "Edit" Then
@@ -4021,4 +3975,51 @@ Public Class PackingListForm
             Return _systemOwner.IsThurston
         End Get
     End Property
+
+    Private Async Function AutomateContainPackingListToDefaultCartonAsync() As Task
+        Await FunctionUtils.TryCatchFunctionAsync("Assign this packing list to default carton size",
+            action:=
+            Async Function()
+                Dim packingListCartonDataService = GetRequiredService(Of IPackingListCartonDataService)()
+
+                Dim cartonSizeDataService = GetRequiredService(Of ICartonSizeDataService)()
+                Dim cartonSize = Await cartonSizeDataService.GetOrCreateDefaultAsync(organizationId:=Z_OrganizationID, userId:=Z_UserID)
+                Dim cartonSizeId = cartonSize.RowID.Value
+                Dim cartonNo = cartonSize.SizeName
+
+                Dim contactDataService = GetRequiredService(Of IContactDataService)()
+                Dim defaultPacker = Await contactDataService.GetOrCreateDefaultAsync(organizationId:=Z_OrganizationID,
+                    userId:=Z_UserID,
+                    contactType:=ContactType.Packer)
+                Dim packerId = defaultPacker.RowID.Value
+
+                Dim packingListDataService = GetRequiredService(Of IPackingListDataService)()
+                Dim packingList = Await packingListDataService.GetPackingListByOrderIdAsync(orderId:=palorderid)
+                Dim packingListId = packingList.RowID.Value
+                Dim packedDate = If(packingList.PackingListDate, Date.Now)
+                Dim amount = packingList.GrandTotalItemGross
+
+                Dim newPackingListCarton = PackingListCarton.NewPackingListCarton(organizationId:=Z_OrganizationID,
+                    userId:=Z_UserID,
+                    cartonSizeId:=cartonSizeId,
+                    contactId:=packerId,
+                    packingListId:=packingListId,
+                    packedDate:=packedDate,
+                    cartonNo:=cartonNo,
+                    amount:=amount)
+
+                Dim orderItems = packingList.Order.OrderItems
+                For Each item In orderItems
+                    Dim newPackingListCartonItem = PackingListCartonItem.NewPackingListCartonItem(organizationId:=Z_OrganizationID,
+                        userId:=Z_UserID,
+                        orderItemId:=item.RowID.Value,
+                        quantity:=item.QtyOrdered)
+
+                    newPackingListCarton.AddPackingListCartonItems(packingListCartonItems:=New List(Of PackingListCartonItem) From {newPackingListCartonItem})
+                Next
+
+                Await packingListCartonDataService.SaveManyAsync(userId:=Z_UserID, added:=New List(Of PackingListCarton) From {newPackingListCarton})
+            End Function)
+    End Function
+
 End Class

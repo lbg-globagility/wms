@@ -24,6 +24,11 @@ Public Class AddLineUpForm
         Dim _systemOwnerService = GetRequiredService(Of ISystemOwnerService)()
         _systemOwner = Await _systemOwnerService.GetCurrentSystemOwnerEntityAsync()
 
+        If IsThurston Then
+            Label16.Visible = False
+            txtCBM.Visible = False
+        End If
+
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
