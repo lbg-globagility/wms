@@ -47,6 +47,17 @@ Public Class AddLineUpForm
 
         Await GetAgentsAsync()
         Await GetHelpersAsync()
+
+        If IsThurston Then
+            For Each comboBox In gbLineUpInformation.Controls.
+                OfType(Of Control).
+                OfType(Of ComboBox).
+                ToArray()
+
+                SetStyleToDropDownList(comboBox)
+            Next
+        End If
+
     End Sub
 
 #Region "Functions"

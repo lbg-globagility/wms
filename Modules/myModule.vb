@@ -3362,4 +3362,9 @@ Module myModule
     Public Function GetRequiredService(Of T)() As T
         Return MainServiceProvider.GetRequiredService(Of T)
     End Function
+
+    Public Sub SetStyleToDropDownList(comboBox As ComboBox)
+        comboBox.DropDownStyle = ComboBoxStyle.DropDownList
+    End Sub
+
 End Module

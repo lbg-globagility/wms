@@ -55,6 +55,17 @@ Public Class PackingListForm
             conn.Close()
         End Try
         Me.Cursor = Cursors.Default
+
+
+        If IsThurston Then
+            For Each comboBox In gbPackingListInformation.Controls.
+                OfType(Of Control).
+                OfType(Of ComboBox).
+                ToArray()
+
+                SetStyleToDropDownList(comboBox)
+            Next
+        End If
     End Sub
 
     Private Sub PackingListForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing

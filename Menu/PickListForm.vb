@@ -29,7 +29,6 @@ Public Class PickListForm
     Private _systemOwner As WarehouseManagementSystem.Core.Entities.SystemOwner
 
     Private Async Sub PickListForm_Load(sender As Object, e As EventArgs) Handles Me.Load
-
         Dim _systemOwnerService = GetRequiredService(Of ISystemOwnerService)()
         _systemOwner = Await _systemOwnerService.GetCurrentSystemOwnerEntityAsync()
 
@@ -49,6 +48,16 @@ Public Class PickListForm
             ShowOrHideUserInterface()
         End Try
         Me.Cursor = Cursors.Default
+
+        If IsThurston Then
+            For Each comboBox In gbPickListInformation.Controls.
+                OfType(Of Control).
+                OfType(Of ComboBox).
+                ToArray()
+
+                SetStyleToDropDownList(comboBox)
+            Next
+        End If
     End Sub
 
     Private Sub PickListForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing

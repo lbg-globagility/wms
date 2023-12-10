@@ -1,5 +1,7 @@
 ﻿Imports MySql.Data.MySqlClient
+Imports WarehouseManagementSystem.Core.Entities
 Imports WarehouseManagementSystem.Core.Enums
+Imports WarehouseManagementSystem.Core.Interfaces
 
 Public Class ReceivingForm
     Dim manager As New sqlModule.Manager
@@ -19,8 +21,12 @@ Public Class ReceivingForm
     Dim rrtotalqtyreceivedgood, rrtotalqtyreceivedbad, rrtotalqtystocked As Integer
     Dim simplesearchphrase, datephrase, commonphrase, pagefilter1, pagefilter2, pagefilter3, pagefilter4 As String
     Dim rrsuppliercustomerid, rrorderid, rrproductcolorsizesid, rrproductid, rrproductbundleid, rrrelatedorderid, rrcontactid As Integer
+    Private _systemOwner As SystemOwner
 
-    Private Sub ReceivingForm_Load(sender As Object, e As EventArgs) Handles Me.Load
+    Private Async Sub ReceivingForm_Load(sender As Object, e As EventArgs) Handles Me.Load
+        Dim _systemOwnerService = GetRequiredService(Of ISystemOwnerService)()
+        _systemOwner = Await _systemOwnerService.GetCurrentSystemOwnerEntityAsync()
+
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
@@ -36,6 +42,17 @@ Public Class ReceivingForm
             conn.Close()
         End Try
         Me.Cursor = Cursors.Default
+
+        If IsThurston Then
+            For Each comboBox In gbReceivingInformation.Controls.
+                OfType(Of Control).
+                OfType(Of ComboBox).
+                ToArray()
+
+                SetStyleToDropDownList(comboBox)
+            Next
+        End If
+
     End Sub
 
     Private Sub ReceivingOrderForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
@@ -870,7 +887,7 @@ Public Class ReceivingForm
             If dgReceivingItems.Rows.Count <> 0 Then
                 For i As Integer = 0 To dgReceivingItems.Rows.Count - 1
                     If dgReceivingItems.Rows(i).Cells(ci_itemtype.Index).Value = "A" Then
-                        dgReceivingItems.Rows(i).DefaultCellStyle.BackColor = Color.BurlyWood
+                        dgReceivingItems.Rows(i).DefaultCellStyle.BackColor = Drawing.Color.BurlyWood
                     End If
                     If CStr(dgReceivingItems.Rows(i).Cells("ci_colorvalue").Value) <> "" Then
                         readcolor = colorconverter.ConvertFromString(CStr(dgReceivingItems.Rows(i).Cells("ci_colorvalue").Value))
@@ -1073,7 +1090,7 @@ Public Class ReceivingForm
 
     Private Sub pbAddSupplierCustomer_MouseEnter(sender As Object, e As EventArgs) Handles pbAddSupplierCustomer.MouseEnter
         Try
-            pbAddSupplierCustomer.BackColor = Color.MediumSpringGreen
+            pbAddSupplierCustomer.BackColor = Drawing.Color.MediumSpringGreen
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -1083,7 +1100,7 @@ Public Class ReceivingForm
 
     Private Sub pbAddSupplierCustomer_MouseLeave(sender As Object, e As EventArgs) Handles pbAddSupplierCustomer.MouseLeave
         Try
-            pbAddSupplierCustomer.BackColor = Color.Transparent
+            pbAddSupplierCustomer.BackColor = Drawing.Color.Transparent
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -1171,7 +1188,7 @@ Public Class ReceivingForm
 
     Private Sub pbAddReceivedBy_MouseEnter(sender As Object, e As EventArgs) Handles pbAddReceivedBy.MouseEnter
         Try
-            pbAddReceivedBy.BackColor = Color.MediumSpringGreen
+            pbAddReceivedBy.BackColor = Drawing.Color.MediumSpringGreen
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -1181,7 +1198,7 @@ Public Class ReceivingForm
 
     Private Sub pbAddReceivedBy_MouseLeave(sender As Object, e As EventArgs) Handles pbAddReceivedBy.MouseLeave
         Try
-            pbAddReceivedBy.BackColor = Color.Transparent
+            pbAddReceivedBy.BackColor = Drawing.Color.Transparent
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -2734,5 +2751,11 @@ Public Class ReceivingForm
     End Sub
 
 #End Region
+
+    Private ReadOnly Property IsThurston As Boolean
+        Get
+            Return _systemOwner.IsThurston
+        End Get
+    End Property
 
 End Class

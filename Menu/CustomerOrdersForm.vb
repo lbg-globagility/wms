@@ -63,6 +63,17 @@ Public Class CustomerOrdersForm
         Me.Cursor = Cursors.Default
 
         Await LoadInventoryLocations()
+
+        If IsThurston Then
+            For Each comboBox In gbCustomerOrderInformation.Controls.
+                OfType(Of Control).
+                OfType(Of ComboBox).
+                ToArray()
+
+                SetStyleToDropDownList(comboBox)
+            Next
+        End If
+
     End Sub
 
     Private Async Function GetAgentsAsync() As Task
@@ -5260,4 +5271,5 @@ Public Class CustomerOrdersForm
             Return _systemOwner.IsThurston
         End Get
     End Property
+
 End Class

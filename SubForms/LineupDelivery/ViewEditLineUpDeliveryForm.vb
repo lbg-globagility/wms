@@ -76,6 +76,25 @@ Public Class ViewEditLineUpDeliveryForm
 
         Await GetAgentsAsync()
         Await GetHelpersAsync()
+
+        If IsThurston Then
+            For Each comboBox In gbLineUpInformation.Controls.
+                OfType(Of Control).
+                OfType(Of ComboBox).
+                ToArray()
+
+                SetStyleToDropDownList(comboBox)
+            Next
+
+            For Each comboBox In FlowLayoutPanel1.Controls.
+                OfType(Of Control).
+                OfType(Of ComboBox).
+                ToArray()
+
+                SetStyleToDropDownList(comboBox)
+            Next
+        End If
+
     End Function
 
     Private Async Function GetAgentsAsync() As Task
