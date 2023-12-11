@@ -2146,7 +2146,7 @@ Public Class PurchaseForm
                         Exit Try
                     End If
                     M_I_OrdersA(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, posupplierid, txtSupplierOrderNo.Text, OrderType:=OrderType.PO.ToString(), dtpSupplierOrderDate.Value, dtpTargetDeliveryDate.Value,
-                           cboSupplierName.Text, txtComments.Text, txtStatus.Text, Math.Round(poitotalprice, 2), "", Me)
+                           cboSupplierName.Text, txtComments.Text, txtStatus.Text, Math.Round(poitotalprice, 2), Nothing, Me)
                     poorderid = globalorderidsp
                     If dgSupplierOrderItems.Rows.Count <> 0 Then
                         For a = 0 To dgSupplierOrderItems.Rows.Count - 1
