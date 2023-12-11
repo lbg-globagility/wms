@@ -2,7 +2,7 @@
 using WarehouseManagementSystem.Core.Interfaces.DomainServices.Base;
 using WarehouseManagementSystem.Core.Interfaces.Repositories;
 
-namespace WarehouseManagementSystem.Infrastructure.Data.Services.Base
+namespace WarehouseManagementSystem.Infrastructure.Data
 {
     public abstract class BaseDataService : IBaseDataService
     {

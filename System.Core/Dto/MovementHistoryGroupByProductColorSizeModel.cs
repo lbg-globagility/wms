@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using WarehouseManagementSystem.Core.Entities;
-using WarehouseManagementSystem.Core.Exceptions;
 
 namespace WarehouseManagementSystem.Core.Dto
 {
@@ -33,9 +32,13 @@ namespace WarehouseManagementSystem.Core.Dto
 
         public ProductColorSize ProductColorSize => MovementHistories.FirstOrDefault().ProductColorSize;
 
+        public bool IsTransactionTypeIsFrom => MovementHistories.FirstOrDefault()?.IsTransactionTypeIsFrom ?? false;
+
+        public bool IsTransactionTypeIsTo => MovementHistories.FirstOrDefault()?.IsTransactionTypeIsTo ?? false;
+
         public ProductInventoryLocation ProductInventoryLocation => MovementHistories.FirstOrDefault().ProductInventoryLocation;
 
-        public string ProductCode => MovementHistories.FirstOrDefault().ProductCode;
+        public string ProductCode => MovementHistories.FirstOrDefault(t => !string.IsNullOrEmpty(t.ProductCode))?.ProductCode;
 
         public int QtyToApply => MovementHistories.Sum(t => t.QtyToApply.Value);
 

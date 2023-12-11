@@ -1,11 +1,14 @@
 ﻿Option Strict On
 
+Imports log4net
 Imports Microsoft.EntityFrameworkCore
 Imports WarehouseManagementSystem.Core.Exceptions
 
 Namespace Global.WarehouseManagementSystem.Desktop.Utilities
 
     Public Class FunctionUtils
+
+        Private Shared ReadOnly _logger As ILog = LogManager.GetLogger("ExceptionLogger")
 
         Public Shared Async Function TryCatchFunctionAsync(
                 messageTitle As String,
@@ -17,18 +20,23 @@ Namespace Global.WarehouseManagementSystem.Desktop.Utilities
 
                 Await action()
             Catch ex As ArgumentException
+                _logger.Error(baseExceptionErrorMessage, ex)
+
                 MessageBoxHelper.ErrorMessage(ex.Message, messageTitle)
 
                 If errorCallBack IsNot Nothing Then
                     errorCallBack()
                 End If
             Catch ex As BusinessLogicException
+                _logger.Error(baseExceptionErrorMessage, ex)
+
                 MessageBoxHelper.ErrorMessage(ex.Message, messageTitle)
 
                 If errorCallBack IsNot Nothing Then
                     errorCallBack()
                 End If
             Catch ex As DbUpdateException
+                _logger.Error(baseExceptionErrorMessage, ex)
 
                 If dbUpdateCallBack IsNot Nothing Then
                     dbUpdateCallBack(ex)
@@ -49,6 +57,8 @@ Namespace Global.WarehouseManagementSystem.Desktop.Utilities
                 baseExceptionErrorMessage As String,
                 errorCallBack As Action,
                 ex As Exception)
+
+            _logger.Error(baseExceptionErrorMessage, ex)
 
             Debugger.Break()
 

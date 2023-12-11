@@ -1,0 +1,4 @@
+UPDATE productcolorsizes pcs
+SET pcs.`Status`='Active'
+WHERE pcs.`Status` IS NULL
+;

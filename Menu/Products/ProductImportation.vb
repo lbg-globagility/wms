@@ -21,7 +21,7 @@ Public Class ProductImportation
     Public Async Function SaveAsync() As Task
         Await FunctionUtils.TryCatchFunctionAsync("Import Product(s)",
             Async Function()
-                Dim colorDataService = MainServiceProvider.GetRequiredService(Of IColorDataService)
+                Dim colorDataService = GetRequiredService(Of IColorDataService)()
                 Dim groupByColorList = _productRowRecords.
                     GroupBy(Function(t) t.Colors.Trim()).
                     ToArray()
@@ -32,7 +32,7 @@ Public Class ProductImportation
                     userId:=Z_UserID,
                     names:=colorNames)
 
-                Dim categoryDataService = MainServiceProvider.GetRequiredService(Of ICategoryDataService)
+                Dim categoryDataService = GetRequiredService(Of ICategoryDataService)()
                 Dim groupByProductCategoryList = _productRowRecords.
                     GroupBy(Function(t) t.Category.Trim()).
                     ToList()
@@ -48,7 +48,7 @@ Public Class ProductImportation
                     Select(Function(s) s.Key.Trim()).
                     ToArray()
 
-                Dim productDataService = MainServiceProvider.GetRequiredService(Of IProductDataService)
+                Dim productDataService = GetRequiredService(Of IProductDataService)()
                 Dim products = Await productDataService.GetManyByProductCodesAsync(organizationId:=Z_OrganizationID,
                     productCodes:=productCodes)
 
@@ -103,10 +103,10 @@ Public Class ProductImportation
                     Next
                 Next
 
-                Dim productColorDataService = MainServiceProvider.GetRequiredService(Of IProductColorDataService)
+                Dim productColorDataService = GetRequiredService(Of IProductColorDataService)()
                 Await productColorDataService.SaveManyAsync(entities:=newProductColors, userId:=Z_UserID)
 
-                Dim inventoryLocationDataService = MainServiceProvider.GetRequiredService(Of IInventoryLocationDataService)
+                Dim inventoryLocationDataService = GetRequiredService(Of IInventoryLocationDataService)()
 
                 Await inventoryLocationDataService.PopulateAllInventoryLocationWithProductColorSizesAsync(
                     organizationId:=Z_OrganizationID,

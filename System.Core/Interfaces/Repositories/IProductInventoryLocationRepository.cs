@@ -11,5 +11,8 @@ namespace WarehouseManagementSystem.Core.Interfaces.Repositories
         Task<List<ProductInventoryLocation>> GetByInventoryLocationIdAsync(int inventoryLocationId);
 
         Task<List<ProductInventoryLocation>> GetProductInventoryLocationsZeroQtyAsync();
+        Task<ProductInventoryLocation> GetByInventoryLocationIdAndProductColorSizeIdAsync(int inventoryLocationId, int productColorSizeId);
+
+        Task<ICollection<ProductInventoryLocation>> GetManyByCompositeKeysAsync(int organizationId, int inventoryLocationId, int productColorId);
     }
 }

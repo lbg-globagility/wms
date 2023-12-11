@@ -40,7 +40,7 @@ namespace WarehouseManagementSystem.Core.Entities
             decimal? unitPrice = null)
         {
             OrganizationID = organizationId;
-            CreatedBy = userId;
+            AuditUser(userId);
             ProductColorSizeID = productColorSizeId;
             UnitPrice = unitPrice;
             UnitOfMeasure = unitOfMeasure;
@@ -60,6 +60,6 @@ namespace WarehouseManagementSystem.Core.Entities
                 unitOfMeasure: unitOfMeasure,
                 unitPrice: unitPrice);
 
-        public int QtyOrderable => (TotalReserveQty - TotalAllocatedQty) ?? 0;
+        public int TotalOrderableQty => (TotalAvailableQty ?? 0) - (TotalAllocatedQty ?? 0);
     }
 }

@@ -52,7 +52,9 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
                 .Where(o => o.OrganizationID == organizationId)
                 .AsQueryable();
 
-            query = StockTransferNavMapping(orderType, query);
+            query = StockTransferNavMapping(query, orderType);
+
+            query = StockAdjustmentNavMapping(query, orderType);
 
             return Task.FromResult(
                 query
@@ -83,7 +85,9 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
                 .Where(o => o.OrganizationID == organizationId)
                 .AsQueryable();
 
-            query = StockTransferNavMapping(orderType, query);
+            query = StockTransferNavMapping(query, orderType);
+
+            query = StockAdjustmentNavMapping(query, orderType);
 
             return query;
         }
@@ -99,18 +103,42 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
         {
             var query = _context.Orders
                 .Include(o => o.OrderItems)
+                .Include(o => o.UserCreate)
+                .Include(o => o.UserUpdate)
                 .AsNoTracking()
                 .Where(o => o.RowID == order.RowID)
                 .AsQueryable();
 
-            query = StockTransferNavMapping(order.OrderType, query);
+            query = StockTransferNavMapping(query, order.OrderType);
+
+            query = StockAdjustmentNavMapping(query, order.OrderType);
 
             return await query.FirstOrDefaultAsync();
         }
 
-        private IQueryable<Order> StockTransferNavMapping(OrderType orderType, IQueryable<Order> query)
+        private IQueryable<Order> StockTransferNavMapping(IQueryable<Order> query, OrderType orderType = default)
         {
             if (orderType == OrderType.ST)
+                query = query
+                    .Include(o => o.MovementHistories)
+                        .ThenInclude(m => m.ProductInventoryLocation)
+                            .ThenInclude(pil => pil.ProductColorSize)
+                                .ThenInclude(pcs => pcs.ProductColor)
+                                    .ThenInclude(pc => pc.Product)
+                    .Include(o => o.MovementHistories)
+                        .ThenInclude(m => m.ProductInventoryLocation)
+                            .ThenInclude(pil => pil.ProductColorSize)
+                                .ThenInclude(pcs => pcs.ProductColor)
+                                    .ThenInclude(pc => pc.Color)
+                    .Include(o => o.MovementHistories)
+                        .ThenInclude(m => m.ProductInventoryLocation)
+                            .ThenInclude(pil => pil.RackShelfColumn);
+            return query;
+        }
+
+        private IQueryable<Order> StockAdjustmentNavMapping(IQueryable<Order> query, OrderType orderType = default)
+        {
+            if (orderType == OrderType.SA)
                 query = query
                     .Include(o => o.MovementHistories)
                         .ThenInclude(m => m.ProductInventoryLocation)

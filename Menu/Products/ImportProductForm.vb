@@ -52,7 +52,7 @@ Public Class ImportProductForm
             Select(Function(s) s.Key).
             ToArray()
 
-        Dim productDataService = MainServiceProvider.GetRequiredService(Of IProductDataService)
+        Dim productDataService = GetRequiredService(Of IProductDataService)()
         'Dim products = Await productDataService.GetManyByProductCodesAsync(organizationId:=Z_OrganizationID,
         '    productCodes:=groupByColorList)
         Dim products = Await productDataService.GetManyByOrganizationIdAsync(organizationId:=Z_OrganizationID)

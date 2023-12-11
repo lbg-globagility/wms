@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using WarehouseManagementSystem.Core.Entities.Base;
-using WarehouseManagementSystem.Utilities.Attributes;
 
 namespace WarehouseManagementSystem.Core.Entities
 {
@@ -54,7 +53,7 @@ namespace WarehouseManagementSystem.Core.Entities
             string columnName = "TotalAvailableQty")
         {
             OrganizationID = organizationId;
-            CreatedBy = userId;
+            AuditUser(userId);
             ProductColorSizeID = productColorSizeID;
             OrderID = orderId;
             ProductInventoryLocationIDA = productInventoryLocationId;
@@ -84,8 +83,8 @@ namespace WarehouseManagementSystem.Core.Entities
                 transactionType: transactionType,
                 columnName: columnName);
 
-        public bool IsTransactionTypeIsFrom => TransactionType.Contains("From");
-        public bool IsTransactionTypeIsTo => TransactionType.Contains("To");
+        public bool IsTransactionTypeIsFrom => TransactionType?.Contains("From") ?? false;
+        public bool IsTransactionTypeIsTo => TransactionType?.Contains("To") ?? false;
 
         public void RecomputeNewQty()
         {

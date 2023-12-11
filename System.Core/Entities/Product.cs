@@ -58,7 +58,7 @@ namespace WarehouseManagementSystem.Core.Entities
             string sku2)
         {
             OrganizationID = organizationId;
-            CreatedBy = userId;
+            AuditUser(userId);
             CategoryID = categoryId;
             ProductCode = productCode;
             ProductName = productCode;

@@ -13,6 +13,7 @@ Public Class PickListForm
     Dim sqlrd As MySqlDataReader
     Dim plnewpicklist As New ArrayList
     Dim printdataset As New DataSetA.SetADataTable
+    Dim printdatasetthurston As New DataSetA.SetGDataTable
     Dim printdatatable As New DataTable
     Dim sqlTran As MySqlTransaction
     Dim sqlquery As String
@@ -28,8 +29,7 @@ Public Class PickListForm
     Private _systemOwner As WarehouseManagementSystem.Core.Entities.SystemOwner
 
     Private Async Sub PickListForm_Load(sender As Object, e As EventArgs) Handles Me.Load
-
-        Dim _systemOwnerService = MainServiceProvider.GetRequiredService(Of ISystemOwnerService)
+        Dim _systemOwnerService = GetRequiredService(Of ISystemOwnerService)()
         _systemOwner = Await _systemOwnerService.GetCurrentSystemOwnerEntityAsync()
 
         Me.Cursor = Cursors.WaitCursor
@@ -48,6 +48,16 @@ Public Class PickListForm
             ShowOrHideUserInterface()
         End Try
         Me.Cursor = Cursors.Default
+
+        If IsThurston Then
+            For Each comboBox In gbPickListInformation.Controls.
+                OfType(Of Control).
+                OfType(Of ComboBox).
+                ToArray()
+
+                SetStyleToDropDownList(comboBox)
+            Next
+        End If
     End Sub
 
     Private Sub PickListForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
@@ -242,11 +252,11 @@ Public Class PickListForm
         End Try
     End Sub
 
-    Sub enableANDvisibleMS(ByVal enable1 As Boolean, ByVal enable2 As Boolean, ByVal enable3 As Boolean, ByVal visible1 As Boolean)
+    Private Sub enableANDvisibleMS(ByVal enable1 As Boolean, ByVal enable2 As Boolean, ByVal enable3 As Boolean, ByVal visible1 As Boolean)
         Try
             msNew.Enabled = enable1
             msSave.Enabled = enable2
-            msPrint.Enabled = enable3
+            'msPrint.Enabled = enable3
             msOrder.Visible = visible1
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
@@ -339,9 +349,9 @@ Public Class PickListForm
     Sub getTotalQtyPickedB(ByVal ipicklistorderid As Integer, ByVal iproductinventorylocationid As Integer)
         Try
             pltotalqtypicked = 0
-            If conn1.State = ConnectionState.Open Then conn1.Close()
+            If conn1.State = ConnectionState.Closed Then conn1.Open()
             Dim dtTQo As New DataTable
-            dtTQo = getDataTableForSQL("SELECT COALESCE(pli.qtypicked,0) FROM picklistorderitems pli WHERE pli.organizationid = " & Z_OrganizationID & " AND pli.picklistorderid = " & ipicklistorderid & " AND pli.productinventorylocationid = " & iproductinventorylocationid & " AND pli.`status` != 'Inactive' ")
+            dtTQo = getDataTableForSQL("SELECT COALESCE(pli.qtypicked,0) FROM picklistorderitems pli WHERE pli.organizationid = " & Z_OrganizationID & " AND pli.picklistorderid = " & ipicklistorderid & " AND pli.productinventorylocationid = " & iproductinventorylocationid & "")
             If dtTQo.Rows.Count <> 0 Then
                 pltotalqtypicked = dtTQo.Rows(0)(0)
             Else
@@ -349,8 +359,6 @@ Public Class PickListForm
             End If
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
-        Finally
-            conn1.Close()
         End Try
     End Sub
 
@@ -468,8 +476,8 @@ Public Class PickListForm
             countpagenum = 0
             If conn.State = ConnectionState.Open Then conn.Close()
             Dim dtCid As New DataTable
-            dtCid = getDataTableForSQL("SELECT COALESCE(COUNT(pl.rowid),0) FROM picklist pl LEFT JOIN contacts co ON pl.contactid = co.rowid WHERE pl.organizationid = " & Z_OrganizationID & " AND " &
-                            "(pl.picklistno LIKE ""%" & esearchstring & "%"" OR pl.status LIKE ""%" & esearchstring & "%"" OR co.firstname LIKE ""%" & esearchstring & "%"" OR co.lastname LIKE ""%" & esearchstring & "%"") ")
+            dtCid = getDataTableForSQL("Select COALESCE(COUNT(pl.rowid),0) FROM picklist pl LEFT JOIN contacts co On pl.contactid = co.rowid WHERE pl.organizationid = " & Z_OrganizationID & " And " &
+                            "(pl.picklistno Like ""%" & esearchstring & "%"" Or pl.status Like ""%" & esearchstring & "%"" Or co.firstname Like ""%" & esearchstring & "%"" Or co.lastname Like ""%" & esearchstring & "%"") ")
             If dtCid.Rows.Count <> 0 Then
                 countpagenum = dtCid.Rows(0)(0)
             Else
@@ -508,7 +516,7 @@ Public Class PickListForm
             countpagenum = 0
             If conn.State = ConnectionState.Open Then conn.Close()
             Dim dtCid As New DataTable
-            dtCid = getDataTableForSQL("SELECT COALESCE(COUNT(pl.rowid),0) FROM picklist pl WHERE pl.organizationid = " & Z_OrganizationID & " AND " &
+            dtCid = getDataTableForSQL("Select COALESCE(COUNT(pl.rowid),0) FROM picklist pl WHERE pl.organizationid = " & Z_OrganizationID & " And " &
                             "(" & edatesearch & " >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' " &
                             "AND " & edatesearch & " <= '" & dtpToSearch.Value.Year & "-" & dtpToSearch.Value.Month & "-" & dtpToSearch.Value.Day & "' ) ")
             If dtCid.Rows.Count <> 0 Then
@@ -1123,6 +1131,28 @@ Public Class PickListForm
         End Try
     End Sub
 
+    Function getPickQty(ByVal orderItemId As Integer)
+        Try
+            If conn.State = ConnectionState.Closed Then conn.Open()
+
+            Dim dtTQo As New DataTable
+            dtTQo = getDataTableForSQL("SELECT ploi.QtyPicked
+	                                        FROM picklistorderitems ploi JOIN 
+	                                        (orderitems oi JOIN picklistorders plo ON oi.RowID = plo.OrderItemID) ON ploi.PickListOrderID = plo.RowID
+	
+	                                        WHERE 
+		                                        oi.RowID = " & orderItemId & "")
+
+            If dtTQo.Rows.Count <> 0 Then
+                Return dtTQo.Rows(0)(0)
+            End If
+            Return 0
+
+        Catch ex As Exception
+            MsgBox(getErrExcptn(ex, Me.Name))
+        End Try
+    End Function
+
 #End Region
 
 #Region "Colors"
@@ -1369,7 +1399,7 @@ Public Class PickListForm
             If conn3.State = ConnectionState.Closed Then conn3.Open()
             Dim sql1 As String = "SELECT pil.rowid,COALESCE(pil.totalavailableqty,0),COALESCE(pil.totalallocatedqty,0) FROM productinventorylocation pil LEFT JOIN rackshelfcolumn rsc ON pil.rackshelfcolumnid = rsc.rowid " &
                     "WHERE pil.organizationid = " & Z_OrganizationID & " AND rsc.inventorylocationid = " & iinventorylocationid & " AND pil.productcolorsizeid = " & iproductcolorsizeid & " " &
-                    "AND pil.totalavailableqty - pil.totalallocatedqty > 0 ORDER BY pil.totalavailableqty ASC "
+                    "AND ((IFNULL(pil.totalavailableqty,0) - IFNULL(pil.totalallocatedqty,0)) > 0) ORDER BY pil.totalavailableqty ASC "
             Dim cmd1 As New MySqlCommand(sql1, conn3)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             While reader1.Read()
@@ -1606,6 +1636,46 @@ Public Class PickListForm
                         productimage = Nothing
                     End If
                     printdataset.AddSetARow(CStr(reader1(0)), CStr(reader1(1)), CStr(reader1(2)), CStr(reader1(3)), CInt(reader1(4)), "Pick List No.: " & CStr(reader1(5)) & "", "Picker Name: " & CStr(reader1(6)) & "", "Pick List Date: " & CStr(reader1(7)) & "", "Location Name: " & CStr(reader1(8)) & "", CStr(reader1(10)), "", productimage, "", "", "")
+                End If
+            End While
+            reader1.Close()
+        Catch ex As Exception
+            MsgBox(getErrExcptn(ex, Me.Name))
+        Finally
+            conn.Close()
+        End Try
+    End Sub
+
+    Sub printPickListThurston(ByVal orderNumber As Integer, ByVal iinventorylocationid As Integer)
+        Try
+            printdatasetthurston.Clear()
+            If conn.State = ConnectionState.Closed Then conn.Open()
+            Dim sql1 As String = "SELECT DISTINCT  o.OrderDate AS Date
+	                                , o.OrderNumber AS 'S.O. No.'
+	                                , o.CustomerAddress AS 'Ship To'
+	                                , o.TargetDate AS 'Ship Date'
+	                                , p.ProductCode AS Item
+	                                , CONCAT(p.Description	, ' ', c.ColorName, ' ', pcs.Size ) AS Description	
+	                                , oi.QtyOrdered AS Needed
+	                                , oi.RowID AS OrderItemID
+
+
+                                FROM 
+                                ((((((orderitems oi JOIN productcolorsizes pcs ON oi.ProductColorSizeID = pcs.RowID) 
+                                JOIN orders o ON oi.OrderID = o.RowID)
+                                JOIN productcolors pc ON pcs.ProductColorId = pc.RowID)
+                                JOIN products p ON pc.ProductID = p.RowID)
+                                JOIN colors c ON pc.ColorID = c.RowID)
+
+                                JOIN picklistorders plo ON o.RowID = plo.OrderID)
+                                WHERE o.OrderNumber = " & orderNumber & "
+                                ORDER BY p.ProductCode ASC"
+            Dim cmd1 As New MySqlCommand(sql1, conn)
+            cmd1.CommandTimeout = commantimeoutlimit
+            Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
+            While reader1.Read()
+                If reader1.HasRows Then
+                    printdatasetthurston.AddSetGRow("", CStr(reader1(0)), CStr(reader1(1)), CStr(reader1(2)), CStr(reader1(3)), "", CStr(reader1(4)), CStr(reader1(5)), CStr(reader1(6)), getPickQty(CInt(CStr(reader1(7)))), "", "")
                 End If
             End While
             reader1.Close()
@@ -1952,7 +2022,13 @@ Public Class PickListForm
                     Else
                         msSaveRSC.Enabled = fraud
                     End If
-                    getInventorylocationIDA(cboLocationName.Text, Me)
+
+                    If IsThurston Then
+                        getInventorylocationIDA(If(dgCustomerOrders.CurrentRow?.Cells(co_inventorylocation.Name).Value, cboLocationName.Text), Me)
+                    Else
+                        getInventorylocationIDA(cboLocationName.Text, Me)
+                    End If
+
                     plinventorylocationdid = globalinventorylocationid
                     If plinventorylocationdid <> 0 Then
                         displayRackShelfColumn(CInt(dgCustomerOrderItems.CurrentRow.Cells("ci_pcsrowid").Value), plinventorylocationdid)
@@ -2254,7 +2330,7 @@ Public Class PickListForm
                     End If
                     If cue = "Edit" Then
                         getPickListStatus(CInt(dgPickList.CurrentRow.Cells("pl_rowid").Value), Me)
-                        U_PickList(CInt(dgPickList.CurrentRow.Cells("pl_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, plinventorylocationdid, plcontactid, txtComments.Text, If(globalpickliststatus = "New", "Modified", globalpickliststatus), Me)
+                        U_PickList(RowID:=CInt(dgPickList.CurrentRow.Cells("pl_rowid").Value), LastUpd:=Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), LastUpdBy:=Z_UserID, InventoryLocationID:=plinventorylocationdid, ContactID:=plcontactid, Comments:=txtComments.Text, Status:=If(globalpickliststatus = "New", "Modified", globalpickliststatus), globalformname:=Me)
                     End If
                     If myModule.systemerrorfound = False Then
                         myBalloon("Successfully Updated", "Update", lblsavemsg, -15, -65)
@@ -2502,7 +2578,7 @@ Public Class PickListForm
         Me.Cursor = Cursors.Default
     End Sub
 
-    Private Sub msPrint_Click(sender As Object, e As EventArgs) Handles msPrint.Click
+    Private Async Sub msPrint_Click(sender As Object, e As EventArgs) Handles msPrint.Click
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
@@ -2554,18 +2630,37 @@ Public Class PickListForm
                             U_PickList(CInt(dgPickList.CurrentRow.Cells("pl_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, plinventorylocationdid, If(plcontactid = 0, DBNull.Value, plcontactid), txtComments.Text, txtStatus.Text, Me)
                             If myModule.systemerrorfound = False Then
                                 getUserName(Z_UserID, Me)
-                                printPickList(CInt(dgPickList.CurrentRow.Cells("pl_rowid").Value), plinventorylocationdid)
-                                Dim printreport As New PickListPrint
-                                Dim openreportviewer As New ReportViewer
-                                openreportviewer.CrystalReportViewer.ReportSource = printreport
-                                printdatatable = printdataset
-                                printreport.SetDataSource(printdatatable)
-                                openreportviewer.Show()
-                                printdatatable.Dispose()
-                                printdatatable = Nothing
-                                printdataset.Clear()
-                            End If
-                            Exit Try
+                                Dim systemOwnerService = MainServiceProvider.GetRequiredService(Of ISystemOwnerService)
+                                Dim currentSystemOwner = Await systemOwnerService.GetCurrentSystemOwnerEntityAsync()
+                                If currentSystemOwner.IsThurston Then
+                                        If dgCustomerOrders.CurrentRow.Selected Then
+                                            printPickListThurston(CInt(dgCustomerOrders.CurrentRow.Cells("co_customerorderno").Value), plinventorylocationdid)
+                                            Dim printreport As New PickList
+                                            Dim openreportviewer As New ReportViewer
+                                            openreportviewer.CrystalReportViewer.ReportSource = printreport
+                                            printdatatable = printdatasetthurston
+                                            printreport.SetDataSource(printdatatable)
+                                            openreportviewer.Show()
+                                            printdatatable.Dispose()
+                                            printdatatable = Nothing
+                                            printdatasetthurston.Clear()
+                                        Else
+                                            MessageBox.Show("Select a customer order")
+                                        End If
+                                    Else
+                                        printPickList(CInt(dgPickList.CurrentRow.Cells("pl_rowid").Value), plinventorylocationdid)
+                                        Dim printreport As New PickListPrint
+                                        Dim openreportviewer As New ReportViewer
+                                        openreportviewer.CrystalReportViewer.ReportSource = printreport
+                                        printdatatable = printdataset
+                                        printreport.SetDataSource(printdatatable)
+                                        openreportviewer.Show()
+                                        printdatatable.Dispose()
+                                        printdatatable = Nothing
+                                        printdataset.Clear()
+                                    End If
+                                End If
+                                Exit Try
                         Else
                             Exit Try
                         End If
@@ -2580,16 +2675,36 @@ Public Class PickListForm
                         U_PickList(CInt(dgPickList.CurrentRow.Cells("pl_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, plinventorylocationdid, If(plcontactid = 0, DBNull.Value, plcontactid), txtComments.Text, txtStatus.Text, Me)
                         If myModule.systemerrorfound = False Then
                             getUserName(Z_UserID, Me)
-                            printPickList(CInt(dgPickList.CurrentRow.Cells("pl_rowid").Value), plinventorylocationdid)
-                            Dim printreport As New PickListPrint
-                            Dim openreportviewer As New ReportViewer
-                            openreportviewer.CrystalReportViewer.ReportSource = printreport
-                            printdatatable = printdataset
-                            printreport.SetDataSource(printdatatable)
-                            openreportviewer.Show()
-                            printdatatable.Dispose()
-                            printdatatable = Nothing
-                            printdataset.Clear()
+                            Dim systemOwnerService = MainServiceProvider.GetRequiredService(Of ISystemOwnerService)
+                            Dim currentSystemOwner = Await systemOwnerService.GetCurrentSystemOwnerEntityAsync()
+                            If currentSystemOwner.IsThurston Then
+                                If dgCustomerOrders.CurrentRow.Selected Then
+                                    printPickListThurston(CInt(dgCustomerOrders.CurrentRow.Cells("co_customerorderno").Value), plinventorylocationdid)
+                                    Dim printreport As New PickList
+                                    Dim openreportviewer As New ReportViewer
+                                    openreportviewer.CrystalReportViewer.ReportSource = printreport
+                                    printdatatable = printdatasetthurston
+                                    printreport.SetDataSource(printdatatable)
+                                    openreportviewer.Show()
+                                    printdatatable.Dispose()
+                                    printdatatable = Nothing
+                                    printdatasetthurston.Clear()
+                                Else
+                                    MessageBox.Show("Select a customer order")
+                                End If
+                            Else
+                                printPickList(CInt(dgPickList.CurrentRow.Cells("pl_rowid").Value), plinventorylocationdid)
+                                Dim printreport As New PickListPrint
+                                Dim openreportviewer As New ReportViewer
+                                openreportviewer.CrystalReportViewer.ReportSource = printreport
+                                printdatatable = printdataset
+                                printreport.SetDataSource(printdatatable)
+                                openreportviewer.Show()
+                                printdatatable.Dispose()
+                                printdatatable = Nothing
+                                printdataset.Clear()
+                            End If
+
                         End If
                     End If
                 End If

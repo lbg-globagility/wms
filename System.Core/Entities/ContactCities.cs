@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WarehouseManagementSystem.Core.Entities
 {
     [Table("contactcities")]
     public partial class ContactCity
     {
-
         public int RowId { get; set; }
         public int ContactID { get; set; }
 

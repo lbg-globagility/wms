@@ -28,8 +28,8 @@ Partial Class DeliveryTimestampTrackingForm
         Me.dtpTime = New System.Windows.Forms.DateTimePicker()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.Panel2 = New System.Windows.Forms.Panel()
-        Me.btnSave = New System.Windows.Forms.Button()
         Me.btnCancel = New System.Windows.Forms.Button()
+        Me.btnSave = New System.Windows.Forms.Button()
         Me.Panel1.SuspendLayout()
         Me.Panel2.SuspendLayout()
         Me.SuspendLayout()
@@ -68,6 +68,7 @@ Partial Class DeliveryTimestampTrackingForm
         Me.dtpTime.Format = System.Windows.Forms.DateTimePickerFormat.Custom
         Me.dtpTime.Location = New System.Drawing.Point(174, 45)
         Me.dtpTime.Name = "dtpTime"
+        Me.dtpTime.ShowCheckBox = True
         Me.dtpTime.ShowUpDown = True
         Me.dtpTime.Size = New System.Drawing.Size(100, 22)
         Me.dtpTime.TabIndex = 1
@@ -95,6 +96,16 @@ Partial Class DeliveryTimestampTrackingForm
         Me.Panel2.Size = New System.Drawing.Size(296, 43)
         Me.Panel2.TabIndex = 3
         '
+        'btnCancel
+        '
+        Me.btnCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnCancel.Location = New System.Drawing.Point(209, 8)
+        Me.btnCancel.Name = "btnCancel"
+        Me.btnCancel.Size = New System.Drawing.Size(75, 23)
+        Me.btnCancel.TabIndex = 0
+        Me.btnCancel.Text = "Cancel"
+        Me.btnCancel.UseVisualStyleBackColor = True
+        '
         'btnSave
         '
         Me.btnSave.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
@@ -105,16 +116,6 @@ Partial Class DeliveryTimestampTrackingForm
         Me.btnSave.TabIndex = 0
         Me.btnSave.Text = "OK"
         Me.btnSave.UseVisualStyleBackColor = True
-        '
-        'btnCancel
-        '
-        Me.btnCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnCancel.Location = New System.Drawing.Point(209, 8)
-        Me.btnCancel.Name = "btnCancel"
-        Me.btnCancel.Size = New System.Drawing.Size(75, 23)
-        Me.btnCancel.TabIndex = 0
-        Me.btnCancel.Text = "Cancel"
-        Me.btnCancel.UseVisualStyleBackColor = True
         '
         'DeliveryTimestampTrackingForm
         '

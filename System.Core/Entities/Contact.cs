@@ -41,6 +41,7 @@ namespace WarehouseManagementSystem.Core.Entities
 
     public partial class Contact
     {
+        public static string DEFAULT_NAME = "DEFAULT";
         private Contact()
         { }
 
@@ -54,8 +55,7 @@ namespace WarehouseManagementSystem.Core.Entities
             int regionId,
             int provinceId,
             List<ContactCity> cities,
-            string status = "Active"
-            )
+            string status = "Active")
         {
             OrganizationID = organizationId;
             LastName = lastName;
@@ -68,6 +68,25 @@ namespace WarehouseManagementSystem.Core.Entities
             ProvinceID = provinceId;
             Status = status;
             Cities = cities;
+        }
+
+        public Contact(int organizationId,
+            string lastName,
+            string firstName,
+            ContactType type,
+            string workPhone,
+            string email,
+            string comments,
+            string status = "Active")
+        {
+            OrganizationID = organizationId;
+            LastName = lastName;
+            FirstName = firstName;
+            Type = type;
+            WorkPhone = workPhone;
+            EmailAddress = email;
+            Comments = comments;
+            Status = status;
         }
 
         public bool IsAgent => Type == ContactType.Agent;
@@ -108,5 +127,20 @@ namespace WarehouseManagementSystem.Core.Entities
                 provinceId: provinceId,
                 status: status,
                 cities: cities);
+
+        public static Contact BlankAgent(int organizationId)
+        {
+            var blankAgent = new Contact(organizationId: organizationId,
+                lastName: "NO AGENT",
+                firstName: string.Empty,
+                type: ContactType.Agent,
+                workPhone: string.Empty,
+                email: string.Empty,
+                comments: string.Empty);
+            
+            blankAgent.RowID = 0;
+
+            return blankAgent;
+        }
     }
 }

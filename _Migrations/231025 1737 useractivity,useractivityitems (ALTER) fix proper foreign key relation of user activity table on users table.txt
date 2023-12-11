@@ -1,0 +1,32 @@
+#5:37 PM 10/25/2023
+
+ALTER TABLE `useractivity`
+	DROP FOREIGN KEY IF EXISTS `FK_useractivity_aspnetusers_UserId`;
+
+ALTER TABLE `useractivity`
+	DROP FOREIGN KEY IF EXISTS `FK_useractivity_users`;
+
+ALTER TABLE `useractivity`
+	DROP INDEX IF EXISTS `FK_useractivity_users`;
+
+ALTER TABLE `useractivity`
+	ADD CONSTRAINT `FK_useractivity_users` FOREIGN KEY (`UserId`) REFERENCES `users` (`RowID`) ON UPDATE NO ACTION ON DELETE NO ACTION;
+
+
+
+
+
+
+
+
+ALTER TABLE `useractivityitem`
+	DROP FOREIGN KEY IF EXISTS `FK_useractivityitem_aspnetusers_ChangedUserId`;
+
+ALTER TABLE `useractivityitem`
+	DROP INDEX IF EXISTS `FK_useractivityitem_aspnetusers_ChangedUserId`;
+
+ALTER TABLE `useractivityitem`
+	DROP FOREIGN KEY IF EXISTS `FK_useractivityitem_users`;
+
+ALTER TABLE `useractivityitem`
+	ADD CONSTRAINT `FK_useractivityitem_users` FOREIGN KEY (`ChangedUserId`) REFERENCES `users` (`RowID`) ON UPDATE NO ACTION ON DELETE NO ACTION;

@@ -2,8 +2,9 @@
 
 Imports Microsoft.Extensions.DependencyInjection
 Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
-
-Public Class ProductSelectorDialog
+Imports WarehouseManagementSystem.Core.Interfaces.Repositories
+Imports WarehouseManagementSystem.Utilities.Extensions
+Public Class ProductColorSizeSelectorDialog
     Private _baseSource As List(Of ProductColorSizeModel)
     Private ReadOnly _inventoryLocationId As Integer
     Private ReadOnly _picp As ProductImageConfigParser
@@ -40,24 +41,41 @@ Public Class ProductSelectorDialog
     End Sub
 
     Private Async Function GetProductColorSizes() As Task(Of List(Of ProductColorSizeModel))
-        'Dim productColorSizeRepository = MainServiceProvider.GetRequiredService(Of IProductColorSizeRepository)
-        'Dim productColorSizes = Await productColorSizeRepository.GetManyByOrganizationIdsAsync(organizationId:=Z_OrganizationID)
-
-        Dim productInventoryLocationDataService = MainServiceProvider.GetRequiredService(Of IProductInventoryLocationDataService)
+        Dim productInventoryLocationDataService = GetRequiredService(Of IProductInventoryLocationDataService)()
         Dim productInventoryLocations = Await productInventoryLocationDataService.GetByInventoryLocationIdAsync(inventoryLocationId:=_inventoryLocationId)
 
-        'Return productColorSizes.
-        '    Select(Function(t) New ProductColorSizeModel(t)).
-        '    ToList()
+        Dim productColorSizeRepository = GetRequiredService(Of IProductColorSizeRepository)()
+        Dim productColorSizes = Await productColorSizeRepository.GetManyByOrganizationIdsAsync(Z_OrganizationID)
+
         If ProductColorSizeExceptionIds IsNot Nothing AndAlso ProductColorSizeExceptionIds.Any() Then
-            Return productInventoryLocations.
-                Where(Function(t) Not ProductColorSizeExceptionIds.Contains(t.ProductColorSizeID)).
-                Select(Function(t) New ProductColorSizeModel(productInventoryLocation:=t, productColorSize:=t.ProductColorSize, _picp)).
+            Return productColorSizes.
+                Where(Function(t) Not ProductColorSizeExceptionIds.Contains(t.RowID.Value)).
+                Select(Function(t)
+                           Dim productInventoryLocation = productInventoryLocations.
+                            FirstOrDefault(Function(i) i.ProductColorSizeID = t.RowID.Value)
+                           Dim productInventoryLocationItems = productInventoryLocations.
+                            Where(Function(i) i.ProductColorSizeID = t.RowID.Value).
+                            ToList() 'productInventoryLocation:=productInventoryLocation,
+                           Return New ProductColorSizeModel(productInventoryLocations:=productInventoryLocationItems,
+                            productColorSize:=t,
+                            _picp)
+                       End Function).
+                OrderBy(Function(t) t.ProductCode).
                 ToList()
         End If
 
-        Return productInventoryLocations.
-            Select(Function(t) New ProductColorSizeModel(productInventoryLocation:=t, productColorSize:=t.ProductColorSize, _picp)).
+        Return productColorSizes.
+            Select(Function(t)
+                       Dim productInventoryLocation = productInventoryLocations.
+                            FirstOrDefault(Function(i) i.ProductColorSizeID = t.RowID.Value)
+                       Dim productInventoryLocationItems = productInventoryLocations.
+                            Where(Function(i) i.ProductColorSizeID = t.RowID.Value).
+                            ToList() 'productInventoryLocation:=productInventoryLocation,
+                       Return New ProductColorSizeModel(productInventoryLocations:=productInventoryLocationItems,
+                            productColorSize:=t,
+                            _picp)
+                   End Function).
+            OrderBy(Function(t) t.ProductCode).
             ToList()
     End Function
 
@@ -70,7 +88,7 @@ Public Class ProductSelectorDialog
     End Sub
 
     Private Sub txtSearch_TextChanged(sender As Object, e As EventArgs) Handles txtSearch.TextChanged
-        Dim searchText = txtSearch.Text.ToLower()
+        Dim searchText = txtSearch.Text
 
         Dim dataSource = _baseSource
 
@@ -79,16 +97,21 @@ Public Class ProductSelectorDialog
                 Return If(boolValue, False)
             End Function
 
-        If Not String.IsNullOrEmpty(searchText) Then
+        If Not String.IsNullOrEmpty(searchText) AndAlso
+            _baseSource IsNot Nothing Then
+
+            '(Not String.IsNullOrEmpty(t.BrandName) AndAlso t.BrandName.ToLower.Contains(searchText)) Or
             dataSource = _baseSource.
-                Where(Function(t) t.ProductCode.ToLower.Contains(searchText) Or
-                    (Not String.IsNullOrEmpty(t.BrandName) AndAlso t.BrandName.ToLower.Contains(searchText)) Or
-                    absoluteBool(t.Category?.ToLower.Contains(searchText)) Or
-                    absoluteBool(t.UnitOfMeasure?.ToLower.Contains(searchText)) Or
-                    absoluteBool(t.Description?.ToLower.Contains(searchText)) Or
-                    absoluteBool(t.Colors?.ToLower.Contains(searchText)) Or
-                    absoluteBool(t.SeasonCode?.ToLower.Contains(searchText))).
+                Where(Function(t) t.ProductCode.Like(searchText) Or
+                    absoluteBool(t.BrandName?.Like(searchText)) Or
+                    absoluteBool(t.Category?.Like(searchText)) Or
+                    absoluteBool(t.UnitOfMeasure?.Like(searchText)) Or
+                    absoluteBool(t.Description?.Like(searchText)) Or
+                    absoluteBool(t.Colors?.Like(searchText)) Or
+                    absoluteBool(t.SeasonCode?.Like(searchText))).
                 ToList()
+        Else
+            dataSource = Enumerable.Empty(Of ProductColorSizeModel)().ToList()
         End If
 
         grid.DataSource = dataSource
@@ -103,6 +126,21 @@ Public Class ProductSelectorDialog
             grid.Item(isSelectedColumn.Index, e.RowIndex).Selected = True
             grid.Focus()
             ShowSelectedStatus()
+
+            Return
+
+            If grid.Rows.Count() = 0 AndAlso grid.CurrentRow Is Nothing Then Return
+
+            Dim boundData = CType(grid.CurrentRow.DataBoundItem, ProductColorSizeModel)
+
+            If boundData.IsSelected AndAlso boundData.HasMoreThanOneRackShelfColumn Then
+                Dim productColorSizeId = boundData.ProductColorSizeId
+                Dim form As New ProductColorSizeSelectorSubDialog(productColorSizeId:=productColorSizeId,
+                    productInventoryLocations:=boundData.ProductInventoryLocations)
+                If Not form.ShowDialog() = DialogResult.OK Then Return
+
+                boundData.ChangeSelectedProductInventoryLocation(form.SelectedRackShelfColumnId)
+            End If
         End If
     End Sub
 
@@ -111,13 +149,8 @@ Public Class ProductSelectorDialog
     End Sub
 
     Private Sub ShowSelectedStatus()
-        'Dim models = GetModels()
         Label2.Text = $"{_baseSource.Where(Function(t) t.IsSelected).Count()}/{_baseSource.Count()} selected"
     End Sub
-
-    Private Function GetModels() As List(Of ProductColorSizeModel)
-        Return grid.Rows.OfType(Of DataGridViewRow).Select(Function(r) CType(r.DataBoundItem, ProductColorSizeModel)).ToList()
-    End Function
 
     Private Sub LinkLabelReset_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabelReset.LinkClicked
         txtSearch.Clear()

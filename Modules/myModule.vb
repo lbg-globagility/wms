@@ -1,4 +1,5 @@
 ﻿Imports System.IO
+Imports log4net
 Imports Microsoft.Extensions.DependencyInjection
 Imports MySql.Data.MySqlClient
 
@@ -48,6 +49,7 @@ Module myModule
 
     Public MainServiceProvider As ServiceProvider
     Public Const CONFIG_FILE_PATH As String = "C:\ConnectionString\config.ini"
+    Private ReadOnly _logger As ILog = LogManager.GetLogger("ExceptionLogger")
 
 #Region "Module Functions"
 
@@ -108,6 +110,7 @@ Module myModule
     End Function
 
     Public Function getErrExcptn(ByVal ex As Exception, Optional FormNam As String = Nothing) As String
+        _logger.Error(message:=FormNam, exception:=ex)
         Dim st As StackTrace = New StackTrace(ex, True)
         Dim sf As StackFrame = st.GetFrame(st.FrameCount - 1)
         Dim op_FrmNam As String = If(FormNam = Nothing, "", FormNam & ".")
@@ -552,7 +555,9 @@ Module myModule
     Sub globalautocompleteTruckShiftInfo(ByVal globalicombobox As ComboBox, ByVal globalformname As Object)
         Try
             Dim truckshiftinfo As New AutoCompleteStringCollection
-            Dim cmd As New MySqlCommand("SELECT COALESCE(CONCAT(COALESCE(dt.truckname,''),' - ',COALESCE(dt.truckno,''),' / ',COALESCE(s.shiftname,'')),'') AS 'truckshiftinfo' FROM deliverytruckshifts dts " &
+            'COALESCE(CONCAT(COALESCE(dt.truckname,''),' - ',COALESCE(dt.truckno,''),' / ',COALESCE(s.shiftname,'')),'')
+            'CONCAT_WS(' - ', dt.YearAndModel, dt.truckno, s.shiftname)
+            Dim cmd As New MySqlCommand("SELECT CONCAT_WS(' - ', dt.YearAndModel, dt.PlateNo) AS 'truckshiftinfo' FROM deliverytruckshifts dts " &
                             "LEFT JOIN deliverytrucks dt ON dts.deliverytruckid = dt.rowid LEFT JOIN shifts s ON dts.shiftid = s.rowid WHERE dts.organizationid = " & Z_OrganizationID & " AND dts.`status` = 'Active' GROUP BY dts.rowid ", globalconn)
             Dim ds As New DataSet
             Dim da As New MySqlDataAdapter(cmd)
@@ -1020,7 +1025,9 @@ Module myModule
         Try
             globalicombobox.Items.Clear()
             If globalconn.State = ConnectionState.Open Then globalconn.Close()
-            Dim sql1 As String = "SELECT COALESCE(dt.plateno,'') AS 'truckshiftinfo' FROM deliverytruckshifts dts " &
+            'COALESCE(CONCAT(COALESCE(dt.truckname,''),' - ',COALESCE(dt.truckno,''),' / ',COALESCE(s.shiftname,'')),'')
+            'CONCAT_WS(' - ', dt.truckname, dt.truckno, s.shiftname)
+            Dim sql1 As String = "SELECT CONCAT_WS(' - ', dt.YearAndModel, dt.PlateNo) AS 'truckshiftinfo' FROM deliverytruckshifts dts " &
                     "LEFT JOIN deliverytrucks dt ON dts.deliverytruckid = dt.rowid LEFT JOIN shifts s ON dts.shiftid = s.rowid WHERE dts.organizationid = " & Z_OrganizationID & " AND dts.`status` = 'Active' GROUP BY dts.rowid ORDER BY dt.truckname,s.shiftname DESC "
             If globalconn.State = ConnectionState.Closed Then globalconn.Open()
             Dim cmd1 As New MySqlCommand(sql1, globalconn)
@@ -2868,7 +2875,8 @@ Module myModule
             globaldeliverytruckshiftid = 0 : globaldeliverytruckid = 0
             If globalconn.State = ConnectionState.Open Then globalconn.Close()
             Dim dtGid As New DataTable
-            dtGid = getDataTableForSQL("SELECT COALESCE(dts.rowid,0),COALESCE(dts.deliverytruckid,0)  FROM deliverytruckshifts dts LEFT JOIN deliverytrucks dt ON dts.deliverytruckid = dt.rowid LEFT JOIN shifts s ON dts.shiftid = s.rowid WHERE COALESCE(CONCAT(COALESCE(dt.truckname,''),' - ',COALESCE(dt.truckno,''),' / ',COALESCE(s.shiftname,'')),'') = """ & globaltruckshiftinfo & """ AND dts.organizationid = " & Z_OrganizationID & " " & globalistatuscondition & " ")
+            'COALESCE(CONCAT(COALESCE(dt.truckname,''),' - ',COALESCE(dt.truckno,''),' / ',COALESCE(s.shiftname,'')),'')
+            dtGid = getDataTableForSQL("SELECT COALESCE(dts.rowid,0),COALESCE(dts.deliverytruckid,0)  FROM deliverytruckshifts dts LEFT JOIN deliverytrucks dt ON dts.deliverytruckid = dt.rowid LEFT JOIN shifts s ON dts.shiftid = s.rowid WHERE CONCAT_WS(' - ', dt.YearAndModel, dt.PlateNo) = '" & globaltruckshiftinfo & "' AND dts.organizationid = " & Z_OrganizationID & " " & globalistatuscondition & " ")
             If dtGid.Rows.Count <> 0 Then
                 globaldeliverytruckshiftid = dtGid.Rows(0)(0)
                 globaldeliverytruckid = dtGid.Rows(0)(1)
@@ -2888,12 +2896,13 @@ Module myModule
             If globalconn.State = ConnectionState.Open Then globalconn.Close()
             Dim dtGinfo As New DataTable
             dtGinfo = getDataTableForSQL("SELECT COALESCE(c.deliveryhours,''),CONCAT(COALESCE(ad.streetaddress1,''),' ',COALESCE(ad.streetaddress2,''),' ',COALESCE(ad.barangay,''),' ',COALESCE(ad.citytown,''),' ',COALESCE(ad.province,''),' ',COALESCE(ad.state,''),' ',COALESCE(ad.zipcode,''),' ',COALESCE(ad.country,''))," &
-                            "COALESCE(CONCAT(COALESCE(bc.branchcode,''),' - ',COALESCE(bc.branchname,'')),''),COALESCE(c.agentid,'') FROM accounts c LEFT JOIN address ad ON c.primaryaddressid = ad.rowid LEFT JOIN branches bc ON c.branchid = bc.rowid WHERE c.rowid = " & globaliaccountid & " ")
+                            "COALESCE(CONCAT(COALESCE(bc.branchcode,''),' - ',COALESCE(bc.branchname,'')),''),c.agentid FROM accounts c LEFT JOIN address ad ON c.primaryaddressid = ad.rowid LEFT JOIN branches bc ON c.branchid = bc.rowid WHERE c.rowid = " & globaliaccountid & " ")
             If dtGinfo.Rows.Count <> 0 Then
                 globaldeliveryhours = dtGinfo.Rows(0)(0)
                 globaladdressname = dtGinfo.Rows(0)(1)
                 globalbranchname = dtGinfo.Rows(0)(2)
-                globalAgentId = dtGinfo.Rows(0)(3)
+                Dim agentId = dtGinfo.Rows(0)(3)
+                globalagentid = If(IsDBNull(agentId), 0, CInt(agentId))
             Else
                 globaldeliveryhours = "" : globaladdressname = "" : globalbranchname = ""
             End If
@@ -3349,5 +3358,13 @@ Module myModule
 #End Region
 
 #End Region
+
+    Public Function GetRequiredService(Of T)() As T
+        Return MainServiceProvider.GetRequiredService(Of T)
+    End Function
+
+    Public Sub SetStyleToDropDownList(comboBox As ComboBox)
+        comboBox.DropDownStyle = ComboBoxStyle.DropDownList
+    End Sub
 
 End Module

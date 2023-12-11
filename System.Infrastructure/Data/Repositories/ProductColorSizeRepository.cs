@@ -14,17 +14,14 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
         {
         }
 
-        public override async Task<ICollection<ProductColorSize>> GetManyByOrganizationIdsAsync(int organizationId)
-        {
-            return await _context.ProductColorSizes
-                .Include(pcs => pcs.ProductColor)
-                    .ThenInclude(pc => pc.Product)
-                        .ThenInclude(p => p.Category)
-                .Include(pcs => pcs.ProductColor)
-                    .ThenInclude(pc => pc.Color)
-                .AsNoTracking()
-                .Where(x => x.OrganizationID == organizationId)
-                .ToListAsync();
-        }
+        public override async Task<ICollection<ProductColorSize>> GetManyByOrganizationIdsAsync(int organizationId) => await _context.ProductColorSizes
+            .Include(pcs => pcs.ProductColor)
+                .ThenInclude(pc => pc.Product)
+                    .ThenInclude(p => p.Category)
+            .Include(pcs => pcs.ProductColor)
+                .ThenInclude(pc => pc.Color)
+            .AsNoTracking()
+            .Where(x => x.OrganizationID == organizationId)
+            .ToListAsync();
     }
 }

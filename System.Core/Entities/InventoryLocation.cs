@@ -28,7 +28,7 @@ namespace WarehouseManagementSystem.Core.Entities
         }
 
         public bool IsMainWarehouse => Type == InventoryLocationType.Main;
-        public bool IsNotMain => !IsMainWarehouse && (IsClassBWarehouse || IsSampleWarehouse || IsDamageWarehouse);
+        public bool IsNotMain => !IsMainWarehouse && (IsClassBWarehouse || IsSampleWarehouse || IsDamageWarehouse || IsDonationWarehouse);
 
         //public bool IsBranch => Type == InventoryLocationType.Branch;
         //public bool IsOthers => Type == InventoryLocationType.Others;
@@ -37,6 +37,7 @@ namespace WarehouseManagementSystem.Core.Entities
 
         public bool IsSampleWarehouse => Type == InventoryLocationType.Sample;
         public bool IsDamageWarehouse => Type == InventoryLocationType.Damage;
+        public bool IsDonationWarehouse => Type == InventoryLocationType.Donation;
 
         //public virtual RackShelfColumn RackShelfColumn { get; set; }
         public virtual ICollection<RackShelfColumn> RackShelfColumns { get; set; }

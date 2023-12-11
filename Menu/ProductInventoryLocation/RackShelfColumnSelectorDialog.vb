@@ -1,4 +1,5 @@
 ﻿Imports Microsoft.Extensions.DependencyInjection
+Imports OfficeOpenXml.FormulaParsing.Excel.Functions.Text
 Imports WarehouseManagementSystem.Core.Dto
 Imports WarehouseManagementSystem.Core.Entities
 Imports WarehouseManagementSystem.Core.Enums
@@ -13,6 +14,8 @@ Public Class RackShelfColumnSelectorDialog
     Private ReadOnly _movementHistoryGroupByProductColorSizeModel As MovementHistoryGroupByProductColorSizeModel
     Private ReadOnly _isStockTransferFromInventoryLocation As Boolean
     Private ReadOnly _isStockTransferToInventoryLocation As Boolean
+    Private ReadOnly _inventoryLocationName As String
+    Private _order As Order
 
     Public Sub New(orderId As Integer?,
         inventoryLocationId As Integer?,
@@ -34,13 +37,7 @@ Public Class RackShelfColumnSelectorDialog
 
         _isStockTransferToInventoryLocation = _inventoryLocationId = If(movementHistoryGroupByProductColorSizeModel.StockTransferToInventoryLocationId, 0)
 
-        Me.Text = $"{inventoryLocationName} {If(_isStockTransferFromInventoryLocation, "→", If(_isStockTransferToInventoryLocation, "←", ""))} {movementHistoryGroupByProductColorSizeModel.ProductCode}"
-        '
-        Quantity.HeaderText = If(_isStockTransferFromInventoryLocation,
-            "Outgoing Quantity",
-            If(_isStockTransferToInventoryLocation,
-            "Incoming Quantity",
-            "Quantity"))
+        _inventoryLocationName = inventoryLocationName
     End Sub
 
     Public ReadOnly Property GeneratedMovementHistories As List(Of MovementHistory)
@@ -48,30 +45,104 @@ Public Class RackShelfColumnSelectorDialog
     Private Async Sub RackShelfColumnSelectorDialog_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         gridRackShelfColumn.AutoGenerateColumns = False
 
-        Dim productInventoryLocationDataService = MainServiceProvider.GetRequiredService(Of IProductInventoryLocationDataService)
+        Dim orderDataService = GetRequiredService(Of IOrderDataService)()
+        _order = Await orderDataService.GetOrderAsync(_orderId)
+
+        If _order.IsStockTransferType Then
+            Me.Text = $"{_inventoryLocationName} {If(_isStockTransferFromInventoryLocation, "→", If(_isStockTransferToInventoryLocation, "←", ""))} {_movementHistoryGroupByProductColorSizeModel.ProductCode}"
+
+            Quantity.HeaderText =
+                If(_isStockTransferFromInventoryLocation,
+                    "Outgoing Quantity",
+                    If(_isStockTransferToInventoryLocation,
+                        "Incoming Quantity",
+                        "Quantity"))
+        ElseIf _order.IsStockAdjustType Then
+            Quantity.MinValue = Integer.MinValue
+            FlowLayoutPanel1.Visible = True
+            FlowLayoutPanel1.FlowDirection = FlowDirection.LeftToRight
+            FlowLayoutPanel1.WrapContents = True
+        End If
+
+        Await LoadDataSourceAsync()
+
+        DisEnableOKButton()
+    End Sub
+
+    Private Async Function LoadDataSourceAsync() As Task
+        Dim productInventoryLocationDataService = GetRequiredService(Of IProductInventoryLocationDataService)()
         Dim productInventoryLocations = Await productInventoryLocationDataService.GetByInventoryLocationIdAsync(_inventoryLocationId)
 
+        'Dim movementHistory = _movementHistories?.
+        '    Where(Function(f) f.ProductColorSizeID = _productColorSizeId).
+        '    Where(Function(f) f.ProductInventoryLocationIDA = _productInventoryLocationId).
+        '    FirstOrDefault()
         Dim dataSource = productInventoryLocations.
             Where(Function(t) t.ProductColorSizeID = _productColorSizeId).
-            Select(Function(t) New RackShelfColumnModel(rackShelfColumn:=t.RackShelfColumn,
-                qtyToApply:=If(_movementHistories.Where(Function(f) f.ProductColorSizeID = _productColorSizeId).
-                    Where(Function(f) f.ProductInventoryLocationIDA = _productInventoryLocationId).
-                    FirstOrDefault()?.
-                    QtyToApply, 0))).
+            Select(Function(t)
+                       Dim movementHistory = _movementHistories?.
+                        Where(Function(f) f.ProductColorSizeID = _productColorSizeId).
+                        Where(Function(f) f.ProductInventoryLocationIDA = t.RowID).
+                        Where(Function(f) f.ProductInventoryLocationIDA = _productInventoryLocationId).
+                       FirstOrDefault()
+                       Dim qtyToApply = If(movementHistory?.QtyToApply, 0)
+
+                       Return New RackShelfColumnModel(order:=_order,
+                        productInventoryLocation:=t,
+                        rackShelfColumn:=t.RackShelfColumn,
+                        qtyToApply:=qtyToApply,
+                        movementHistory:=movementHistory)
+                   End Function).
+            OrderByDescending(Function(t) t.HasAvailableQty).
+            ThenBy(Function(t) t.PickOrderNo).
             ToList()
         gridRackShelfColumn.DataSource = dataSource
-    End Sub
+    End Function
 
     Private Sub gridRackShelfColumn_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles gridRackShelfColumn.CellContentClick
 
     End Sub
 
+    Private Sub gridRackShelfColumn_SelectionChanged(sender As Object, e As EventArgs) Handles gridRackShelfColumn.SelectionChanged
+        If gridRackShelfColumn.CurrentRow Is Nothing Then Return
+
+        gridRackShelfColumn.CurrentCell = gridRackShelfColumn.CurrentRow.Cells(Quantity.Name)
+        gridRackShelfColumn.BeginEdit(selectAll:=True)
+    End Sub
+
+    Private Sub gridRackShelfColumn_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles gridRackShelfColumn.CellClick
+        gridRackShelfColumn_SelectionChanged(sender:=gridRackShelfColumn, e:=e)
+    End Sub
+
+    Private Sub gridRackShelfColumn_CellEndEdit(sender As Object, e As DataGridViewCellEventArgs) Handles gridRackShelfColumn.CellEndEdit
+        DisEnableOKButton()
+    End Sub
+
+    Private Sub DisEnableOKButton()
+        gridRackShelfColumn.Refresh()
+
+        Dim models = GetModels().
+            Where(Function(t) t.HasError).
+            ToList()
+
+        ButtonOK.Enabled = Not models.Any()
+    End Sub
+
     Private Sub ButtonOK_Click(sender As Object, e As EventArgs) Handles ButtonOK.Click
-        Dim models = gridRackShelfColumn.Rows.
-            OfType(Of DataGridViewRow).
-            Select(Function(t) CType(t.DataBoundItem, RackShelfColumnModel)).
+        If gridRackShelfColumn.CurrentRow IsNot Nothing Then
+            gridRackShelfColumn.CurrentCell = gridRackShelfColumn.CurrentRow.Cells(Column14.Name)
+            gridRackShelfColumn.EndEdit()
+        End If
+
+        Dim models = GetModels().
             Where(Function(t) t.HasChangedQuantity).
             ToList()
+        If _movementHistoryGroupByProductColorSizeModel.IsTransactionTypeIsFrom Then
+            models = GetModels().
+                Where(Function(t) t.HasAvailableQty).
+                Where(Function(t) t.HasChangedQuantity).
+                ToList()
+        End If
 
         Dim fromOrToText = If(_inventoryLocationId = _movementHistoryGroupByProductColorSizeModel.StockTransferFromInventoryLocationId, "From",
             If(_inventoryLocationId = _movementHistoryGroupByProductColorSizeModel.StockTransferToInventoryLocationId, "To", String.Empty))
@@ -81,7 +152,7 @@ Public Class RackShelfColumnSelectorDialog
                 userId:=Z_UserID,
                 productColorSizeID:=_productColorSizeId,
                 orderId:=_orderId,
-                productInventoryLocationId:=_productInventoryLocationId,
+                productInventoryLocationId:=t.ProductInventoryLocationId,
                 currentQty:=t.AvailableQty,
                 qtyToApply:=t.Quantity,
                 transactionType:=$"{OrderType.ST} - {fromOrToText}")).
@@ -90,8 +161,25 @@ Public Class RackShelfColumnSelectorDialog
         DialogResult = DialogResult.OK
     End Sub
 
+    Private Function GetModels() As List(Of RackShelfColumnModel)
+        If gridRackShelfColumn.Rows.Count() = 0 Then Return Enumerable.Empty(Of RackShelfColumnModel)()
+
+        Return gridRackShelfColumn.Rows.
+            OfType(Of DataGridViewRow).
+            Select(Function(t) CType(t.DataBoundItem, RackShelfColumnModel)).
+            ToList()
+    End Function
+
     Private Sub ButtonCancel_Click(sender As Object, e As EventArgs) Handles ButtonCancel.Click
         DialogResult = DialogResult.Cancel
+    End Sub
+
+    Private Sub LinkLabelSeeSample_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabelSeeSample.LinkClicked
+        Dim newLine = Environment.NewLine
+        MessageBox.Show(text:=$"Ex #1.{newLine}An item has [60] `Available Qty`, but the actual count is [45].{newLine}The user need to input negative fifteen [-15] in the `Quantity` column.{newLine}{newLine}Ex #2.{newLine}An item has [192] `Available Qty`, but the actual count is [248].{newLine}The user need to input fifty six [56] in the `Quantity` column.",
+            caption:="How Adjustment works",
+            icon:=MessageBoxIcon.Information,
+            buttons:=MessageBoxButtons.OK)
     End Sub
 
 End Class

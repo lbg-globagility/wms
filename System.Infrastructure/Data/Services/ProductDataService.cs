@@ -4,11 +4,10 @@ using WarehouseManagementSystem.Core.Entities;
 using WarehouseManagementSystem.Core.Interfaces;
 using WarehouseManagementSystem.Core.Interfaces.DomainServices;
 using WarehouseManagementSystem.Core.Interfaces.Repositories;
-using WarehouseManagementSystem.Infrastructure.Data.Services.Base;
 
 namespace WarehouseManagementSystem.Infrastructure.Data.Services
 {
-    public class ProductDataService : BaseSavableDataService<Product>, IProductDataService
+    public class ProductDataService : AuditableDataService<Product>, IProductDataService
     {
         private readonly IProductRepository _productRepository;
 
@@ -29,5 +28,9 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
         public async Task<List<Product>> GetManyByProductCodesAsync(int organizationId, string[] productCodes) => await _productRepository.GetManyByProductCodesAsync(organizationId: organizationId, productCodes: productCodes);
 
         public async Task<List<Product>> GetManyByOrganizationIdAsync(int organizationId) => await _productRepository.GetManyByOrganizationIdAsync(organizationId);
+
+        protected override string CreateUserActivitySuffixIdentifier(Product entity) => $" with `code` '{entity.ProductCode}', `sku` '{entity.SKU}', `sku2` '{entity.SKU2}', `unit of measure` '{entity.UnitOfMeasure}', `unit price` '{entity.UnitPrice}', and `status` is '{entity.Status}'";
+
+        protected override string GetUserActivityName(Product entity) => _entityName;
     }
 }

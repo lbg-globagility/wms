@@ -10,6 +10,8 @@ Imports System.Diagnostics
 Imports System.Runtime.InteropServices
 Imports System.Text.RegularExpressions
 Imports System.ComponentModel
+Imports WarehouseManagementSystem.Core.Entities
+Imports WarehouseManagementSystem.Core.Interfaces
 Public Class AddToCartonForm
     Dim manager As New sqlModule.Manager
     Dim conn As New MySqlConnection(Manager.GetConnString)
@@ -22,7 +24,22 @@ Public Class AddToCartonForm
     Dim atctotalqtypicked, atctotalqtyincartonsum, atcqtytopacksum, atctotalqtyincarton, atcqtypicked As Integer
     Public addtocartonformcue As Boolean = False
     Public atcpackinglistid, atcorderid, atcorderitemid As Integer
-    Private Sub AddToCartonForm_Load(sender As Object, e As EventArgs) Handles Me.Load
+    Private _systemOwner As SystemOwner
+
+    Private Async Sub AddToCartonForm_Load(sender As Object, e As EventArgs) Handles Me.Load
+        Dim _systemOwnerService = GetRequiredService(Of ISystemOwnerService)()
+        _systemOwner = Await _systemOwnerService.GetCurrentSystemOwnerEntityAsync()
+
+        If IsThurston Then
+            lblTitle.Text = "Add To Truck"
+            ci_totalqtyincarton.HeaderText = "Total Qty. In Truck"
+            rbtnAddNewCarton.Text = "Add New Truck"
+            rbtnExistingCarton.Text = "Existing Truck"
+            lblCartonNoA.Text = "Truck No.:"
+            lblCartonNoE.Text = "Truck No.:"
+            Label3.Text = $"Total Qty. In {ChrW(10)}{ChrW(10)}Truck (Sum):"
+        End If
+
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
@@ -353,7 +370,7 @@ Public Class AddToCartonForm
         Try
             If dgCustomerOrderItems.Rows.Count <> 0 Then
                 For i As Integer = 0 To dgCustomerOrderItems.Rows.Count - 1
-                    dgCustomerOrderItems.Rows(i).Cells("ci_qtytopack").Style.BackColor = Color.Gainsboro
+                    dgCustomerOrderItems.Rows(i).Cells("ci_qtytopack").Style.BackColor = Drawing.Color.Gainsboro
                     If CStr(dgCustomerOrderItems.Rows(i).Cells("ci_colorvalue").Value) <> "" Then
                         readcolor = colorconverter.ConvertFromString(CStr(dgCustomerOrderItems.Rows(i).Cells("ci_colorvalue").Value))
                         dgCustomerOrderItems.Rows(i).Cells("ci_color").Style.BackColor = readcolor
@@ -563,7 +580,7 @@ Public Class AddToCartonForm
     'End Sub
     Private Sub pbAddPacker_MouseEnter(sender As Object, e As EventArgs) Handles pbAddPacker.MouseEnter
         Try
-            pbAddPacker.BackColor = Color.MediumSpringGreen
+            pbAddPacker.BackColor = Drawing.Color.MediumSpringGreen
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -572,7 +589,7 @@ Public Class AddToCartonForm
     End Sub
     Private Sub pbAddPacker_MouseLeave(sender As Object, e As EventArgs) Handles pbAddPacker.MouseLeave
         Try
-            pbAddPacker.BackColor = Color.Transparent
+            pbAddPacker.BackColor = Drawing.Color.Transparent
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -613,7 +630,7 @@ Public Class AddToCartonForm
     End Sub
     Private Sub pbAddSize_MouseEnter(sender As Object, e As EventArgs) Handles pbAddSize.MouseEnter
         Try
-            pbAddSize.BackColor = Color.MediumSpringGreen
+            pbAddSize.BackColor = Drawing.Color.MediumSpringGreen
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -622,7 +639,7 @@ Public Class AddToCartonForm
     End Sub
     Private Sub pbAddSize_MouseLeave(sender As Object, e As EventArgs) Handles pbAddSize.MouseLeave
         Try
-            pbAddSize.BackColor = Color.Transparent
+            pbAddSize.BackColor = Drawing.Color.Transparent
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -664,7 +681,7 @@ Public Class AddToCartonForm
     End Sub
     Private Sub pbAutoAddA_MouseEnter(sender As Object, e As EventArgs) Handles pbAutoAddA.MouseEnter
         Try
-            pbAutoAddA.BackColor = Color.MediumSpringGreen
+            pbAutoAddA.BackColor = Drawing.Color.MediumSpringGreen
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -673,7 +690,7 @@ Public Class AddToCartonForm
     End Sub
     Private Sub pbAutoAddA_MouseLeave(sender As Object, e As EventArgs) Handles pbAutoAddA.MouseLeave
         Try
-            pbAutoAddA.BackColor = Color.Transparent
+            pbAutoAddA.BackColor = Drawing.Color.Transparent
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -973,4 +990,10 @@ Public Class AddToCartonForm
         Me.Cursor = Cursors.Default
     End Sub
 #End Region
+
+    Private ReadOnly Property IsThurston As Boolean
+        Get
+            Return _systemOwner.IsThurston
+        End Get
+    End Property
 End Class

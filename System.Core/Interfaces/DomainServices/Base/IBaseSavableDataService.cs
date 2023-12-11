@@ -18,5 +18,7 @@ namespace WarehouseManagementSystem.Core.Interfaces.DomainServices.Base
             List<T> deleted = null);
 
         Task SaveManyAsync(List<T> entities, int userId);
+
+        Task<T> GetByIdAsync(int id);
     }
 }

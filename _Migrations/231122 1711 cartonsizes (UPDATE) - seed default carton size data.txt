@@ -1,0 +1,4 @@
+UPDATE `cartonsizes` SET `SizeName`='DEFAULT' WHERE  `RowID`=1;
+
+UPDATE `cartonsizes` SET `Status`='Inactive' WHERE  `RowID` IN (2, 3, 4);
+

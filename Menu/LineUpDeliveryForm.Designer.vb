@@ -34,14 +34,14 @@ Partial Class LineUpDeliveryForm
         Me.dtpFromSearch = New System.Windows.Forms.DateTimePicker()
         Me.Label18 = New System.Windows.Forms.Label()
         Me.dgLineUpCalendar = New DevComponents.DotNetBar.Controls.DataGridViewX()
+        Me.lud_basisdate = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.lud_date = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.msMenu = New System.Windows.Forms.MenuStrip()
         Me.msRefresh = New System.Windows.Forms.ToolStripMenuItem()
         Me.msNew = New System.Windows.Forms.ToolStripMenuItem()
         Me.msViewEdit = New System.Windows.Forms.ToolStripMenuItem()
         Me.errProvider = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.lblsavemsg = New System.Windows.Forms.Label()
-        Me.lud_basisdate = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.lud_date = New System.Windows.Forms.DataGridViewTextBoxColumn()
         CType(Me.pbClose, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.dgLineUpCalendar, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.msMenu.SuspendLayout()
@@ -161,6 +161,19 @@ Partial Class LineUpDeliveryForm
         Me.dgLineUpCalendar.Size = New System.Drawing.Size(1170, 462)
         Me.dgLineUpCalendar.TabIndex = 260
         '
+        'lud_basisdate
+        '
+        Me.lud_basisdate.HeaderText = "basisdate"
+        Me.lud_basisdate.Name = "lud_basisdate"
+        Me.lud_basisdate.ReadOnly = True
+        Me.lud_basisdate.Visible = False
+        '
+        'lud_date
+        '
+        Me.lud_date.HeaderText = "Delivery Date"
+        Me.lud_date.Name = "lud_date"
+        Me.lud_date.ReadOnly = True
+        '
         'msMenu
         '
         Me.msMenu.BackColor = System.Drawing.Color.Transparent
@@ -189,7 +202,7 @@ Partial Class LineUpDeliveryForm
         '
         Me.msViewEdit.Image = CType(resources.GetObject("msViewEdit.Image"), System.Drawing.Image)
         Me.msViewEdit.Name = "msViewEdit"
-        Me.msViewEdit.Size = New System.Drawing.Size(238, 21)
+        Me.msViewEdit.Size = New System.Drawing.Size(239, 21)
         Me.msViewEdit.Text = "&View / Edit Line-Up and Delivery"
         '
         'errProvider
@@ -203,19 +216,6 @@ Partial Class LineUpDeliveryForm
         Me.lblsavemsg.Name = "lblsavemsg"
         Me.lblsavemsg.Size = New System.Drawing.Size(0, 13)
         Me.lblsavemsg.TabIndex = 263
-        '
-        'lud_basisdate
-        '
-        Me.lud_basisdate.HeaderText = "basisdate"
-        Me.lud_basisdate.Name = "lud_basisdate"
-        Me.lud_basisdate.ReadOnly = True
-        Me.lud_basisdate.Visible = False
-        '
-        'lud_date
-        '
-        Me.lud_date.HeaderText = "Delivery Date"
-        Me.lud_date.Name = "lud_date"
-        Me.lud_date.ReadOnly = True
         '
         'LineUpDeliveryForm
         '

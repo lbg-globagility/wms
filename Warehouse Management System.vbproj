@@ -276,6 +276,41 @@
     <Compile Include="Core\Utilities\Helper\SaveFileDialogHelper.vb" />
     <Compile Include="Core\Utilities\Helper\TemplatesHelper.vb" />
     <Compile Include="Core\Utilities\MessageBoxHelper.vb" />
+    <Compile Include="CrystalReports\DailyDeliveriesReport.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DailyDeliveriesReport.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="CrystalReports\DataSet\ReportDataTableCollection.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ReportDataTableCollection.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSet\ReportDataTableCollection.vb">
+      <DependentUpon>ReportDataTableCollection.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DefaultReportViewerForm.Designer.vb">
+      <DependentUpon>DefaultReportViewerForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DefaultReportViewerForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CrystalReports\DeliveryPerformanceReport.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DeliveryPerformanceReport.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="CrystalReports\ReportProviders\DailyDeliveriesReportProvider.vb" />
+    <Compile Include="CrystalReports\ReportProviders\IReportProvider.vb" />
+    <Compile Include="CrystalReports\ReportProviders\DeliveryPerformanceReportProvider.vb" />
+    <Compile Include="CrystalReports\ReportProviders\UserDatePickerForm.Designer.vb">
+      <DependentUpon>UserDatePickerForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\ReportProviders\UserDatePickerForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="General\DummyForm.Designer.vb">
       <DependentUpon>DummyForm.vb</DependentUpon>
     </Compile>
@@ -342,6 +377,13 @@
     <Compile Include="Menu\Accounts\AccountsForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Menu\CustomerOrder\CustomerOrderInventoryLocationSelectorDialog.Designer.vb">
+      <DependentUpon>CustomerOrderInventoryLocationSelectorDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Menu\CustomerOrder\CustomerOrderInventoryLocationSelectorDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Menu\CustomerOrder\ProductColorSizeOrderModel.vb" />
     <Compile Include="Menu\InventoryLocationsForm.Designer.vb">
       <DependentUpon>InventoryLocationsForm.vb</DependentUpon>
     </Compile>
@@ -366,6 +408,18 @@
     <Compile Include="Menu\PickListForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Menu\ProductInventoryLocation\RackShelfColumnForm.Designer.vb">
+      <DependentUpon>RackShelfColumnForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Menu\ProductInventoryLocation\RackShelfColumnForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Menu\ProductInventoryLocation\RackShelfColumnFormDialog.Designer.vb">
+      <DependentUpon>RackShelfColumnFormDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Menu\ProductInventoryLocation\RackShelfColumnFormDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Menu\ProductInventoryLocation\RackShelfColumnModel.vb" />
     <Compile Include="Menu\ProductInventoryLocation\RackShelfColumnSelectorDialog.Designer.vb">
       <DependentUpon>RackShelfColumnSelectorDialog.vb</DependentUpon>
@@ -373,6 +427,7 @@
     <Compile Include="Menu\ProductInventoryLocation\RackShelfColumnSelectorDialog.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Menu\ProductInventoryLocation\RackShelfColumnSimpleModel.vb" />
     <Compile Include="Menu\Products\ImportProductForm.Designer.vb">
       <DependentUpon>ImportProductForm.vb</DependentUpon>
     </Compile>
@@ -380,12 +435,19 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Menu\Products\ProductColorSizeModel.vb" />
-    <Compile Include="Menu\Products\ProductImageConfigParser.vb" />
-    <Compile Include="Menu\Products\ProductImportation.vb" />
-    <Compile Include="Menu\Products\ProductSelectorDialog.Designer.vb">
-      <DependentUpon>ProductSelectorDialog.vb</DependentUpon>
+    <Compile Include="Menu\Products\ProductColorSizeSelectorSubDialog.Designer.vb">
+      <DependentUpon>ProductColorSizeSelectorSubDialog.vb</DependentUpon>
     </Compile>
-    <Compile Include="Menu\Products\ProductSelectorDialog.vb">
+    <Compile Include="Menu\Products\ProductColorSizeSelectorSubDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Menu\Products\ProductImageConfigParser.vb" />
+    <Compile Include="Menu\Products\ProductImageManager.vb" />
+    <Compile Include="Menu\Products\ProductImportation.vb" />
+    <Compile Include="Menu\Products\ProductColorSizeSelectorDialog.Designer.vb">
+      <DependentUpon>ProductColorSizeSelectorDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Menu\Products\ProductColorSizeSelectorDialog.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Menu\Products\ProductsForm.Designer.vb">
@@ -434,6 +496,12 @@
       <DependentUpon>StockAdjustmentForm.vb</DependentUpon>
     </Compile>
     <Compile Include="Menu\StockAdjustmentForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Menu\StockAdjustmentForm2.Designer.vb">
+      <DependentUpon>StockAdjustmentForm2.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Menu\StockAdjustmentForm2.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Menu\StockTransferForm.Designer.vb">
@@ -653,14 +721,38 @@
     </Compile>
     <Compile Include="Print\VerifyPickListPrint.vb">
       <DependentUpon>VerifyPickListPrint.rpt</DependentUpon>
-      <SubType>Component</SubType>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Print\VerifyPickListPrintB.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>VerifyPickListPrintB.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Report Files\DeliverySchedule.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DeliverySchedule.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Report Files\GatePass.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GatePass.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Report Files\PickList.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PickList.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Report Files\TripTicket.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TripTicket.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\AgingReportForm.Designer.vb">
@@ -873,6 +965,12 @@
     <Compile Include="SubForms\EditCartonForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="SubForms\EditContactForm.Designer.vb">
+      <DependentUpon>EditContactForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="SubForms\EditContactForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="SubForms\EditRackShelfColumnForm.Designer.vb">
       <DependentUpon>EditRackShelfColumnForm.vb</DependentUpon>
     </Compile>
@@ -944,6 +1042,20 @@
     <EmbeddedResource Include="Admin\UserForm.resx">
       <DependentUpon>UserForm.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="CrystalReports\DailyDeliveriesReport.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>DailyDeliveriesReport.vb</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CrystalReports\DefaultReportViewerForm.resx">
+      <DependentUpon>DefaultReportViewerForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CrystalReports\DeliveryPerformanceReport.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>DeliveryPerformanceReport.vb</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CrystalReports\ReportProviders\UserDatePickerForm.resx">
+      <DependentUpon>UserDatePickerForm.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="General\DummyForm.resx">
       <DependentUpon>DummyForm.vb</DependentUpon>
     </EmbeddedResource>
@@ -978,6 +1090,9 @@
     <EmbeddedResource Include="Menu\Accounts\AccountsForm.resx">
       <DependentUpon>AccountsForm.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Menu\CustomerOrder\CustomerOrderInventoryLocationSelectorDialog.resx">
+      <DependentUpon>CustomerOrderInventoryLocationSelectorDialog.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Menu\InventoryLocationsForm.resx">
       <DependentUpon>InventoryLocationsForm.vb</DependentUpon>
     </EmbeddedResource>
@@ -990,14 +1105,23 @@
     <EmbeddedResource Include="Menu\PickListForm.resx">
       <DependentUpon>PickListForm.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Menu\ProductInventoryLocation\RackShelfColumnForm.resx">
+      <DependentUpon>RackShelfColumnForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Menu\ProductInventoryLocation\RackShelfColumnFormDialog.resx">
+      <DependentUpon>RackShelfColumnFormDialog.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Menu\ProductInventoryLocation\RackShelfColumnSelectorDialog.resx">
       <DependentUpon>RackShelfColumnSelectorDialog.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Menu\Products\ImportProductForm.resx">
       <DependentUpon>ImportProductForm.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Menu\Products\ProductSelectorDialog.resx">
-      <DependentUpon>ProductSelectorDialog.vb</DependentUpon>
+    <EmbeddedResource Include="Menu\Products\ProductColorSizeSelectorDialog.resx">
+      <DependentUpon>ProductColorSizeSelectorDialog.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Menu\Products\ProductColorSizeSelectorSubDialog.resx">
+      <DependentUpon>ProductColorSizeSelectorSubDialog.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Menu\Products\ProductsForm.resx">
       <DependentUpon>ProductsForm.vb</DependentUpon>
@@ -1022,6 +1146,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Menu\StockAdjustmentForm.resx">
       <DependentUpon>StockAdjustmentForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Menu\StockAdjustmentForm2.resx">
+      <DependentUpon>StockAdjustmentForm2.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Menu\StockTransferForm.resx">
       <DependentUpon>StockTransferForm.vb</DependentUpon>
@@ -1158,6 +1285,22 @@
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>VerifyPickListPrintB.vb</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Report Files\DeliverySchedule.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>DeliverySchedule.vb</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report Files\GatePass.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>GatePass.vb</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report Files\PickList.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>PickList.vb</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report Files\TripTicket.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>TripTicket.vb</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Reports\AgingReportForm.resx">
       <DependentUpon>AgingReportForm.vb</DependentUpon>
     </EmbeddedResource>
@@ -1265,6 +1408,9 @@
     <EmbeddedResource Include="SubForms\EditCartonForm.resx">
       <DependentUpon>EditCartonForm.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="SubForms\EditContactForm.resx">
+      <DependentUpon>EditContactForm.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SubForms\EditRackShelfColumnForm.resx">
       <DependentUpon>EditRackShelfColumnForm.vb</DependentUpon>
     </EmbeddedResource>
@@ -1294,11 +1440,26 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SubForms\LineupDelivery\ViewEditLineUpDeliveryForm.resx">
       <DependentUpon>ViewEditLineUpDeliveryForm.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />
+    <None Include="CrystalReports\DataSet\ReportDataTableCollection.xsc">
+      <DependentUpon>ReportDataTableCollection.xsd</DependentUpon>
+    </None>
+    <None Include="CrystalReports\DataSet\ReportDataTableCollection.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>ReportDataTableCollection.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="CrystalReports\DataSet\ReportDataTableCollection.xss">
+      <DependentUpon>ReportDataTableCollection.xsd</DependentUpon>
+    </None>
     <None Include="Import Templates\product-color-size-template.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="log4.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="My Project\app.manifest" />

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using WarehouseManagementSystem.Core.Enums;
@@ -9,6 +10,17 @@ namespace WarehouseManagementSystem.Core.Entities
 {
     public partial class Order
     {
+        public static Order NewStockTransferOrder(int organizationId,
+            int userId,
+            string orderNumber,
+            OrderStatus status,
+            DateTime orderDate) => new Order(organizationId: organizationId,
+                userId: userId,
+                orderType: OrderType.ST,
+                orderNumber: orderNumber,
+                status: status,
+                orderDate: orderDate);
+
         public void AddMovementHistories(List<MovementHistory> movementHistories)
         {
             if (MovementHistories == null) MovementHistories = new List<MovementHistory>();
@@ -44,13 +56,13 @@ namespace WarehouseManagementSystem.Core.Entities
             null;
 
         public ICollection<MovementHistory> MovementHistoriesFrom => MovementHistories?
-            .Where(t => t.ProductInventoryLocation?.RackShelfColumn?.InventoryLocationID == StockTransferFromInventoryLocationId)
+            //.Where(t => t.ProductInventoryLocation?.RackShelfColumn?.InventoryLocationID == StockTransferFromInventoryLocationId)
             .Where(t => t.IsTransactionTypeIsFrom)
             .OrderBy(t => t.ProductCode)
             .ToList();
 
         public ICollection<MovementHistory> MovementHistoriesTo => MovementHistories?
-            .Where(t => t.ProductInventoryLocation?.RackShelfColumn?.InventoryLocationID == StockTransferToInventoryLocationId)
+            //.Where(t => t.ProductInventoryLocation?.RackShelfColumn?.InventoryLocationID == StockTransferToInventoryLocationId)
             .Where(t => t.IsTransactionTypeIsTo)
             .OrderBy(t => t.ProductCode)
             .ToList();
@@ -74,7 +86,7 @@ namespace WarehouseManagementSystem.Core.Entities
 
         public void DeleteMovementHistoryByProductColorSizeId(int productColorSizeId)
         {
-            if (IsApproved) throw new BusinessLogicException("Invalid Command. Stock Transfer already `Approved`.");
+            if (IsApproved) BusinessLogicException.Throw("Invalid Command. This Stock Transfer already `Approved`.");
 
             var deleteItems = MovementHistories?.Where(t => t.ProductColorSizeID.Value == productColorSizeId).ToList();
             if (DeletedMovementHistories == null) DeletedMovementHistories = new List<MovementHistory>();
