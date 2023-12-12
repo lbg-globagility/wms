@@ -415,11 +415,12 @@ Module MarvinModule
         End Try
     End Sub
 
-    Sub getProductColorSizeTotalDamageQty(ByVal globaliproductcolorsizeid As Integer, ByVal globalformname As Object)
+    Sub getProductColorSizeTotalDamageQty(ByVal globaliproductcolorsizeid As Object, ByVal globalformname As Object)
         Try
             globaltotalqtydamage = 0
             Dim dtGtdq As New DataTable
-            dtGtdq = getDataTableForSQL("SELECT COALESCE(pcs.totaldamageqty,'') FROM productcolorsizes pcs WHERE pcs.rowid = " & globaliproductcolorsizeid & " ")
+            Dim id = If(globaliproductcolorsizeid Is Nothing, 0, CInt(globaliproductcolorsizeid))
+            dtGtdq = getDataTableForSQL("SELECT COALESCE(pcs.totaldamageqty,'') FROM productcolorsizes pcs WHERE pcs.rowid = " & id & " ")
             If dtGtdq.Rows.Count <> 0 Then
                 globaltotalqtydamage = dtGtdq.Rows(0)(0)
             Else
@@ -586,7 +587,7 @@ Module MarvinModule
                         ByVal Comments As String,
                         ByVal Status As String,
                         ByVal TotalAmount As Decimal,
-                        ByVal LineUpId As Integer,
+                        ByVal LineUpId As Object,
                         ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
@@ -612,7 +613,7 @@ Module MarvinModule
                 .Parameters.AddWithValue("I_Comments", Comments)
                 .Parameters.AddWithValue("I_Status", Status)
                 .Parameters.AddWithValue("I_TotalAmount", TotalAmount)
-                .Parameters.AddWithValue("I_LineUpId", LineUpId)
+                .Parameters.AddWithValue("I_LineUpId", If(LineUpId Is Nothing, DBNull.Value, LineUpId))
                 .Parameters("newOrdersID").Direction = ParameterDirection.ReturnValue
                 globaldatareader = .ExecuteReader
                 globalorderidsp = globaldatareader(0)

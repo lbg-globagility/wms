@@ -1,0 +1,4 @@
+# 1:06 PM 12/11/2023
+
+ALTER TABLE `orderitems`
+	CHANGE COLUMN `Remarks` `Remarks` VARCHAR(255) NULL DEFAULT NULL COLLATE 'latin1_swedish_ci' AFTER `Status`;

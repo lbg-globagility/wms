@@ -1,6 +1,8 @@
 ﻿Imports Microsoft.Extensions.DependencyInjection
 Imports MySql.Data.MySqlClient
+Imports WarehouseManagementSystem.Core.Entities
 Imports WarehouseManagementSystem.Core.Enums
+Imports WarehouseManagementSystem.Core.Interfaces
 Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
 
 Public Class AccountsForm
@@ -17,8 +19,12 @@ Public Class AccountsForm
     Dim simplesearchphraseA, simplesearchphraseB, commonphrase, pagefilter1, pagefilter2, pagefilter3A, pagefilter3B As String
     Dim cfparentcustomerid, cfdeliveryaddressid, cfcontactpersonid, cfpicklistgroupid, cfbranchid, sfdeliveryaddressid, sfcontactpersonid As Integer
     Private _agents As List(Of WarehouseManagementSystem.Core.Entities.Contact)
+    Private _systemOwner As SystemOwner
 
-    Private Sub AccountsForm_Load(sender As Object, e As EventArgs) Handles Me.Load
+    Private Async Sub AccountsForm_Load(sender As Object, e As EventArgs) Handles Me.Load
+        Dim _systemOwnerService = GetRequiredService(Of ISystemOwnerService)()
+        _systemOwner = Await _systemOwnerService.GetCurrentSystemOwnerEntityAsync()
+
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
@@ -39,6 +45,16 @@ Public Class AccountsForm
             conn.Close()
         End Try
         Me.Cursor = Cursors.Default
+
+        If IsThurston Then
+            'For Each comboBox In gbCustomerInformation.Controls.
+            '    OfType(Of Control).
+            '    OfType(Of ComboBox).
+            '    ToArray()
+
+            '    SetStyleToDropDownList(comboBox)
+            'Next
+        End If
     End Sub
 
     Private Sub AccountsForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
@@ -1365,7 +1381,7 @@ Public Class AccountsForm
             If dgCustomerOrderItems.Rows.Count <> 0 Then
                 For i As Integer = 0 To dgCustomerOrderItems.Rows.Count - 1
                     If dgCustomerOrderItems.Rows(i).Cells(ci_type.Index).Value = "B" Then
-                        dgCustomerOrderItems.Rows(i).DefaultCellStyle.BackColor = Color.PaleGreen
+                        dgCustomerOrderItems.Rows(i).DefaultCellStyle.BackColor = Drawing.Color.PaleGreen
                     Else
                         If CStr(dgCustomerOrderItems.Rows(i).Cells("ci_colorvalue").Value) <> "" Then
                             readcolor = colorconverter.ConvertFromString(CStr(dgCustomerOrderItems.Rows(i).Cells("ci_colorvalue").Value))
@@ -1524,7 +1540,7 @@ Public Class AccountsForm
 
     Private Sub pbAutoAddA_MouseEnter(sender As Object, e As EventArgs) Handles pbAutoAddA.MouseEnter
         Try
-            pbAutoAddA.BackColor = Color.MediumSpringGreen
+            pbAutoAddA.BackColor = Drawing.Color.MediumSpringGreen
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -1534,7 +1550,7 @@ Public Class AccountsForm
 
     Private Sub pbAutoAddA_MouseLeave(sender As Object, e As EventArgs) Handles pbAutoAddA.MouseLeave
         Try
-            pbAutoAddA.BackColor = Color.Transparent
+            pbAutoAddA.BackColor = Drawing.Color.Transparent
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -1676,7 +1692,7 @@ Public Class AccountsForm
 
     Private Sub pbEditDeliveryAddress_MouseEnter(sender As Object, e As EventArgs) Handles pbEditDeliveryAddress.MouseEnter
         Try
-            pbEditDeliveryAddress.BackColor = Color.MediumSpringGreen
+            pbEditDeliveryAddress.BackColor = Drawing.Color.MediumSpringGreen
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -1686,7 +1702,7 @@ Public Class AccountsForm
 
     Private Sub pbEditDeliveryAddress_MouseLeave(sender As Object, e As EventArgs) Handles pbEditDeliveryAddress.MouseLeave
         Try
-            pbEditDeliveryAddress.BackColor = Color.Transparent
+            pbEditDeliveryAddress.BackColor = Drawing.Color.Transparent
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -1738,7 +1754,7 @@ Public Class AccountsForm
 
     Private Sub pbEditContactPersonA_MouseEnter(sender As Object, e As EventArgs) Handles pbEditContactPersonA.MouseEnter
         Try
-            pbEditContactPersonA.BackColor = Color.MediumSpringGreen
+            pbEditContactPersonA.BackColor = Drawing.Color.MediumSpringGreen
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -1748,7 +1764,7 @@ Public Class AccountsForm
 
     Private Sub pbEditContactPersonA_MouseLeave(sender As Object, e As EventArgs) Handles pbEditContactPersonA.MouseLeave
         Try
-            pbEditContactPersonA.BackColor = Color.Transparent
+            pbEditContactPersonA.BackColor = Drawing.Color.Transparent
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -1800,7 +1816,7 @@ Public Class AccountsForm
 
     Private Sub pbAddBranchCodeName_MouseEnter(sender As Object, e As EventArgs) Handles pbAddBranchCodeName.MouseEnter
         Try
-            pbAddBranchCodeName.BackColor = Color.MediumSpringGreen
+            pbAddBranchCodeName.BackColor = Drawing.Color.MediumSpringGreen
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -1810,7 +1826,7 @@ Public Class AccountsForm
 
     Private Sub pbAddBranchCodeName_MouseLeave(sender As Object, e As EventArgs) Handles pbAddBranchCodeName.MouseLeave
         Try
-            pbAddBranchCodeName.BackColor = Color.Transparent
+            pbAddBranchCodeName.BackColor = Drawing.Color.Transparent
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -2061,7 +2077,7 @@ Public Class AccountsForm
 
     Private Sub pbEditContactPerson_MouseEnter(sender As Object, e As EventArgs) Handles pbEditContactPerson.MouseEnter
         Try
-            pbEditContactPerson.BackColor = Color.MediumSpringGreen
+            pbEditContactPerson.BackColor = Drawing.Color.MediumSpringGreen
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -2071,7 +2087,7 @@ Public Class AccountsForm
 
     Private Sub pbEditContactPerson_MouseLeave(sender As Object, e As EventArgs) Handles pbEditContactPerson.MouseLeave
         Try
-            pbEditContactPerson.BackColor = Color.Transparent
+            pbEditContactPerson.BackColor = Drawing.Color.Transparent
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -2982,5 +2998,11 @@ Public Class AccountsForm
     End Sub
 
 #End Region
+
+    Private ReadOnly Property IsThurston As Boolean
+        Get
+            Return _systemOwner.IsThurston
+        End Get
+    End Property
 
 End Class

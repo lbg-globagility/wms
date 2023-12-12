@@ -392,7 +392,7 @@ Public Class StockTransferForm2
             Dim productInventoryLocationsRecepient = Await productInventoryLocationDataService.GetByInventoryLocationIdAsync(inventoryLocationId:=inventoryLocationIdTo)
 
             For Each productColorSizeModel In selectedProductColorSizeModels
-                Dim fromProductInventoryLocation = productInventoryLocationsRecepient.
+                Dim fromProductInventoryLocation = productInventoryLocationsSource.
                     Where(Function(t) t.ProductColorSizeID = productColorSizeModel.ProductColorSizeId).
                     Where(Function(t) t.RackShelfColumn.InventoryLocationID = inventoryLocationIdFrom).
                     FirstOrDefault()
