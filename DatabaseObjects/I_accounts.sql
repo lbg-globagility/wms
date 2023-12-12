@@ -12,7 +12,7 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
-DROP FUNCTION IF EXISTS `I_accounts`;
+DROP PROCEDURE IF EXISTS `I_accounts`;
 -- Dumping structure for procedure dws.I_accounts
 DELIMITER //
 CREATE PROCEDURE `I_accounts`(
