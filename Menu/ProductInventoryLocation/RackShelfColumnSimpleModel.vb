@@ -15,23 +15,15 @@ Public Class RackShelfColumnSimpleModel
         _Shelf = If(_Rack = DEFAULT_DISPLAY_TEXT AndAlso String.IsNullOrEmpty(rackShelfColumn.ShelfNo), DEFAULT_DISPLAY_TEXT, rackShelfColumn.ShelfNo)
         _Column = If(_Rack = DEFAULT_DISPLAY_TEXT AndAlso String.IsNullOrEmpty(rackShelfColumn.ColumnNo), DEFAULT_DISPLAY_TEXT, rackShelfColumn.ColumnNo)
 
-        Dim aQty = If(rackShelfColumn.AvailableQty, 0)
-        _AvailableQty = aQty
-        If aQty = 0 Then
-            Dim availableQty = rackShelfColumn.ProductInventoryLocations.
-                FirstOrDefault(Function(t) t.ProductColorSizeID = productColorSizeId)?.
-                TotalAvailableQty
-            _AvailableQty = If(availableQty, 0)
-        End If
+        Dim availableQty = rackShelfColumn.ProductInventoryLocations.
+            FirstOrDefault(Function(t) t.ProductColorSizeID = productColorSizeId)?.
+            TotalAvailableQty
+        _AvailableQty = If(availableQty, 0)
 
-        Dim rQty = If(rackShelfColumn.ReservedQty, 0)
-        _ReservedQty = rQty
-        If rQty = 0 Then
-            Dim reserveQty = rackShelfColumn.ProductInventoryLocations.
-                FirstOrDefault(Function(t) t.ProductColorSizeID = productColorSizeId)?.
-                TotalReserveQty
-            _ReservedQty = If(reserveQty, 0)
-        End If
+        Dim reserveQty = rackShelfColumn.ProductInventoryLocations.
+            FirstOrDefault(Function(t) t.ProductColorSizeID = productColorSizeId)?.
+            TotalReserveQty
+        _ReservedQty = If(reserveQty, 0)
 
         _Remarks = rackShelfColumn.Remarks
 
