@@ -6,6 +6,6 @@
         Sample,
         Damage,
         Donation,
-        ClassB
+        Loose
     }
 }

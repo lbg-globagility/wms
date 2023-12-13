@@ -28,12 +28,12 @@ namespace WarehouseManagementSystem.Core.Entities
         }
 
         public bool IsMainWarehouse => Type == InventoryLocationType.Main;
-        public bool IsNotMain => !IsMainWarehouse && (IsClassBWarehouse || IsSampleWarehouse || IsDamageWarehouse || IsDonationWarehouse);
+        public bool IsNotMain => !IsMainWarehouse && (IsLooseWarehouse || IsSampleWarehouse || IsDamageWarehouse || IsDonationWarehouse);
 
         //public bool IsBranch => Type == InventoryLocationType.Branch;
         //public bool IsOthers => Type == InventoryLocationType.Others;
         //public bool IsSub => Type == InventoryLocationType.Sub;
-        public bool IsClassBWarehouse => Type == InventoryLocationType.ClassB;
+        public bool IsLooseWarehouse => Type == InventoryLocationType.Loose;
 
         public bool IsSampleWarehouse => Type == InventoryLocationType.Sample;
         public bool IsDamageWarehouse => Type == InventoryLocationType.Damage;
