@@ -34,7 +34,7 @@ Public Class ViewEditLineUpDeliveryForm
     Private _helpers As List(Of WarehouseManagementSystem.Core.Entities.Contact)
     Private _systemOwner As WarehouseManagementSystem.Core.Entities.SystemOwner
 
-    Private Async Function ViewEditLineUpDeliveryForm_LoadAsync(sender As Object, e As EventArgs) As Task Handles Me.Load
+    Private Async Sub ViewEditLineUpDeliveryForm_LoadAsync(sender As Object, e As EventArgs) Handles Me.Load
         Dim _systemOwnerService = GetRequiredService(Of ISystemOwnerService)()
         _systemOwner = Await _systemOwnerService.GetCurrentSystemOwnerEntityAsync()
 
@@ -95,7 +95,7 @@ Public Class ViewEditLineUpDeliveryForm
             Next
         End If
 
-    End Function
+    End Sub
 
     Private Async Function GetAgentsAsync() As Task
         Dim contactDataService = GetRequiredService(Of IContactDataService)()
