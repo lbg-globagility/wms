@@ -3364,6 +3364,8 @@ Module myModule
     End Function
 
     Public Sub SetStyleToDropDownList(comboBox As ComboBox)
+        If comboBox.AutoCompleteCustomSource IsNot Nothing Then Return
+
         comboBox.DropDownStyle = ComboBoxStyle.DropDownList
     End Sub
 
