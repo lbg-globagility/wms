@@ -1653,12 +1653,11 @@ Public Class ViewEditLineUpDeliveryForm
         Me.Cursor = Cursors.Default
     End Sub
 
-
     Sub printDeliveryScheduleThurston(ByVal lineUpNo As Integer)
         Try
             printdatasetHthurston.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT 
+            Dim sql1 As String = "SELECT
 	                                CONCAT(COALESCE(c.FirstName, ''), ' ', COALESCE(c.MiddleName, ''), ' ', COALESCE(c.LastName, '')) AS Driver,
 	                                CONCAT_WS(
                                         ' ',
@@ -1670,11 +1669,11 @@ Public Class ViewEditLineUpDeliveryForm
 	                                o.CustomerName AS Customer,
 	                                o.ReferenceNumber AS 'P.O. NO.',
 	                                SUM(plci.QtyInCarton) AS Qty,
-	                                GROUP_CONCAT(pcs.SKU, '/', plci.QtyInCarton SEPARATOR' , ') AS 'Item / Description'
-	
+	                                GROUP_CONCAT(IFNULL(IFNULL(pcs.SKU, pcs.SKU2), '[NO SKU]'), '/', IFNULL(plci.QtyInCarton, '') SEPARATOR ' , ') AS 'Item / Description'
+
 		                                FROM
 		                                lineups lu
-		
+
 		                                JOIN lineupcartons lc ON lu.RowID = lc.LineUpID
 		                                LEFT JOIN contacts c  ON lu.ContactID = c.RowID
 		                                LEFT JOIN contacts c2 ON lu.Helper1Id = c2.RowID
@@ -1682,7 +1681,7 @@ Public Class ViewEditLineUpDeliveryForm
  		                                JOIN packinglistcartonitems plci ON lc.PackingListCartonID = plci.PackingListCartonID
  		                                JOIN orderitems oi ON plci.OrderItemID = oi.RowID
  		                                JOIN productcolorsizes pcs ON oi.ProductColorSizeID = pcs.RowID
-		
+
 			                                WHERE lu.LineUpNo = " & lineUpNo & " AND plci.`Status` = 'Lined Up'
 				                                GROUP BY lc.RowID"
             Dim cmd1 As New MySqlCommand(sql1, conn)
@@ -1705,7 +1704,7 @@ Public Class ViewEditLineUpDeliveryForm
         Try
             printdatasetHthurston.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT 
+            Dim sql1 As String = "SELECT
 	                                lu.LineUpDate AS 'Date',
 	                                o.CustomerName AS Customer,
 	                                o.DRNumber AS 'DR No',
@@ -1717,8 +1716,8 @@ Public Class ViewEditLineUpDeliveryForm
                                         NULLIF(COALESCE(c2.MiddleName, ''), ''),
                                         COALESCE(c2.LastName, '')
                                     ) AS Helper
-	
-		                                FROM	
+
+		                                FROM
 			                                lineups lu
 			                                JOIN orders o ON lu.OrderID = o.RowID
 			                                JOIN lineupcartons lc ON lu.RowID = lc.LineUpID
@@ -2633,8 +2632,6 @@ Public Class ViewEditLineUpDeliveryForm
                 vieweditlineupdeliverycue = legit
                 tsrefreshperformclick()
             End If
-
-
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -3204,4 +3201,5 @@ Public Class ViewEditLineUpDeliveryForm
             Return _systemOwner.IsThurston
         End Get
     End Property
+
 End Class
