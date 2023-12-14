@@ -16,3 +16,8 @@ System.Utilities/obj/Debug
 System.Utilities/obj
 System.Infrastructure/obj
 System.Core/obj
+bin/Release
+obj/Release
+System.Core/bin/Release
+System.Infrastructure/bin/Release
+System.Utilities/bin/Release
