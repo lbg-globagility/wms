@@ -51,6 +51,10 @@ Public Class LoginForm
             Dim strQuery As String = "SELECT COALESCE(o.name,'') FROM organizations o "
             cboOrganization.Items.Clear()
             cboOrganization.Items.AddRange(CType(SQL_ArrayList(strQuery).ToArray(GetType(String)), String()))
+            Dim datasource = cboOrganization.Items.OfType(Of Object).ToList()
+            If datasource.Any() AndAlso datasource.Count() = 1 Then
+                cboOrganization.SelectedItem = datasource.FirstOrDefault()
+            End If
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
