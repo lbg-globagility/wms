@@ -635,6 +635,13 @@ Public Class PrimaryForm
 #Region "msClicks/tsClicks"
 
     Private Sub msCustomerOrders_Click(sender As Object, e As EventArgs) Handles msCustomerOrders.Click
+        If IsThurston Then
+            Dim form = New CustomerOrdersForm2(userId:=Z_UserID)
+            form.ShowDialog()
+
+            Return
+        End If
+
         Me.Cursor = Cursors.WaitCursor
         Try
             getPositionID(Me)

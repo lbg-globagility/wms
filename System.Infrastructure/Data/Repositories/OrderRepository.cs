@@ -7,6 +7,7 @@ using WarehouseManagementSystem.Core.Enums;
 using WarehouseManagementSystem.Core.Interfaces.Repositories;
 using WarehouseManagementSystem.Infrastructure.Data.Repositories.Base;
 using System.Linq;
+using System;
 
 namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
 {
@@ -56,13 +57,14 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
 
             query = StockAdjustmentNavMapping(query, orderType);
 
+            query = CustomerOrderNavMapping(query, orderType);
+
             return Task.FromResult(
                 query
                 .AsEnumerable()
                 .Where(o => o.OrderType == orderType)
                 .ToList());
         }
-
         public Task<List<Order>> SearchOrdersAsync(int organizationId, OrderType orderType, string searchText)
         {
             var query = OrderQueryable(organizationId, orderType);
@@ -89,6 +91,8 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
 
             query = StockAdjustmentNavMapping(query, orderType);
 
+            query = CustomerOrderNavMapping(query, orderType);
+
             return query;
         }
 
@@ -112,6 +116,8 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
             query = StockTransferNavMapping(query, order.OrderType);
 
             query = StockAdjustmentNavMapping(query, order.OrderType);
+
+            query = CustomerOrderNavMapping(query, order.OrderType);
 
             return await query.FirstOrDefaultAsync();
         }
@@ -153,6 +159,17 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
                     .Include(o => o.MovementHistories)
                         .ThenInclude(m => m.ProductInventoryLocation)
                             .ThenInclude(pil => pil.RackShelfColumn);
+            return query;
+        }
+
+        private IQueryable<Order> CustomerOrderNavMapping(IQueryable<Order> query, OrderType orderType = default)
+        {
+            if (orderType == OrderType.CO)
+                query = query
+                    .Include(o => o.OrderItems)
+                    .Include(o => o.Agent)
+                    .Include(o => o.Customer)
+                    .Include(o => o.InventoryLocation);
             return query;
         }
     }

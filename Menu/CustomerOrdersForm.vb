@@ -33,9 +33,9 @@ Public Class CustomerOrdersForm
         Dim _systemOwnerService = GetRequiredService(Of ISystemOwnerService)()
         _systemOwner = Await _systemOwnerService.GetCurrentSystemOwnerEntityAsync()
 
-        SplitContainer3.Panel1Collapsed = Not IsThurston
-        'SplitContainer3.Panel2Collapsed = IsThurston
-        'Panel1.Visible = IsThurston
+        SplitContainer3.Panel1Collapsed = IsThurston
+        SplitContainer4.Panel1Collapsed = IsThurston
+        SplitContainer4.Panel2Collapsed = Not IsThurston
 
         Dim names = {Label3.Name, cboByPhrase.Name, btnAddProduct.Name}
         Label3.Text = "Select Product Code"
@@ -4316,10 +4316,28 @@ Public Class CustomerOrdersForm
         Dim inventoryLocationId = CInt(cboInventoryLocation.SelectedValue)
 
         'btnAddperformclick()
+
+        Dim hasOrder As Boolean = False
+
+        Dim form As New ProductColorSizeSelectorDialog(inventoryLocationId:=inventoryLocationId)
+        If hasOrder Then form.ProductColorSizeExceptionIds = Nothing
+
+        If hasOrder AndAlso form.ShowDialog() = Global.System.Windows.Forms.DialogResult.OK Then
+            Dim selectedProductColorSizeModels = form.SelectedProductColorSizeModels
+
+        End If
     End Sub
 
     Private Sub gbCustomerOrderItems_EnabledChanged(sender As Object, e As EventArgs) Handles gbCustomerOrderItems.EnabledChanged
-        Panel1.Enabled = gbCustomerOrderItems.Enabled
+        'Panel1.Enabled = gbCustomerOrderItems.Enabled
+    End Sub
+
+    Private Sub DataGridViewX1_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridViewX1.CellContentClick
+
+    End Sub
+
+    Private Sub DataGridViewX1_SelectionChanged(sender As Object, e As EventArgs) Handles DataGridViewX1.SelectionChanged
+
     End Sub
 
     Private Sub pbAddBranchCodeName_Click(sender As Object, e As EventArgs) Handles pbAddBranchCodeName.Click

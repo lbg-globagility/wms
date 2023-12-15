@@ -32,6 +32,7 @@ Public Class DependencyInjectionHelper
 
         With services
             'Data Services
+            .AddTransient(Of IAccountDataService, AccountDataService)
             .AddTransient(Of ICartonSizeDataService, CartonSizeDataService)
             .AddTransient(Of ICategoryDataService, CategoryDataService)
             .AddTransient(Of IColorDataService, ColorDataService)
@@ -50,6 +51,7 @@ Public Class DependencyInjectionHelper
             .AddTransient(Of ISystemOwnerService, SystemOwnerService)
 
             ' Repositories
+            .AddTransient(Of IAccountRepository, AccountRepository)
             .AddTransient(Of ICartonSizeRepository, CartonSizeRepository)
             .AddTransient(Of ICategoryRepository, CategoryRepository)
             .AddTransient(Of IColorRepository, ColorRepository)

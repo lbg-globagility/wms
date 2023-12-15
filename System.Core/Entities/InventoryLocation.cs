@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using WarehouseManagementSystem.Core.Entities.Base;
@@ -150,5 +151,9 @@ namespace WarehouseManagementSystem.Core.Entities
             InventoryLocationType type) => new InventoryLocation(organizationId: organizationId,
                 name: name,
                 type: type);
+
+        public virtual ICollection<Order> Orders { get; set; }
+
+        public static Array GetTypes => Enum.GetValues(enumType: typeof(InventoryLocationType));
     }
 }

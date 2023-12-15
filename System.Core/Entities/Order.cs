@@ -12,10 +12,16 @@ namespace WarehouseManagementSystem.Core.Entities
     {
         public int? RelatedOrderID { get; set; }
         public int? InventoryLocationID { get; set; }
+        /// <summary>
+        /// Basically the `Agent`
+        /// </summary>
         public int? ContactID { get; set; }
         public int? BranchID { get; set; }
         public int? CompanyID { get; set; }
         public int? CombineCodingID { get; set; }
+        /// <summary>
+        /// Basically the `Customer`
+        /// </summary>
         public int? AccountID { get; set; }
         public OrderType OrderType { get; set; }
         public string OrderNumber { get; set; }
@@ -40,6 +46,9 @@ namespace WarehouseManagementSystem.Core.Entities
         public decimal? TotalDownPayment { get; set; }
         public decimal? TotalPayment { get; set; }
         public decimal? TotalBalance { get; set; }
+        /// <summary>
+        /// Basically the `Agent`
+        /// </summary>
         public int? AgentID { get; set; }
     }
 
@@ -113,5 +122,8 @@ namespace WarehouseManagementSystem.Core.Entities
             IsStockTransferType ? "Stock Transfer" : string.Empty;
 
         public virtual PackingList PackingList { get; set; }
+        public virtual Contact Agent { get; set; }
+        public virtual Account Customer { get; set; }
+        public virtual InventoryLocation InventoryLocation { get; set; }
     }
 }

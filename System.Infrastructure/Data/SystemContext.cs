@@ -16,6 +16,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data
         {
         }
 
+        internal virtual DbSet<Account> Accounts { get; set; }
         internal virtual DbSet<Agent> Agents { get; set; }
         internal virtual DbSet<CartonSize> CartonSizes { get; set; }
         internal virtual DbSet<Category> Categories { get; set; }
@@ -157,12 +158,6 @@ namespace WarehouseManagementSystem.Infrastructure.Data
             //    t.HasKey("RowID");
             //});
 
-            //modelBuilder.Entity<Contact>(t =>
-            //{
-            //    t.ToTable("contacts");
-            //    t.HasKey("RowID");
-            //});
-
             modelBuilder.Entity<Category>(t =>
             {
                 t.Property(x => x.Status)
@@ -260,6 +255,21 @@ namespace WarehouseManagementSystem.Infrastructure.Data
                 //t.Property(x => x.AgentId).HasColumnName("AgentID");
 
                 //t.Ignore(o => o.DeletedMovementHistories);
+
+                t.HasOne(x => x.Agent)
+                    .WithMany(x => x.Orders)
+                    .HasForeignKey(x => x.AgentID)
+                    .HasPrincipalKey(x => x.RowID);
+
+                t.HasOne(x => x.Customer)
+                    .WithMany(x => x.Orders)
+                    .HasForeignKey(x => x.AccountID)
+                    .HasPrincipalKey(x => x.RowID);
+
+                t.HasOne(x => x.InventoryLocation)
+                    .WithMany(x => x.Orders)
+                    .HasForeignKey(x => x.InventoryLocationID)
+                    .HasPrincipalKey(x => x.RowID);
             });
 
             modelBuilder.Entity<Lineup>(t =>
@@ -348,6 +358,16 @@ namespace WarehouseManagementSystem.Infrastructure.Data
 
                 t.HasMany(x => x.Cities)
                   .WithOne(x => x.Contact);
+
+                t.HasMany(x => x.Accounts)
+                    .WithOne(x => x.Contact)
+                    .HasForeignKey(x => x.AgentID)
+                    .HasPrincipalKey(x => x.RowID);
+
+                //t.HasOne(o => o.UserCreate)
+                //    .WithMany(u => u.OrdersCreate)
+                //    .HasForeignKey(o => o.CreatedBy)
+                //    .HasPrincipalKey(u => u.RowID);
             });
 
             modelBuilder.Entity<ContactCity>(t =>
@@ -448,6 +468,16 @@ namespace WarehouseManagementSystem.Infrastructure.Data
             modelBuilder.Entity<CartonSize>(t => {
                 t.HasMany(x => x.PackingListCartons)
                     .WithOne(x => x.CartonSize);
+            });
+
+            modelBuilder.Entity<Account>(t => {
+                t.Property(x => x.AccountType)
+                    .HasConversion(new EnumToStringConverter<AccountType>());
+
+                t.HasOne(x => x.Contact)
+                    .WithMany(x => x.Accounts)
+                    .HasForeignKey(x => x.AgentID)
+                    .HasPrincipalKey(x => x.RowID);
             });
         }
     }

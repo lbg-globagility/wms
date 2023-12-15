@@ -31,5 +31,10 @@ namespace WarehouseManagementSystem.Core.Interfaces.DomainServices
         Task<Order> QuickCreateStockAdjustmentOrderAsync(int organizationId, int userId);
 
         Task ApproveStockAdjustment(Order order, int userId);
+
+        Task<List<Order>> GetCustomerOrdersAsync(int organizationId);
+        Task<List<Order>> SearchCustomerOrdersAsync(int organizationId, string searchText);
+        Task<Order> QuickCreateCustomerOrderAsync(int organizationId, int userId);
+        Task ApproveCustomerOrder(Order order, int userId);
     }
 }

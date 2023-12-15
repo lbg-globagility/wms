@@ -126,6 +126,8 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
 
             StockTransferRecordUpdate(entity, oldEntity, userActivityItems);
 
+            CustomerOrderRecordUpdate(entity, oldEntity, userActivityItems);
+            
             if (userActivityItems.Any())
             {
                 await _userActivityRepository.CreateRecordAsync(

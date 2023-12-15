@@ -131,16 +131,19 @@ namespace WarehouseManagementSystem.Core.Entities
         public static Contact BlankAgent(int organizationId)
         {
             var blankAgent = new Contact(organizationId: organizationId,
-                lastName: "NO AGENT",
+                lastName: "[NO AGENT]",
                 firstName: string.Empty,
                 type: ContactType.Agent,
                 workPhone: string.Empty,
                 email: string.Empty,
                 comments: string.Empty);
-            
+
             blankAgent.RowID = 0;
 
             return blankAgent;
         }
+
+        public virtual ICollection<Account> Accounts { get; set; }
+        public virtual ICollection<Order> Orders { get; set; }
     }
 }
