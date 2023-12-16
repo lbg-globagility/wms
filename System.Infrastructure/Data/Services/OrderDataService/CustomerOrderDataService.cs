@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -67,6 +68,32 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
                     description: $"Change `Comments` from '{oldEntity.Comments}' to '{entity.Comments}'{suffix}",
                     changedUserId: entity.LastUpdBy.Value));
             }
+        }
+
+        public async Task SaveManyCustomerOrderAsync(int userId,
+            List<Order> added = null,
+            List<Order> updated = null,
+            List<Order> deleted = null)
+        {
+            if (deleted != null)
+            {
+                deleted.ForEach(o =>
+                {
+                    if(o.OrderItems != null && o.OrderItems.Any(oi => oi.IsNewEntity))
+                    {
+                        var fsdfsd = o.OrderItems.Where(oi => oi.IsNewEntity).ToList();
+                        fsdfsd.ForEach(d =>
+                        {
+                            o.OrderItems.Remove(d);
+                        });
+                    }
+                });
+            }
+
+            await SaveManyAsync(userId: userId,
+                added: added,
+                updated: updated,
+                deleted: deleted);
         }
     }
 }

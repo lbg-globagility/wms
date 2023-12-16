@@ -5,7 +5,7 @@ Imports WarehouseManagementSystem.Core.Entities
 Public Class OrderItemModel
     Private ReadOnly _orderItem As OrderItem
 
-    Public Sub New(orderItem As OrderItem, Optional isNew As Boolean = False, Optional isDelete As Boolean = False)
+    Public Sub New(orderItem As OrderItem)
         _orderItem = orderItem
 
         _ProductCode = orderItem.ProductColorSize?.ProductColor.Product.ProductCode
@@ -17,13 +17,11 @@ Public Class OrderItemModel
         _UnitOfMeasure = orderItem.UnitOfMeasure
         _Sku = orderItem.SKU
         _Sku2 = orderItem.SKU2
-        _IsNew = isNew
-        _IsDelete = isDelete
+        _IsNew = orderItem.IsNewEntity
 
         RowID = orderItem.RowID
         ProductColorSizeId = orderItem.ProductColorSizeID
         ProductInventoryLocationId = orderItem.ProductInventoryLocationId
-
     End Sub
 
     Public ReadOnly Property OrderItem As OrderItem

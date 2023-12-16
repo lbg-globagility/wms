@@ -36,5 +36,6 @@ namespace WarehouseManagementSystem.Core.Interfaces.DomainServices
         Task<List<Order>> SearchCustomerOrdersAsync(int organizationId, string searchText);
         Task<Order> QuickCreateCustomerOrderAsync(int organizationId, int userId);
         Task ApproveCustomerOrder(Order order, int userId);
+        Task SaveManyCustomerOrderAsync(int userId, List<Order> added = null, List<Order> updated = null, List<Order> deleted = null);
     }
 }
