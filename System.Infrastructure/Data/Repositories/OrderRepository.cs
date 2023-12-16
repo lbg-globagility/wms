@@ -49,6 +49,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
         {
             var query = _context.Orders
                 .Include(o => o.OrderItems)
+                .Include(o => o.InventoryLocation)
                 .AsNoTracking()
                 .Where(o => o.OrganizationID == organizationId)
                 .AsQueryable();
@@ -168,6 +169,12 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
                 query = query
                     .Include(o => o.OrderItems)
                         .ThenInclude(oi => oi.ProductColorSize)
+                            .ThenInclude(pcs => pcs.ProductColor)
+                                .ThenInclude(pc => pc.Color)
+                    .Include(o => o.OrderItems)
+                        .ThenInclude(oi => oi.ProductColorSize)
+                            .ThenInclude(pcs => pcs.ProductColor)
+                                .ThenInclude(pc => pc.Product)
                     .Include(o => o.OrderItems)
                         .ThenInclude(oi => oi.ProductInventoryLocation)
                     .Include(o => o.OrderItems)

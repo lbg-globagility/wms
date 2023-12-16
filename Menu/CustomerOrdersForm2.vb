@@ -10,11 +10,11 @@ Public Class CustomerOrdersForm2
 
     Private Class InvetoryTypeModel
         Public ReadOnly Property Name As String
-        Public ReadOnly Property Value As Object
+        Public ReadOnly Property Value As InventoryLocationType
 
-        Public Sub New(t As Object)
-            _Name = $"{t}"
-            _Value = t
+        Public Sub New(inventoryLocationType As InventoryLocationType)
+            _Name = $"{inventoryLocationType}"
+            _Value = inventoryLocationType
         End Sub
 
     End Class
@@ -61,7 +61,7 @@ Public Class CustomerOrdersForm2
 
         Dim customerOrderTypes = InventoryLocation.GetTypes.
             OfType(Of Object).
-            Select(Function(t) New InvetoryTypeModel(t)).
+            Select(Function(t) New InvetoryTypeModel(CType(t, InventoryLocationType))).
             ToList()
         cboCustomerOrderType.DataSource = customerOrderTypes
     End Sub
@@ -107,14 +107,38 @@ Public Class CustomerOrdersForm2
 
         Dim hasOrder As Boolean = _selectedOrder IsNot Nothing
 
-        Dim form As New ProductColorSizeSelectorDialog(inventoryLocationId:=inventoryLocationId)
-        If hasOrder Then form.ProductColorSizeExceptionIds = Nothing
+        Dim orderItemModels = GetOrderItemModels()
 
-        'gridOrderItems
+        Dim form As New ProductColorSizeSelectorDialog(inventoryLocationId:=inventoryLocationId)
+        If hasOrder Then form.ProductColorSizeExceptionIds = orderItemModels.
+            Select(Function(t) t.ProductColorSizeId.Value).
+            ToList()
 
         If hasOrder AndAlso form.ShowDialog() = DialogResult.OK Then
             Dim selectedProductColorSizeModels = form.SelectedProductColorSizeModels
 
+            Dim orderItemList As New List(Of OrderItem)
+
+            For Each item In selectedProductColorSizeModels
+                Dim orderItemModel = orderItemModels.FirstOrDefault(Function(t) If(t.ProductColorSizeId, 0) = item.ProductColorSizeId)
+
+                Dim thisOrderItem = OrderItem.NewCustomerOrderItem(organizationId:=Z_OrganizationID,
+                    userId:=Z_UserID,
+                    qtyOrdered:=If(orderItemModel?.QuantityOrdered, 0),
+                    srp:=If(orderItemModel?.UnitPrice, item.UnitPrice),
+                    unitOfMeasure:=If(String.IsNullOrEmpty(orderItemModel?.UnitOfMeasure), item.UnitOfMeasure, orderItemModel.UnitOfMeasure),
+                    sku:=If(String.IsNullOrEmpty(orderItemModel?.Sku), item.Sku, orderItemModel.Sku),
+                    sku2:=If(String.IsNullOrEmpty(orderItemModel?.Sku2), item.Sku2, orderItemModel.Sku2),
+                    productColorSizeId:=If(orderItemModel?.ProductColorSizeId, item.ProductColorSizeId),
+                    productInventoryLocationId:=If(orderItemModel?.ProductInventoryLocationId, item.ProductInventoryLocation.RowID.Value),
+                    rowId:=orderItemModel?.RowID)
+
+                orderItemList.Add(thisOrderItem)
+            Next
+
+            _selectedOrder.AddCustomerOrderItems(orderItemList)
+
+            ReloadDisplayForm(_selectedOrder)
         End If
     End Sub
 
@@ -224,8 +248,12 @@ Public Class CustomerOrdersForm2
 
         If currentRow Is Nothing Then Return
 
-        Dim selectedOrderItem = CType(currentRow.DataBoundItem, OrderItem)
+        Dim selectedOrderItem = GetOrderItemModel(currentRow)
 
+    End Sub
+
+    Private Sub gridOrderItems_CellEndEdit(sender As Object, e As DataGridViewCellEventArgs) Handles gridOrderItems.CellEndEdit
+        gridOrderItems.Refresh()
     End Sub
 
     Private Async Sub ToolStripButtonNew_Click(sender As Object, e As EventArgs) Handles ToolStripButtonNew.Click
@@ -272,6 +300,8 @@ Public Class CustomerOrdersForm2
 
         txtComments.Text = String.Empty
 
+        gridOrderItems.DataSource = Enumerable.Empty(Of OrderItemModel)()
+
         If order Is Nothing Then
 
             Return
@@ -298,6 +328,9 @@ Public Class CustomerOrdersForm2
         dtpEndDate.Checked = False
 
         txtComments.Text = order.Comments
+
+        gridOrderItems.DataSource = If(_selectedOrder.OrderItems?.Select(Function(t) New OrderItemModel(t)).ToList(),
+            Enumerable.Empty(Of OrderItemModel)())
     End Sub
 
     Private Async Sub ToolStripButtonSave_Click(sender As Object, e As EventArgs) Handles ToolStripButtonSave.Click

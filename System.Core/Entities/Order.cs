@@ -56,6 +56,7 @@ namespace WarehouseManagementSystem.Core.Entities
     {
         private Order()
         {
+            if(OrderItems == null) OrderItems = new List<OrderItem>();
         }
 
         public virtual ICollection<OrderItem> OrderItems { get; set; }
@@ -107,6 +108,7 @@ namespace WarehouseManagementSystem.Core.Entities
             OrderNumber = orderNumber;
             Status = status;
             OrderDate = orderDate;
+            if (OrderItems == null) OrderItems = new List<OrderItem>();
         }
 
         public string ViewName => IsCustomerOrderType ? View.CUSTOMER_ORDERS_VIEW :

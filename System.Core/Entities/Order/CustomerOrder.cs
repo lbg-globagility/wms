@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using WarehouseManagementSystem.Core.Enums;
 
 namespace WarehouseManagementSystem.Core.Entities
@@ -24,5 +26,26 @@ namespace WarehouseManagementSystem.Core.Entities
         public string CustomerNameText => Customer?.CompanyName;
 
         public string AgentNameText => Agent?.FullNameLastNameFirst;
+
+        public void AddCustomerOrderItems(List<OrderItem> orderItems)
+        {
+            if (OrderItems == null) OrderItems = new List<OrderItem>();
+
+            foreach (var orderItem in orderItems)
+            {
+                var productColorSizeId = orderItem.ProductColorSizeID;
+                var existingOrderItem = OrderItems
+                    .Where(t => t.RowID == orderItem.RowID)
+                    .Where(t => t.ProductColorSizeID == productColorSizeId)
+                    .FirstOrDefault();
+                if (existingOrderItem == null)
+                    OrderItems.Add(orderItem);
+                else
+                {
+                    existingOrderItem.QtyOrdered = orderItem.QtyOrdered;
+                    existingOrderItem.SRP = orderItem.SRP;
+                }
+            }
+        }
     }
 }

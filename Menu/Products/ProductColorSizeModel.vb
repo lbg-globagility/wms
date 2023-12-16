@@ -49,13 +49,32 @@ Public Class ProductColorSizeModel
 
     Public ReadOnly Property SRP As String
         Get
-            Return _productColor?.Product?.UnitPrice.Value.ToString("N2")
+            Return If(If(_ProductInventoryLocation?.UnitPrice, 0) = 0, _productColor?.Product?.UnitPrice.Value.ToString("N2"), _ProductInventoryLocation?.UnitPrice.Value.ToString("N2"))
+        End Get
+    End Property
+
+    Public ReadOnly Property UnitPrice As Decimal
+        Get
+            Dim fsdfsd = If(If(_ProductInventoryLocation?.UnitPrice, 0) = 0, _productColor?.Product?.UnitPrice.Value, _ProductInventoryLocation?.UnitPrice.Value)
+            Return If(fsdfsd, 0)
         End Get
     End Property
 
     Public ReadOnly Property UnitOfMeasure As String
         Get
-            Return _productColor?.Product?.UnitOfMeasure
+            Return If(String.IsNullOrEmpty(_ProductInventoryLocation?.UnitOfMeasure), _productColor?.Product?.UnitOfMeasure, _ProductInventoryLocation?.UnitOfMeasure)
+        End Get
+    End Property
+
+    Public ReadOnly Property Sku As String
+        Get
+            Return _productColorSize?.SKU
+        End Get
+    End Property
+
+    Public ReadOnly Property Sku2 As String
+        Get
+            Return _productColorSize?.SKU2
         End Get
     End Property
 

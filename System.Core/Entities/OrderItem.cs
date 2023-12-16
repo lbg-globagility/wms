@@ -33,6 +33,7 @@ namespace WarehouseManagementSystem.Core.Entities
         public string Approval { get; set; }
         public string ItemCode { get; set; }
         public string SKU { get; set; }
+        public string SKU2 { get; set; }
         public string UnitOfMeasure { get; set; }
         public string Tags { get; set; }
         public string Status { get; set; }
@@ -54,5 +55,48 @@ namespace WarehouseManagementSystem.Core.Entities
         public decimal TotalItemGross => OrderedGross + AvailableGross + DeliveredGross + DamagedGross + ReceivedGross;
         public virtual ProductInventoryLocation ProductInventoryLocation { get; set; }
         public virtual RackShelfColumn RackShelfColumn { get; set; }
+
+        private OrderItem() { }
+        public OrderItem(int organizationId,
+            int userId,
+            int qtyOrdered,
+            decimal srp,
+            string unitOfMeasure,
+            string sku,
+            string sku2,
+            int productColorSizeId,
+            int productInventoryLocationId,
+            int? rowId = null)
+        {
+            OrganizationID = organizationId;
+            AuditUser(userId);
+            QtyOrdered = qtyOrdered;
+            SRP = srp;
+            UnitOfMeasure = unitOfMeasure;
+            SKU = sku;
+            SKU2 = sku2;
+            ProductColorSizeID = productColorSizeId;
+            ProductInventoryLocationId = productInventoryLocationId;
+        }
+
+        public static OrderItem NewCustomerOrderItem(int organizationId,
+            int userId,
+            int qtyOrdered,
+            decimal srp,
+            string unitOfMeasure,
+            string sku,
+            string sku2,
+            int productColorSizeId,
+            int productInventoryLocationId,
+            int? rowId = null) => new OrderItem(organizationId: organizationId,
+                userId: userId,
+                qtyOrdered: qtyOrdered,
+                srp: srp,
+                unitOfMeasure: unitOfMeasure,
+                sku: sku,
+                sku2: sku2,
+                productColorSizeId: productColorSizeId,
+                productInventoryLocationId: productInventoryLocationId,
+                rowId: rowId);
     }
 }
