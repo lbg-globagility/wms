@@ -16,7 +16,9 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
         }
 
         public async Task<List<Account>> GetManyByOrganizationIdAndTypeAsync(int organizationId, AccountType type) => await _context.Accounts
-            .Include(t => t.Contact)
+            .Include(t => t.Agent)
+            .Include(t => t.SubAccounts)
+            .Include(t => t.Address)
             .AsNoTracking()
             .Where(t => t.OrganizationID == organizationId)
             .Where(t => t.AccountType == type)

@@ -61,5 +61,7 @@ namespace WarehouseManagementSystem.Core.Entities
                 unitPrice: unitPrice);
 
         public int TotalOrderableQty => (TotalAvailableQty ?? 0) - (TotalAllocatedQty ?? 0);
+
+        public virtual ICollection<OrderItem> OrderItems { get; set; }
     }
 }

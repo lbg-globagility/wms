@@ -77,5 +77,11 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
             .Where(x => x.ProductColorSize.ProductColorID == productColorId)
             .Where(x => x.RackShelfColumn.InventoryLocationID == inventoryLocationId)
             .ToListAsync();
+
+        public async Task<ICollection<ProductInventoryLocation>> GetByInventoryLocationIdAndProductColorSizeIdsAsync(int inventoryLocationId, int[] productColorSizeIds) => await _context.ProductInventoryLocations
+            .Include(t => t.RackShelfColumn)
+            .Where(t => productColorSizeIds.Contains(t.ProductColorSizeID))
+            .Where(t => t.RackShelfColumn.InventoryLocationID == inventoryLocationId)
+            .ToListAsync();
     }
 }

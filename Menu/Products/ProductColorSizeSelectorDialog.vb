@@ -110,6 +110,9 @@ Public Class ProductColorSizeSelectorDialog
                     absoluteBool(t.Colors?.Like(searchText)) Or
                     absoluteBool(t.SeasonCode?.Like(searchText))).
                 ToList()
+        ElseIf String.IsNullOrEmpty(searchText) AndAlso
+            _baseSource IsNot Nothing Then
+            ' Load default data source
         Else
             dataSource = Enumerable.Empty(Of ProductColorSizeModel)().ToList()
         End If

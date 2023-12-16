@@ -51,9 +51,13 @@ namespace WarehouseManagementSystem.Core.Entities
         {
         }
 
-        public virtual Contact Contact { get; set; }
+        public virtual Contact Agent { get; set; }
         public bool IsCustomerType => AccountType == AccountType.Customer;
         public bool IsSupplierType => AccountType == AccountType.Supplier;
         public virtual ICollection<Order> Orders { get; set; }
+        public virtual ICollection<Account> SubAccounts { get; set; }
+        public virtual Account ParentAccount { get; set; }
+        public virtual Address Address { get; set; }
+        public string FullAddress => Address?.FullAddress;
     }
 }

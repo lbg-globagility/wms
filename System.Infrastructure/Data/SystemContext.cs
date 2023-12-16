@@ -17,6 +17,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data
         }
 
         internal virtual DbSet<Account> Accounts { get; set; }
+        internal virtual DbSet<Address> Addresses { get; set; }
         internal virtual DbSet<Agent> Agents { get; set; }
         internal virtual DbSet<CartonSize> CartonSizes { get; set; }
         internal virtual DbSet<Category> Categories { get; set; }
@@ -272,6 +273,18 @@ namespace WarehouseManagementSystem.Infrastructure.Data
                     .HasPrincipalKey(x => x.RowID);
             });
 
+            modelBuilder.Entity<OrderItem>(t => {
+                t.HasOne(x => x.ProductInventoryLocation)
+                    .WithMany(x => x.OrderItems)
+                    .HasForeignKey(x => x.ProductInventoryLocationId)
+                    .HasPrincipalKey(x => x.RowID);
+
+                t.HasOne(x => x.RackShelfColumn)
+                    .WithMany(x => x.OrderItems)
+                    .HasForeignKey(x => x.RackShelfColumnId)
+                    .HasPrincipalKey(x => x.RowID);
+            });
+
             modelBuilder.Entity<Lineup>(t =>
             {
                 t.HasOne(x => x.Order)
@@ -360,7 +373,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data
                   .WithOne(x => x.Contact);
 
                 t.HasMany(x => x.Accounts)
-                    .WithOne(x => x.Contact)
+                    .WithOne(x => x.Agent)
                     .HasForeignKey(x => x.AgentID)
                     .HasPrincipalKey(x => x.RowID);
 
@@ -474,9 +487,19 @@ namespace WarehouseManagementSystem.Infrastructure.Data
                 t.Property(x => x.AccountType)
                     .HasConversion(new EnumToStringConverter<AccountType>());
 
-                t.HasOne(x => x.Contact)
+                t.HasOne(x => x.Agent)
                     .WithMany(x => x.Accounts)
                     .HasForeignKey(x => x.AgentID)
+                    .HasPrincipalKey(x => x.RowID);
+
+                t.HasMany(x => x.SubAccounts)
+                    .WithOne(x => x.ParentAccount)
+                    .HasForeignKey(x => x.ParentAccountID)
+                    .HasPrincipalKey(x => x.RowID);
+
+                t.HasOne(x => x.Address)
+                    .WithMany(x => x.Accounts)
+                    .HasForeignKey(x => x.PrimaryAddressID)
                     .HasPrincipalKey(x => x.RowID);
             });
         }

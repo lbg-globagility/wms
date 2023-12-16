@@ -75,5 +75,7 @@ namespace WarehouseManagementSystem.Core.Entities
         public int LogicalAvailableQty => AvailableQty ?? 0 - ReservedQty ?? 0;
 
         public bool IsActive => Status == RackShelfColumnStatus.Active;
+
+        public virtual ICollection<OrderItem> OrderItems { get; set; }
     }
 }

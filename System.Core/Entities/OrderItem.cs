@@ -52,5 +52,7 @@ namespace WarehouseManagementSystem.Core.Entities
         public decimal DamagedGross => (QtyDamaged ?? 0) * (SRP ?? 0);
         public decimal ReceivedGross => (QtyReceived ?? 0) * (SRP ?? 0);
         public decimal TotalItemGross => OrderedGross + AvailableGross + DeliveredGross + DamagedGross + ReceivedGross;
+        public virtual ProductInventoryLocation ProductInventoryLocation { get; set; }
+        public virtual RackShelfColumn RackShelfColumn { get; set; }
     }
 }

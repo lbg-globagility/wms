@@ -167,6 +167,11 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
             if (orderType == OrderType.CO)
                 query = query
                     .Include(o => o.OrderItems)
+                        .ThenInclude(oi => oi.ProductColorSize)
+                    .Include(o => o.OrderItems)
+                        .ThenInclude(oi => oi.ProductInventoryLocation)
+                    .Include(o => o.OrderItems)
+                        .ThenInclude(oi => oi.RackShelfColumn)
                     .Include(o => o.Agent)
                     .Include(o => o.Customer)
                     .Include(o => o.InventoryLocation);

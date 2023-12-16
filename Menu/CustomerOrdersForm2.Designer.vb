@@ -22,12 +22,21 @@ Partial Class CustomerOrdersForm2
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
-        Dim DataGridViewCellStyle8 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(CustomerOrdersForm2))
-        Dim DataGridViewCellStyle9 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle7 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
         Me.gridOrders = New DevComponents.DotNetBar.Controls.DataGridViewX()
+        Me.Column13 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column14 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column19 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column16 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column18 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column21 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column15 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column17 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column20 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Panel3 = New System.Windows.Forms.Panel()
         Me.SplitContainer2 = New System.Windows.Forms.SplitContainer()
         Me.Label25 = New System.Windows.Forms.Label()
@@ -106,15 +115,6 @@ Partial Class CustomerOrdersForm2
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.btnAddOrderItem = New System.Windows.Forms.Button()
-        Me.Column13 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column14 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column19 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column16 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column18 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column21 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column15 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column17 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column20 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
@@ -161,14 +161,14 @@ Partial Class CustomerOrdersForm2
         Me.gridOrders.AllowUserToDeleteRows = False
         Me.gridOrders.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.gridOrders.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column13, Me.Column14, Me.Column19, Me.Column16, Me.Column18, Me.Column21, Me.Column15, Me.Column17, Me.Column20})
-        DataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle8.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.gridOrders.DefaultCellStyle = DataGridViewCellStyle8
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle2.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.gridOrders.DefaultCellStyle = DataGridViewCellStyle2
         Me.gridOrders.Dock = System.Windows.Forms.DockStyle.Fill
         Me.gridOrders.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
         Me.gridOrders.Location = New System.Drawing.Point(0, 127)
@@ -177,6 +177,72 @@ Partial Class CustomerOrdersForm2
         Me.gridOrders.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.gridOrders.Size = New System.Drawing.Size(310, 413)
         Me.gridOrders.TabIndex = 5
+        '
+        'Column13
+        '
+        Me.Column13.DataPropertyName = "OrderNumber"
+        Me.Column13.HeaderText = "Customer Order No."
+        Me.Column13.Name = "Column13"
+        Me.Column13.ReadOnly = True
+        '
+        'Column14
+        '
+        Me.Column14.DataPropertyName = "ReferenceNumber"
+        Me.Column14.HeaderText = "P.O. No."
+        Me.Column14.Name = "Column14"
+        Me.Column14.ReadOnly = True
+        '
+        'Column19
+        '
+        Me.Column19.DataPropertyName = "Status"
+        Me.Column19.HeaderText = "Status"
+        Me.Column19.Name = "Column19"
+        Me.Column19.ReadOnly = True
+        '
+        'Column16
+        '
+        Me.Column16.DataPropertyName = "OrderDate"
+        Me.Column16.HeaderText = "Customer Order Date"
+        Me.Column16.Name = "Column16"
+        Me.Column16.ReadOnly = True
+        '
+        'Column18
+        '
+        Me.Column18.DataPropertyName = "CustomerNameText"
+        Me.Column18.HeaderText = "Customer Name"
+        Me.Column18.Name = "Column18"
+        Me.Column18.ReadOnly = True
+        '
+        'Column21
+        '
+        Me.Column21.DataPropertyName = "AgentNameText"
+        Me.Column21.HeaderText = "Agent Name"
+        Me.Column21.Name = "Column21"
+        Me.Column21.ReadOnly = True
+        '
+        'Column15
+        '
+        Me.Column15.DataPropertyName = "DRNumber"
+        Me.Column15.HeaderText = "D.R. No."
+        Me.Column15.Name = "Column15"
+        Me.Column15.ReadOnly = True
+        '
+        'Column17
+        '
+        Me.Column17.DataPropertyName = "DateSubmitted"
+        Me.Column17.HeaderText = "Date Sent to Warehouse"
+        Me.Column17.Name = "Column17"
+        Me.Column17.ReadOnly = True
+        '
+        'Column20
+        '
+        Me.Column20.DataPropertyName = "TotalAmount"
+        DataGridViewCellStyle1.Format = "N2"
+        DataGridViewCellStyle1.NullValue = Nothing
+        Me.Column20.DefaultCellStyle = DataGridViewCellStyle1
+        Me.Column20.HeaderText = "Total Amount"
+        Me.Column20.Name = "Column20"
+        Me.Column20.ReadOnly = True
         '
         'Panel3
         '
@@ -236,7 +302,6 @@ Partial Class CustomerOrdersForm2
         Me.SplitContainer2.Panel1.Controls.Add(Me.Label37)
         Me.SplitContainer2.Panel1.Controls.Add(Me.Label9)
         Me.SplitContainer2.Panel1.Controls.Add(Me.Label34)
-        Me.SplitContainer2.Panel1MinSize = 288
         '
         'SplitContainer2.Panel2
         '
@@ -252,9 +317,9 @@ Partial Class CustomerOrdersForm2
         Me.Label25.AutoSize = True
         Me.Label25.Location = New System.Drawing.Point(409, 119)
         Me.Label25.Name = "Label25"
-        Me.Label25.Size = New System.Drawing.Size(64, 13)
+        Me.Label25.Size = New System.Drawing.Size(61, 13)
         Me.Label25.TabIndex = 756
-        Me.Label25.Text = "Comments:"
+        Me.Label25.Text = "Comments"
         '
         'txtComments
         '
@@ -314,9 +379,9 @@ Partial Class CustomerOrdersForm2
         Me.Label11.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label11.Location = New System.Drawing.Point(244, 153)
         Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(82, 13)
+        Me.Label11.Size = New System.Drawing.Size(79, 13)
         Me.Label11.TabIndex = 737
-        Me.Label11.Text = "Line-Up No(s).:"
+        Me.Label11.Text = "Line-Up No(s)."
         '
         'pbAddClassDescription
         '
@@ -345,9 +410,9 @@ Partial Class CustomerOrdersForm2
         Me.Label24.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label24.Location = New System.Drawing.Point(48, 153)
         Me.Label24.Name = "Label24"
-        Me.Label24.Size = New System.Drawing.Size(71, 13)
+        Me.Label24.Size = New System.Drawing.Size(68, 13)
         Me.Label24.TabIndex = 739
-        Me.Label24.Text = "Pick List No.:"
+        Me.Label24.Text = "Pick List No."
         '
         'Label31
         '
@@ -355,9 +420,9 @@ Partial Class CustomerOrdersForm2
         Me.Label31.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label31.Location = New System.Drawing.Point(48, 63)
         Me.Label31.Name = "Label31"
-        Me.Label31.Size = New System.Drawing.Size(98, 13)
+        Me.Label31.Size = New System.Drawing.Size(95, 13)
         Me.Label31.TabIndex = 751
-        Me.Label31.Text = "Class Description:"
+        Me.Label31.Text = "Class Description"
         '
         'txtPickListNo
         '
@@ -413,9 +478,9 @@ Partial Class CustomerOrdersForm2
         Me.Label10.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label10.Location = New System.Drawing.Point(101, 85)
         Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(84, 13)
+        Me.Label10.Size = New System.Drawing.Size(81, 13)
         Me.Label10.TabIndex = 742
-        Me.Label10.Text = "Delivery Hours:"
+        Me.Label10.Text = "Delivery Hours"
         '
         'txtDeliveryHours
         '
@@ -446,9 +511,9 @@ Partial Class CustomerOrdersForm2
         Me.Label27.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label27.Location = New System.Drawing.Point(409, 65)
         Me.Label27.Name = "Label27"
-        Me.Label27.Size = New System.Drawing.Size(71, 13)
+        Me.Label27.Size = New System.Drawing.Size(68, 13)
         Me.Label27.TabIndex = 747
-        Me.Label27.Text = "S.I./D.R. No.:"
+        Me.Label27.Text = "S.I./D.R. No."
         '
         'Label28
         '
@@ -475,9 +540,9 @@ Partial Class CustomerOrdersForm2
         Me.Label26.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label26.Location = New System.Drawing.Point(409, 203)
         Me.Label26.Name = "Label26"
-        Me.Label26.Size = New System.Drawing.Size(136, 13)
+        Me.Label26.Size = New System.Drawing.Size(133, 13)
         Me.Label26.TabIndex = 745
-        Me.Label26.Text = "Date Sent to Warehouse:"
+        Me.Label26.Text = "Date Sent to Warehouse"
         '
         'dtpDateSubmitted
         '
@@ -512,9 +577,9 @@ Partial Class CustomerOrdersForm2
         Me.Label22.ForeColor = System.Drawing.SystemColors.ControlText
         Me.Label22.Location = New System.Drawing.Point(409, 257)
         Me.Label22.Name = "Label22"
-        Me.Label22.Size = New System.Drawing.Size(71, 13)
+        Me.Label22.Size = New System.Drawing.Size(68, 13)
         Me.Label22.TabIndex = 744
-        Me.Label22.Text = "Cancel Date:"
+        Me.Label22.Text = "Cancel Date"
         Me.Label22.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Label20
@@ -523,9 +588,9 @@ Partial Class CustomerOrdersForm2
         Me.Label20.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label20.Location = New System.Drawing.Point(409, 37)
         Me.Label20.Name = "Label20"
-        Me.Label20.Size = New System.Drawing.Size(52, 13)
+        Me.Label20.Size = New System.Drawing.Size(49, 13)
         Me.Label20.TabIndex = 743
-        Me.Label20.Text = "P.O. No.:"
+        Me.Label20.Text = "P.O. No."
         '
         'dtpDeliveryDate
         '
@@ -548,9 +613,9 @@ Partial Class CustomerOrdersForm2
         Me.Label23.ForeColor = System.Drawing.SystemColors.ControlText
         Me.Label23.Location = New System.Drawing.Point(409, 230)
         Me.Label23.Name = "Label23"
-        Me.Label23.Size = New System.Drawing.Size(77, 13)
+        Me.Label23.Size = New System.Drawing.Size(74, 13)
         Me.Label23.TabIndex = 738
-        Me.Label23.Text = "Delivery Date:"
+        Me.Label23.Text = "Delivery Date"
         '
         'txtStatus
         '
@@ -566,9 +631,9 @@ Partial Class CustomerOrdersForm2
         Me.Label12.AutoSize = True
         Me.Label12.Location = New System.Drawing.Point(409, 92)
         Me.Label12.Name = "Label12"
-        Me.Label12.Size = New System.Drawing.Size(42, 13)
+        Me.Label12.Size = New System.Drawing.Size(39, 13)
         Me.Label12.TabIndex = 736
-        Me.Label12.Text = "Status:"
+        Me.Label12.Text = "Status"
         '
         'Label6
         '
@@ -603,9 +668,9 @@ Partial Class CustomerOrdersForm2
         Me.Label33.AutoSize = True
         Me.Label33.Location = New System.Drawing.Point(3, 92)
         Me.Label33.Name = "Label33"
-        Me.Label33.Size = New System.Drawing.Size(105, 13)
+        Me.Label33.Size = New System.Drawing.Size(102, 13)
         Me.Label33.TabIndex = 720
-        Me.Label33.Text = "Inventory Location:"
+        Me.Label33.Text = "Inventory Location"
         Me.Label33.Visible = False
         '
         'Label41
@@ -613,9 +678,9 @@ Partial Class CustomerOrdersForm2
         Me.Label41.AutoSize = True
         Me.Label41.Location = New System.Drawing.Point(3, 202)
         Me.Label41.Name = "Label41"
-        Me.Label41.Size = New System.Drawing.Size(138, 13)
+        Me.Label41.Size = New System.Drawing.Size(135, 13)
         Me.Label41.TabIndex = 719
-        Me.Label41.Text = "Branch Code / Name Info:"
+        Me.Label41.Text = "Branch Code / Name Info"
         Me.Label41.Visible = False
         '
         'Label35
@@ -623,18 +688,18 @@ Partial Class CustomerOrdersForm2
         Me.Label35.AutoSize = True
         Me.Label35.Location = New System.Drawing.Point(3, 283)
         Me.Label35.Name = "Label35"
-        Me.Label35.Size = New System.Drawing.Size(96, 13)
+        Me.Label35.Size = New System.Drawing.Size(93, 13)
         Me.Label35.TabIndex = 717
-        Me.Label35.Text = "Inventory Source:"
+        Me.Label35.Text = "Inventory Source"
         '
         'Label29
         '
         Me.Label29.AutoSize = True
         Me.Label29.Location = New System.Drawing.Point(3, 229)
         Me.Label29.Name = "Label29"
-        Me.Label29.Size = New System.Drawing.Size(140, 13)
+        Me.Label29.Size = New System.Drawing.Size(137, 13)
         Me.Label29.TabIndex = 718
-        Me.Label29.Text = "Vendor Code / Name Info:"
+        Me.Label29.Text = "Vendor Code / Name Info"
         Me.Label29.Visible = False
         '
         'Label19
@@ -642,9 +707,9 @@ Partial Class CustomerOrdersForm2
         Me.Label19.AutoSize = True
         Me.Label19.Location = New System.Drawing.Point(3, 146)
         Me.Label19.Name = "Label19"
-        Me.Label19.Size = New System.Drawing.Size(94, 13)
+        Me.Label19.Size = New System.Drawing.Size(91, 13)
         Me.Label19.TabIndex = 716
-        Me.Label19.Text = "Delivery Address:"
+        Me.Label19.Text = "Delivery Address"
         '
         'Label2
         '
@@ -652,18 +717,18 @@ Partial Class CustomerOrdersForm2
         Me.Label2.ForeColor = System.Drawing.SystemColors.ControlText
         Me.Label2.Location = New System.Drawing.Point(3, 65)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(119, 13)
+        Me.Label2.Size = New System.Drawing.Size(116, 13)
         Me.Label2.TabIndex = 714
-        Me.Label2.Text = "Customer Order Date:"
+        Me.Label2.Text = "Customer Order Date"
         '
         'Label14
         '
         Me.Label14.AutoSize = True
         Me.Label14.Location = New System.Drawing.Point(3, 119)
         Me.Label14.Name = "Label14"
-        Me.Label14.Size = New System.Drawing.Size(91, 13)
+        Me.Label14.Size = New System.Drawing.Size(88, 13)
         Me.Label14.TabIndex = 713
-        Me.Label14.Text = "Customer Name:"
+        Me.Label14.Text = "Customer Name"
         '
         'Label52
         '
@@ -671,9 +736,9 @@ Partial Class CustomerOrdersForm2
         Me.Label52.ForeColor = System.Drawing.SystemColors.ControlText
         Me.Label52.Location = New System.Drawing.Point(3, 37)
         Me.Label52.Name = "Label52"
-        Me.Label52.Size = New System.Drawing.Size(113, 13)
+        Me.Label52.Size = New System.Drawing.Size(110, 13)
         Me.Label52.TabIndex = 712
-        Me.Label52.Text = "Customer Order No.:"
+        Me.Label52.Text = "Customer Order No."
         '
         'cboCustomerOrderType
         '
@@ -875,14 +940,14 @@ Partial Class CustomerOrdersForm2
         Me.gridOrderItems.AllowUserToDeleteRows = False
         Me.gridOrderItems.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.gridOrderItems.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column1, Me.Column2, Me.Column3, Me.Column4, Me.Column5, Me.Column6, Me.Column7, Me.Column8, Me.Column9, Me.Column10, Me.Column11, Me.Column12})
-        DataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle9.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.gridOrderItems.DefaultCellStyle = DataGridViewCellStyle9
+        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle3.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.gridOrderItems.DefaultCellStyle = DataGridViewCellStyle3
         Me.gridOrderItems.Dock = System.Windows.Forms.DockStyle.Fill
         Me.gridOrderItems.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
         Me.gridOrderItems.Location = New System.Drawing.Point(0, 35)
@@ -980,72 +1045,6 @@ Partial Class CustomerOrdersForm2
         Me.btnAddOrderItem.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.btnAddOrderItem.UseVisualStyleBackColor = True
         '
-        'Column13
-        '
-        Me.Column13.DataPropertyName = "OrderNumber"
-        Me.Column13.HeaderText = "Customer Order No."
-        Me.Column13.Name = "Column13"
-        Me.Column13.ReadOnly = True
-        '
-        'Column14
-        '
-        Me.Column14.DataPropertyName = "ReferenceNumber"
-        Me.Column14.HeaderText = "P.O. No."
-        Me.Column14.Name = "Column14"
-        Me.Column14.ReadOnly = True
-        '
-        'Column19
-        '
-        Me.Column19.DataPropertyName = "Status"
-        Me.Column19.HeaderText = "Status"
-        Me.Column19.Name = "Column19"
-        Me.Column19.ReadOnly = True
-        '
-        'Column16
-        '
-        Me.Column16.DataPropertyName = "OrderDate"
-        Me.Column16.HeaderText = "Customer Order Date"
-        Me.Column16.Name = "Column16"
-        Me.Column16.ReadOnly = True
-        '
-        'Column18
-        '
-        Me.Column18.DataPropertyName = "CustomerNameText"
-        Me.Column18.HeaderText = "Customer Name"
-        Me.Column18.Name = "Column18"
-        Me.Column18.ReadOnly = True
-        '
-        'Column21
-        '
-        Me.Column21.DataPropertyName = "AgentNameText"
-        Me.Column21.HeaderText = "Agent Name"
-        Me.Column21.Name = "Column21"
-        Me.Column21.ReadOnly = True
-        '
-        'Column15
-        '
-        Me.Column15.DataPropertyName = "DRNumber"
-        Me.Column15.HeaderText = "D.R. No."
-        Me.Column15.Name = "Column15"
-        Me.Column15.ReadOnly = True
-        '
-        'Column17
-        '
-        Me.Column17.DataPropertyName = "DateSubmitted"
-        Me.Column17.HeaderText = "Date Sent to Warehouse"
-        Me.Column17.Name = "Column17"
-        Me.Column17.ReadOnly = True
-        '
-        'Column20
-        '
-        Me.Column20.DataPropertyName = "TotalAmount"
-        DataGridViewCellStyle7.Format = "N2"
-        DataGridViewCellStyle7.NullValue = Nothing
-        Me.Column20.DefaultCellStyle = DataGridViewCellStyle7
-        Me.Column20.HeaderText = "Total Amount"
-        Me.Column20.Name = "Column20"
-        Me.Column20.ReadOnly = True
-        '
         'CustomerOrdersForm2
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -1054,6 +1053,7 @@ Partial Class CustomerOrdersForm2
         Me.ClientSize = New System.Drawing.Size(1184, 542)
         Me.Controls.Add(Me.SplitContainer1)
         Me.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.KeyPreview = True
         Me.MinimizeBox = False
         Me.Name = "CustomerOrdersForm2"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
