@@ -38,6 +38,8 @@ namespace WarehouseManagementSystem.Core.Entities
         public DateTime? LastPurchaseDate { get; set; }
         public DateTime? LastSoldDate { get; set; }
         //public longblob? Image { get; set; }
+        public string UnitOfMeasure2 { get; set; }
+        public decimal? UnitPriceOfUOM2 { get; set; }
     }
 
     public partial class Product

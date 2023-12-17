@@ -36,7 +36,7 @@ Public Class ProductImageManager
     End Sub
 
     Public Function GetPhotoUrl(productCode As String) As String
-        If String.IsNullOrEmpty(productCode) Then Return String.Empty
+        If String.IsNullOrEmpty(productCode) Then Return $"\\{_server}{_photoDir}\nothing.jpg"
 
         Return $"\\{_server}{_photoDir}\{productCode}.jpg"
     End Function

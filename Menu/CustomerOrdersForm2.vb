@@ -126,8 +126,8 @@ Public Class CustomerOrdersForm2
                 Dim thisOrderItem = OrderItem.NewCustomerOrderItem(organizationId:=Z_OrganizationID,
                     userId:=Z_UserID,
                     qtyOrdered:=If(orderItemModel?.QuantityOrdered, 0),
-                    srp:=If(orderItemModel?.UnitPrice, item.UnitPrice),
-                    unitOfMeasure:=StringExtensions.IfNullOrEmpty(orderItemModel?.UnitOfMeasure, item.UnitOfMeasure),
+                    srp:=If(orderItemModel?.UnitPrice, If(item.UnitPriceOfUOM2, 0)),
+                    unitOfMeasure:=StringExtensions.IfNullOrEmpty(orderItemModel?.UnitOfMeasure, item.UnitOfMeasure2),
                     sku:=StringExtensions.IfNullOrEmpty(orderItemModel?.Sku, item.Sku),
                     sku2:=StringExtensions.IfNullOrEmpty(orderItemModel?.Sku2, item.Sku2),
                     productColorSizeId:=If(orderItemModel?.ProductColorSizeId, item.ProductColorSizeId),
@@ -269,7 +269,7 @@ Public Class CustomerOrdersForm2
 
         Dim afterTaskMethod =
             Async Function()
-
+                Return Task.FromResult(0)
             End Function
 
         Dim continuationAction As Action(Of Object) = Function() afterTaskMethod()

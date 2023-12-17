@@ -639,7 +639,7 @@ Public Class ProductsForm
                     dgProductList.Item(p_brandname.Index, n).Value = reader1(2)
                     dgProductList.Item(p_category.Index, n).Value = reader1(3)
                     dgProductList.Item(p_company.Index, n).Value = reader1(4)
-                    dgProductList.Item(PhotoResourceLocation.Index, n).Value = _pim.GetPhotoUrl(productCode:=reader1(1))
+                    dgProductList.Item(PhotoResourceLocation.Name, n).Value = _pim.GetPhotoUrl(productCode:=reader1(1))
                     seqno = seqno + 1
                     n = n + 1
                 End If
@@ -686,6 +686,7 @@ Public Class ProductsForm
                     dgProductList.Item(p_brandname.Index, n).Value = reader1(2)
                     dgProductList.Item(p_category.Index, n).Value = reader1(3)
                     dgProductList.Item(p_company.Index, n).Value = reader1(4)
+                    dgProductList.Item(PhotoResourceLocation.Name, n).Value = _pim.GetPhotoUrl(productCode:=reader1(1))
                     seqno = seqno + 1
                     n = n + 1
                 End If

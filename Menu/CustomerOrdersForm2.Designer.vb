@@ -58,7 +58,6 @@ Partial Class CustomerOrdersForm2
         Me.pbAddCustomer = New System.Windows.Forms.PictureBox()
         Me.Label10 = New System.Windows.Forms.Label()
         Me.txtDeliveryHours = New System.Windows.Forms.TextBox()
-        Me.pbSaveSIDRNo = New System.Windows.Forms.PictureBox()
         Me.Label27 = New System.Windows.Forms.Label()
         Me.Label28 = New System.Windows.Forms.Label()
         Me.txtDRNumber = New System.Windows.Forms.TextBox()
@@ -131,7 +130,6 @@ Partial Class CustomerOrdersForm2
         CType(Me.pbAddBranchCodeName, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbAddVendorCodeName, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbAddCustomer, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.pbSaveSIDRNo, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ToolStrip1.SuspendLayout()
         CType(Me.gridOrderItems, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel1.SuspendLayout()
@@ -152,8 +150,8 @@ Partial Class CustomerOrdersForm2
         'SplitContainer1.Panel2
         '
         Me.SplitContainer1.Panel2.Controls.Add(Me.SplitContainer2)
-        Me.SplitContainer1.Size = New System.Drawing.Size(1184, 542)
-        Me.SplitContainer1.SplitterDistance = 312
+        Me.SplitContainer1.Size = New System.Drawing.Size(1264, 761)
+        Me.SplitContainer1.SplitterDistance = 333
         Me.SplitContainer1.TabIndex = 0
         '
         'gridOrders
@@ -176,8 +174,8 @@ Partial Class CustomerOrdersForm2
         Me.gridOrders.Name = "gridOrders"
         Me.gridOrders.ReadOnly = True
         Me.gridOrders.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.gridOrders.Size = New System.Drawing.Size(310, 413)
-        Me.gridOrders.TabIndex = 5
+        Me.gridOrders.Size = New System.Drawing.Size(331, 632)
+        Me.gridOrders.TabIndex = 2
         '
         'Column13
         '
@@ -250,8 +248,8 @@ Partial Class CustomerOrdersForm2
         Me.Panel3.Dock = System.Windows.Forms.DockStyle.Top
         Me.Panel3.Location = New System.Drawing.Point(0, 0)
         Me.Panel3.Name = "Panel3"
-        Me.Panel3.Size = New System.Drawing.Size(310, 127)
-        Me.Panel3.TabIndex = 6
+        Me.Panel3.Size = New System.Drawing.Size(331, 127)
+        Me.Panel3.TabIndex = 1
         '
         'SplitContainer2
         '
@@ -266,7 +264,6 @@ Partial Class CustomerOrdersForm2
         Me.SplitContainer2.Panel1.Controls.Add(Me.Label25)
         Me.SplitContainer2.Panel1.Controls.Add(Me.txtComments)
         Me.SplitContainer2.Panel1.Controls.Add(Me.Panel4)
-        Me.SplitContainer2.Panel1.Controls.Add(Me.pbSaveSIDRNo)
         Me.SplitContainer2.Panel1.Controls.Add(Me.Label27)
         Me.SplitContainer2.Panel1.Controls.Add(Me.Label28)
         Me.SplitContainer2.Panel1.Controls.Add(Me.txtDRNumber)
@@ -309,8 +306,8 @@ Partial Class CustomerOrdersForm2
         Me.SplitContainer2.Panel2.Controls.Add(Me.gridOrderItems)
         Me.SplitContainer2.Panel2.Controls.Add(Me.Panel2)
         Me.SplitContainer2.Panel2.Controls.Add(Me.Panel1)
-        Me.SplitContainer2.Size = New System.Drawing.Size(868, 542)
-        Me.SplitContainer2.SplitterDistance = 307
+        Me.SplitContainer2.Size = New System.Drawing.Size(927, 761)
+        Me.SplitContainer2.SplitterDistance = 322
         Me.SplitContainer2.TabIndex = 0
         '
         'Label25
@@ -329,7 +326,7 @@ Partial Class CustomerOrdersForm2
         Me.txtComments.Name = "txtComments"
         Me.txtComments.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.txtComments.Size = New System.Drawing.Size(208, 50)
-        Me.txtComments.TabIndex = 755
+        Me.txtComments.TabIndex = 13
         '
         'Panel4
         '
@@ -493,19 +490,6 @@ Partial Class CustomerOrdersForm2
         Me.txtDeliveryHours.Size = New System.Drawing.Size(187, 40)
         Me.txtDeliveryHours.TabIndex = 731
         '
-        'pbSaveSIDRNo
-        '
-        Me.pbSaveSIDRNo.BackColor = System.Drawing.Color.Transparent
-        Me.pbSaveSIDRNo.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.pbSaveSIDRNo.Image = CType(resources.GetObject("pbSaveSIDRNo.Image"), System.Drawing.Image)
-        Me.pbSaveSIDRNo.Location = New System.Drawing.Point(778, 60)
-        Me.pbSaveSIDRNo.Name = "pbSaveSIDRNo"
-        Me.pbSaveSIDRNo.Size = New System.Drawing.Size(14, 18)
-        Me.pbSaveSIDRNo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
-        Me.pbSaveSIDRNo.TabIndex = 748
-        Me.pbSaveSIDRNo.TabStop = False
-        Me.pbSaveSIDRNo.Tag = ""
-        '
         'Label27
         '
         Me.Label27.AutoSize = True
@@ -533,7 +517,7 @@ Partial Class CustomerOrdersForm2
         Me.txtDRNumber.Location = New System.Drawing.Point(564, 56)
         Me.txtDRNumber.Name = "txtDRNumber"
         Me.txtDRNumber.Size = New System.Drawing.Size(208, 22)
-        Me.txtDRNumber.TabIndex = 725
+        Me.txtDRNumber.TabIndex = 10
         '
         'Label26
         '
@@ -556,7 +540,7 @@ Partial Class CustomerOrdersForm2
         Me.dtpDateSubmitted.Name = "dtpDateSubmitted"
         Me.dtpDateSubmitted.ShowCheckBox = True
         Me.dtpDateSubmitted.Size = New System.Drawing.Size(110, 22)
-        Me.dtpDateSubmitted.TabIndex = 728
+        Me.dtpDateSubmitted.TabIndex = 14
         '
         'dtpEndDate
         '
@@ -569,7 +553,7 @@ Partial Class CustomerOrdersForm2
         Me.dtpEndDate.Name = "dtpEndDate"
         Me.dtpEndDate.ShowCheckBox = True
         Me.dtpEndDate.Size = New System.Drawing.Size(110, 22)
-        Me.dtpEndDate.TabIndex = 728
+        Me.dtpEndDate.TabIndex = 16
         '
         'Label22
         '
@@ -605,7 +589,7 @@ Partial Class CustomerOrdersForm2
         Me.dtpDeliveryDate.Name = "dtpDeliveryDate"
         Me.dtpDeliveryDate.ShowCheckBox = True
         Me.dtpDeliveryDate.Size = New System.Drawing.Size(110, 22)
-        Me.dtpDeliveryDate.TabIndex = 727
+        Me.dtpDeliveryDate.TabIndex = 15
         '
         'Label23
         '
@@ -625,7 +609,7 @@ Partial Class CustomerOrdersForm2
         Me.txtStatus.Name = "txtStatus"
         Me.txtStatus.ReadOnly = True
         Me.txtStatus.Size = New System.Drawing.Size(208, 22)
-        Me.txtStatus.TabIndex = 726
+        Me.txtStatus.TabIndex = 12
         '
         'Label12
         '
@@ -653,7 +637,7 @@ Partial Class CustomerOrdersForm2
         Me.txtReferenceNumber.Location = New System.Drawing.Point(564, 28)
         Me.txtReferenceNumber.Name = "txtReferenceNumber"
         Me.txtReferenceNumber.Size = New System.Drawing.Size(208, 22)
-        Me.txtReferenceNumber.TabIndex = 724
+        Me.txtReferenceNumber.TabIndex = 9
         '
         'Label36
         '
@@ -749,7 +733,7 @@ Partial Class CustomerOrdersForm2
         Me.cboCustomerOrderType.Location = New System.Drawing.Point(168, 275)
         Me.cboCustomerOrderType.Name = "cboCustomerOrderType"
         Me.cboCustomerOrderType.Size = New System.Drawing.Size(208, 21)
-        Me.cboCustomerOrderType.TabIndex = 709
+        Me.cboCustomerOrderType.TabIndex = 8
         '
         'cboAgent
         '
@@ -759,7 +743,7 @@ Partial Class CustomerOrdersForm2
         Me.cboAgent.Location = New System.Drawing.Point(168, 248)
         Me.cboAgent.Name = "cboAgent"
         Me.cboAgent.Size = New System.Drawing.Size(208, 21)
-        Me.cboAgent.TabIndex = 711
+        Me.cboAgent.TabIndex = 7
         '
         'cboInventoryLocation
         '
@@ -769,7 +753,7 @@ Partial Class CustomerOrdersForm2
         Me.cboInventoryLocation.Location = New System.Drawing.Point(168, 84)
         Me.cboInventoryLocation.Name = "cboInventoryLocation"
         Me.cboInventoryLocation.Size = New System.Drawing.Size(208, 21)
-        Me.cboInventoryLocation.TabIndex = 710
+        Me.cboInventoryLocation.TabIndex = 2
         Me.cboInventoryLocation.Visible = False
         '
         'cboBranchCodeNameInfo
@@ -781,7 +765,7 @@ Partial Class CustomerOrdersForm2
         Me.cboBranchCodeNameInfo.Location = New System.Drawing.Point(168, 194)
         Me.cboBranchCodeNameInfo.Name = "cboBranchCodeNameInfo"
         Me.cboBranchCodeNameInfo.Size = New System.Drawing.Size(208, 21)
-        Me.cboBranchCodeNameInfo.TabIndex = 707
+        Me.cboBranchCodeNameInfo.TabIndex = 5
         Me.cboBranchCodeNameInfo.Visible = False
         '
         'cboVendorCodeNameInfo
@@ -792,7 +776,7 @@ Partial Class CustomerOrdersForm2
         Me.cboVendorCodeNameInfo.Location = New System.Drawing.Point(168, 221)
         Me.cboVendorCodeNameInfo.Name = "cboVendorCodeNameInfo"
         Me.cboVendorCodeNameInfo.Size = New System.Drawing.Size(208, 21)
-        Me.cboVendorCodeNameInfo.TabIndex = 708
+        Me.cboVendorCodeNameInfo.TabIndex = 6
         Me.cboVendorCodeNameInfo.Visible = False
         '
         'txtOrderNumber
@@ -802,7 +786,7 @@ Partial Class CustomerOrdersForm2
         Me.txtOrderNumber.Name = "txtOrderNumber"
         Me.txtOrderNumber.ReadOnly = True
         Me.txtOrderNumber.Size = New System.Drawing.Size(208, 22)
-        Me.txtOrderNumber.TabIndex = 703
+        Me.txtOrderNumber.TabIndex = 0
         '
         'txtDeliveryAddress
         '
@@ -812,7 +796,7 @@ Partial Class CustomerOrdersForm2
         Me.txtDeliveryAddress.Name = "txtDeliveryAddress"
         Me.txtDeliveryAddress.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.txtDeliveryAddress.Size = New System.Drawing.Size(208, 50)
-        Me.txtDeliveryAddress.TabIndex = 706
+        Me.txtDeliveryAddress.TabIndex = 4
         '
         'dtpOrderDate
         '
@@ -823,7 +807,7 @@ Partial Class CustomerOrdersForm2
         Me.dtpOrderDate.Location = New System.Drawing.Point(168, 56)
         Me.dtpOrderDate.Name = "dtpOrderDate"
         Me.dtpOrderDate.Size = New System.Drawing.Size(208, 22)
-        Me.dtpOrderDate.TabIndex = 704
+        Me.dtpOrderDate.TabIndex = 1
         '
         'cboCustomerName
         '
@@ -833,7 +817,7 @@ Partial Class CustomerOrdersForm2
         Me.cboCustomerName.Location = New System.Drawing.Point(168, 111)
         Me.cboCustomerName.Name = "cboCustomerName"
         Me.cboCustomerName.Size = New System.Drawing.Size(208, 21)
-        Me.cboCustomerName.TabIndex = 705
+        Me.cboCustomerName.TabIndex = 3
         '
         'ToolStrip1
         '
@@ -842,7 +826,7 @@ Partial Class CustomerOrdersForm2
         Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButtonNew, Me.ToolStripButtonSave, Me.ToolStripLabel1, Me.ToolStripButtonApproved, Me.ToolStripLabel2, Me.ToolStripButtonCancel, Me.ToolStripButtonClose})
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
-        Me.ToolStrip1.Size = New System.Drawing.Size(866, 25)
+        Me.ToolStrip1.Size = New System.Drawing.Size(925, 25)
         Me.ToolStrip1.TabIndex = 1
         Me.ToolStrip1.Text = "ToolStrip1"
         '
@@ -952,15 +936,15 @@ Partial Class CustomerOrdersForm2
         Me.gridOrderItems.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
         Me.gridOrderItems.Location = New System.Drawing.Point(0, 35)
         Me.gridOrderItems.Name = "gridOrderItems"
-        Me.gridOrderItems.Size = New System.Drawing.Size(866, 159)
-        Me.gridOrderItems.TabIndex = 4
+        Me.gridOrderItems.Size = New System.Drawing.Size(925, 363)
+        Me.gridOrderItems.TabIndex = 1
         '
         'Panel2
         '
         Me.Panel2.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Panel2.Location = New System.Drawing.Point(0, 194)
+        Me.Panel2.Location = New System.Drawing.Point(0, 398)
         Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(866, 35)
+        Me.Panel2.Size = New System.Drawing.Size(925, 35)
         Me.Panel2.TabIndex = 5
         '
         'Panel1
@@ -970,8 +954,8 @@ Partial Class CustomerOrdersForm2
         Me.Panel1.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Panel1.Location = New System.Drawing.Point(0, 0)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(866, 35)
-        Me.Panel1.TabIndex = 3
+        Me.Panel1.Size = New System.Drawing.Size(925, 35)
+        Me.Panel1.TabIndex = 1
         '
         'btnAddOrderItem
         '
@@ -988,14 +972,14 @@ Partial Class CustomerOrdersForm2
         'Column1
         '
         Me.Column1.DataPropertyName = "ProductCode"
-        Me.Column1.HeaderText = "ProductCode"
+        Me.Column1.HeaderText = "Product Code"
         Me.Column1.Name = "Column1"
         Me.Column1.ReadOnly = True
         '
         'Column2
         '
         Me.Column2.DataPropertyName = "ColorName"
-        Me.Column2.HeaderText = "ColorName"
+        Me.Column2.HeaderText = "Color Name"
         Me.Column2.Name = "Column2"
         Me.Column2.ReadOnly = True
         '
@@ -1009,7 +993,7 @@ Partial Class CustomerOrdersForm2
         'Column4
         '
         Me.Column4.DataPropertyName = "SeasonCode"
-        Me.Column4.HeaderText = "SeasonCode"
+        Me.Column4.HeaderText = "Season Code"
         Me.Column4.Name = "Column4"
         Me.Column4.ReadOnly = True
         '
@@ -1018,7 +1002,7 @@ Partial Class CustomerOrdersForm2
         Me.Column5.DataPropertyName = "QuantityOrdered"
         DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
         Me.Column5.DefaultCellStyle = DataGridViewCellStyle3
-        Me.Column5.HeaderText = "QuantityOrdered"
+        Me.Column5.HeaderText = "Quantity Ordered"
         Me.Column5.Name = "Column5"
         '
         'Column6
@@ -1028,7 +1012,7 @@ Partial Class CustomerOrdersForm2
         DataGridViewCellStyle4.Format = "N2"
         DataGridViewCellStyle4.NullValue = Nothing
         Me.Column6.DefaultCellStyle = DataGridViewCellStyle4
-        Me.Column6.HeaderText = "UnitPrice"
+        Me.Column6.HeaderText = "Unit Price"
         Me.Column6.Name = "Column6"
         '
         'Column7
@@ -1038,7 +1022,7 @@ Partial Class CustomerOrdersForm2
         DataGridViewCellStyle5.Format = "N2"
         DataGridViewCellStyle5.NullValue = Nothing
         Me.Column7.DefaultCellStyle = DataGridViewCellStyle5
-        Me.Column7.HeaderText = "TotalItemPrice"
+        Me.Column7.HeaderText = "Total Item Price"
         Me.Column7.Name = "Column7"
         Me.Column7.ReadOnly = True
         '
@@ -1069,7 +1053,7 @@ Partial Class CustomerOrdersForm2
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.White
-        Me.ClientSize = New System.Drawing.Size(1184, 542)
+        Me.ClientSize = New System.Drawing.Size(1264, 761)
         Me.Controls.Add(Me.SplitContainer1)
         Me.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.KeyPreview = True
@@ -1093,7 +1077,6 @@ Partial Class CustomerOrdersForm2
         CType(Me.pbAddBranchCodeName, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.pbAddVendorCodeName, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.pbAddCustomer, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.pbSaveSIDRNo, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ToolStrip1.ResumeLayout(False)
         Me.ToolStrip1.PerformLayout()
         CType(Me.gridOrderItems, System.ComponentModel.ISupportInitialize).EndInit()
@@ -1145,7 +1128,6 @@ Partial Class CustomerOrdersForm2
     Friend WithEvents Label31 As Label
     Friend WithEvents pbAddBranchCodeName As PictureBox
     Friend WithEvents pbAddVendorCodeName As PictureBox
-    Friend WithEvents pbSaveSIDRNo As PictureBox
     Friend WithEvents Label27 As Label
     Friend WithEvents Label28 As Label
     Friend WithEvents txtDRNumber As TextBox

@@ -23,6 +23,8 @@ namespace WarehouseManagementSystem.Core.Entities
         public string Status { get; set; }
         public string BarCode { get; set; }
         public string Type { get; set; }
+        public string UnitOfMeasure2 { get; set; }
+        public decimal? UnitPriceOfUOM2 { get; set; }
     }
 
     public partial class ProductColorSize

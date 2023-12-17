@@ -1888,7 +1888,9 @@ Public Class InventoryLocationsForm
                     userId:=Z_UserID,
                     productColorSizeId:=productColorSizeId,
                     unitOfMeasure:=model.ProductInventoryLocation.UnitOfMeasure,
-                    unitPrice:=model.ProductInventoryLocation.UnitPrice)
+                    unitPrice:=model.ProductInventoryLocation.UnitPrice,
+                    unitOfMeasure2:=model.UnitOfMeasure2,
+                    unitPriceOfUOM2:=model.UnitPriceOfUOM2)
 
                 Dim newRackShelfColumn = form.ProcessedRackShelfColumn
 
@@ -1964,7 +1966,9 @@ Public Class InventoryLocationsForm
                     userId:=Z_UserID,
                     productColorSizeId:=productColorSizeId,
                     unitOfMeasure:=model.ProductInventoryLocation.UnitOfMeasure,
-                    unitPrice:=model.ProductInventoryLocation.UnitPrice)
+                    unitPrice:=model.ProductInventoryLocation.UnitPrice,
+                    unitOfMeasure2:=model.UnitOfMeasure2,
+                    unitPriceOfUOM2:=model.UnitPriceOfUOM2)
 
                 Dim newRackShelfColumn = form.ProcessedRackShelfColumn
 

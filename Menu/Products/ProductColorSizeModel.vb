@@ -25,6 +25,9 @@ Public Class ProductColorSizeModel
         _productColor = productColorSize.ProductColor
 
         _pim = New ProductImageManager(productImageConfigParser)
+
+        UnitOfMeasure2 = productColorSize.UnitOfMeasure2
+        UnitPriceOfUOM2 = productColorSize.UnitPriceOfUOM2
     End Sub
 
     Public Property IsSelected As Boolean
@@ -62,7 +65,7 @@ Public Class ProductColorSizeModel
 
     Public ReadOnly Property UnitOfMeasure As String
         Get
-            Return If(String.IsNullOrEmpty(_ProductInventoryLocation?.UnitOfMeasure), _productColor?.Product?.UnitOfMeasure, _ProductInventoryLocation?.UnitOfMeasure)
+            Return If(String.IsNullOrEmpty(_ProductInventoryLocation?.UnitOfMeasure2), _productColor?.Product?.UnitOfMeasure2, _ProductInventoryLocation?.UnitOfMeasure2)
         End Get
     End Property
 
@@ -155,6 +158,7 @@ Public Class ProductColorSizeModel
                 Sum(Function(t) If(t.TotalAvailableQty, 0)), 0)
         End Get
     End Property
+
     Public ReadOnly Property TotalAllocatedQty As Integer
         Get
             Return If(_productInventoryLocations?.
@@ -162,6 +166,7 @@ Public Class ProductColorSizeModel
                 Sum(Function(t) If(t.TotalAllocatedQty, 0)), 0)
         End Get
     End Property
+
     Public ReadOnly Property TotalReserveQty As Integer
         Get
             Return If(_productInventoryLocations?.
@@ -169,6 +174,7 @@ Public Class ProductColorSizeModel
                 Sum(Function(t) If(t.TotalReserveQty, 0)), 0)
         End Get
     End Property
+
     Public ReadOnly Property TotalDamageQty As Integer
         Get
             Return If(_productInventoryLocations?.
@@ -176,6 +182,7 @@ Public Class ProductColorSizeModel
                 Sum(Function(t) If(t.TotalDamageQty, 0)), 0)
         End Get
     End Property
+
     Public ReadOnly Property TotalSupplierProblemQty As Integer
         Get
             Return If(_productInventoryLocations?.
@@ -183,6 +190,7 @@ Public Class ProductColorSizeModel
                 Sum(Function(t) If(t.TotalSupplierProblemQty, 0)), 0)
         End Get
     End Property
+
     Public ReadOnly Property TotalInRepairQty As Integer
         Get
             Return If(_productInventoryLocations?.
@@ -190,6 +198,7 @@ Public Class ProductColorSizeModel
                 Sum(Function(t) If(t.TotalInRepairQty, 0)), 0)
         End Get
     End Property
+
     Public ReadOnly Property TotalToReceiveQty As Integer
         Get
             Return If(_productInventoryLocations?.
@@ -197,6 +206,7 @@ Public Class ProductColorSizeModel
                 Sum(Function(t) If(t.TotalToReceiveQty, 0)), 0)
         End Get
     End Property
+
     Public ReadOnly Property RunningTotalQty As Integer
         Get
             Return If(_productInventoryLocations?.
@@ -204,6 +214,7 @@ Public Class ProductColorSizeModel
                 Sum(Function(t) If(t.RunningTotalQty, 0)), 0)
         End Get
     End Property
+
     Public ReadOnly Property TotalOrderableQty As Integer
         Get
             Return If(_productInventoryLocations?.
@@ -211,4 +222,7 @@ Public Class ProductColorSizeModel
                 Sum(Function(t) t.TotalOrderableQty), 0)
         End Get
     End Property
+
+    Public ReadOnly Property UnitOfMeasure2 As String
+    Public ReadOnly Property UnitPriceOfUOM2 As Decimal?
 End Class
