@@ -66,8 +66,7 @@ namespace WarehouseManagementSystem.Core.Entities
             string sku,
             string sku2,
             int productColorSizeId,
-            int productInventoryLocationId,
-            int? rowId = null)
+            int productInventoryLocationId)
         {
             OrganizationID = organizationId;
             AuditUser(userId);
@@ -89,8 +88,7 @@ namespace WarehouseManagementSystem.Core.Entities
             string sku,
             string sku2,
             int productColorSizeId,
-            int productInventoryLocationId,
-            int? rowId = null) => new OrderItem(organizationId: organizationId,
+            int productInventoryLocationId) => new OrderItem(organizationId: organizationId,
                 userId: userId,
                 qtyOrdered: qtyOrdered,
                 srp: srp,
@@ -98,7 +96,6 @@ namespace WarehouseManagementSystem.Core.Entities
                 sku: sku,
                 sku2: sku2,
                 productColorSizeId: productColorSizeId,
-                productInventoryLocationId: productInventoryLocationId,
-                rowId: rowId);
+                productInventoryLocationId: productInventoryLocationId);
     }
 }

@@ -193,7 +193,9 @@ namespace WarehouseManagementSystem.Infrastructure.Data
                 //t.HasKey("RowID");
 
                 t.HasMany(x => x.OrderItems)
-                    .WithOne(x => x.Order);
+                    .WithOne(x => x.Order)
+                    .HasForeignKey(x => x.OrderID)
+                    .HasPrincipalKey(x => x.RowID);
 
                 t.HasMany(x => x.MovementHistories)
                     .WithOne(x => x.Order);

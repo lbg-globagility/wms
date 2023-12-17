@@ -132,8 +132,7 @@ Public Class CustomerOrdersForm2
                     sku:=StringExtensions.IfNullOrEmpty(orderItemModel?.Sku, item.Sku),
                     sku2:=StringExtensions.IfNullOrEmpty(orderItemModel?.Sku2, item.Sku2),
                     productColorSizeId:=If(orderItemModel?.ProductColorSizeId, item.ProductColorSizeId),
-                    productInventoryLocationId:=If(orderItemModel?.ProductInventoryLocationId, item.ProductInventoryLocation.RowID.Value),
-                    rowId:=orderItemModel?.RowID)
+                    productInventoryLocationId:=If(orderItemModel?.ProductInventoryLocationId, item.ProductInventoryLocation.RowID.Value))
 
                 orderItemList.Add(thisOrderItem)
             Next

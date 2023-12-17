@@ -95,12 +95,12 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
                             if (oi.IsNewEntity)
                             {
                                 oi.OrderID = o.RowID.Value;
-                                _context.Entry(oi).State = EntityState.Added;
+                                // _context.Entry(oi).State = EntityState.Added;
                                 addedOrderItems.Add(oi);
                             }
                             else if (!oi.IsNewEntity)
                             {
-                                _context.Entry(oi).State = EntityState.Modified;
+                                // _context.Entry(oi).State = EntityState.Modified;
                                 updatedOrderItems.Add(oi);
                             }
                         });
@@ -134,12 +134,12 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
                             if (oi.IsNewEntity)
                             {
                                 oi.OrderID = o.RowID.Value;
-                                _context.Entry(oi).State = EntityState.Added;
+                                // _context.Entry(oi).State = EntityState.Added;
                                 addedOrderItems.Add(oi);
                             }
                             else if (!oi.IsNewEntity)
                             {
-                                _context.Entry(oi).State = EntityState.Modified;
+                                // _context.Entry(oi).State = EntityState.Modified;
                                 updatedOrderItems.Add(oi);
                             }
                         });
