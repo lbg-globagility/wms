@@ -283,6 +283,38 @@ namespace WarehouseManagementSystem.Infrastructure.Data
                     .WithMany(x => x.OrderItems)
                     .HasForeignKey(x => x.RackShelfColumnId)
                     .HasPrincipalKey(x => x.RowID);
+
+                // entity value
+                Expression<Func<string, OrderItemStatus>> stringToOrderItemStatus()
+                {
+                    return s => s == OrderItemStatus.Open.ToString() ? OrderItemStatus.Open :
+                        s == OrderItemStatus.Delivered.ToString() ? OrderItemStatus.Delivered :
+                        s == OrderItemStatus.Verified.ToString() ? OrderItemStatus.Verified :
+                        s == OrderItemStatus.Inactive.ToString() ? OrderItemStatus.Inactive :
+                        s == OrderItemStatus.Packed.ToString() ? OrderItemStatus.Packed :
+                        s == OrderItemStatus.Active.ToString() ? OrderItemStatus.Active :
+                        s == OrderItemStatus.New.ToString() ? OrderItemStatus.New :
+                        s == OrderItemStatus.PickListed.ToString() ? OrderItemStatus.PickListed : default;
+                }
+
+                // database value
+                Expression<Func<OrderItemStatus, string>> OrderItemStatusToString()
+                {
+                    return l => l == OrderItemStatus.Open ? OrderItemStatus.Open.ToString() :
+                        l == OrderItemStatus.Delivered ? OrderItemStatus.Delivered.ToString() :
+                        l == OrderItemStatus.Verified ? OrderItemStatus.Verified.ToString() :
+                        l == OrderItemStatus.Inactive ? OrderItemStatus.Inactive.ToString() :
+                        l == OrderItemStatus.Packed ? OrderItemStatus.Packed.ToString() :
+                        l == OrderItemStatus.Active ? OrderItemStatus.Active.ToString() :
+                        l == OrderItemStatus.New ? OrderItemStatus.New.ToString() :
+                        l == OrderItemStatus.PickListed ? OrderItemStatus.PickListed.ToString() : default;
+                }
+
+                var converter = new ValueConverter<OrderItemStatus, string>(convertToProviderExpression: OrderItemStatusToString(),
+                    convertFromProviderExpression: stringToOrderItemStatus());
+
+                t.Property(x => x.Status)
+                    .HasConversion(converter);
             });
 
             modelBuilder.Entity<Lineup>(t =>

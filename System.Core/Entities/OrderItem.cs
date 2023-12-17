@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using WarehouseManagementSystem.Core.Entities.Base;
+using WarehouseManagementSystem.Core.Enums;
 
 namespace WarehouseManagementSystem.Core.Entities
 {
@@ -36,7 +37,7 @@ namespace WarehouseManagementSystem.Core.Entities
         public string SKU2 { get; set; }
         public string UnitOfMeasure { get; set; }
         public string Tags { get; set; }
-        public string Status { get; set; }
+        public OrderItemStatus Status { get; set; }
         public string Remarks { get; set; }
         public string Reasons { get; set; }
         public int? ProductInventoryLocationId { get; set; }
@@ -77,6 +78,7 @@ namespace WarehouseManagementSystem.Core.Entities
             SKU2 = sku2;
             ProductColorSizeID = productColorSizeId;
             ProductInventoryLocationId = productInventoryLocationId;
+            Status = OrderItemStatus.Open;
         }
 
         public static OrderItem NewCustomerOrderItem(int organizationId,

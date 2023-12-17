@@ -4,19 +4,47 @@ Imports WarehouseManagementSystem.Core.Entities
 
 Public Class OrderItemModel
     Private ReadOnly _orderItem As OrderItem
+    Private ReadOnly _productInventoryLocation As ProductInventoryLocation
 
     Public Sub New(orderItem As OrderItem)
         _orderItem = orderItem
 
-        _ProductCode = orderItem.ProductColorSize?.ProductColor.Product.ProductCode
-        _ColorName = orderItem.ProductColorSize?.ProductColor.Color.ColorName
-        _Size = If(orderItem.ProductColorSize?.Size, 0)
-        _SeasonCode = orderItem.ProductColorSize?.SeasonCode
+        Dim productColorSize = orderItem.ProductColorSize
+
+        _ProductCode = productColorSize?.ProductColor.Product.ProductCode
+        _ColorName = productColorSize?.ProductColor.Color.ColorName
+        _Size = If(productColorSize?.Size, 0)
+        _SeasonCode = productColorSize?.SeasonCode
         _QuantityOrdered = If(orderItem.QtyOrdered, 0)
         _UnitPrice = If(orderItem.SRP, 0)
         _UnitOfMeasure = orderItem.UnitOfMeasure
         _Sku = orderItem.SKU
         _Sku2 = orderItem.SKU2
+        _Remarks = orderItem.Remarks
+        _IsNew = orderItem.IsNewEntity
+
+        RowID = orderItem.RowID
+        ProductColorSizeId = orderItem.ProductColorSizeID
+        ProductInventoryLocationId = orderItem.ProductInventoryLocationId
+    End Sub
+
+    Public Sub New(orderItem As OrderItem, productInventoryLocation As ProductInventoryLocation)
+        _productInventoryLocation = productInventoryLocation
+
+        _orderItem = orderItem
+
+        Dim productColorSize = If(orderItem.ProductColorSize Is Nothing, productInventoryLocation.ProductColorSize, orderItem.ProductColorSize)
+
+        _ProductCode = productColorSize?.ProductColor.Product.ProductCode
+        _ColorName = productColorSize?.ProductColor.Color.ColorName
+        _Size = If(productColorSize?.Size, 0)
+        _SeasonCode = productColorSize?.SeasonCode
+        _QuantityOrdered = If(orderItem.QtyOrdered, 0)
+        _UnitPrice = If(orderItem.SRP, 0)
+        _UnitOfMeasure = orderItem.UnitOfMeasure
+        _Sku = orderItem.SKU
+        _Sku2 = orderItem.SKU2
+        _Remarks = orderItem.Remarks
         _IsNew = orderItem.IsNewEntity
 
         RowID = orderItem.RowID
@@ -42,11 +70,23 @@ Public Class OrderItemModel
     Public Property UnitOfMeasure As String
     Public Property Sku As String
     Public Property Sku2 As String
+    Public Property Remarks As String
     Public ReadOnly Property IsNew As Boolean
     Public ReadOnly Property IsDelete As Boolean
+
     Public ReadOnly Property TotalItemPrice As Decimal
         Get
             Return UnitPrice * QuantityOrdered
         End Get
     End Property
+
+    Public Sub Refresh(orderItemModel As OrderItemModel)
+        _orderItem.QtyOrdered = orderItemModel.QuantityOrdered
+        _orderItem.SRP = orderItemModel.UnitPrice
+        _orderItem.UnitOfMeasure = orderItemModel.UnitOfMeasure
+        _orderItem.SKU = orderItemModel.Sku
+        _orderItem.SKU2 = orderItemModel.Sku2
+        _orderItem.Remarks = orderItemModel.Remarks
+    End Sub
+
 End Class

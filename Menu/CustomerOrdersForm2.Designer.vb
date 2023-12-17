@@ -114,6 +114,7 @@ Partial Class CustomerOrdersForm2
         Me.Column7 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column8 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column10 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column11 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column9 = New DevComponents.DotNetBar.Controls.DataGridViewButtonXColumn()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
@@ -539,7 +540,7 @@ Partial Class CustomerOrdersForm2
         Me.dtpDateSubmitted.Location = New System.Drawing.Point(564, 194)
         Me.dtpDateSubmitted.Name = "dtpDateSubmitted"
         Me.dtpDateSubmitted.ShowCheckBox = True
-        Me.dtpDateSubmitted.Size = New System.Drawing.Size(110, 22)
+        Me.dtpDateSubmitted.Size = New System.Drawing.Size(208, 22)
         Me.dtpDateSubmitted.TabIndex = 14
         '
         'dtpEndDate
@@ -552,7 +553,7 @@ Partial Class CustomerOrdersForm2
         Me.dtpEndDate.Location = New System.Drawing.Point(564, 248)
         Me.dtpEndDate.Name = "dtpEndDate"
         Me.dtpEndDate.ShowCheckBox = True
-        Me.dtpEndDate.Size = New System.Drawing.Size(110, 22)
+        Me.dtpEndDate.Size = New System.Drawing.Size(208, 22)
         Me.dtpEndDate.TabIndex = 16
         '
         'Label22
@@ -588,7 +589,7 @@ Partial Class CustomerOrdersForm2
         Me.dtpDeliveryDate.Location = New System.Drawing.Point(564, 221)
         Me.dtpDeliveryDate.Name = "dtpDeliveryDate"
         Me.dtpDeliveryDate.ShowCheckBox = True
-        Me.dtpDeliveryDate.Size = New System.Drawing.Size(110, 22)
+        Me.dtpDeliveryDate.Size = New System.Drawing.Size(208, 22)
         Me.dtpDeliveryDate.TabIndex = 15
         '
         'Label23
@@ -754,7 +755,6 @@ Partial Class CustomerOrdersForm2
         Me.cboInventoryLocation.Name = "cboInventoryLocation"
         Me.cboInventoryLocation.Size = New System.Drawing.Size(208, 21)
         Me.cboInventoryLocation.TabIndex = 2
-        Me.cboInventoryLocation.Visible = False
         '
         'cboBranchCodeNameInfo
         '
@@ -923,7 +923,7 @@ Partial Class CustomerOrdersForm2
         '
         Me.gridOrderItems.AllowUserToAddRows = False
         Me.gridOrderItems.AllowUserToDeleteRows = False
-        Me.gridOrderItems.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column1, Me.Column2, Me.Column3, Me.Column4, Me.Column5, Me.Column6, Me.Column7, Me.Column8, Me.Column10, Me.Column9})
+        Me.gridOrderItems.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column1, Me.Column2, Me.Column3, Me.Column4, Me.Column5, Me.Column6, Me.Column7, Me.Column8, Me.Column10, Me.Column11, Me.Column9})
         DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
         DataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Window
         DataGridViewCellStyle6.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -1037,6 +1037,12 @@ Partial Class CustomerOrdersForm2
         Me.Column10.DataPropertyName = "Sku2"
         Me.Column10.HeaderText = "SKU2"
         Me.Column10.Name = "Column10"
+        '
+        'Column11
+        '
+        Me.Column11.DataPropertyName = "Remarks"
+        Me.Column11.HeaderText = "Remarks"
+        Me.Column11.Name = "Column11"
         '
         'Column9
         '
@@ -1170,5 +1176,6 @@ Partial Class CustomerOrdersForm2
     Friend WithEvents Column7 As DataGridViewTextBoxColumn
     Friend WithEvents Column8 As DataGridViewTextBoxColumn
     Friend WithEvents Column10 As DataGridViewTextBoxColumn
+    Friend WithEvents Column11 As DataGridViewTextBoxColumn
     Friend WithEvents Column9 As DevComponents.DotNetBar.Controls.DataGridViewButtonXColumn
 End Class

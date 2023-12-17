@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using WarehouseManagementSystem.Core.Entities.Base;
+using WarehouseManagementSystem.Utilities.Extensions;
 
 namespace WarehouseManagementSystem.Core.Entities
 {
@@ -36,7 +38,7 @@ namespace WarehouseManagementSystem.Core.Entities
         public virtual ProductColorSize ProductColorSize { get; set; }
         public virtual ProductInventoryLocation ProductInventoryLocation { get; set; }
         public string ProductCode => ProductInventoryLocation?.ProductColorSize?.ProductColor?.Product?.ProductCode;
-        public string UnitOfMeasure => ProductInventoryLocation?.UnitOfMeasure;
+        public string UnitOfMeasure => new string[] { ProductInventoryLocation?.UnitOfMeasure2, ProductColorSize?.UnitOfMeasure2 }.Where(t => !string.IsNullOrEmpty(t)).FirstOrDefault();
 
         private MovementHistory()
         {

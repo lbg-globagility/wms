@@ -80,6 +80,12 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
 
         public async Task<ICollection<ProductInventoryLocation>> GetByInventoryLocationIdAndProductColorSizeIdsAsync(int inventoryLocationId, int[] productColorSizeIds) => await _context.ProductInventoryLocations
             .Include(t => t.RackShelfColumn)
+            .Include(t => t.ProductColorSize)
+                .ThenInclude(t => t.ProductColor)
+                    .ThenInclude(t => t.Product)
+            .Include(t => t.ProductColorSize)
+                .ThenInclude(t => t.ProductColor)
+                    .ThenInclude(t => t.Color)
             .Where(t => productColorSizeIds.Contains(t.ProductColorSizeID))
             .Where(t => t.RackShelfColumn.InventoryLocationID == inventoryLocationId)
             .ToListAsync();

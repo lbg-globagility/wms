@@ -44,8 +44,18 @@ namespace WarehouseManagementSystem.Core.Entities
                 {
                     existingOrderItem.QtyOrdered = orderItem.QtyOrdered;
                     existingOrderItem.SRP = orderItem.SRP;
+                    existingOrderItem.UnitOfMeasure = orderItem.UnitOfMeasure;
+                    existingOrderItem.SKU = orderItem.SKU;
+                    existingOrderItem.SKU2 = orderItem.SKU2;
+                    existingOrderItem.Remarks = orderItem.Remarks;
                 }
             }
+        }
+
+        public void RecomputeTotalAmount()
+        {
+            var totalAmount = OrderItems?.Sum(t => t.OrderedGross) ?? 0M;
+            TotalAmount = totalAmount;
         }
     }
 }

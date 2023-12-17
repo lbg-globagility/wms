@@ -759,6 +759,12 @@ Public Class ProductsForm
             Dim sql1 As String = "SELECT COALESCE(p.productcode,''),COALESCE(b.brandname,''),COALESCE(ct.categoryname,''),COALESCE(cm.companyname,''),COALESCE(p.unitprice,0.0)," &
                         "COALESCE(p.unitofmeasure,''),COALESCE(p.description,''),p.image FROM products p LEFT JOIN brands b ON p.brandid = b.rowid " &
                         "LEFT JOIN categories ct ON p.categoryid = ct.rowid LEFT JOIN companies cm ON p.companyid = cm.rowid WHERE p.rowid = " & iproductid & " "
+            If IsThurston Then
+                sql1 = "SELECT COALESCE(p.productcode,''),COALESCE(b.brandname,''),COALESCE(ct.categoryname,''),COALESCE(cm.companyname,''),COALESCE(p.UnitPriceOfUOM2,0.0)," &
+                        "COALESCE(p.UnitOfMeasure2,''),COALESCE(p.description,''),p.image FROM products p LEFT JOIN brands b ON p.brandid = b.rowid " &
+                        "LEFT JOIN categories ct ON p.categoryid = ct.rowid LEFT JOIN companies cm ON p.companyid = cm.rowid WHERE p.rowid = " & iproductid & " "
+            End If
+
             Dim cmd1 As New MySqlCommand(sql1, conn1)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             While reader1.Read()

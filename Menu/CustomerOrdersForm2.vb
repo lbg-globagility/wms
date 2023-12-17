@@ -5,6 +5,7 @@ Imports WarehouseManagementSystem.Core.Enums
 Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
 Imports WarehouseManagementSystem.Core.Interfaces.Repositories
 Imports WarehouseManagementSystem.Desktop.Utilities
+Imports WarehouseManagementSystem.Infrastructure.Data.Services
 Imports WarehouseManagementSystem.Utilities.Extensions
 
 Public Class CustomerOrdersForm2
@@ -103,7 +104,7 @@ Public Class CustomerOrdersForm2
         cboAgent.DataSource = agentDataSource
     End Function
 
-    Private Sub btnAddOrderItem_Click(sender As Object, e As EventArgs) Handles btnAddOrderItem.Click
+    Private Async Sub btnAddOrderItem_Click(sender As Object, e As EventArgs) Handles btnAddOrderItem.Click
         Dim inventoryLocationId = CInt(cboInventoryLocation.SelectedValue)
 
         Dim hasOrder As Boolean = _selectedOrder IsNot Nothing
@@ -139,7 +140,7 @@ Public Class CustomerOrdersForm2
 
             _selectedOrder.AddCustomerOrderItems(orderItemList)
 
-            ReloadDisplayForm(_selectedOrder)
+            Await ReloadDisplayForm(_selectedOrder)
         End If
     End Sub
 
@@ -148,7 +149,7 @@ Public Class CustomerOrdersForm2
     End Function
 
     Private Function GetOrderItemModels() As List(Of OrderItemModel)
-        If If(gridOrderItems.Rows?.Count(), 0) > 0 Then
+        If Not If(gridOrderItems.Rows?.Count(), 0) > 0 Then
             Return Enumerable.Empty(Of OrderItemModel).ToList()
         End If
 
@@ -158,7 +159,7 @@ Public Class CustomerOrdersForm2
     End Function
 
     Private Sub cboCustomerOrderType_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboCustomerOrderType.SelectedIndexChanged
-
+        cboCustomerOrderType_SelectedValueChanged(sender, e)
     End Sub
 
     Private Sub cboCustomerOrderType_SelectedValueChanged(sender As Object, e As EventArgs) Handles cboCustomerOrderType.SelectedValueChanged
@@ -220,30 +221,30 @@ Public Class CustomerOrdersForm2
         cboCustomerName.DropDownWidth = width + 8
     End Sub
 
-    Private Sub gridOrders_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles gridOrders.CellContentClick
+    Private Async Sub gridOrders_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles gridOrders.CellContentClick
         Dim currentRow = gridOrders.CurrentRow
 
         If currentRow Is Nothing Then
-            ReloadDisplayForm()
+            Await ReloadDisplayForm()
             Return
         End If
 
         Dim selectedOrder = CType(currentRow.DataBoundItem, Order)
 
-        ReloadDisplayForm(selectedOrder)
+        Await ReloadDisplayForm(selectedOrder)
     End Sub
 
-    Private Sub gridOrders_SelectionChanged(sender As Object, e As EventArgs) Handles gridOrders.SelectionChanged
+    Private Async Sub gridOrders_SelectionChanged(sender As Object, e As EventArgs) Handles gridOrders.SelectionChanged
         Dim currentRow = gridOrders.CurrentRow
         If currentRow Is Nothing Then
             _selectedOrder = Nothing
-            ReloadDisplayForm()
+            Await ReloadDisplayForm()
             Return
         End If
 
         _selectedOrder = CType(currentRow.DataBoundItem, Order)
 
-        ReloadDisplayForm(order:=_selectedOrder)
+        Await ReloadDisplayForm(order:=_selectedOrder)
 
     End Sub
 
@@ -261,7 +262,16 @@ Public Class CustomerOrdersForm2
     End Sub
 
     Private Sub gridOrderItems_CellEndEdit(sender As Object, e As DataGridViewCellEventArgs) Handles gridOrderItems.CellEndEdit
+        Dim currentRow = gridOrderItems.CurrentRow
+
+        If currentRow Is Nothing Then Return
+
         gridOrderItems.Refresh()
+
+        Dim selectedOrderItem = GetOrderItemModel(currentRow)
+
+        selectedOrderItem.Refresh(orderItemModel:=selectedOrderItem)
+
     End Sub
 
     Private Async Sub ToolStripButtonNew_Click(sender As Object, e As EventArgs) Handles ToolStripButtonNew.Click
@@ -291,66 +301,107 @@ Public Class CustomerOrdersForm2
         SplitContainer1.Panel1.Enabled = ToolStripButtonNew.Enabled
     End Sub
 
-    Private Function ReloadDisplayForm(Optional order As Order = Nothing) As Task
-        txtOrderNumber.Text = String.Empty
-        txtReferenceNumber.Text = String.Empty
-        txtStatus.Text = String.Empty
-        dtpOrderDate.Value = DateTime.Now
-        cboCustomerName.Text = String.Empty
-        cboAgent.Text = String.Empty
-        cboCustomerOrderType.Text = String.Empty
-        txtDRNumber.Text = String.Empty
-        txtDeliveryAddress.Text = String.Empty
+    Private Async Function ReloadDisplayForm(Optional order As Order = Nothing) As Task(Of Integer)
+        'txtOrderNumber.Text = String.Empty
+        'txtReferenceNumber.Text = String.Empty
+        'txtStatus.Text = String.Empty
+        'dtpOrderDate.Value = Date.Now
+        'cboCustomerName.Text = String.Empty
+        'cboAgent.Text = String.Empty
+        'cboCustomerOrderType.Text = String.Empty
+        'txtDRNumber.Text = String.Empty
+        'txtDeliveryAddress.Text = String.Empty
 
-        dtpDateSubmitted.Value = DateTime.Now
-        dtpDateSubmitted.Checked = False
+        'dtpDateSubmitted.Value = Date.Now
+        'dtpDateSubmitted.Checked = False
 
-        dtpDeliveryDate.Value = DateTime.Now
-        dtpDeliveryDate.Checked = False
+        'dtpDeliveryDate.Value = Date.Now
+        'dtpDeliveryDate.Checked = False
 
-        dtpEndDate.Value = DateTime.Now
-        dtpEndDate.Checked = False
+        'dtpEndDate.Value = Date.Now
+        'dtpEndDate.Checked = False
 
-        txtComments.Text = String.Empty
+        'txtComments.Text = String.Empty
 
         gridOrderItems.DataSource = Enumerable.Empty(Of OrderItemModel)()
 
+        For Each textBox In SplitContainer2.Panel1.Controls.OfType(Of Control).OfType(Of TextBox)
+            textBox.DataBindings.Clear()
+        Next
+        For Each comboBox In SplitContainer2.Panel1.Controls.OfType(Of Control).OfType(Of ComboBox)
+            comboBox.DataBindings.Clear()
+        Next
+        For Each dateTimePicker In SplitContainer2.Panel1.Controls.OfType(Of Control).OfType(Of DateTimePicker)
+            dateTimePicker.DataBindings.Clear()
+        Next
+
         If order Is Nothing Then
 
-            Return Task.FromResult(0)
+            Return 0
         End If
 
-        txtOrderNumber.Text = order.OrderNumber
-        txtReferenceNumber.Text = order.ReferenceNumber
-        txtStatus.Text = $"{order.Status}"
-        dtpOrderDate.Value = If(order.OrderDate?.Date, DateTime.Now)
-        cboCustomerName.SelectedValue = If(order.AccountID, 0)
-        cboAgent.SelectedValue = If(order.AgentID, 0)
-        cboInventoryLocation.SelectedValue = If(order.InventoryLocationID, -1)
-        cboCustomerOrderType.SelectedValue = If(order.InventoryLocation?.Type, InventoryLocationType.Main)
-        txtDRNumber.Text = order.DRNumber
-        txtDeliveryAddress.Text = order.CustomerAddress
+        'txtOrderNumber.Text = order.OrderNumber
+        txtOrderNumber.DataBindings.Add("Text", order, "OrderNumber", True, DataSourceUpdateMode.Never)
 
-        dtpDateSubmitted.Value = If(order.DateSubmitted?.Date, DateTime.Now)
+        'txtReferenceNumber.Text = order.ReferenceNumber
+        txtReferenceNumber.DataBindings.Add("Text", order, "ReferenceNumber", True, DataSourceUpdateMode.OnPropertyChanged)
+
+        'txtStatus.Text = $"{order.Status}"
+        txtStatus.DataBindings.Add("Text", order, "Status", True, DataSourceUpdateMode.Never)
+
+        'dtpOrderDate.Value = If(order.OrderDate?.Date, Date.Now)
+        Dim dtpOrderDateBinding = New Binding("Value", order, "OrderDate") With {
+            .DataSourceUpdateMode = DataSourceUpdateMode.OnPropertyChanged}
+        dtpOrderDate.DataBindings.Add(dtpOrderDateBinding)
+
+        'cboCustomerName.SelectedValue = If(order.AccountID, 0)
+        cboCustomerName.DataBindings.Add("SelectedValue", order, "AccountID", True, DataSourceUpdateMode.OnPropertyChanged)
+
+        'cboAgent.SelectedValue = If(order.AgentID, 0)
+        cboAgent.DataBindings.Add("SelectedValue", order, "AgentID", True, DataSourceUpdateMode.OnPropertyChanged)
+
+        'cboInventoryLocation.SelectedValue = If(order.InventoryLocationID, -1)
+        cboInventoryLocation.DataBindings.Add("SelectedValue", order, "InventoryLocationID", True, DataSourceUpdateMode.OnPropertyChanged)
+
+        cboCustomerOrderType.SelectedValue = If(order.InventoryLocation?.Type, InventoryLocationType.Main)
+
+        'txtDRNumber.Text = order.DRNumber
+        txtDRNumber.DataBindings.Add("Text", order, "DRNumber", True, DataSourceUpdateMode.OnPropertyChanged)
+
+        'txtDeliveryAddress.Text = order.CustomerAddress
+        txtDeliveryAddress.DataBindings.Add("Text", order, "CustomerAddress", True, DataSourceUpdateMode.OnPropertyChanged)
+
+        dtpDateSubmitted.Value = If(order.DateSubmitted?.Date, Date.Now)
         dtpDateSubmitted.Checked = False
 
-        dtpDeliveryDate.Value = If(order.TargetDate?.Date, DateTime.Now)
+        dtpDeliveryDate.Value = If(order.TargetDate?.Date, Date.Now)
         dtpDeliveryDate.Checked = False
 
-        dtpEndDate.Value = If(order.EndDate?.Date, DateTime.Now)
+        dtpEndDate.Value = If(order.EndDate?.Date, Date.Now)
         dtpEndDate.Checked = False
 
-        txtComments.Text = order.Comments
+        'txtComments.Text = order.Comments
+        txtComments.DataBindings.Add("Text", order, "Comments", True, DataSourceUpdateMode.OnPropertyChanged)
 
-        Dim fsdfsd =
+        Dim productColorSizeIds = order.OrderItems?.Select(Function(oi) oi.ProductColorSizeID.Value).ToArray()
+
+        Dim productInventoryLocationDataService = GetRequiredService(Of IProductInventoryLocationDataService)()
+        Dim productInventoryLocations = Await productInventoryLocationDataService.GetByInventoryLocationIdAndProductColorSizeIdsAsync(inventoryLocationId:=CInt(cboInventoryLocation.SelectedValue), productColorSizeIds:=productColorSizeIds)
+
+        Dim getOrderItemModel =
             Function(orderItem As OrderItem)
-                Return New OrderItemModel(orderItem)
+                Dim productInventoryLocation = productInventoryLocations.
+                    Where(Function(t) t.ProductColorSizeID = orderItem.ProductColorSizeID.Value).
+                    FirstOrDefault()
+                If orderItem.ProductColorSize Is Nothing Then Return New OrderItemModel(orderItem:=orderItem, productInventoryLocation:=productInventoryLocation)
+
+                Return New OrderItemModel(orderItem:=orderItem)
             End Function
 
-        gridOrderItems.DataSource = If(_selectedOrder.OrderItems?.Select(Function(t) fsdfsd(t)).ToList(),
+        gridOrderItems.DataSource = If(_selectedOrder.OrderItems?.Select(Function(t) getOrderItemModel(t)).ToList(),
             Enumerable.Empty(Of OrderItemModel)())
 
-        Return Task.FromResult(0)
+        Return 0
     End Function
 
     Private Async Sub ToolStripButtonSave_Click(sender As Object, e As EventArgs) Handles ToolStripButtonSave.Click
@@ -371,22 +422,30 @@ Public Class CustomerOrdersForm2
 
         Await FunctionUtils.TryCatchFunctionAsync("Save changes from Customer Order",
             Async Function()
-                With _selectedOrder
-                    .OrderNumber = txtOrderNumber.Text
-                    .ReferenceNumber = txtReferenceNumber.Text
-                    Dim orderStatus As OrderStatus
-                    .Status = If([Enum].TryParse(txtStatus.Text, result:=orderStatus), orderStatus, OrderStatus.Open)
-                    .OrderDate = dtpOrderDate.Value.Date
-                    .AccountID = CInt(cboCustomerName.SelectedValue)
-                    .AgentID = CInt(cboAgent.SelectedValue)
-                    .InventoryLocationID = CInt(cboInventoryLocation.SelectedValue)
-                    .DRNumber = txtDRNumber.Text
-                    .CustomerAddress = txtDeliveryAddress.Text
-                    .DateSubmitted = dtpDateSubmitted.Value.Date
-                    .TargetDate = dtpDeliveryDate.Value.Date
-                    .EndDate = dtpEndDate.Value.Date
-                    .Comments = txtComments.Text
-                End With
+                'With _selectedOrder
+                '    .OrderNumber = txtOrderNumber.Text
+                '    .ReferenceNumber = txtReferenceNumber.Text
+                '    Dim orderStatus As OrderStatus
+                '    .Status = If([Enum].TryParse(txtStatus.Text, result:=orderStatus), orderStatus, OrderStatus.Open)
+                '    .OrderDate = dtpOrderDate.Value.Date
+                '    .AccountID = CInt(cboCustomerName.SelectedValue)
+                '    .AgentID = CInt(cboAgent.SelectedValue)
+                '    .InventoryLocationID = CInt(cboInventoryLocation.SelectedValue)
+                '    .DRNumber = txtDRNumber.Text
+                '    .CustomerAddress = txtDeliveryAddress.Text
+                '    .DateSubmitted = dtpDateSubmitted.Value.Date
+                '    .TargetDate = dtpDeliveryDate.Value.Date
+                '    .EndDate = dtpEndDate.Value.Date
+                '    .Comments = txtComments.Text
+                'End With
+
+                _selectedOrder.CustomerName = cboCustomerName.Text
+
+                Dim orderItemList = GetOrderItemModels().
+                    Select(Function(t) t.OrderItem).
+                    ToList()
+                _selectedOrder.AddCustomerOrderItems(orderItemList)
+                _selectedOrder.RecomputeTotalAmount()
 
                 Dim orderDataService = GetRequiredService(Of IOrderDataService)()
                 Await orderDataService.SaveManyCustomerOrderAsync(userId:=Z_UserID,

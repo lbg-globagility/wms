@@ -18,6 +18,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
         private readonly IPositionViewDataService _positionViewDataService;
         private readonly IMovementHistoryDataService _movementHistoryDataService;
         private readonly IProductInventoryLocationDataService _productInventoryLocationDataService;
+        private readonly IOrderItemDataService _orderItemDataService;
 
         public OrderDataService(IOrderRepository orderRepository,
             IUserActivityRepository userActivityRepository,
@@ -26,7 +27,8 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
             IProductInventoryLocationRepository productInventoryLocationRepository,
             IPositionViewDataService positionViewDataService,
             IMovementHistoryDataService movementHistoryDataService,
-            IProductInventoryLocationDataService productInventoryLocationDataService) :
+            IProductInventoryLocationDataService productInventoryLocationDataService,
+            IOrderItemDataService orderItemDataService) :
 
             base(orderRepository,
                 userActivityRepository,
@@ -39,6 +41,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
             _positionViewDataService = positionViewDataService;
             _movementHistoryDataService = movementHistoryDataService;
             _productInventoryLocationDataService = productInventoryLocationDataService;
+            _orderItemDataService = orderItemDataService;
         }
 
         public async Task<List<Order>> GetOrdersByOrderTypeAsync(int organizationId, OrderType orderType) =>

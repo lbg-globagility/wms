@@ -6,8 +6,6 @@ using WarehouseManagementSystem.Core.Entities;
 using WarehouseManagementSystem.Core.Enums;
 using WarehouseManagementSystem.Core.Interfaces.Repositories;
 using WarehouseManagementSystem.Infrastructure.Data.Repositories.Base;
-using System.Linq;
-using System;
 
 namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
 {
@@ -15,13 +13,13 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
     {
         public OrderRepository(SystemContext context) : base(context)
         {
-
         }
+
         public async Task<Order> GetById(int orderId) => await _context.Orders
-           .Include(x=>x.OrderItems)
-            .ThenInclude(x=>x.ProductColorSize)
-                .ThenInclude(x=>x.ProductColor)
-                    .ThenInclude(x=>x.Product)
+           .Include(x => x.OrderItems)
+            .ThenInclude(x => x.ProductColorSize)
+                .ThenInclude(x => x.ProductColor)
+                    .ThenInclude(x => x.Product)
            .Include(x => x.OrderItems)
             .ThenInclude(x => x.ProductColorSize)
                 .ThenInclude(x => x.ProductColor)
@@ -66,6 +64,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
                 .Where(o => o.OrderType == orderType)
                 .ToList());
         }
+
         public Task<List<Order>> SearchOrdersAsync(int organizationId, OrderType orderType, string searchText)
         {
             var query = OrderQueryable(organizationId, orderType);

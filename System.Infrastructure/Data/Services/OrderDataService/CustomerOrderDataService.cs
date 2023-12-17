@@ -1,4 +1,5 @@
-﻿using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
+﻿using Microsoft.EntityFrameworkCore;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -75,19 +76,103 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
             List<Order> updated = null,
             List<Order> deleted = null)
         {
-            if (deleted != null)
+            if (added != null)
             {
-                deleted.ForEach(o =>
+                var addedOrderItems = new List<OrderItem>();
+                var updatedOrderItems = new List<OrderItem>();
+
+                added.ForEach(o =>
                 {
-                    if(o.OrderItems != null && o.OrderItems.Any(oi => oi.IsNewEntity))
+                    if (o.OrderItems != null)
                     {
-                        var fsdfsd = o.OrderItems.Where(oi => oi.IsNewEntity).ToList();
-                        fsdfsd.ForEach(d =>
+                        o.OrderItems.ToList().ForEach(oi =>
                         {
-                            o.OrderItems.Remove(d);
+                            oi.Order = null;
+                            oi.ProductColorSize = null;
+                            oi.ProductInventoryLocation = null;
+                            oi.RackShelfColumn = null;
+
+                            if (oi.IsNewEntity)
+                            {
+                                oi.OrderID = o.RowID.Value;
+                                _context.Entry(oi).State = EntityState.Added;
+                                addedOrderItems.Add(oi);
+                            }
+                            else if (!oi.IsNewEntity)
+                            {
+                                _context.Entry(oi).State = EntityState.Modified;
+                                updatedOrderItems.Add(oi);
+                            }
                         });
                     }
                 });
+
+                await _orderItemDataService.SaveManyAsync(userId: userId, added: addedOrderItems, updated: updatedOrderItems);
+            }
+
+            if (updated != null)
+            {
+                var addedOrderItems = new List<OrderItem>();
+                var updatedOrderItems = new List<OrderItem>();
+
+                updated.ForEach(o =>
+                {
+                    o.PackingList = null;
+                    o.Customer = null;
+                    o.Customer = null;
+                    o.InventoryLocation = null;
+
+                    if (o.OrderItems != null)
+                    {
+                        o.OrderItems.ToList().ForEach(oi =>
+                        {
+                            oi.Order = null;
+                            oi.ProductColorSize = null;
+                            oi.ProductInventoryLocation = null;
+                            oi.RackShelfColumn = null;
+
+                            if (oi.IsNewEntity)
+                            {
+                                oi.OrderID = o.RowID.Value;
+                                _context.Entry(oi).State = EntityState.Added;
+                                addedOrderItems.Add(oi);
+                            }
+                            else if (!oi.IsNewEntity)
+                            {
+                                _context.Entry(oi).State = EntityState.Modified;
+                                updatedOrderItems.Add(oi);
+                            }
+                        });
+                    }
+                });
+
+                await _orderItemDataService.SaveManyAsync(userId: userId, added: addedOrderItems, updated: updatedOrderItems);
+            }
+
+            if (deleted != null)
+            {
+                var deletedOrderItems = new List<OrderItem>();
+
+                deleted.ForEach(o =>
+                {
+                    if (o.OrderItems != null)
+                    {
+                        var orderItems = o.OrderItems.Where(oi => oi.IsNewEntity).ToList();
+                        orderItems.ForEach(oi =>
+                        {
+                            o.OrderItems.Remove(oi);
+                        });
+
+                        var notNeworderItems = o.OrderItems.Where(oi => !oi.IsNewEntity).ToList();
+                        notNeworderItems.ForEach(oi =>
+                        {
+                            deletedOrderItems.Add(oi);
+                        });
+
+                    }
+                });
+
+                await _orderItemDataService.SaveManyAsync(userId: userId, deleted: deletedOrderItems);
             }
 
             await SaveManyAsync(userId: userId,
