@@ -1,4 +1,6 @@
-﻿namespace WarehouseManagementSystem.Core.Helpers
+﻿using System;
+
+namespace WarehouseManagementSystem.Core.Helpers
 {
     public class PageOptions
     {
@@ -56,6 +58,26 @@
             PageSize = pageSize;
             Sort = sort;
             Direction = direction;
+        }
+
+        public void MoveToFirst()
+        {
+            PageIndex = 0;
+        }
+
+        public void MoveToPrevious()
+        {
+            PageIndex -= 1;
+        }
+
+        public void MoveToNext()
+        {
+            PageIndex += 1;
+        }
+
+        public void MoveToLast(int total)
+        {
+            PageIndex = total / PageSize;
         }
     }
 }

@@ -89,4 +89,8 @@ Public Class OrderItemModel
         _orderItem.Remarks = orderItemModel.Remarks
     End Sub
 
+    Public Sub SetDelete()
+        _orderItem.SetDelete()
+        _IsDelete = _orderItem.IsDelete
+    End Sub
 End Class

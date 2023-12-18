@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using WarehouseManagementSystem.Core.Entities;
 using WarehouseManagementSystem.Core.Enums;
+using WarehouseManagementSystem.Core.Helpers;
 
 namespace WarehouseManagementSystem.Core.Interfaces.Repositories
 {
@@ -19,6 +20,6 @@ namespace WarehouseManagementSystem.Core.Interfaces.Repositories
 
         Task<Order> GetOrderAsync(Order order);
 
-        //Task<Order> GetOrderByIdAsync(int id);
+        Task<PaginatedList<Order>> GetOrdersByOrderTypeAsync(PageOptions pageOptions, int organizationId, OrderType orderType, string searchText = "");
     }
 }

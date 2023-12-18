@@ -2,10 +2,10 @@
 
 Imports WarehouseManagementSystem.Core.Entities
 Imports WarehouseManagementSystem.Core.Enums
+Imports WarehouseManagementSystem.Core.Helpers
 Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
 Imports WarehouseManagementSystem.Core.Interfaces.Repositories
 Imports WarehouseManagementSystem.Desktop.Utilities
-Imports WarehouseManagementSystem.Infrastructure.Data.Services
 Imports WarehouseManagementSystem.Utilities.Extensions
 
 Public Class CustomerOrdersForm2
@@ -24,6 +24,7 @@ Public Class CustomerOrdersForm2
     Private ReadOnly _noAgent As Contact = Contact.BlankAgent(organizationId:=Z_OrganizationID)
     Private ReadOnly _userId As Integer
     Private _selectedOrder As Order
+    Private _pageOptions As PageOptions
 
     Public Sub New(userId As Integer)
 
@@ -36,6 +37,7 @@ Public Class CustomerOrdersForm2
     End Sub
 
     Private Async Sub CustomerOrdersForm2_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        _pageOptions = PageOptions.Default
         gridOrders.AutoGenerateColumns = False
         gridOrderItems.AutoGenerateColumns = False
 
@@ -48,13 +50,15 @@ Public Class CustomerOrdersForm2
         Await LoadCustomerOrdersAsync()
     End Sub
 
-    Private Async Function LoadCustomerOrdersAsync() As Task
+    Private Async Function LoadCustomerOrdersAsync() As Task(Of Integer)
         Dim orderDataService = GetRequiredService(Of IOrderDataService)()
-        Dim result = Await orderDataService.GetCustomerOrdersAsync(organizationId:=Z_OrganizationID)
+        Dim result = Await orderDataService.GetCustomerOrdersAsync(organizationId:=Z_OrganizationID, pageOptions:=_pageOptions)
 
-        gridOrders.DataSource = result.
+        gridOrders.DataSource = result.Items.
             OrderByDescending(Function(t) t.Created).
             ToList()
+
+        Return result.TotalCount
     End Function
 
     Private Sub LoadInventorySourceType()
@@ -157,11 +161,15 @@ Public Class CustomerOrdersForm2
             ToList()
     End Function
 
-    Private Sub cboCustomerOrderType_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboCustomerOrderType.SelectedIndexChanged
+    Private Sub cboCustomerOrderType_SelectedIndexChanged1(sender As Object, e As EventArgs) Handles cboCustomerOrderType.SelectedIndexChanged
+
+    End Sub
+
+    Private Sub cboCustomerOrderType_SelectedIndexChanged(sender As Object, e As EventArgs)
         cboCustomerOrderType_SelectedValueChanged(sender, e)
     End Sub
 
-    Private Sub cboCustomerOrderType_SelectedValueChanged(sender As Object, e As EventArgs) Handles cboCustomerOrderType.SelectedValueChanged
+    Private Sub cboCustomerOrderType_SelectedValueChanged(sender As Object, e As EventArgs)
         'If cboCustomerOrderType.SelectedValue IsNot Nothing Then errProvider.SetError(cboCustomerOrderType, String.Empty)
 
         If ToolStripButtonNew.Enabled AndAlso Not cboCustomerOrderType.SelectedIndex = -1 Then Return
@@ -249,6 +257,34 @@ Public Class CustomerOrdersForm2
 
     Private Sub gridOrderItems_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles gridOrderItems.CellContentClick
 
+    End Sub
+
+    Private Async Sub gridOrderItems_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles gridOrderItems.CellClick
+        Dim currentRow = gridOrderItems.CurrentRow
+        If currentRow Is Nothing Then Return
+
+        If e.ColumnIndex = ColumnDelete.Index Then
+
+            Dim orderItemModel = GetOrderItemModel(currentRow)
+
+            'If MessageBox.Show(text:=$"Are you sure you want to delete `{orderItemModel.ProductCode}`?",
+            '    caption:="Delete Item",
+            '    icon:=MessageBoxIcon.Question,
+            '    buttons:=MessageBoxButtons.YesNoCancel,
+            '    defaultButton:=MessageBoxDefaultButton.Button2) = DialogResult.Yes Then
+
+            orderItemModel.SetDelete()
+
+            gridOrders.Refresh()
+            gridOrderItems.Refresh()
+
+            Dim orderItemModels = GetOrderItemModels().
+                Where(Function(t) Not t.IsDelete).
+                ToList()
+
+            gridOrderItems.DataSource = orderItemModels
+            'End If
+        End If
     End Sub
 
     Private Sub gridOrderItems_SelectionChanged(sender As Object, e As EventArgs) Handles gridOrderItems.SelectionChanged
@@ -339,35 +375,30 @@ Public Class CustomerOrdersForm2
             Return 0
         End If
 
-        'txtOrderNumber.Text = order.OrderNumber
         txtOrderNumber.DataBindings.Add("Text", order, "OrderNumber", True, DataSourceUpdateMode.Never)
 
-        'txtReferenceNumber.Text = order.ReferenceNumber
         txtReferenceNumber.DataBindings.Add("Text", order, "ReferenceNumber", True, DataSourceUpdateMode.OnPropertyChanged)
 
-        'txtStatus.Text = $"{order.Status}"
         txtStatus.DataBindings.Add("Text", order, "Status", True, DataSourceUpdateMode.Never)
 
-        'dtpOrderDate.Value = If(order.OrderDate?.Date, Date.Now)
         Dim dtpOrderDateBinding = New Binding("Value", order, "OrderDate") With {
             .DataSourceUpdateMode = DataSourceUpdateMode.OnPropertyChanged}
         dtpOrderDate.DataBindings.Add(dtpOrderDateBinding)
 
-        'cboCustomerName.SelectedValue = If(order.AccountID, 0)
         cboCustomerName.DataBindings.Add("SelectedValue", order, "AccountID", True, DataSourceUpdateMode.OnPropertyChanged)
 
-        'cboAgent.SelectedValue = If(order.AgentID, 0)
         cboAgent.DataBindings.Add("SelectedValue", order, "AgentID", True, DataSourceUpdateMode.OnPropertyChanged)
 
-        'cboInventoryLocation.SelectedValue = If(order.InventoryLocationID, -1)
+        RemoveHandler cboCustomerOrderType.SelectedIndexChanged, AddressOf cboCustomerOrderType_SelectedIndexChanged
+        RemoveHandler cboInventoryLocation.SelectedValueChanged, AddressOf cboInventoryLocation_SelectedValueChanged
         cboInventoryLocation.DataBindings.Add("SelectedValue", order, "InventoryLocationID", True, DataSourceUpdateMode.OnPropertyChanged)
-
         cboCustomerOrderType.SelectedValue = If(order.InventoryLocation?.Type, InventoryLocationType.Main)
+        AddHandler cboInventoryLocation.SelectedValueChanged, AddressOf cboInventoryLocation_SelectedValueChanged
+        cboInventoryLocation_SelectedValueChanged(cboInventoryLocation, New EventArgs())
+        AddHandler cboCustomerOrderType.SelectedIndexChanged, AddressOf cboCustomerOrderType_SelectedIndexChanged
 
-        'txtDRNumber.Text = order.DRNumber
         txtDRNumber.DataBindings.Add("Text", order, "DRNumber", True, DataSourceUpdateMode.OnPropertyChanged)
 
-        'txtDeliveryAddress.Text = order.CustomerAddress
         txtDeliveryAddress.DataBindings.Add("Text", order, "CustomerAddress", True, DataSourceUpdateMode.OnPropertyChanged)
 
         dtpDateSubmitted.Value = If(order.DateSubmitted?.Date, Date.Now)
@@ -379,7 +410,6 @@ Public Class CustomerOrdersForm2
         dtpEndDate.Value = If(order.EndDate?.Date, Date.Now)
         dtpEndDate.Checked = False
 
-        'txtComments.Text = order.Comments
         txtComments.DataBindings.Add("Text", order, "Comments", True, DataSourceUpdateMode.OnPropertyChanged)
 
         Dim productColorSizeIds = order.OrderItems?.Select(Function(oi) oi.ProductColorSizeID.Value).ToArray()
@@ -397,8 +427,10 @@ Public Class CustomerOrdersForm2
                 Return New OrderItemModel(orderItem:=orderItem)
             End Function
 
-        gridOrderItems.DataSource = If(_selectedOrder.OrderItems?.Select(Function(t) getOrderItemModel(t)).ToList(),
+        Dim dataSource = If(_selectedOrder.OrderItems?.Select(Function(t) getOrderItemModel(t)).Where(Function(t) Not t.IsDelete).ToList(),
             Enumerable.Empty(Of OrderItemModel)())
+
+        gridOrderItems.DataSource = dataSource
 
         Return 0
     End Function
@@ -421,23 +453,6 @@ Public Class CustomerOrdersForm2
 
         Await FunctionUtils.TryCatchFunctionAsync("Save changes from Customer Order",
             Async Function()
-                'With _selectedOrder
-                '    .OrderNumber = txtOrderNumber.Text
-                '    .ReferenceNumber = txtReferenceNumber.Text
-                '    Dim orderStatus As OrderStatus
-                '    .Status = If([Enum].TryParse(txtStatus.Text, result:=orderStatus), orderStatus, OrderStatus.Open)
-                '    .OrderDate = dtpOrderDate.Value.Date
-                '    .AccountID = CInt(cboCustomerName.SelectedValue)
-                '    .AgentID = CInt(cboAgent.SelectedValue)
-                '    .InventoryLocationID = CInt(cboInventoryLocation.SelectedValue)
-                '    .DRNumber = txtDRNumber.Text
-                '    .CustomerAddress = txtDeliveryAddress.Text
-                '    .DateSubmitted = dtpDateSubmitted.Value.Date
-                '    .TargetDate = dtpDeliveryDate.Value.Date
-                '    .EndDate = dtpEndDate.Value.Date
-                '    .Comments = txtComments.Text
-                'End With
-
                 _selectedOrder.CustomerName = cboCustomerName.Text
 
                 Dim orderItemList = GetOrderItemModels().
@@ -459,8 +474,39 @@ Public Class CustomerOrdersForm2
             ContinueWith(continuationAction:=continuationAction, scheduler:=TaskScheduler.FromCurrentSynchronizationContext)
     End Sub
 
-    Private Sub ToolStripButtonApproved_Click(sender As Object, e As EventArgs) Handles ToolStripButtonApproved.Click
+    Private Async Sub ToolStripButtonApproved_Click(sender As Object, e As EventArgs) Handles ToolStripButtonApproved.Click
+        Dim text = $"NOTE: Submitting this customer order means that you have completed, checked, and satisfied this order.{vbNewLine}{vbNewLine}Do you want to proceed submitting this to warehouse?"
+        If Not MessageBox.Show(text:=text,
+            caption:="Submitting",
+            buttons:=MessageBoxButtons.YesNoCancel,
+            icon:=MessageBoxIcon.Question,
+            defaultButton:=MessageBoxDefaultButton.Button2) = DialogResult.Yes Then
 
+            Return
+        End If
+
+        ToolStripButtonApproved.Enabled = False
+
+        Dim afterTaskMethod =
+            Async Function()
+                ToolStripButtonNew.Enabled = True
+
+                Await LoadCustomerOrdersAsync()
+
+                ToolStripButtonApproved.Enabled = True
+
+                Return Task.FromResult(0)
+            End Function
+
+        Dim continuationAction As Action(Of Object) = Function() afterTaskMethod()
+
+        Await FunctionUtils.TryCatchFunctionAsync("set the Customer Order be `Sent to Warehouse`",
+            Async Function()
+                Dim orderDataService = GetRequiredService(Of IOrderDataService)()
+                Await orderDataService.SaveManyCustomerOrderAsync(userId:=Z_UserID, updated:=New List(Of Order) From {_selectedOrder})
+            End Function,
+            errorCallBack:=afterTaskMethod).
+            ContinueWith(continuationAction, scheduler:=TaskScheduler.FromCurrentSynchronizationContext)
     End Sub
 
     Private Async Sub ToolStripButtonCancel_Click(sender As Object, e As EventArgs) Handles ToolStripButtonCancel.Click
@@ -511,9 +557,47 @@ Public Class CustomerOrdersForm2
 
     End Sub
 
-    Private Sub cboInventoryLocation_SelectedValueChanged(sender As Object, e As EventArgs) Handles cboInventoryLocation.SelectedValueChanged
+    Private Sub cboInventoryLocation_SelectedValueChanged1(sender As Object, e As EventArgs) Handles cboInventoryLocation.SelectedValueChanged
+
+    End Sub
+
+    Private Sub cboInventoryLocation_SelectedValueChanged(sender As Object, e As EventArgs)
         Dim id = CInt(cboInventoryLocation.SelectedValue)
         btnAddOrderItem.Enabled = id > 0
+    End Sub
+
+    Private Sub SplitContainer1_Panel1_SizeChanged(sender As Object, e As EventArgs) Handles SplitContainer1.Panel1.SizeChanged
+        Dim centerWidth = CInt(SplitContainer1.Panel1.Size.Width / 2)
+        linkNext.Location = New Point(x:=centerWidth, y:=linkNext.Location.Y)
+        linkLast.Location = New Point(x:=(linkNext.Location.X + linkLast.Width), y:=linkLast.Location.Y)
+
+        linkPrev.Location = New Point(x:=(linkNext.Location.X - linkPrev.Width), y:=linkPrev.Location.Y)
+        linkFirst.Location = New Point(x:=(linkPrev.Location.X - linkFirst.Width), y:=linkFirst.Location.Y)
+    End Sub
+
+    Private Async Sub linkFirst_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles linkFirst.LinkClicked
+        _pageOptions.MoveToFirst()
+        Await LoadCustomerOrdersAsync()
+    End Sub
+
+    Private Async Sub linkPrev_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles linkPrev.LinkClicked
+        _pageOptions.MoveToPrevious()
+        Await LoadCustomerOrdersAsync()
+    End Sub
+
+    Private Async Sub linkNext_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles linkNext.LinkClicked
+        _pageOptions.MoveToNext()
+        Await LoadCustomerOrdersAsync()
+    End Sub
+
+    Private Async Sub linkLast_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles linkLast.LinkClicked
+        Dim total = Await LoadCustomerOrdersAsync()
+        _pageOptions.MoveToLast(total:=total)
+        Await LoadCustomerOrdersAsync()
+    End Sub
+
+    Private Sub cboAgent_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboAgent.SelectedIndexChanged
+        If cboAgent.SelectedValue Is Nothing Then cboAgent.SelectedItem = _noAgent
     End Sub
 
 End Class

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using WarehouseManagementSystem.Utilities.Attributes;
 
 namespace WarehouseManagementSystem.Core.Entities.Base
 {
@@ -23,6 +24,14 @@ namespace WarehouseManagementSystem.Core.Entities.Base
         {
             // sometimes it's not int.MinValue
             return id == null || id <= 0;
+        }
+
+        [NotMapped]
+        public bool IsDelete { get; private set; }
+
+        public void SetDelete()
+        {
+            IsDelete = true;
         }
     }
 }

@@ -1,12 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WarehouseManagementSystem.Core.Entities;
 using WarehouseManagementSystem.Core.Enums;
 using WarehouseManagementSystem.Core.Exceptions;
+using WarehouseManagementSystem.Core.Helpers;
 
 namespace WarehouseManagementSystem.Infrastructure.Data.Services
 {
@@ -14,6 +13,9 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
     {
         public async Task<List<Order>> GetCustomerOrdersAsync(int organizationId) =>
             await GetOrdersByOrderTypeAsync(organizationId: organizationId, orderType: OrderType.CO);
+
+        public async Task<PaginatedList<Order>> GetCustomerOrdersAsync(int organizationId, PageOptions pageOptions, string searchText = "") =>
+            await _orderRepository.GetOrdersByOrderTypeAsync(pageOptions: pageOptions, organizationId: organizationId, orderType: OrderType.CO, searchText: searchText);
 
         public async Task<List<Order>> SearchCustomerOrdersAsync(int organizationId, string searchText) =>
             await _orderRepository.SearchOrdersAsync(organizationId: organizationId, orderType: OrderType.CO, searchText: searchText);
@@ -32,6 +34,8 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
                 status: OrderStatus.Open,
                 orderDate: DateTime.Now);
 
+            await ScrutinateUserPrivilegeAsync(order: customerOrder, userId: userId);
+
             await SaveManyAsync(entities: new List<Order>() { customerOrder }, userId: userId);
 
             return customerOrder;
@@ -41,7 +45,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
         {
             await ScrutinateUserPrivilegeAsync(order, userId);
 
-            if (order.IsCustomerOrderType && (order?.IsApproved ?? false)) BusinessLogicException.Throw(message: "Customer Order already `Approved`");
+            if (order.IsCustomerOrderType && (order?.IsSubmittedToWarehouse ?? false)) BusinessLogicException.Throw(message: "Customer Order already `Sent to Warehouse`");
 
             if (order.InventoryLocationID == null) BusinessLogicException.Throw(message: "Invalid Invetory Location value.");
 
@@ -78,6 +82,8 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
         {
             if (added != null)
             {
+                await ScrutinateUserPrivilegeAsync(orders: added, userId: userId);
+
                 var addedOrderItems = new List<OrderItem>();
                 var updatedOrderItems = new List<OrderItem>();
 
@@ -107,13 +113,16 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
                     }
                 });
 
-                await _orderItemDataService.SaveManyAsync(userId: userId, added: addedOrderItems, updated: updatedOrderItems);
+                await _orderItemDataService.SaveManyChangesAsync(userId: userId, added: addedOrderItems, updated: updatedOrderItems);
             }
 
             if (updated != null)
             {
+                await ScrutinateUserPrivilegeAsync(orders: updated, userId: userId);
+
                 var addedOrderItems = new List<OrderItem>();
                 var updatedOrderItems = new List<OrderItem>();
+                var deletedOrderItems = new List<OrderItem>();
 
                 updated.ForEach(o =>
                 {
@@ -142,15 +151,20 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
                                 // _context.Entry(oi).State = EntityState.Modified;
                                 updatedOrderItems.Add(oi);
                             }
+
+                            if (oi.IsDelete) deletedOrderItems.Add(oi);
                         });
                     }
                 });
 
-                await _orderItemDataService.SaveManyAsync(userId: userId, added: addedOrderItems, updated: updatedOrderItems);
+                await _orderItemDataService.SaveManyChangesAsync(userId: userId, added: addedOrderItems, updated: updatedOrderItems);
+                await _orderItemDataService.DeleteManyAsync(userId: userId, deleted: deletedOrderItems);
             }
 
             if (deleted != null)
             {
+                await ScrutinateUserPrivilegeAsync(orders: deleted, userId: userId);
+
                 var deletedOrderItems = new List<OrderItem>();
 
                 deleted.ForEach(o =>
@@ -160,19 +174,20 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
                         var orderItems = o.OrderItems.Where(oi => oi.IsNewEntity).ToList();
                         orderItems.ForEach(oi =>
                         {
+                            oi.SetDelete();
                             o.OrderItems.Remove(oi);
                         });
 
                         var notNeworderItems = o.OrderItems.Where(oi => !oi.IsNewEntity).ToList();
                         notNeworderItems.ForEach(oi =>
                         {
+                            oi.SetDelete();
                             deletedOrderItems.Add(oi);
                         });
-
                     }
                 });
 
-                await _orderItemDataService.SaveManyAsync(userId: userId, deleted: deletedOrderItems);
+                await _orderItemDataService.DeleteManyAsync(userId: userId, deleted: deletedOrderItems);
             }
 
             await SaveManyAsync(userId: userId,

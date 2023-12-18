@@ -138,7 +138,8 @@ namespace WarehouseManagementSystem.Core.Entities
                 email: string.Empty,
                 comments: string.Empty);
 
-            blankAgent.RowID = 0;
+            //blankAgent.RowID = (int?)null;
+            blankAgent.RowID = default(int?);
 
             return blankAgent;
         }

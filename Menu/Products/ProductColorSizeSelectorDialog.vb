@@ -102,13 +102,13 @@ Public Class ProductColorSizeSelectorDialog
 
             '(Not String.IsNullOrEmpty(t.BrandName) AndAlso t.BrandName.ToLower.Contains(searchText)) Or
             dataSource = _baseSource.
-                Where(Function(t) t.ProductCode.Like(searchText) Or
-                    absoluteBool(t.BrandName?.Like(searchText)) Or
-                    absoluteBool(t.Category?.Like(searchText)) Or
-                    absoluteBool(t.UnitOfMeasure?.Like(searchText)) Or
-                    absoluteBool(t.Description?.Like(searchText)) Or
-                    absoluteBool(t.Colors?.Like(searchText)) Or
-                    absoluteBool(t.SeasonCode?.Like(searchText))).
+                Where(Function(t) t.ProductCode.SimilarTo(searchText) Or
+                    absoluteBool(t.BrandName?.SimilarTo(searchText)) Or
+                    absoluteBool(t.Category?.SimilarTo(searchText)) Or
+                    absoluteBool(t.UnitOfMeasure?.SimilarTo(searchText)) Or
+                    absoluteBool(t.Description?.SimilarTo(searchText)) Or
+                    absoluteBool(t.Colors?.SimilarTo(searchText)) Or
+                    absoluteBool(t.SeasonCode?.SimilarTo(searchText))).
                 ToList()
         ElseIf String.IsNullOrEmpty(searchText) AndAlso
             _baseSource IsNot Nothing Then
@@ -169,4 +169,8 @@ Public Class ProductColorSizeSelectorDialog
         PictureBox1.LoadAsync(url:=boundData.Photo)
     End Sub
 
+    Private Sub grid_KeyDown(sender As Object, e As KeyEventArgs) Handles grid.KeyDown
+        e.Handled = e.KeyCode = Keys.Enter
+        If e.Handled Then ButtonOK.PerformClick()
+    End Sub
 End Class

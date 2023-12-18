@@ -28,6 +28,8 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
                 status: OrderStatus.Open,
                 orderDate: DateTime.Now);
 
+            await ScrutinateUserPrivilegeAsync(order: stockAdjustmentOrder, userId: userId);
+
             await SaveManyAsync(entities: new List<Order>() { stockAdjustmentOrder }, userId: userId);
 
             return stockAdjustmentOrder;

@@ -76,7 +76,7 @@ namespace WarehouseManagementSystem.Core.Entities
             .ToList();
 
         public bool HasMovementHistoryProductLikeThis(string searchText) => MovementHistories?
-            .Where(t => t.ProductCode.Like(searchText))?
+            .Where(t => t.ProductCode.SimilarTo(searchText))?
             .Any() ?? false;
 
         public void SetApproveStockTransfer()

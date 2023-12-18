@@ -65,6 +65,9 @@ namespace WarehouseManagementSystem.Core.Entities
         public bool HasMovementHistories => MovementHistories?.Any(t => (t.QtyToApply ?? 0) != 0) ?? false;
         public bool HasNewMovementHistories => MovementHistories?.Any(t => t.IsNewEntity) ?? false;
 
+        public bool HasOrderItems => OrderItems?.Any(t => (t.QtyOrdered ?? 0) != 0) ?? false;
+        public bool HasNewOrderItems => OrderItems?.Any(t => t.IsNewEntity) ?? false;
+
         public bool IsCustomerOrderType => OrderType == OrderType.CO;
         public bool IsPurchaseOrderType => OrderType == OrderType.PO;
         public bool IsReceivingReportType => OrderType == OrderType.RR;
@@ -127,5 +130,6 @@ namespace WarehouseManagementSystem.Core.Entities
         public virtual Contact Agent { get; set; }
         public virtual Account Customer { get; set; }
         public virtual InventoryLocation InventoryLocation { get; set; }
+        public string InventoryLocationName => InventoryLocation?.Name;
     }
 }

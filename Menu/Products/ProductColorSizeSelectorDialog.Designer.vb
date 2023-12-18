@@ -28,16 +28,6 @@ Partial Class ProductColorSizeSelectorDialog
         Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.grid = New DevComponents.DotNetBar.Controls.DataGridViewX()
-        Me.Panel4 = New System.Windows.Forms.Panel()
-        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
-        Me.Panel2 = New System.Windows.Forms.Panel()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.ButtonCancel = New System.Windows.Forms.Button()
-        Me.ButtonOK = New System.Windows.Forms.Button()
-        Me.txtSearch = New System.Windows.Forms.TextBox()
-        Me.Panel3 = New System.Windows.Forms.Panel()
-        Me.LinkLabelReset = New System.Windows.Forms.LinkLabel()
-        Me.Label1 = New System.Windows.Forms.Label()
         Me.isSelectedColumn = New System.Windows.Forms.DataGridViewCheckBoxColumn()
         Me.Column3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -50,6 +40,16 @@ Partial Class ProductColorSizeSelectorDialog
         Me.Column11 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column12 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column13 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Panel4 = New System.Windows.Forms.Panel()
+        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
+        Me.Panel2 = New System.Windows.Forms.Panel()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.ButtonCancel = New System.Windows.Forms.Button()
+        Me.ButtonOK = New System.Windows.Forms.Button()
+        Me.txtSearch = New System.Windows.Forms.TextBox()
+        Me.Panel3 = New System.Windows.Forms.Panel()
+        Me.LinkLabelReset = New System.Windows.Forms.LinkLabel()
+        Me.Label1 = New System.Windows.Forms.Label()
         Me.Panel1.SuspendLayout()
         CType(Me.grid, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel4.SuspendLayout()
@@ -87,104 +87,7 @@ Partial Class ProductColorSizeSelectorDialog
         Me.grid.Location = New System.Drawing.Point(0, 0)
         Me.grid.Name = "grid"
         Me.grid.Size = New System.Drawing.Size(841, 318)
-        Me.grid.TabIndex = 1
-        '
-        'Panel4
-        '
-        Me.Panel4.Controls.Add(Me.PictureBox1)
-        Me.Panel4.Dock = System.Windows.Forms.DockStyle.Right
-        Me.Panel4.Location = New System.Drawing.Point(841, 0)
-        Me.Panel4.Name = "Panel4"
-        Me.Panel4.Size = New System.Drawing.Size(172, 318)
-        Me.Panel4.TabIndex = 2
-        '
-        'PictureBox1
-        '
-        Me.PictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.PictureBox1.Location = New System.Drawing.Point(6, 0)
-        Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(159, 215)
-        Me.PictureBox1.TabIndex = 2
-        Me.PictureBox1.TabStop = False
-        '
-        'Panel2
-        '
-        Me.Panel2.Controls.Add(Me.Label2)
-        Me.Panel2.Controls.Add(Me.ButtonCancel)
-        Me.Panel2.Controls.Add(Me.ButtonOK)
-        Me.Panel2.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Panel2.Location = New System.Drawing.Point(0, 397)
-        Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(1013, 53)
-        Me.Panel2.TabIndex = 2
-        '
-        'Label2
-        '
-        Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(12, 3)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(40, 13)
-        Me.Label2.TabIndex = 2
-        Me.Label2.Text = "Label2"
-        '
-        'ButtonCancel
-        '
-        Me.ButtonCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonCancel.Location = New System.Drawing.Point(926, 19)
-        Me.ButtonCancel.Name = "ButtonCancel"
-        Me.ButtonCancel.Size = New System.Drawing.Size(75, 23)
-        Me.ButtonCancel.TabIndex = 1
-        Me.ButtonCancel.Text = "Cancel"
-        Me.ButtonCancel.UseVisualStyleBackColor = True
-        '
-        'ButtonOK
-        '
-        Me.ButtonOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonOK.Location = New System.Drawing.Point(845, 19)
-        Me.ButtonOK.Name = "ButtonOK"
-        Me.ButtonOK.Size = New System.Drawing.Size(75, 23)
-        Me.ButtonOK.TabIndex = 0
-        Me.ButtonOK.Text = "OK"
-        Me.ButtonOK.UseVisualStyleBackColor = True
-        '
-        'txtSearch
-        '
-        Me.txtSearch.Location = New System.Drawing.Point(129, 23)
-        Me.txtSearch.Name = "txtSearch"
-        Me.txtSearch.Size = New System.Drawing.Size(416, 22)
-        Me.txtSearch.TabIndex = 0
-        '
-        'Panel3
-        '
-        Me.Panel3.Controls.Add(Me.LinkLabelReset)
-        Me.Panel3.Controls.Add(Me.Label1)
-        Me.Panel3.Controls.Add(Me.txtSearch)
-        Me.Panel3.Dock = System.Windows.Forms.DockStyle.Top
-        Me.Panel3.Location = New System.Drawing.Point(0, 0)
-        Me.Panel3.Name = "Panel3"
-        Me.Panel3.Size = New System.Drawing.Size(1013, 79)
-        Me.Panel3.TabIndex = 0
-        '
-        'LinkLabelReset
-        '
-        Me.LinkLabelReset.AutoSize = True
-        Me.LinkLabelReset.LinkBehavior = System.Windows.Forms.LinkBehavior.AlwaysUnderline
-        Me.LinkLabelReset.LinkColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(155, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.LinkLabelReset.Location = New System.Drawing.Point(510, 48)
-        Me.LinkLabelReset.Name = "LinkLabelReset"
-        Me.LinkLabelReset.Size = New System.Drawing.Size(35, 13)
-        Me.LinkLabelReset.TabIndex = 2
-        Me.LinkLabelReset.TabStop = True
-        Me.LinkLabelReset.Text = "Reset"
-        '
-        'Label1
-        '
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(13, 31)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(41, 13)
-        Me.Label1.TabIndex = 2
-        Me.Label1.Text = "Search"
+        Me.grid.TabIndex = 0
         '
         'isSelectedColumn
         '
@@ -276,6 +179,103 @@ Partial Class ProductColorSizeSelectorDialog
         Me.Column13.HeaderText = "SKU2"
         Me.Column13.Name = "Column13"
         Me.Column13.ReadOnly = True
+        '
+        'Panel4
+        '
+        Me.Panel4.Controls.Add(Me.PictureBox1)
+        Me.Panel4.Dock = System.Windows.Forms.DockStyle.Right
+        Me.Panel4.Location = New System.Drawing.Point(841, 0)
+        Me.Panel4.Name = "Panel4"
+        Me.Panel4.Size = New System.Drawing.Size(172, 318)
+        Me.Panel4.TabIndex = 1
+        '
+        'PictureBox1
+        '
+        Me.PictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.PictureBox1.Location = New System.Drawing.Point(6, 0)
+        Me.PictureBox1.Name = "PictureBox1"
+        Me.PictureBox1.Size = New System.Drawing.Size(159, 215)
+        Me.PictureBox1.TabIndex = 2
+        Me.PictureBox1.TabStop = False
+        '
+        'Panel2
+        '
+        Me.Panel2.Controls.Add(Me.Label2)
+        Me.Panel2.Controls.Add(Me.ButtonCancel)
+        Me.Panel2.Controls.Add(Me.ButtonOK)
+        Me.Panel2.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.Panel2.Location = New System.Drawing.Point(0, 397)
+        Me.Panel2.Name = "Panel2"
+        Me.Panel2.Size = New System.Drawing.Size(1013, 53)
+        Me.Panel2.TabIndex = 2
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Location = New System.Drawing.Point(12, 3)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(40, 13)
+        Me.Label2.TabIndex = 2
+        Me.Label2.Text = "Label2"
+        '
+        'ButtonCancel
+        '
+        Me.ButtonCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ButtonCancel.Location = New System.Drawing.Point(926, 19)
+        Me.ButtonCancel.Name = "ButtonCancel"
+        Me.ButtonCancel.Size = New System.Drawing.Size(75, 23)
+        Me.ButtonCancel.TabIndex = 1
+        Me.ButtonCancel.Text = "Cancel"
+        Me.ButtonCancel.UseVisualStyleBackColor = True
+        '
+        'ButtonOK
+        '
+        Me.ButtonOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ButtonOK.Location = New System.Drawing.Point(845, 19)
+        Me.ButtonOK.Name = "ButtonOK"
+        Me.ButtonOK.Size = New System.Drawing.Size(75, 23)
+        Me.ButtonOK.TabIndex = 0
+        Me.ButtonOK.Text = "OK"
+        Me.ButtonOK.UseVisualStyleBackColor = True
+        '
+        'txtSearch
+        '
+        Me.txtSearch.Location = New System.Drawing.Point(129, 23)
+        Me.txtSearch.Name = "txtSearch"
+        Me.txtSearch.Size = New System.Drawing.Size(416, 22)
+        Me.txtSearch.TabIndex = 0
+        '
+        'Panel3
+        '
+        Me.Panel3.Controls.Add(Me.LinkLabelReset)
+        Me.Panel3.Controls.Add(Me.Label1)
+        Me.Panel3.Controls.Add(Me.txtSearch)
+        Me.Panel3.Dock = System.Windows.Forms.DockStyle.Top
+        Me.Panel3.Location = New System.Drawing.Point(0, 0)
+        Me.Panel3.Name = "Panel3"
+        Me.Panel3.Size = New System.Drawing.Size(1013, 79)
+        Me.Panel3.TabIndex = 0
+        '
+        'LinkLabelReset
+        '
+        Me.LinkLabelReset.AutoSize = True
+        Me.LinkLabelReset.LinkBehavior = System.Windows.Forms.LinkBehavior.AlwaysUnderline
+        Me.LinkLabelReset.LinkColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(155, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.LinkLabelReset.Location = New System.Drawing.Point(510, 48)
+        Me.LinkLabelReset.Name = "LinkLabelReset"
+        Me.LinkLabelReset.Size = New System.Drawing.Size(35, 13)
+        Me.LinkLabelReset.TabIndex = 1
+        Me.LinkLabelReset.TabStop = True
+        Me.LinkLabelReset.Text = "Reset"
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(13, 31)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(41, 13)
+        Me.Label1.TabIndex = 2
+        Me.Label1.Text = "Search"
         '
         'ProductColorSizeSelectorDialog
         '

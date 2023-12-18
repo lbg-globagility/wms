@@ -1,11 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
+using OfficeOpenXml.Style;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Permissions;
 using System.Threading.Tasks;
 using WarehouseManagementSystem.Core.Entities;
 using WarehouseManagementSystem.Core.Enums;
+using WarehouseManagementSystem.Core.Helpers;
 using WarehouseManagementSystem.Core.Interfaces.Repositories;
 using WarehouseManagementSystem.Infrastructure.Data.Repositories.Base;
+using WarehouseManagementSystem.Utilities.Extensions;
 
 namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
 {
@@ -105,13 +111,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
 
         public async Task<Order> GetOrderAsync(Order order)
         {
-            var query = _context.Orders
-                .Include(o => o.OrderItems)
-                .Include(o => o.UserCreate)
-                .Include(o => o.UserUpdate)
-                .AsNoTracking()
-                .Where(o => o.RowID == order.RowID)
-                .AsQueryable();
+            var query = BaseOrderNavMapping(order);
 
             query = StockTransferNavMapping(query, order.OrderType);
 
@@ -121,6 +121,22 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
 
             return await query.FirstOrDefaultAsync();
         }
+
+        private IQueryable<Order> BaseOrderNavMapping(Order order) => _context.Orders
+            .Include(o => o.OrderItems)
+            .Include(o => o.UserCreate)
+            .Include(o => o.UserUpdate)
+            .AsNoTracking()
+            .Where(o => o.RowID == order.RowID)
+            .AsQueryable();
+
+        private IQueryable<Order> BaseOrderNavMapping(int organizationId) => _context.Orders
+            .Include(o => o.OrderItems)
+            .Include(o => o.UserCreate)
+            .Include(o => o.UserUpdate)
+            .AsNoTracking()
+            .Where(o => o.OrganizationID == organizationId)
+            .AsQueryable();
 
         private IQueryable<Order> StockTransferNavMapping(IQueryable<Order> query, OrderType orderType = default)
         {
@@ -182,6 +198,34 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
                     .Include(o => o.Customer)
                     .Include(o => o.InventoryLocation);
             return query;
+        }
+
+        public Task<PaginatedList<Order>> GetOrdersByOrderTypeAsync(PageOptions pageOptions,
+            int organizationId,
+            OrderType orderType,
+            string searchText = "")
+        {
+            var query = BaseOrderNavMapping(organizationId);
+
+            query = query.Where(t => t.OrderType == orderType);
+
+            query = CustomerOrderNavMapping(query, orderType);
+
+            if (!string.IsNullOrEmpty(searchText))
+            {
+                var orders1 = query
+                    .Page(pageOptions)
+                    .AsEnumerable()
+                    .Where(t => t.CustomerOrderSearchableString.SimilarTo(searchText));
+                var count1 = orders1.Count();
+
+                return Task.FromResult(new PaginatedList<Order>(items: orders1, total: count1));
+            }
+
+            var orders = query.Page(pageOptions).AsEnumerable();
+            var count = orders.Count();
+
+            return Task.FromResult(new PaginatedList<Order>(items: orders, total: count));
         }
     }
 }

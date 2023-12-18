@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using WarehouseManagementSystem.Core.Entities;
 using WarehouseManagementSystem.Core.Enums;
+using WarehouseManagementSystem.Core.Helpers;
 using WarehouseManagementSystem.Core.Interfaces.DomainServices.Base;
 
 namespace WarehouseManagementSystem.Core.Interfaces.DomainServices
@@ -33,6 +34,7 @@ namespace WarehouseManagementSystem.Core.Interfaces.DomainServices
         Task ApproveStockAdjustment(Order order, int userId);
 
         Task<List<Order>> GetCustomerOrdersAsync(int organizationId);
+        Task<PaginatedList<Order>> GetCustomerOrdersAsync(int organizationId, PageOptions pageOptions, string searchText = "");
         Task<List<Order>> SearchCustomerOrdersAsync(int organizationId, string searchText);
         Task<Order> QuickCreateCustomerOrderAsync(int organizationId, int userId);
         Task ApproveCustomerOrder(Order order, int userId);

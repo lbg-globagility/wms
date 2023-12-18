@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using OfficeOpenXml.Style;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -94,6 +95,9 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
 
             if (positionView.Restricted || positionView.ReadOnly) ThrowError();
 
+            var isDoingCreateWithNoCreatePrivilege = order.IsNewEntity && !positionView.Creates;
+            if (isDoingCreateWithNoCreatePrivilege) ThrowError();
+
             var isDoingUpdateWithNoUpdatePrivilege = !order.IsNewEntity && !positionView.Updates;
 
             if ((order.IsStockTransferType || order.IsStockAdjustType) &&
@@ -106,6 +110,49 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
                 ThrowError();
             }
 
+            if (isDoingUpdateWithNoUpdatePrivilege)
+                ThrowError();
+
+            void ThrowError() => BusinessLogicException.ThrowInsufficientPrivilege();
+        }
+
+        private async Task ScrutinateUserPrivilegeAsync(List<Order> orders, int userId)
+        {
+            var positionView = await _positionViewDataService.GetByUserIdAndViewNameAsync(organizationId: orders.FirstOrDefault().OrganizationID.Value,
+                userId: userId,
+                viewName: orders.FirstOrDefault().ViewName);
+
+            if (positionView.Restricted || positionView.ReadOnly) ThrowError();
+
+            var isDoingCreateWithNoCreatePrivilege = (orders?.Any(t => t.IsNewEntity) ?? false) && !positionView.Creates;
+            if (isDoingCreateWithNoCreatePrivilege) ThrowError();
+
+            var isDoingUpdateWithNoUpdatePrivilege = (orders?.Any(t => !t.IsNewEntity) ?? false) && !positionView.Updates;
+            if ((orders.Any(t => t.IsStockTransferType)
+                || orders.Any(t => t.IsStockAdjustType))
+                && isDoingUpdateWithNoUpdatePrivilege)
+            {
+                var ids = orders.Where(t => !t.IsNewEntity)
+                    .Select(t => t.RowID.Value)
+                    .ToArray();
+                var originOrders = await _orderRepository.GetManyByIdsAsync(ids: ids);
+
+                if (originOrders.Any(t => !t.HasMovementHistories) && orders.Any(t => t.HasNewMovementHistories)) return;
+
+                ThrowError();
+            }
+            else if (orders.Any(t => t.IsCustomerOrderType) && isDoingUpdateWithNoUpdatePrivilege)
+            {
+                var ids = orders.Where(t => !t.IsNewEntity)
+                    .Select(t => t.RowID.Value)
+                    .ToArray();
+                var originOrders = await _orderRepository.GetManyByIdsAsync(ids: ids);
+
+                if (originOrders.Any(t => !t.HasOrderItems) && orders.Any(t => t.HasNewOrderItems)) return;
+
+                ThrowError();
+            }
+            
             if (isDoingUpdateWithNoUpdatePrivilege)
                 ThrowError();
 

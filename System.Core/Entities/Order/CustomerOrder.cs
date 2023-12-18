@@ -57,5 +57,26 @@ namespace WarehouseManagementSystem.Core.Entities
             var totalAmount = OrderItems?.Sum(t => t.OrderedGross) ?? 0M;
             TotalAmount = totalAmount;
         }
+
+        public string CustomerOrderSearchableString
+        {
+            get
+            {
+                string[] texts = {Comments,
+                    OrderNumber,
+                    ReferenceNumber,
+                    DRNumber,
+                    CustomerName,
+                    CustomerAddress,
+                    DeliveryHours,
+                    ReceivedBy,
+                    ReceivedBrands,
+                    ContainerNo,
+                    SealNo,
+                    ArrivedIn,
+                    InventoryLocationName};
+                return string.Join(string.Empty, texts.Where(t => !string.IsNullOrEmpty(t)));
+            }
+        }
     }
 }

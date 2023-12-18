@@ -97,5 +97,7 @@ namespace WarehouseManagementSystem.Core.Entities
                 sku2: sku2,
                 productColorSizeId: productColorSizeId,
                 productInventoryLocationId: productInventoryLocationId);
+
+        public string ViewName => View.CUSTOMER_ORDERS_VIEW;
     }
 }
