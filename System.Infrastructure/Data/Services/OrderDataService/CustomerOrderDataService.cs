@@ -43,9 +43,11 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
 
         public async Task ApproveCustomerOrder(Order order, int userId)
         {
+            if (order == null) return;
+
             await ScrutinateUserPrivilegeAsync(order, userId);
 
-            if (order.IsCustomerOrderType && (order?.IsSubmittedToWarehouse ?? false)) BusinessLogicException.Throw(message: "Customer Order already `Sent to Warehouse`");
+            if (order.IsCustomerOrderType && !order.IsNew) BusinessLogicException.Throw(message: "Customer Order already on another phase of transaction process.");
             
             CustomerOrderValidation(order);
 

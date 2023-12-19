@@ -333,6 +333,12 @@ Public Class CustomerOrdersForm2
 
     End Sub
 
+    Private Sub gridOrderItems_CellMouseUp(sender As Object, e As DataGridViewCellMouseEventArgs) Handles gridOrderItems.CellMouseUp
+        If e.Button = MouseButtons.Right Then
+
+        End If
+    End Sub
+
     Private Async Sub ToolStripButtonNew_Click(sender As Object, e As EventArgs) Handles ToolStripButtonNew.Click
         ToolStripButtonNew.Enabled = False
 
@@ -405,27 +411,30 @@ Public Class CustomerOrdersForm2
             Return 0
         End If
 
+        Dim isUntouchable = order.IsCustomerOrderType AndAlso Not order.IsNew
+        Dim updateMode = If(isUntouchable, DataSourceUpdateMode.Never, DataSourceUpdateMode.OnPropertyChanged)
+
         txtOrderNumber.DataBindings.Add("Text", order, "OrderNumber", True, DataSourceUpdateMode.Never)
 
-        txtReferenceNumber.DataBindings.Add("Text", order, "ReferenceNumber", True, DataSourceUpdateMode.OnPropertyChanged)
+        txtReferenceNumber.DataBindings.Add("Text", order, "ReferenceNumber", True, updateMode)
 
-        txtStatus.DataBindings.Add("Text", order, "Status", True, DataSourceUpdateMode.Never)
+        txtStatus.DataBindings.Add("Text", order, "StatusDisplayText", True, DataSourceUpdateMode.Never)
 
         Dim dtpOrderDateBinding = New Binding("Value", order, "OrderDate") With {
-            .DataSourceUpdateMode = DataSourceUpdateMode.OnPropertyChanged}
+            .DataSourceUpdateMode = updateMode}
         dtpOrderDate.DataBindings.Add(dtpOrderDateBinding)
 
         RemoveHandler cboCustomerName.SelectedIndexChanged, AddressOf cboCustomerName_SelectedIndexChanged
-        cboCustomerName.DataBindings.Add("SelectedValue", order, "AccountID", True, DataSourceUpdateMode.OnPropertyChanged)
+        cboCustomerName.DataBindings.Add("SelectedValue", order, "AccountID", True, updateMode)
         AddHandler cboCustomerName.SelectedIndexChanged, AddressOf cboCustomerName_SelectedIndexChanged
 
-        cboAgent.DataBindings.Add("SelectedValue", order, "AgentID", True, DataSourceUpdateMode.OnPropertyChanged)
+        cboAgent.DataBindings.Add("SelectedValue", order, "AgentID", True, updateMode)
 
         RemoveHandler cboCustomerOrderType.SelectedIndexChanged, AddressOf cboCustomerOrderType_SelectedIndexChanged
         RemoveHandler cboCustomerOrderType.SelectedValueChanged, AddressOf cboCustomerOrderType_SelectedValueChanged
         RemoveHandler cboInventoryLocation.SelectedValueChanged, AddressOf cboInventoryLocation_SelectedValueChanged
 
-        cboInventoryLocation.DataBindings.Add("SelectedValue", order, "InventoryLocationID", True, DataSourceUpdateMode.OnPropertyChanged)
+        cboInventoryLocation.DataBindings.Add("SelectedValue", order, "InventoryLocationID", True, updateMode)
 
         cboCustomerOrderType.SelectedValue = If(order.InventoryLocation?.Type, InventoryLocationType.Main)
 
@@ -437,7 +446,7 @@ Public Class CustomerOrdersForm2
 
         txtDRNumber.DataBindings.Add("Text", order, "DRNumber", True, DataSourceUpdateMode.OnPropertyChanged)
 
-        txtDeliveryAddress.DataBindings.Add("Text", order, "CustomerAddress", True, DataSourceUpdateMode.OnPropertyChanged)
+        txtDeliveryAddress.DataBindings.Add("Text", order, "CustomerAddress", True, updateMode)
 
         dtpDateSubmitted.Value = If(order.DateSubmitted?.Date, Date.Now)
         dtpDateSubmitted.Checked = False
@@ -554,7 +563,7 @@ Public Class CustomerOrdersForm2
                 ToolStripButtonApproved.Enabled = True
             End Function
 
-        Await FunctionUtils.TryCatchFunctionAsync("set the Customer Order be `Sent to Warehouse`",
+        Await FunctionUtils.TryCatchFunctionAsync(String.Empty,
             Async Function()
                 ApplyCustomerOrderChanges(_selectedOrder)
 

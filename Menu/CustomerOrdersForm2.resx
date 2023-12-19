@@ -318,10 +318,10 @@
   <data name="ToolStripButtonApproved.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACjSURBVDhPnZFRCgMhDEQ9m2fxo57FO/ljT9IbCOrvltl2
-        JA2ioQMDS0zmDayjxhiX9HdsF46897dXAbXWlwTAvffHD1kG0DjGYillvocQLgTeyfJQmwFYjjHOec75
-        Q7cEbOkQlmh5SG/pUjoAsyMdwpIk0ngz01eLrbXnkU6tqqKFiU7pFiml+b2lU7qF9JFO6RawiU6tWpjp
-        FGjyd5rp/8m5NznfqO/L7j3/AAAAAElFTkSuQmCC
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACiSURBVDhPY/j27dt/IH7//fv3BAZyAMiAmHkR/++9vPf/
+        69ev86HCxAOQARZdJv9dJjr8331lJ8g154GuUYBKEwYwA2C4e2cn2EtA1wRAleAH6AbUb64lzwCQF9af
+        W4vVCyA1uDBYEhSIlx5dwhmIIDVOTk4YGG4AEOONRrwGoAOogRiYJAOwKcaGqWMAiEDH2BRjwyC1JNmI
+        jgeRAeTjb/8BXszXFkYc+EYAAAAASUVORK5CYII=
 </value>
   </data>
   <data name="ToolStripButtonCancel.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
@@ -381,7 +381,7 @@
   <data name="ColumnDelete.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
-        vQAADr0BR/uQrQAAALFJREFUOE+tkDESwiAQRbmA17C2tKb2EBbeICfKEeQGXkZNFWho1/wdlsEMgXVM
+        vAAADrwBlbxySQAAALFJREFUOE+tkDESwiAQRbmA17C2tKb2EBbeICfKEeQGXkZNFWho1/wdlsEMgXVM
         8cJC9r9ZMET0F/yJMZ6AHK73LaTZJzhY7muhEgj8Y7gRQO3fz3C/nPO+JzFhehEC4/HAIamxqgRLw7WU
         SBiT9MKA30DGFoF2fGDKMFap1W8gAoBarpMEXfIVAOoFfhPnHFlrm7AAY6RgHhU/0ODnsMmXYM1ugh5N
         gZaq4Beqh3rIfADNkAPZUpn57QAAAABJRU5ErkJggg==
@@ -395,6 +395,9 @@
         AElFTkSuQmCC
 </value>
   </data>
+  <metadata name="ContextMenuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>123, 17</value>
+  </metadata>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>25</value>
   </metadata>
