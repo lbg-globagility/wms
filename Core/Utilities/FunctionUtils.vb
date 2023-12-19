@@ -15,10 +15,12 @@ Namespace Global.WarehouseManagementSystem.Desktop.Utilities
                 action As Func(Of Task),
                 Optional baseExceptionErrorMessage As String = Nothing,
                 Optional errorCallBack As Action = Nothing,
+                Optional successCallBack As Action = Nothing,
                 Optional dbUpdateCallBack As Action(Of DbUpdateException) = Nothing) As Task
             Try
-
                 Await action()
+
+                If successCallBack IsNot Nothing Then successCallBack()
             Catch ex As ArgumentException
                 _logger.Error(baseExceptionErrorMessage, ex)
 

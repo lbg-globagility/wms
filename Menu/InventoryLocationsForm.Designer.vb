@@ -1902,7 +1902,6 @@ Partial Class InventoryLocationsForm
         '
         Me.Column14.DataPropertyName = "TotalAvailableQty"
         DataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle9.Format = "N2"
         DataGridViewCellStyle9.NullValue = Nothing
         Me.Column14.DefaultCellStyle = DataGridViewCellStyle9
         Me.Column14.HeaderText = "Total Available Qty"
@@ -1912,7 +1911,6 @@ Partial Class InventoryLocationsForm
         '
         Me.Column15.DataPropertyName = "TotalReserveQty"
         DataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle10.Format = "N2"
         Me.Column15.DefaultCellStyle = DataGridViewCellStyle10
         Me.Column15.HeaderText = "Total Reserved Qty"
         Me.Column15.Name = "Column15"
@@ -1921,7 +1919,6 @@ Partial Class InventoryLocationsForm
         '
         Me.Column16.DataPropertyName = "TotalAllocatedQty"
         DataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle11.Format = "N2"
         Me.Column16.DefaultCellStyle = DataGridViewCellStyle11
         Me.Column16.HeaderText = "Total Allocated Qty"
         Me.Column16.Name = "Column16"
@@ -1930,7 +1927,6 @@ Partial Class InventoryLocationsForm
         '
         Me.Column17.DataPropertyName = "TotalOrderableQty"
         DataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle12.Format = "N2"
         Me.Column17.DefaultCellStyle = DataGridViewCellStyle12
         Me.Column17.HeaderText = "Total Orderable Qty"
         Me.Column17.Name = "Column17"
@@ -1946,7 +1942,6 @@ Partial Class InventoryLocationsForm
         '
         Me.Column18.DataPropertyName = "TotalDamageQty"
         DataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle13.Format = "N2"
         Me.Column18.DefaultCellStyle = DataGridViewCellStyle13
         Me.Column18.HeaderText = "Total Damage Qty"
         Me.Column18.Name = "Column18"
@@ -1956,7 +1951,6 @@ Partial Class InventoryLocationsForm
         '
         Me.Column19.DataPropertyName = "TotalSupplierProblemQty"
         DataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle14.Format = "N2"
         Me.Column19.DefaultCellStyle = DataGridViewCellStyle14
         Me.Column19.HeaderText = "Total Supplier Problem Qty"
         Me.Column19.Name = "Column19"
@@ -1966,7 +1960,6 @@ Partial Class InventoryLocationsForm
         '
         Me.Column20.DataPropertyName = "TotalInRepairQty"
         DataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle15.Format = "N2"
         Me.Column20.DefaultCellStyle = DataGridViewCellStyle15
         Me.Column20.HeaderText = "Total InRepair Qty"
         Me.Column20.Name = "Column20"
@@ -1976,7 +1969,6 @@ Partial Class InventoryLocationsForm
         '
         Me.Column21.DataPropertyName = "TotalToReceiveQty"
         DataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle16.Format = "N2"
         Me.Column21.DefaultCellStyle = DataGridViewCellStyle16
         Me.Column21.HeaderText = "Total ToReceive Qty"
         Me.Column21.Name = "Column21"
@@ -1986,7 +1978,6 @@ Partial Class InventoryLocationsForm
         '
         Me.Column22.DataPropertyName = "RunningTotalQty"
         DataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle17.Format = "N2"
         Me.Column22.DefaultCellStyle = DataGridViewCellStyle17
         Me.Column22.HeaderText = "Total Running Qty"
         Me.Column22.Name = "Column22"

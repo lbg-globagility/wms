@@ -66,7 +66,9 @@ namespace WarehouseManagementSystem.Core.Entities
             string sku,
             string sku2,
             int productColorSizeId,
-            int productInventoryLocationId)
+            int productInventoryLocationId,
+            string itemCode = "",
+            int? accountId = (int?)null)
         {
             OrganizationID = organizationId;
             AuditUser(userId);
@@ -77,7 +79,11 @@ namespace WarehouseManagementSystem.Core.Entities
             SKU2 = sku2;
             ProductColorSizeID = productColorSizeId;
             ProductInventoryLocationId = productInventoryLocationId;
-            Status = OrderItemStatus.Open;
+            Status = OrderItemStatus.New;
+            Approval = "N";
+            ItemType = "S";
+            ItemCode = itemCode;
+            AccountID = accountId;
         }
 
         public static OrderItem NewCustomerOrderItem(int organizationId,
@@ -88,7 +94,9 @@ namespace WarehouseManagementSystem.Core.Entities
             string sku,
             string sku2,
             int productColorSizeId,
-            int productInventoryLocationId) => new OrderItem(organizationId: organizationId,
+            int productInventoryLocationId,
+            string itemCode = "",
+            int? accountId = (int?)null) => new OrderItem(organizationId: organizationId,
                 userId: userId,
                 qtyOrdered: qtyOrdered,
                 srp: srp,
@@ -96,7 +104,9 @@ namespace WarehouseManagementSystem.Core.Entities
                 sku: sku,
                 sku2: sku2,
                 productColorSizeId: productColorSizeId,
-                productInventoryLocationId: productInventoryLocationId);
+                productInventoryLocationId: productInventoryLocationId,
+                itemCode: itemCode,
+                accountId: accountId);
 
         public string ViewName => View.CUSTOMER_ORDERS_VIEW;
     }

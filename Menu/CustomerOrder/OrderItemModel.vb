@@ -67,7 +67,7 @@ Public Class OrderItemModel
     Public ReadOnly Property SeasonCode As String
     Public Property QuantityOrdered As Integer
     Public Property UnitPrice As Decimal
-    Public Property UnitOfMeasure As String
+    Public ReadOnly Property UnitOfMeasure As String
     Public Property Sku As String
     Public Property Sku2 As String
     Public Property Remarks As String

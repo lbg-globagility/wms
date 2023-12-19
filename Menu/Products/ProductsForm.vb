@@ -1566,10 +1566,8 @@ Public Class ProductsForm
                                 sourceFileName:=fileOpener.FileName)
 
                             ReloadPictureBox()
-
-                            errorCallback()
-                        End Function,
-                        errorCallBack:=errorCallback)
+                        End Function).
+                        ContinueWith(continuationAction:=errorCallback, scheduler:=TaskScheduler.FromCurrentSynchronizationContext)
                 End If
 
             End If
@@ -1604,10 +1602,8 @@ Public Class ProductsForm
                             MessageBoxButtons.YesNo,
                             MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then _
                                 Await _pim.DeleteAsync(productId:=CInt(dgProductList.CurrentRow?.Cells("p_rowid").Value))
-
-                        errorCallback()
-                    End Function,
-                errorCallBack:=errorCallback)
+                    End Function).
+                    ContinueWith(continuationAction:=errorCallback, scheduler:=TaskScheduler.FromCurrentSynchronizationContext)
             Return
         End If
 
@@ -1669,10 +1665,8 @@ Public Class ProductsForm
                     Async Function()
 
                         Await _pim.DownloadAsync(productId:=CInt(dgProductList.CurrentRow?.Cells("p_rowid").Value))
-
-                        errorCallback()
-                    End Function,
-                errorCallBack:=errorCallback)
+                    End Function).
+                    ContinueWith(continuationAction:=errorCallback, scheduler:=TaskScheduler.FromCurrentSynchronizationContext)
             Return
         End If
 

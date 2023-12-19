@@ -2605,12 +2605,7 @@ Public Class PackingListForm
                         U_OrderStatus(palorderid, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, "Packing", Me)
                     End If
                     If myModule.systemerrorfound = False Then
-                        Await AutomateContainPackingListToDefaultCartonAsync().
-                            ContinueWith(
-                            continuationAction:=Sub()
-                                                    myBalloon("Successfully Save", "Save", lblsavemsg, -15, -65)
-                                                    tsrefreshperformclick()
-                                                End Sub, scheduler:=TaskScheduler.FromCurrentSynchronizationContext)
+                        Await AutomateContainPackingListToDefaultCartonAsync()
                     End If
                 ElseIf cue = "Edit" Then
                     If dgPackingList.Rows.Count <> 0 Then

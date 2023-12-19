@@ -185,11 +185,8 @@ Public Class StockTransferForm2
                     caption:="Success",
                     icon:=MessageBoxIcon.Information,
                     buttons:=MessageBoxButtons.OK)
-
-                action()
-
             End Function,
-            errorCallBack:=action)
+            successCallBack:=action)
     End Sub
 
     Private Async Sub ToolStripButtonCancel_Click(sender As Object, e As EventArgs) Handles ToolStripButtonCancel.Click
@@ -213,11 +210,8 @@ Public Class StockTransferForm2
                     Dim orderDataService = GetRequiredService(Of IOrderDataService)()
                     Await orderDataService.SaveManyAsync(userId:=Z_UserID,
                         deleted:=New List(Of Order) From {_selectedOrder})
-
-                    cancelButtonAction()
-
                 End Function,
-                errorCallBack:=cancelButtonAction).
+                successCallBack:=cancelButtonAction).
                 ContinueWith(Sub()
                                  ToolStripButtonCancel.Enabled = True
                              End Sub, scheduler:=TaskScheduler.FromCurrentSynchronizationContext)
@@ -493,13 +487,8 @@ Public Class StockTransferForm2
                     caption:="Approved",
                     icon:=MessageBoxIcon.Information,
                     buttons:=MessageBoxButtons.OK)
-
-                '_selectedOrder = Await orderDataService.GetOrderAsync(order:=_selectedOrder)
-
-                action()
-
             End Function,
-            errorCallBack:=action)
+            successCallBack:=action)
 
         SplitContainer1.Panel1.Enabled = True
     End Sub

@@ -12,6 +12,7 @@ namespace WarehouseManagementSystem.Core.Entities
         public int? ParentPositionID { get; set; }
         public int? DivisionId { get; set; }
         public string Comments { get; set; }
+        public bool IsGodMode { get; set; }
     }
 
     public partial class Position

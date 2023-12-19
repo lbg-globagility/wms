@@ -93,6 +93,8 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
                 userId: userId,
                 viewName: order.ViewName);
 
+            if (positionView.IsGodMode) return;
+
             if (positionView.Restricted || positionView.ReadOnly) ThrowError();
 
             var isDoingCreateWithNoCreatePrivilege = order.IsNewEntity && !positionView.Creates;
@@ -121,6 +123,8 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
             var positionView = await _positionViewDataService.GetByUserIdAndViewNameAsync(organizationId: orders.FirstOrDefault().OrganizationID.Value,
                 userId: userId,
                 viewName: orders.FirstOrDefault().ViewName);
+
+            if (positionView.IsGodMode) return;
 
             if (positionView.Restricted || positionView.ReadOnly) ThrowError();
 

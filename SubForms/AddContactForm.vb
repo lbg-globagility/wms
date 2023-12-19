@@ -84,7 +84,6 @@ Public Class AddContactForm
 
                 If _isFormDialog Then DialogResult = DialogResult.OK
             End Function)
-        tsbtnSave.Enabled = True
     End Sub
 
     Private Sub tsbtnCancel_Click(sender As Object, e As EventArgs) Handles tsbtnCancel.Click

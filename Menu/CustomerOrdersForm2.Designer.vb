@@ -88,7 +88,6 @@ Partial Class CustomerOrdersForm2
         Me.Label52 = New System.Windows.Forms.Label()
         Me.cboCustomerOrderType = New System.Windows.Forms.ComboBox()
         Me.cboAgent = New System.Windows.Forms.ComboBox()
-        Me.cboInventoryLocation = New System.Windows.Forms.ComboBox()
         Me.cboBranchCodeNameInfo = New System.Windows.Forms.ComboBox()
         Me.cboVendorCodeNameInfo = New System.Windows.Forms.ComboBox()
         Me.txtOrderNumber = New System.Windows.Forms.TextBox()
@@ -106,6 +105,7 @@ Partial Class CustomerOrdersForm2
         Me.Label37 = New System.Windows.Forms.Label()
         Me.Label9 = New System.Windows.Forms.Label()
         Me.Label34 = New System.Windows.Forms.Label()
+        Me.cboInventoryLocation = New System.Windows.Forms.ComboBox()
         Me.gridOrderItems = New DevComponents.DotNetBar.Controls.DataGridViewX()
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.Panel1 = New System.Windows.Forms.Panel()
@@ -115,6 +115,7 @@ Partial Class CustomerOrdersForm2
         Me.Column3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column9 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column6 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column7 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column8 = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -363,7 +364,6 @@ Partial Class CustomerOrdersForm2
         Me.SplitContainer2.Panel1.Controls.Add(Me.Label52)
         Me.SplitContainer2.Panel1.Controls.Add(Me.cboCustomerOrderType)
         Me.SplitContainer2.Panel1.Controls.Add(Me.cboAgent)
-        Me.SplitContainer2.Panel1.Controls.Add(Me.cboInventoryLocation)
         Me.SplitContainer2.Panel1.Controls.Add(Me.cboBranchCodeNameInfo)
         Me.SplitContainer2.Panel1.Controls.Add(Me.cboVendorCodeNameInfo)
         Me.SplitContainer2.Panel1.Controls.Add(Me.txtOrderNumber)
@@ -374,6 +374,7 @@ Partial Class CustomerOrdersForm2
         Me.SplitContainer2.Panel1.Controls.Add(Me.Label37)
         Me.SplitContainer2.Panel1.Controls.Add(Me.Label9)
         Me.SplitContainer2.Panel1.Controls.Add(Me.Label34)
+        Me.SplitContainer2.Panel1.Controls.Add(Me.cboInventoryLocation)
         '
         'SplitContainer2.Panel2
         '
@@ -819,17 +820,6 @@ Partial Class CustomerOrdersForm2
         Me.cboAgent.Size = New System.Drawing.Size(208, 21)
         Me.cboAgent.TabIndex = 7
         '
-        'cboInventoryLocation
-        '
-        Me.cboInventoryLocation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cboInventoryLocation.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cboInventoryLocation.FormattingEnabled = True
-        Me.cboInventoryLocation.Location = New System.Drawing.Point(168, 84)
-        Me.cboInventoryLocation.Name = "cboInventoryLocation"
-        Me.cboInventoryLocation.Size = New System.Drawing.Size(208, 21)
-        Me.cboInventoryLocation.TabIndex = 2
-        Me.cboInventoryLocation.Visible = False
-        '
         'cboBranchCodeNameInfo
         '
         Me.cboBranchCodeNameInfo.BackColor = System.Drawing.SystemColors.Window
@@ -993,11 +983,22 @@ Partial Class CustomerOrdersForm2
         Me.Label34.Text = "*"
         Me.Label34.Visible = False
         '
+        'cboInventoryLocation
+        '
+        Me.cboInventoryLocation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cboInventoryLocation.Enabled = False
+        Me.cboInventoryLocation.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cboInventoryLocation.FormattingEnabled = True
+        Me.cboInventoryLocation.Location = New System.Drawing.Point(168, 111)
+        Me.cboInventoryLocation.Name = "cboInventoryLocation"
+        Me.cboInventoryLocation.Size = New System.Drawing.Size(208, 21)
+        Me.cboInventoryLocation.TabIndex = 2
+        '
         'gridOrderItems
         '
         Me.gridOrderItems.AllowUserToAddRows = False
         Me.gridOrderItems.AllowUserToDeleteRows = False
-        Me.gridOrderItems.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column1, Me.Column2, Me.Column3, Me.Column4, Me.Column5, Me.Column6, Me.Column7, Me.Column8, Me.Column10, Me.Column11, Me.ColumnDelete})
+        Me.gridOrderItems.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column1, Me.Column2, Me.Column3, Me.Column4, Me.Column5, Me.Column9, Me.Column6, Me.Column7, Me.Column8, Me.Column10, Me.Column11, Me.ColumnDelete})
         DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
         DataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Window
         DataGridViewCellStyle6.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -1078,6 +1079,13 @@ Partial Class CustomerOrdersForm2
         Me.Column5.DefaultCellStyle = DataGridViewCellStyle3
         Me.Column5.HeaderText = "Quantity Ordered"
         Me.Column5.Name = "Column5"
+        '
+        'Column9
+        '
+        Me.Column9.DataPropertyName = "UnitOfMeasure"
+        Me.Column9.HeaderText = "Unit of Measure"
+        Me.Column9.Name = "Column9"
+        Me.Column9.ReadOnly = True
         '
         'Column6
         '
@@ -1252,6 +1260,7 @@ Partial Class CustomerOrdersForm2
     Friend WithEvents Column3 As DataGridViewTextBoxColumn
     Friend WithEvents Column4 As DataGridViewTextBoxColumn
     Friend WithEvents Column5 As DataGridViewTextBoxColumn
+    Friend WithEvents Column9 As DataGridViewTextBoxColumn
     Friend WithEvents Column6 As DataGridViewTextBoxColumn
     Friend WithEvents Column7 As DataGridViewTextBoxColumn
     Friend WithEvents Column8 As DataGridViewTextBoxColumn

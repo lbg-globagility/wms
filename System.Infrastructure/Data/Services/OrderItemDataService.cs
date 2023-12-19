@@ -43,6 +43,8 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
                 userId: userId,
                 viewName: orderItems.FirstOrDefault().ViewName);
 
+            if (positionView.IsGodMode) return;
+
             if (positionView.Restricted || positionView.ReadOnly) ThrowError();
 
             var isDoingCreateWithNoCreatePrivilege = (orderItems?.Any(t => t.IsNewEntity) ?? false) && !positionView.Creates;

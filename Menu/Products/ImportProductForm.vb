@@ -116,8 +116,11 @@ Public Class ImportProductForm
 
                 Me.DialogResult = DialogResult.OK
 
+            End Function,
+            successCallBack:=
+            Sub()
                 Panel1.Enabled = True
-            End Function)
+            End Sub)
     End Sub
 
     Private Sub CancelDialogButton_Click(sender As Object, e As EventArgs) Handles CancelDialogButton.Click

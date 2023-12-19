@@ -58,12 +58,11 @@ Public Class RackShelfColumnForm
                     added:=New List(Of RackShelfColumn) From {newRackShelfColumn})
 
                 _ProcessedRackShelfColumn = form.ProcessedRackShelfColumn
-            End Function).
-                ContinueWith(
-                continuationAction:=Async Sub()
-                                        Await LoadRackShelfColumnAsync()
-                                    End Sub,
-                scheduler:=TaskScheduler.FromCurrentSynchronizationContext())
+            End Function,
+            successCallBack:=
+            Async Sub()
+                Await LoadRackShelfColumnAsync()
+            End Sub)
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click

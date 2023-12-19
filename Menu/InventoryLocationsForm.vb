@@ -1965,8 +1965,8 @@ Public Class InventoryLocationsForm
                     organizationId:=Z_OrganizationID,
                     userId:=Z_UserID,
                     productColorSizeId:=productColorSizeId,
-                    unitOfMeasure:=model.ProductInventoryLocation.UnitOfMeasure,
-                    unitPrice:=model.ProductInventoryLocation.UnitPrice,
+                    unitOfMeasure:=StringExtensions.IfNullOrEmpty(model?.ProductInventoryLocation?.UnitOfMeasure, model.ProductColorSize.UnitOfMeasure2),
+                    unitPrice:=If(model?.ProductInventoryLocation?.UnitPrice, model.ProductColorSize.UnitPriceOfUOM2),
                     unitOfMeasure2:=model.UnitOfMeasure2,
                     unitPriceOfUOM2:=model.UnitPriceOfUOM2)
 
@@ -2361,18 +2361,23 @@ Public Class InventoryLocationsForm
     Private Function PopulateInventoryLocationWithProductColorSizesAsync() As Func(Of Task)
         Return Async Function()
                    Await FunctionUtils.TryCatchFunctionAsync("Save changes Inventory Location",
-                Async Function()
-                    Dim inventoryLocationDataService = GetRequiredService(Of IInventoryLocationDataService)()
+                        Async Function()
+                            Dim inventoryLocationDataService = GetRequiredService(Of IInventoryLocationDataService)()
 
-                    Await inventoryLocationDataService.PopulateWithProductColorSizesAsync(
-                        inventoryLocationName:=txtLocationName.Text.Trim,
-                        userId:=Z_UserID)
+                            Await inventoryLocationDataService.PopulateWithProductColorSizesAsync(
+                                inventoryLocationName:=txtLocationName.Text.Trim,
+                                userId:=Z_UserID)
 
-                    MessageBox.Show(text:="Inventory location save changes!",
-                        caption:="",
-                        buttons:=MessageBoxButtons.OK,
-                        icon:=MessageBoxIcon.Information)
-                End Function)
+                            MessageBox.Show(text:="Inventory location save changes!",
+                                caption:="",
+                                buttons:=MessageBoxButtons.OK,
+                                icon:=MessageBoxIcon.Information)
+                        End Function,
+                        successCallBack:=
+                        Sub()
+                            myBalloon("Successfully Save", "Save", lblsavemsg, -15, -65)
+                            tsrefreshperformclick()
+                        End Sub)
                End Function
     End Function
 

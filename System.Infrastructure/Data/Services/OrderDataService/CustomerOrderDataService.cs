@@ -31,7 +31,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
             var customerOrder = Order.NewCustomerOrder(organizationId: organizationId,
                 userId: userId,
                 orderNumber: $"{orderNumber}",
-                status: OrderStatus.Open,
+                status: OrderStatus.New,
                 orderDate: DateTime.Now);
 
             await ScrutinateUserPrivilegeAsync(order: customerOrder, userId: userId);
@@ -46,12 +46,19 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
             await ScrutinateUserPrivilegeAsync(order, userId);
 
             if (order.IsCustomerOrderType && (order?.IsSubmittedToWarehouse ?? false)) BusinessLogicException.Throw(message: "Customer Order already `Sent to Warehouse`");
-
-            if (order.InventoryLocationID == null) BusinessLogicException.Throw(message: "Invalid Invetory Location value.");
+            
+            CustomerOrderValidation(order);
 
             order.SetSubmittedToWarehouseCustomerOrder();
 
             await SaveManyAsync(entities: new List<Order>() { order }, userId: userId);
+        }
+
+        private static void CustomerOrderValidation(Order order)
+        {
+            if (order.InventoryLocationID == null) BusinessLogicException.Throw(message: "Invalid Invetory Location value.");
+            if (order.AccountID == null) BusinessLogicException.Throw(message: "Invalid Customer Name.");
+            if (!order.HasOrderItems) BusinessLogicException.Throw(message: "Invalid Order Item(s).");
         }
 
         private void CustomerOrderRecordUpdate(Order entity, Order oldEntity, List<UserActivityItem> userActivityItems)
@@ -89,6 +96,8 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
 
                 added.ForEach(o =>
                 {
+                    CustomerOrderValidation(o);
+
                     if (o.OrderItems != null)
                     {
                         o.OrderItems.ToList().ForEach(oi =>
@@ -126,6 +135,8 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
 
                 updated.ForEach(o =>
                 {
+                    CustomerOrderValidation(o);
+
                     o.PackingList = null;
                     o.Customer = null;
                     o.Customer = null;
@@ -158,7 +169,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
                 });
 
                 await _orderItemDataService.SaveManyChangesAsync(userId: userId, added: addedOrderItems, updated: updatedOrderItems);
-                await _orderItemDataService.DeleteManyAsync(userId: userId, deleted: deletedOrderItems);
+                if(deletedOrderItems.Any()) await _orderItemDataService.DeleteManyAsync(userId: userId, deleted: deletedOrderItems);
             }
 
             if (deleted != null)

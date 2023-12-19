@@ -33,9 +33,9 @@ Public Class CustomerOrdersForm
         Dim _systemOwnerService = GetRequiredService(Of ISystemOwnerService)()
         _systemOwner = Await _systemOwnerService.GetCurrentSystemOwnerEntityAsync()
 
-        SplitContainer3.Panel1Collapsed = IsThurston
-        SplitContainer4.Panel1Collapsed = IsThurston
-        SplitContainer4.Panel2Collapsed = Not IsThurston
+        'SplitContainer3.Panel1Collapsed = IsThurston
+        'SplitContainer4.Panel1Collapsed = IsThurston
+        'SplitContainer4.Panel2Collapsed = Not IsThurston
 
         Dim names = {Label3.Name, cboByPhrase.Name, btnAddProduct.Name}
         Label3.Text = "Select Product Code"

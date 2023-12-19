@@ -1,0 +1,4 @@
+
+ALTER TABLE `orderitems`
+	CHANGE COLUMN `ItemType` `ItemType` CHAR(10) NOT NULL DEFAULT 'S' COLLATE 'latin1_swedish_ci' AFTER `SRP`,
+	CHANGE COLUMN `Approval` `Approval` CHAR(1) NOT NULL DEFAULT 'N' COLLATE 'latin1_swedish_ci' AFTER `ItemType`;

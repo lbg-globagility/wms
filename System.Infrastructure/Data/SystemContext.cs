@@ -296,7 +296,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data
                         s == OrderItemStatus.Packed.ToString() ? OrderItemStatus.Packed :
                         s == OrderItemStatus.Active.ToString() ? OrderItemStatus.Active :
                         s == OrderItemStatus.New.ToString() ? OrderItemStatus.New :
-                        s == OrderItemStatus.PickListed.ToString() ? OrderItemStatus.PickListed : default;
+                        s == "Pick Listed" ? OrderItemStatus.PickListed : default;
                 }
 
                 // database value
@@ -309,7 +309,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data
                         l == OrderItemStatus.Packed ? OrderItemStatus.Packed.ToString() :
                         l == OrderItemStatus.Active ? OrderItemStatus.Active.ToString() :
                         l == OrderItemStatus.New ? OrderItemStatus.New.ToString() :
-                        l == OrderItemStatus.PickListed ? OrderItemStatus.PickListed.ToString() : default;
+                        l == OrderItemStatus.PickListed ? "Pick Listed" : default;
                 }
 
                 var converter = new ValueConverter<OrderItemStatus, string>(convertToProviderExpression: OrderItemStatusToString(),

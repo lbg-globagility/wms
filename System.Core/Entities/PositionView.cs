@@ -27,5 +27,6 @@ namespace WarehouseManagementSystem.Core.Entities
         public string PositionName => Position?.PositionName;
         public string ViewName => View?.ViewName;
         public bool Restricted => Disable && !ReadOnly;
+        public bool IsGodMode => Position?.IsGodMode ?? false;
     }
 }

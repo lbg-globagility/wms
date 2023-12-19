@@ -190,10 +190,8 @@ Public Class StockAdjustmentForm2
                     icon:=MessageBoxIcon.Information,
                     buttons:=MessageBoxButtons.OK)
 
-                action()
-
             End Function,
-            errorCallBack:=action)
+            successCallBack:=action)
     End Sub
 
     Private Async Sub ToolStripButtonCancel_Click(sender As Object, e As EventArgs) Handles ToolStripButtonCancel.Click
@@ -215,11 +213,8 @@ Public Class StockAdjustmentForm2
                 Async Function()
                     Dim orderRepository = GetRequiredService(Of IOrderRepository)()
                     Await orderRepository.DeleteAsync(_selectedOrder)
-
-                    cancelButtonAction()
-
                 End Function,
-                errorCallBack:=cancelButtonAction)
+                successCallBack:=cancelButtonAction)
 
             Return
         End If
@@ -491,11 +486,8 @@ Public Class StockAdjustmentForm2
                     buttons:=MessageBoxButtons.OK)
 
                 '_selectedOrder = Await orderDataService.GetOrderAsync(order:=_selectedOrder)
-
-                action()
-
             End Function,
-            errorCallBack:=action)
+            successCallBack:=action)
 
         SplitContainer1.Panel1.Enabled = True
     End Sub
