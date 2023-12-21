@@ -9,6 +9,7 @@
         Packed,
         Active,
         New,
-        PickListed
+        PickListed,
+        Cancelled
     }
 }

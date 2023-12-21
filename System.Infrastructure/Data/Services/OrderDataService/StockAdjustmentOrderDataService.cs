@@ -39,7 +39,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
         {
             await ScrutinateUserPrivilegeAsync(order, userId);
 
-            if (order.IsStockTransferType && (order?.IsApproved ?? false)) BusinessLogicException.Throw(message: "Stock Adjustment already `Approved`");
+            if (order.IsStockTransferType && (order?.IsStatusApproved ?? false)) BusinessLogicException.Throw(message: "Stock Adjustment already `Approved`");
 
             if (order.StockTransferFromInventoryLocationId == null ||
                 order.StockTransferToInventoryLocationId == null) BusinessLogicException.Throw(message: "Invalid Invetory Location value.");

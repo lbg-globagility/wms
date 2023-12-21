@@ -235,7 +235,7 @@ Public Class StockTransferForm2
 
         Dim invalidFrom = inventoryLocationIdFrom = Nothing OrElse inventoryLocationIdFrom = 0
         Dim invalidTo = inventoryLocationIdTo = Nothing OrElse inventoryLocationIdTo = 0
-        btnAddItem.Enabled = Not invalidFrom AndAlso Not invalidTo AndAlso If(_selectedOrder?.IsOpen, False)
+        btnAddItem.Enabled = Not invalidFrom AndAlso Not invalidTo AndAlso If(_selectedOrder?.IsStatusOpen, False)
     End Sub
 
     Private Sub cboToInventory_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboToInventory.SelectedIndexChanged
@@ -320,7 +320,7 @@ Public Class StockTransferForm2
             Return
         End If
 
-        ToolStripButtonApproved.Enabled = order.IsOpen AndAlso order.HasMovementHistories
+        ToolStripButtonApproved.Enabled = order.IsStatusOpen AndAlso order.HasMovementHistories
 
         txtStockTransferNo.Text = order?.OrderNumber
         txtStockTransferNo.DataBindings.Add("Text", order, "OrderNumber", True, DataSourceUpdateMode.OnPropertyChanged)
@@ -511,7 +511,7 @@ Public Class StockTransferForm2
             button.Enabled = enabled
         Next
 
-        If _selectedOrder IsNot Nothing AndAlso _selectedOrder.IsApproved Then ToolStripButtonApproved.Enabled = False
+        If _selectedOrder IsNot Nothing AndAlso _selectedOrder.IsStatusApproved Then ToolStripButtonApproved.Enabled = False
     End Sub
 
     Private Sub gridStockTransferOrders_DataSourceChanged(sender As Object, e As EventArgs) Handles gridStockTransferOrders.DataSourceChanged

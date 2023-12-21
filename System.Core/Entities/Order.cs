@@ -84,19 +84,19 @@ namespace WarehouseManagementSystem.Core.Entities
             }
         }
 
-        public bool IsOpen => Status == OrderStatus.Open;
-        public bool IsClose => Status == OrderStatus.Close;
-        public bool IsApproved => Status == OrderStatus.Approved;
-        public bool IsDelivery => Status == OrderStatus.Delivery;
-        public bool IsPacking => Status == OrderStatus.Packing;
-        public bool IsForPacking => Status == OrderStatus.ForPacking;
-        public bool IsPickListed => Status == OrderStatus.PickListed;
-        public bool IsNew => Status == OrderStatus.New;
-        public bool IsLinedUp => Status == OrderStatus.LinedUp;
-        public bool IsCancelled => Status == OrderStatus.Cancelled;
-        public bool IsReceived => Status == OrderStatus.Received;
-        public bool IsForApproval => Status == OrderStatus.ForApproval;
-        public bool IsSubmittedToWarehouse => Status == OrderStatus.SubmittedToWarehouse;
+        public bool IsStatusOpen => Status == OrderStatus.Open;
+        public bool IsStatusClose => Status == OrderStatus.Close;
+        public bool IsStatusApproved => Status == OrderStatus.Approved;
+        public bool IsStatusDelivery => Status == OrderStatus.Delivery;
+        public bool IsStatusPacking => Status == OrderStatus.Packing;
+        public bool IsStatusForPacking => Status == OrderStatus.ForPacking;
+        public bool IsStatusPickListed => Status == OrderStatus.PickListed;
+        public bool IsStatusNew => Status == OrderStatus.New;
+        public bool IsStatusLinedUp => Status == OrderStatus.LinedUp;
+        public bool IsStatusCancelled => Status == OrderStatus.Cancelled;
+        public bool IsStatusReceived => Status == OrderStatus.Received;
+        public bool IsStatusForApproval => Status == OrderStatus.ForApproval;
+        public bool IsStatusSubmittedToWarehouse => Status == OrderStatus.SubmittedToWarehouse;
 
         public Order(int organizationId,
             int userId,

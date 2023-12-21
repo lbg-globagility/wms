@@ -88,8 +88,6 @@ Public Class CustomerOrdersForm2
         Dim orderDataService = GetRequiredService(Of IOrderDataService)()
         Dim result = Await orderDataService.GetCustomerOrdersAsync(organizationId:=Z_OrganizationID, pageOptions:=_pageOptions)
 
-        _selectedOrder = Nothing
-
         gridOrders.DataSource = result.Items.
             OrderByDescending(Function(t) t.Created).
             ToList()
@@ -286,17 +284,8 @@ Public Class CustomerOrdersForm2
         cboCustomerName.DropDownWidth = width + 8
     End Sub
 
-    Private Async Sub gridOrders_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles gridOrders.CellContentClick
-        Dim currentRow = gridOrders.CurrentRow
+    Private Sub gridOrders_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles gridOrders.CellContentClick
 
-        If currentRow Is Nothing Then
-            Await ReloadDisplayForm()
-            Return
-        End If
-
-        Dim selectedOrder = CType(currentRow.DataBoundItem, Order)
-
-        Await ReloadDisplayForm(selectedOrder)
     End Sub
 
     Private Async Sub gridOrders_SelectionChanged(sender As Object, e As EventArgs) Handles gridOrders.SelectionChanged
@@ -399,8 +388,10 @@ Public Class CustomerOrdersForm2
     End Sub
 
     Private Sub ToolStripButtonNew_EnabledChanged(sender As Object, e As EventArgs) Handles ToolStripButtonNew.EnabledChanged
-        SplitContainer1.Panel1.Enabled = ToolStripButtonNew.Enabled
-        ToolStripButtonReEncode.Enabled = ToolStripButtonNew.Enabled
+        Dim bool = ToolStripButtonNew.Enabled
+        SplitContainer1.Panel1.Enabled = bool
+        ToolStripButtonApproved.Enabled = bool
+        ToolStripButtonReEncode.Enabled = bool
     End Sub
 
     Private Async Function ReloadDisplayForm(Optional order As Order = Nothing) As Task(Of Integer)
@@ -421,7 +412,7 @@ Public Class CustomerOrdersForm2
             Return 0
         End If
 
-        Dim isUntouchable = order.IsCustomerOrderType AndAlso Not order.IsNew
+        Dim isUntouchable = order.IsCustomerOrderType AndAlso Not order.IsStatusNew
         Dim updateMode = If(isUntouchable, DataSourceUpdateMode.Never, DataSourceUpdateMode.OnPropertyChanged)
 
         txtOrderNumber.DataBindings.Add("Text", order, "OrderNumber", True, DataSourceUpdateMode.Never)
@@ -564,12 +555,11 @@ Public Class CustomerOrdersForm2
                 Await LoadCustomerOrdersAsync()
 
                 ToolStripButtonApproved.Enabled = True
-
-                'Return Task.FromResult(0)
             End Function
 
         Dim errorCallBack =
             Async Function()
+                ToolStripButtonNew.Enabled = True
                 ToolStripButtonApproved.Enabled = True
             End Function
 
@@ -582,7 +572,6 @@ Public Class CustomerOrdersForm2
             End Function,
             errorCallBack:=errorCallBack,
             successCallBack:=successCallBack)
-        'ContinueWith(continuationAction, scheduler:=TaskScheduler.FromCurrentSynchronizationContext)
     End Sub
 
     Private Async Sub ToolStripButtonCancel_Click(sender As Object, e As EventArgs) Handles ToolStripButtonCancel.Click
@@ -613,7 +602,6 @@ Public Class CustomerOrdersForm2
             End Function,
             errorCallBack:=errorCallBack,
             successCallBack:=successCallBack)
-        'ContinueWith(continuationAction, scheduler:=TaskScheduler.FromCurrentSynchronizationContext)
     End Sub
 
     Private Async Sub ToolStripButtonReEncode_Click(sender As Object, e As EventArgs) Handles ToolStripButtonReEncode.Click
@@ -654,8 +642,45 @@ Public Class CustomerOrdersForm2
             End Function)
     End Sub
 
-    Private Sub ToolStripButtonRevoke_Click(sender As Object, e As EventArgs) Handles ToolStripButtonRevoke.Click
+    Private Async Sub ToolStripButtonRevoke_Click(sender As Object, e As EventArgs) Handles ToolStripButtonRevoke.Click
+        If If(_selectedOrder?.IsNewEntity, True) Then Return
 
+        Dim text = $"Are you sure you want to ""CANCEL"" this `Customer Order` #{_selectedOrder.OrderNumber} {If(String.IsNullOrEmpty(_selectedOrder.ReferenceNumber), String.Empty, $"P.O. #{_selectedOrder.ReferenceNumber}")}?{vbNewLine}{vbNewLine}If so, please coordinate to those user(s) who are involve on this transaction process."
+        If Not MessageBox.Show(text:=text,
+            caption:="WARNING: Revoke Customer Order",
+            buttons:=MessageBoxButtons.YesNoCancel,
+            icon:=MessageBoxIcon.Warning,
+            defaultButton:=MessageBoxDefaultButton.Button2) = DialogResult.Yes Then
+
+            Return
+        End If
+
+        ToolStripButtonRevoke.Enabled = False
+
+        Dim successCallBack =
+            Async Function()
+                ToolStripButtonNew.Enabled = True
+
+                Await LoadCustomerOrdersAsync()
+
+                ToolStripButtonRevoke.Enabled = True
+            End Function
+
+        Dim errorCallBack =
+            Async Function()
+                ToolStripButtonNew.Enabled = True
+                ToolStripButtonRevoke.Enabled = True
+            End Function
+
+        Await FunctionUtils.TryCatchFunctionAsync(String.Empty,
+            Async Function()
+                ApplyCustomerOrderChanges(_selectedOrder)
+
+                Dim orderDataService = GetRequiredService(Of IOrderDataService)()
+                Await orderDataService.RevokeCustomerOrder(order:=_selectedOrder, userId:=Z_UserID)
+            End Function,
+            errorCallBack:=errorCallBack,
+            successCallBack:=successCallBack)
     End Sub
 
     Private Sub ToolStripButtonClose_Click(sender As Object, e As EventArgs) Handles ToolStripButtonClose.Click
@@ -704,22 +729,31 @@ Public Class CustomerOrdersForm2
     Private Async Sub linkFirst_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles linkFirst.LinkClicked
         _pageOptions.MoveToFirst()
         Await LoadCustomerOrdersAsync()
+        gridOrders_SelectionChanged(gridOrders, New EventArgs())
     End Sub
 
     Private Async Sub linkPrev_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles linkPrev.LinkClicked
         _pageOptions.MoveToPrevious()
         Await LoadCustomerOrdersAsync()
+        gridOrders_SelectionChanged(gridOrders, New EventArgs())
     End Sub
 
     Private Async Sub linkNext_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles linkNext.LinkClicked
         _pageOptions.MoveToNext()
         Await LoadCustomerOrdersAsync()
+        gridOrders_SelectionChanged(gridOrders, New EventArgs())
     End Sub
 
     Private Async Sub linkLast_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles linkLast.LinkClicked
         Dim total = Await LoadCustomerOrdersAsync()
         _pageOptions.MoveToLast(total:=total)
         Await LoadCustomerOrdersAsync()
+        gridOrders_SelectionChanged(gridOrders, New EventArgs())
     End Sub
 
+    Private Sub gridOrders_DataSourceChanged(sender As Object, e As EventArgs) Handles gridOrders.DataSourceChanged
+        If gridOrders.DataSource IsNot Nothing AndAlso _selectedOrder Is Nothing Then
+            gridOrders_SelectionChanged(gridOrders, New EventArgs)
+        End If
+    End Sub
 End Class

@@ -23,6 +23,11 @@ namespace WarehouseManagementSystem.Core.Entities
             Status = OrderStatus.SubmittedToWarehouse;
         }
 
+        public void SetCancelledCustomerOrder()
+        {
+            Status = OrderStatus.Cancelled;
+        }
+
         public string CustomerNameText => Customer?.CompanyName;
 
         public string AgentNameText => Agent?.FullNameLastNameFirst;

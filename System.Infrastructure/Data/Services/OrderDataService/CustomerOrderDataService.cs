@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -54,15 +55,50 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
 
             order.SetSubmittedToWarehouseCustomerOrder();
 
+            if ((order.RowID ?? 0) > 0)
+            {
+                var originOrder = await _orderRepository.GetByIdAsync(order.RowID.Value);
+                if (!(originOrder.IsStatusNew && order.IsStatusSubmittedToWarehouse))
+                {
+                    order.Status = originOrder.Status;
+                    BusinessLogicException.Throw(message: "Customer Order cannot be `SENT TO WAREHOUSE` anymore.");
+                }
+            }
+
             await SaveManyAsync(entities: new List<Order>() { order }, userId: userId);
         }
 
-        private static void CustomerOrderValidation(Order order)
+        public async Task RevokeCustomerOrder(Order order, int userId)
         {
-            if (order.InventoryLocationID == null) BusinessLogicException.Throw(message: "Invalid Invetory Location value.");
-            if (order.AccountID == null) BusinessLogicException.Throw(message: "Invalid Customer Name.");
+            if (order == null) return;
+
+            await ScrutinateUserPrivilegeAsync(order, userId);
+
+            CustomerOrderValidation(order);
+
+            order.SetCancelledCustomerOrder();
+
+            if ((order.RowID ?? 0) > 0)
+            {
+                var originOrder = await _orderRepository.GetByIdAsync(order.RowID.Value);
+                if (!(!originOrder.IsStatusCancelled && order.IsStatusCancelled))
+                {
+                    order.Status = originOrder.Status;
+                    BusinessLogicException.Throw(message: "Customer Order cannot be `CANCELLED` anymore.");
+                }
+            }
+
+            await SaveManyAsync(entities: new List<Order>() { order }, userId: userId);
+        }
+
+        private void CustomerOrderValidation(Order order)
+        {
+            if (!order.IsCustomerOrderType) return;
+            if ((order.InventoryLocationID ?? 0) == 0) BusinessLogicException.Throw(message: "Invalid Invetory Location value.");
+            if (string.IsNullOrEmpty(order.ReferenceNumber)) BusinessLogicException.Throw(message: "Invalid P.O. number.");
+            if ((order.AccountID ?? 0) == 0) BusinessLogicException.Throw(message: "Invalid Customer Name.");
+            if ((order.AgentID ?? 0) == 0) BusinessLogicException.Throw(message: "Invalid Agent value.");            
             if (!order.HasOrderItems) BusinessLogicException.Throw(message: "Invalid Order Item(s).");
-            if (order.IsCustomerOrderType && !order.IsNew) BusinessLogicException.Throw(message: "Customer Order already on another phase of transaction process.");
         }
 
         private void CustomerOrderRecordUpdate(Order entity, Order oldEntity, List<UserActivityItem> userActivityItems)
@@ -210,5 +246,6 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
                 updated: updated,
                 deleted: deleted);
         }
+
     }
 }

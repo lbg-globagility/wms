@@ -53,7 +53,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
             await ScrutinateUserPrivilegeAsync(order, userId);
 
             if ((order.IsStockAdjustType || order.IsStockTransferType) &&
-                order.IsOpen)
+                order.IsStatusOpen)
             {
                 order.MovementHistories?.ToList().ForEach(movementHistory =>
                 {
