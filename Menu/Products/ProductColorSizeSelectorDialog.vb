@@ -1,6 +1,7 @@
 ﻿Option Strict On
 
 Imports Microsoft.Extensions.DependencyInjection
+Imports WarehouseManagementSystem.Core.Entities
 Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
 Imports WarehouseManagementSystem.Core.Interfaces.Repositories
 Imports WarehouseManagementSystem.Utilities.Extensions
@@ -47,34 +48,28 @@ Public Class ProductColorSizeSelectorDialog
         Dim productColorSizeRepository = GetRequiredService(Of IProductColorSizeRepository)()
         Dim productColorSizes = Await productColorSizeRepository.GetManyByOrganizationIdsAsync(Z_OrganizationID)
 
+        Dim selector As Func(Of ProductColorSize, ProductColorSizeModel) =
+            Function(t)
+                Dim productInventoryLocation = productInventoryLocations.
+                    FirstOrDefault(Function(i) i.ProductColorSizeID = t.RowID.Value)
+                Dim productInventoryLocationItems = productInventoryLocations.
+                    Where(Function(i) i.ProductColorSizeID = t.RowID.Value).
+                    ToList()
+                Return New ProductColorSizeModel(productInventoryLocations:=productInventoryLocationItems,
+                    productColorSize:=t,
+                    _picp)
+            End Function
+
         If ProductColorSizeExceptionIds IsNot Nothing AndAlso ProductColorSizeExceptionIds.Any() Then
             Return productColorSizes.
                 Where(Function(t) Not ProductColorSizeExceptionIds.Contains(t.RowID.Value)).
-                Select(Function(t)
-                           Dim productInventoryLocation = productInventoryLocations.
-                            FirstOrDefault(Function(i) i.ProductColorSizeID = t.RowID.Value)
-                           Dim productInventoryLocationItems = productInventoryLocations.
-                            Where(Function(i) i.ProductColorSizeID = t.RowID.Value).
-                            ToList() 'productInventoryLocation:=productInventoryLocation,
-                           Return New ProductColorSizeModel(productInventoryLocations:=productInventoryLocationItems,
-                            productColorSize:=t,
-                            _picp)
-                       End Function).
+                Select(selector).
                 OrderBy(Function(t) t.ProductCode).
                 ToList()
         End If
 
         Return productColorSizes.
-            Select(Function(t)
-                       Dim productInventoryLocation = productInventoryLocations.
-                            FirstOrDefault(Function(i) i.ProductColorSizeID = t.RowID.Value)
-                       Dim productInventoryLocationItems = productInventoryLocations.
-                            Where(Function(i) i.ProductColorSizeID = t.RowID.Value).
-                            ToList() 'productInventoryLocation:=productInventoryLocation,
-                       Return New ProductColorSizeModel(productInventoryLocations:=productInventoryLocationItems,
-                            productColorSize:=t,
-                            _picp)
-                   End Function).
+            Select(selector).
             OrderBy(Function(t) t.ProductCode).
             ToList()
     End Function
@@ -172,5 +167,19 @@ Public Class ProductColorSizeSelectorDialog
     Private Sub grid_KeyDown(sender As Object, e As KeyEventArgs) Handles grid.KeyDown
         e.Handled = e.KeyCode = Keys.Enter
         If e.Handled Then ButtonOK.PerformClick()
+    End Sub
+
+    Private Sub grid_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles grid.CellDoubleClick
+        Dim currentRow = grid.CurrentRow
+        If currentRow Is Nothing Then Return
+
+        Dim model = CType(currentRow.DataBoundItem, ProductColorSizeModel)
+        model.IsSelected = Not model.IsSelected
+
+        grid.Refresh()
+
+        grid_CellContentClick(grid, e:=New DataGridViewCellEventArgs(
+            columnIndex:=currentRow.Cells(isSelectedColumn.Name).ColumnIndex,
+            rowIndex:=e.RowIndex))
     End Sub
 End Class

@@ -32,7 +32,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
                     .ThenInclude(x => x.Color)
           .AsNoTracking()
           .Where(c => c.RowID == orderId)
-          .FirstAsync();
+          .FirstOrDefaultAsync();
 
         public Task<Order> GetLastOrderOfThisTypeAsync(int organizationId, OrderType orderType)
         {
@@ -69,6 +69,28 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
                 .AsEnumerable()
                 .Where(o => o.OrderType == orderType)
                 .ToList());
+        }
+
+        public Task<Order> GetOrderByOrderTypeAsync(int id, OrderType orderType)
+        {
+            var query = _context.Orders
+                .Include(o => o.OrderItems)
+                .Include(o => o.InventoryLocation)
+                .AsNoTracking()
+                .Where(o => o.RowID == id)
+                .Where(o => o.OrderType == orderType)
+                .AsQueryable();
+
+            query = StockTransferNavMapping(query, orderType);
+
+            query = StockAdjustmentNavMapping(query, orderType);
+
+            query = CustomerOrderNavMapping(query, orderType);
+
+            return Task.FromResult(
+                query
+                .AsEnumerable()
+                .FirstOrDefault());
         }
 
         public Task<List<Order>> SearchOrdersAsync(int organizationId, OrderType orderType, string searchText)

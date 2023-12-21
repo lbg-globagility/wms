@@ -17,6 +17,9 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
         public async Task<PaginatedList<Order>> GetCustomerOrdersAsync(int organizationId, PageOptions pageOptions, string searchText = "") =>
             await _orderRepository.GetOrdersByOrderTypeAsync(pageOptions: pageOptions, organizationId: organizationId, orderType: OrderType.CO, searchText: searchText);
 
+        public async Task<Order> GetCustomerOrderAsync(int primaryKey) =>
+            await _orderRepository.GetOrderByOrderTypeAsync(id: primaryKey, orderType: OrderType.CO);
+
         public async Task<List<Order>> SearchCustomerOrdersAsync(int organizationId, string searchText) =>
             await _orderRepository.SearchOrdersAsync(organizationId: organizationId, orderType: OrderType.CO, searchText: searchText);
 
@@ -47,8 +50,6 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
 
             await ScrutinateUserPrivilegeAsync(order, userId);
 
-            if (order.IsCustomerOrderType && !order.IsNew) BusinessLogicException.Throw(message: "Customer Order already on another phase of transaction process.");
-            
             CustomerOrderValidation(order);
 
             order.SetSubmittedToWarehouseCustomerOrder();
@@ -61,6 +62,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
             if (order.InventoryLocationID == null) BusinessLogicException.Throw(message: "Invalid Invetory Location value.");
             if (order.AccountID == null) BusinessLogicException.Throw(message: "Invalid Customer Name.");
             if (!order.HasOrderItems) BusinessLogicException.Throw(message: "Invalid Order Item(s).");
+            if (order.IsCustomerOrderType && !order.IsNew) BusinessLogicException.Throw(message: "Customer Order already on another phase of transaction process.");
         }
 
         private void CustomerOrderRecordUpdate(Order entity, Order oldEntity, List<UserActivityItem> userActivityItems)

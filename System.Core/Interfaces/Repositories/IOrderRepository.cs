@@ -21,5 +21,6 @@ namespace WarehouseManagementSystem.Core.Interfaces.Repositories
         Task<Order> GetOrderAsync(Order order);
 
         Task<PaginatedList<Order>> GetOrdersByOrderTypeAsync(PageOptions pageOptions, int organizationId, OrderType orderType, string searchText = "");
+        Task<Order> GetOrderByOrderTypeAsync(int id, OrderType orderType);
     }
 }

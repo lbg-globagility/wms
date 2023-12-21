@@ -44,7 +44,11 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
             var positionViews = await _positionViewRepository
                 .GetManyByPositionIdAsync(organizationId: organizationId, positionId: user.PositionID);
 
-            return positionViews.FirstOrDefault(t => t.ViewName == viewName);
+            var positionView = positionViews.FirstOrDefault(t => t.ViewName == viewName);
+            if (positionView?.IsGodMode ?? false)
+                positionView.Creates = true; positionView.Updates = true; positionView.Disable = false; positionView.ReadOnly = false;
+
+            return positionView;
         }
 
         protected override string CreateUserActivitySuffixIdentifier(PositionView entity) => $" with `name` '{entity.ViewName}' for `position` '{(string.IsNullOrEmpty(entity.PositionName) ? $"{entity.PositionID}" : entity.PositionName)}'";

@@ -21,7 +21,6 @@ Public Class CustomerOrdersForm2
 
     End Class
 
-    Private ReadOnly _noAgent As Contact = Contact.BlankAgent(organizationId:=Z_OrganizationID)
     Private ReadOnly _userId As Integer
     Private _selectedOrder As Order
     Private _pageOptions As PageOptions
@@ -41,6 +40,8 @@ Public Class CustomerOrdersForm2
         gridOrders.AutoGenerateColumns = False
         gridOrderItems.AutoGenerateColumns = False
 
+        Await ScrutinateUserPrivilegeAsync()
+
         LoadInventorySourceType()
 
         Await LoadInventoryLocationsAsync()
@@ -50,9 +51,44 @@ Public Class CustomerOrdersForm2
         Await LoadCustomerOrdersAsync()
     End Sub
 
+    Private Async Function ScrutinateUserPrivilegeAsync() As Task
+        Dim positionViewDataService = GetRequiredService(Of IPositionViewDataService)()
+        Dim positionView = Await positionViewDataService.GetByUserIdAndViewNameAsync(organizationId:=Z_OrganizationID,
+            userId:=_userId,
+            viewName:=View.CUSTOMER_ORDERS_VIEW)
+        If positionView.Restricted Then
+            MessageBox.Show(text:="The user has insufficient privilege to access this module.",
+                caption:="Insufficient Privilege",
+                icon:=MessageBoxIcon.Error,
+                buttons:=MessageBoxButtons.OK)
+
+            Close()
+
+            Return
+        ElseIf positionView.ReadOnly Then
+            Dim toolStripItems = ToolStrip1.Items.
+                OfType(Of ToolStripItem).
+                Where(Function(t) Not t.Name = ToolStripButtonClose.Name).
+                ToList()
+
+            For Each item In toolStripItems
+                item.Visible = False
+            Next
+
+            Return
+        End If
+
+        ToolStripButtonNew.Visible = Not positionView.ReadOnly AndAlso positionView.Creates
+        ToolStripButtonSave.Visible = Not positionView.ReadOnly AndAlso (positionView.Updates Or positionView.Creates)
+        ToolStripButtonApproved.Visible = Not positionView.ReadOnly AndAlso positionView.Updates
+        ToolStripButtonRevoke.Visible = Not positionView.ReadOnly AndAlso positionView.Updates
+    End Function
+
     Private Async Function LoadCustomerOrdersAsync() As Task(Of Integer)
         Dim orderDataService = GetRequiredService(Of IOrderDataService)()
         Dim result = Await orderDataService.GetCustomerOrdersAsync(organizationId:=Z_OrganizationID, pageOptions:=_pageOptions)
+
+        _selectedOrder = Nothing
 
         gridOrders.DataSource = result.Items.
             OrderByDescending(Function(t) t.Created).
@@ -100,12 +136,9 @@ Public Class CustomerOrdersForm2
 
         Dim agents = Await contactDataService.GetAgentsAsync(organizationId:=Z_OrganizationID)
 
-        Dim agentDataSource = New List(Of Contact) From {_noAgent}
-        agentDataSource.AddRange(agents.OrderBy(Function(t) t.FullNameLastNameFirst).ToList())
-
         cboAgent.ValueMember = "RowID"
         cboAgent.DisplayMember = "FullNameLastNameFirst"
-        cboAgent.DataSource = agentDataSource
+        cboAgent.DataSource = agents.OrderBy(Function(t) t.FullNameLastNameFirst).ToList()
     End Function
 
     Private Async Sub btnAddOrderItem_Click(sender As Object, e As EventArgs) Handles btnAddOrderItem.Click
@@ -333,9 +366,9 @@ Public Class CustomerOrdersForm2
 
     End Sub
 
-    Private Sub gridOrderItems_CellMouseUp(sender As Object, e As DataGridViewCellMouseEventArgs) Handles gridOrderItems.CellMouseUp
+    Private Sub gridOrderItems_CellMouseClick(sender As Object, e As DataGridViewCellMouseEventArgs) Handles gridOrderItems.CellMouseClick
         If e.Button = MouseButtons.Right Then
-
+            MsgBox("gridOrderItems_CellMouseClick")
         End If
     End Sub
 
@@ -346,8 +379,6 @@ Public Class CustomerOrdersForm2
             Async Function()
                 'Return Task.FromResult(0)
             End Function
-
-        Dim continuationAction As Action(Of Object) = Function() successCallBack()
 
         Dim errorCallBack =
             Async Function()
@@ -365,35 +396,14 @@ Public Class CustomerOrdersForm2
             End Function,
             errorCallBack:=errorCallBack,
             successCallBack:=successCallBack)
-        'ContinueWith(continuationAction:=continuationAction, scheduler:=TaskScheduler.FromCurrentSynchronizationContext)
     End Sub
 
     Private Sub ToolStripButtonNew_EnabledChanged(sender As Object, e As EventArgs) Handles ToolStripButtonNew.EnabledChanged
         SplitContainer1.Panel1.Enabled = ToolStripButtonNew.Enabled
+        ToolStripButtonReEncode.Enabled = ToolStripButtonNew.Enabled
     End Sub
 
     Private Async Function ReloadDisplayForm(Optional order As Order = Nothing) As Task(Of Integer)
-        'txtOrderNumber.Text = String.Empty
-        'txtReferenceNumber.Text = String.Empty
-        'txtStatus.Text = String.Empty
-        'dtpOrderDate.Value = Date.Now
-        'cboCustomerName.Text = String.Empty
-        'cboAgent.Text = String.Empty
-        'cboCustomerOrderType.Text = String.Empty
-        'txtDRNumber.Text = String.Empty
-        'txtDeliveryAddress.Text = String.Empty
-
-        'dtpDateSubmitted.Value = Date.Now
-        'dtpDateSubmitted.Checked = False
-
-        'dtpDeliveryDate.Value = Date.Now
-        'dtpDeliveryDate.Checked = False
-
-        'dtpEndDate.Value = Date.Now
-        'dtpEndDate.Checked = False
-
-        'txtComments.Text = String.Empty
-
         gridOrderItems.DataSource = Enumerable.Empty(Of OrderItemModel)()
 
         For Each textBox In SplitContainer2.Panel1.Controls.OfType(Of Control).OfType(Of TextBox)
@@ -462,19 +472,20 @@ Public Class CustomerOrdersForm2
         Dim productColorSizeIds = order.OrderItems?.Select(Function(oi) oi.ProductColorSizeID.Value).ToArray()
 
         Dim productInventoryLocationDataService = GetRequiredService(Of IProductInventoryLocationDataService)()
-        Dim productInventoryLocations = Await productInventoryLocationDataService.GetByInventoryLocationIdAndProductColorSizeIdsAsync(inventoryLocationId:=CInt(cboInventoryLocation.SelectedValue), productColorSizeIds:=productColorSizeIds)
+        Dim productInventoryLocations = Enumerable.Empty(Of ProductInventoryLocation)()
+        If If(productColorSizeIds?.Any(), False) Then productInventoryLocations = Await productInventoryLocationDataService.GetByInventoryLocationIdAndProductColorSizeIdsAsync(inventoryLocationId:=CInt(cboInventoryLocation.SelectedValue), productColorSizeIds:=productColorSizeIds)
 
         Dim getOrderItemModel =
             Function(orderItem As OrderItem)
                 Dim productInventoryLocation = productInventoryLocations.
                     Where(Function(t) t.ProductColorSizeID = orderItem.ProductColorSizeID.Value).
                     FirstOrDefault()
-                If orderItem.ProductColorSize Is Nothing Then Return New OrderItemModel(orderItem:=orderItem, productInventoryLocation:=productInventoryLocation)
+                If orderItem.ProductColorSize Is Nothing AndAlso productInventoryLocation IsNot Nothing Then Return New OrderItemModel(orderItem:=orderItem, productInventoryLocation:=productInventoryLocation)
 
                 Return New OrderItemModel(orderItem:=orderItem)
             End Function
 
-        Dim dataSource = If(_selectedOrder.OrderItems?.Select(Function(t) getOrderItemModel(t)).Where(Function(t) Not t.IsDelete).ToList(),
+        Dim dataSource = If(order.OrderItems?.Select(Function(t) getOrderItemModel(t)).Where(Function(t) Not t.IsDelete).ToList(),
             Enumerable.Empty(Of OrderItemModel)())
 
         gridOrderItems.DataSource = dataSource
@@ -483,6 +494,8 @@ Public Class CustomerOrdersForm2
     End Function
 
     Private Async Sub ToolStripButtonSave_Click(sender As Object, e As EventArgs) Handles ToolStripButtonSave.Click
+        If _selectedOrder Is Nothing Then Return
+
         ToolStripButtonSave.Enabled = False
 
         Dim successCallBack =
@@ -495,8 +508,6 @@ Public Class CustomerOrdersForm2
 
                 'Return Task.FromResult(0)
             End Function
-
-        Dim continuationAction As Action(Of Object) = Function() successCallBack()
 
         Dim errorCallBack =
             Async Function()
@@ -518,7 +529,6 @@ Public Class CustomerOrdersForm2
             End Function,
             errorCallBack:=errorCallBack,
             successCallBack:=successCallBack)
-        'ContinueWith(continuationAction:=continuationAction, scheduler:=TaskScheduler.FromCurrentSynchronizationContext)
     End Sub
 
     Private Sub ApplyCustomerOrderChanges(order As Order)
@@ -533,6 +543,8 @@ Public Class CustomerOrdersForm2
     End Sub
 
     Private Async Sub ToolStripButtonApproved_Click(sender As Object, e As EventArgs) Handles ToolStripButtonApproved.Click
+        If If(_selectedOrder?.IsNewEntity, True) Then Return
+
         Dim text = $"NOTE: Submitting this customer order means that you have completed, checked, and satisfied this order.{vbNewLine}{vbNewLine}Do you want to proceed submitting this to warehouse?"
         If Not MessageBox.Show(text:=text,
             caption:="Submitting",
@@ -555,8 +567,6 @@ Public Class CustomerOrdersForm2
 
                 'Return Task.FromResult(0)
             End Function
-
-        Dim continuationAction As Action(Of Object) = Function() successCallBack()
 
         Dim errorCallBack =
             Async Function()
@@ -586,10 +596,8 @@ Public Class CustomerOrdersForm2
 
                 ToolStripButtonCancel.Enabled = True
 
-                'Return Task.FromResult(0)
+                Await ReloadDisplayForm()
             End Function
-
-        Dim continuationAction As Action(Of Object) = Function() successCallBack()
 
         Dim errorCallBack =
             Async Function()
@@ -606,6 +614,48 @@ Public Class CustomerOrdersForm2
             errorCallBack:=errorCallBack,
             successCallBack:=successCallBack)
         'ContinueWith(continuationAction, scheduler:=TaskScheduler.FromCurrentSynchronizationContext)
+    End Sub
+
+    Private Async Sub ToolStripButtonReEncode_Click(sender As Object, e As EventArgs) Handles ToolStripButtonReEncode.Click
+        If If(_selectedOrder?.IsNewEntity, True) Then Return
+
+        Dim originOrderId = _selectedOrder.RowID.Value
+
+        ToolStripButtonNew.Enabled = False
+
+        Await FunctionUtils.TryCatchFunctionAsync("ReEncode as new Customer Order",
+            Async Function()
+                Dim orderDataService = GetRequiredService(Of IOrderDataService)()
+                Dim originOrder = Await orderDataService.GetCustomerOrderAsync(originOrderId)
+
+                Dim newOrder = Await orderDataService.QuickCreateCustomerOrderAsync(organizationId:=Z_OrganizationID, userId:=_userId)
+
+                newOrder.ReferenceNumber = originOrder.ReferenceNumber
+                newOrder.OrderDate = originOrder.OrderDate
+                newOrder.AccountID = originOrder.AccountID
+                newOrder.AgentID = originOrder.AgentID
+                newOrder.InventoryLocationID = originOrder.InventoryLocationID
+                newOrder.DRNumber = originOrder.DRNumber
+                newOrder.CustomerAddress = originOrder.CustomerAddress
+                newOrder.CustomerName = originOrder.CustomerName
+                newOrder.Comments = originOrder.Comments
+
+                Dim orderItems = originOrder.OrderItems.ToList()
+                orderItems.ForEach(Sub(oi)
+                                       oi.RowID = Nothing
+                                       oi.OrderID = Nothing
+                                   End Sub)
+
+                newOrder.AddCustomerOrderItems(orderItems)
+                newOrder.RecomputeTotalAmount()
+
+                _selectedOrder = newOrder
+                Await ReloadDisplayForm(order:=_selectedOrder)
+            End Function)
+    End Sub
+
+    Private Sub ToolStripButtonRevoke_Click(sender As Object, e As EventArgs) Handles ToolStripButtonRevoke.Click
+
     End Sub
 
     Private Sub ToolStripButtonClose_Click(sender As Object, e As EventArgs) Handles ToolStripButtonClose.Click
@@ -670,10 +720,6 @@ Public Class CustomerOrdersForm2
         Dim total = Await LoadCustomerOrdersAsync()
         _pageOptions.MoveToLast(total:=total)
         Await LoadCustomerOrdersAsync()
-    End Sub
-
-    Private Sub cboAgent_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboAgent.SelectedIndexChanged
-        If cboAgent.SelectedValue Is Nothing Then cboAgent.SelectedItem = _noAgent
     End Sub
 
 End Class

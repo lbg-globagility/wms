@@ -34,6 +34,7 @@ namespace WarehouseManagementSystem.Core.Interfaces.DomainServices
         Task ApproveStockAdjustment(Order order, int userId);
 
         Task<List<Order>> GetCustomerOrdersAsync(int organizationId);
+        Task<Order> GetCustomerOrderAsync(int primaryKey);
         Task<PaginatedList<Order>> GetCustomerOrdersAsync(int organizationId, PageOptions pageOptions, string searchText = "");
         Task<List<Order>> SearchCustomerOrdersAsync(int organizationId, string searchText);
         Task<Order> QuickCreateCustomerOrderAsync(int organizationId, int userId);

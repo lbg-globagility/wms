@@ -87,10 +87,9 @@ Public Class StockAdjustmentForm2
             Return
         End If
 
-        ToolStripButtonNew.Visible = _positionView.Creates
-        ToolStripButtonSave.Visible = _positionView.Updates Or _positionView.Creates
-        ToolStripButtonApproved.Visible = _positionView.Updates
-
+        ToolStripButtonNew.Visible = Not _positionView.ReadOnly AndAlso _positionView.Creates
+        ToolStripButtonSave.Visible = Not _positionView.ReadOnly AndAlso (_positionView.Updates Or _positionView.Creates)
+        ToolStripButtonApproved.Visible = Not _positionView.ReadOnly AndAlso _positionView.Updates
     End Function
 
     Private Async Function LoadStockAdjustmentOrders() As Task
@@ -332,7 +331,7 @@ Public Class StockAdjustmentForm2
         txtStockAdjustmentNo.DataBindings.Add("Text", order, "OrderNumber", True, DataSourceUpdateMode.OnPropertyChanged)
 
         txtStatus.Text = $"{order?.Status}"
-        txtStatus.DataBindings.Add("Text", order, "Status", True, DataSourceUpdateMode.OnPropertyChanged)
+        txtStatus.DataBindings.Add("Text", order, "StatusDisplayText", True, DataSourceUpdateMode.Never)
 
         txtTransferedBy.Text = String.Empty
         'txtTransferedBy.DataBindings.Add("Text", order, "LoanNumber", True, DataSourceUpdateMode.OnPropertyChanged)
