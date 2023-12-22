@@ -63,7 +63,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
         {
             await ScrutinateUserPrivilegeAsync(userId: userId, orderItems: deleted);
 
-            await SaveManyAsync(userId: userId, deleted: deleted);
+            if(deleted?.Any() ?? false) await SaveManyAsync(userId: userId, deleted: deleted);
         }
 
         public async Task SaveManyChangesAsync(int userId, List<OrderItem> added, List<OrderItem> updated)
@@ -71,7 +71,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
             await ScrutinateUserPrivilegeAsync(userId: userId, orderItems: added);
             await ScrutinateUserPrivilegeAsync(userId: userId, orderItems: updated);
 
-            await SaveManyAsync(userId: userId, added: added, updated: updated);
+            if ((added?.Any() ?? false) || (updated?.Any() ?? false)) await SaveManyAsync(userId: userId, added: added, updated: updated);
         }
     }
 }

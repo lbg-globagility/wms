@@ -49,6 +49,9 @@ Public Class CustomerOrdersForm2
         Await LoadAgentsAsync()
 
         Await LoadCustomerOrdersAsync()
+
+        AddHandler gridOrders.SelectionChanged, AddressOf gridOrders_SelectionChanged
+        gridOrders_SelectionChanged(gridOrders, New EventArgs())
     End Sub
 
     Private Async Function ScrutinateUserPrivilegeAsync() As Task
@@ -288,11 +291,11 @@ Public Class CustomerOrdersForm2
 
     End Sub
 
-    Private Async Sub gridOrders_SelectionChanged(sender As Object, e As EventArgs) Handles gridOrders.SelectionChanged
+    Private Async Sub gridOrders_SelectionChanged(sender As Object, e As EventArgs)
         Dim currentRow = gridOrders.CurrentRow
-        If currentRow Is Nothing Then
+        If currentRow Is Nothing Or gridOrders.Rows.Count() = 0 Then
             _selectedOrder = Nothing
-            Await ReloadDisplayForm()
+            Await ReloadDisplayForm(order:=Nothing)
             Return
         End If
 
@@ -399,68 +402,69 @@ Public Class CustomerOrdersForm2
 
         For Each textBox In SplitContainer2.Panel1.Controls.OfType(Of Control).OfType(Of TextBox)
             textBox.DataBindings.Clear()
+            textBox.Clear()
         Next
         For Each comboBox In SplitContainer2.Panel1.Controls.OfType(Of Control).OfType(Of ComboBox)
             comboBox.DataBindings.Clear()
+            comboBox.SelectedIndex = -1
         Next
         For Each dateTimePicker In SplitContainer2.Panel1.Controls.OfType(Of Control).OfType(Of DateTimePicker)
             dateTimePicker.DataBindings.Clear()
+            dateTimePicker.Value = Date.Now
         Next
 
-        If order Is Nothing Then
+        If order IsNot Nothing Then
+            Dim isUntouchable = If(order?.IsCustomerOrderType, False) AndAlso Not If(order?.IsStatusNew, False)
+            Dim updateMode = If(isUntouchable, DataSourceUpdateMode.Never, DataSourceUpdateMode.OnPropertyChanged)
 
-            Return 0
+            txtOrderNumber.DataBindings.Add("Text", order, "OrderNumber", True, DataSourceUpdateMode.Never)
+
+            txtReferenceNumber.DataBindings.Add("Text", order, "ReferenceNumber", True, updateMode)
+
+            txtStatus.DataBindings.Add("Text", order, "StatusDisplayText", True, DataSourceUpdateMode.Never)
+
+            Dim dtpOrderDateBinding = New Binding("Value", order, "OrderDate") With {
+            .DataSourceUpdateMode = updateMode}
+            dtpOrderDate.DataBindings.Add(dtpOrderDateBinding)
+
+            RemoveHandler cboCustomerName.SelectedIndexChanged, AddressOf cboCustomerName_SelectedIndexChanged
+            cboCustomerName.DataBindings.Add("SelectedValue", order, "AccountID", True, updateMode)
+            AddHandler cboCustomerName.SelectedIndexChanged, AddressOf cboCustomerName_SelectedIndexChanged
+
+            cboAgent.DataBindings.Add("SelectedValue", order, "AgentID", True, updateMode)
+
+            RemoveHandler cboCustomerOrderType.SelectedIndexChanged, AddressOf cboCustomerOrderType_SelectedIndexChanged
+            RemoveHandler cboCustomerOrderType.SelectedValueChanged, AddressOf cboCustomerOrderType_SelectedValueChanged
+            RemoveHandler cboInventoryLocation.SelectedValueChanged, AddressOf cboInventoryLocation_SelectedValueChanged
+
+            cboInventoryLocation.DataBindings.Add("SelectedValue", order, "InventoryLocationID", True, updateMode)
+
+            cboCustomerOrderType.SelectedValue = If(order?.InventoryLocation?.Type, InventoryLocationType.Main)
+
+            AddHandler cboInventoryLocation.SelectedValueChanged, AddressOf cboInventoryLocation_SelectedValueChanged
+            cboInventoryLocation_SelectedValueChanged(cboInventoryLocation, New EventArgs())
+            AddHandler cboCustomerOrderType.SelectedValueChanged, AddressOf cboCustomerOrderType_SelectedValueChanged
+            cboCustomerOrderType_SelectedValueChanged(cboCustomerOrderType, New EventArgs())
+            AddHandler cboCustomerOrderType.SelectedIndexChanged, AddressOf cboCustomerOrderType_SelectedIndexChanged
+
+            txtDRNumber.DataBindings.Add("Text", order, "DRNumber", True, DataSourceUpdateMode.OnPropertyChanged)
+
+            txtDeliveryAddress.DataBindings.Add("Text", order, "CustomerAddress", True, updateMode)
+
+            dtpDateSubmitted.Value = If(order?.DateSubmitted?.Date, Date.Now)
+            dtpDateSubmitted.Checked = False
+
+            dtpDeliveryDate.Value = If(order?.TargetDate?.Date, Date.Now)
+            dtpDeliveryDate.Checked = False
+
+            dtpEndDate.Value = If(order?.EndDate?.Date, Date.Now)
+            dtpEndDate.Checked = False
+
+            txtComments.DataBindings.Add("Text", order, "Comments", True, DataSourceUpdateMode.OnPropertyChanged)
         End If
 
-        Dim isUntouchable = order.IsCustomerOrderType AndAlso Not order.IsStatusNew
-        Dim updateMode = If(isUntouchable, DataSourceUpdateMode.Never, DataSourceUpdateMode.OnPropertyChanged)
-
-        txtOrderNumber.DataBindings.Add("Text", order, "OrderNumber", True, DataSourceUpdateMode.Never)
-
-        txtReferenceNumber.DataBindings.Add("Text", order, "ReferenceNumber", True, updateMode)
-
-        txtStatus.DataBindings.Add("Text", order, "StatusDisplayText", True, DataSourceUpdateMode.Never)
-
-        Dim dtpOrderDateBinding = New Binding("Value", order, "OrderDate") With {
-            .DataSourceUpdateMode = updateMode}
-        dtpOrderDate.DataBindings.Add(dtpOrderDateBinding)
-
-        RemoveHandler cboCustomerName.SelectedIndexChanged, AddressOf cboCustomerName_SelectedIndexChanged
-        cboCustomerName.DataBindings.Add("SelectedValue", order, "AccountID", True, updateMode)
-        AddHandler cboCustomerName.SelectedIndexChanged, AddressOf cboCustomerName_SelectedIndexChanged
-
-        cboAgent.DataBindings.Add("SelectedValue", order, "AgentID", True, updateMode)
-
-        RemoveHandler cboCustomerOrderType.SelectedIndexChanged, AddressOf cboCustomerOrderType_SelectedIndexChanged
-        RemoveHandler cboCustomerOrderType.SelectedValueChanged, AddressOf cboCustomerOrderType_SelectedValueChanged
-        RemoveHandler cboInventoryLocation.SelectedValueChanged, AddressOf cboInventoryLocation_SelectedValueChanged
-
-        cboInventoryLocation.DataBindings.Add("SelectedValue", order, "InventoryLocationID", True, updateMode)
-
-        cboCustomerOrderType.SelectedValue = If(order.InventoryLocation?.Type, InventoryLocationType.Main)
-
-        AddHandler cboInventoryLocation.SelectedValueChanged, AddressOf cboInventoryLocation_SelectedValueChanged
-        cboInventoryLocation_SelectedValueChanged(cboInventoryLocation, New EventArgs())
-        AddHandler cboCustomerOrderType.SelectedValueChanged, AddressOf cboCustomerOrderType_SelectedValueChanged
-        cboCustomerOrderType_SelectedValueChanged(cboCustomerOrderType, New EventArgs())
-        AddHandler cboCustomerOrderType.SelectedIndexChanged, AddressOf cboCustomerOrderType_SelectedIndexChanged
-
-        txtDRNumber.DataBindings.Add("Text", order, "DRNumber", True, DataSourceUpdateMode.OnPropertyChanged)
-
-        txtDeliveryAddress.DataBindings.Add("Text", order, "CustomerAddress", True, updateMode)
-
-        dtpDateSubmitted.Value = If(order.DateSubmitted?.Date, Date.Now)
-        dtpDateSubmitted.Checked = False
-
-        dtpDeliveryDate.Value = If(order.TargetDate?.Date, Date.Now)
-        dtpDeliveryDate.Checked = False
-
-        dtpEndDate.Value = If(order.EndDate?.Date, Date.Now)
-        dtpEndDate.Checked = False
-
-        txtComments.DataBindings.Add("Text", order, "Comments", True, DataSourceUpdateMode.OnPropertyChanged)
-
-        Dim productColorSizeIds = order.OrderItems?.Select(Function(oi) oi.ProductColorSizeID.Value).ToArray()
+        Dim productColorSizeIds = If(order?.OrderItems?.Select(Function(oi) oi.ProductColorSizeID.Value).ToArray(),
+            Enumerable.Empty(Of Integer).ToArray())
 
         Dim productInventoryLocationDataService = GetRequiredService(Of IProductInventoryLocationDataService)()
         Dim productInventoryLocations = Enumerable.Empty(Of ProductInventoryLocation)()
@@ -476,10 +480,11 @@ Public Class CustomerOrdersForm2
                 Return New OrderItemModel(orderItem:=orderItem)
             End Function
 
-        Dim dataSource = If(order.OrderItems?.Select(Function(t) getOrderItemModel(t)).Where(Function(t) Not t.IsDelete).ToList(),
+        Dim dataSource = If(order?.OrderItems?.Select(Function(t) getOrderItemModel(t)).Where(Function(t) Not t.IsDelete).ToList(),
             Enumerable.Empty(Of OrderItemModel)())
 
         gridOrderItems.DataSource = dataSource
+        gridOrderItems.Refresh()
 
         Return 0
     End Function
@@ -493,7 +498,7 @@ Public Class CustomerOrdersForm2
             Async Function()
                 ToolStripButtonNew.Enabled = True
 
-                Await LoadCustomerOrdersAsync()
+                Await DefaultReloadCustomerOrdersAsync()
 
                 ToolStripButtonSave.Enabled = True
 
@@ -552,7 +557,7 @@ Public Class CustomerOrdersForm2
             Async Function()
                 ToolStripButtonNew.Enabled = True
 
-                Await LoadCustomerOrdersAsync()
+                Await DefaultReloadCustomerOrdersAsync()
 
                 ToolStripButtonApproved.Enabled = True
             End Function
@@ -581,7 +586,7 @@ Public Class CustomerOrdersForm2
             Async Function()
                 ToolStripButtonNew.Enabled = True
 
-                Await LoadCustomerOrdersAsync()
+                Await DefaultReloadCustomerOrdersAsync()
 
                 ToolStripButtonCancel.Enabled = True
 
@@ -661,7 +666,7 @@ Public Class CustomerOrdersForm2
             Async Function()
                 ToolStripButtonNew.Enabled = True
 
-                Await LoadCustomerOrdersAsync()
+                Await DefaultReloadCustomerOrdersAsync()
 
                 ToolStripButtonRevoke.Enabled = True
             End Function
@@ -726,34 +731,61 @@ Public Class CustomerOrdersForm2
         linkFirst.Location = New Point(x:=(linkPrev.Location.X - linkFirst.Width), y:=linkFirst.Location.Y)
     End Sub
 
-    Private Async Sub linkFirst_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles linkFirst.LinkClicked
+    Private Async Function DefaultReloadCustomerOrdersAsync() As Task
+        RemoveHandler gridOrders.SelectionChanged, AddressOf gridOrders_SelectionChanged
+
+        Panel5.Enabled = False
+
         _pageOptions.MoveToFirst()
-        Await LoadCustomerOrdersAsync()
-        gridOrders_SelectionChanged(gridOrders, New EventArgs())
-    End Sub
+        Await LoadCustomerOrdersAsync().
+            ContinueWith(
+            Sub()
+                Panel5.Enabled = True
+                AddHandler gridOrders.SelectionChanged, AddressOf gridOrders_SelectionChanged
+                gridOrders_SelectionChanged(gridOrders, New EventArgs())
+            End Sub, TaskScheduler.FromCurrentSynchronizationContext)
+    End Function
 
-    Private Async Sub linkPrev_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles linkPrev.LinkClicked
-        _pageOptions.MoveToPrevious()
-        Await LoadCustomerOrdersAsync()
-        gridOrders_SelectionChanged(gridOrders, New EventArgs())
-    End Sub
+    Private Async Sub Pagination_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles linkFirst.LinkClicked,
+            linkPrev.LinkClicked,
+            linkNext.LinkClicked
+        RemoveHandler gridOrders.SelectionChanged, AddressOf gridOrders_SelectionChanged
 
-    Private Async Sub linkNext_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles linkNext.LinkClicked
-        _pageOptions.MoveToNext()
-        Await LoadCustomerOrdersAsync()
-        gridOrders_SelectionChanged(gridOrders, New EventArgs())
+        Panel5.Enabled = False
+
+        Dim control = CType(sender, LinkLabel)
+        If control.Name = linkFirst.Name Then
+            Await DefaultReloadCustomerOrdersAsync()
+            Return
+        ElseIf control.Name = linkPrev.Name Then
+            _pageOptions.MoveToPrevious()
+        ElseIf control.Name = linkNext.Name Then
+            _pageOptions.MoveToNext()
+        End If
+
+        Await LoadCustomerOrdersAsync().
+            ContinueWith(
+            Sub()
+                Panel5.Enabled = True
+                AddHandler gridOrders.SelectionChanged, AddressOf gridOrders_SelectionChanged
+                gridOrders_SelectionChanged(gridOrders, New EventArgs())
+            End Sub, TaskScheduler.FromCurrentSynchronizationContext)
     End Sub
 
     Private Async Sub linkLast_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles linkLast.LinkClicked
+        RemoveHandler gridOrders.SelectionChanged, AddressOf gridOrders_SelectionChanged
+
+        Panel5.Enabled = False
+
         Dim total = Await LoadCustomerOrdersAsync()
         _pageOptions.MoveToLast(total:=total)
-        Await LoadCustomerOrdersAsync()
-        gridOrders_SelectionChanged(gridOrders, New EventArgs())
+        Await LoadCustomerOrdersAsync().
+            ContinueWith(
+            Sub()
+                Panel5.Enabled = True
+                AddHandler gridOrders.SelectionChanged, AddressOf gridOrders_SelectionChanged
+                gridOrders_SelectionChanged(gridOrders, New EventArgs())
+            End Sub, TaskScheduler.FromCurrentSynchronizationContext)
     End Sub
 
-    Private Sub gridOrders_DataSourceChanged(sender As Object, e As EventArgs) Handles gridOrders.DataSourceChanged
-        If gridOrders.DataSource IsNot Nothing AndAlso _selectedOrder Is Nothing Then
-            gridOrders_SelectionChanged(gridOrders, New EventArgs)
-        End If
-    End Sub
 End Class
