@@ -1,5 +1,6 @@
 ﻿Option Strict On
 
+Imports System.Windows.Media.Animation
 Imports WarehouseManagementSystem.Core.Entities
 Imports WarehouseManagementSystem.Core.Enums
 Imports WarehouseManagementSystem.Core.Helpers
@@ -50,8 +51,8 @@ Public Class CustomerOrdersForm2
 
         Await LoadCustomerOrdersAsync()
 
-        AddHandler gridOrders.SelectionChanged, AddressOf gridOrders_SelectionChanged
         gridOrders_SelectionChanged(gridOrders, New EventArgs())
+        AddHandler gridOrders.SelectionChanged, AddressOf gridOrders_SelectionChanged
     End Sub
 
     Private Async Function ScrutinateUserPrivilegeAsync() As Task
@@ -417,27 +418,27 @@ Public Class CustomerOrdersForm2
             Dim isUntouchable = If(order?.IsCustomerOrderType, False) AndAlso Not If(order?.IsStatusNew, False)
             Dim updateMode = If(isUntouchable, DataSourceUpdateMode.Never, DataSourceUpdateMode.OnPropertyChanged)
 
-            txtOrderNumber.DataBindings.Add("Text", order, "OrderNumber", True, DataSourceUpdateMode.Never)
+            txtOrderNumber.DataBindings.Add("Text", order, "OrderNumber", False, DataSourceUpdateMode.Never)
 
-            txtReferenceNumber.DataBindings.Add("Text", order, "ReferenceNumber", True, updateMode)
+            txtReferenceNumber.DataBindings.Add("Text", order, "ReferenceNumber", False, updateMode)
 
-            txtStatus.DataBindings.Add("Text", order, "StatusDisplayText", True, DataSourceUpdateMode.Never)
+            txtStatus.DataBindings.Add("Text", order, "StatusDisplayText", False, DataSourceUpdateMode.Never)
 
             Dim dtpOrderDateBinding = New Binding("Value", order, "OrderDate") With {
             .DataSourceUpdateMode = updateMode}
             dtpOrderDate.DataBindings.Add(dtpOrderDateBinding)
 
             RemoveHandler cboCustomerName.SelectedIndexChanged, AddressOf cboCustomerName_SelectedIndexChanged
-            cboCustomerName.DataBindings.Add("SelectedValue", order, "AccountID", True, updateMode)
+            cboCustomerName.DataBindings.Add("SelectedValue", order, "AccountID", False, updateMode)
             AddHandler cboCustomerName.SelectedIndexChanged, AddressOf cboCustomerName_SelectedIndexChanged
 
-            cboAgent.DataBindings.Add("SelectedValue", order, "AgentID", True, updateMode)
+            cboAgent.DataBindings.Add("SelectedValue", order, "AgentID", False, updateMode)
 
             RemoveHandler cboCustomerOrderType.SelectedIndexChanged, AddressOf cboCustomerOrderType_SelectedIndexChanged
             RemoveHandler cboCustomerOrderType.SelectedValueChanged, AddressOf cboCustomerOrderType_SelectedValueChanged
             RemoveHandler cboInventoryLocation.SelectedValueChanged, AddressOf cboInventoryLocation_SelectedValueChanged
 
-            cboInventoryLocation.DataBindings.Add("SelectedValue", order, "InventoryLocationID", True, updateMode)
+            cboInventoryLocation.DataBindings.Add("SelectedValue", order, "InventoryLocationID", False, updateMode)
 
             cboCustomerOrderType.SelectedValue = If(order?.InventoryLocation?.Type, InventoryLocationType.Main)
 
@@ -447,44 +448,53 @@ Public Class CustomerOrdersForm2
             cboCustomerOrderType_SelectedValueChanged(cboCustomerOrderType, New EventArgs())
             AddHandler cboCustomerOrderType.SelectedIndexChanged, AddressOf cboCustomerOrderType_SelectedIndexChanged
 
-            txtDRNumber.DataBindings.Add("Text", order, "DRNumber", True, DataSourceUpdateMode.OnPropertyChanged)
+            txtDRNumber.DataBindings.Add("Text", order, "DRNumber", False, DataSourceUpdateMode.OnPropertyChanged)
 
-            txtDeliveryAddress.DataBindings.Add("Text", order, "CustomerAddress", True, updateMode)
+            txtDeliveryAddress.DataBindings.Add("Text", order, "CustomerAddress", False, updateMode)
 
-            dtpDateSubmitted.Value = If(order?.DateSubmitted?.Date, Date.Now)
-            dtpDateSubmitted.Checked = False
+            'dtpDateSubmitted.Value = If(order?.DateSubmitted?.Date, Date.Now)
+            dtpDateSubmitted.DataBindings.Add(New Binding("Value", order, "DateSubmitted") With {
+            .DataSourceUpdateMode = DataSourceUpdateMode.Never, .FormattingEnabled = True, .NullValue = dtpDateSubmitted.MinDate.Date})
+            dtpDateSubmitted.Checked = Not dtpDateSubmitted.Value.Date = dtpDateSubmitted.MinDate.Date
 
-            dtpDeliveryDate.Value = If(order?.TargetDate?.Date, Date.Now)
-            dtpDeliveryDate.Checked = False
+            'dtpDeliveryDate.Value = If(order?.TargetDate?.Date, Date.Now)
+            dtpDeliveryDate.DataBindings.Add(New Binding("Value", order, "TargetDate") With {
+            .DataSourceUpdateMode = DataSourceUpdateMode.Never, .FormattingEnabled = True, .NullValue = dtpDeliveryDate.MinDate.Date})
+            dtpDeliveryDate.Checked = Not dtpDeliveryDate.Value.Date = dtpDeliveryDate.MinDate.Date
 
-            dtpEndDate.Value = If(order?.EndDate?.Date, Date.Now)
-            dtpEndDate.Checked = False
+            'dtpEndDate.Value = If(order?.EndDate?.Date, Date.Now)
+            dtpEndDate.DataBindings.Add(New Binding("Value", order, "EndDate") With {
+            .DataSourceUpdateMode = DataSourceUpdateMode.Never, .FormattingEnabled = True, .NullValue = dtpEndDate.MinDate.Date})
+            dtpEndDate.Checked = Not dtpEndDate.Value.Date = dtpEndDate.MinDate.Date
 
-            txtComments.DataBindings.Add("Text", order, "Comments", True, DataSourceUpdateMode.OnPropertyChanged)
+            txtComments.DataBindings.Add("Text", order, "Comments", False, DataSourceUpdateMode.OnPropertyChanged)
+
+            Dim productColorSizeIds = If(order?.OrderItems?.Select(Function(oi) oi.ProductColorSizeID.Value).ToArray(),
+                Enumerable.Empty(Of Integer).ToArray())
+
+            Dim productInventoryLocations = Enumerable.Empty(Of ProductInventoryLocation)()
+            If If(productColorSizeIds?.Any(), False) Then
+                Dim productInventoryLocationDataService = GetRequiredService(Of IProductInventoryLocationDataService)()
+                productInventoryLocations = Await productInventoryLocationDataService.GetByInventoryLocationIdAndProductColorSizeIdsAsync(inventoryLocationId:=CInt(cboInventoryLocation.SelectedValue), productColorSizeIds:=productColorSizeIds)
+            End If
+
+            Dim getOrderItemModel =
+                Function(orderItem As OrderItem)
+                    Dim productInventoryLocation = productInventoryLocations.
+                        Where(Function(t) t.ProductColorSizeID = orderItem.ProductColorSizeID.Value).
+                        FirstOrDefault()
+                    If orderItem.ProductColorSize Is Nothing AndAlso productInventoryLocation IsNot Nothing Then _
+                        Return New OrderItemModel(orderItem:=orderItem, productInventoryLocation:=productInventoryLocation)
+
+                    Return New OrderItemModel(orderItem:=orderItem)
+                End Function
+
+            Dim dataSource = If(order?.OrderItems?.Select(Function(t) getOrderItemModel(t)).Where(Function(t) Not t.IsDelete).ToList(),
+                Enumerable.Empty(Of OrderItemModel)())
+
+            gridOrderItems.DataSource = dataSource
+            'gridOrderItems.Refresh()
         End If
-
-        Dim productColorSizeIds = If(order?.OrderItems?.Select(Function(oi) oi.ProductColorSizeID.Value).ToArray(),
-            Enumerable.Empty(Of Integer).ToArray())
-
-        Dim productInventoryLocationDataService = GetRequiredService(Of IProductInventoryLocationDataService)()
-        Dim productInventoryLocations = Enumerable.Empty(Of ProductInventoryLocation)()
-        If If(productColorSizeIds?.Any(), False) Then productInventoryLocations = Await productInventoryLocationDataService.GetByInventoryLocationIdAndProductColorSizeIdsAsync(inventoryLocationId:=CInt(cboInventoryLocation.SelectedValue), productColorSizeIds:=productColorSizeIds)
-
-        Dim getOrderItemModel =
-            Function(orderItem As OrderItem)
-                Dim productInventoryLocation = productInventoryLocations.
-                    Where(Function(t) t.ProductColorSizeID = orderItem.ProductColorSizeID.Value).
-                    FirstOrDefault()
-                If orderItem.ProductColorSize Is Nothing AndAlso productInventoryLocation IsNot Nothing Then Return New OrderItemModel(orderItem:=orderItem, productInventoryLocation:=productInventoryLocation)
-
-                Return New OrderItemModel(orderItem:=orderItem)
-            End Function
-
-        Dim dataSource = If(order?.OrderItems?.Select(Function(t) getOrderItemModel(t)).Where(Function(t) Not t.IsDelete).ToList(),
-            Enumerable.Empty(Of OrderItemModel)())
-
-        gridOrderItems.DataSource = dataSource
-        gridOrderItems.Refresh()
 
         Return 0
     End Function
@@ -741,8 +751,8 @@ Public Class CustomerOrdersForm2
             ContinueWith(
             Sub()
                 Panel5.Enabled = True
-                AddHandler gridOrders.SelectionChanged, AddressOf gridOrders_SelectionChanged
                 gridOrders_SelectionChanged(gridOrders, New EventArgs())
+                AddHandler gridOrders.SelectionChanged, AddressOf gridOrders_SelectionChanged
             End Sub, TaskScheduler.FromCurrentSynchronizationContext)
     End Function
 
@@ -767,8 +777,8 @@ Public Class CustomerOrdersForm2
             ContinueWith(
             Sub()
                 Panel5.Enabled = True
-                AddHandler gridOrders.SelectionChanged, AddressOf gridOrders_SelectionChanged
                 gridOrders_SelectionChanged(gridOrders, New EventArgs())
+                AddHandler gridOrders.SelectionChanged, AddressOf gridOrders_SelectionChanged
             End Sub, TaskScheduler.FromCurrentSynchronizationContext)
     End Sub
 
@@ -783,8 +793,8 @@ Public Class CustomerOrdersForm2
             ContinueWith(
             Sub()
                 Panel5.Enabled = True
-                AddHandler gridOrders.SelectionChanged, AddressOf gridOrders_SelectionChanged
                 gridOrders_SelectionChanged(gridOrders, New EventArgs())
+                AddHandler gridOrders.SelectionChanged, AddressOf gridOrders_SelectionChanged
             End Sub, TaskScheduler.FromCurrentSynchronizationContext)
     End Sub
 

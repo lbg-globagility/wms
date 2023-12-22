@@ -131,7 +131,7 @@ namespace WarehouseManagementSystem.Core.Entities
         public virtual Account Customer { get; set; }
         public virtual InventoryLocation InventoryLocation { get; set; }
         public string InventoryLocationName => InventoryLocation?.Name;
-        public string StatusDisplayText => Status == OrderStatus.Open ? OrderStatus.Open.ToString() :
+        public virtual string StatusDisplayText => Status == OrderStatus.Open ? OrderStatus.Open.ToString() :
             Status == OrderStatus.Close ? OrderStatus.Close.ToString() :
             Status == OrderStatus.Approved ? OrderStatus.Approved.ToString() :
             Status == OrderStatus.Delivery ? OrderStatus.Delivery.ToString() :
@@ -143,6 +143,6 @@ namespace WarehouseManagementSystem.Core.Entities
             Status == OrderStatus.Cancelled ? OrderStatus.Cancelled.ToString() :
             Status == OrderStatus.Received ? OrderStatus.Received.ToString() :
             Status == OrderStatus.ForApproval ? "For Approval" :
-            Status == OrderStatus.SubmittedToWarehouse ? "Submitted To Warehouse" : default;
+            Status == OrderStatus.SubmittedToWarehouse ? "Submitted To Warehouse" : OrderStatus.New.ToString();
     }
 }

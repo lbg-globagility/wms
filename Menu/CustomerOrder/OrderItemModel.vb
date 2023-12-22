@@ -4,7 +4,6 @@ Imports WarehouseManagementSystem.Core.Entities
 
 Public Class OrderItemModel
     Private ReadOnly _orderItem As OrderItem
-    Private ReadOnly _productInventoryLocation As ProductInventoryLocation
 
     Public Sub New(orderItem As OrderItem)
         _orderItem = orderItem
@@ -29,8 +28,6 @@ Public Class OrderItemModel
     End Sub
 
     Public Sub New(orderItem As OrderItem, productInventoryLocation As ProductInventoryLocation)
-        _productInventoryLocation = productInventoryLocation
-
         _orderItem = orderItem
 
         Dim productColorSize = If(orderItem.ProductColorSize Is Nothing, productInventoryLocation.ProductColorSize, orderItem.ProductColorSize)
