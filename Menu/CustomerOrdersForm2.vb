@@ -800,4 +800,7 @@ Public Class CustomerOrdersForm2
             End Sub, TaskScheduler.FromCurrentSynchronizationContext)
     End Sub
 
+    Private Sub txtStatus_TextChanged(sender As Object, e As EventArgs) Handles txtStatus.TextChanged
+        ToolStripButtonApproved.Enabled = txtStatus.Text = OrderStatus.[New].ToString()
+    End Sub
 End Class
