@@ -2372,12 +2372,7 @@ Public Class InventoryLocationsForm
                                 caption:="",
                                 buttons:=MessageBoxButtons.OK,
                                 icon:=MessageBoxIcon.Information)
-                        End Function,
-                        successCallBack:=
-                        Sub()
-                            myBalloon("Successfully Save", "Save", lblsavemsg, -15, -65)
-                            tsrefreshperformclick()
-                        End Sub)
+                        End Function)
                End Function
     End Function
 
