@@ -489,10 +489,12 @@ Public Class CustomerOrdersForm2
                     Return New OrderItemModel(orderItem:=orderItem)
                 End Function
 
-            Dim dataSource = If(order?.OrderItems?.Select(Function(t) getOrderItemModel(t)).Where(Function(t) Not t.IsDelete).ToList(),
-                Enumerable.Empty(Of OrderItemModel)())
+            Dim dataSource = order?.OrderItems?.Select(Function(t) getOrderItemModel(t)).
+                Where(Function(t) Not t.IsDelete).
+                OrderBy(Function(t) t.RowID).
+                ToList()
 
-            gridOrderItems.DataSource = dataSource
+            gridOrderItems.DataSource = If(dataSource, Enumerable.Empty(Of OrderItemModel)())
             'gridOrderItems.Refresh()
         End If
 
