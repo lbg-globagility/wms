@@ -396,6 +396,7 @@ Public Class CustomerOrdersForm2
         SplitContainer1.Panel1.Enabled = bool
         ToolStripButtonApproved.Enabled = bool
         ToolStripButtonReEncode.Enabled = bool
+        ToolStripButtonRevoke.Enabled = bool
     End Sub
 
     Private Async Function ReloadDisplayForm(Optional order As Order = Nothing) As Task(Of Integer)
