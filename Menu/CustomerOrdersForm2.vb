@@ -1,6 +1,5 @@
 ﻿Option Strict On
 
-Imports System.Windows.Media.Animation
 Imports WarehouseManagementSystem.Core.Entities
 Imports WarehouseManagementSystem.Core.Enums
 Imports WarehouseManagementSystem.Core.Helpers
@@ -603,7 +602,8 @@ Public Class CustomerOrdersForm2
 
                 ToolStripButtonCancel.Enabled = True
 
-                Await ReloadDisplayForm()
+                Dim currentSelectedOrder = If(gridOrders.CurrentRow Is Nothing, Nothing, CType(gridOrders.CurrentRow?.DataBoundItem, Order))
+                Await ReloadDisplayForm(currentSelectedOrder)
             End Function
 
         Dim errorCallBack =
