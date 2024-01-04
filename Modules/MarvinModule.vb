@@ -420,7 +420,7 @@ Module MarvinModule
             globaltotalqtydamage = 0
             Dim dtGtdq As New DataTable
             Dim id = If(globaliproductcolorsizeid Is Nothing, 0, CInt(globaliproductcolorsizeid))
-            dtGtdq = getDataTableForSQL("SELECT COALESCE(pcs.totaldamageqty,'') FROM productcolorsizes pcs WHERE pcs.rowid = " & id & " ")
+            dtGtdq = getDataTableForSQL("SELECT COALESCE(pcs.totaldamageqty,0) FROM productcolorsizes pcs WHERE pcs.rowid = " & id & " ")
             If dtGtdq.Rows.Count <> 0 Then
                 globaltotalqtydamage = dtGtdq.Rows(0)(0)
             Else
