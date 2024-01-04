@@ -640,7 +640,6 @@ Public Class CustomerOrdersForm2
                 newOrder.AccountID = originOrder.AccountID
                 newOrder.AgentID = originOrder.AgentID
                 newOrder.InventoryLocationID = originOrder.InventoryLocationID
-                newOrder.DRNumber = originOrder.DRNumber
                 newOrder.CustomerAddress = originOrder.CustomerAddress
                 newOrder.CustomerName = originOrder.CustomerName
                 newOrder.Comments = originOrder.Comments
