@@ -52,7 +52,7 @@ Public Class ImportProductForm
             Select(Function(s) s.Key).
             ToArray()
 
-        Dim productDataService = MainServiceProvider.GetRequiredService(Of IProductDataService)
+        Dim productDataService = GetRequiredService(Of IProductDataService)()
         'Dim products = Await productDataService.GetManyByProductCodesAsync(organizationId:=Z_OrganizationID,
         '    productCodes:=groupByColorList)
         Dim products = Await productDataService.GetManyByOrganizationIdAsync(organizationId:=Z_OrganizationID)
@@ -116,8 +116,11 @@ Public Class ImportProductForm
 
                 Me.DialogResult = DialogResult.OK
 
+            End Function,
+            successCallBack:=
+            Sub()
                 Panel1.Enabled = True
-            End Function)
+            End Sub)
     End Sub
 
     Private Sub CancelDialogButton_Click(sender As Object, e As EventArgs) Handles CancelDialogButton.Click

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WarehouseManagementSystem.Core.Entities;
+using WarehouseManagementSystem.Core.Enums;
 using WarehouseManagementSystem.Core.Interfaces.Repositories;
 using WarehouseManagementSystem.Infrastructure.Data.Repositories.Base;
 
@@ -42,5 +43,18 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
             .AsNoTracking()
             .Where(i => i.OrganizationID == organizationId)
             .ToListAsync();
+
+        public async Task<List<InventoryLocation>> GetManyByTypeAsync(int organizationId, InventoryLocationType inventoryLocationType)
+        {
+            var query =  _context.InventoryLocations
+                .Include(i => i.RackShelfColumns)
+                    .ThenInclude(r => r.ProductInventoryLocations)
+                .AsNoTracking()
+                .Where(i => i.OrganizationID == organizationId);
+
+            return await query
+                .Where(t => t.Type == inventoryLocationType)
+                .ToListAsync();
+        }
     }
 }

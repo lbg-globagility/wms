@@ -1,13 +1,7 @@
-﻿Imports System.Buffers
-Imports System.IO
-Imports System.Net
-Imports System.Net.Http
-Imports Microsoft.Extensions.DependencyInjection
+﻿Imports System.IO
 Imports MySql.Data.MySqlClient
-Imports Newtonsoft.Json
-Imports OfficeOpenXml.FormulaParsing.Excel.Functions.Math
 Imports WarehouseManagementSystem.Core.Interfaces
-Imports Xenocode
+Imports WarehouseManagementSystem.Desktop.Utilities
 
 Public Class ProductsForm
     Dim manager As New sqlModule.Manager
@@ -28,15 +22,23 @@ Public Class ProductsForm
     Dim pfproductid, pfcategoryid, pfbrandid, pfcompanyid, pfskuid, pfSKU2id, pfproductcolorsizeid As Integer
     Dim pftotalqtyavailable, pftotalqtyallocated, pftotalqtyreserve As Integer
     Dim simplesearchphrase, commonphrase, pagefilter1, pagefilter2, pagefilter3 As String
-    Dim productImageFilePath As String
     Private _systemOwner As WarehouseManagementSystem.Core.Entities.SystemOwner
     Private _picp As ProductImageConfigParser
+    Private _pim As ProductImageManager
+    Public Const VIEW_NAME As String = "Products"
 
     Private Async Sub ProductManagementForm_Load(sender As Object, e As EventArgs) Handles Me.Load
-        Dim _systemOwnerService = MainServiceProvider.GetRequiredService(Of ISystemOwnerService)
+        Dim _systemOwnerService = GetRequiredService(Of ISystemOwnerService)()
         _systemOwner = Await _systemOwnerService.GetCurrentSystemOwnerEntityAsync()
 
         _picp = New ProductImageConfigParser(filePath:=CONFIG_FILE_PATH)
+
+        _pim = New ProductImageManager(_picp,
+            organizationId:=Z_OrganizationID,
+            userId:=Z_UserID,
+            viewName:=VIEW_NAME)
+
+        PictureBox1.Visible = IsThurston
 
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -637,10 +639,10 @@ Public Class ProductsForm
                     dgProductList.Item(p_brandname.Index, n).Value = reader1(2)
                     dgProductList.Item(p_category.Index, n).Value = reader1(3)
                     dgProductList.Item(p_company.Index, n).Value = reader1(4)
+                    dgProductList.Item(PhotoResourceLocation.Name, n).Value = _pim.GetPhotoUrl(productCode:=reader1(1))
                     seqno = seqno + 1
                     n = n + 1
                 End If
-
             End While
             reader1.Close()
             dgProductList.Columns("p_seqno").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
@@ -684,6 +686,7 @@ Public Class ProductsForm
                     dgProductList.Item(p_brandname.Index, n).Value = reader1(2)
                     dgProductList.Item(p_category.Index, n).Value = reader1(3)
                     dgProductList.Item(p_company.Index, n).Value = reader1(4)
+                    dgProductList.Item(PhotoResourceLocation.Name, n).Value = _pim.GetPhotoUrl(productCode:=reader1(1))
                     seqno = seqno + 1
                     n = n + 1
                 End If
@@ -756,6 +759,12 @@ Public Class ProductsForm
             Dim sql1 As String = "SELECT COALESCE(p.productcode,''),COALESCE(b.brandname,''),COALESCE(ct.categoryname,''),COALESCE(cm.companyname,''),COALESCE(p.unitprice,0.0)," &
                         "COALESCE(p.unitofmeasure,''),COALESCE(p.description,''),p.image FROM products p LEFT JOIN brands b ON p.brandid = b.rowid " &
                         "LEFT JOIN categories ct ON p.categoryid = ct.rowid LEFT JOIN companies cm ON p.companyid = cm.rowid WHERE p.rowid = " & iproductid & " "
+            If IsThurston Then
+                sql1 = "SELECT COALESCE(p.productcode,''),COALESCE(b.brandname,''),COALESCE(ct.categoryname,''),COALESCE(cm.companyname,''),COALESCE(p.UnitPriceOfUOM2,0.0)," &
+                        "COALESCE(p.UnitOfMeasure2,''),COALESCE(p.description,''),p.image FROM products p LEFT JOIN brands b ON p.brandid = b.rowid " &
+                        "LEFT JOIN categories ct ON p.categoryid = ct.rowid LEFT JOIN companies cm ON p.companyid = cm.rowid WHERE p.rowid = " & iproductid & " "
+            End If
+
             Dim cmd1 As New MySqlCommand(sql1, conn1)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             While reader1.Read()
@@ -768,13 +777,10 @@ Public Class ProductsForm
                     cboUnitOfMeasure.Text = reader1(5)
                     txtDescription.Text = reader1(6)
                     productimage = reader1(7)
-                    productImageFilePath = reader1(7)
                     If IsDBNull(productimage) Then
                         pbProductImage.Image = Nothing
                     Else
-                        pbProductImage.ImageLocation = System.IO.Path.Combine("c:\AttachedImages", reader1(7))
-
-                        'pbProductImage.ImageLocation = reader1(7)
+                        pbProductImage.Image = ConvertByteToImage(productimage)
                     End If
                 End If
             End While
@@ -783,6 +789,7 @@ Public Class ProductsForm
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
             conn1.Close()
+            PictureBox1.LoadAsync(url:=dgProductList.CurrentRow?.Cells(PhotoResourceLocation.Name).Value)
         End Try
     End Sub
 
@@ -825,7 +832,7 @@ Public Class ProductsForm
         Try
             dgProductSizes.Rows.Clear()
             If conn1.State = ConnectionState.Closed Then conn1.Open()
-            Dim sql1 As String = "SELECT pcs.rowid,COALESCE(pcs.size,''),COALESCE(pcs.status,''),COALESCE(pcs.seasoncode,'') FROM productcolorsizes pcs WHERE pcs.organizationid = " & Z_OrganizationID & " AND pcs.productcolorid = " & iproductcolorid & " ORDER BY pcs.size ASC "
+            Dim sql1 As String = $"SELECT pcs.rowid,COALESCE(pcs.size,''),COALESCE(pcs.status,''),COALESCE(pcs.seasoncode,''), p.ProductCode FROM productcolorsizes pcs INNER JOIN productcolors pc ON pc.RowID=pcs.ProductColorID INNER JOIN products p ON p.RowID=pc.ProductID WHERE pcs.organizationid = {Z_OrganizationID} AND pcs.productcolorid = {iproductcolorid} ORDER BY pcs.size ASC;"
             Dim cmd1 As New MySqlCommand(sql1, conn1)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             Dim n As Integer = 0
@@ -858,6 +865,7 @@ Public Class ProductsForm
             If dgProductSizes.Rows.Count <> 0 Then
                 dgProductSizes.CurrentRow.Selected = False
             End If
+
             colorCoding()
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
@@ -1286,6 +1294,10 @@ Public Class ProductsForm
         End Try
     End Sub
 
+    Private Sub dgProductList_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgProductList.CellContentClick
+
+    End Sub
+
     Private Sub dgProductList_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgProductList.CellClick
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1457,12 +1469,23 @@ Public Class ProductsForm
     End Sub
 
     Private Sub dgInventoryLocations_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgInventoryLocations.CellClick
+        Dim localMethod =
+            Sub()
+                displayRackShelfColumn(CInt(dgProductSizes.CurrentRow.Cells("s_rowid").Value), CInt(dgInventoryLocations.CurrentRow.Cells("il_rowid").Value))
+                txtLocation.Text = dgInventoryLocations.CurrentRow.Cells("il_locationname").Value
+            End Sub
+
+        If IsThurston Then
+            localMethod()
+            Return
+        End If
+
         Me.Cursor = Cursors.WaitCursor
         Try
+
             If dgInventoryLocations.Rows.Count <> 0 Then
                 If CStr(dgInventoryLocations.CurrentRow.Cells("il_locationtype").Value) = "Main" Then
-                    displayRackShelfColumn(CInt(dgProductSizes.CurrentRow.Cells("s_rowid").Value), CInt(dgInventoryLocations.CurrentRow.Cells("il_rowid").Value))
-                    txtLocation.Text = dgInventoryLocations.CurrentRow.Cells("il_locationname").Value
+                    localMethod()
                 Else
                     dgRackShelfColumn.Rows.Clear()
                     txtLocation.Text = ""
@@ -1498,19 +1521,7 @@ Public Class ProductsForm
         Me.Cursor = Cursors.Default
     End Sub
 
-    Private Sub btnChangeImage_Click(sender As Object, e As EventArgs) Handles btnChangeImage.Click
-        If IsThurston Then
-            ' TODO: Code here
-            ' Dim code = New YourCode(productImageConfigParser:=_picp, product:=product)
-            ' code.ChangeImage()
-            fileOpener.Filter = "Image files (*.bmp;*.jpg;*.jpeg;*.png)|*.bmp;*.jpg;*.jpeg;*.png"
-            If fileOpener.ShowDialog() = Windows.Forms.DialogResult.OK Then
-                pbProductImage.Image = Image.FromFile(fileOpener.FileName)
-                txtImagePath.Text = fileOpener.FileName
-            End If
-            Return
-        End If
-
+    Private Async Sub btnChangeImage_Click(sender As Object, e As EventArgs) Handles btnChangeImage.Click
         Me.Cursor = Cursors.WaitCursor
         Try
             getPositionID(Me)
@@ -1534,9 +1545,31 @@ Public Class ProductsForm
                 Exit Try
             End If
             fileOpener.Filter = "Image files (*.bmp;*.jpg;*.jpeg;*.png)|*.bmp;*.jpg;*.jpeg;*.png"
+
+            If IsThurston Then fileOpener.Filter = "Image files (*.jpg)|*.jpg"
+
             If fileOpener.ShowDialog() = Windows.Forms.DialogResult.OK Then
                 pbProductImage.Image = Image.FromFile(fileOpener.FileName)
                 txtImagePath.Text = fileOpener.FileName
+
+                If dgProductList.CurrentRow IsNot Nothing AndAlso
+                    IsThurston Then
+
+                    Dim errorCallback = Sub()
+                                            Me.Cursor = Cursors.Default
+                                        End Sub
+
+                    Await FunctionUtils.TryCatchFunctionAsync("Change Product Image",
+                        action:=
+                        Async Function()
+                            Await _pim.ChangeAsync(productId:=CInt(dgProductList.CurrentRow?.Cells("p_rowid").Value),
+                                sourceFileName:=fileOpener.FileName)
+
+                            ReloadPictureBox()
+                        End Function).
+                        ContinueWith(continuationAction:=errorCallback, scheduler:=TaskScheduler.FromCurrentSynchronizationContext)
+                End If
+
             End If
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
@@ -1546,15 +1579,31 @@ Public Class ProductsForm
         Me.Cursor = Cursors.Default
     End Sub
 
-    Private Sub btnDeleteImage_Click(sender As Object, e As EventArgs) Handles btnDeleteImage.Click
-        If IsThurston Then
-            ' TODO: Code here
-            ' Dim code = New YourCode(productImageConfigParser:=_picp, product:=product)
-            ' code.DeleteImage()
-            If MessageBox.Show("Would you like to permanently delete this image?", "Deleting", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
-                productImageFilePath = ""
-                pbProductImage.Image = Nothing
-            End If
+    Private Sub ReloadPictureBox()
+        PictureBox1.LoadAsync(url:=dgProductList.CurrentRow?.Cells(PhotoResourceLocation.Name).Value)
+        PictureBox1.Refresh()
+    End Sub
+
+    Private Async Sub btnDeleteImage_Click(sender As Object, e As EventArgs) Handles btnDeleteImage.Click
+        If dgProductList.CurrentRow IsNot Nothing AndAlso
+            IsThurston Then
+
+            Dim errorCallback = Sub()
+                                    ReloadPictureBox()
+                                    Me.Cursor = Cursors.Default
+                                End Sub
+
+            Await FunctionUtils.TryCatchFunctionAsync("Delete Product Image",
+                action:=
+                    Async Function()
+
+                        If MessageBox.Show("Would you like to permanently delete this image?",
+                            "Deleting",
+                            MessageBoxButtons.YesNo,
+                            MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then _
+                                Await _pim.DeleteAsync(productId:=CInt(dgProductList.CurrentRow?.Cells("p_rowid").Value))
+                    End Function).
+                    ContinueWith(continuationAction:=errorCallback, scheduler:=TaskScheduler.FromCurrentSynchronizationContext)
             Return
         End If
 
@@ -1587,13 +1636,13 @@ Public Class ProductsForm
                     U_ProductImage(CInt(dgProductList.CurrentRow.Cells("p_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, DBNull.Value, Me)
                     If myModule.systemerrorfound = False Then
                         myBalloon("Successfully Deleted Image", "Delete", lblsavemsg, -15, -65)
-                        pbProductImage.Image = Nothing
+
                     End If
                 End If
             End If
             If txtImagePath.Text <> "" Then
                 txtImagePath.Clear()
-                pbProductImage.Image = Nothing
+
             End If
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
@@ -1603,17 +1652,21 @@ Public Class ProductsForm
         Me.Cursor = Cursors.Default
     End Sub
 
-    Private Sub btnDownloadImage_Click(sender As Object, e As EventArgs) Handles btnDownloadImage.Click
-        If IsThurston Then
-            If MessageBox.Show("Would you like to Download this image?", "Downloading", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
-                Dim path As String = System.IO.Path.Combine("c:\AttachedImages", productImageFilePath)
-                Dim ext As String = ".jpeg"
-                Dim url = System.Guid.NewGuid().ToString() + ext
-                Dim Client As New WebClient
-                Client.DownloadFile(path, System.IO.Path.Combine("c:\AttachedImages\download\", url))
-                Client.Dispose()
-                MessageBox.Show("Image saved to c:\AttachedImages\download as " & url, "System Message")
-            End If
+    Private Async Sub btnDownloadImage_Click(sender As Object, e As EventArgs) Handles btnDownloadImage.Click
+        If dgProductList.CurrentRow IsNot Nothing AndAlso
+            IsThurston Then
+
+            Dim errorCallback = Sub()
+                                    Me.Cursor = Cursors.Default
+                                End Sub
+
+            Await FunctionUtils.TryCatchFunctionAsync("Download Product Image",
+                action:=
+                    Async Function()
+
+                        Await _pim.DownloadAsync(productId:=CInt(dgProductList.CurrentRow?.Cells("p_rowid").Value))
+                    End Function).
+                    ContinueWith(continuationAction:=errorCallback, scheduler:=TaskScheduler.FromCurrentSynchronizationContext)
             Return
         End If
 
@@ -1681,6 +1734,10 @@ Public Class ProductsForm
             conn.Close()
         End Try
         Me.Cursor = Cursors.Default
+    End Sub
+
+    Private Sub dgProductSizes_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgProductSizes.CellContentClick
+
     End Sub
 
     'Private Sub txtProductCode_TextChanged(sender As Object, e As EventArgs) Handles txtProductCode.TextChanged
@@ -1900,33 +1957,11 @@ Public Class ProductsForm
                 If MessageBox.Show("Would you like to save the changes in this page?", "Saving", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
                     Me.Cursor = Cursors.WaitCursor
                     If txtImagePath.Text <> "" Then
-
-                        Dim filePathNameToMove = txtImagePath.Text
-                        Dim directoryPathToMove = "c:\AttachedImages\"
-                        productImageFilePath = "prod-img\" + System.Guid.NewGuid().ToString() + ".jpg"
-                        If (File.Exists(txtImagePath.Text)) Then
-
-                            Dim fileToCopy = Path.Combine(directoryPathToMove, productImageFilePath)
-                            If (File.Exists(fileToCopy) = False) Then
-
-                                Try
-                                    File.Copy(filePathNameToMove, fileToCopy)
-                                    Console.WriteLine("File Moved!")
-                                    Exit Try
-
-                                Catch ex As Exception
-                                    MsgBox(getErrExcptn(ex, Me.Name))
-
-
-                                End Try
-
-                            End If
-                        End If
-                        'fs = New FileStream(txtImagePath.Text, FileMode.Open, FileAccess.Read)
-                        '            br = New BinaryReader(fs)
-                        '            ImageData = br.ReadBytes(CType(fs.Length, Integer))
-                        '            br.Close()
-                        '            fs.Close()
+                        fs = New FileStream(txtImagePath.Text, FileMode.Open, FileAccess.Read)
+                        br = New BinaryReader(fs)
+                        ImageData = br.ReadBytes(CType(fs.Length, Integer))
+                        br.Close()
+                        fs.Close()
                     End If
                     If LTrim(cboCategory.Text) <> "" Then
                         getCategoryID(cboCategory.Text, "", Me) : pfcategoryid = globalcategoryid
@@ -1974,7 +2009,7 @@ Public Class ProductsForm
                     getProductIDA(CInt(dgProductList.CurrentRow.Cells("p_rowid").Value), txtProductCode.Text, Me)
                     If pfproductid = 0 Then
                         U_Products(CInt(dgProductList.CurrentRow.Cells("p_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, If(pfcategoryid = 0, DBNull.Value, pfcategoryid), If(pfbrandid = 0, DBNull.Value, pfbrandid), If(pfcompanyid = 0, DBNull.Value, pfcompanyid),
-txtProductCode.Text, txtProductCode.Text, cboUnitOfMeasure.Text, cboBrandName.Text, cboCategory.Text, cboCompany.Text, txtDescription.Text, If(IsNumeric(txtSRP.Text), CDec(txtSRP.Text), 0.0), productImageFilePath, Me)
+                         txtProductCode.Text, txtProductCode.Text, cboUnitOfMeasure.Text, cboBrandName.Text, cboCategory.Text, cboCompany.Text, txtDescription.Text, If(IsNumeric(txtSRP.Text), CDec(txtSRP.Text), 0.0), If(txtImagePath.Text <> "", ImageData, DBNull.Value), Me)
                     End If
                     If myModule.systemerrorfound = True Then
                         Exit Try

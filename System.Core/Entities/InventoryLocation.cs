@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using WarehouseManagementSystem.Core.Entities.Base;
@@ -28,15 +29,16 @@ namespace WarehouseManagementSystem.Core.Entities
         }
 
         public bool IsMainWarehouse => Type == InventoryLocationType.Main;
-        public bool IsNotMain => !IsMainWarehouse && (IsClassBWarehouse || IsSampleWarehouse || IsDamageWarehouse);
+        public bool IsNotMain => !IsMainWarehouse && (IsLooseWarehouse || IsSampleWarehouse || IsDamageWarehouse || IsDonationWarehouse);
 
         //public bool IsBranch => Type == InventoryLocationType.Branch;
         //public bool IsOthers => Type == InventoryLocationType.Others;
         //public bool IsSub => Type == InventoryLocationType.Sub;
-        public bool IsClassBWarehouse => Type == InventoryLocationType.ClassB;
+        public bool IsLooseWarehouse => Type == InventoryLocationType.Loose;
 
         public bool IsSampleWarehouse => Type == InventoryLocationType.Sample;
         public bool IsDamageWarehouse => Type == InventoryLocationType.Damage;
+        public bool IsDonationWarehouse => Type == InventoryLocationType.Donation;
 
         //public virtual RackShelfColumn RackShelfColumn { get; set; }
         public virtual ICollection<RackShelfColumn> RackShelfColumns { get; set; }
@@ -45,7 +47,6 @@ namespace WarehouseManagementSystem.Core.Entities
             int userId,
             List<ProductColorSize> nonExistentProductColorSizes)
         {
-            int[] fsdfsd = { 16550, 16202 };
             if (!nonExistentProductColorSizes?.Any() ?? true) return;
 
             var thisRackShelfColumns = new List<RackShelfColumn>();
@@ -66,7 +67,9 @@ namespace WarehouseManagementSystem.Core.Entities
                             userId: userId,
                             productColorSizeId: nonExistentProductColorSize.RowID.Value,
                             unitOfMeasure: nonExistentProductColorSize?.ProductColor?.Product?.UnitOfMeasure,
-                            unitPrice: nonExistentProductColorSize?.ProductColor?.Product?.UnitPrice ?? 0);
+                            unitPrice: nonExistentProductColorSize?.ProductColor?.Product?.UnitPrice ?? 0,
+                            unitOfMeasure2: nonExistentProductColorSize.UnitOfMeasure2,
+                            unitPriceOfUOM2: nonExistentProductColorSize.UnitPriceOfUOM2);
 
                         newProductInventoryLocation.RackShelfColumnID = thisRackShelfColumn.RowID;
 
@@ -83,7 +86,9 @@ namespace WarehouseManagementSystem.Core.Entities
                             userId: userId,
                             productColorSizeId: nonExistentProductColorSize.RowID.Value,
                             unitOfMeasure: nonExistentProductColorSize?.ProductColor?.Product?.UnitOfMeasure,
-                            unitPrice: nonExistentProductColorSize?.ProductColor?.Product?.UnitPrice ?? 0);
+                            unitPrice: nonExistentProductColorSize?.ProductColor?.Product?.UnitPrice ?? 0,
+                            unitOfMeasure2: nonExistentProductColorSize.UnitOfMeasure2,
+                            unitPriceOfUOM2: nonExistentProductColorSize.UnitPriceOfUOM2);
 
                         newRackShelfColumn.AddProductInventoryLocations(productInventoryLocations: new List<ProductInventoryLocation>() { newProductInventoryLocation });
                     }
@@ -105,7 +110,9 @@ namespace WarehouseManagementSystem.Core.Entities
                             userId: userId,
                             productColorSizeId: nonExistentProductColorSize.RowID.Value,
                             unitOfMeasure: nonExistentProductColorSize?.ProductColor?.Product?.UnitOfMeasure,
-                            unitPrice: nonExistentProductColorSize?.ProductColor?.Product?.UnitPrice ?? 0);
+                            unitPrice: nonExistentProductColorSize?.ProductColor?.Product?.UnitPrice ?? 0,
+                            unitOfMeasure2: nonExistentProductColorSize.UnitOfMeasure2,
+                            unitPriceOfUOM2: nonExistentProductColorSize.UnitPriceOfUOM2);
 
                         newProductInventoryLocation.RackShelfColumnID = thisRackShelfColumn.RowID;
 
@@ -122,7 +129,9 @@ namespace WarehouseManagementSystem.Core.Entities
                             userId: userId,
                             productColorSizeId: nonExistentProductColorSize.RowID.Value,
                             unitOfMeasure: nonExistentProductColorSize?.ProductColor?.Product?.UnitOfMeasure,
-                            unitPrice: nonExistentProductColorSize?.ProductColor?.Product?.UnitPrice ?? 0);
+                            unitPrice: nonExistentProductColorSize?.ProductColor?.Product?.UnitPrice ?? 0,
+                            unitOfMeasure2: nonExistentProductColorSize.UnitOfMeasure2,
+                            unitPriceOfUOM2: nonExistentProductColorSize.UnitPriceOfUOM2);
 
                         newRackShelfColumn.AddProductInventoryLocations(productInventoryLocations: new List<ProductInventoryLocation>() { newProductInventoryLocation });
                     }
@@ -149,5 +158,9 @@ namespace WarehouseManagementSystem.Core.Entities
             InventoryLocationType type) => new InventoryLocation(organizationId: organizationId,
                 name: name,
                 type: type);
+
+        public virtual ICollection<Order> Orders { get; set; }
+
+        public static Array GetTypes => Enum.GetValues(enumType: typeof(InventoryLocationType));
     }
 }

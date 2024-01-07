@@ -10,6 +10,8 @@ Imports System.Diagnostics
 Imports System.Runtime.InteropServices
 Imports System.Text.RegularExpressions
 Imports WarehouseManagementSystem.Core.Enums
+Imports WarehouseManagementSystem.Core.Interfaces
+Imports WarehouseManagementSystem.Core.Entities
 
 Public Class PurchaseForm
     Dim manager As New sqlModule.Manager
@@ -29,8 +31,12 @@ Public Class PurchaseForm
     Dim pototalqtyordered, poqtyordered, poitotalqtyordered, poiqtyordered As Integer
     Dim posupplierid, poorderid, poproductcolorsizesid, poproductid, poproductbundleid As Integer
     Dim simplesearchphrase, datephrase, commonphrase, pagefilter1, pagefilter2, pagefilter3, pagefilter4 As String
+    Private _systemOwner As SystemOwner
 
-    Private Sub PurchaseForm_Load(sender As Object, e As EventArgs) Handles Me.Load
+    Private Async Sub PurchaseForm_Load(sender As Object, e As EventArgs) Handles Me.Load
+        Dim _systemOwnerService = GetRequiredService(Of ISystemOwnerService)()
+        _systemOwner = Await _systemOwnerService.GetCurrentSystemOwnerEntityAsync()
+
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
@@ -701,10 +707,14 @@ Public Class PurchaseForm
     Sub autopopulatecboBy()
         Try
             cboBy.Items.Clear()
-            cboBy.Items.Add("Combination")
-            cboBy.Items.Add("ProductCode")
-            cboBy.Items.Add("SKU")
-            cboBy.Items.Add("")
+            If IsThurston Then
+                cboBy.Items.Add("ProductCode")
+            Else
+                cboBy.Items.Add("Combination")
+                cboBy.Items.Add("ProductCode")
+                cboBy.Items.Add("SKU")
+                cboBy.Items.Add("")
+            End If
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -1150,7 +1160,7 @@ Public Class PurchaseForm
             If dgSupplierOrderItems.Rows.Count <> 0 Then
                 For i As Integer = 0 To dgSupplierOrderItems.Rows.Count - 1
                     If dgSupplierOrderItems.Rows(i).Cells(ci_itemtype.Index).Value = "A" Then
-                        dgSupplierOrderItems.Rows(i).DefaultCellStyle.BackColor = Color.BurlyWood
+                        dgSupplierOrderItems.Rows(i).DefaultCellStyle.BackColor = Drawing.Color.BurlyWood
                     End If
                     If CStr(dgSupplierOrderItems.Rows(i).Cells("ci_colorvalue").Value) <> "" Then
                         readcolor = colorconverter.ConvertFromString(CStr(dgSupplierOrderItems.Rows(i).Cells("ci_colorvalue").Value))
@@ -1923,7 +1933,7 @@ Public Class PurchaseForm
 
     Private Sub pbAddSupplier_MouseEnter(sender As Object, e As EventArgs) Handles pbAddSupplier.MouseEnter
         Try
-            pbAddSupplier.BackColor = Color.MediumSpringGreen
+            pbAddSupplier.BackColor = Drawing.Color.MediumSpringGreen
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -1933,7 +1943,7 @@ Public Class PurchaseForm
 
     Private Sub pbAddSupplier_MouseLeave(sender As Object, e As EventArgs) Handles pbAddSupplier.MouseLeave
         Try
-            pbAddSupplier.BackColor = Color.Transparent
+            pbAddSupplier.BackColor = Drawing.Color.Transparent
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -2145,8 +2155,13 @@ Public Class PurchaseForm
                         errProvider.SetError(txtSupplierOrderNo, "Purchase order no. has been created already, please type a new one.")
                         Exit Try
                     End If
+<<<<<<< HEAD
                     M_I_OrdersA(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, posupplierid, txtSupplierOrderNo.Text, OrderType:=OrderType.PO.ToString(), dtpSupplierOrderDate.Value, dtpTargetDeliveryDate.Value,
                            cboSupplierName.Text, txtComments.Text, txtStatus.Text, Math.Round(poitotalprice, 2), Nothing, Me)
+=======
+                    M_I_OrdersA(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, posupplierid, txtSupplierOrderNo.Text, OrderType:=$"{OrderType.PO.ToString()}", dtpSupplierOrderDate.Value, dtpTargetDeliveryDate.Value,
+                           cboSupplierName.Text, txtComments.Text, txtStatus.Text, Math.Round(poitotalprice, 2), 0, Me)
+>>>>>>> 7eb6984ac1bfda265764cfb15e3dc1bd5772ca6e
                     poorderid = globalorderidsp
                     If dgSupplierOrderItems.Rows.Count <> 0 Then
                         For a = 0 To dgSupplierOrderItems.Rows.Count - 1
@@ -3052,5 +3067,9 @@ Public Class PurchaseForm
     End Sub
 
 #End Region
-
+    Private ReadOnly Property IsThurston As Boolean
+        Get
+            Return _systemOwner.IsThurston
+        End Get
+    End Property
 End Class

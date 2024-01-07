@@ -1,6 +1,7 @@
 ﻿Imports Microsoft.Extensions.DependencyInjection
 Imports MySql.Data.MySqlClient
 Imports WarehouseManagementSystem.Core.Enums
+Imports WarehouseManagementSystem.Core.Interfaces
 Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
 
 Public Class ViewEditLineUpDeliveryForm
@@ -21,14 +22,32 @@ Public Class ViewEditLineUpDeliveryForm
     Dim simplesearchphrase, datephrase, commonphrase, pagefilter1, pagefilter2, pagefilter3, pagefilter4 As String
     Dim veludtotalqtyincarton, veludqtyincartonbalance, veludqtytodeliver As Integer
     Dim veludcustomerid, veludcontactid, veluddeliverytruckshiftid, veludpackinglistid, veludlineupid, veludorderid, veluddeliverytruckid, veludpackinglistcartonid, veludlineupcbmid As Integer
+    Dim printdatatable As New DataTable
+    Dim printdatasetHthurston As New DataSetA.SetHDataTable
+    Dim printdatasetJthurston As New DataSetA.SetJDataTable
+    Dim printdatasetIthurston As New DataSetA.SetIDataTable
     Public veludpublicdeliverydate As String
     Public veludpublicdeliverytruckshiftid As Integer
     Public vieweditlineupdeliverycue As Boolean = False
     Public veludpublicselectedcellcue As Boolean = False
     Private _agents As List(Of WarehouseManagementSystem.Core.Entities.Contact)
     Private _helpers As List(Of WarehouseManagementSystem.Core.Entities.Contact)
+    Private _systemOwner As WarehouseManagementSystem.Core.Entities.SystemOwner
 
-    Private Async Function ViewEditLineUpDeliveryForm_LoadAsync(sender As Object, e As EventArgs) As Task Handles Me.Load
+    Private Async Sub ViewEditLineUpDeliveryForm_LoadAsync(sender As Object, e As EventArgs) Handles Me.Load
+        Dim _systemOwnerService = GetRequiredService(Of ISystemOwnerService)()
+        _systemOwner = Await _systemOwnerService.GetCurrentSystemOwnerEntityAsync()
+
+        If IsThurston Then
+            Label9.Visible = False
+            txtCBM.Visible = False
+            Label23.Visible = False
+            txtBoxCBM.Visible = False
+            Label15.Text = "Contents"
+            lblCartonNoE.Text = "Select Contents: "
+            ca_cartonno.HeaderText = String.Empty
+        End If
+
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
@@ -57,10 +76,29 @@ Public Class ViewEditLineUpDeliveryForm
 
         Await GetAgentsAsync()
         Await GetHelpersAsync()
-    End Function
+
+        If IsThurston Then
+            For Each comboBox In gbLineUpInformation.Controls.
+                OfType(Of Control).
+                OfType(Of ComboBox).
+                ToArray()
+
+                SetStyleToDropDownList(comboBox)
+            Next
+
+            For Each comboBox In FlowLayoutPanel1.Controls.
+                OfType(Of Control).
+                OfType(Of ComboBox).
+                ToArray()
+
+                SetStyleToDropDownList(comboBox)
+            Next
+        End If
+
+    End Sub
 
     Private Async Function GetAgentsAsync() As Task
-        Dim contactDataService = MainServiceProvider.GetRequiredService(Of IContactDataService)
+        Dim contactDataService = GetRequiredService(Of IContactDataService)()
 
         _agents = Await contactDataService.GetAgentsAsync(organizationId:=Z_OrganizationID)
 
@@ -73,7 +111,7 @@ Public Class ViewEditLineUpDeliveryForm
     End Function
 
     Private Async Function GetHelpersAsync() As Task
-        Dim contactDataService = MainServiceProvider.GetRequiredService(Of IContactDataService)
+        Dim contactDataService = GetRequiredService(Of IContactDataService)()
 
         _helpers = Await contactDataService.GetHelpersAsync(organizationId:=Z_OrganizationID)
 
@@ -186,7 +224,7 @@ Public Class ViewEditLineUpDeliveryForm
             If veluddeliverytruckshiftid <> 0 Then
                 veludlineupdate = Format(dtpLineUpDate.Value, "yyyy-MM-dd")
                 cbmcomputation(veluddeliverytruckid, veluddeliverytruckshiftid, veludlineupdate)
-                If veluddeliverytruckcbm - (veludlineupboxescbmsum + If(IsNumeric(txtBoxCBM.Text), CDec(txtBoxCBM.Text), 0.0)) < neutralpage Then
+                If Not IsThurston AndAlso veluddeliverytruckcbm - (veludlineupboxescbmsum + If(IsNumeric(txtBoxCBM.Text), CDec(txtBoxCBM.Text), 0.0)) < neutralpage Then
                     errProvider.SetError(txtCBM, "System detected that the truck is full already.")
                     Exit Try
                 End If
@@ -1220,7 +1258,7 @@ Public Class ViewEditLineUpDeliveryForm
     Sub displayLineUpInformation(ByVal ilineupid As Integer)
         Try
             Dim dtLUinfo As New DataTable
-            dtLUinfo = getDataTableForSQL("SELECT COALESCE(lu.lineupno,''),COALESCE(DATE_FORMAT(lu.lineupdate,'%d-%b-%Y'),''),COALESCE(o.drnumber,''),COALESCE(DATE_FORMAT(lu.deliverydate,'%d-%b-%Y'),''),COALESCE(dt.plateno,''),COALESCE(lu.status,'')," &
+            dtLUinfo = getDataTableForSQL("SELECT COALESCE(lu.lineupno,''),COALESCE(DATE_FORMAT(lu.lineupdate,'%d-%b-%Y'),''),COALESCE(o.drnumber,''),COALESCE(DATE_FORMAT(lu.deliverydate,'%d-%b-%Y'),''),CONCAT_WS(' - ', dt.YearAndModel, dt.PlateNo),COALESCE(lu.status,'')," &
                         "COALESCE(CONCAT(COALESCE(c.firstname,''),' ',COALESCE(c.middlename,''),' ',COALESCE(c.lastname,''),' ',COALESCE(c.suffix,''),' - ',COALESCE(c.contactno,'')),''),COALESCE(CONCAT(COALESCE(o.ordernumber,''),' (C.O. No.) / ', COALESCE(a.companyname,''),' - ', COALESCE(a.accountno,''),' / ',CONCAT(COALESCE(pl.packinglistno,''),' (Pa.L. No.)')),'')," &
                         "COALESCE(DATE_FORMAT(o.orderdate,'%d-%b-%Y'),''),COALESCE(DATE_FORMAT(o.targetdate,'%d-%b-%Y'),''),COALESCE(o.customeraddress,''),COALESCE(lu.comments,''),COALESCE(o.deliveryhours,''),COALESCE(lu.packinglistid,0),COALESCE(lu.orderid,0),COALESCE(o.referencenumber,''),COALESCE(DATE_FORMAT(o.enddate,'%d-%b-%Y'),''),COALESCE(CONCAT(COALESCE(bc.branchcode,''),' - ',COALESCE(bc.branchname,'')),'')," &
                         "COALESCE(CONCAT(COALESCE(ve.companyname,''),' - ',COALESCE(ve.companycode,'')),''),COALESCE(CONCAT(COALESCE(cc.codename,''),' / ',COALESCE(c1.codeno,''),'-',COALESCE(c2.codeno,''),'-',COALESCE(c3.codeno,'')),''), lu.AgentId, lu.Helper1Id, lu.Helper2Id FROM lineups lu LEFT JOIN orders o ON lu.orderid = o.rowid LEFT JOIN deliverytruckshifts dts ON lu.deliverytruckshiftid = dts.rowid LEFT JOIN combinecodings cc ON o.combinecodingid = cc.rowid LEFT JOIN codings c1 ON cc.codingida = c1.rowid " &
@@ -1613,6 +1651,142 @@ Public Class ViewEditLineUpDeliveryForm
             conn.Close()
         End Try
         Me.Cursor = Cursors.Default
+    End Sub
+
+    Sub printDeliveryScheduleThurston(ByVal lineUpNo As Integer)
+        Try
+            printdatasetHthurston.Clear()
+            If conn.State = ConnectionState.Closed Then conn.Open()
+            Dim sql1 As String = "SELECT
+	                                CONCAT(COALESCE(c.FirstName, ''), ' ', COALESCE(c.MiddleName, ''), ' ', COALESCE(c.LastName, '')) AS Driver,
+	                                CONCAT_WS(
+                                        ' ',
+                                        COALESCE(c2.FirstName, ''),
+                                        NULLIF(COALESCE(c2.MiddleName, ''), ''),
+                                        COALESCE(c2.LastName, '')
+                                    ) AS Helper,
+	                                lu.LineUpDate AS 'Date',
+	                                o.CustomerName AS Customer,
+	                                o.ReferenceNumber AS 'P.O. NO.',
+	                                SUM(plci.QtyInCarton) AS Qty,
+	                                GROUP_CONCAT(IFNULL(IFNULL(pcs.SKU, pcs.SKU2), '[NO SKU]'), '/', IFNULL(plci.QtyInCarton, '') SEPARATOR ' , ') AS 'Item / Description'
+
+		                                FROM
+		                                lineups lu
+
+		                                JOIN lineupcartons lc ON lu.RowID = lc.LineUpID
+		                                LEFT JOIN contacts c  ON lu.ContactID = c.RowID
+		                                LEFT JOIN contacts c2 ON lu.Helper1Id = c2.RowID
+		                                JOIN orders o ON lu.OrderID = o.RowID
+ 		                                JOIN packinglistcartonitems plci ON lc.PackingListCartonID = plci.PackingListCartonID
+ 		                                JOIN orderitems oi ON plci.OrderItemID = oi.RowID
+ 		                                JOIN productcolorsizes pcs ON oi.ProductColorSizeID = pcs.RowID
+
+			                                WHERE lu.LineUpNo = " & lineUpNo & " AND plci.`Status` = 'Lined Up'
+				                                GROUP BY lc.RowID"
+            Dim cmd1 As New MySqlCommand(sql1, conn)
+            cmd1.CommandTimeout = commantimeoutlimit
+            Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
+            While reader1.Read()
+                If reader1.HasRows Then
+                    printdatasetHthurston.AddSetHRow(CStr(reader1(0)), CStr(reader1(1)), CStr(reader1(2)), CStr(reader1(3)), CStr(reader1(4)), CStr(reader1(5)), CStr(reader1(6)), "")
+                End If
+            End While
+            reader1.Close()
+        Catch ex As Exception
+            MsgBox(getErrExcptn(ex, Me.Name))
+        Finally
+            conn.Close()
+        End Try
+    End Sub
+
+    Sub printTripTicketThurston(ByVal lineUpNo As Integer)
+        Try
+            printdatasetHthurston.Clear()
+            If conn.State = ConnectionState.Closed Then conn.Open()
+            Dim sql1 As String = "SELECT
+	                                lu.LineUpDate AS 'Date',
+	                                o.CustomerName AS Customer,
+	                                o.DRNumber AS 'DR No',
+	                                SUM(plci.QtyInCarton) AS Qty,
+	                                CONCAT(COALESCE(c.FirstName, ''), ' ', COALESCE(c.MiddleName, ''), ' ', COALESCE(c.LastName, '')) AS Driver,
+	                                CONCAT_WS(
+                                        ' ',
+                                        COALESCE(c2.FirstName, ''),
+                                        NULLIF(COALESCE(c2.MiddleName, ''), ''),
+                                        COALESCE(c2.LastName, '')
+                                    ) AS Helper
+
+		                                FROM
+			                                lineups lu
+			                                JOIN orders o ON lu.OrderID = o.RowID
+			                                JOIN lineupcartons lc ON lu.RowID = lc.LineUpID
+ 			                                JOIN packinglistcartonitems plci ON lc.PackingListCartonID = plci.PackingListCartonID
+			                                LEFT JOIN contacts c  ON lu.ContactID = c.RowID
+			                                LEFT JOIN contacts c2 ON lu.Helper1Id = c2.RowID
+				                                WHERE
+					                                lu.RowID = " & lineUpNo & " AND
+					                                plci.`Status` = 'Lined Up'"
+            Dim cmd1 As New MySqlCommand(sql1, conn)
+            cmd1.CommandTimeout = commantimeoutlimit
+            Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
+            While reader1.Read()
+                If reader1.HasRows Then
+                    printdatasetJthurston.AddSetJRow(CStr(reader1(0)), CStr(reader1(1)), CStr(reader1(2)), CStr(reader1(3)), "", CStr(reader1(4)), CStr(reader1(5)), "", "", "", "")
+                End If
+            End While
+            reader1.Close()
+        Catch ex As Exception
+            MsgBox(getErrExcptn(ex, Me.Name))
+        Finally
+            conn.Close()
+        End Try
+    End Sub
+
+    Private Sub DeliveryScheduleToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeliveryScheduleToolStripMenuItem.Click
+        If IsThurston Then
+            printDeliveryScheduleThurston(CInt(dgLineUpList.CurrentRow.Cells("lu_lineupno").Value))
+            Dim printreport As New DeliverySchedule
+            Dim openreportviewer As New ReportViewer
+            openreportviewer.CrystalReportViewer.ReportSource = printreport
+            printdatatable = printdatasetHthurston
+            printreport.SetDataSource(printdatatable)
+            openreportviewer.Show()
+            printdatatable.Dispose()
+            printdatatable = Nothing
+            printdatasetHthurston.Clear()
+        End If
+    End Sub
+
+    Private Sub TripTicketToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles TripTicketToolStripMenuItem.Click
+        If IsThurston Then
+            printTripTicketThurston(CInt(dgLineUpList.CurrentRow.Cells("lu_lineupno").Value))
+            Dim printreport As New TripTicket
+            Dim openreportviewer As New ReportViewer
+            openreportviewer.CrystalReportViewer.ReportSource = printreport
+            printdatatable = printdatasetJthurston
+            printreport.SetDataSource(printdatatable)
+            openreportviewer.Show()
+            printdatatable.Dispose()
+            printdatatable = Nothing
+            printdatasetJthurston.Clear()
+        End If
+    End Sub
+
+    Private Sub GatePassToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles GatePassToolStripMenuItem.Click
+        If IsThurston Then
+            Return
+            'printGatePassThurston(CInt(dgLineUpList.CurrentRow.Cells("lu_lineupno").Value))
+            Dim printreport As New GatePass
+            Dim openreportviewer As New ReportViewer
+            openreportviewer.CrystalReportViewer.ReportSource = printreport
+            printdatatable = printdatasetIthurston
+            printreport.SetDataSource(printdatatable)
+            openreportviewer.Show()
+            printdatatable.Dispose()
+            printdatatable = Nothing
+            printdatasetIthurston.Clear()
+        End If
     End Sub
 
     Private Sub dgLineUpList_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgLineUpList.CellClick
@@ -2383,82 +2557,80 @@ Public Class ViewEditLineUpDeliveryForm
                 Return
             End If
 
-            If MessageBox.Show("NOTE: Once you confirmed this delivery, you cannot undo the process again." & vbNewLine & "" & vbNewLine & "Do you want to proceed confirming this delivery?", "Confirm Delivery", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
-                Me.Cursor = Cursors.WaitCursor
-                PrimaryForm.MainLoadingBar.Visible = legit
-                PrimaryForm.MainLoadingBar.Maximum = vplloadingbar
-                If dgLineUpList.Rows.Count <> 0 Then
-                    getLineUpStatus(CInt(dgLineUpList.CurrentRow.Cells("lu_rowid").Value), Me)
-                    If globallineupstatus <> "Lined Up" Then
-                        If globallineupstatus <> "Delivered" Then
-                            errProvider.SetError(txtStatus, "The line up has been confirmed or cancelled already.")
-                            Exit Try
-                        End If
+            Me.Cursor = Cursors.WaitCursor
+            PrimaryForm.MainLoadingBar.Visible = legit
+            PrimaryForm.MainLoadingBar.Maximum = vplloadingbar
+            If dgLineUpList.Rows.Count <> 0 Then
+                getLineUpStatus(CInt(dgLineUpList.CurrentRow.Cells("lu_rowid").Value), Me)
+                If globallineupstatus <> "Lined Up" Then
+                    If globallineupstatus <> "Delivered" Then
+                        errProvider.SetError(txtStatus, "The line up has been confirmed or cancelled already.")
+                        Exit Try
                     End If
-                Else
-                    errProvider.SetError(txtLineUpNo, "System cannot find the line up.")
-                    Exit Try
                 End If
-                getOrderStatus(veludorderid, Me)
-                If globalorderstatus <> "Lined Up" Then
-                    errProvider.SetError(txtCustomerOrderInfo, "The customer order has been updated, please check the status of the customer order.")
-                    Exit Try
-                End If
-                If LTrim(cboTruckShiftInfo.Text) <> "" Then
-                    getDeliveryTruckShiftIDB(cboTruckShiftInfo.Text, "AND dts.`status` = 'Active'", Me)
-                    veluddeliverytruckshiftid = globaldeliverytruckshiftid
-                    veluddeliverytruckid = globaldeliverytruckid
-                    cbmcomputation(veluddeliverytruckid, veluddeliverytruckshiftid, Format(dtpLineUpDate.Value, "yyyy-MM-dd"))
-                    If veluddeliverytruckshiftid <> 0 Then
-                        veludlineupdate = Format(dtpLineUpDate.Value, "yyyy-MM-dd")
-                        getLineUpIDC(CInt(dgLineUpList.CurrentRow.Cells("lu_rowid").Value), veluddeliverytruckshiftid, veludorderid, veludlineupdate, Me)
-                        veludlineupid = globallineupid
-                        If veludlineupid <> 0 Then
-                            errProvider.SetError(dtpLineUpDate, "The line-up has been created already, please choose a new combination of line-up.")
-                            errProvider.SetError(txtCustomerOrderInfo, "The line-up has been created already, please choose a new combination of line-up.")
-                            errProvider.SetError(pbAddTruckShiftInfo, "The line-up has been created already, please choose a new combination of line-up.")
-                            Exit Try
-                        End If
-                    Else
-                        errProvider.SetError(pbAddTruckShiftInfo, "System cannot find the track and shift info.")
+            Else
+                errProvider.SetError(txtLineUpNo, "System cannot find the line up.")
+                Exit Try
+            End If
+            getOrderStatus(veludorderid, Me)
+            If globalorderstatus <> "Lined Up" Then
+                errProvider.SetError(txtCustomerOrderInfo, "The customer order has been updated, please check the status of the customer order.")
+                Exit Try
+            End If
+            If LTrim(cboTruckShiftInfo.Text) <> "" Then
+                getDeliveryTruckShiftIDB(cboTruckShiftInfo.Text, "AND dts.`status` = 'Active'", Me)
+                veluddeliverytruckshiftid = globaldeliverytruckshiftid
+                veluddeliverytruckid = globaldeliverytruckid
+                cbmcomputation(veluddeliverytruckid, veluddeliverytruckshiftid, Format(dtpLineUpDate.Value, "yyyy-MM-dd"))
+                If veluddeliverytruckshiftid <> 0 Then
+                    veludlineupdate = Format(dtpLineUpDate.Value, "yyyy-MM-dd")
+                    getLineUpIDC(CInt(dgLineUpList.CurrentRow.Cells("lu_rowid").Value), veluddeliverytruckshiftid, veludorderid, veludlineupdate, Me)
+                    veludlineupid = globallineupid
+                    If veludlineupid <> 0 Then
+                        errProvider.SetError(dtpLineUpDate, "The line-up has been created already, please choose a new combination of line-up.")
+                        errProvider.SetError(txtCustomerOrderInfo, "The line-up has been created already, please choose a new combination of line-up.")
+                        errProvider.SetError(pbAddTruckShiftInfo, "The line-up has been created already, please choose a new combination of line-up.")
                         Exit Try
                     End If
                 Else
-                    errProvider.SetError(pbAddTruckShiftInfo, "Please choose the track and shift info.")
+                    errProvider.SetError(pbAddTruckShiftInfo, "System cannot find the track and shift info.")
                     Exit Try
                 End If
-                getContactID(cboDriverName.Text, "Driver", Me)
-                veludcontactid = globalcontactid
-                U_LineUps(CInt(dgLineUpList.CurrentRow.Cells("lu_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, If(veludcontactid = 0, DBNull.Value, veludcontactid), veluddeliverytruckshiftid, dtpLineUpDate.Value, txtSIDRNo.Text, txtComments.Text, Me,
-                    AgentId:=cboAgent.SelectedValue,
-                    Helper1Id:=cboHelper1.SelectedValue,
-                    Helper2Id:=cboHelper2.SelectedValue)
-                If PrimaryForm.MainLoadingBar.Value < vplloadingbar Then
-                    PrimaryForm.MainLoadingBar.Value = PrimaryForm.MainLoadingBar.Value + startingpage
-                End If
-                If myModule.systemerrorfound = False Then
-                    confirmLineUpCartons(CInt(dgLineUpList.CurrentRow.Cells("lu_rowid").Value))
-                End If
-                If PrimaryForm.MainLoadingBar.Value < vplloadingbar Then
-                    PrimaryForm.MainLoadingBar.Value = PrimaryForm.MainLoadingBar.Value + startingpage
-                End If
-                If myModule.systemerrorfound = False Then
-                    U_OrderStatus(veludorderid, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, "Delivery", Me)
-                End If
-                If PrimaryForm.MainLoadingBar.Value < vplloadingbar Then
-                    PrimaryForm.MainLoadingBar.Value = PrimaryForm.MainLoadingBar.Value + startingpage
-                End If
-                If myModule.systemerrorfound = False Then
-                    U_LineUpStatus(CInt(dgLineUpList.CurrentRow.Cells("lu_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, "Confirmed Delivery", Me)
-                End If
-                If PrimaryForm.MainLoadingBar.Value < vplloadingbar Then
-                    PrimaryForm.MainLoadingBar.Value = PrimaryForm.MainLoadingBar.Value + startingpage
-                End If
-                If myModule.systemerrorfound = False Then
-                    myBalloon("Successfully Confirmed", "Confirm Delivery", lblsavemsg, -15, -65)
-                    vieweditlineupdeliverycue = legit
-                    tsrefreshperformclick()
-                End If
+            Else
+                errProvider.SetError(pbAddTruckShiftInfo, "Please choose the track and shift info.")
+                Exit Try
+            End If
+            getContactID(cboDriverName.Text, "Driver", Me)
+            veludcontactid = globalcontactid
+            U_LineUps(CInt(dgLineUpList.CurrentRow.Cells("lu_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, If(veludcontactid = 0, DBNull.Value, veludcontactid), veluddeliverytruckshiftid, dtpLineUpDate.Value, txtSIDRNo.Text, txtComments.Text, Me,
+        AgentId:=cboAgent.SelectedValue,
+        Helper1Id:=cboHelper1.SelectedValue,
+        Helper2Id:=cboHelper2.SelectedValue)
+            If PrimaryForm.MainLoadingBar.Value < vplloadingbar Then
+                PrimaryForm.MainLoadingBar.Value = PrimaryForm.MainLoadingBar.Value + startingpage
+            End If
+            If myModule.systemerrorfound = False Then
+                confirmLineUpCartons(CInt(dgLineUpList.CurrentRow.Cells("lu_rowid").Value))
+            End If
+            If PrimaryForm.MainLoadingBar.Value < vplloadingbar Then
+                PrimaryForm.MainLoadingBar.Value = PrimaryForm.MainLoadingBar.Value + startingpage
+            End If
+            If myModule.systemerrorfound = False Then
+                U_OrderStatus(veludorderid, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, "Delivery", Me)
+            End If
+            If PrimaryForm.MainLoadingBar.Value < vplloadingbar Then
+                PrimaryForm.MainLoadingBar.Value = PrimaryForm.MainLoadingBar.Value + startingpage
+            End If
+            If myModule.systemerrorfound = False Then
+                U_LineUpStatus(CInt(dgLineUpList.CurrentRow.Cells("lu_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, "Confirmed Delivery", Me)
+            End If
+            If PrimaryForm.MainLoadingBar.Value < vplloadingbar Then
+                PrimaryForm.MainLoadingBar.Value = PrimaryForm.MainLoadingBar.Value + startingpage
+            End If
+            If myModule.systemerrorfound = False Then
+                myBalloon("Successfully Confirmed", "Confirm Delivery", lblsavemsg, -15, -65)
+                vieweditlineupdeliverycue = legit
+                tsrefreshperformclick()
             End If
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
@@ -3023,5 +3195,11 @@ Public Class ViewEditLineUpDeliveryForm
             Await GetHelpersAsync()
         End If
     End Sub
+
+    Private ReadOnly Property IsThurston As Boolean
+        Get
+            Return _systemOwner.IsThurston
+        End Get
+    End Property
 
 End Class

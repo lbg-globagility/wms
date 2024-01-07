@@ -5,12 +5,12 @@ using WarehouseManagementSystem.Core.Entities;
 using WarehouseManagementSystem.Core.Interfaces;
 using WarehouseManagementSystem.Core.Interfaces.DomainServices;
 using WarehouseManagementSystem.Core.Interfaces.Repositories;
-using WarehouseManagementSystem.Infrastructure.Data.Services.Base;
+
 using WarehouseManagementSystem.Utilities.Extensions;
 
 namespace WarehouseManagementSystem.Infrastructure.Data.Services
 {
-    public class ColorDataService : BaseSavableDataService<Color>, IColorDataService
+    public class ColorDataService : AuditableDataService<Color>, IColorDataService
     {
         private readonly IColorRepository _colorRepository;
 
@@ -53,7 +53,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
             {
                 color = Color.NewColor(organizationId: organizationId, userId: userId, name: name, value: string.Empty);
 
-                await SaveManyAsync(entities: new List<Color>() { color }, userId: userId);
+                await SaveManyAsync(userId: userId, added: new List<Color>() { color });
             }
 
             if (color == null)
@@ -64,5 +64,9 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
 
             return color;
         }
+
+        protected override string CreateUserActivitySuffixIdentifier(Color entity) => $" with `name` '{entity.ColorName}, `value` '{entity.ColorValue}', and `status` is '{entity.Status}'";
+
+        protected override string GetUserActivityName(Color entity) => _entityName;
     }
 }

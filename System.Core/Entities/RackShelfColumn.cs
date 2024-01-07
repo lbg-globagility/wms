@@ -10,9 +10,7 @@ namespace WarehouseManagementSystem.Core.Entities
     [Table("rackshelfcolumn")]
     public partial class RackShelfColumn : AuditableEntity
     {
-        ////[ForeignKey("InventoryLocation")]
         public int InventoryLocationID { get; set; }
-
         public string RackNo { get; set; }
         public string ShelfNo { get; set; }
         public string ColumnNo { get; set; }
@@ -27,6 +25,7 @@ namespace WarehouseManagementSystem.Core.Entities
         public int? SupplierProblemQty { get; set; }
         public DateTime? LastShippedToLocDate { get; set; }
         public DateTime? LastCycleCountDate { get; set; }
+
     }
 
     public partial class RackShelfColumn
@@ -40,7 +39,7 @@ namespace WarehouseManagementSystem.Core.Entities
             int inventoryLocationId)
         {
             OrganizationID = organizationId;
-            CreatedBy = userId;
+            AuditUser(userId);
             InventoryLocationID = inventoryLocationId;
             Status = RackShelfColumnStatus.Active;
             PickOrderNo = (PickOrderNo ?? 0) == 0 ? 1 : PickOrderNo;
@@ -72,5 +71,11 @@ namespace WarehouseManagementSystem.Core.Entities
                     continue;
             }
         }
+
+        public int LogicalAvailableQty => AvailableQty ?? 0 - ReservedQty ?? 0;
+
+        public bool IsActive => Status == RackShelfColumnStatus.Active;
+
+        public virtual ICollection<OrderItem> OrderItems { get; set; }
     }
 }

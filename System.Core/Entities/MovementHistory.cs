@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using WarehouseManagementSystem.Core.Entities.Base;
-using WarehouseManagementSystem.Utilities.Attributes;
+using WarehouseManagementSystem.Utilities.Extensions;
 
 namespace WarehouseManagementSystem.Core.Entities
 {
@@ -37,7 +38,7 @@ namespace WarehouseManagementSystem.Core.Entities
         public virtual ProductColorSize ProductColorSize { get; set; }
         public virtual ProductInventoryLocation ProductInventoryLocation { get; set; }
         public string ProductCode => ProductInventoryLocation?.ProductColorSize?.ProductColor?.Product?.ProductCode;
-        public string UnitOfMeasure => ProductInventoryLocation?.UnitOfMeasure;
+        public string UnitOfMeasure => new string[] { ProductInventoryLocation?.UnitOfMeasure2, ProductColorSize?.UnitOfMeasure2 }.Where(t => !string.IsNullOrEmpty(t)).FirstOrDefault();
 
         private MovementHistory()
         {
@@ -54,7 +55,7 @@ namespace WarehouseManagementSystem.Core.Entities
             string columnName = "TotalAvailableQty")
         {
             OrganizationID = organizationId;
-            CreatedBy = userId;
+            AuditUser(userId);
             ProductColorSizeID = productColorSizeID;
             OrderID = orderId;
             ProductInventoryLocationIDA = productInventoryLocationId;
@@ -84,8 +85,8 @@ namespace WarehouseManagementSystem.Core.Entities
                 transactionType: transactionType,
                 columnName: columnName);
 
-        public bool IsTransactionTypeIsFrom => TransactionType.Contains("From");
-        public bool IsTransactionTypeIsTo => TransactionType.Contains("To");
+        public bool IsTransactionTypeIsFrom => TransactionType?.Contains("From") ?? false;
+        public bool IsTransactionTypeIsTo => TransactionType?.Contains("To") ?? false;
 
         public void RecomputeNewQty()
         {

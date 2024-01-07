@@ -1,11 +1,12 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using WarehouseManagementSystem.Core.Entities.Base;
+using WarehouseManagementSystem.Core.Enums;
 
 namespace WarehouseManagementSystem.Core.Entities
 {
     [Table("orderitems")]
-    public class OrderItem : AuditableEntity
+    public partial class OrderItem : AuditableEntity
     {
         public int? AccountID { get; set; }
 
@@ -33,14 +34,80 @@ namespace WarehouseManagementSystem.Core.Entities
         public string Approval { get; set; }
         public string ItemCode { get; set; }
         public string SKU { get; set; }
+        public string SKU2 { get; set; }
         public string UnitOfMeasure { get; set; }
         public string Tags { get; set; }
-        public string Status { get; set; }
+        public OrderItemStatus Status { get; set; }
         public string Remarks { get; set; }
         public string Reasons { get; set; }
+        public int? ProductInventoryLocationId { get; set; }
+        public int? RackShelfColumnId { get; set; }
+    }
 
+    public partial class OrderItem
+    {
         public virtual Order Order { get; set; }
-
         public virtual ProductColorSize ProductColorSize { get; set; }
+        public decimal OrderedGross => (QtyOrdered ?? 0) * (SRP ?? 0);
+        public decimal AvailableGross => (QtyAvailable ?? 0) * (SRP ?? 0);
+        public decimal DeliveredGross => (QtyDelivered ?? 0) * (SRP ?? 0);
+        public decimal DamagedGross => (QtyDamaged ?? 0) * (SRP ?? 0);
+        public decimal ReceivedGross => (QtyReceived ?? 0) * (SRP ?? 0);
+        public decimal TotalItemGross => OrderedGross + AvailableGross + DeliveredGross + DamagedGross + ReceivedGross;
+        public virtual ProductInventoryLocation ProductInventoryLocation { get; set; }
+        public virtual RackShelfColumn RackShelfColumn { get; set; }
+
+        private OrderItem() { }
+        public OrderItem(int organizationId,
+            int userId,
+            int qtyOrdered,
+            decimal srp,
+            string unitOfMeasure,
+            string sku,
+            string sku2,
+            int productColorSizeId,
+            int productInventoryLocationId,
+            string itemCode = "",
+            int? accountId = (int?)null)
+        {
+            OrganizationID = organizationId;
+            AuditUser(userId);
+            QtyOrdered = qtyOrdered;
+            SRP = srp;
+            UnitOfMeasure = unitOfMeasure;
+            SKU = sku;
+            SKU2 = sku2;
+            ProductColorSizeID = productColorSizeId;
+            ProductInventoryLocationId = productInventoryLocationId;
+            Status = OrderItemStatus.New;
+            Approval = "N";
+            ItemType = "S";
+            ItemCode = itemCode;
+            AccountID = accountId;
+        }
+
+        public static OrderItem NewCustomerOrderItem(int organizationId,
+            int userId,
+            int qtyOrdered,
+            decimal srp,
+            string unitOfMeasure,
+            string sku,
+            string sku2,
+            int productColorSizeId,
+            int productInventoryLocationId,
+            string itemCode = "",
+            int? accountId = (int?)null) => new OrderItem(organizationId: organizationId,
+                userId: userId,
+                qtyOrdered: qtyOrdered,
+                srp: srp,
+                unitOfMeasure: unitOfMeasure,
+                sku: sku,
+                sku2: sku2,
+                productColorSizeId: productColorSizeId,
+                productInventoryLocationId: productInventoryLocationId,
+                itemCode: itemCode,
+                accountId: accountId);
+
+        public string ViewName => View.CUSTOMER_ORDERS_VIEW;
     }
 }

@@ -60,6 +60,7 @@ Partial Class ProductsForm
         Me.p_brandname = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.p_category = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.p_company = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.PhotoResourceLocation = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Label16 = New System.Windows.Forms.Label()
         Me.gbSearch = New System.Windows.Forms.GroupBox()
         Me.Label21 = New System.Windows.Forms.Label()
@@ -107,6 +108,7 @@ Partial Class ProductsForm
         Me.rsc_qtyorderable = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Label15 = New System.Windows.Forms.Label()
         Me.gbProductImage = New System.Windows.Forms.GroupBox()
+        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.btnDownloadImage = New System.Windows.Forms.Button()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.txtImagePath = New System.Windows.Forms.TextBox()
@@ -173,6 +175,8 @@ Partial Class ProductsForm
         Me.msSave = New System.Windows.Forms.ToolStripMenuItem()
         Me.lblsavemsg = New System.Windows.Forms.Label()
         Me.errProvider = New System.Windows.Forms.ErrorProvider(Me.components)
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.Panel2 = New System.Windows.Forms.Panel()
         CType(Me.pbClose, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
@@ -192,6 +196,7 @@ Partial Class ProductsForm
         Me.gbRackShelfColumn.SuspendLayout()
         CType(Me.dgRackShelfColumn, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.gbProductImage.SuspendLayout()
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbProductImage, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.gbProductSize.SuspendLayout()
         CType(Me.dgProductSizes, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -204,6 +209,8 @@ Partial Class ProductsForm
         CType(Me.pbAutoAddA, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.msMenu.SuspendLayout()
         CType(Me.errProvider, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.Panel1.SuspendLayout()
+        Me.Panel2.SuspendLayout()
         Me.SuspendLayout()
         '
         'lblTitle
@@ -397,7 +404,7 @@ Partial Class ProductsForm
         DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
         Me.dgProductList.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
         Me.dgProductList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgProductList.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.p_rowid, Me.p_seqno, Me.p_productcode, Me.p_brandname, Me.p_category, Me.p_company})
+        Me.dgProductList.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.p_rowid, Me.p_seqno, Me.p_productcode, Me.p_brandname, Me.p_category, Me.p_company, Me.PhotoResourceLocation})
         DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
         DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window
         DataGridViewCellStyle2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -453,6 +460,13 @@ Partial Class ProductsForm
         Me.p_company.HeaderText = "Vendor Name"
         Me.p_company.Name = "p_company"
         Me.p_company.ReadOnly = True
+        '
+        'PhotoResourceLocation
+        '
+        Me.PhotoResourceLocation.HeaderText = "ProductPhotoColumn"
+        Me.PhotoResourceLocation.Name = "PhotoResourceLocation"
+        Me.PhotoResourceLocation.ReadOnly = True
+        Me.PhotoResourceLocation.Visible = False
         '
         'Label16
         '
@@ -618,9 +632,9 @@ Partial Class ProductsForm
         Me.gbInventoryLocation.Controls.Add(Me.Label3)
         Me.gbInventoryLocation.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.gbInventoryLocation.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.gbInventoryLocation.Location = New System.Drawing.Point(419, 150)
+        Me.gbInventoryLocation.Location = New System.Drawing.Point(421, 258)
         Me.gbInventoryLocation.Name = "gbInventoryLocation"
-        Me.gbInventoryLocation.Size = New System.Drawing.Size(397, 175)
+        Me.gbInventoryLocation.Size = New System.Drawing.Size(424, 178)
         Me.gbInventoryLocation.TabIndex = 7
         Me.gbInventoryLocation.TabStop = False
         '
@@ -649,8 +663,9 @@ Partial Class ProductsForm
         DataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.ControlText
         DataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
         Me.dgInventoryLocations.DefaultCellStyle = DataGridViewCellStyle4
+        Me.dgInventoryLocations.Dock = System.Windows.Forms.DockStyle.Fill
         Me.dgInventoryLocations.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
-        Me.dgInventoryLocations.Location = New System.Drawing.Point(6, 20)
+        Me.dgInventoryLocations.Location = New System.Drawing.Point(3, 16)
         Me.dgInventoryLocations.MultiSelect = False
         Me.dgInventoryLocations.Name = "dgInventoryLocations"
         Me.dgInventoryLocations.ReadOnly = True
@@ -664,7 +679,7 @@ Partial Class ProductsForm
         Me.dgInventoryLocations.RowHeadersDefaultCellStyle = DataGridViewCellStyle5
         Me.dgInventoryLocations.RowHeadersVisible = False
         Me.dgInventoryLocations.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgInventoryLocations.Size = New System.Drawing.Size(385, 145)
+        Me.dgInventoryLocations.Size = New System.Drawing.Size(418, 159)
         Me.dgInventoryLocations.TabIndex = 37
         '
         'il_rowid
@@ -736,21 +751,14 @@ Partial Class ProductsForm
         '
         'gbRackShelfColumn
         '
-        Me.gbRackShelfColumn.Controls.Add(Me.txtSeasonCode)
-        Me.gbRackShelfColumn.Controls.Add(Me.Label19)
-        Me.gbRackShelfColumn.Controls.Add(Me.txtLocation)
-        Me.gbRackShelfColumn.Controls.Add(Me.Label11)
-        Me.gbRackShelfColumn.Controls.Add(Me.txtSize)
-        Me.gbRackShelfColumn.Controls.Add(Me.Label10)
-        Me.gbRackShelfColumn.Controls.Add(Me.txtColor)
-        Me.gbRackShelfColumn.Controls.Add(Me.Label7)
         Me.gbRackShelfColumn.Controls.Add(Me.dgRackShelfColumn)
+        Me.gbRackShelfColumn.Controls.Add(Me.Panel2)
         Me.gbRackShelfColumn.Controls.Add(Me.Label15)
         Me.gbRackShelfColumn.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.gbRackShelfColumn.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.gbRackShelfColumn.Location = New System.Drawing.Point(419, 328)
+        Me.gbRackShelfColumn.Location = New System.Drawing.Point(421, 439)
         Me.gbRackShelfColumn.Name = "gbRackShelfColumn"
-        Me.gbRackShelfColumn.Size = New System.Drawing.Size(397, 314)
+        Me.gbRackShelfColumn.Size = New System.Drawing.Size(424, 311)
         Me.gbRackShelfColumn.TabIndex = 8
         Me.gbRackShelfColumn.TabStop = False
         '
@@ -859,8 +867,9 @@ Partial Class ProductsForm
         DataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.ControlText
         DataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
         Me.dgRackShelfColumn.DefaultCellStyle = DataGridViewCellStyle7
+        Me.dgRackShelfColumn.Dock = System.Windows.Forms.DockStyle.Fill
         Me.dgRackShelfColumn.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
-        Me.dgRackShelfColumn.Location = New System.Drawing.Point(6, 77)
+        Me.dgRackShelfColumn.Location = New System.Drawing.Point(3, 96)
         Me.dgRackShelfColumn.MultiSelect = False
         Me.dgRackShelfColumn.Name = "dgRackShelfColumn"
         Me.dgRackShelfColumn.ReadOnly = True
@@ -874,7 +883,7 @@ Partial Class ProductsForm
         Me.dgRackShelfColumn.RowHeadersDefaultCellStyle = DataGridViewCellStyle8
         Me.dgRackShelfColumn.RowHeadersVisible = False
         Me.dgRackShelfColumn.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgRackShelfColumn.Size = New System.Drawing.Size(385, 231)
+        Me.dgRackShelfColumn.Size = New System.Drawing.Size(418, 212)
         Me.dgRackShelfColumn.TabIndex = 42
         '
         'rsc_rowid
@@ -963,6 +972,7 @@ Partial Class ProductsForm
         '
         'gbProductImage
         '
+        Me.gbProductImage.Controls.Add(Me.PictureBox1)
         Me.gbProductImage.Controls.Add(Me.btnDownloadImage)
         Me.gbProductImage.Controls.Add(Me.Label2)
         Me.gbProductImage.Controls.Add(Me.txtImagePath)
@@ -973,9 +983,18 @@ Partial Class ProductsForm
         Me.gbProductImage.ForeColor = System.Drawing.SystemColors.ControlText
         Me.gbProductImage.Location = New System.Drawing.Point(581, 5)
         Me.gbProductImage.Name = "gbProductImage"
-        Me.gbProductImage.Size = New System.Drawing.Size(235, 139)
+        Me.gbProductImage.Size = New System.Drawing.Size(264, 247)
         Me.gbProductImage.TabIndex = 4
         Me.gbProductImage.TabStop = False
+        '
+        'PictureBox1
+        '
+        Me.PictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.PictureBox1.Location = New System.Drawing.Point(94, 21)
+        Me.PictureBox1.Name = "PictureBox1"
+        Me.PictureBox1.Size = New System.Drawing.Size(159, 215)
+        Me.PictureBox1.TabIndex = 398
+        Me.PictureBox1.TabStop = False
         '
         'btnDownloadImage
         '
@@ -1042,27 +1061,12 @@ Partial Class ProductsForm
         '
         'gbProductSize
         '
-        Me.gbProductSize.Controls.Add(Me.lblSKU2)
-        Me.gbProductSize.Controls.Add(Me.txtSKU2)
-        Me.gbProductSize.Controls.Add(Me.lblSeasonCode)
-        Me.gbProductSize.Controls.Add(Me.txtEditSeasonCode)
-        Me.gbProductSize.Controls.Add(Me.txtSumQtyAllocated)
-        Me.gbProductSize.Controls.Add(Me.Label20)
-        Me.gbProductSize.Controls.Add(Me.txtLastSoldDate)
-        Me.gbProductSize.Controls.Add(Me.Label13)
-        Me.gbProductSize.Controls.Add(Me.txtSumQtyReserve)
-        Me.gbProductSize.Controls.Add(Me.Label12)
-        Me.gbProductSize.Controls.Add(Me.txtSumQtyAvailable)
-        Me.gbProductSize.Controls.Add(Me.Label5)
         Me.gbProductSize.Controls.Add(Me.dgProductSizes)
+        Me.gbProductSize.Controls.Add(Me.Panel1)
         Me.gbProductSize.Controls.Add(Me.Label1)
-        Me.gbProductSize.Controls.Add(Me.lblSKU)
-        Me.gbProductSize.Controls.Add(Me.txtLastShipmentDate)
-        Me.gbProductSize.Controls.Add(Me.Label8)
-        Me.gbProductSize.Controls.Add(Me.txtSKU)
         Me.gbProductSize.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.gbProductSize.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.gbProductSize.Location = New System.Drawing.Point(175, 150)
+        Me.gbProductSize.Location = New System.Drawing.Point(175, 258)
         Me.gbProductSize.Name = "gbProductSize"
         Me.gbProductSize.Size = New System.Drawing.Size(240, 492)
         Me.gbProductSize.TabIndex = 6
@@ -1073,7 +1077,7 @@ Partial Class ProductsForm
         Me.lblSKU2.AutoSize = True
         Me.lblSKU2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblSKU2.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.lblSKU2.Location = New System.Drawing.Point(47, 364)
+        Me.lblSKU2.Location = New System.Drawing.Point(41, 102)
         Me.lblSKU2.Name = "lblSKU2"
         Me.lblSKU2.Size = New System.Drawing.Size(45, 15)
         Me.lblSKU2.TabIndex = 469
@@ -1082,7 +1086,7 @@ Partial Class ProductsForm
         'txtSKU2
         '
         Me.txtSKU2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtSKU2.Location = New System.Drawing.Point(12, 382)
+        Me.txtSKU2.Location = New System.Drawing.Point(6, 120)
         Me.txtSKU2.Name = "txtSKU2"
         Me.txtSKU2.Size = New System.Drawing.Size(105, 21)
         Me.txtSKU2.TabIndex = 467
@@ -1092,7 +1096,7 @@ Partial Class ProductsForm
         Me.lblSeasonCode.AutoSize = True
         Me.lblSeasonCode.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblSeasonCode.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.lblSeasonCode.Location = New System.Drawing.Point(135, 322)
+        Me.lblSeasonCode.Location = New System.Drawing.Point(129, 60)
         Me.lblSeasonCode.Name = "lblSeasonCode"
         Me.lblSeasonCode.Size = New System.Drawing.Size(84, 15)
         Me.lblSeasonCode.TabIndex = 467
@@ -1101,7 +1105,7 @@ Partial Class ProductsForm
         'txtEditSeasonCode
         '
         Me.txtEditSeasonCode.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtEditSeasonCode.Location = New System.Drawing.Point(123, 340)
+        Me.txtEditSeasonCode.Location = New System.Drawing.Point(117, 78)
         Me.txtEditSeasonCode.Name = "txtEditSeasonCode"
         Me.txtEditSeasonCode.Size = New System.Drawing.Size(105, 21)
         Me.txtEditSeasonCode.TabIndex = 466
@@ -1109,7 +1113,7 @@ Partial Class ProductsForm
         'txtSumQtyAllocated
         '
         Me.txtSumQtyAllocated.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtSumQtyAllocated.Location = New System.Drawing.Point(88, 298)
+        Me.txtSumQtyAllocated.Location = New System.Drawing.Point(82, 36)
         Me.txtSumQtyAllocated.Name = "txtSumQtyAllocated"
         Me.txtSumQtyAllocated.ReadOnly = True
         Me.txtSumQtyAllocated.Size = New System.Drawing.Size(65, 21)
@@ -1121,7 +1125,7 @@ Partial Class ProductsForm
         Me.Label20.AutoSize = True
         Me.Label20.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label20.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label20.Location = New System.Drawing.Point(90, 268)
+        Me.Label20.Location = New System.Drawing.Point(84, 6)
         Me.Label20.Name = "Label20"
         Me.Label20.Size = New System.Drawing.Size(66, 26)
         Me.Label20.TabIndex = 465
@@ -1131,7 +1135,7 @@ Partial Class ProductsForm
         'txtLastSoldDate
         '
         Me.txtLastSoldDate.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtLastSoldDate.Location = New System.Drawing.Point(99, 445)
+        Me.txtLastSoldDate.Location = New System.Drawing.Point(93, 183)
         Me.txtLastSoldDate.Name = "txtLastSoldDate"
         Me.txtLastSoldDate.ReadOnly = True
         Me.txtLastSoldDate.Size = New System.Drawing.Size(135, 21)
@@ -1142,7 +1146,7 @@ Partial Class ProductsForm
         Me.Label13.AutoSize = True
         Me.Label13.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label13.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label13.Location = New System.Drawing.Point(3, 448)
+        Me.Label13.Location = New System.Drawing.Point(-3, 186)
         Me.Label13.Name = "Label13"
         Me.Label13.Size = New System.Drawing.Size(90, 15)
         Me.Label13.TabIndex = 463
@@ -1151,7 +1155,7 @@ Partial Class ProductsForm
         'txtSumQtyReserve
         '
         Me.txtSumQtyReserve.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtSumQtyReserve.Location = New System.Drawing.Point(163, 298)
+        Me.txtSumQtyReserve.Location = New System.Drawing.Point(157, 36)
         Me.txtSumQtyReserve.Name = "txtSumQtyReserve"
         Me.txtSumQtyReserve.ReadOnly = True
         Me.txtSumQtyReserve.Size = New System.Drawing.Size(65, 21)
@@ -1163,7 +1167,7 @@ Partial Class ProductsForm
         Me.Label12.AutoSize = True
         Me.Label12.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label12.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label12.Location = New System.Drawing.Point(162, 268)
+        Me.Label12.Location = New System.Drawing.Point(156, 6)
         Me.Label12.Name = "Label12"
         Me.Label12.Size = New System.Drawing.Size(66, 26)
         Me.Label12.TabIndex = 461
@@ -1173,7 +1177,7 @@ Partial Class ProductsForm
         'txtSumQtyAvailable
         '
         Me.txtSumQtyAvailable.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtSumQtyAvailable.Location = New System.Drawing.Point(12, 298)
+        Me.txtSumQtyAvailable.Location = New System.Drawing.Point(6, 36)
         Me.txtSumQtyAvailable.Name = "txtSumQtyAvailable"
         Me.txtSumQtyAvailable.ReadOnly = True
         Me.txtSumQtyAvailable.Size = New System.Drawing.Size(65, 21)
@@ -1185,7 +1189,7 @@ Partial Class ProductsForm
         Me.Label5.AutoSize = True
         Me.Label5.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label5.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label5.Location = New System.Drawing.Point(12, 268)
+        Me.Label5.Location = New System.Drawing.Point(6, 6)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(66, 26)
         Me.Label5.TabIndex = 459
@@ -1217,8 +1221,9 @@ Partial Class ProductsForm
         DataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.ControlText
         DataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
         Me.dgProductSizes.DefaultCellStyle = DataGridViewCellStyle10
+        Me.dgProductSizes.Dock = System.Windows.Forms.DockStyle.Fill
         Me.dgProductSizes.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
-        Me.dgProductSizes.Location = New System.Drawing.Point(6, 20)
+        Me.dgProductSizes.Location = New System.Drawing.Point(3, 16)
         Me.dgProductSizes.MultiSelect = False
         Me.dgProductSizes.Name = "dgProductSizes"
         DataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
@@ -1231,7 +1236,7 @@ Partial Class ProductsForm
         Me.dgProductSizes.RowHeadersDefaultCellStyle = DataGridViewCellStyle11
         Me.dgProductSizes.RowHeadersVisible = False
         Me.dgProductSizes.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgProductSizes.Size = New System.Drawing.Size(228, 245)
+        Me.dgProductSizes.Size = New System.Drawing.Size(234, 252)
         Me.dgProductSizes.TabIndex = 31
         '
         's_rowid
@@ -1298,7 +1303,7 @@ Partial Class ProductsForm
         Me.lblSKU.AutoSize = True
         Me.lblSKU.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblSKU.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.lblSKU.Location = New System.Drawing.Point(47, 322)
+        Me.lblSKU.Location = New System.Drawing.Point(41, 60)
         Me.lblSKU.Name = "lblSKU"
         Me.lblSKU.Size = New System.Drawing.Size(35, 15)
         Me.lblSKU.TabIndex = 272
@@ -1307,7 +1312,7 @@ Partial Class ProductsForm
         'txtLastShipmentDate
         '
         Me.txtLastShipmentDate.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtLastShipmentDate.Location = New System.Drawing.Point(123, 418)
+        Me.txtLastShipmentDate.Location = New System.Drawing.Point(117, 156)
         Me.txtLastShipmentDate.Name = "txtLastShipmentDate"
         Me.txtLastShipmentDate.ReadOnly = True
         Me.txtLastShipmentDate.Size = New System.Drawing.Size(111, 21)
@@ -1318,7 +1323,7 @@ Partial Class ProductsForm
         Me.Label8.AutoSize = True
         Me.Label8.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label8.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label8.Location = New System.Drawing.Point(3, 421)
+        Me.Label8.Location = New System.Drawing.Point(-3, 159)
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(118, 15)
         Me.Label8.TabIndex = 273
@@ -1327,7 +1332,7 @@ Partial Class ProductsForm
         'txtSKU
         '
         Me.txtSKU.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtSKU.Location = New System.Drawing.Point(12, 340)
+        Me.txtSKU.Location = New System.Drawing.Point(6, 78)
         Me.txtSKU.Name = "txtSKU"
         Me.txtSKU.Size = New System.Drawing.Size(105, 21)
         Me.txtSKU.TabIndex = 34
@@ -1338,7 +1343,7 @@ Partial Class ProductsForm
         Me.gbProductColor.Controls.Add(Me.Label6)
         Me.gbProductColor.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.gbProductColor.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.gbProductColor.Location = New System.Drawing.Point(6, 150)
+        Me.gbProductColor.Location = New System.Drawing.Point(6, 258)
         Me.gbProductColor.Name = "gbProductColor"
         Me.gbProductColor.Size = New System.Drawing.Size(165, 492)
         Me.gbProductColor.TabIndex = 5
@@ -1369,8 +1374,9 @@ Partial Class ProductsForm
         DataGridViewCellStyle13.SelectionForeColor = System.Drawing.SystemColors.ControlText
         DataGridViewCellStyle13.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
         Me.dgProductColors.DefaultCellStyle = DataGridViewCellStyle13
+        Me.dgProductColors.Dock = System.Windows.Forms.DockStyle.Fill
         Me.dgProductColors.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
-        Me.dgProductColors.Location = New System.Drawing.Point(7, 20)
+        Me.dgProductColors.Location = New System.Drawing.Point(3, 16)
         Me.dgProductColors.MultiSelect = False
         Me.dgProductColors.Name = "dgProductColors"
         Me.dgProductColors.ReadOnly = True
@@ -1384,7 +1390,7 @@ Partial Class ProductsForm
         Me.dgProductColors.RowHeadersDefaultCellStyle = DataGridViewCellStyle14
         Me.dgProductColors.RowHeadersVisible = False
         Me.dgProductColors.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgProductColors.Size = New System.Drawing.Size(150, 466)
+        Me.dgProductColors.Size = New System.Drawing.Size(159, 473)
         Me.dgProductColors.TabIndex = 30
         '
         'c_rowid
@@ -1461,7 +1467,7 @@ Partial Class ProductsForm
         Me.gbProductInformation.ForeColor = System.Drawing.SystemColors.ControlText
         Me.gbProductInformation.Location = New System.Drawing.Point(6, 5)
         Me.gbProductInformation.Name = "gbProductInformation"
-        Me.gbProductInformation.Size = New System.Drawing.Size(569, 139)
+        Me.gbProductInformation.Size = New System.Drawing.Size(569, 247)
         Me.gbProductInformation.TabIndex = 3
         Me.gbProductInformation.TabStop = False
         '
@@ -1714,6 +1720,46 @@ Partial Class ProductsForm
         '
         Me.errProvider.ContainerControl = Me
         '
+        'Panel1
+        '
+        Me.Panel1.Controls.Add(Me.txtSumQtyAvailable)
+        Me.Panel1.Controls.Add(Me.lblSKU2)
+        Me.Panel1.Controls.Add(Me.txtSKU)
+        Me.Panel1.Controls.Add(Me.txtSKU2)
+        Me.Panel1.Controls.Add(Me.Label8)
+        Me.Panel1.Controls.Add(Me.lblSeasonCode)
+        Me.Panel1.Controls.Add(Me.txtLastShipmentDate)
+        Me.Panel1.Controls.Add(Me.txtEditSeasonCode)
+        Me.Panel1.Controls.Add(Me.lblSKU)
+        Me.Panel1.Controls.Add(Me.txtSumQtyAllocated)
+        Me.Panel1.Controls.Add(Me.Label5)
+        Me.Panel1.Controls.Add(Me.Label20)
+        Me.Panel1.Controls.Add(Me.Label12)
+        Me.Panel1.Controls.Add(Me.txtLastSoldDate)
+        Me.Panel1.Controls.Add(Me.txtSumQtyReserve)
+        Me.Panel1.Controls.Add(Me.Label13)
+        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.Panel1.Location = New System.Drawing.Point(3, 268)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(234, 221)
+        Me.Panel1.TabIndex = 470
+        '
+        'Panel2
+        '
+        Me.Panel2.Controls.Add(Me.txtColor)
+        Me.Panel2.Controls.Add(Me.txtSeasonCode)
+        Me.Panel2.Controls.Add(Me.Label7)
+        Me.Panel2.Controls.Add(Me.Label19)
+        Me.Panel2.Controls.Add(Me.Label10)
+        Me.Panel2.Controls.Add(Me.txtLocation)
+        Me.Panel2.Controls.Add(Me.txtSize)
+        Me.Panel2.Controls.Add(Me.Label11)
+        Me.Panel2.Dock = System.Windows.Forms.DockStyle.Top
+        Me.Panel2.Location = New System.Drawing.Point(3, 16)
+        Me.Panel2.Name = "Panel2"
+        Me.Panel2.Size = New System.Drawing.Size(418, 80)
+        Me.Panel2.TabIndex = 281
+        '
         'ProductsForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -1756,6 +1802,7 @@ Partial Class ProductsForm
         CType(Me.dgRackShelfColumn, System.ComponentModel.ISupportInitialize).EndInit()
         Me.gbProductImage.ResumeLayout(False)
         Me.gbProductImage.PerformLayout()
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.pbProductImage, System.ComponentModel.ISupportInitialize).EndInit()
         Me.gbProductSize.ResumeLayout(False)
         Me.gbProductSize.PerformLayout()
@@ -1772,6 +1819,10 @@ Partial Class ProductsForm
         Me.msMenu.ResumeLayout(False)
         Me.msMenu.PerformLayout()
         CType(Me.errProvider, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.Panel1.ResumeLayout(False)
+        Me.Panel1.PerformLayout()
+        Me.Panel2.ResumeLayout(False)
+        Me.Panel2.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -1873,23 +1924,10 @@ Partial Class ProductsForm
     Friend WithEvents pbAutoAddB As System.Windows.Forms.PictureBox
     Friend WithEvents pbAutoAddD As System.Windows.Forms.PictureBox
     Friend WithEvents tsColors As System.Windows.Forms.ToolStripButton
-    Friend WithEvents p_rowid As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents p_seqno As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents p_productcode As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents p_brandname As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents p_category As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents p_company As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents txtSumQtyAllocated As System.Windows.Forms.TextBox
     Friend WithEvents Label20 As System.Windows.Forms.Label
     Friend WithEvents lblSeasonCode As System.Windows.Forms.Label
     Friend WithEvents txtEditSeasonCode As System.Windows.Forms.TextBox
-    Friend WithEvents s_rowid As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents s_sizes As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents s_seasoncode As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents s_totalqtyavailable As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents s_totalqtyallocated As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents s_totalqtyreserve As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents s_active As System.Windows.Forms.DataGridViewCheckBoxColumn
     Friend WithEvents il_rowid As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents il_seqno As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents il_locationname As System.Windows.Forms.DataGridViewTextBoxColumn
@@ -1910,4 +1948,21 @@ Partial Class ProductsForm
     Friend WithEvents rsc_qtyorderable As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents lblSKU2 As Label
     Friend WithEvents txtSKU2 As TextBox
+    Friend WithEvents PictureBox1 As PictureBox
+    Friend WithEvents s_rowid As DataGridViewTextBoxColumn
+    Friend WithEvents s_sizes As DataGridViewTextBoxColumn
+    Friend WithEvents s_seasoncode As DataGridViewTextBoxColumn
+    Friend WithEvents s_totalqtyavailable As DataGridViewTextBoxColumn
+    Friend WithEvents s_totalqtyallocated As DataGridViewTextBoxColumn
+    Friend WithEvents s_totalqtyreserve As DataGridViewTextBoxColumn
+    Friend WithEvents s_active As DataGridViewCheckBoxColumn
+    Friend WithEvents p_rowid As DataGridViewTextBoxColumn
+    Friend WithEvents p_seqno As DataGridViewTextBoxColumn
+    Friend WithEvents p_productcode As DataGridViewTextBoxColumn
+    Friend WithEvents p_brandname As DataGridViewTextBoxColumn
+    Friend WithEvents p_category As DataGridViewTextBoxColumn
+    Friend WithEvents p_company As DataGridViewTextBoxColumn
+    Friend WithEvents PhotoResourceLocation As DataGridViewTextBoxColumn
+    Friend WithEvents Panel1 As Panel
+    Friend WithEvents Panel2 As Panel
 End Class

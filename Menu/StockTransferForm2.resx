@@ -126,6 +126,12 @@
   <metadata name="Column7.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
+  <metadata name="Column4.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="Column8.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="LinkLabelRefresh.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -230,10 +236,10 @@
   <data name="ToolStripButtonApproved.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACqSURBVDhPtZHLDcMgEESpjVo4hFroiQupJCXwuzoa24M2
-        CJm9ZKSRDOzOG8mG6r0f0ve1Xliy1p5eBZRSPhIAt9ZeP2QZQGMZgyml8e6cOxB4JsvF2QzAsPd+3McY
-        L7omYEXPOV90CEO0XKQf6VJzAO62dAhDkkjjTU1fDdZa31s6taqKFio6NbcIIYzvRzo1t5De0qm5Bayi
-        U6sWajqFFvJ34nw//UPGfAHO9ak6WNeh+QAAAABJRU5ErkJggg==
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACjSURBVDhPnZFRCgMhDEQ9m2fxo57FO/ljT9IbCOrvltl2
+        JA2ioQMDS0zmDayjxhiX9HdsF46897dXAbXWlwTAvffHD1kG0DjGYillvocQLgTeyfJQmwFYjjHOec75
+        Q7cEbOkQlmh5SG/pUjoAsyMdwpIk0ngz01eLrbXnkU6tqqKFiU7pFiml+b2lU7qF9JFO6RawiU6tWpjp
+        FGjyd5rp/8m5NznfqO/L7j3/AAAAAElFTkSuQmCC
 </value>
   </data>
   <data name="ToolStripButtonCancel.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">

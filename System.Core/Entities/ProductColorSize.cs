@@ -23,6 +23,8 @@ namespace WarehouseManagementSystem.Core.Entities
         public string Status { get; set; }
         public string BarCode { get; set; }
         public string Type { get; set; }
+        public string UnitOfMeasure2 { get; set; }
+        public decimal? UnitPriceOfUOM2 { get; set; }
     }
 
     public partial class ProductColorSize
@@ -39,11 +41,12 @@ namespace WarehouseManagementSystem.Core.Entities
             string seasonCode)
         {
             OrganizationID = organizationId;
-            CreatedBy = userId;
+            AuditUser(userId);
             Size = size;
             SKU = sku;
             SKU2 = sku2;
             SeasonCode = seasonCode;
+            Status = "Active";
         }
 
         public virtual ProductColor ProductColor { get; set; }

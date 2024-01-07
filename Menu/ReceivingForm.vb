@@ -1,5 +1,5 @@
-﻿Imports Microsoft.Extensions.DependencyInjection
-Imports MySql.Data.MySqlClient
+﻿Imports MySql.Data.MySqlClient
+Imports WarehouseManagementSystem.Core.Entities
 Imports WarehouseManagementSystem.Core.Enums
 Imports WarehouseManagementSystem.Core.Interfaces
 
@@ -21,8 +21,12 @@ Public Class ReceivingForm
     Dim rrtotalqtyreceivedgood, rrtotalqtyreceivedbad, rrtotalqtystocked As Integer
     Dim simplesearchphrase, datephrase, commonphrase, pagefilter1, pagefilter2, pagefilter3, pagefilter4 As String
     Dim rrsuppliercustomerid, rrorderid, rrproductcolorsizesid, rrproductid, rrproductbundleid, rrrelatedorderid, rrcontactid As Integer
+    Private _systemOwner As SystemOwner
 
-    Private Sub ReceivingForm_Load(sender As Object, e As EventArgs) Handles Me.Load
+    Private Async Sub ReceivingForm_Load(sender As Object, e As EventArgs) Handles Me.Load
+        Dim _systemOwnerService = GetRequiredService(Of ISystemOwnerService)()
+        _systemOwner = Await _systemOwnerService.GetCurrentSystemOwnerEntityAsync()
+
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
@@ -38,6 +42,17 @@ Public Class ReceivingForm
             conn.Close()
         End Try
         Me.Cursor = Cursors.Default
+
+        If IsThurston Then
+            For Each comboBox In gbReceivingInformation.Controls.
+                OfType(Of Control).
+                OfType(Of ComboBox).
+                ToArray()
+
+                SetStyleToDropDownList(comboBox)
+            Next
+        End If
+
     End Sub
 
     Private Sub ReceivingOrderForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
@@ -872,7 +887,7 @@ Public Class ReceivingForm
             If dgReceivingItems.Rows.Count <> 0 Then
                 For i As Integer = 0 To dgReceivingItems.Rows.Count - 1
                     If dgReceivingItems.Rows(i).Cells(ci_itemtype.Index).Value = "A" Then
-                        dgReceivingItems.Rows(i).DefaultCellStyle.BackColor = Color.BurlyWood
+                        dgReceivingItems.Rows(i).DefaultCellStyle.BackColor = Drawing.Color.BurlyWood
                     End If
                     If CStr(dgReceivingItems.Rows(i).Cells("ci_colorvalue").Value) <> "" Then
                         readcolor = colorconverter.ConvertFromString(CStr(dgReceivingItems.Rows(i).Cells("ci_colorvalue").Value))
@@ -1075,7 +1090,7 @@ Public Class ReceivingForm
 
     Private Sub pbAddSupplierCustomer_MouseEnter(sender As Object, e As EventArgs) Handles pbAddSupplierCustomer.MouseEnter
         Try
-            pbAddSupplierCustomer.BackColor = Color.MediumSpringGreen
+            pbAddSupplierCustomer.BackColor = Drawing.Color.MediumSpringGreen
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -1085,7 +1100,7 @@ Public Class ReceivingForm
 
     Private Sub pbAddSupplierCustomer_MouseLeave(sender As Object, e As EventArgs) Handles pbAddSupplierCustomer.MouseLeave
         Try
-            pbAddSupplierCustomer.BackColor = Color.Transparent
+            pbAddSupplierCustomer.BackColor = Drawing.Color.Transparent
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -1173,7 +1188,7 @@ Public Class ReceivingForm
 
     Private Sub pbAddReceivedBy_MouseEnter(sender As Object, e As EventArgs) Handles pbAddReceivedBy.MouseEnter
         Try
-            pbAddReceivedBy.BackColor = Color.MediumSpringGreen
+            pbAddReceivedBy.BackColor = Drawing.Color.MediumSpringGreen
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -1183,7 +1198,7 @@ Public Class ReceivingForm
 
     Private Sub pbAddReceivedBy_MouseLeave(sender As Object, e As EventArgs) Handles pbAddReceivedBy.MouseLeave
         Try
-            pbAddReceivedBy.BackColor = Color.Transparent
+            pbAddReceivedBy.BackColor = Drawing.Color.Transparent
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -1737,7 +1752,7 @@ Public Class ReceivingForm
                     Exit Try
                 End If
             ElseIf cue = "Edit" Then
-                If globalcreateflg = "Y" Then
+                If globalupdateflg = "N" Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
@@ -1794,7 +1809,7 @@ Public Class ReceivingForm
                                                 DirectCommand("UPDATE productcolorsizes SET lastshipmentdate = """ & Format(dtpRRDate.Value, "yyyy/MM/dd") & """ WHERE rowid = " & CInt(dgReceivingItems.Rows(a).Cells("ci_pcsrowid").Value) & " ")
                                             End If
                                             If dgReceivingItems.Rows(a).Cells("ci_approved").Value = legit Then
-                                                getProductColorSizeTotalDamageQty(CInt(dgReceivingItems.Rows(a).Cells("ci_pcsrowid").Value), Me)
+                                                getProductColorSizeTotalDamageQty((dgReceivingItems.Rows(a).Cells("ci_pcsrowid").Value), Me)
                                                 U_ProductColorSizeTotalDamageQty(CInt(dgReceivingItems.Rows(a).Cells("ci_pcsrowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, globaltotalqtydamage + If(IsNumeric(dgReceivingItems.Rows(a).Cells("ci_qtybad").Value), CInt(dgReceivingItems.Rows(a).Cells("ci_qtybad").Value), 0), Me)
                                                 I_ProductMovementHistory(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, rrorderid, DBNull.Value, DBNull.Value, CInt(dgReceivingItems.Rows(a).Cells("ci_pcsrowid").Value), DBNull.Value, DBNull.Value, globaltotalqtydamage,
                                                         If(IsNumeric(dgReceivingItems.Rows(a).Cells("ci_qtybad").Value), CInt(dgReceivingItems.Rows(a).Cells("ci_qtybad").Value), 0), globaltotalqtydamage + If(IsNumeric(dgReceivingItems.Rows(a).Cells("ci_qtybad").Value), CInt(dgReceivingItems.Rows(a).Cells("ci_qtybad").Value), 0), "Receiving", "TotalDamageQty", "", Me)
@@ -1859,7 +1874,7 @@ Public Class ReceivingForm
                                                     M_U_OrderItems(CInt(dgReceivingItems.Rows(a).Cells("ci_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, If(IsNumeric(dgReceivingItems.Rows(a).Cells("ci_qtyreceived").Value), CInt(dgReceivingItems.Rows(a).Cells("ci_qtyreceived").Value), 0),
                                                         If(IsNumeric(dgReceivingItems.Rows(a).Cells("ci_qtybad").Value), CInt(dgReceivingItems.Rows(a).Cells("ci_qtybad").Value), 0), CStr(dgReceivingItems.Rows(a).Cells("ci_remarks").Value), CStr(dgReceivingItems.Rows(a).Cells("ci_reason").Value), If(dgReceivingItems.Rows(a).Cells("ci_approved").Value = legit, "Y", "N"), Me)
                                                     If dgReceivingItems.Rows(a).Cells("ci_approved").Value = legit Then
-                                                        getProductColorSizeTotalDamageQty(CInt(dgReceivingItems.Rows(a).Cells("ci_pcsrowid").Value), Me)
+                                                        getProductColorSizeTotalDamageQty((dgReceivingItems.Rows(a).Cells("ci_pcsrowid").Value), Me)
                                                         U_ProductColorSizeTotalDamageQty(CInt(dgReceivingItems.Rows(a).Cells("ci_pcsrowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, globaltotalqtydamage + If(IsNumeric(dgReceivingItems.Rows(a).Cells("ci_qtybad").Value), CInt(dgReceivingItems.Rows(a).Cells("ci_qtybad").Value), 0), Me)
                                                         I_ProductMovementHistory(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, CInt(dgReceivingList.CurrentRow.Cells("rr_rowid").Value), DBNull.Value, DBNull.Value, CInt(dgReceivingItems.Rows(a).Cells("ci_pcsrowid").Value), DBNull.Value, DBNull.Value, globaltotalqtydamage,
                                                                 If(IsNumeric(dgReceivingItems.Rows(a).Cells("ci_qtybad").Value), CInt(dgReceivingItems.Rows(a).Cells("ci_qtybad").Value), 0), globaltotalqtydamage + If(IsNumeric(dgReceivingItems.Rows(a).Cells("ci_qtybad").Value), CInt(dgReceivingItems.Rows(a).Cells("ci_qtybad").Value), 0), "Receiving", "TotalDamageQty", "", Me)
@@ -1883,7 +1898,7 @@ Public Class ReceivingForm
                                                     M_U_OrderItems(CInt(dgReceivingItems.Rows(a).Cells("ci_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, If(IsNumeric(dgReceivingItems.Rows(a).Cells("ci_qtyreceived").Value), CInt(dgReceivingItems.Rows(a).Cells("ci_qtyreceived").Value), 0),
                                                             If(IsNumeric(dgReceivingItems.Rows(a).Cells("ci_qtybad").Value), CInt(dgReceivingItems.Rows(a).Cells("ci_qtybad").Value), 0), CStr(dgReceivingItems.Rows(a).Cells("ci_remarks").Value), CStr(dgReceivingItems.Rows(a).Cells("ci_reason").Value), If(dgReceivingItems.Rows(a).Cells("ci_approved").Value = legit, "Y", "N"), Me)
                                                     If dgReceivingItems.Rows(a).Cells("ci_approved").Value = legit Then
-                                                        getProductColorSizeTotalDamageQty(CInt(dgReceivingItems.Rows(a).Cells("ci_pcsrowid").Value), Me)
+                                                        getProductColorSizeTotalDamageQty((dgReceivingItems.Rows(a).Cells("ci_pcsrowid").Value), Me)
                                                         U_ProductColorSizeTotalDamageQty(CInt(dgReceivingItems.Rows(a).Cells("ci_pcsrowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, globaltotalqtydamage + If(IsNumeric(dgReceivingItems.Rows(a).Cells("ci_qtybad").Value), CInt(dgReceivingItems.Rows(a).Cells("ci_qtybad").Value), 0), Me)
                                                         I_ProductMovementHistory(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, CInt(dgReceivingList.CurrentRow.Cells("rr_rowid").Value), DBNull.Value, DBNull.Value, CInt(dgReceivingItems.Rows(a).Cells("ci_pcsrowid").Value), DBNull.Value, DBNull.Value, globaltotalqtydamage,
                                                                 If(IsNumeric(dgReceivingItems.Rows(a).Cells("ci_qtybad").Value), CInt(dgReceivingItems.Rows(a).Cells("ci_qtybad").Value), 0), globaltotalqtydamage + If(IsNumeric(dgReceivingItems.Rows(a).Cells("ci_qtybad").Value), CInt(dgReceivingItems.Rows(a).Cells("ci_qtybad").Value), 0), "Receiving", "TotalDamageQty", "", Me)
@@ -1901,7 +1916,7 @@ Public Class ReceivingForm
                                                             DirectCommand("UPDATE productcolorsizes SET lastshipmentdate = """ & Format(dtpRRDate.Value, "yyyy/MM/dd") & """ WHERE rowid = " & CInt(dgReceivingItems.Rows(a).Cells("ci_pcsrowid").Value) & " ")
                                                         End If
                                                         If dgReceivingItems.Rows(a).Cells("ci_approved").Value = legit Then
-                                                            getProductColorSizeTotalDamageQty(CInt(dgReceivingItems.Rows(a).Cells("ci_pcsrowid").Value), Me)
+                                                            getProductColorSizeTotalDamageQty((dgReceivingItems.Rows(a).Cells("ci_pcsrowid").Value), Me)
                                                             U_ProductColorSizeTotalDamageQty(CInt(dgReceivingItems.Rows(a).Cells("ci_pcsrowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, globaltotalqtydamage + If(IsNumeric(dgReceivingItems.Rows(a).Cells("ci_qtybad").Value), CInt(dgReceivingItems.Rows(a).Cells("ci_qtybad").Value), 0), Me)
                                                             I_ProductMovementHistory(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, CInt(dgReceivingList.CurrentRow.Cells("rr_rowid").Value), DBNull.Value, DBNull.Value, CInt(dgReceivingItems.Rows(a).Cells("ci_pcsrowid").Value), DBNull.Value, DBNull.Value, globaltotalqtydamage,
                                                                     If(IsNumeric(dgReceivingItems.Rows(a).Cells("ci_qtybad").Value), CInt(dgReceivingItems.Rows(a).Cells("ci_qtybad").Value), 0), globaltotalqtydamage + If(IsNumeric(dgReceivingItems.Rows(a).Cells("ci_qtybad").Value), CInt(dgReceivingItems.Rows(a).Cells("ci_qtybad").Value), 0), "Receiving", "TotalDamageQty", "", Me)
@@ -1921,7 +1936,7 @@ Public Class ReceivingForm
                                                         DirectCommand("UPDATE productcolorsizes SET lastshipmentdate = """ & Format(dtpRRDate.Value, "yyyy/MM/dd") & """ WHERE rowid = " & CInt(dgReceivingItems.Rows(a).Cells("ci_pcsrowid").Value) & " ")
                                                     End If
                                                     If dgReceivingItems.Rows(a).Cells("ci_approved").Value = legit Then
-                                                        getProductColorSizeTotalDamageQty(CInt(dgReceivingItems.Rows(a).Cells("ci_pcsrowid").Value), Me)
+                                                        getProductColorSizeTotalDamageQty((dgReceivingItems.Rows(a).Cells("ci_pcsrowid").Value), Me)
                                                         U_ProductColorSizeTotalDamageQty(CInt(dgReceivingItems.Rows(a).Cells("ci_pcsrowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, globaltotalqtydamage + If(IsNumeric(dgReceivingItems.Rows(a).Cells("ci_qtybad").Value), CInt(dgReceivingItems.Rows(a).Cells("ci_qtybad").Value), 0), Me)
                                                         I_ProductMovementHistory(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, CInt(dgReceivingList.CurrentRow.Cells("rr_rowid").Value), DBNull.Value, DBNull.Value, CInt(dgReceivingItems.Rows(a).Cells("ci_pcsrowid").Value), DBNull.Value, DBNull.Value, globaltotalqtydamage,
                                                                 If(IsNumeric(dgReceivingItems.Rows(a).Cells("ci_qtybad").Value), CInt(dgReceivingItems.Rows(a).Cells("ci_qtybad").Value), 0), globaltotalqtydamage + If(IsNumeric(dgReceivingItems.Rows(a).Cells("ci_qtybad").Value), CInt(dgReceivingItems.Rows(a).Cells("ci_qtybad").Value), 0), "Receiving", "TotalDamageQty", "", Me)
@@ -2736,5 +2751,11 @@ Public Class ReceivingForm
     End Sub
 
 #End Region
+
+    Private ReadOnly Property IsThurston As Boolean
+        Get
+            Return _systemOwner.IsThurston
+        End Get
+    End Property
 
 End Class

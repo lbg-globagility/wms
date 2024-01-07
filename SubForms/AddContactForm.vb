@@ -57,9 +57,9 @@ Public Class AddContactForm
         tsbtnSave.Enabled = False
         Await FunctionUtils.TryCatchFunctionAsync(messageTitle:=String.Empty,
             Async Function()
-                Dim contactDataService = MainServiceProvider.GetRequiredService(Of IContactDataService)
-                Console.Write("citiiesListBox.SelectedValue")
-                Dim cities = New List(Of Entities.ContactCity)
+                Dim contactDataService = GetRequiredService(Of IContactDataService)()
+
+                Dim cities = New List(Of ContactCity)
                 For Each itemChecked In citiesListBox.CheckedItems
                     Dim city = New ContactCity()
                     city.CityID = itemChecked.RowId
@@ -84,7 +84,6 @@ Public Class AddContactForm
 
                 If _isFormDialog Then DialogResult = DialogResult.OK
             End Function)
-        tsbtnSave.Enabled = True
     End Sub
 
     Private Sub tsbtnCancel_Click(sender As Object, e As EventArgs) Handles tsbtnCancel.Click
@@ -92,13 +91,13 @@ Public Class AddContactForm
     End Sub
 
     Private Sub txtLastName_TextChanged(sender As Object, e As EventArgs) Handles txtLastName.TextChanged
-        Dim bool = Not String.Concat(txtLastName.Text.Trim, txtFirstName.Text.Trim) = String.Empty
+        Dim bool = Not String.IsNullOrEmpty(txtLastName.Text.Trim()) AndAlso Not String.IsNullOrEmpty(txtFirstName.Text.Trim())
         tsbtnSave.Enabled = bool
         btnSave.Enabled = bool
     End Sub
 
     Private Sub txtFirstName_TextChanged(sender As Object, e As EventArgs) Handles txtFirstName.TextChanged
-        Dim bool = Not String.Concat(txtLastName.Text.Trim, txtFirstName.Text.Trim) = String.Empty
+        Dim bool = Not String.IsNullOrEmpty(txtFirstName.Text.Trim()) AndAlso Not String.IsNullOrEmpty(txtLastName.Text.Trim())
         tsbtnSave.Enabled = bool
         btnSave.Enabled = bool
     End Sub

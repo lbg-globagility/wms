@@ -4,11 +4,9 @@ using System.Text;
 
 namespace WarehouseManagementSystem.Core.Enums
 {
-    public enum CustomerOrderType
+    public enum AccountType
     {
-        Sales,
-        Sample,
-        Damage,
-        Donation
+        Customer,
+        Supplier
     }
 }

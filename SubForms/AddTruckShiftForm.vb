@@ -11,7 +11,7 @@ Imports System.Runtime.InteropServices
 Imports System.Text.RegularExpressions
 Public Class AddTruckShiftForm
     Dim manager As New sqlModule.Manager
-    Dim conn As New MySqlConnection(Manager.GetConnString)
+    Dim conn As New MySqlConnection(manager.GetConnString)
     Dim sqlcmd As MySqlCommand
     Dim sqlrd As MySqlDataReader
     Dim sqlquery As String

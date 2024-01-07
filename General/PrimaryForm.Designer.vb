@@ -1,9 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class PrimaryForm
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -20,7 +20,7 @@ Partial Class PrimaryForm
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(PrimaryForm))
@@ -242,6 +242,9 @@ Partial Class PrimaryForm
         Me.PictureBox2 = New System.Windows.Forms.PictureBox()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.MainLoadingBar = New System.Windows.Forms.ProgressBar()
+        Me.OthersToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DailyDeliveriesReportToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DeliveryTrafficReportToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.msHome.SuspendLayout()
         Me.tsInformation.SuspendLayout()
         CType(Me.pbPin, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -415,7 +418,7 @@ Partial Class PrimaryForm
         '
         'msInventoryManagement
         '
-        Me.msInventoryManagement.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.msInventoryLocations, Me.mStockTransfer, Me.msStockAdjustment, Me.FasdfsdfToolStripMenuItem})
+        Me.msInventoryManagement.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.msInventoryLocations, Me.mStockTransfer, Me.msStockAdjustment})
         Me.msInventoryManagement.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.msInventoryManagement.Image = CType(resources.GetObject("msInventoryManagement.Image"), System.Drawing.Image)
         Me.msInventoryManagement.Name = "msInventoryManagement"
@@ -467,7 +470,7 @@ Partial Class PrimaryForm
         Me.msAccounts.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.msAccounts.Image = CType(resources.GetObject("msAccounts.Image"), System.Drawing.Image)
         Me.msAccounts.Name = "msAccounts"
-        Me.msAccounts.Size = New System.Drawing.Size(162, 22)
+        Me.msAccounts.Size = New System.Drawing.Size(180, 22)
         Me.msAccounts.Text = "(&O) Accounts"
         '
         'msContacts
@@ -475,7 +478,7 @@ Partial Class PrimaryForm
         Me.msContacts.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.msContacts.Image = CType(resources.GetObject("msContacts.Image"), System.Drawing.Image)
         Me.msContacts.Name = "msContacts"
-        Me.msContacts.Size = New System.Drawing.Size(162, 22)
+        Me.msContacts.Size = New System.Drawing.Size(180, 22)
         Me.msContacts.Text = "(&P) Contacts"
         '
         'msReferences
@@ -483,19 +486,20 @@ Partial Class PrimaryForm
         Me.msReferences.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.msReferences.Image = CType(resources.GetObject("msReferences.Image"), System.Drawing.Image)
         Me.msReferences.Name = "msReferences"
-        Me.msReferences.Size = New System.Drawing.Size(162, 22)
+        Me.msReferences.Size = New System.Drawing.Size(180, 22)
         Me.msReferences.Text = "(&Q) References"
         '
         'AgentHelperToolStripMenuItem
         '
         Me.AgentHelperToolStripMenuItem.Font = New System.Drawing.Font("Segoe UI", 9.75!)
         Me.AgentHelperToolStripMenuItem.Name = "AgentHelperToolStripMenuItem"
-        Me.AgentHelperToolStripMenuItem.Size = New System.Drawing.Size(162, 22)
+        Me.AgentHelperToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.AgentHelperToolStripMenuItem.Text = "Agent/Helper"
         '
         'msReports
         '
         Me.msReports.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.msCycleCount, Me.msBrokenSizes, Me.msSellThrough, Me.msAging, Me.msSalesAndQty, Me.msDeliveryPerformance, Me.msStockLevel, Me.ToolStripMenuItem1, Me.ms_AvailableQty})
+        Me.msReports.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.msCycleCount, Me.msBrokenSizes, Me.msSellThrough, Me.msAging, Me.msSalesAndQty, Me.msDeliveryPerformance, Me.msStockLevel, Me.OthersToolStripMenuItem})
         Me.msReports.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.msReports.Image = CType(resources.GetObject("msReports.Image"), System.Drawing.Image)
         Me.msReports.Name = "msReports"
@@ -2140,6 +2144,26 @@ Partial Class PrimaryForm
         Me.MainLoadingBar.Size = New System.Drawing.Size(160, 21)
         Me.MainLoadingBar.TabIndex = 10
         '
+        'OthersToolStripMenuItem
+        '
+        Me.OthersToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DailyDeliveriesReportToolStripMenuItem, Me.DeliveryTrafficReportToolStripMenuItem})
+        Me.OthersToolStripMenuItem.Font = New System.Drawing.Font("Segoe UI", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.OthersToolStripMenuItem.Name = "OthersToolStripMenuItem"
+        Me.OthersToolStripMenuItem.Size = New System.Drawing.Size(224, 22)
+        Me.OthersToolStripMenuItem.Text = "Others"
+        '
+        'DailyDeliveriesReportToolStripMenuItem
+        '
+        Me.DailyDeliveriesReportToolStripMenuItem.Name = "DailyDeliveriesReportToolStripMenuItem"
+        Me.DailyDeliveriesReportToolStripMenuItem.Size = New System.Drawing.Size(208, 22)
+        Me.DailyDeliveriesReportToolStripMenuItem.Text = "Daily Deliveries Report"
+        '
+        'DeliveryTrafficReportToolStripMenuItem
+        '
+        Me.DeliveryTrafficReportToolStripMenuItem.Name = "DeliveryTrafficReportToolStripMenuItem"
+        Me.DeliveryTrafficReportToolStripMenuItem.Size = New System.Drawing.Size(208, 22)
+        Me.DeliveryTrafficReportToolStripMenuItem.Text = "Delivery Traffic Report"
+        '
         'PrimaryForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -2400,4 +2424,7 @@ Partial Class PrimaryForm
     Friend WithEvents FasdfsdfToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ToolStripMenuItem1 As ToolStripMenuItem
     Friend WithEvents ms_AvailableQty As ToolStripMenuItem
+    Friend WithEvents OthersToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents DailyDeliveriesReportToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents DeliveryTrafficReportToolStripMenuItem As ToolStripMenuItem
 End Class

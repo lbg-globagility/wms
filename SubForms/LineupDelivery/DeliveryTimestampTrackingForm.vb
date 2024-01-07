@@ -1,10 +1,13 @@
-﻿Imports Microsoft.Extensions.DependencyInjection
+﻿Option Strict On
+Imports Microsoft.Extensions.DependencyInjection
+Imports WarehouseManagementSystem.Core.Entities
+Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
 Imports WarehouseManagementSystem.Core.Interfaces.Repositories
 Imports WarehouseManagementSystem.Desktop.Utilities
 
 Public Class DeliveryTimestampTrackingForm
     Private ReadOnly _lineupId As Integer
-    Private _lineup As WarehouseManagementSystem.Core.Entities.Lineup
+    Private _lineup As Lineup
 
     Public Sub New(lineupId As Integer)
 
@@ -18,43 +21,51 @@ Public Class DeliveryTimestampTrackingForm
     End Sub
 
     Private Async Sub DeliveryTimestampTrackingForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Dim lineupRepository = MainServiceProvider.GetRequiredService(Of ILineupRepository)
+        Dim lineupRepository = GetRequiredService(Of ILineupRepository)()
         _lineup = Await lineupRepository.GetByIdAsync(id:=_lineupId)
         If _lineup IsNot Nothing Then
-            dtpTime.Checked = _lineup.ConfirmedDeliveryTimeStamp IsNot Nothing
-            dtpDate.MinDate = If(_lineup.LineUpDate, Date.Now)
+            Dim hasValue = _lineup.ConfirmedDeliveryTimeStamp IsNot Nothing
 
-            dtpDate.Value = _lineup.ConfirmedDeliveryTimeStamp.Value.Date
-            dtpTime.Value = _lineup.ConfirmedDeliveryTimeStamp.Value
+            dtpTime.Checked = hasValue
+            'dtpDate.MinDate = If(_lineup.LineUpDate, Date.Now)
+
+            If hasValue Then
+                dtpDate.Value = _lineup.ConfirmedDeliveryTimeStamp.Value.Date
+                dtpTime.Value = _lineup.ConfirmedDeliveryTimeStamp.Value
+            Else
+                dtpDate.Value = Date.Now
+                dtpTime.Value = Date.Now
+            End If
         End If
     End Sub
 
     Private Async Sub btnSave_Click(sender As Object, e As EventArgs) Handles btnSave.Click
-        Dim value = dtpDate.Value.Date.
-            AddSeconds(0).
-            AddMinutes(dtpTime.Value.Minute).
-            AddHours(dtpTime.Value.Hour)
+        Dim value = dtpDate.Value
         If Not MessageBox.Show(
-                text:=$"Are you sure the delivery that time is {value.ToShortDateString()} {value.ToShortTimeString()}?",
-                caption:="Confirm Delivery Time",
-                buttons:=MessageBoxButtons.YesNo,
-                icon:=MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
+                text:=$"NOTE: Once you confirmed this delivery, you cannot undo the process again.{Environment.NewLine}{Environment.NewLine}Are you sure you want to `Confirm` this delivery and set delivery date/time to {value:MMM d, yyyy h:mm tt}?",
+                caption:="Confirm Delivery",
+                buttons:=MessageBoxButtons.YesNoCancel,
+                defaultButton:=MessageBoxDefaultButton.Button2,
+                icon:=MessageBoxIcon.Question) = DialogResult.Yes Then
             Return
         End If
 
         Panel2.Enabled = False
+
         Await FunctionUtils.TryCatchFunctionAsync(messageTitle:=String.Empty,
             Async Function()
                 If _lineup IsNot Nothing Then
                     _lineup.SetConfirmedDeliveryTimeStamp(dateTime:=value)
                 End If
 
-                Dim lineupRepository = MainServiceProvider.GetRequiredService(Of ILineupRepository)
-                Await lineupRepository.SaveAsync(entity:=_lineup)
+                Dim lineupDataService = GetRequiredService(Of ILineupDataService)()
+                Await lineupDataService.SaveManyAsync(userId:=Z_UserID, updated:=New List(Of Lineup) From {_lineup})
 
                 DialogResult = DialogResult.OK
-                Panel2.Enabled = True
-            End Function)
+            End Function).
+            ContinueWith(Sub()
+                             Panel2.Enabled = True
+                         End Sub, scheduler:=TaskScheduler.FromCurrentSynchronizationContext)
     End Sub
 
     Private Sub btnCancel_Click(sender As Object, e As EventArgs) Handles btnCancel.Click

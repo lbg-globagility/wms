@@ -2,9 +2,10 @@
 {
     public enum InventoryLocationType
     {
-        Main,
-        ClassB,
+        Main, //Sales
         Sample,
-        Damage
+        Damage,
+        Donation,
+        Loose
     }
 }

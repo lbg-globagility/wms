@@ -25,11 +25,6 @@
         /// <summary>
         /// Stock Transfer
         /// </summary>
-        ST// Stock Trans.
+        ST
     }
-
-    //Stock Adj.
-    //CO
-    //RR
-    //PO
 }

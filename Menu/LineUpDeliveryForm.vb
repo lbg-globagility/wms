@@ -1,4 +1,6 @@
 ﻿Imports MySql.Data.MySqlClient
+Imports WarehouseManagementSystem.Core.Entities
+Imports WarehouseManagementSystem.Core.Interfaces
 
 Public Class LineUpDeliveryForm
     Dim manager As New sqlModule.Manager
@@ -11,8 +13,12 @@ Public Class LineUpDeliveryForm
     Dim itemno, rowscount As Integer
     Dim luddisplaydays, ludlineupcartonsqty, luddeliverytruckshiftid As Integer
     Dim ludstringdate, ludstringday, ludcustomerorderslineup, ludbasisdate, ludselectedcell, ludselectedcolumn As String
+    Private _systemOwner As SystemOwner
 
-    Private Sub LineUpDeliveryForm_Load(sender As Object, e As EventArgs) Handles Me.Load
+    Private Async Sub LineUpDeliveryForm_Load(sender As Object, e As EventArgs) Handles Me.Load
+        Dim _systemOwnerService = GetRequiredService(Of ISystemOwnerService)()
+        _systemOwner = Await _systemOwnerService.GetCurrentSystemOwnerEntityAsync()
+
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
@@ -185,9 +191,15 @@ Public Class LineUpDeliveryForm
                 If reader1.HasRows Then
                     countLineUpCartons(CInt(reader1(0)))
                     If rowscount = 0 Then
-                        ludcustomerorderslineup = "" & CStr(reader1(1)) & " / Total Box/es: " & ludlineupcartonsqty & ""
+                        Dim valueText = If(IsThurston,
+                            $"{CStr(reader1(1))} / Total Contents: {ludlineupcartonsqty}",
+                            "" & CStr(reader1(1)) & " / Total Box/es: " & ludlineupcartonsqty & "")
+                        ludcustomerorderslineup = valueText
                     Else
-                        ludcustomerorderslineup = "" & ludcustomerorderslineup & "" & vbNewLine & "" & CStr(reader1(1)) & " / Total Box/es: " & ludlineupcartonsqty & ""
+                        Dim valueText = If(IsThurston,
+                            $"{ludcustomerorderslineup}{vbNewLine} {CStr(reader1(1))} / Total Box/es: {ludlineupcartonsqty}",
+                            "" & ludcustomerorderslineup & "" & vbNewLine & "" & CStr(reader1(1)) & " / Total Box/es: " & ludlineupcartonsqty & "")
+                        ludcustomerorderslineup = valueText
                     End If
                     rowscount = rowscount + 1
                 End If
@@ -224,12 +236,12 @@ Public Class LineUpDeliveryForm
                 For i As Integer = 0 To dgLineUpCalendar.Rows.Count - 1
                     For j = 1 To dgLineUpCalendar.Columns.Count - 1
                         If dgLineUpCalendar.Rows(i).Cells(dgLineUpCalendar.Columns(j).Name).Value <> "" Then
-                            dgLineUpCalendar.Rows(i).Cells(dgLineUpCalendar.Columns(j).Name).Style.BackColor = Color.Ivory
+                            dgLineUpCalendar.Rows(i).Cells(dgLineUpCalendar.Columns(j).Name).Style.BackColor = Drawing.Color.Ivory
                         End If
                     Next
                 Next
                 For i As Integer = 0 To dgLineUpCalendar.Rows.Count - 1
-                    dgLineUpCalendar.Rows(i).Cells("lud_date").Style.BackColor = Color.Lavender
+                    dgLineUpCalendar.Rows(i).Cells("lud_date").Style.BackColor = Drawing.Color.Lavender
                 Next
             End If
         Catch ex As Exception
@@ -389,6 +401,10 @@ Public Class LineUpDeliveryForm
         Me.Cursor = Cursors.Default
     End Sub
 
+    Private Sub dgLineUpCalendar_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgLineUpCalendar.CellContentClick
+
+    End Sub
+
     Private Sub dgLineUpCalendar_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgLineUpCalendar.CellClick
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -482,4 +498,9 @@ Public Class LineUpDeliveryForm
 
 #End Region
 
+    Private ReadOnly Property IsThurston As Boolean
+        Get
+            Return _systemOwner.IsThurston
+        End Get
+    End Property
 End Class

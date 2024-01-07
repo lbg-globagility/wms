@@ -138,10 +138,10 @@ Public Class VerifyPickListForm
         End Try
     End Sub
 
-    Sub enableANDvisibleMS(ByVal enable1 As Boolean)
+    Private Sub enableANDvisibleMS(ByVal enable1 As Boolean)
         Try
             msSave.Enabled = enable1
-            msPrint.Enabled = enable1
+            'msPrint.Enabled = enable1
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally

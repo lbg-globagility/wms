@@ -1,0 +1,6 @@
+SELECT
+CONCAT('SET @rId=(SELECT RowID FROM rackshelfcolumn WHERE RackNo=\'\' AND InventoryLocationID=', il.RowID, ' LIMIT 1); INSERT INTO rackshelfcolumn (RowID, OrganizationID, CreatedBy, InventoryLocationID, `Status`, RackNo, ShelfNo, ColumnNo) VALUES (@rId, ', il.OrganizationID, ', 1, ', il.RowID, ', \'Active\', \'\', \'\', \'\') ON DUPLICATE KEY UPDATE LastUpd=CURRENT_TIMESTAMP();') `Result`
+FROM inventorylocations il
+;
+
+# EXPORT THE RESULT AS `Delimited Text`, AND EXECUTE THOSE

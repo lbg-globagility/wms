@@ -23,7 +23,7 @@ namespace WarehouseManagementSystem.Core.Entities
             string name)
         {
             OrganizationID = organizationId;
-            CreatedBy = userId;
+            AuditUser(userId);
             CategoryName = name;
         }
 

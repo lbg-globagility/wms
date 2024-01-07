@@ -1,6 +1,10 @@
 ﻿Imports MySql.Data.MySqlClient
 Imports Spire.Barcode
+Imports WarehouseManagementSystem.Core.Entities
 Imports WarehouseManagementSystem.Core.Enums
+Imports WarehouseManagementSystem.Core.Interfaces
+Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
+Imports WarehouseManagementSystem.Desktop.Utilities
 
 Public Class PackingListForm
     Dim manager As New sqlModule.Manager
@@ -21,8 +25,21 @@ Public Class PackingListForm
     Dim palcustomerid, palcontactid, palorderid, palpackinglistid, palcountpackinglistboxes As Integer
     Dim simplesearchphrase, datephrase, commonphrase, pagefilter1, pagefilter2, palstartidentifier, palendindentifier, palmothersku, palprintsku, palorderitemstatus As String
     Dim paltotalqtyincarton, palqtyincartonsum, paltotalqtypickedsum, paltotalqtyincartonsum, palqtyincarton, palqtytopacksum, paltotalqtypicked, palqtypicked, palqtyordered As Integer
+    Private _systemOwner As SystemOwner
 
-    Private Sub PackingListForm_Load(sender As Object, e As EventArgs) Handles Me.Load
+    Private Async Sub PackingListForm_Load(sender As Object, e As EventArgs) Handles Me.Load
+        Dim _systemOwnerService = GetRequiredService(Of ISystemOwnerService)()
+        _systemOwner = Await _systemOwnerService.GetCurrentSystemOwnerEntityAsync()
+
+        If IsThurston Then
+            ci_totalqtyincarton.HeaderText = "Total Qty. In Truck"
+            Label3.Text = $"Total Qty. {ChrW(13)}{ChrW(13)}In Truck (Sum):"
+            Label5.Text = "Qty. In Truck (Sum):"
+            cai_qtyincarton.HeaderText = "Qty. In Truck"
+            Label1.Text = "Truck Items:"
+            ca_cartonno.HeaderText = "Truck No."
+        End If
+
         Me.Cursor = Cursors.WaitCursor
         Try
             Spire.Barcode.BarcodeSettings.ApplyKey("LNAVJZFGXY6-NWBQG-FGB9V-34L5T")
@@ -38,6 +55,17 @@ Public Class PackingListForm
             conn.Close()
         End Try
         Me.Cursor = Cursors.Default
+
+
+        If IsThurston Then
+            For Each comboBox In gbPackingListInformation.Controls.
+                OfType(Of Control).
+                OfType(Of ComboBox).
+                ToArray()
+
+                SetStyleToDropDownList(comboBox)
+            Next
+        End If
     End Sub
 
     Private Sub PackingListForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
@@ -1210,7 +1238,7 @@ Public Class PackingListForm
             If dgCustomerOrderItems.Rows.Count <> 0 Then
                 For i As Integer = 0 To dgCustomerOrderItems.Rows.Count - 1
                     If dgCustomerOrderItems.Rows(i).Cells(ci_type.Index).Value = "B" Then
-                        dgCustomerOrderItems.Rows(i).DefaultCellStyle.BackColor = Color.PaleGreen
+                        dgCustomerOrderItems.Rows(i).DefaultCellStyle.BackColor = Drawing.Color.PaleGreen
                     Else
                         If CStr(dgCustomerOrderItems.Rows(i).Cells("ci_colorvalue").Value) <> "" Then
                             readcolor = colorconverter.ConvertFromString(CStr(dgCustomerOrderItems.Rows(i).Cells("ci_colorvalue").Value))
@@ -1226,7 +1254,7 @@ Public Class PackingListForm
                         dgCartonItems.Rows(i).Cells("cai_color").Style.BackColor = readcolor
                     End If
                     If dgCartonItems.Rows(i).Cells(cai_type.Index).Value = "BI" Then
-                        dgCartonItems.Rows(i).DefaultCellStyle.BackColor = Color.PaleGreen
+                        dgCartonItems.Rows(i).DefaultCellStyle.BackColor = Drawing.Color.PaleGreen
                     End If
                 Next
             End If
@@ -2458,7 +2486,7 @@ Public Class PackingListForm
         Me.Cursor = Cursors.Default
     End Sub
 
-    Private Sub msSave_Click(sender As Object, e As EventArgs) Handles msSave.Click
+    Private Async Sub msSave_Click(sender As Object, e As EventArgs) Handles msSave.Click
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
@@ -2577,8 +2605,7 @@ Public Class PackingListForm
                         U_OrderStatus(palorderid, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, "Packing", Me)
                     End If
                     If myModule.systemerrorfound = False Then
-                        myBalloon("Successfully Save", "Save", lblsavemsg, -15, -65)
-                        tsrefreshperformclick()
+                        Await AutomateContainPackingListToDefaultCartonAsync()
                     End If
                 ElseIf cue = "Edit" Then
                     If dgPackingList.Rows.Count <> 0 Then
@@ -3948,5 +3975,57 @@ Public Class PackingListForm
     End Sub
 
 #End Region
+
+    Private ReadOnly Property IsThurston As Boolean
+        Get
+            Return _systemOwner.IsThurston
+        End Get
+    End Property
+
+    Private Async Function AutomateContainPackingListToDefaultCartonAsync() As Task
+        Await FunctionUtils.TryCatchFunctionAsync("Assign this packing list to default carton size",
+            action:=
+            Async Function()
+                Dim packingListCartonDataService = GetRequiredService(Of IPackingListCartonDataService)()
+
+                Dim cartonSizeDataService = GetRequiredService(Of ICartonSizeDataService)()
+                Dim cartonSize = Await cartonSizeDataService.GetOrCreateDefaultAsync(organizationId:=Z_OrganizationID, userId:=Z_UserID)
+                Dim cartonSizeId = cartonSize.RowID.Value
+                Dim cartonNo = cartonSize.SizeName
+
+                Dim contactDataService = GetRequiredService(Of IContactDataService)()
+                Dim defaultPacker = Await contactDataService.GetOrCreateDefaultAsync(organizationId:=Z_OrganizationID,
+                    userId:=Z_UserID,
+                    contactType:=ContactType.Packer)
+                Dim packerId = defaultPacker.RowID.Value
+
+                Dim packingListDataService = GetRequiredService(Of IPackingListDataService)()
+                Dim packingList = Await packingListDataService.GetPackingListByOrderIdAsync(orderId:=palorderid)
+                Dim packingListId = packingList.RowID.Value
+                Dim packedDate = If(packingList.PackingListDate, Date.Now)
+                Dim amount = packingList.GrandTotalItemGross
+
+                Dim newPackingListCarton = PackingListCarton.NewPackingListCarton(organizationId:=Z_OrganizationID,
+                    userId:=Z_UserID,
+                    cartonSizeId:=cartonSizeId,
+                    contactId:=packerId,
+                    packingListId:=packingListId,
+                    packedDate:=packedDate,
+                    cartonNo:=cartonNo,
+                    amount:=amount)
+
+                Dim orderItems = packingList.Order.OrderItems
+                For Each item In orderItems
+                    Dim newPackingListCartonItem = PackingListCartonItem.NewPackingListCartonItem(organizationId:=Z_OrganizationID,
+                        userId:=Z_UserID,
+                        orderItemId:=item.RowID.Value,
+                        quantity:=item.QtyOrdered)
+
+                    newPackingListCarton.AddPackingListCartonItems(packingListCartonItems:=New List(Of PackingListCartonItem) From {newPackingListCartonItem})
+                Next
+
+                Await packingListCartonDataService.SaveManyAsync(userId:=Z_UserID, added:=New List(Of PackingListCarton) From {newPackingListCarton})
+            End Function)
+    End Function
 
 End Class

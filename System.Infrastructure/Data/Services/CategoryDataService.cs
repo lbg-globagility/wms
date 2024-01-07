@@ -5,11 +5,10 @@ using WarehouseManagementSystem.Core.Entities;
 using WarehouseManagementSystem.Core.Interfaces;
 using WarehouseManagementSystem.Core.Interfaces.DomainServices;
 using WarehouseManagementSystem.Core.Interfaces.Repositories;
-using WarehouseManagementSystem.Infrastructure.Data.Services.Base;
 
 namespace WarehouseManagementSystem.Infrastructure.Data.Services
 {
-    public class CategoryDataService : BaseSavableDataService<Category>, ICategoryDataService
+    public class CategoryDataService : AuditableDataService<Category>, ICategoryDataService
     {
         private readonly ICategoryRepository _categoryRepository;
 
@@ -63,5 +62,9 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
 
             return category;
         }
+
+        protected override string CreateUserActivitySuffixIdentifier(Category entity) => $" with `name` '{entity.CategoryName}' and `status` is '{entity.Status}'";
+
+        protected override string GetUserActivityName(Category entity) => _entityName;
     }
 }

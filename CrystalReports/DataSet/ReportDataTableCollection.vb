@@ -1,0 +1,2 @@
+﻿Partial Class ReportDataTableCollection
+End Class

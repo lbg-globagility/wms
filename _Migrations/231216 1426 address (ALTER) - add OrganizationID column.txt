@@ -1,0 +1,4 @@
+
+ALTER TABLE `address`
+	ADD COLUMN IF NOT EXISTS `OrganizationID` INT(11) NULL DEFAULT NULL AFTER `RowID`,
+	ADD CONSTRAINT `FK_address_organizations` FOREIGN KEY (`OrganizationID`) REFERENCES `organizations` (`RowID`) ON UPDATE RESTRICT ON DELETE RESTRICT;
