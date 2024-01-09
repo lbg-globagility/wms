@@ -4025,7 +4025,13 @@ Public Class PackingListForm
                 Next
 
                 Await packingListCartonDataService.SaveManyAsync(userId:=Z_UserID, added:=New List(Of PackingListCarton) From {newPackingListCarton})
-            End Function)
+            End Function).
+            ContinueWith(
+            continuationAction:=
+            Sub()
+                myBalloon("Successfully Save", "Save", lblsavemsg, -15, -65)
+                tsrefreshperformclick()
+            End Sub, scheduler:=TaskScheduler.FromCurrentSynchronizationContext)
     End Function
 
 End Class
