@@ -4,6 +4,7 @@ Imports WarehouseManagementSystem.Core.Entities
 Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
 Imports WarehouseManagementSystem.Core.Interfaces.Repositories
 Imports WarehouseManagementSystem.Desktop.Utilities
+Imports WarehouseManagementSystem.Infrastructure.Data.Repositories
 
 Public Class DeliveryTimestampTrackingForm
     Private ReadOnly _lineupId As Integer
@@ -59,6 +60,52 @@ Public Class DeliveryTimestampTrackingForm
                 End If
 
                 Dim lineupDataService = GetRequiredService(Of ILineupDataService)()
+
+                Dim lineup = Await lineupDataService.GetByLineupIdAsync(lineupId:=_lineupId)
+                Dim order = lineup.Order
+                Dim productColorSizeIds = New List(Of Integer)
+                For Each item1 In lineup.LineupCartons
+                    Dim packingListCartonItems = item1.PackingListCarton.PackingListCartonItems
+                    If Not packingListCartonItems.Any() Then Continue For
+
+                    For Each packingListCartonItem In packingListCartonItems
+                        productColorSizeIds.Add(packingListCartonItem.OrderItem.ProductColorSizeID.Value)
+                    Next
+                Next
+
+                Dim productInventoryLocationDataService = GetRequiredService(Of IProductInventoryLocationDataService)()
+                Dim productInventoryLocations = Await productInventoryLocationDataService.GetByInventoryLocationIdAndProductColorSizeIdsAsync(
+                    inventoryLocationId:=order.InventoryLocationID.Value,
+                    productColorSizeIds:=productColorSizeIds.ToArray())
+
+                'For Each productColorSizeId In productColorSizeIds
+                'Next
+                Dim updatedProductInventoryLocations = New List(Of ProductInventoryLocation)
+                For Each item1 In lineup.LineupCartons
+                    Dim packingListCartonItems = item1.PackingListCarton.PackingListCartonItems
+                    If Not packingListCartonItems.Any() Then Continue For
+
+                    For Each packingListCartonItem In packingListCartonItems
+                        Dim productColorSizeId = packingListCartonItem.OrderItem.ProductColorSizeID.Value
+                        Dim productInventoryLocation = productInventoryLocations.
+                            Where(Function(t) t.ProductColorSizeID = productColorSizeId).
+                            Where(Function(t) If(t.TotalReserveQty, 0) > 0 AndAlso If(t.TotalReserveQty, 0) >= If(packingListCartonItem.QtyInCarton, 0)).
+                            FirstOrDefault()
+
+                        If productInventoryLocation Is Nothing Then Continue For
+
+                        Dim qty = If(packingListCartonItem.QtyInCarton, 0)
+
+                        'productInventoryLocation.TotalReserveQty -= qty
+
+                        productInventoryLocation.TotalAvailableQty -= qty
+
+                        updatedProductInventoryLocations.Add(productInventoryLocation)
+                    Next
+                Next
+
+                Await productInventoryLocationDataService.SaveManyAsync(userId:=Z_UserID, updated:=updatedProductInventoryLocations)
+
                 Await lineupDataService.SaveManyAsync(userId:=Z_UserID, updated:=New List(Of Lineup) From {_lineup})
 
                 DialogResult = DialogResult.OK

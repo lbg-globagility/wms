@@ -1,4 +1,7 @@
-﻿using WarehouseManagementSystem.Core.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Threading.Tasks;
+using WarehouseManagementSystem.Core.Entities;
 using WarehouseManagementSystem.Core.Interfaces.Repositories;
 using WarehouseManagementSystem.Infrastructure.Data.Repositories.Base;
 

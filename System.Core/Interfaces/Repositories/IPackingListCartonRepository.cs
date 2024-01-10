@@ -1,4 +1,5 @@
-﻿using WarehouseManagementSystem.Core.Entities;
+﻿using System.Threading.Tasks;
+using WarehouseManagementSystem.Core.Entities;
 
 namespace WarehouseManagementSystem.Core.Interfaces.Repositories
 {

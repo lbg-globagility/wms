@@ -10,6 +10,7 @@
         Active,
         New,
         PickListed,
-        Cancelled
+        Cancelled,
+        PartiallyPacked
     }
 }

@@ -1,4 +1,5 @@
-﻿using WarehouseManagementSystem.Core.Entities;
+﻿using System.Threading.Tasks;
+using WarehouseManagementSystem.Core.Entities;
 using WarehouseManagementSystem.Core.Interfaces.DomainServices.Base;
 
 namespace WarehouseManagementSystem.Core.Interfaces.DomainServices

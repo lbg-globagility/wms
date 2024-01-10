@@ -45,5 +45,14 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
                 .AsNoTracking()
                 .FirstOrDefaultAsync(t => t.OrderID == orderId);
         }
+
+        public async Task<PackingList> GetPackingListByOrderIdAsync(int orderId, string packingListNo)
+        {
+            return await _context.PackingLists
+                .Include(t => t.Order)
+                    .ThenInclude(o => o.OrderItems)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(t => t.OrderID == orderId && t.PackingListNo == packingListNo);
+        }
     }
 }

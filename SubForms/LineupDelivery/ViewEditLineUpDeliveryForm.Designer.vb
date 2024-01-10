@@ -23,12 +23,12 @@ Partial Class ViewEditLineUpDeliveryForm
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim DataGridViewCellStyle26 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle27 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle16 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle17 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ViewEditLineUpDeliveryForm))
-        Dim DataGridViewCellStyle28 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle29 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle30 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle18 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle19 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle20 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.Label16 = New System.Windows.Forms.Label()
         Me.dgLineUpList = New DevComponents.DotNetBar.Controls.DataGridViewX()
         Me.lu_rowid = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -82,9 +82,10 @@ Partial Class ViewEditLineUpDeliveryForm
         Me.Label24 = New System.Windows.Forms.Label()
         Me.txtBoxCBM = New System.Windows.Forms.TextBox()
         Me.Label23 = New System.Windows.Forms.Label()
+        Me.btnAddCarton = New System.Windows.Forms.Button()
+        Me.FlowLayoutPanel1 = New System.Windows.Forms.FlowLayoutPanel()
         Me.lblCartonNoE = New System.Windows.Forms.Label()
         Me.cboCartonNo = New System.Windows.Forms.ComboBox()
-        Me.btnAddCarton = New System.Windows.Forms.Button()
         Me.gbLineUpInformation = New System.Windows.Forms.GroupBox()
         Me.btnAddHelper2 = New System.Windows.Forms.PictureBox()
         Me.btnAddHelper1 = New System.Windows.Forms.PictureBox()
@@ -150,7 +151,6 @@ Partial Class ViewEditLineUpDeliveryForm
         Me.lblsavemsg = New System.Windows.Forms.Label()
         Me.errProvider = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.lblTitle = New System.Windows.Forms.Label()
-        Me.FlowLayoutPanel1 = New System.Windows.Forms.FlowLayoutPanel()
         CType(Me.dgLineUpList, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ToolStrip3.SuspendLayout()
         Me.gbLineUpList.SuspendLayout()
@@ -165,6 +165,7 @@ Partial Class ViewEditLineUpDeliveryForm
         Me.gbCartons.SuspendLayout()
         CType(Me.dgCartons, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.gbAddProductItem.SuspendLayout()
+        Me.FlowLayoutPanel1.SuspendLayout()
         Me.gbLineUpInformation.SuspendLayout()
         CType(Me.btnAddHelper2, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.btnAddHelper1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -173,7 +174,6 @@ Partial Class ViewEditLineUpDeliveryForm
         CType(Me.pbAddTruckShiftInfo, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.msMenu.SuspendLayout()
         CType(Me.errProvider, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.FlowLayoutPanel1.SuspendLayout()
         Me.SuspendLayout()
         '
         'Label16
@@ -197,24 +197,24 @@ Partial Class ViewEditLineUpDeliveryForm
         Me.dgLineUpList.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.dgLineUpList.BackgroundColor = System.Drawing.Color.White
-        DataGridViewCellStyle26.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle26.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle26.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle26.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle26.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle26.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle26.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgLineUpList.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle26
+        DataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle16.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle16.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle16.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle16.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle16.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle16.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgLineUpList.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle16
         Me.dgLineUpList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.dgLineUpList.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.lu_rowid, Me.lu_lineupno, Me.lu_deliveryno, Me.lu_customerorderinfo, Me.lu_deliverydate})
-        DataGridViewCellStyle27.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle27.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle27.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle27.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle27.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle27.SelectionForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle27.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.dgLineUpList.DefaultCellStyle = DataGridViewCellStyle27
+        DataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle17.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle17.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle17.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle17.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle17.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle17.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.dgLineUpList.DefaultCellStyle = DataGridViewCellStyle17
         Me.dgLineUpList.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
         Me.dgLineUpList.Location = New System.Drawing.Point(7, 68)
         Me.dgLineUpList.MultiSelect = False
@@ -388,8 +388,8 @@ Partial Class ViewEditLineUpDeliveryForm
         Me.SplitContainer1.Panel2.Controls.Add(Me.gbLineUpInformation)
         Me.SplitContainer1.Panel2.Controls.Add(Me.msMenu)
         Me.SplitContainer1.Panel2.Controls.Add(Me.lblsavemsg)
-        Me.SplitContainer1.Size = New System.Drawing.Size(984, 534)
-        Me.SplitContainer1.SplitterDistance = 357
+        Me.SplitContainer1.Size = New System.Drawing.Size(1000, 534)
+        Me.SplitContainer1.SplitterDistance = 362
         Me.SplitContainer1.TabIndex = 236
         '
         'gbSearch
@@ -595,36 +595,36 @@ Partial Class ViewEditLineUpDeliveryForm
         Me.dgCartons.AllowUserToOrderColumns = True
         Me.dgCartons.AllowUserToResizeRows = False
         Me.dgCartons.BackgroundColor = System.Drawing.Color.White
-        DataGridViewCellStyle28.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle28.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle28.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle28.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle28.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle28.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle28.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgCartons.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle28
+        DataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle18.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle18.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle18.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle18.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle18.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle18.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgCartons.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle18
         Me.dgCartons.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.dgCartons.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ca_rowid, Me.ca_packinglistcartonid, Me.ca_seqno, Me.ca_cartonno, Me.ca_cbm, Me.ca_sizename, Me.ca_packername, Me.ca_status, Me.ca_packeddate, Me.ca_option})
-        DataGridViewCellStyle29.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle29.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle29.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle29.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle29.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle29.SelectionForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle29.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.dgCartons.DefaultCellStyle = DataGridViewCellStyle29
+        DataGridViewCellStyle19.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle19.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle19.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle19.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle19.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle19.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle19.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.dgCartons.DefaultCellStyle = DataGridViewCellStyle19
         Me.dgCartons.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
         Me.dgCartons.Location = New System.Drawing.Point(8, 51)
         Me.dgCartons.MultiSelect = False
         Me.dgCartons.Name = "dgCartons"
-        DataGridViewCellStyle30.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle30.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle30.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle30.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle30.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle30.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle30.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgCartons.RowHeadersDefaultCellStyle = DataGridViewCellStyle30
+        DataGridViewCellStyle20.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle20.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle20.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle20.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle20.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle20.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle20.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgCartons.RowHeadersDefaultCellStyle = DataGridViewCellStyle20
         Me.dgCartons.RowHeadersVisible = False
         Me.dgCartons.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.dgCartons.Size = New System.Drawing.Size(589, 171)
@@ -717,7 +717,7 @@ Partial Class ViewEditLineUpDeliveryForm
         Me.gbAddProductItem.Controls.Add(Me.Label23)
         Me.gbAddProductItem.Controls.Add(Me.btnAddCarton)
         Me.gbAddProductItem.Controls.Add(Me.FlowLayoutPanel1)
-        Me.gbAddProductItem.Location = New System.Drawing.Point(8, 8)
+        Me.gbAddProductItem.Location = New System.Drawing.Point(8, 6)
         Me.gbAddProductItem.Name = "gbAddProductItem"
         Me.gbAddProductItem.Size = New System.Drawing.Size(589, 39)
         Me.gbAddProductItem.TabIndex = 38
@@ -761,6 +761,28 @@ Partial Class ViewEditLineUpDeliveryForm
         Me.Label23.TabIndex = 451
         Me.Label23.Text = "CBM:"
         '
+        'btnAddCarton
+        '
+        Me.btnAddCarton.BackColor = System.Drawing.Color.DeepSkyBlue
+        Me.btnAddCarton.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue
+        Me.btnAddCarton.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btnAddCarton.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnAddCarton.Image = CType(resources.GetObject("btnAddCarton.Image"), System.Drawing.Image)
+        Me.btnAddCarton.Location = New System.Drawing.Point(526, 7)
+        Me.btnAddCarton.Name = "btnAddCarton"
+        Me.btnAddCarton.Size = New System.Drawing.Size(45, 30)
+        Me.btnAddCarton.TabIndex = 42
+        Me.btnAddCarton.UseVisualStyleBackColor = False
+        '
+        'FlowLayoutPanel1
+        '
+        Me.FlowLayoutPanel1.Controls.Add(Me.lblCartonNoE)
+        Me.FlowLayoutPanel1.Controls.Add(Me.cboCartonNo)
+        Me.FlowLayoutPanel1.Location = New System.Drawing.Point(0, 8)
+        Me.FlowLayoutPanel1.Name = "FlowLayoutPanel1"
+        Me.FlowLayoutPanel1.Size = New System.Drawing.Size(264, 28)
+        Me.FlowLayoutPanel1.TabIndex = 298
+        '
         'lblCartonNoE
         '
         Me.lblCartonNoE.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -779,19 +801,6 @@ Partial Class ViewEditLineUpDeliveryForm
         Me.cboCartonNo.Name = "cboCartonNo"
         Me.cboCartonNo.Size = New System.Drawing.Size(124, 23)
         Me.cboCartonNo.TabIndex = 39
-        '
-        'btnAddCarton
-        '
-        Me.btnAddCarton.BackColor = System.Drawing.Color.DeepSkyBlue
-        Me.btnAddCarton.FlatAppearance.BorderColor = System.Drawing.Color.DodgerBlue
-        Me.btnAddCarton.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btnAddCarton.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnAddCarton.Image = CType(resources.GetObject("btnAddCarton.Image"), System.Drawing.Image)
-        Me.btnAddCarton.Location = New System.Drawing.Point(526, 7)
-        Me.btnAddCarton.Name = "btnAddCarton"
-        Me.btnAddCarton.Size = New System.Drawing.Size(45, 30)
-        Me.btnAddCarton.TabIndex = 42
-        Me.btnAddCarton.UseVisualStyleBackColor = False
         '
         'gbLineUpInformation
         '
@@ -1400,7 +1409,7 @@ Partial Class ViewEditLineUpDeliveryForm
         Me.msMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.msSave, Me.msToDeliver, Me.msOrder, Me.msPrint, Me.msConfirm})
         Me.msMenu.Location = New System.Drawing.Point(0, 0)
         Me.msMenu.Name = "msMenu"
-        Me.msMenu.Size = New System.Drawing.Size(612, 24)
+        Me.msMenu.Size = New System.Drawing.Size(613, 24)
         Me.msMenu.TabIndex = 18
         '
         'msSave
@@ -1477,19 +1486,10 @@ Partial Class ViewEditLineUpDeliveryForm
         Me.lblTitle.ForeColor = System.Drawing.Color.MidnightBlue
         Me.lblTitle.Location = New System.Drawing.Point(0, 0)
         Me.lblTitle.Name = "lblTitle"
-        Me.lblTitle.Size = New System.Drawing.Size(984, 28)
+        Me.lblTitle.Size = New System.Drawing.Size(1000, 28)
         Me.lblTitle.TabIndex = 234
         Me.lblTitle.Text = "View / Edit Line-Up And Delivery"
         Me.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'FlowLayoutPanel1
-        '
-        Me.FlowLayoutPanel1.Controls.Add(Me.lblCartonNoE)
-        Me.FlowLayoutPanel1.Controls.Add(Me.cboCartonNo)
-        Me.FlowLayoutPanel1.Location = New System.Drawing.Point(0, 8)
-        Me.FlowLayoutPanel1.Name = "FlowLayoutPanel1"
-        Me.FlowLayoutPanel1.Size = New System.Drawing.Size(264, 28)
-        Me.FlowLayoutPanel1.TabIndex = 298
         '
         'ViewEditLineUpDeliveryForm
         '
@@ -1497,13 +1497,12 @@ Partial Class ViewEditLineUpDeliveryForm
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.AutoScroll = True
         Me.BackColor = System.Drawing.Color.White
-        Me.ClientSize = New System.Drawing.Size(984, 562)
+        Me.ClientSize = New System.Drawing.Size(1000, 562)
         Me.Controls.Add(Me.SplitContainer1)
         Me.Controls.Add(Me.lblTitle)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.KeyPreview = True
-        Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "ViewEditLineUpDeliveryForm"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
@@ -1529,6 +1528,7 @@ Partial Class ViewEditLineUpDeliveryForm
         CType(Me.dgCartons, System.ComponentModel.ISupportInitialize).EndInit()
         Me.gbAddProductItem.ResumeLayout(False)
         Me.gbAddProductItem.PerformLayout()
+        Me.FlowLayoutPanel1.ResumeLayout(False)
         Me.gbLineUpInformation.ResumeLayout(False)
         Me.gbLineUpInformation.PerformLayout()
         CType(Me.btnAddHelper2, System.ComponentModel.ISupportInitialize).EndInit()
@@ -1539,7 +1539,6 @@ Partial Class ViewEditLineUpDeliveryForm
         Me.msMenu.ResumeLayout(False)
         Me.msMenu.PerformLayout()
         CType(Me.errProvider, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.FlowLayoutPanel1.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub

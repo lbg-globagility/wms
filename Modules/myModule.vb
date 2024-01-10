@@ -454,11 +454,23 @@ Module myModule
         End Try
     End Sub
 
+    Private fsdfsd As String = "
+        UNION
+        SELECT
+        DISTINCT CONCAT(COALESCE(a.CompanyName,''),' - ',COALESCE(a.AccountNo,''),' / ',CONCAT(COALESCE(o.OrderNumber,''),' (C.O. No.)'))
+        FROM packinglistcartonitems plo
+        INNER JOIN orderitems oi ON oi.RowID=plo.OrderItemID
+        INNER JOIN packinglistcartons plc ON plc.RowID=plo.PackingListCartonID
+        INNER JOIN packinglist pl ON pl.RowID=plc.PackingListID
+        INNER JOIN orders o ON o.RowID=pl.OrderID AND o.OrderType='CO'
+        INNER JOIN accounts a ON a.RowID=o.AccountID
+        WHERE (plo.QtyInCarton MOD oi.QtyOrdered) != 0"
+
     Sub globalautocompleteOrderInfoA(ByVal globalicombobox As ComboBox, ByVal globaliordertype As String, ByVal globaliorderstatus As String, ByVal globalformname As Object)
         Try
             Dim orderinfo As New AutoCompleteStringCollection
-            Dim cmd1 As New MySqlCommand("SELECT COALESCE(CONCAT(COALESCE(a.companyname,''),' - ',COALESCE(a.accountno,''),' / ',CONCAT(COALESCE(o.ordernumber,''),' (C.O. No.)')),'') AS 'companyname' FROM orders o LEFT JOIN accounts a ON o.accountid = a.rowid WHERE o.organizationid = " & Z_OrganizationID & " AND o.`status` = '" & globaliorderstatus & "' AND o.ordertype = '" & globaliordertype & "' GROUP BY o.rowid ", globalconn)
-            Dim cmd2 As New MySqlCommand("SELECT COALESCE(CONCAT(COALESCE(o.ordernumber,''),' (C.O. No.) / ',COALESCE(a.companyname,''),' - ',COALESCE(a.accountno,'')),'') AS 'ordernumber' FROM orders o LEFT JOIN accounts a ON o.accountid = a.rowid WHERE o.organizationid = " & Z_OrganizationID & " AND o.`status` = '" & globaliorderstatus & "' AND o.ordertype = '" & globaliordertype & "' GROUP BY o.rowid ", globalconn)
+            Dim cmd1 As New MySqlCommand($"SELECT COALESCE(CONCAT(COALESCE(a.companyname,''),' - ',COALESCE(a.accountno,''),' / ',CONCAT(COALESCE(o.ordernumber,''),' (C.O. No.)')),'') AS 'companyname' FROM orders o LEFT JOIN accounts a ON o.accountid = a.rowid WHERE o.organizationid = {Z_OrganizationID} AND o.`status` = '{globaliorderstatus}' AND o.ordertype = '{globaliordertype}' GROUP BY o.rowid {fsdfsd}", globalconn)
+            Dim cmd2 As New MySqlCommand($"SELECT COALESCE(CONCAT(COALESCE(o.ordernumber,''),' (C.O. No.) / ',COALESCE(a.companyname,''),' - ',COALESCE(a.accountno,'')),'') AS 'ordernumber' FROM orders o LEFT JOIN accounts a ON o.accountid = a.rowid WHERE o.organizationid = {Z_OrganizationID} AND o.`status` = '{globaliorderstatus}' AND o.ordertype = '{globaliordertype}' GROUP BY o.rowid {fsdfsd}", globalconn)
             Dim da1 As New MySqlDataAdapter(cmd1)
             Dim da2 As New MySqlDataAdapter(cmd2)
             Dim ds1 As New DataSet
@@ -557,7 +569,7 @@ Module myModule
             Dim truckshiftinfo As New AutoCompleteStringCollection
             'COALESCE(CONCAT(COALESCE(dt.truckname,''),' - ',COALESCE(dt.truckno,''),' / ',COALESCE(s.shiftname,'')),'')
             'CONCAT_WS(' - ', dt.YearAndModel, dt.truckno, s.shiftname)
-            Dim cmd As New MySqlCommand("SELECT CONCAT_WS(' - ', dt.YearAndModel, dt.PlateNo) AS 'truckshiftinfo' FROM deliverytruckshifts dts " &
+            Dim cmd As New MySqlCommand("SELECT IFNULL(dt.truckname, '') AS 'truckshiftinfo' FROM deliverytruckshifts dts " &
                             "LEFT JOIN deliverytrucks dt ON dts.deliverytruckid = dt.rowid LEFT JOIN shifts s ON dts.shiftid = s.rowid WHERE dts.organizationid = " & Z_OrganizationID & " AND dts.`status` = 'Active' GROUP BY dts.rowid ", globalconn)
             Dim ds As New DataSet
             Dim da As New MySqlDataAdapter(cmd)
@@ -945,7 +957,7 @@ Module myModule
         Try
             globalicombobox.Items.Clear()
             If globalconn.State = ConnectionState.Open Then globalconn.Close()
-            Dim sql1 As String = "SELECT COALESCE(CONCAT(COALESCE(o.ordernumber,''),' (C.O. No.) / ',COALESCE(a.companyname,''),' - ',COALESCE(a.accountno,'')),'') AS 'ordernumber' FROM orders o LEFT JOIN accounts a ON o.accountid = a.rowid WHERE o.organizationid = " & Z_OrganizationID & " AND o.status = '" & globaliorderstatus & "' AND o.ordertype = '" & globaliordertype & "' GROUP BY o.rowid ORDER BY o.ordernumber "
+            Dim sql1 As String = $"(SELECT COALESCE(CONCAT(COALESCE(o.ordernumber,''),' (C.O. No.) / ',COALESCE(a.companyname,''),' - ',COALESCE(a.accountno,'')),'') AS 'ordernumber' FROM orders o LEFT JOIN accounts a ON o.accountid = a.rowid WHERE o.organizationid = {Z_OrganizationID} AND o.status = '{globaliorderstatus}' AND o.ordertype = '{globaliordertype}' GROUP BY o.rowid ORDER BY o.ordernumber) {fsdfsd}"
             If globalconn.State = ConnectionState.Closed Then globalconn.Open()
             Dim cmd1 As New MySqlCommand(sql1, globalconn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader()
@@ -1027,7 +1039,7 @@ Module myModule
             If globalconn.State = ConnectionState.Open Then globalconn.Close()
             'COALESCE(CONCAT(COALESCE(dt.truckname,''),' - ',COALESCE(dt.truckno,''),' / ',COALESCE(s.shiftname,'')),'')
             'CONCAT_WS(' - ', dt.truckname, dt.truckno, s.shiftname)
-            Dim sql1 As String = "SELECT CONCAT_WS(' - ', dt.YearAndModel, dt.PlateNo) AS 'truckshiftinfo' FROM deliverytruckshifts dts " &
+            Dim sql1 As String = "SELECT IFNULL(dt.truckname, '') AS 'truckshiftinfo' FROM deliverytruckshifts dts " &
                     "LEFT JOIN deliverytrucks dt ON dts.deliverytruckid = dt.rowid LEFT JOIN shifts s ON dts.shiftid = s.rowid WHERE dts.organizationid = " & Z_OrganizationID & " AND dts.`status` = 'Active' GROUP BY dts.rowid ORDER BY dt.truckname,s.shiftname DESC "
             If globalconn.State = ConnectionState.Closed Then globalconn.Open()
             Dim cmd1 As New MySqlCommand(sql1, globalconn)
@@ -2876,7 +2888,7 @@ Module myModule
             If globalconn.State = ConnectionState.Open Then globalconn.Close()
             Dim dtGid As New DataTable
             'COALESCE(CONCAT(COALESCE(dt.truckname,''),' - ',COALESCE(dt.truckno,''),' / ',COALESCE(s.shiftname,'')),'')
-            dtGid = getDataTableForSQL("SELECT COALESCE(dts.rowid,0),COALESCE(dts.deliverytruckid,0)  FROM deliverytruckshifts dts LEFT JOIN deliverytrucks dt ON dts.deliverytruckid = dt.rowid LEFT JOIN shifts s ON dts.shiftid = s.rowid WHERE CONCAT_WS(' - ', dt.YearAndModel, dt.PlateNo) = '" & globaltruckshiftinfo & "' AND dts.organizationid = " & Z_OrganizationID & " " & globalistatuscondition & " ")
+            dtGid = getDataTableForSQL("SELECT COALESCE(dts.rowid,0),COALESCE(dts.deliverytruckid,0)  FROM deliverytruckshifts dts LEFT JOIN deliverytrucks dt ON dts.deliverytruckid = dt.rowid LEFT JOIN shifts s ON dts.shiftid = s.rowid WHERE IFNULL(dt.truckname, '') = '" & globaltruckshiftinfo & "' AND dts.organizationid = " & Z_OrganizationID & " " & globalistatuscondition & " ")
             If dtGid.Rows.Count <> 0 Then
                 globaldeliverytruckshiftid = dtGid.Rows(0)(0)
                 globaldeliverytruckid = dtGid.Rows(0)(1)

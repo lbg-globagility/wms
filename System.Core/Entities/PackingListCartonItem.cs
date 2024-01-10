@@ -33,6 +33,7 @@ namespace WarehouseManagementSystem.Core.Entities
         public bool IsDelivered => Status == PackingListCartonItemStatus.Delivered;
         public bool IsInactive => Status == PackingListCartonItemStatus.Inactive;
         public virtual PackingListCarton PackingListCarton { get; set; }
+        public virtual OrderItem OrderItem { get; set; }
 
         public static PackingListCartonItem NewPackingListCartonItem(int organizationId,
             int userId,

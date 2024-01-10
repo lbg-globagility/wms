@@ -6,11 +6,14 @@ using WarehouseManagementSystem.Core.Entities;
 using WarehouseManagementSystem.Core.Interfaces;
 using WarehouseManagementSystem.Core.Interfaces.DomainServices;
 using WarehouseManagementSystem.Core.Interfaces.Repositories;
+using WarehouseManagementSystem.Infrastructure.Data.Repositories;
 
 namespace WarehouseManagementSystem.Infrastructure.Data.Services
 {
     public class PackingListCartonDataService : AuditableDataService<PackingListCarton>, IPackingListCartonDataService
     {
+        private readonly IPackingListCartonRepository _packingListCartonRepositry;
+
         public PackingListCartonDataService(IPackingListCartonRepository packingListCartonRepositry,
             IUserActivityRepository userActivityRepository,
             SystemContext context,
@@ -22,6 +25,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
                 policy,
                 entityName: "PackingListCarton")
         {
+            _packingListCartonRepositry = packingListCartonRepositry;
         }
 
         protected override string CreateUserActivitySuffixIdentifier(PackingListCarton entity) => $"CartonNo: {entity.CartonNo}";

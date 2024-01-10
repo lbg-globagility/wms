@@ -24,5 +24,7 @@ namespace WarehouseManagementSystem.Core.Entities
         public virtual Order Order { get; set; }
 
         public decimal GrandTotalItemGross => Order?.OrderItems?.Sum(t => t.TotalItemGross) ?? 0M;
+
+        public virtual ICollection<PackingListCarton> PackingListCartons { get; set; }
     }
 }

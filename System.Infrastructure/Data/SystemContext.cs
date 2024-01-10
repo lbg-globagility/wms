@@ -296,7 +296,8 @@ namespace WarehouseManagementSystem.Infrastructure.Data
                         s == OrderItemStatus.Packed.ToString() ? OrderItemStatus.Packed :
                         s == OrderItemStatus.Active.ToString() ? OrderItemStatus.Active :
                         s == OrderItemStatus.New.ToString() ? OrderItemStatus.New :
-                        s == "Pick Listed" ? OrderItemStatus.PickListed : default;
+                        s == "Pick Listed" ? OrderItemStatus.PickListed :
+                        s == "Partially Packed" ? OrderItemStatus.PartiallyPacked : default;
                 }
 
                 // database value
@@ -309,7 +310,8 @@ namespace WarehouseManagementSystem.Infrastructure.Data
                         l == OrderItemStatus.Packed ? OrderItemStatus.Packed.ToString() :
                         l == OrderItemStatus.Active ? OrderItemStatus.Active.ToString() :
                         l == OrderItemStatus.New ? OrderItemStatus.New.ToString() :
-                        l == OrderItemStatus.PickListed ? "Pick Listed" : default;
+                        l == OrderItemStatus.PickListed ? "Pick Listed" :
+                        l == OrderItemStatus.PartiallyPacked ? "Partially Packed" : default;
                 }
 
                 var converter = new ValueConverter<OrderItemStatus, string>(convertToProviderExpression: OrderItemStatusToString(),
@@ -322,7 +324,14 @@ namespace WarehouseManagementSystem.Infrastructure.Data
             modelBuilder.Entity<Lineup>(t =>
             {
                 t.HasOne(x => x.Order)
-                    .WithMany(x => x.Lineups);
+                    .WithMany(x => x.Lineups)
+                    .HasForeignKey(x => x.OrderID)
+                    .HasPrincipalKey(x => x.RowID);
+
+                t.HasMany(x => x.LineupCartons)
+                    .WithOne(x => x.Lineup)
+                    .HasForeignKey(x => x.LineUpID)
+                    .HasPrincipalKey(x => x.RowID);
             });
 
             modelBuilder.Entity<Product>(t =>
@@ -495,6 +504,11 @@ namespace WarehouseManagementSystem.Infrastructure.Data
             {
                 t.HasOne(x => x.Order)
                     .WithOne(x => x.PackingList);
+
+                t.HasMany(x => x.PackingListCartons)
+                    .WithOne(x => x.PackingList)
+                    .HasForeignKey(x => x.PackingListID)
+                    .HasPrincipalKey(x => x.RowID);
             });
 
             modelBuilder.Entity<PackingListCarton>(t =>
@@ -503,13 +517,20 @@ namespace WarehouseManagementSystem.Infrastructure.Data
                     .HasConversion(new EnumToStringConverter<PackingListCartonStatus>());
 
                 t.HasMany(x => x.PackingListCartonItems)
-                    .WithOne(x => x.PackingListCarton);
+                    .WithOne(x => x.PackingListCarton)
+                    .HasForeignKey(x => x.PackingListCartonID)
+                    .HasPrincipalKey(x => x.RowID);
             });
 
             modelBuilder.Entity<PackingListCartonItem>(t =>
             {
                 t.Property(x => x.Status)
                     .HasConversion(new EnumToStringConverter<PackingListCartonItemStatus>());
+
+                t.HasOne(x => x.OrderItem)
+                    .WithMany(x => x.PackingListCartonItems)
+                    .HasForeignKey(x => x.OrderItemID)
+                    .HasPrincipalKey(x => x.RowID);
             });
 
             modelBuilder.Entity<CartonSize>(t => {

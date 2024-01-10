@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using WarehouseManagementSystem.Core.Entities.Base;
 using WarehouseManagementSystem.Core.Enums;
 
@@ -29,6 +31,10 @@ namespace WarehouseManagementSystem.Core.Entities
         public bool IsConfirmedDelivery => Status == LineupStatus.ConfirmedDelivery;
         public bool IsDelivered => Status == LineupStatus.Delivered;
         public bool IsCancelled => Status == LineupStatus.Cancelled;
+
+        public virtual ICollection<LineupCarton> LineupCartons { get; set; }
+        public bool HasPackingListCartonItems => LineupCartons?.Any(t => t.PackingListCarton?.PackingListCartonItems?.Any() ?? false) ?? false;
+        public virtual PackingList  PackingList { get; set; }
 
         public void SetConfirmedDeliveryTimeStamp(DateTime? dateTime)
         {

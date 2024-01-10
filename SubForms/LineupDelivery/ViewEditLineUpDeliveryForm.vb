@@ -1258,7 +1258,7 @@ Public Class ViewEditLineUpDeliveryForm
     Sub displayLineUpInformation(ByVal ilineupid As Integer)
         Try
             Dim dtLUinfo As New DataTable
-            dtLUinfo = getDataTableForSQL("SELECT COALESCE(lu.lineupno,''),COALESCE(DATE_FORMAT(lu.lineupdate,'%d-%b-%Y'),''),COALESCE(o.drnumber,''),COALESCE(DATE_FORMAT(lu.deliverydate,'%d-%b-%Y'),''),CONCAT_WS(' - ', dt.YearAndModel, dt.PlateNo),COALESCE(lu.status,'')," &
+            dtLUinfo = getDataTableForSQL("SELECT COALESCE(lu.lineupno,''),COALESCE(DATE_FORMAT(lu.lineupdate,'%d-%b-%Y'),''),COALESCE(o.drnumber,''),COALESCE(DATE_FORMAT(lu.deliverydate,'%d-%b-%Y'),''),IFNULL(dt.truckname, ''),COALESCE(lu.status,'')," &
                         "COALESCE(CONCAT(COALESCE(c.firstname,''),' ',COALESCE(c.middlename,''),' ',COALESCE(c.lastname,''),' ',COALESCE(c.suffix,''),' - ',COALESCE(c.contactno,'')),''),COALESCE(CONCAT(COALESCE(o.ordernumber,''),' (C.O. No.) / ', COALESCE(a.companyname,''),' - ', COALESCE(a.accountno,''),' / ',CONCAT(COALESCE(pl.packinglistno,''),' (Pa.L. No.)')),'')," &
                         "COALESCE(DATE_FORMAT(o.orderdate,'%d-%b-%Y'),''),COALESCE(DATE_FORMAT(o.targetdate,'%d-%b-%Y'),''),COALESCE(o.customeraddress,''),COALESCE(lu.comments,''),COALESCE(o.deliveryhours,''),COALESCE(lu.packinglistid,0),COALESCE(lu.orderid,0),COALESCE(o.referencenumber,''),COALESCE(DATE_FORMAT(o.enddate,'%d-%b-%Y'),''),COALESCE(CONCAT(COALESCE(bc.branchcode,''),' - ',COALESCE(bc.branchname,'')),'')," &
                         "COALESCE(CONCAT(COALESCE(ve.companyname,''),' - ',COALESCE(ve.companycode,'')),''),COALESCE(CONCAT(COALESCE(cc.codename,''),' / ',COALESCE(c1.codeno,''),'-',COALESCE(c2.codeno,''),'-',COALESCE(c3.codeno,'')),''), lu.AgentId, lu.Helper1Id, lu.Helper2Id FROM lineups lu LEFT JOIN orders o ON lu.orderid = o.rowid LEFT JOIN deliverytruckshifts dts ON lu.deliverytruckshiftid = dts.rowid LEFT JOIN combinecodings cc ON o.combinecodingid = cc.rowid LEFT JOIN codings c1 ON cc.codingida = c1.rowid " &
@@ -1298,7 +1298,14 @@ Public Class ViewEditLineUpDeliveryForm
             dgCartons.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
             Dim sql1 As String = "SELECT luc.rowid,luc.packinglistcartonid,COALESCE(pc.cartonno,''),COALESCE(CONCAT(COALESCE(c.firstname,''),' ',COALESCE(c.middlename,''),' ',COALESCE(c.lastname,''),' ',COALESCE(c.suffix,''),' - ',COALESCE(c.contactno,'')),''),COALESCE(DATE_FORMAT(pc.packeddate,'%d-%b-%Y'),''),COALESCE(luc.`status`,''),COALESCE(cs.sizename,''),COALESCE(cs.`length`,0)," &
-                        "COALESCE(cs.`width`,0),COALESCE(cs.`height`,0) FROM lineupcartons luc LEFT JOIN packinglistcartons pc ON luc.packinglistcartonid = pc.rowid LEFT JOIN contacts c ON pc.contactid = c.rowid LEFT JOIN cartonsizes cs ON pc.cartonsizeid = cs.rowid WHERE luc.lineupid = " & ilineupid & " AND luc.organizationid = " & Z_OrganizationID & " AND luc.`status` != 'Inactive' ORDER BY pc.cartonno "
+                        $"COALESCE(cs.`width`,0),COALESCE(cs.`height`,0) FROM packinglistcartons pc
+                        INNER JOIN packinglist pl ON pl.RowID=pc.PackingListID
+                        INNER JOIN lineupcartons luc ON luc.PackingListCartonID=pc.RowID
+                        INNER JOIN lineups lu ON lu.RowID=luc.LineUpID AND lu.LineUpNo={ilineupid}
+                        LEFT JOIN contacts c ON pc.contactid = c.rowid
+                        LEFT JOIN cartonsizes cs ON pc.cartonsizeid = cs.rowid
+                        INNER JOIN packinglistcartonitems plci ON plci.PackingListCartonID=pc.RowID
+                        WHERE luc.organizationid = " & Z_OrganizationID & " AND luc.`status` != 'Inactive' HAVING COUNT(plci.RowID) > 0 ORDER BY pc.cartonno "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             Dim n As Integer = 0
@@ -2318,7 +2325,7 @@ Public Class ViewEditLineUpDeliveryForm
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
-                If globalcreateflg = "Y" Then
+                If globalcreateflg = "N" Or globalupdateflg = "N" Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
@@ -2498,7 +2505,7 @@ Public Class ViewEditLineUpDeliveryForm
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
-                If globalcreateflg = "Y" Then
+                If globalcreateflg = "N" Or globalupdateflg = "N" Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
