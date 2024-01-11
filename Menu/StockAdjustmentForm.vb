@@ -1250,7 +1250,7 @@ Public Class StockAdjustmentForm
                     'End If
                     getOrderNo(globaliordertype:=OrderType.SA.ToString(), Me)
                     M_I_Orders(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, DBNull.Value, globalorderno, OrderType:=OrderType.SA.ToString(),
-                            dtpStockAdjustmentDate.Value, DBNull.Value, "", txtComments.Text, "For Approval", 0, txtAdjustedBy.Text, DBNull.Value, DBNull.Value, DBNull.Value, "", "", "", "", Me)
+                            dtpStockAdjustmentDate.Value, DBNull.Value, "", txtComments.Text, "For Approval", 0, txtAdjustedBy.Text, DBNull.Value, DBNull.Value, DBNull.Value, "", "", "", "", Nothing, Me)
                     orderid = globalorderidsp
                     If dgStockAdjustmentItems.Rows.Count <> 0 Then
                         For a = 0 To dgStockAdjustmentItems.Rows.Count - 1

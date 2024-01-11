@@ -1126,7 +1126,7 @@ Public Class StockTransferForm
                     End If
                     getOrderNo(globaliordertype:=OrderType.ST.ToString(), Me)
                     M_I_Orders(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, DBNull.Value, CStr(globalorderno), OrderType.ST.ToString(),
-                            dtpStockTransferDate.Value, DBNull.Value, "", txtComments.Text, txtStatus.Text, 0, txtTransferedBy.Text, DBNull.Value, DBNull.Value, DBNull.Value, "", "", "", "", Me)
+                            dtpStockTransferDate.Value, DBNull.Value, "", txtComments.Text, txtStatus.Text, 0, txtTransferedBy.Text, DBNull.Value, DBNull.Value, DBNull.Value, "", "", "", "", Nothing, Me)
                     storderid = globalorderidsp
                     If dgRackShelfColumnFrom.Rows.Count <> 0 Then
                         For a = 0 To dgRackShelfColumnFrom.Rows.Count - 1

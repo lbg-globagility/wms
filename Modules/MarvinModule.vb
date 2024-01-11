@@ -706,6 +706,7 @@ Module MarvinModule
                      ByVal ContainerNo As String,
                      ByVal SealNo As String,
                      ByVal ArrivedIn As String,
+                     ByVal InventoryLocationID As Integer,
                      ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
@@ -739,6 +740,7 @@ Module MarvinModule
                 .Parameters.AddWithValue("I_ContainerNo", ContainerNo)
                 .Parameters.AddWithValue("I_SealNo", SealNo)
                 .Parameters.AddWithValue("I_ArrivedIn", ArrivedIn)
+                .Parameters.AddWithValue("I_InventoryLocationId", InventoryLocationID)
                 .Parameters("newOrdersID").Direction = ParameterDirection.ReturnValue
                 globaldatareader = .ExecuteReader
                 globalorderidsp = globaldatareader(0)

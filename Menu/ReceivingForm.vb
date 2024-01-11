@@ -2,6 +2,7 @@
 Imports WarehouseManagementSystem.Core.Entities
 Imports WarehouseManagementSystem.Core.Enums
 Imports WarehouseManagementSystem.Core.Interfaces
+Imports WarehouseManagementSystem.Core.Interfaces.Repositories
 
 Public Class ReceivingForm
     Dim manager As New sqlModule.Manager
@@ -72,12 +73,15 @@ Public Class ReceivingForm
     Sub callAutoComplete()
         globalautocompleteAccountNameReceiving(cboAccountName, Me)
         globalautocompleteReceivedBy(cboReceivedBy, Me)
+
     End Sub
 
     Sub callAutoPopulate()
         autopopulatecboSearch()
         globalautopopulateAccountNameReceiving(cboAccountName, Me)
         globalautopopulateReceivedBy(cboReceivedBy, Me)
+        globalautopopulateInventorySource(cboInventorySource, Me)
+        LoadInventoryLocationsAsync()
     End Sub
 
 #Region "Computations"
@@ -202,6 +206,8 @@ Public Class ReceivingForm
             txtSealNo.Text = ""
             cboReceivedBy.SelectedItem = Nothing
             cboAccountName.SelectedItem = Nothing
+            cboInventorySource.SelectedItem = "Main"
+            cboInventoryLocation.SelectedItem = Nothing
             dtpRRDate.Value = Now.Date
             dtpTimeArrived.Value = New DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 10, 0, 0)
         Catch ex As Exception
@@ -282,6 +288,26 @@ Public Class ReceivingForm
         ci_qtyordered.Visible = visible1
     End Sub
 
+    Public Async Function globalautopopulateInventorySource(ByVal globalicombobox As ComboBox, ByVal globalformname As Object) As Task
+        globalicombobox.ValueMember = "Value"
+        globalicombobox.DisplayMember = "Name"
+
+        Dim customerOrderTypes = InventoryLocation.GetTypes.
+            OfType(Of Object).
+            Select(Function(t) New InvetoryTypeModel(CType(t, InventoryLocationType))).
+            ToList()
+        globalicombobox.DataSource = customerOrderTypes
+    End Function
+    Private Class InvetoryTypeModel
+        Public ReadOnly Property Name As String
+        Public ReadOnly Property Value As InventoryLocationType
+
+        Public Sub New(inventoryLocationType As InventoryLocationType)
+            _Name = $"{inventoryLocationType}"
+            _Value = inventoryLocationType
+        End Sub
+
+    End Class
 #End Region
 
 #Region "Click"
@@ -756,12 +782,14 @@ Public Class ReceivingForm
             If conn1.State = ConnectionState.Closed Then conn1.Open()
             Dim sql1 As String = "SELECT COALESCE(rr.ordernumber,''),DATE_FORMAT(rr.orderdate,'%d-%b-%Y'),COALESCE(CONCAT(COALESCE(ac.companyname,''),' - ',COALESCE(ac.accountno,''),' - ',COALESCE(ac.accounttype,'')),''),COALESCE(rr.`status`,''),COALESCE(o.ordertype,'Blank')," &
                          "COALESCE(o.ordernumber,''),COALESCE(rr.comments,''),COALESCE(CONCAT(COALESCE(c.firstname,''),' ',COALESCE(c.middlename,''),' ',COALESCE(c.lastname,''),' ',COALESCE(c.suffix,''),' - ',COALESCE(c.contactno,''),' / ',COALESCE(c.`type`,'')),''),COALESCE(rr.receivedbrands,'')," &
-                         "COALESCE(TIME_FORMAT(rr.timearrived,'%r'),''),COALESCE(rr.containerno,''),COALESCE(rr.arrivedin,''),COALESCE(rr.sealno,'') FROM orders rr LEFT JOIN accounts ac ON rr.accountid = ac.rowid LEFT JOIN orders o ON rr.relatedorderid = o.rowid LEFT JOIN contacts c ON rr.contactid = c.rowid WHERE rr.rowid = " & iorderid & " "
+                         "COALESCE(TIME_FORMAT(rr.timearrived,'%r'),''),COALESCE(rr.containerno,''),COALESCE(rr.arrivedin,''),COALESCE(rr.sealno,''),COALESCE(il.type,''),COALESCE(il.name,'') FROM orders rr LEFT JOIN accounts ac ON rr.accountid = ac.rowid LEFT JOIN orders o ON rr.relatedorderid = o.rowid LEFT JOIN contacts c ON rr.contactid = c.rowid LEFT JOIN inventorylocations il on rr.inventorylocationid=il.rowid WHERE rr.rowid = " & iorderid & " "
             Dim cmd1 As New MySqlCommand(sql1, conn1)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             While reader1.Read()
                 If reader1.HasRows Then
                     cboAccountName.Text = reader1(2)
+                    cboInventorySource.Text = reader1(13)
+                    cboInventoryLocation.Text = reader1(14)
                     If cue = "New" Then
                         txtReferenceNo.Text = reader1(0)
                         txtStatus.Text = "For Approval"
@@ -1332,6 +1360,7 @@ Public Class ReceivingForm
                 btnStockToWarehouse.Enabled = fraud
                 btnAddAdditionalItems.Enabled = fraud
                 rrrelatedorderid = newrrlinkform.nrorderid
+                cboInventorySource.Enabled = legit
                 If newrrlinkform.nrrnewrrtype = OrderType.PO.ToString() Then
                     txtRRType.Text = OrderType.PO.ToString()
                     lblReferenceNo.Text = "Related P.O. No.:"
@@ -1386,6 +1415,7 @@ Public Class ReceivingForm
                 cboAccountName.Enabled = fraud
                 btnStockToWarehouse.Enabled = fraud
                 btnAddAdditionalItems.Enabled = legit
+                cboInventorySource.Enabled = fraud
                 displayReceivingInformation(CInt(dgReceivingList.CurrentRow.Cells("rr_rowid").Value))
                 If txtRRType.Text <> "Blank" Then
                     ci_option.Visible = fraud
@@ -1423,6 +1453,67 @@ Public Class ReceivingForm
         Me.Cursor = Cursors.Default
     End Sub
 
+    Private Sub cboCustomerOrderType_SelectedIndexChanged(sender As Object, e As EventArgs)
+
+    End Sub
+
+    Private Sub Label35_Click(sender As Object, e As EventArgs)
+
+    End Sub
+
+    Private Sub Label37_Click(sender As Object, e As EventArgs)
+
+    End Sub
+    Private Async Function LoadInventoryLocationsAsync() As Task
+        Dim inventoryLocationRepository = GetRequiredService(Of IInventoryLocationRepository)()
+        Dim inventoryLocations = Await inventoryLocationRepository.GetAllByOrganizationIdAsync(Z_OrganizationID)
+
+        cboInventoryLocation.ValueMember = "RowID"
+        cboInventoryLocation.DisplayMember = "Name"
+        cboInventoryLocation.DataSource = inventoryLocations.
+            OrderByDescending(Function(t) t.IsMainWarehouse).
+            ThenBy(Function(t) t.Name).
+            ToList()
+    End Function
+    Private Sub cboInventorySource_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboInventorySource.SelectedIndexChanged
+        cboCustomerOrderType_SelectedValueChanged(sender, e)
+    End Sub
+    Private Sub cboCustomerOrderType_SelectedValueChanged(sender As Object, e As EventArgs)
+        'If cboCustomerOrderType.SelectedValue IsNot Nothing Then errProvider.SetError(cboCustomerOrderType, String.Empty),
+        If msNew.Enabled AndAlso Not cboInventorySource.SelectedIndex = -1 And cboInventoryLocation.SelectedIndex = -1 Then Return
+        Dim inventoryLocationType = CType(cboInventorySource.SelectedValue, InventoryLocationType)
+
+        Dim source = cboInventoryLocation.Items?.
+            OfType(Of Object)
+        If Not If(source?.Any(), False) Then Return
+
+        Dim dataSource = source?.
+            Select(Function(t) CType(t, InventoryLocation)).
+            Where(Function(t) t.Type = inventoryLocationType).
+            ToList()
+
+        If Not dataSource.Any() Then
+            MessageBox.Show(text:=$"No Inventory Location for type `{inventoryLocationType}`.{Environment.NewLine}{Environment.NewLine}You need to create a new Inventory Location with type `{inventoryLocationType}`.{Environment.NewLine}{Environment.NewLine}Go to `Menu` > `Inventory Management` > `(L) Inventory Locations`",
+                caption:="No Inventory Location",
+                icon:=MessageBoxIcon.Error,
+                buttons:=MessageBoxButtons.OK)
+
+            cboInventorySource.SelectedIndex = -1
+            Return
+        End If
+
+        If dataSource.Count() > 1 Then
+            Dim form = New CustomerOrderInventoryLocationSelectorDialog(inventoryLocations:=dataSource)
+            If form.ShowDialog() = DialogResult.OK Then
+                cboInventoryLocation.SelectedValue = form.InventoryLocationId
+            Else
+                cboInventorySource.SelectedIndex = -1
+            End If
+        Else
+            cboInventoryLocation.SelectedItem = dataSource.FirstOrDefault()
+        End If
+    End Sub
+
     Private Sub dgReceivingList_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgReceivingList.CellClick
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1443,6 +1534,7 @@ Public Class ReceivingForm
                 cboAccountName.Enabled = fraud
                 btnStockToWarehouse.Enabled = fraud
                 btnAddAdditionalItems.Enabled = legit
+                cboInventorySource.Enabled = fraud
                 displayReceivingInformation(CInt(dgReceivingList.CurrentRow.Cells("rr_rowid").Value))
                 If txtRRType.Text <> "Blank" Then
                     ci_option.Visible = fraud
@@ -1792,7 +1884,7 @@ Public Class ReceivingForm
                         Exit Try
                     End If
                     M_I_Orders(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, rrsuppliercustomerid, txtRRNo.Text, OrderType:=OrderType.RR.ToString(), dtpRRDate.Value, DBNull.Value, cboAccountName.Text, txtComments.Text,
-                            "For Approval", 0, "", If(rrrelatedorderid = 0, DBNull.Value, rrrelatedorderid), If(rrcontactid = 0, DBNull.Value, rrcontactid), dtpTimeArrived.Value, txtBrands.Text, txtContainerNo.Text, txtSealNo.Text, txtArrivedIn.Text, Me)
+                            "For Approval", 0, "", If(rrrelatedorderid = 0, DBNull.Value, rrrelatedorderid), If(rrcontactid = 0, DBNull.Value, rrcontactid), dtpTimeArrived.Value, txtBrands.Text, txtContainerNo.Text, txtSealNo.Text, txtArrivedIn.Text, cboInventoryLocation.SelectedValue, Me)
                     rrorderid = globalorderidsp
                     If txtRRType.Text <> "Blank" Then
                         If rrrelatedorderid <> 0 Then
@@ -2091,6 +2183,8 @@ Public Class ReceivingForm
             stocklinkform.sfseqno = CStr(dgReceivingItems.CurrentRow.Cells("ci_seqno").Value)
             stocklinkform.sfprodcolorsizeid = CInt(dgReceivingItems.CurrentRow.Cells("ci_pcsrowid").Value)
             stocklinkform.sforderid = CInt(dgReceivingList.CurrentRow.Cells("rr_rowid").Value)
+            stocklinkform.sfinventorylocationid = CInt(cboInventoryLocation.SelectedValue)
+            stocklinkform.sfqtyOrdered = CInt(dgReceivingItems.CurrentRow.Cells("ci_qtyordered").Value)
             stocklinkform.ShowInTaskbar = False
             stocklinkform.ShowDialog()
             If stocklinkform.stockformcue = legit Then

@@ -2155,13 +2155,8 @@ Public Class PurchaseForm
                         errProvider.SetError(txtSupplierOrderNo, "Purchase order no. has been created already, please type a new one.")
                         Exit Try
                     End If
-<<<<<<< HEAD
                     M_I_OrdersA(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, posupplierid, txtSupplierOrderNo.Text, OrderType:=OrderType.PO.ToString(), dtpSupplierOrderDate.Value, dtpTargetDeliveryDate.Value,
                            cboSupplierName.Text, txtComments.Text, txtStatus.Text, Math.Round(poitotalprice, 2), Nothing, Me)
-=======
-                    M_I_OrdersA(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, posupplierid, txtSupplierOrderNo.Text, OrderType:=$"{OrderType.PO.ToString()}", dtpSupplierOrderDate.Value, dtpTargetDeliveryDate.Value,
-                           cboSupplierName.Text, txtComments.Text, txtStatus.Text, Math.Round(poitotalprice, 2), 0, Me)
->>>>>>> 7eb6984ac1bfda265764cfb15e3dc1bd5772ca6e
                     poorderid = globalorderidsp
                     If dgSupplierOrderItems.Rows.Count <> 0 Then
                         For a = 0 To dgSupplierOrderItems.Rows.Count - 1

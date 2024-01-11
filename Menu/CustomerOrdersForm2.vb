@@ -220,9 +220,6 @@ Public Class CustomerOrdersForm2
             ToList()
     End Function
 
-    Private Sub cboCustomerOrderType_SelectedIndexChanged1(sender As Object, e As EventArgs) Handles cboCustomerOrderType.SelectedIndexChanged
-
-    End Sub
 
     Private Sub cboCustomerOrderType_SelectedIndexChanged(sender As Object, e As EventArgs)
         cboCustomerOrderType_SelectedValueChanged(sender, e)

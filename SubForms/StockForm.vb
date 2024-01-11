@@ -9,25 +9,25 @@ Imports System.Data
 Imports System.Diagnostics
 Imports System.Runtime.InteropServices
 Imports System.Text.RegularExpressions
+Imports OfficeOpenXml.FormulaParsing.Excel.Functions.Information
 Public Class StockForm
     Dim manager As New sqlModule.Manager
-    Dim conn As New MySqlConnection(Manager.GetConnString)
-    Dim conn1 As New MySqlConnection(Manager.GetConnString)
+    Dim conn As New MySqlConnection(manager.GetConnString)
+    Dim conn1 As New MySqlConnection(manager.GetConnString)
     Dim sqlcmd As MySqlCommand
     Dim sqlrd As MySqlDataReader
     Dim sqlquery As String
     Dim rowscount, sftotalqtytostockleft, sftotalqtytostock As Integer
-    Dim sfinventorylocationid, sfrackcolumnshelfid, sfproductinventorylocationid As Integer
+    Dim sfrackcolumnshelfid, sfproductinventorylocationid As Integer
     Public sfseqno As String
     Public stockformcue As Boolean = False
-    Public sforderitemid, sfprodcolorsizeid, sforderid As Integer
+    Public sforderitemid, sfprodcolorsizeid, sforderid, sfinventorylocationid, sfqtyOrdered As Integer
     Private Sub StockForm_Load(sender As Object, e As EventArgs) Handles Me.Load
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
             clearfields()
             getInventoryLocID(Me)
-            sfinventorylocationid = glolocid
             If sfinventorylocationid <> 0 Then
                 callAutoCompleteFunctions()
                 callAutoPopulateFunctions()
@@ -309,9 +309,9 @@ Public Class StockForm
         Try
             dgReceivingItem.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT ci.rowid,COALESCE(ci.productcolorsizeid,0),COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(c.colorname,''),COALESCE(pcs.size,'')," & _
-                    "COALESCE(pcs.seasoncode,''),COALESCE(ci.unitofmeasure,''),COALESCE(pcs.sku,''),COALESCE(ci.itemtype,''),COALESCE(ci.remarks,''),COALESCE(ci.qtyreceived,0) FROM orderitems ci " & _
-                    "LEFT JOIN productcolorsizes pcs ON ci.productcolorsizeid = pcs.rowid LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN colors c ON pc.colorid = c.rowid " & _
+            Dim sql1 As String = "SELECT ci.rowid,COALESCE(ci.productcolorsizeid,0),COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(c.colorname,''),COALESCE(pcs.size,'')," &
+                    "COALESCE(pcs.seasoncode,''),COALESCE(ci.unitofmeasure,''),COALESCE(pcs.sku,''),COALESCE(ci.itemtype,''),COALESCE(ci.remarks,''),COALESCE(ci.qtyreceived,0) FROM orderitems ci " &
+                    "LEFT JOIN productcolorsizes pcs ON ci.productcolorsizeid = pcs.rowid LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN colors c ON pc.colorid = c.rowid " &
                     "LEFT JOIN products p ON pc.productid = p.rowid WHERE ci.rowid = " & iorderitemid & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -363,7 +363,7 @@ Public Class StockForm
         Try
             dgRackColumnShelf.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT pil.rowid,COALESCE(rcs.rackNo,''),COALESCE(rcs.columnno,''),COALESCE(rcs.shelfno,''),COALESCE(pil.totalavailableqty,0),pil.rackshelfcolumnid FROM productinventorylocation pil " & _
+            Dim sql1 As String = "SELECT pil.rowid,COALESCE(rcs.rackNo,''),COALESCE(rcs.columnno,''),COALESCE(rcs.shelfno,''),COALESCE(pil.totalavailableqty,0),pil.rackshelfcolumnid FROM productinventorylocation pil " &
                         "LEFT JOIN rackshelfcolumn rcs ON pil.rackshelfcolumnid = rcs.rowid WHERE pil.productcolorsizeid = " & iproductcolorsizeid & " AND pil.organizationid = " & Z_OrganizationID & " AND rcs.inventorylocationid = " & sfinventorylocationid & " ORDER BY rcs.pickorderno ASC "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -601,7 +601,6 @@ Public Class StockForm
                 Exit Try
             End If
             getInventoryLocID(Me)
-            sfinventorylocationid = glolocid
             If sfinventorylocationid = 0 Then
                 MessageBox.Show("System cannot find the inventory location.", "Stocking", MessageBoxButtons.OK, MessageBoxIcon.Information)
                 Exit Try
@@ -661,7 +660,6 @@ Public Class StockForm
                     Exit Try
                 End If
                 getInventoryLocID(Me)
-                sfinventorylocationid = glolocid
                 If sfinventorylocationid = 0 Then
                     MessageBox.Show("System cannot find the inventory location.", "Stocking", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
@@ -698,8 +696,25 @@ Public Class StockForm
                                         End If
                                         getProductInventoryLocationTotals(CInt(dgRackColumnShelf.Rows(i).Cells("rcs_rowid").Value), Me)
                                         U_ProductInventoryLocationTotals(CInt(dgRackColumnShelf.Rows(i).Cells("rcs_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, globalpiltotalavailableqty + CInt(dgRackColumnShelf.Rows(i).Cells("rcs_qtytostock").Value), globalpiltotalreserveqty, Me)
-                                        I_ProductMovementHistory(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, sforderid, DBNull.Value, DBNull.Value, sfprodcolorsizeid, CInt(dgRackColumnShelf.Rows(i).Cells("rcs_rowid").Value), _
+                                        I_ProductMovementHistory(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, sforderid, DBNull.Value, DBNull.Value, sfprodcolorsizeid, CInt(dgRackColumnShelf.Rows(i).Cells("rcs_rowid").Value),
                                                 DBNull.Value, globalpiltotalavailableqty, CInt(dgRackColumnShelf.Rows(i).Cells("rcs_qtytostock").Value), globalpiltotalavailableqty + CInt(dgRackColumnShelf.Rows(i).Cells("rcs_qtytostock").Value), "Receiving", "TotalAvailableQty", "", Me)
+
+                                        'if leftQtyToStock is equals to qtyToStock trigger stock to damage warehouse
+                                        If dgReceivingItem.Rows(i).Cells("ci_qtyleft").Value = dgRackColumnShelf.Rows(i).Cells("rcs_qtytostock").Value Then
+                                            If conn.State = ConnectionState.Closed Then conn.Open()
+                                            Dim sql1 As String = "SELECT pil.rowid,COALESCE(pil.totalavailableqty,0),pil.rackshelfcolumnid FROM productinventorylocation pil " &
+                                            "LEFT JOIN rackshelfcolumn rcs ON pil.rackshelfcolumnid = rcs.rowid WHERE pil.productcolorsizeid = " & sfprodcolorsizeid & " AND pil.organizationid = " & Z_OrganizationID & " AND rcs.inventorylocationid = " & 6 & " ORDER BY rcs.pickorderno ASC "
+                                            Dim cmd1 As New MySqlCommand(sql1, conn)
+                                            Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
+                                            Dim damageQty = sfqtyOrdered - dgReceivingItem.Rows(i).Cells("ci_qtyreceived").Value
+                                            While reader1.Read()
+                                                U_ProductInventoryLocationTotals(CInt(reader1(0)), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, reader1(1) + damageQty, reader1(1), Me)
+                                                I_ProductMovementHistory(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, sforderid, DBNull.Value, DBNull.Value, sfprodcolorsizeid, reader1(0),
+                                                DBNull.Value, reader1(1), damageQty, reader1(1) + damageQty, "Receiving", "TotalDamageQty", "", Me)
+                                            End While
+                                        End If
+
+
                                     Else
 
                                     End If
@@ -713,7 +728,7 @@ Public Class StockForm
                                             I_ProductInventoryLocation(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, sfrackcolumnshelfid, sfprodcolorsizeid, CInt(dgRackColumnShelf.Rows(i).Cells("rcs_qtytostock").Value), Me)
                                             sfproductinventorylocationid = globalproductinventorylocationidsp
                                             M_I_rscorderitems(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, sfproductinventorylocationid, sforderitemid, CInt(dgRackColumnShelf.Rows(i).Cells("rcs_qtytostock").Value), "Active", Me)
-                                            I_ProductMovementHistory(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, sforderid, DBNull.Value, DBNull.Value, sfprodcolorsizeid, sfproductinventorylocationid, _
+                                            I_ProductMovementHistory(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, sforderid, DBNull.Value, DBNull.Value, sfprodcolorsizeid, sfproductinventorylocationid,
                                                     DBNull.Value, 0, CInt(dgRackColumnShelf.Rows(i).Cells("rcs_qtytostock").Value), CInt(dgRackColumnShelf.Rows(i).Cells("rcs_qtytostock").Value), "New PIL", "TotalAvailableQty", "", Me)
                                         Else
                                             getRCSOrderItemID(sfproductinventorylocationid, sforderitemid, Me)
@@ -724,8 +739,22 @@ Public Class StockForm
                                             End If
                                             getProductInventoryLocationTotals(sfproductinventorylocationid, Me)
                                             U_ProductInventoryLocationTotals(sfproductinventorylocationid, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, globalpiltotalavailableqty + CInt(dgRackColumnShelf.Rows(i).Cells("rcs_qtytostock").Value), globalpiltotalreserveqty, Me)
-                                            I_ProductMovementHistory(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, sforderid, DBNull.Value, DBNull.Value, sfprodcolorsizeid, sfproductinventorylocationid, _
+                                            I_ProductMovementHistory(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, sforderid, DBNull.Value, DBNull.Value, sfprodcolorsizeid, sfproductinventorylocationid,
                                                     DBNull.Value, globalpiltotalavailableqty, CInt(dgRackColumnShelf.Rows(i).Cells("rcs_qtytostock").Value), globalpiltotalavailableqty + CInt(dgRackColumnShelf.Rows(i).Cells("rcs_qtytostock").Value), "Receiving", "TotalAvailableQty", "", Me)
+                                            'if leftQtyToStock is equals to qtyToStock trigger stock to damage warehouse
+                                            If dgReceivingItem.Rows(i).Cells("ci_qtyleft").Value = dgRackColumnShelf.Rows(i).Cells("rcs_qtytostock").Value Then
+                                                If conn.State = ConnectionState.Closed Then conn.Open()
+                                                Dim sql1 As String = "SELECT pil.rowid,COALESCE(pil.totalavailableqty,0),pil.rackshelfcolumnid FROM productinventorylocation pil " &
+                                                "LEFT JOIN rackshelfcolumn rcs ON pil.rackshelfcolumnid = rcs.rowid WHERE pil.productcolorsizeid = " & sfprodcolorsizeid & " AND pil.organizationid = " & Z_OrganizationID & " AND rcs.inventorylocationid = " & 6 & " ORDER BY rcs.pickorderno ASC "
+                                                Dim cmd1 As New MySqlCommand(sql1, conn)
+                                                Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
+                                                Dim damageQty = sfqtyOrdered - dgReceivingItem.Rows(i).Cells("ci_qtyreceived").Value
+                                                While reader1.Read()
+                                                    U_ProductInventoryLocationTotals(CInt(reader1(0)), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, reader1(1) + damageQty, reader1(1), Me)
+                                                    I_ProductMovementHistory(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, sforderid, DBNull.Value, DBNull.Value, sfprodcolorsizeid, reader1(0),
+                                                    DBNull.Value, reader1(1), damageQty, reader1(1) + damageQty, "Receiving", "TotalDamageQty", "", Me)
+                                                End While
+                                            End If
                                         End If
                                     End If
                                 End If
