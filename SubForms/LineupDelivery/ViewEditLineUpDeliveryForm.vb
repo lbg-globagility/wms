@@ -2525,10 +2525,12 @@ Public Class ViewEditLineUpDeliveryForm
                 errProvider.SetError(txtLineUpNo, "System cannot find the line up.")
                 Exit Try
             End If
-            getOrderStatus(veludorderid, Me)
-            If globalorderstatus <> "Lined Up" Then
-                errProvider.SetError(txtCustomerOrderInfo, "The customer order has been updated, please check the status of the customer order.")
-                Exit Try
+            If Not IsThurston Then
+                getOrderStatus(veludorderid, Me)
+                If globalorderstatus <> "Lined Up" Then
+                    errProvider.SetError(txtCustomerOrderInfo, "The customer order has been updated, please check the status of the customer order.")
+                    Exit Try
+                End If
             End If
             If LTrim(cboTruckShiftInfo.Text) <> "" Then
                 getDeliveryTruckShiftIDB(cboTruckShiftInfo.Text, "AND dts.`status` = 'Active'", Me)
@@ -2579,10 +2581,12 @@ Public Class ViewEditLineUpDeliveryForm
                 errProvider.SetError(txtLineUpNo, "System cannot find the line up.")
                 Exit Try
             End If
-            getOrderStatus(veludorderid, Me)
-            If globalorderstatus <> "Lined Up" Then
-                errProvider.SetError(txtCustomerOrderInfo, "The customer order has been updated, please check the status of the customer order.")
-                Exit Try
+            If Not IsThurston Then
+                getOrderStatus(veludorderid, Me)
+                If globalorderstatus <> "Lined Up" Then
+                    errProvider.SetError(txtCustomerOrderInfo, "The customer order has been updated, please check the status of the customer order.")
+                    Exit Try
+                End If
             End If
             If LTrim(cboTruckShiftInfo.Text) <> "" Then
                 getDeliveryTruckShiftIDB(cboTruckShiftInfo.Text, "AND dts.`status` = 'Active'", Me)
