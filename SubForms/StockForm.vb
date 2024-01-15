@@ -21,7 +21,7 @@ Public Class StockForm
     Dim sfrackcolumnshelfid, sfproductinventorylocationid As Integer
     Public sfseqno As String
     Public stockformcue As Boolean = False
-    Public sforderitemid, sfprodcolorsizeid, sforderid, sfinventorylocationid, sfqtyOrdered As Integer
+    Public sforderitemid, sfprodcolorsizeid, sforderid, sfinventorylocationid, sfqtyOrdered, sfdamageqtyOrdered As Integer
     Private Sub StockForm_Load(sender As Object, e As EventArgs) Handles Me.Load
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -701,12 +701,13 @@ Public Class StockForm
 
                                         'if leftQtyToStock is equals to qtyToStock trigger stock to damage warehouse
                                         If dgReceivingItem.Rows(i).Cells("ci_qtyleft").Value = dgRackColumnShelf.Rows(i).Cells("rcs_qtytostock").Value Then
+                                            Console.WriteLine("test is this working")
                                             If conn.State = ConnectionState.Closed Then conn.Open()
                                             Dim sql1 As String = "SELECT pil.rowid,COALESCE(pil.totalavailableqty,0),pil.rackshelfcolumnid FROM productinventorylocation pil " &
                                             "LEFT JOIN rackshelfcolumn rcs ON pil.rackshelfcolumnid = rcs.rowid WHERE pil.productcolorsizeid = " & sfprodcolorsizeid & " AND pil.organizationid = " & Z_OrganizationID & " AND rcs.inventorylocationid = " & 6 & " ORDER BY rcs.pickorderno ASC "
                                             Dim cmd1 As New MySqlCommand(sql1, conn)
                                             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
-                                            Dim damageQty = sfqtyOrdered - dgReceivingItem.Rows(i).Cells("ci_qtyreceived").Value
+                                            Dim damageQty = sfdamageqtyOrdered
                                             While reader1.Read()
                                                 U_ProductInventoryLocationTotals(CInt(reader1(0)), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, reader1(1) + damageQty, reader1(1), Me)
                                                 I_ProductMovementHistory(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, sforderid, DBNull.Value, DBNull.Value, sfprodcolorsizeid, reader1(0),
@@ -743,12 +744,13 @@ Public Class StockForm
                                                     DBNull.Value, globalpiltotalavailableqty, CInt(dgRackColumnShelf.Rows(i).Cells("rcs_qtytostock").Value), globalpiltotalavailableqty + CInt(dgRackColumnShelf.Rows(i).Cells("rcs_qtytostock").Value), "Receiving", "TotalAvailableQty", "", Me)
                                             'if leftQtyToStock is equals to qtyToStock trigger stock to damage warehouse
                                             If dgReceivingItem.Rows(i).Cells("ci_qtyleft").Value = dgRackColumnShelf.Rows(i).Cells("rcs_qtytostock").Value Then
+                                                Console.WriteLine("test is this working 12345")
                                                 If conn.State = ConnectionState.Closed Then conn.Open()
                                                 Dim sql1 As String = "SELECT pil.rowid,COALESCE(pil.totalavailableqty,0),pil.rackshelfcolumnid FROM productinventorylocation pil " &
                                                 "LEFT JOIN rackshelfcolumn rcs ON pil.rackshelfcolumnid = rcs.rowid WHERE pil.productcolorsizeid = " & sfprodcolorsizeid & " AND pil.organizationid = " & Z_OrganizationID & " AND rcs.inventorylocationid = " & 6 & " ORDER BY rcs.pickorderno ASC "
                                                 Dim cmd1 As New MySqlCommand(sql1, conn)
                                                 Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
-                                                Dim damageQty = sfqtyOrdered - dgReceivingItem.Rows(i).Cells("ci_qtyreceived").Value
+                                                Dim damageQty = sfdamageqtyOrdered
                                                 While reader1.Read()
                                                     U_ProductInventoryLocationTotals(CInt(reader1(0)), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, reader1(1) + damageQty, reader1(1), Me)
                                                     I_ProductMovementHistory(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, sforderid, DBNull.Value, DBNull.Value, sfprodcolorsizeid, reader1(0),

@@ -207,7 +207,7 @@ Public Class ReceivingForm
             cboReceivedBy.SelectedItem = Nothing
             cboAccountName.SelectedItem = Nothing
             cboInventorySource.SelectedItem = "Main"
-            cboInventoryLocation.SelectedItem = Nothing
+            cboInventoryLocation.SelectedItem = 1
             dtpRRDate.Value = Now.Date
             dtpTimeArrived.Value = New DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 10, 0, 0)
         Catch ex As Exception
@@ -2185,6 +2185,7 @@ Public Class ReceivingForm
             stocklinkform.sforderid = CInt(dgReceivingList.CurrentRow.Cells("rr_rowid").Value)
             stocklinkform.sfinventorylocationid = CInt(cboInventoryLocation.SelectedValue)
             stocklinkform.sfqtyOrdered = CInt(dgReceivingItems.CurrentRow.Cells("ci_qtyordered").Value)
+            stocklinkform.sfdamageqtyOrdered = CInt(dgReceivingItems.CurrentRow.Cells("ci_qtybad").Value)
             stocklinkform.ShowInTaskbar = False
             stocklinkform.ShowDialog()
             If stocklinkform.stockformcue = legit Then
