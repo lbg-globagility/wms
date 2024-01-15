@@ -7,10 +7,8 @@ using WarehouseManagementSystem.Core.Interfaces.DomainServices.Base;
 
 namespace WarehouseManagementSystem.Core.Interfaces.DomainServices
 {
-    public interface ILineupDataService : IBaseSavableDataService<Lineup>
+    public interface IPickListDataService : IBaseSavableDataService<PickList>
     {
-        Task CancelDeliveryAsync(int lineupId, int userId);
-        Task ConfirmDeliveryAsync(int lineupId, int userId, DateTime dateTime);
-        Task<Lineup> GetByLineupIdAsync(int lineupId);
+        Task<PickList> GetByOrderIdAsync(int orderId);
     }
 }

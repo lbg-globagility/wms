@@ -4,6 +4,7 @@
     {
         Active,
         Delivered,
-        Inactive
+        Inactive,
+        Cancelled
     }
 }

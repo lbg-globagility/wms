@@ -4,7 +4,7 @@ using WarehouseManagementSystem.Core.Entities.Base;
 namespace WarehouseManagementSystem.Core.Entities
 {
     [Table("picklistorderitems")]
-    public class PickListOrderItem : AuditableEntity
+    public partial class PickListOrderItem : AuditableEntity
     {
         public int PickListOrderID { get; set; }
         public int ProductInventoryLocationID { get; set; }
@@ -15,5 +15,10 @@ namespace WarehouseManagementSystem.Core.Entities
         public string IssueFlg { get; set; }
         public string Status { get; set; }
         public string Remarks { get; set; }
+     }
+
+    public partial class PickListOrderItem
+    {
+        public virtual PickListOrder PickListOrder { get; set; }
     }
 }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using WarehouseManagementSystem.Core.Entities.Base;
+using WarehouseManagementSystem.Core.Enums;
 
 namespace WarehouseManagementSystem.Core.Entities
 {
@@ -26,5 +27,17 @@ namespace WarehouseManagementSystem.Core.Entities
         public decimal GrandTotalItemGross => Order?.OrderItems?.Sum(t => t.TotalItemGross) ?? 0M;
 
         public virtual ICollection<PackingListCarton> PackingListCartons { get; set; }
+
+        public void SetStatusToCancelled()
+        {
+            Status = $"{OrderStatus.Cancelled}";
+
+            if(PackingListCartons != null)
+                foreach (var item in PackingListCartons)
+                {
+                    item.Status = PackingListCartonStatus.Cancelled;
+                    item.SetEdited();
+                }
+        }
     }
 }

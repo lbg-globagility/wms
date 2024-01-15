@@ -3,6 +3,7 @@ Imports MySql.Data.MySqlClient
 Imports WarehouseManagementSystem.Core.Enums
 Imports WarehouseManagementSystem.Core.Interfaces
 Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
+Imports WarehouseManagementSystem.Desktop.Utilities
 
 Public Class ViewEditLineUpDeliveryForm
     Dim manager As New sqlModule.Manager
@@ -2430,7 +2431,7 @@ Public Class ViewEditLineUpDeliveryForm
         Me.Cursor = Cursors.Default
     End Sub
 
-    Private Sub msOrder_Click(sender As Object, e As EventArgs) Handles msOrder.Click
+    Private Async Sub CancelLineUp_Click(sender As Object, e As EventArgs) Handles msOrder.Click
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
@@ -2446,7 +2447,7 @@ Public Class ViewEditLineUpDeliveryForm
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
-                If globalcreateflg = "Y" Then
+                If globalcreateflg = "N" Or globalupdateflg = "N" Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
@@ -2473,13 +2474,28 @@ Public Class ViewEditLineUpDeliveryForm
                     U_OrderStatus(veludorderid, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, "Packing", Me)
                 End If
                 If myModule.systemerrorfound = False Then
-                    U_LineUpStatus(CInt(dgLineUpList.CurrentRow.Cells("lu_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, "Cancelled", Me)
+                    Await FunctionUtils.TryCatchFunctionAsync(messageTitle:=String.Empty,
+                        Async Function()
+                            Dim lineupId = CInt(dgLineUpList.CurrentRow.Cells(lu_rowid.Name).Value)
+
+                            Dim lineupDataService = GetRequiredService(Of ILineupDataService)()
+
+                            Await lineupDataService.CancelDeliveryAsync(
+                                lineupId:=lineupId,
+                                userId:=Z_UserID)
+
+                        End Function).
+                        ContinueWith(Sub()
+                                         'U_LineUpStatus(CInt(dgLineUpList.CurrentRow.Cells("lu_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, "Cancelled", Me)
+
+                                         If myModule.systemerrorfound = False Then
+                                             myBalloon("Successfully Cancelled", "Cancel", lblsavemsg, -15, -65)
+                                             vieweditlineupdeliverycue = legit
+                                             tsrefreshperformclick()
+                                         End If
+                                     End Sub, scheduler:=TaskScheduler.FromCurrentSynchronizationContext)
                 End If
-                If myModule.systemerrorfound = False Then
-                    myBalloon("Successfully Cancelled", "Cancel", lblsavemsg, -15, -65)
-                    vieweditlineupdeliverycue = legit
-                    tsrefreshperformclick()
-                End If
+
             End If
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))

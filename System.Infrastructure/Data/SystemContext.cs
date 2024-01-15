@@ -39,6 +39,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data
         internal virtual DbSet<PackingList> PackingLists { get; set; }
         internal virtual DbSet<PackingListCarton> PackingListCartons { get; set; }
         internal virtual DbSet<PackingListCartonItem> PackingListCartonItems { get; set; }
+        internal virtual DbSet<PickList> PickLists { get; set; }
         internal virtual DbSet<PickListOrder> PickListOrders { get; set; }
         internal virtual DbSet<PickListOrderItem> PickListOrderItems { get; set; }
         internal virtual DbSet<Position> Positions { get; set; }
@@ -275,7 +276,8 @@ namespace WarehouseManagementSystem.Infrastructure.Data
                     .HasPrincipalKey(x => x.RowID);
             });
 
-            modelBuilder.Entity<OrderItem>(t => {
+            modelBuilder.Entity<OrderItem>(t =>
+            {
                 t.HasOne(x => x.ProductInventoryLocation)
                     .WithMany(x => x.OrderItems)
                     .HasForeignKey(x => x.ProductInventoryLocationId)
@@ -533,12 +535,14 @@ namespace WarehouseManagementSystem.Infrastructure.Data
                     .HasPrincipalKey(x => x.RowID);
             });
 
-            modelBuilder.Entity<CartonSize>(t => {
+            modelBuilder.Entity<CartonSize>(t =>
+            {
                 t.HasMany(x => x.PackingListCartons)
                     .WithOne(x => x.CartonSize);
             });
 
-            modelBuilder.Entity<Account>(t => {
+            modelBuilder.Entity<Account>(t =>
+            {
                 t.Property(x => x.AccountType)
                     .HasConversion(new EnumToStringConverter<AccountType>());
 
@@ -557,6 +561,23 @@ namespace WarehouseManagementSystem.Infrastructure.Data
                     .HasForeignKey(x => x.PrimaryAddressID)
                     .HasPrincipalKey(x => x.RowID);
             });
+
+            modelBuilder.Entity<PickListOrder>(t =>
+            {
+                t.HasMany(x => x.PickListOrderItems)
+                    .WithOne(x => x.PickListOrder)
+                    .HasForeignKey(x => x.PickListOrderID)
+                    .HasPrincipalKey(x => x.RowID);
+            });
+
+            modelBuilder.Entity<PickList>(t =>
+            {
+                t.HasMany(x => x.PickListOrders)
+                    .WithOne(x => x.PickList)
+                    .HasForeignKey(x => x.PickListID)
+                    .HasPrincipalKey(x => x.RowID);
+            });
+
         }
     }
 }

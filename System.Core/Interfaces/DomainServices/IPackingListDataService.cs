@@ -8,5 +8,6 @@ namespace WarehouseManagementSystem.Core.Interfaces.DomainServices
     {
         Task<PackingList> GetPackingListByOrderIdAsync(int orderId);
         Task<PackingList> GetPackingListByOrderIdAsync(int orderId, string packingListNo);
+        Task<PackingList> GetByOrderIdAsync(int orderId);
     }
 }

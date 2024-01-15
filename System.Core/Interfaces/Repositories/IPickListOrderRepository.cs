@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Threading.Tasks;
 using WarehouseManagementSystem.Core.Entities;
 
 namespace WarehouseManagementSystem.Core.Interfaces.Repositories
 {
-    public interface IPackingListRepository : ISavableRepository<PackingList>
+    public interface IPickListOrderRepository : ISavableRepository<PickListOrder>
     {
-        Task<PackingList> GetByOrderIdAsync(int orderId);
     }
 }

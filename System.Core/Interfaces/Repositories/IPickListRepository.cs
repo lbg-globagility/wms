@@ -6,8 +6,8 @@ using WarehouseManagementSystem.Core.Entities;
 
 namespace WarehouseManagementSystem.Core.Interfaces.Repositories
 {
-    public interface IPackingListRepository : ISavableRepository<PackingList>
+    public interface IPickListRepository : ISavableRepository<PickList>
     {
-        Task<PackingList> GetByOrderIdAsync(int orderId);
+        Task<PickList> GetByOrderIdAsync(int orderId);
     }
 }

@@ -40,5 +40,10 @@ namespace WarehouseManagementSystem.Core.Entities
         {
             ConfirmedDeliveryTimeStamp = dateTime;
         }
+
+        public void SetStatusToCancelled()
+        {
+            Status = LineupStatus.Cancelled;
+        }
     }
 }
