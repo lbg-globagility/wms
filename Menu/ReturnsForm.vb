@@ -2145,8 +2145,15 @@ Public Class ReturnsForm
                         errProvider.SetError(txtPullOutNo, "Return No. has been created already, please type a new one.")
                         Exit Try
                     End If
+                    Dim drNo
+                    If (cboDRNo.Text <> "") Then
+                        drNo = cboDRNo.Text
+                    Else
+                        drNo = Nothing
+                    End If
+
                     M_I_OrdersA(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, pocustomerid, txtPullOutNo.Text, "Return", dtpPullOutDate.Value, Now.Date,
-                           cboCustomerName.Text, txtComments.Text, txtStatus.Text, Math.Round(poitotalprice, 2), cboDRNo.Text, Me)
+                           cboCustomerName.Text, txtComments.Text, txtStatus.Text, Math.Round(poitotalprice, 2), drNo, Me)
                     poorderid = globalorderidsp
                     If dgPullOutItems.Rows.Count <> 0 Then
                         For a = 0 To dgPullOutItems.Rows.Count - 1

@@ -1480,7 +1480,7 @@ Public Class ReceivingForm
     End Sub
     Private Sub cboCustomerOrderType_SelectedValueChanged(sender As Object, e As EventArgs)
         'If cboCustomerOrderType.SelectedValue IsNot Nothing Then errProvider.SetError(cboCustomerOrderType, String.Empty),
-        If msNew.Enabled AndAlso Not cboInventorySource.SelectedIndex = -1 And cboInventoryLocation.SelectedIndex = -1 Then Return
+        If msNew.Enabled AndAlso Not cboInventorySource.SelectedIndex = -1 And Not cboInventoryLocation.SelectedIndex = -1 Then Return
         Dim inventoryLocationType = CType(cboInventorySource.SelectedValue, InventoryLocationType)
 
         Dim source = cboInventoryLocation.Items?.
