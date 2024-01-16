@@ -1,0 +1,9 @@
+SET @shiftId=(SELECT RowID FROM shifts WHERE `Status`='Active' LIMIT 1);
+
+INSERT INTO deliverytruckshifts (OrganizationID, Created, CreatedBy, DeliveryTruckID, ShiftID, `Status`)
+SELECT 1, CURRENT_TIMESTAMP(), 1, dt.RowID, @shiftId, 'Active'
+FROM deliverytrucks dt
+WHERE dt.`Status`='Active'
+ON DUPLICATE KEY UPDATE LastUpd=CURRENT_TIMESTAMP()
+;
+

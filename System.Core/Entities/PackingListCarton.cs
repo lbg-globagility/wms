@@ -47,6 +47,7 @@ namespace WarehouseManagementSystem.Core.Entities
         public bool IsDelivered => Status == PackingListCartonStatus.Delivered;
         public bool IsInactive  => Status == PackingListCartonStatus.Inactive;
         public virtual CartonSize CartonSize { get; set; }
+        public virtual PackingList PackingList { get; set; }
         public virtual ICollection<PackingListCartonItem> PackingListCartonItems { get; set; }
         public void AddPackingListCartonItems(List<PackingListCartonItem> packingListCartonItems)
         {
@@ -81,5 +82,7 @@ namespace WarehouseManagementSystem.Core.Entities
                 packedDate: packedDate,
                 cartonNo: cartonNo,
                 amount: amount);
+
+        public bool HasPackingListCartonItems => PackingListCartonItems?.Any() ?? false;
     }
 }

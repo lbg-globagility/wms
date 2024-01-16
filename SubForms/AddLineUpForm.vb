@@ -256,7 +256,7 @@ Public Class AddLineUpForm
             dgCartons.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
             Dim sql1 As String = "SELECT pc.rowid,COALESCE(pc.cartonno,''),COALESCE(CONCAT(COALESCE(c.firstname,''),' ',COALESCE(c.middlename,''),' ',COALESCE(c.lastname,''),' ',COALESCE(c.suffix,''),' - ',COALESCE(c.contactno,'')),''),COALESCE(DATE_FORMAT(pc.packeddate,'%d-%b-%Y'),''),COALESCE(pc.`status`,''),COALESCE(cs.sizename,'')," &
-                        "COALESCE(cs.`length`,0),COALESCE(cs.`width`,0),COALESCE(cs.`height`,0) FROM packinglistcartons pc LEFT JOIN contacts c ON pc.contactid = c.rowid LEFT JOIN cartonsizes cs ON pc.cartonsizeid = cs.rowid WHERE pc.packinglistid = " & ipackinglistid & " AND pc.organizationid = " & Z_OrganizationID & " AND pc.`status` != 'Inactive' ORDER BY pc.cartonno "
+                        $"COALESCE(cs.`length`,0),COALESCE(cs.`width`,0),COALESCE(cs.`height`,0) FROM packinglistcartons pc LEFT JOIN contacts c ON pc.contactid = c.rowid LEFT JOIN cartonsizes cs ON pc.cartonsizeid = cs.rowid {If(IsThurston, $"INNER JOIN packinglist pl ON pl.RowID=pc.PackingListID INNER JOIN orders o ON o.RowID=pl.OrderID AND LOCATE(CONCAT_WS(' ', o.OrderNumber, '(C.O. No.)'), '{cboCustomerOrderInfo.Text.Trim()}') > 0", String.Empty)} WHERE {If(IsThurston, "IFNULL(pc.Amount, 0) > 0 AND ", $"pc.packinglistid = {ipackinglistid} AND ")}pc.organizationid = " & Z_OrganizationID & " AND pc.`status` != 'Inactive' ORDER BY pc.cartonno "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             Dim n As Integer = 0

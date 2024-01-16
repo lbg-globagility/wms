@@ -2,20 +2,27 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using WarehouseManagementSystem.Core.Entities;
+using WarehouseManagementSystem.Core.Enums;
 using WarehouseManagementSystem.Core.Interfaces;
 using WarehouseManagementSystem.Core.Interfaces.DomainServices;
 using WarehouseManagementSystem.Core.Interfaces.Repositories;
+using WarehouseManagementSystem.Infrastructure.Data.Repositories;
 
 namespace WarehouseManagementSystem.Infrastructure.Data.Services
 {
     public class PackingListDataService : AuditableDataService<PackingList>, IPackingListDataService
     {
+        private readonly IPackingListRepository _packingListRepository;
+        private readonly IPackingListCartonDataService _packingListCartonDataService;
+
         public PackingListDataService(IPackingListRepository packingListRepository,
             IUserActivityRepository userActivityRepository,
             SystemContext context,
-            IPolicyHelper policy) : 
+            IPolicyHelper policy,
+            IPackingListCartonDataService packingListCartonDataService) : 
             
             base(packingListRepository,
                 userActivityRepository,
@@ -23,18 +30,32 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
                 policy,
                 entityName: "PackingList")
         {
+            _packingListRepository = packingListRepository;
+            _packingListCartonDataService = packingListCartonDataService;
         }
 
         protected override string CreateUserActivitySuffixIdentifier(PackingList entity) => $"Packing List No.: {entity.PackingListNo} and status: {entity.Status}";
 
         protected override string GetUserActivityName(PackingList entity) => _entityName;
 
-        public override Task SaveManyAsync(int userId,
+        public override async Task SaveManyAsync(int userId,
             List<PackingList> added = null,
             List<PackingList> updated = null,
             List<PackingList> deleted = null)
         {
-            return base.SaveManyAsync(userId, added, updated, deleted);
+            if (updated != null && updated.Any())
+            {
+                var packingListCartons = new List<PackingListCarton>();
+
+                foreach (var packing in updated)
+                    foreach (var item in packing.PackingListCartons.Where(t => t.IsEdited))
+                        packingListCartons.Add(item);
+
+                if (packingListCartons?.Any() ?? false)
+                    await _packingListCartonDataService.SaveManyAsync(userId: userId, updated: packingListCartons);
+            }
+            
+            await base.SaveManyAsync(userId: userId, added: added, updated: updated, deleted: deleted);
         }
 
         public async Task<PackingList> GetPackingListByOrderIdAsync(int orderId)
@@ -45,5 +66,16 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
                 .AsNoTracking()
                 .FirstOrDefaultAsync(t => t.OrderID == orderId);
         }
+
+        public async Task<PackingList> GetPackingListByOrderIdAsync(int orderId, string packingListNo)
+        {
+            return await _context.PackingLists
+                .Include(t => t.Order)
+                    .ThenInclude(o => o.OrderItems)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(t => t.OrderID == orderId && t.PackingListNo == packingListNo);
+        }
+
+        public async Task<PackingList> GetByOrderIdAsync(int orderId) => await _packingListRepository.GetByOrderIdAsync(orderId);
     }
 }

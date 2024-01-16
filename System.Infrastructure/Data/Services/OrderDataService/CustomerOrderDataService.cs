@@ -81,7 +81,8 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
             if ((order.RowID ?? 0) > 0)
             {
                 var originOrder = await _orderRepository.GetByIdAsync(order.RowID.Value);
-                if (!(!originOrder.IsStatusCancelled && order.IsStatusCancelled))
+                if ((!(!originOrder.IsStatusCancelled && order.IsStatusCancelled)) // when cancelling an already cancelled order
+                    || (originOrder.IsStatusDelivery && order.IsStatusCancelled)) // when cancelling a confirmed delivered transaction
                 {
                     order.Status = originOrder.Status;
                     BusinessLogicException.Throw(message: "Customer Order cannot be `CANCELLED` anymore.");
@@ -97,8 +98,10 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
             if ((order.InventoryLocationID ?? 0) == 0) BusinessLogicException.Throw(message: "Invalid Invetory Location value.");
             if (string.IsNullOrEmpty(order.ReferenceNumber)) BusinessLogicException.Throw(message: "Invalid P.O. number.");
             if ((order.AccountID ?? 0) == 0) BusinessLogicException.Throw(message: "Invalid Customer Name.");
-            if ((order.AgentID ?? 0) == 0) BusinessLogicException.Throw(message: "Invalid Agent value.");            
+            if ((order.AgentID ?? 0) == 0) BusinessLogicException.Throw(message: "Invalid Agent value.");
             if (!order.HasOrderItems) BusinessLogicException.Throw(message: "Invalid Order Item(s).");
+            if (order.IsStatusDelivery) BusinessLogicException.Throw(message: "Changes can't be made to this transaction, as it's already been completed.");
+            if (order.IsStatusCancelled) BusinessLogicException.Throw(message: "Changes can't be made to this transaction, as it's already been cancelled.");
         }
 
         private void CustomerOrderRecordUpdate(Order entity, Order oldEntity, List<UserActivityItem> userActivityItems)

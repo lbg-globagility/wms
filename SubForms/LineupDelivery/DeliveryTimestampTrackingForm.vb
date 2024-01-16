@@ -4,6 +4,7 @@ Imports WarehouseManagementSystem.Core.Entities
 Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
 Imports WarehouseManagementSystem.Core.Interfaces.Repositories
 Imports WarehouseManagementSystem.Desktop.Utilities
+Imports WarehouseManagementSystem.Infrastructure.Data.Repositories
 
 Public Class DeliveryTimestampTrackingForm
     Private ReadOnly _lineupId As Integer
@@ -40,7 +41,8 @@ Public Class DeliveryTimestampTrackingForm
     End Sub
 
     Private Async Sub btnSave_Click(sender As Object, e As EventArgs) Handles btnSave.Click
-        Dim value = dtpDate.Value
+        Dim value = If(dtpTime.Checked, dtpDate.Value.Date.AddTicks(dtpTime.Value.TimeOfDay.Ticks),
+            dtpDate.Value.Date)
         If Not MessageBox.Show(
                 text:=$"NOTE: Once you confirmed this delivery, you cannot undo the process again.{Environment.NewLine}{Environment.NewLine}Are you sure you want to `Confirm` this delivery and set delivery date/time to {value:MMM d, yyyy h:mm tt}?",
                 caption:="Confirm Delivery",
@@ -54,12 +56,12 @@ Public Class DeliveryTimestampTrackingForm
 
         Await FunctionUtils.TryCatchFunctionAsync(messageTitle:=String.Empty,
             Async Function()
-                If _lineup IsNot Nothing Then
-                    _lineup.SetConfirmedDeliveryTimeStamp(dateTime:=value)
-                End If
-
                 Dim lineupDataService = GetRequiredService(Of ILineupDataService)()
-                Await lineupDataService.SaveManyAsync(userId:=Z_UserID, updated:=New List(Of Lineup) From {_lineup})
+
+                Await lineupDataService.ConfirmDeliveryAsync(
+                    lineupId:=_lineupId,
+                    userId:=Z_UserID,
+                    dateTime:=value)
 
                 DialogResult = DialogResult.OK
             End Function).

@@ -743,7 +743,7 @@ Public Class AddToCartonForm
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
-                If globalcreateflg = "Y" Then
+                If globalcreateflg = "N" Or globalupdateflg = "N" Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If

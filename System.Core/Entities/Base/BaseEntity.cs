@@ -33,5 +33,13 @@ namespace WarehouseManagementSystem.Core.Entities.Base
         {
             IsDelete = true;
         }
+
+        [NotMapped]
+        public bool IsEdited { get; private set; }
+
+        public void SetEdited()
+        {
+            IsEdited = true;
+        }
     }
 }

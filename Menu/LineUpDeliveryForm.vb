@@ -107,7 +107,7 @@ Public Class LineUpDeliveryForm
             startcol.Name = "lud_date"
             dgLineUpCalendar.Columns.Add(startcol)
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT COALESCE(CONCAT(COALESCE(dt.truckname,''),' - ',COALESCE(dt.truckno,''),' / ',COALESCE(s.shiftname,'')),'') " &
+            Dim sql1 As String = $"SELECT {If(IsThurston, "IFNULL(dt.truckname, '')", "COALESCE(CONCAT(COALESCE(dt.truckname,''),' - ',COALESCE(dt.truckno,''),' / ',COALESCE(s.shiftname,'')),'')")} " &
                         "FROM deliverytruckshifts dts LEFT JOIN deliverytrucks dt ON dts.deliverytruckid = dt.rowid LEFT JOIN shifts s ON dts.shiftid = s.rowid " &
                         "WHERE dts.organizationid = " & Z_OrganizationID & " AND dts.`status` = 'Active' ORDER BY dt.truckname,s.shiftname DESC "
             Dim cmd1 As New MySqlCommand(sql1, conn)
@@ -145,7 +145,8 @@ Public Class LineUpDeliveryForm
                 Dim m As Integer = 0
                 For j = 0 To dgLineUpCalendar.Columns.Count - 1
                     If conn.State = ConnectionState.Closed Then conn.Open()
-                    Dim sql1 As String = "SELECT COALESCE(DATE_FORMAT(lu.lineupdate,'%d-%b-%Y'),''),COALESCE(CONCAT(COALESCE(dt.truckname,''),' - ',COALESCE(dt.truckno,''),' / ',COALESCE(s.shiftname,'')),'')," &
+                    Dim sdfsdfsd = If(IsThurston, "IFNULL(dt.truckname, '')", "COALESCE(CONCAT(COALESCE(dt.truckname,''),' - ',COALESCE(dt.truckno,''),' / ',COALESCE(s.shiftname,'')),'')")
+                    Dim sql1 As String = $"SELECT COALESCE(DATE_FORMAT(lu.lineupdate,'%d-%b-%Y'),''),{sdfsdfsd}," &
                                 "COALESCE(o.ordernumber,'') FROM lineups lu LEFT JOIN orders o ON lu.orderid = o.rowid LEFT JOIN deliverytruckshifts dts ON lu.deliverytruckshiftid = dts.rowid " &
                                 "LEFT JOIN deliverytrucks dt ON dts.deliverytruckid = dt.rowid LEFT JOIN shifts s ON dts.shiftid = s.rowid " &
                                 "WHERE lu.organizationid = " & Z_OrganizationID & " AND lu.`status` != 'Cancelled' "
@@ -181,10 +182,11 @@ Public Class LineUpDeliveryForm
         Try
             ludcustomerorderslineup = "" : rowscount = 0
             If conn1.State = ConnectionState.Closed Then conn1.Open()
+            Dim fsdfsd = If(IsThurston, "IFNULL(dt.truckname, '')", "COALESCE(CONCAT(COALESCE(dt.truckname,''),' - ',COALESCE(dt.truckno,''),' / ',COALESCE(s.shiftname,'')),'')")
             Dim sql1 As String = "SELECT lu.rowid,COALESCE(CONCAT(COALESCE(o.ordernumber,''),' (C.O. No.) / ',COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),'')),'') FROM lineups lu " &
                         "LEFT JOIN orders o ON lu.orderid = o.rowid LEFT JOIN accounts cu ON o.accountid = cu.rowid LEFT JOIN deliverytruckshifts dts ON lu.deliverytruckshiftid = dts.rowid " &
                         "LEFT JOIN deliverytrucks dt ON dts.deliverytruckid = dt.rowid LEFT JOIN shifts s ON dts.shiftid = s.rowid WHERE lu.organizationid = " & Z_OrganizationID & " AND lu.`status` != 'Cancelled' " &
-                        "AND COALESCE(DATE_FORMAT(lu.lineupdate,'%d-%b-%Y'),'') = """ & ilineupdate & """ AND COALESCE(CONCAT(COALESCE(dt.truckname,''),' - ',COALESCE(dt.truckno,''),' / ',COALESCE(s.shiftname,'')),'') = """ & ideliverytruckshift & """ ORDER BY o.ordernumber "
+                        "AND COALESCE(DATE_FORMAT(lu.lineupdate,'%d-%b-%Y'),'') = """ & ilineupdate & $""" AND {fsdfsd} = """ & ideliverytruckshift & """ ORDER BY o.ordernumber "
             Dim cmd1 As New MySqlCommand(sql1, conn1)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             While reader1.Read()

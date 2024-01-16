@@ -5,6 +5,7 @@ Imports WarehouseManagementSystem.Core.Enums
 Imports WarehouseManagementSystem.Core.Interfaces
 Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
 Imports WarehouseManagementSystem.Desktop.Utilities
+Imports WarehouseManagementSystem.Utilities.Extensions
 
 Public Class PackingListForm
     Dim manager As New sqlModule.Manager
@@ -33,11 +34,14 @@ Public Class PackingListForm
 
         If IsThurston Then
             ci_totalqtyincarton.HeaderText = "Total Qty. In Truck"
-            Label3.Text = $"Total Qty. {ChrW(13)}{ChrW(13)}In Truck (Sum):"
+            Label3.Text = $"Total Qty.{Environment.NewLine}In Truck (Sum):"
             Label5.Text = "Qty. In Truck (Sum):"
             cai_qtyincarton.HeaderText = "Qty. In Truck"
             Label1.Text = "Truck Items:"
             ca_cartonno.HeaderText = "Truck No."
+
+            gbCartons.Visible = False
+            gbCartonItems.Visible = False
         End If
 
         Me.Cursor = Cursors.WaitCursor
@@ -1009,15 +1013,41 @@ Public Class PackingListForm
         End Try
     End Sub
 
-    Sub displayCustomerOrderItems(ByVal icustomerorderid As Integer, ByVal ipackinglistid As Integer)
+    Private Sub displayCustomerOrderItems(ByVal icustomerorderid As Integer, ByVal ipackinglistid As Integer)
         Try
             dgCustomerOrderItems.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT ci.rowid,COALESCE(ci.productcolorsizeid,0),COALESCE(ci.productbundleid,0),COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(b.bundlename,''),COALESCE(c.colorname,''),COALESCE(pcs.size,'')," &
-                    "COALESCE(pcs.seasoncode,''),COALESCE(ci.qtyordered,0),COALESCE(pcs.sku,''),COALESCE(b.sku,''),COALESCE(ci.unitofmeasure,''),COALESCE(ci.itemtype,''),COALESCE(ci.remarks,''),COALESCE(ci.`status`,''),COALESCE(DATE_FORMAT(ci.packeddate,'%d-%b-%Y'),'')," &
-                    "COALESCE(CONCAT(COALESCE(pa.firstname,''),' ',COALESCE(pa.middlename,''),' ',COALESCE(pa.lastname,''),' ',COALESCE(pa.suffix,''),' - ',COALESCE(pa.contactno,'')),''),COALESCE(ci.srp,''),COALESCE(ci.tags,''),COALESCE(ci.sku,'') FROM orderitems ci LEFT JOIN productbundles b ON ci.productbundleid = b.rowid " &
-                    "LEFT JOIN productcolorsizes pcs ON ci.productcolorsizeid = pcs.rowid LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN colors c ON pc.colorid = c.rowid LEFT JOIN products p ON pc.productid = p.rowid LEFT JOIN contacts pa ON ci.packedby = pa.rowid " &
-                    "WHERE ci.orderid = " & icustomerorderid & " AND ci.organizationid = " & Z_OrganizationID & " AND ci.status != 'Inactive' AND ci.itemtype != 'BI' ORDER BY ci.rowid "
+            Dim sql1 = $"SELECT ci.rowid, COALESCE(ci.productcolorsizeid,0), COALESCE(ci.productbundleid,0), COALESCE(c.colorvalue,''), COALESCE(p.productcode,''), COALESCE(b.bundlename,''), COALESCE(c.colorname,''), COALESCE(pcs.size,''), COALESCE(pcs.seasoncode,''),(IFNULL(ci.qtyordered,0) - IFNULL(plo.QtyInCarton, 0)), COALESCE(pcs.sku,''), COALESCE(b.sku,''), COALESCE(ci.unitofmeasure,''), COALESCE(ci.itemtype,''), COALESCE(ci.remarks,''), COALESCE(ci.`status`,''), COALESCE(DATE_FORMAT(ci.packeddate,'%d-%b-%Y'),''), COALESCE(CONCAT(COALESCE(pa.firstname,''),' ', COALESCE(pa.middlename,''),' ', COALESCE(pa.lastname,''),' ', COALESCE(pa.suffix,''),' - ', COALESCE(pa.contactno,'')),''), COALESCE(ci.srp,''), COALESCE(ci.tags,''), COALESCE(ci.sku,''), IFNULL(ci.QtyOrdered,0) `QtyOrdered`, IFNULL(plo.QtyInCarton, 0) `QtyInCarton`, IFNULL(plo2.QtyInCarton, 0) `QtyInCarton2`
+FROM orderitems ci
+LEFT JOIN productbundles b ON ci.productbundleid = b.rowid
+LEFT JOIN productcolorsizes pcs ON ci.productcolorsizeid = pcs.rowid
+LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid
+LEFT JOIN colors c ON pc.colorid = c.rowid
+LEFT JOIN products p ON pc.productid = p.rowid
+LEFT JOIN contacts pa ON ci.packedby = pa.rowid
+
+LEFT JOIN (
+SELECT plo.OrderItemID, SUM(plo.QtyInCarton) `QtyInCarton`
+FROM packinglistcartonitems plo
+INNER JOIN orderitems oi ON oi.RowID=plo.OrderItemID
+INNER JOIN packinglistcartons plc ON plc.RowID=plo.PackingListCartonID
+INNER JOIN packinglist pl ON pl.RowID=plc.PackingListID
+INNER JOIN orders o ON o.RowID=pl.OrderID AND o.RowID = {palorderid}
+WHERE plo.OrganizationID = {Z_OrganizationID} AND pl.PackingListNo = {If(dgPackingList.CurrentRow?.Cells(pal_packinglistno.Name).Value, 0)}
+GROUP BY OrderItemID) plo ON plo.OrderItemID=ci.RowID
+
+LEFT JOIN (
+SELECT plo.OrderItemID, SUM(plo.QtyInCarton) `QtyInCarton`
+FROM packinglistcartonitems plo
+INNER JOIN orderitems oi ON oi.RowID=plo.OrderItemID
+INNER JOIN packinglistcartons plc ON plc.RowID=plo.PackingListCartonID
+INNER JOIN packinglist pl ON pl.RowID=plc.PackingListID
+INNER JOIN orders o ON o.RowID=pl.OrderID AND o.RowID = {palorderid}
+WHERE plo.OrganizationID = {Z_OrganizationID}
+GROUP BY OrderItemID) plo2 ON plo2.OrderItemID=ci.RowID
+
+WHERE ci.orderid = {palorderid} AND ci.organizationid = {Z_OrganizationID} AND ci.status != 'Inactive' AND ci.itemtype != 'BI' AND (IFNULL(ci.qtyordered,0) - IFNULL(plo.QtyInCarton, 0)) > 0
+ORDER BY ci.rowid;"
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             Dim n As Integer = 0
@@ -1039,17 +1069,24 @@ Public Class PackingListForm
                     dgCustomerOrderItems.Item(ci_color.Index, n).Value = ""
                     dgCustomerOrderItems.Item(ci_size.Index, n).Value = reader1(7)
                     dgCustomerOrderItems.Item(ci_seasoncode.Index, n).Value = reader1(8)
-                    dgCustomerOrderItems.Item(ci_qtyordered.Index, n).Value = reader1(9)
-                    getTotalQtyInCarton(ipackinglistid, CInt(reader1(0)))
-                    getPickListOrderIDA(icustomerorderid, CInt(reader1(0)))
-                    If CInt(reader1(1)) <> 0 Then
-                        dgCustomerOrderItems.Item(ci_totalqtyincarton.Index, n).Value = paltotalqtyincarton
-                        dgCustomerOrderItems.Item(ci_qtypicked.Index, n).Value = paltotalqtypicked
-                    Else
-                        dgCustomerOrderItems.Item(ci_totalqtyincarton.Index, n).Value = ""
-                        dgCustomerOrderItems.Item(ci_qtypicked.Index, n).Value = ""
-                    End If
-                    dgCustomerOrderItems.Item(ci_qtytopack.Index, n).Value = ""
+                    dgCustomerOrderItems.Item(ci_qtyordered.Index, n).Value = reader1.GetInt32("QtyOrdered") 'reader1(9)
+                    'getTotalQtyInCarton(neutralpage, CInt(reader1(0)))
+                    'getPickListOrderIDA(palorderid, CInt(reader1(0)))
+                    'If CInt(reader1(1)) <> 0 Then
+                    '    dgCustomerOrderItems.Item(ci_totalqtyincarton.Index, n).Value = paltotalqtyincarton
+                    '    dgCustomerOrderItems.Item(ci_qtypicked.Index, n).Value = paltotalqtypicked
+                    dgCustomerOrderItems.Item(ci_qtypicked.Index, n).Value = reader1.GetInt32("QtyOrdered")
+                    'Else
+                    dgCustomerOrderItems.Item(ci_totalqtyincarton.Index, n).Value =
+                        If(reader1.GetInt32("QtyInCarton") = 0, 1, reader1.GetInt32("QtyInCarton"))
+                    'dgCustomerOrderItems.Item(ci_qtypicked.Index, n).Value = 1
+                    'End If
+
+                    Dim qtyToPack = CInt(dgCustomerOrderItems.Item(ci_qtypicked.Index, n).Value) -
+                        If(reader1.GetInt32("QtyInCarton2") = 0, 1, reader1.GetInt32("QtyInCarton2"))
+                    dgCustomerOrderItems.Item(ci_qtytopack.Index, n).Value = If(qtyToPack < 0, "-", qtyToPack)
+
+
                     If CInt(reader1(1)) <> 0 Then
                         If LTrim(CStr(reader1(20))) = "" Then
                             dgCustomerOrderItems.Item(ci_sku.Index, n).Value = reader1(10)
@@ -1721,6 +1758,10 @@ Public Class PackingListForm
         Me.Cursor = Cursors.Default
     End Sub
 
+    Private Sub dgPackingList_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgPackingList.CellContentClick
+
+    End Sub
+
     Private Sub dgPackingList_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgPackingList.CellClick
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1913,7 +1954,58 @@ Public Class PackingListForm
     '    End Try
     '    Me.Cursor = Cursors.Default
     'End Sub
+
+    Private Sub cboCustomerOrderInfo_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboCustomerOrderInfo.SelectedIndexChanged
+
+    End Sub
+
+    Private Async Sub cboCustomerOrderInfo_SelectedIndexChanged2(sender As Object, e As EventArgs) Handles cboCustomerOrderInfo.SelectedIndexChanged
+        Dim bool = Not msNew.Enabled AndAlso IsThurston
+        If Not bool Then Return
+
+        Dim orderDataService = GetRequiredService(Of IOrderDataService)()
+        Dim orders = Await orderDataService.GetCustomerOrdersAsync(organizationId:=Z_OrganizationID)
+        Dim dataSource = orders.
+            Where(Function(o) cboCustomerOrderInfo.Text.IsEqualTo(String.Concat(o.Customer.CompanyName, " - ", o.Customer.AccountNo, " / ", o.OrderNumber, " (C.O. No.)")) Or cboCustomerOrderInfo.Text.IsEqualTo(String.Concat(o.OrderNumber, " (C.O. No.) / ", o.Customer.CompanyName, " - ", o.Customer.AccountNo))).
+            ToList()
+        'Where(Function(o) o.Status = OrderStatus.ForPacking).
+        If If(dataSource?.Any(), False) AndAlso dataSource.Count() > 1 Then
+            Dim form As New Form1(dataSource:=dataSource)
+            If form.ShowDialog() = DialogResult.OK Then
+                palorderid = form.SelectedCustomerOrderId
+
+                getOrderInfo(palorderid, Me)
+                txtPONo.Text = globalorderpono
+                txtCustomerOrderDate.Text = globalorderdate
+                txtTargetDeliveryDate.Text = globaltargetdate
+                txtCancelDate.Text = globalordercanceldate
+                txtClassDescription.Text = globalorderclassdescription
+                txtSIDRNo.Text = globalordersidrno
+                txtBranchCodeNameInfo.Text = globalbranchname
+                txtVendorCodeNameInfo.Text = globalvendorname
+                displayCustomerOrderItems(palorderid, neutralpage)
+                colorCoding() : packinglistcomputations(palorderid, neutralpage)
+            End If
+        ElseIf If(dataSource?.Any(), False) AndAlso dataSource.Count() = 1 Then
+            palorderid = dataSource.FirstOrDefault().RowID.Value
+
+            getOrderInfo(palorderid, Me)
+            txtPONo.Text = globalorderpono
+            txtCustomerOrderDate.Text = globalorderdate
+            txtTargetDeliveryDate.Text = globaltargetdate
+            txtCancelDate.Text = globalordercanceldate
+            txtClassDescription.Text = globalorderclassdescription
+            txtSIDRNo.Text = globalordersidrno
+            txtBranchCodeNameInfo.Text = globalbranchname
+            txtVendorCodeNameInfo.Text = globalvendorname
+            displayCustomerOrderItems(palorderid, neutralpage)
+            colorCoding() : packinglistcomputations(palorderid, neutralpage)
+        End If
+    End Sub
+
     Private Sub cboCustomerOrderInfo_Leave(sender As Object, e As EventArgs) Handles cboCustomerOrderInfo.Leave
+        If IsThurston Then Return
+
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
@@ -2231,7 +2323,7 @@ Public Class PackingListForm
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
-                If globalcreateflg = "Y" Then
+                If globalcreateflg = "N" Or globalupdateflg = "N" Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
@@ -2605,7 +2697,7 @@ Public Class PackingListForm
                         U_OrderStatus(palorderid, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, "Packing", Me)
                     End If
                     If myModule.systemerrorfound = False Then
-                        Await AutomateContainPackingListToDefaultCartonAsync()
+                        Await AutomateContainPackingListToDefaultCartonAsync(orderId:=palorderid, packingListNo:=txtPackingListNo.Text)
                     End If
                 ElseIf cue = "Edit" Then
                     If dgPackingList.Rows.Count <> 0 Then
@@ -3982,7 +4074,7 @@ Public Class PackingListForm
         End Get
     End Property
 
-    Private Async Function AutomateContainPackingListToDefaultCartonAsync() As Task
+    Private Async Function AutomateContainPackingListToDefaultCartonAsync(orderId As Integer, packingListNo As String) As Task
         Await FunctionUtils.TryCatchFunctionAsync("Assign this packing list to default carton size",
             action:=
             Async Function()
@@ -4000,7 +4092,7 @@ Public Class PackingListForm
                 Dim packerId = defaultPacker.RowID.Value
 
                 Dim packingListDataService = GetRequiredService(Of IPackingListDataService)()
-                Dim packingList = Await packingListDataService.GetPackingListByOrderIdAsync(orderId:=palorderid)
+                Dim packingList = Await packingListDataService.GetPackingListByOrderIdAsync(orderId:=orderId, packingListNo:=packingListNo)
                 Dim packingListId = packingList.RowID.Value
                 Dim packedDate = If(packingList.PackingListDate, Date.Now)
                 Dim amount = packingList.GrandTotalItemGross
@@ -4019,13 +4111,24 @@ Public Class PackingListForm
                     Dim newPackingListCartonItem = PackingListCartonItem.NewPackingListCartonItem(organizationId:=Z_OrganizationID,
                         userId:=Z_UserID,
                         orderItemId:=item.RowID.Value,
-                        quantity:=item.QtyOrdered)
+                        quantity:=1) 'item.QtyOrdered
 
                     newPackingListCarton.AddPackingListCartonItems(packingListCartonItems:=New List(Of PackingListCartonItem) From {newPackingListCartonItem})
+
+                    'item.Status = OrderItemStatus.PartiallyPacked
                 Next
 
                 Await packingListCartonDataService.SaveManyAsync(userId:=Z_UserID, added:=New List(Of PackingListCarton) From {newPackingListCarton})
-            End Function)
+
+                'Dim orderItemDataService = GetRequiredService(Of IOrderItemDataService)()
+                'Await orderItemDataService.SaveManyAsync(userId:=Z_UserID, updated:=orderItems)
+            End Function).
+            ContinueWith(
+            continuationAction:=
+            Sub()
+                myBalloon("Successfully Save", "Save", lblsavemsg, -15, -65)
+                tsrefreshperformclick()
+            End Sub, scheduler:=TaskScheduler.FromCurrentSynchronizationContext)
     End Function
 
 End Class

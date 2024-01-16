@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using WarehouseManagementSystem.Core.Entities.Base;
 using WarehouseManagementSystem.Core.Enums;
@@ -109,5 +111,7 @@ namespace WarehouseManagementSystem.Core.Entities
                 accountId: accountId);
 
         public string ViewName => View.CUSTOMER_ORDERS_VIEW;
+
+        public virtual ICollection<PackingListCartonItem> PackingListCartonItems { get; set; }
     }
 }

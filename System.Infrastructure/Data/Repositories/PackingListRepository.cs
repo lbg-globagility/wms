@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using System.Threading.Tasks;
 using WarehouseManagementSystem.Core.Entities;
 using WarehouseManagementSystem.Core.Interfaces.Repositories;
@@ -15,9 +16,17 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
         public async override Task<PackingList> GetByIdAsync(int id)
         {
             return await _context.PackingLists
-                .Include(t => t.PackingListNo)
+                .Include(t => t.PackingListCartons)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.RowID == id);
+        }
+
+        public async Task<PackingList> GetByOrderIdAsync(int orderId)
+        {
+            return await _context.PackingLists
+                .Include(t => t.PackingListCartons)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(t => t.OrderID == orderId);
         }
     }
 }

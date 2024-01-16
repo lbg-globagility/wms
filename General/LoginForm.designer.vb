@@ -37,6 +37,7 @@ Partial Class LoginForm
         Me.btnLogin = New System.Windows.Forms.Button()
         Me.PhotoImages = New System.Windows.Forms.PictureBox()
         Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
+        Me.LabelVersion = New System.Windows.Forms.Label()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         CType(Me.PhotoImages, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -54,6 +55,7 @@ Partial Class LoginForm
         '
         'GroupBox2
         '
+        Me.GroupBox2.Controls.Add(Me.LabelVersion)
         Me.GroupBox2.Controls.Add(Me.cboOrganization)
         Me.GroupBox2.Controls.Add(Me.Label1)
         Me.GroupBox2.Controls.Add(Me.txtUsername)
@@ -162,6 +164,19 @@ Partial Class LoginForm
         Me.ImageList1.ImageSize = New System.Drawing.Size(16, 16)
         Me.ImageList1.TransparentColor = System.Drawing.Color.Transparent
         '
+        'LabelVersion
+        '
+        Me.LabelVersion.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.LabelVersion.AutoSize = True
+        Me.LabelVersion.Font = New System.Drawing.Font("Segoe UI Light", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.LabelVersion.Location = New System.Drawing.Point(295, 230)
+        Me.LabelVersion.Name = "LabelVersion"
+        Me.LabelVersion.RightToLeft = System.Windows.Forms.RightToLeft.Yes
+        Me.LabelVersion.Size = New System.Drawing.Size(37, 13)
+        Me.LabelVersion.TabIndex = 19
+        Me.LabelVersion.Text = "Label2"
+        Me.LabelVersion.TextAlign = System.Drawing.ContentAlignment.TopRight
+        '
         'LoginForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
@@ -197,5 +212,5 @@ Partial Class LoginForm
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents btnLogin As System.Windows.Forms.Button
     Friend WithEvents ImageList1 As System.Windows.Forms.ImageList
-
+    Friend WithEvents LabelVersion As Label
 End Class

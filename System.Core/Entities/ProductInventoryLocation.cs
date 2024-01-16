@@ -71,7 +71,7 @@ namespace WarehouseManagementSystem.Core.Entities
                 unitOfMeasure2: unitOfMeasure2,
                 unitPriceOfUOM2: unitPriceOfUOM2);
 
-        public int TotalOrderableQty => (TotalAvailableQty ?? 0) - (TotalAllocatedQty ?? 0);
+        public int TotalOrderableQty => (TotalAvailableQty ?? 0) - ((TotalAllocatedQty ?? 0) + (TotalReserveQty ?? 0));
 
         public virtual ICollection<OrderItem> OrderItems { get; set; }
     }
