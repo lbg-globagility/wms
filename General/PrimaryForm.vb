@@ -1,4 +1,5 @@
-﻿Imports Microsoft.Extensions.DependencyInjection
+﻿Imports System.Configuration
+Imports Microsoft.Extensions.DependencyInjection
 Imports MySql.Data.MySqlClient
 Imports OfficeOpenXml
 Imports WarehouseManagementSystem.Core.Entities
@@ -66,6 +67,9 @@ Public Class PrimaryForm
             MsgBox(getErrExcptn(ex, Me.Name))
         End Try
         Me.Cursor = Cursors.Default
+
+        Dim appSettings = ConfigurationManager.AppSettings
+        ToolStripLabelVersion.Text = $"v{appSettings.Get("system.version")}"
     End Sub
 
     Private Sub PrimaryForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing

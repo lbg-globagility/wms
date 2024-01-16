@@ -1,4 +1,8 @@
-﻿Imports MySql.Data.MySqlClient
+﻿Imports System.Configuration
+Imports MySql.Data.MySqlClient
+Imports WarehouseManagementSystem.Core.Interfaces.Repositories
+Imports WarehouseManagementSystem.Desktop.Utilities
+Imports WarehouseManagementSystem.Utilities.Extensions
 
 Public Class LoginForm
     Dim ctr As Integer = 0
@@ -16,7 +20,7 @@ Public Class LoginForm
 
     End Sub
 
-    Private Sub LoginForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    Private Async Sub LoginForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Me.Cursor = Cursors.WaitCursor
         Try
             dbconn()
@@ -32,7 +36,26 @@ Public Class LoginForm
             SkipLoginCredentials()
         End Try
         Me.Cursor = Cursors.Default
+
+        Await LoadSystemVersion()
     End Sub
+
+    Private Async Function LoadSystemVersion() As Task
+        Dim systemInfoRepository = GetRequiredService(Of ISystemInfoRepository)()
+        Dim systemInfo = Await systemInfoRepository.GetSystemVersion()
+
+        Dim appSettings = ConfigurationManager.AppSettings
+        Dim version = appSettings.Get("system.version")
+
+        LabelVersion.Text = $"v{version}"
+
+        If systemInfo IsNot Nothing AndAlso
+            Not version.IsEqualTo(systemInfo.Value) Then
+
+            MessageBoxHelper.Warning($"Please install the version {systemInfo.Value} (yours: {version}). Contact your IT Department or Globagility Inc. for assistance.")
+            Me.Close()
+        End If
+    End Function
 
     Private Sub LoginForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
         Try

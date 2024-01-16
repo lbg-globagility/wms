@@ -55,6 +55,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data
         internal virtual DbSet<ProductShipmentHistory> ProductShipmentHistories { get; set; }
         internal virtual DbSet<RackShelfColumn> RackShelfColumns { get; set; }
         internal virtual DbSet<Shift> Shifts { get; set; }
+        internal virtual DbSet<SystemInfo> SystemInfos { get; set; }
         internal virtual DbSet<SystemOwner> SystemOwners { get; set; }
         internal virtual DbSet<User> Users { get; set; }
         internal virtual DbSet<UserActivity> UserActivities { get; set; }
@@ -578,6 +579,11 @@ namespace WarehouseManagementSystem.Infrastructure.Data
                     .HasPrincipalKey(x => x.RowID);
             });
 
+            modelBuilder.Entity<SystemInfo>(t =>
+            {
+                t.HasKey(x => x.Name);
+                t.Property(x => x.Value);
+            });
         }
     }
 }
