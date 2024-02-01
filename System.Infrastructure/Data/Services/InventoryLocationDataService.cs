@@ -69,6 +69,10 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
             var organizationId = inventoryLocation.OrganizationID.Value;
 
             var allProductColorSizes = await _productColorSizeRepository.GetManyByOrganizationIdsAsync(organizationId);
+            if (productCodes != null)
+                allProductColorSizes = allProductColorSizes
+                    .Where(t => productCodes.Any(f => f.IsEqualTo(t.ProductColor.Product.ProductCode)))
+                    .ToList();
 
             var inventoryLocationProductColorSizes = await _productInventoryLocationRepository.GetProductColorSizesByInventoryLocationIdAsync(inventoryLocation.RowID.Value);
             var inventoryLocationProductColorSizeIds = inventoryLocationProductColorSizes
