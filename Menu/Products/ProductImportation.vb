@@ -44,8 +44,8 @@ Public Class ProductImportation
                     names:=categoryNames)
 
                 Dim productCodes = _productRowRecords.
-                    GroupBy(Function(t) t.ProductCode.Trim()).
-                    Select(Function(s) s.Key.Trim()).
+                    GroupBy(Function(t) t.ProductCode).
+                    Select(Function(s) s.Key).
                     ToArray()
 
                 Dim productDataService = GetRequiredService(Of IProductDataService)()
