@@ -43,7 +43,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
             var inventoryLocations = await _inventoryLocationRepository.GetAllByOrganizationIdAsync(organizationId: organizationId);
 
             foreach (var inventoryLocation in inventoryLocations)
-                await PopulateWithProductColorSizesAsync(inventoryLocation: inventoryLocation, userId: userId);
+                await PopulateWithProductColorSizesAsync(inventoryLocation: inventoryLocation, userId: userId, productCodes: productCodes);
         }
 
         public async Task PopulateWithProductColorSizesAsync(string inventoryLocationName, int userId)
@@ -64,7 +64,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
             await PopulateWithProductColorSizesAsync(inventoryLocation: inventoryLocation, userId: userId);
         }
 
-        private async Task PopulateWithProductColorSizesAsync(InventoryLocation inventoryLocation, int userId)
+        private async Task PopulateWithProductColorSizesAsync(InventoryLocation inventoryLocation, int userId, string[] productCodes = null)
         {
             var organizationId = inventoryLocation.OrganizationID.Value;
 
