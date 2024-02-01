@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Internal;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ using WarehouseManagementSystem.Core.Enums;
 using WarehouseManagementSystem.Core.Interfaces;
 using WarehouseManagementSystem.Core.Interfaces.DomainServices;
 using WarehouseManagementSystem.Core.Interfaces.Repositories;
+using WarehouseManagementSystem.Utilities.Extensions;
 
 namespace WarehouseManagementSystem.Infrastructure.Data.Services
 {
@@ -93,8 +95,10 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
 
             if (!nonExistentProductColorSizes?.Any() ?? true) return;
 
-            await _rackShelfColumnRepository.SaveManyAsync(added: inventoryLocation.RackShelfColumns.Where(i => i.IsNewEntity).ToList(),
-                updated: inventoryLocation.RackShelfColumns.Where(i => !i.IsNewEntity).ToList());
+            var nonExistentProductColorSizeIds = nonExistentProductColorSizes.Select(t => t.RowID.Value).ToList();
+
+            await _rackShelfColumnRepository.SaveManyAsync(added: inventoryLocation.RackShelfColumns.Where(i => i.IsNewEntity).Where(t => t.ProductInventoryLocations.Any(f => nonExistentProductColorSizeIds.Contains(f.ProductColorSizeID))).ToList(),
+                updated: inventoryLocation.RackShelfColumns.Where(i => !i.IsNewEntity).Where(t => t.ProductInventoryLocations.Any(f => nonExistentProductColorSizeIds.Contains(f.ProductColorSizeID))).ToList());
         }
 
         public async Task<List<InventoryLocation>> GetManyByTypeAsync(int organizationId, InventoryLocationType inventoryLocationType) => await _inventoryLocationRepository.GetManyByTypeAsync(organizationId: organizationId, inventoryLocationType: inventoryLocationType);
