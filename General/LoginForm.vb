@@ -281,7 +281,7 @@ Public Class LoginForm
         If Not Debugger.IsAttached Then Return
 
         txtUsername.Text = "admin"
-        txtPassword.Text = "admin"
+        txtPassword.Text = "adminqwerty"
     End Sub
 
 End Class
