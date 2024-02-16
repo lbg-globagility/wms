@@ -12,6 +12,7 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+DROP FUNCTION IF EXISTS `M_I_Orders`;
 -- Dumping structure for function dws.M_I_Orders
 DELIMITER //
 CREATE FUNCTION `M_I_Orders`(`I_OrganizationID` INT(10),
