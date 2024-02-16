@@ -1,4 +1,6 @@
-﻿Imports Microsoft.Extensions.DependencyInjection
+﻿
+
+Imports Microsoft.Extensions.DependencyInjection
 Imports MySql.Data.MySqlClient
 Imports WarehouseManagementSystem.Core.Enums
 Imports WarehouseManagementSystem.Core.Interfaces
@@ -1294,21 +1296,21 @@ Public Class PickListForm
                 If reader1.HasRows Then
                     plinsufficientqtyorderablecue = fraud
                     checkCustomerOrderItemsQtyOrderable(CInt(reader1(0)))
-                    If plinsufficientqtyorderablecue = fraud Then
-                        getCustomerOrderItems(CInt(reader1(0)), plpicklistid)
-                        If myModule.systemerrorfound = False Then
-                            U_OrderStatus(CInt(reader1(0)), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, "Pick Listed", Me)
-                            If PrimaryForm.MainLoadingBar.Value < plloadingbar Then
-                                PrimaryForm.MainLoadingBar.Value = PrimaryForm.MainLoadingBar.Value + startingpage
-                            End If
-                        Else
-                            Exit Try
-                        End If
-                    Else
+                    'If plinsufficientqtyorderablecue = fraud Then
+                    getCustomerOrderItems(CInt(reader1(0)), plpicklistid)
+                    If myModule.systemerrorfound = False Then
+                        U_OrderStatus(CInt(reader1(0)), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, "Pick Listed", Me)
                         If PrimaryForm.MainLoadingBar.Value < plloadingbar Then
                             PrimaryForm.MainLoadingBar.Value = PrimaryForm.MainLoadingBar.Value + startingpage
                         End If
+                    Else
+                        Exit Try
                     End If
+                    'Else
+                    '    If PrimaryForm.MainLoadingBar.Value < plloadingbar Then
+                    '        PrimaryForm.MainLoadingBar.Value = PrimaryForm.MainLoadingBar.Value + startingpage
+                    '    End If
+                    'End If
                 End If
             End While
             reader1.Close()
