@@ -26,8 +26,8 @@ Public Class ProductColorSizeModel
 
         _pim = New ProductImageManager(productImageConfigParser)
 
-        UnitOfMeasure2 = productColorSize.UnitOfMeasure2
-        UnitPriceOfUOM2 = productColorSize.UnitPriceOfUOM2
+        UnitOfMeasure2 = If(String.IsNullOrEmpty(_ProductInventoryLocation.UnitOfMeasure2), productColorSize.UnitOfMeasure2, _ProductInventoryLocation.UnitOfMeasure2)
+        UnitPriceOfUOM2 = If(_ProductInventoryLocation.UnitPriceOfUOM2, productColorSize.UnitPriceOfUOM2)
     End Sub
 
     Public Property IsSelected As Boolean
