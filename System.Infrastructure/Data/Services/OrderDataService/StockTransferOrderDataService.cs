@@ -42,7 +42,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
             if (order.IsStockTransferType && (order?.IsStatusApproved ?? false)) BusinessLogicException.Throw(message: "Stock Transfer already `Approved`");
 
             if (order.StockTransferFromInventoryLocationId == null ||
-                order.StockTransferToInventoryLocationId == null) BusinessLogicException.Throw(message: "Invalid Invetory Location value.");
+                order.StockTransferToInventoryLocationId == null) BusinessLogicException.Throw(message: "Invalid Inventory Location value.");
 
             if (order.HasNewMovementHistories) await SaveChangesAsync(order, userId);
 

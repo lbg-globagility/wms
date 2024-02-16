@@ -259,7 +259,9 @@ Public Class CustomerOrdersForm2
                 cboCustomerOrderType.SelectedIndex = -1
             End If
         Else
-            cboInventoryLocation.SelectedItem = dataSource.FirstOrDefault()
+            'cboInventoryLocation.SelectedItem = dataSource.FirstOrDefault()
+            Dim id As Integer = If(dataSource.FirstOrDefault()?.RowID, 0)
+            cboInventoryLocation.SelectedValue = id
         End If
     End Sub
 
@@ -539,6 +541,10 @@ Public Class CustomerOrdersForm2
     Private Sub ApplyCustomerOrderChanges(order As Order)
         order.CustomerName = cboCustomerName.Text
 
+        If If(order.InventoryLocationID, 0) = 0 Then order.InventoryLocationID = CType(cboInventoryLocation.SelectedValue, Integer)
+        If If(order.AccountID, 0) = 0 Then order.AccountID = CType(cboCustomerName.SelectedValue, Integer)
+        If If(order.AgentID, 0) = 0 Then order.AgentID = CType(cboAgent.SelectedValue, Integer)
+
         Dim orderItemList = GetOrderItemModels().
             Where(Function(t) Not (t.IsDelete And t.IsNew)).
             Select(Function(t) t.OrderItem).
@@ -719,11 +725,11 @@ Public Class CustomerOrdersForm2
     End Sub
 
     Private Sub cboInventoryLocation_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboInventoryLocation.SelectedIndexChanged
-
+        Console.WriteLine(_selectedOrder?.InventoryLocationID)
     End Sub
 
     Private Sub cboInventoryLocation_SelectedValueChanged1(sender As Object, e As EventArgs) Handles cboInventoryLocation.SelectedValueChanged
-
+        Console.WriteLine(_selectedOrder?.InventoryLocationID)
     End Sub
 
     Private Sub cboInventoryLocation_SelectedValueChanged(sender As Object, e As EventArgs)
