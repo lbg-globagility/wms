@@ -1689,7 +1689,7 @@ Public Class ViewEditLineUpDeliveryForm
 	                                o.CustomerName AS Customer,
 	                                o.ReferenceNumber AS 'P.O. NO.',
 	                                SUM(plci.QtyInCarton) AS Qty,
-	                                GROUP_CONCAT(IFNULL(IFNULL(pcs.SKU, pcs.SKU2), '[NO SKU]'), '/', IFNULL(plci.QtyInCarton, '') SEPARATOR ' , ') AS 'Item / Description'
+	                                GROUP_CONCAT(IFNULL(IFNULL(p.ProductCode, IFNULL(pcs.SKU, pcs.SKU2)), '[NO SKU]'), '/', IFNULL(plci.QtyInCarton, '') SEPARATOR ' , ') AS 'Item / Description'
 
 		                                FROM
 		                                lineups lu
@@ -1702,6 +1702,8 @@ Public Class ViewEditLineUpDeliveryForm
  		                                JOIN packinglistcartonitems plci ON lc.PackingListCartonID = plci.PackingListCartonID
  		                                JOIN orderitems oi ON plci.OrderItemID = oi.RowID
  		                                JOIN productcolorsizes pcs ON oi.ProductColorSizeID = pcs.RowID
+ 		                                JOIN productcolors pc ON pc.RowID=pcs.ProductColorID
+ 		                                JOIN products p ON p.RowID=pc.ProductID
 
 			                                WHERE lu.LineUpNo = " & lineUpNo & " AND plci.`Status` = 'Lined Up'
 				                                GROUP BY lc.RowID"
