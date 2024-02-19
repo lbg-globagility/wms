@@ -34,6 +34,7 @@ Public Class ViewEditLineUpDeliveryForm
     Private _agents As List(Of WarehouseManagementSystem.Core.Entities.Contact)
     Private _helpers As List(Of WarehouseManagementSystem.Core.Entities.Contact)
     Private _systemOwner As WarehouseManagementSystem.Core.Entities.SystemOwner
+    Private ReadOnly Property IsShowDialog As Boolean
 
     Private Async Sub ViewEditLineUpDeliveryForm_LoadAsync(sender As Object, e As EventArgs) Handles Me.Load
         Dim _systemOwnerService = GetRequiredService(Of ISystemOwnerService)()
@@ -94,6 +95,11 @@ Public Class ViewEditLineUpDeliveryForm
 
                 SetStyleToDropDownList(comboBox)
             Next
+
+            If _IsShowDialog Then
+                Dim defaultSelectedGridRowCell = dgLineUpList.Rows?.OfType(Of DataGridViewRow)?.FirstOrDefault()?.Cells(lu_lineupno.Name)
+                If defaultSelectedGridRowCell IsNot Nothing Then dgLineUpList_CellClick(sender:=dgLineUpList, e:=New DataGridViewCellEventArgs(columnIndex:=defaultSelectedGridRowCell.ColumnIndex, rowIndex:=defaultSelectedGridRowCell.RowIndex))
+            End If
         End If
 
     End Sub
@@ -3228,5 +3234,11 @@ Public Class ViewEditLineUpDeliveryForm
             Return _systemOwner.IsThurston
         End Get
     End Property
+
+    Public Shadows Function ShowDialog() As DialogResult
+        _IsShowDialog = True
+
+        Return MyBase.ShowDialog()
+    End Function
 
 End Class
