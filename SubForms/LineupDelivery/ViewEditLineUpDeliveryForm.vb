@@ -1673,12 +1673,18 @@ Public Class ViewEditLineUpDeliveryForm
             If conn.State = ConnectionState.Closed Then conn.Open()
             Dim sql1 As String = "SELECT
 	                                CONCAT(COALESCE(c.FirstName, ''), ' ', COALESCE(c.MiddleName, ''), ' ', COALESCE(c.LastName, '')) AS Driver,
-	                                CONCAT_WS(
+	                                CONCAT_WS('\r\n', CONCAT_WS(
                                         ' ',
                                         COALESCE(c2.FirstName, ''),
                                         NULLIF(COALESCE(c2.MiddleName, ''), ''),
                                         COALESCE(c2.LastName, '')
-                                    ) AS Helper,
+                                    ),
+												CONCAT_WS(
+                                        ' ',
+                                        COALESCE(c3.FirstName, ''),
+                                        NULLIF(COALESCE(c3.MiddleName, ''), ''),
+                                        COALESCE(c3.LastName, '')
+                                    )) AS Helper,
 	                                lu.LineUpDate AS 'Date',
 	                                o.CustomerName AS Customer,
 	                                o.ReferenceNumber AS 'P.O. NO.',
@@ -1691,6 +1697,7 @@ Public Class ViewEditLineUpDeliveryForm
 		                                JOIN lineupcartons lc ON lu.RowID = lc.LineUpID
 		                                LEFT JOIN contacts c  ON lu.ContactID = c.RowID
 		                                LEFT JOIN contacts c2 ON lu.Helper1Id = c2.RowID
+		                                LEFT JOIN contacts c3 ON lu.Helper2Id = c3.RowID
 		                                JOIN orders o ON lu.OrderID = o.RowID
  		                                JOIN packinglistcartonitems plci ON lc.PackingListCartonID = plci.PackingListCartonID
  		                                JOIN orderitems oi ON plci.OrderItemID = oi.RowID
