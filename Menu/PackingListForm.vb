@@ -1046,7 +1046,8 @@ INNER JOIN orders o ON o.RowID=pl.OrderID AND o.RowID = {palorderid}
 WHERE plo.OrganizationID = {Z_OrganizationID}
 GROUP BY OrderItemID) plo2 ON plo2.OrderItemID=ci.RowID
 
-WHERE ci.orderid = {palorderid} AND ci.organizationid = {Z_OrganizationID} AND ci.status != 'Inactive' AND ci.itemtype != 'BI' AND (IFNULL(ci.qtyordered,0) - IFNULL(plo.QtyInCarton, 0)) > 0
+WHERE ci.orderid = {palorderid} AND ci.organizationid = {Z_OrganizationID} AND ci.status != 'Inactive' AND ci.itemtype != 'BI'
+#AND (IFNULL(ci.qtyordered,0) - IFNULL(plo.QtyInCarton, 0)) > 0
 ORDER BY ci.rowid;"
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
