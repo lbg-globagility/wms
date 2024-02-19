@@ -1967,7 +1967,7 @@ ORDER BY ci.rowid;"
         Dim orderDataService = GetRequiredService(Of IOrderDataService)()
         Dim orders = Await orderDataService.GetCustomerOrdersAsync(organizationId:=Z_OrganizationID)
         Dim dataSource = orders.
-            Where(Function(o) cboCustomerOrderInfo.Text.IsEqualTo(String.Concat(o.Customer.CompanyName, " - ", o.Customer.AccountNo, " / ", o.OrderNumber, " (C.O. No.)")) Or cboCustomerOrderInfo.Text.IsEqualTo(String.Concat(o.OrderNumber, " (C.O. No.) / ", o.Customer.CompanyName, " - ", o.Customer.AccountNo))).
+            Where(Function(o) cboCustomerOrderInfo.Text.IsEqualTo(String.Concat(o.Customer?.CompanyName, " - ", o.Customer?.AccountNo, " / ", o.OrderNumber, " (C.O. No.)")) Or cboCustomerOrderInfo.Text.IsEqualTo(String.Concat(o.OrderNumber, " (C.O. No.) / ", o.Customer?.CompanyName, " - ", o.Customer?.AccountNo))).
             ToList()
         'Where(Function(o) o.Status = OrderStatus.ForPacking).
         If If(dataSource?.Any(), False) AndAlso dataSource.Count() > 1 Then
