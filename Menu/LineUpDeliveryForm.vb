@@ -431,7 +431,12 @@ Public Class LineUpDeliveryForm
                     vieweditlineupdeliverylinkform.veludpublicdeliverydate = CStr(dgLineUpCalendar.CurrentRow.Cells("lud_basisdate").Value)
                     vieweditlineupdeliverylinkform.veludpublicdeliverytruckshiftid = luddeliverytruckshiftid
                     vieweditlineupdeliverylinkform.ShowInTaskbar = False
+
+                    'Dim defaultSelectedGridRowCell = vieweditlineupdeliverylinkform.dgLineUpList.Rows?.OfType(Of DataGridViewRow)?.FirstOrDefault()?.Cells(vieweditlineupdeliverylinkform.lu_lineupno.Name)
+                    'If defaultSelectedGridRowCell IsNot Nothing Then vieweditlineupdeliverylinkform.dgLineUpList_CellClick(sender:=vieweditlineupdeliverylinkform.dgLineUpList, e:=New DataGridViewCellEventArgs(columnIndex:=defaultSelectedGridRowCell.ColumnIndex, rowIndex:=defaultSelectedGridRowCell.RowIndex))
+
                     vieweditlineupdeliverylinkform.ShowDialog()
+
                     If vieweditlineupdeliverylinkform.vieweditlineupdeliverycue = legit Then
                         displayLineUpCalenderColumn()
                         luddisplaydays = CInt(DateDiff(DateInterval.Day, dtpFromSearch.Value, dtpToSearch.Value))
