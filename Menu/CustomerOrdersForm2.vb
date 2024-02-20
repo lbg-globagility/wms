@@ -806,4 +806,20 @@ Public Class CustomerOrdersForm2
     Private Sub txtStatus_TextChanged(sender As Object, e As EventArgs) Handles txtStatus.TextChanged
         ToolStripButtonApproved.Enabled = txtStatus.Text = OrderStatus.[New].ToString()
     End Sub
+
+    Private Sub Print()
+        If _selectedOrder Is Nothing Then Return
+
+        Dim printreport As New VendorReportPrint
+        Dim dataSource = CustomerOrdersForm.printCustomerOrderItems(icustomerorderid:=If(_selectedOrder?.RowID, 0))
+        printreport.SetDataSource(CType(dataSource, DataTable))
+
+        Dim openreportviewer As New ReportViewer
+        openreportviewer.CrystalReportViewer.ReportSource = printreport
+        openreportviewer.Show()
+    End Sub
+
+    Private Sub ToolStripButtonPrint_Click(sender As Object, e As EventArgs) Handles ToolStripButtonPrint.Click
+        Print()
+    End Sub
 End Class

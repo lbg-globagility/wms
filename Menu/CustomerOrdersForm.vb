@@ -1,5 +1,6 @@
 ﻿Imports Microsoft.Extensions.DependencyInjection
 Imports MySql.Data.MySqlClient
+Imports Warehouse_Management_System.DataSetA
 Imports WarehouseManagementSystem.Core.Entities
 Imports WarehouseManagementSystem.Core.Enums
 Imports WarehouseManagementSystem.Core.Interfaces
@@ -2196,11 +2197,12 @@ Public Class CustomerOrdersForm
 
 #Region "Printing"
 
-    Sub printCustomerOrderItems(ByVal icustomerorderid As Integer)
+    Public Function printCustomerOrderItems(ByVal icustomerorderid As Integer) As SetADataTable
+        Dim dataTable As New SetADataTable()
         Try
             If conn.State = ConnectionState.Closed Then conn.Open()
             Dim sql1 As String = "SELECT ci.rowid,COALESCE(c.colorvalue,''),COALESCE(ve.companycode,''),COALESCE(o.drnumber,''),COALESCE(br.branchcode,''),COALESCE(DATE_FORMAT(o.targetdate,'%m%d%y'),''),COALESCE(c1.codeno,''),COALESCE(c2.codeno,''),COALESCE(c3.codeno,'')," &
-                    "COALESCE(CONCAT(COALESCE(p.productcode,''),' ',COALESCE(c.colorname,''),' ',COALESCE(pcs.size,''),' ',COALESCE(pcs.seasoncode,'')),''),COALESCE(pcs.sku,''),ci.orderid,COALESCE(o.ordernumber,'') FROM orderitems ci LEFT JOIN productcolorsizes pcs ON ci.productcolorsizeid = pcs.rowid " &
+                    "COALESCE(CONCAT(COALESCE(p.productcode,''),' ',COALESCE(c.colorname,''),' ',COALESCE(pcs.size,''),' ',COALESCE(pcs.seasoncode,'')),''),COALESCE(pcs.sku,''),ci.orderid,COALESCE(o.ordernumber,''), IFNULL(ci.QtyOrdered, 0) `QtyOrdered` FROM orderitems ci LEFT JOIN productcolorsizes pcs ON ci.productcolorsizeid = pcs.rowid " &
                     "LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN colors c ON pc.colorid = c.rowid LEFT JOIN products p ON pc.productid = p.rowid LEFT JOIN orders o ON ci.orderid = o.rowid LEFT JOIN companies ve ON o.companyid = ve.rowid " &
                     "LEFT JOIN branches br ON o.branchid = br.rowid LEFT JOIN combinecodings cc ON o.combinecodingid = cc.rowid LEFT JOIN codings c1 ON cc.codingida = c1.rowid LEFT JOIN codings c2 ON cc.codingidb = c2.rowid LEFT JOIN codings c3 ON cc.codingidc = c3.rowid " &
                     "WHERE ci.organizationid = " & Z_OrganizationID & " AND ci.`status` != 'Inactive' AND ci.itemtype != 'B' AND ci.orderid = " & icustomerorderid & " GROUP BY ci.rowid ORDER BY ci.rowid"
@@ -2209,9 +2211,23 @@ Public Class CustomerOrdersForm
             While reader1.Read()
                 If reader1.HasRows Then
                     getPickListOrderID(CInt(reader1(11)), CInt(reader1(0)))
-                    If cototalqtypicked > 0 Then
-                        printdataset.AddSetARow(CStr(reader1(2)), CStr(reader1(3)), CStr(reader1(4)), CStr(reader1(5)), cototalqtypicked, CStr(reader1(6)), CStr(reader1(7)), CStr(reader1(8)), 0, CStr(reader1(9)), CStr(reader1(10)), Nothing, CStr(reader1(12)), "", "")
-                    End If
+                    Dim newRow = dataTable.NewRow()
+                    newRow.ItemArray = New Object() {CStr(reader1(2)),
+                        CStr(reader1(3)),
+                        CStr(reader1(4)),
+                        CStr(reader1(5)),
+                        CStr(reader1(13)),
+                        CStr(reader1(6)),
+                        CStr(reader1(7)),
+                        CStr(reader1(8)),
+                        0,
+                        CStr(reader1(9)),
+                        CStr(reader1(10)),
+                        Nothing,
+                        CStr(reader1(12)),
+                        "",
+                        ""}
+                    dataTable.Rows.Add(newRow)
                 End If
             End While
             reader1.Close()
@@ -2220,7 +2236,9 @@ Public Class CustomerOrdersForm
         Finally
             conn.Close()
         End Try
-    End Sub
+
+        Return dataTable
+    End Function
 
 #End Region
 
@@ -4560,7 +4578,7 @@ Public Class CustomerOrdersForm
             End If
             If dgCustomerOrderList.Rows.Count <> 0 Then
                 If MessageBox.Show("Would you like to print the VDR?", "Printing", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
-                    printCustomerOrderItems(CInt(dgCustomerOrderList.CurrentRow.Cells("co_rowid").Value))
+                    Dim newSetADataTable = printCustomerOrderItems(CInt(dgCustomerOrderList.CurrentRow.Cells("co_rowid").Value))
                     Dim printreport As New VendorReportPrint
                     Dim openreportviewer As New ReportViewer
                     openreportviewer.CrystalReportViewer.ReportSource = printreport

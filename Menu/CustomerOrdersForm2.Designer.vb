@@ -129,6 +129,8 @@ Partial Class CustomerOrdersForm2
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.btnAddOrderItem = New System.Windows.Forms.Button()
         Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.ToolStripButtonPrint = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripLabel6 = New System.Windows.Forms.ToolStripLabel()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
@@ -897,7 +899,7 @@ Partial Class CustomerOrdersForm2
         '
         Me.ToolStrip1.BackColor = System.Drawing.Color.Transparent
         Me.ToolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButtonNew, Me.ToolStripLabel3, Me.ToolStripButtonSave, Me.ToolStripLabel1, Me.ToolStripButtonApproved, Me.ToolStripLabel2, Me.ToolStripButtonCancel, Me.ToolStripButtonClose, Me.ToolStripLabel4, Me.ToolStripButtonRevoke, Me.ToolStripLabel5, Me.ToolStripButtonReEncode})
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButtonNew, Me.ToolStripLabel3, Me.ToolStripButtonSave, Me.ToolStripLabel1, Me.ToolStripButtonApproved, Me.ToolStripLabel2, Me.ToolStripButtonPrint, Me.ToolStripLabel6, Me.ToolStripButtonCancel, Me.ToolStripButtonClose, Me.ToolStripLabel4, Me.ToolStripButtonRevoke, Me.ToolStripLabel5, Me.ToolStripButtonReEncode})
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
         Me.ToolStrip1.Size = New System.Drawing.Size(925, 25)
@@ -1189,6 +1191,21 @@ Partial Class CustomerOrdersForm2
         Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
         Me.ContextMenuStrip1.Size = New System.Drawing.Size(61, 4)
         '
+        'ToolStripButtonPrint
+        '
+        Me.ToolStripButtonPrint.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButtonPrint.Image = CType(resources.GetObject("ToolStripButtonPrint.Image"), System.Drawing.Image)
+        Me.ToolStripButtonPrint.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButtonPrint.Name = "ToolStripButtonPrint"
+        Me.ToolStripButtonPrint.Size = New System.Drawing.Size(23, 22)
+        Me.ToolStripButtonPrint.Text = "Print"
+        '
+        'ToolStripLabel6
+        '
+        Me.ToolStripLabel6.Name = "ToolStripLabel6"
+        Me.ToolStripLabel6.Size = New System.Drawing.Size(52, 22)
+        Me.ToolStripLabel6.Text = "               "
+        '
         'CustomerOrdersForm2
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -1326,4 +1343,6 @@ Partial Class CustomerOrdersForm2
     Friend WithEvents ToolStripButtonRevoke As ToolStripButton
     Friend WithEvents ToolStripLabel5 As ToolStripLabel
     Friend WithEvents ToolStripButtonReEncode As ToolStripButton
+    Friend WithEvents ToolStripButtonPrint As ToolStripButton
+    Friend WithEvents ToolStripLabel6 As ToolStripLabel
 End Class
