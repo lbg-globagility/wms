@@ -1545,6 +1545,10 @@
       <Project>{aa5aa6cb-3318-4498-92bd-914ed28cfa0e}</Project>
       <Name>WarehouseManagementSystem.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="System.CustomUserControl\SergeUtils.csproj">
+      <Project>{25438301-ddf3-4efd-8c17-4aa3249cc9e0}</Project>
+      <Name>SergeUtils</Name>
+    </ProjectReference>
     <ProjectReference Include="System.Infrastructure\WarehouseManagementSystem.Infrastructure.csproj">
       <Project>{dfb283d2-27f3-429c-9f9b-c9dad02efca7}</Project>
       <Name>WarehouseManagementSystem.Infrastructure</Name>
