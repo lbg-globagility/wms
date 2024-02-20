@@ -2212,21 +2212,22 @@ Public Class CustomerOrdersForm
                 If reader1.HasRows Then
                     getPickListOrderID(CInt(reader1(11)), CInt(reader1(0)))
                     Dim newRow = dataTable.NewRow()
-                    newRow.ItemArray = New Object() {CStr(reader1(2)),
-                        CStr(reader1(3)),
-                        CStr(reader1(4)),
-                        CStr(reader1(5)),
-                        CStr(reader1(13)),
-                        CStr(reader1(6)),
-                        CStr(reader1(7)),
-                        CStr(reader1(8)),
-                        0,
-                        CStr(reader1(9)),
-                        CStr(reader1(10)),
-                        Nothing,
-                        CStr(reader1(12)),
-                        "",
-                        ""}
+                    newRow.ItemArray = New Object() {CStr(reader1(2)),'DataColumn1
+                        CStr(reader1(3)),'DataColumn2
+                        CStr(reader1(4)),'DataColumn3
+                        CStr(reader1(5)),'DataColumn4
+                        CStr(reader1(13)),'DataColumn5
+                        CStr(reader1(6)),'DataColumn6
+                        CStr(reader1(7)),'DataColumn7
+                        CStr(reader1(8)),'DataColumn8
+                        0,'DataColumn9
+                        CStr(reader1(9)),'DataColumn10
+                        CStr(reader1(10)),'DataColumn11
+                        Nothing,'DataColumn12
+                        CStr(reader1(12)),'DataColumn13
+                        "",'DataColumn14
+                        ""'DataColumn15
+                    }
                     dataTable.Rows.Add(newRow)
                 End If
             End While
