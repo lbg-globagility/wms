@@ -416,7 +416,7 @@ Public Class AddLineUpForm
         agentDataSource.AddRange(_agents)
         cboAgent.ValueMember = "RowID"
         cboAgent.DisplayMember = "FullNameLastNameFirst"
-        cboAgent.DataSource = agentDataSource
+        cboAgent.DataSource = agentDataSource.OrderBy(Function(a) a.FullNameLastNameFirst).ToList()
 
     End Function
 
@@ -430,12 +430,12 @@ Public Class AddLineUpForm
 
         cboHelper1.ValueMember = "RowID"
         cboHelper1.DisplayMember = "FullNameLastNameFirst"
-        cboHelper1.DataSource = helperDataSource
+        cboHelper1.DataSource = helperDataSource.OrderBy(Function(h) h.FullNameLastNameFirst).ToList()
 
         cboHelper2.ValueMember = "RowID"
         cboHelper2.DisplayMember = "FullNameLastNameFirst"
         cboHelper2.BindingContext = New BindingContext()
-        cboHelper2.DataSource = helperDataSource
+        cboHelper2.DataSource = helperDataSource.OrderBy(Function(h) h.FullNameLastNameFirst).ToList()
 
     End Function
 
