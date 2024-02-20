@@ -48,8 +48,6 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
                     if (entity.ProductInventoryLocations != null && entity.ProductInventoryLocations.Any())
                         entity.ProductInventoryLocations.ToList().ForEach(t =>
                         {
-                            if (t.RackShelfColumn != null) t.RackShelfColumn = null;
-
                             if (t.IsNewEntity) _context.ProductInventoryLocations.Add(t);
                             //else _context.Entry(t).State = EntityState.Modified;
                         });
