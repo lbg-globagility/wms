@@ -1676,6 +1676,10 @@ Public Class PurchaseForm
                 globalautocompleteByProductCode(cboByPhrase, Me)
                 globalautopopulateByProductCode(cboByPhrase, Me)
                 visibleAddProductItems(fraud, legit, fraud, legit, legit)
+
+                Dim productCodes = cboByPhrase.AutoCompleteCustomSource.Cast(Of String).ToArray()
+                EasyCompletionComboBox1.Items.Clear()
+                EasyCompletionComboBox1.Items.AddRange(items:=productCodes)
             ElseIf cboBy.Text = "SKU" Then
                 globalautocompleteBySKU(cboByPhrase, Me)
                 globalautopopulateBySKU(cboByPhrase, Me)
