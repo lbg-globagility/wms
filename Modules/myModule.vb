@@ -570,7 +570,7 @@ Module myModule
             'COALESCE(CONCAT(COALESCE(dt.truckname,''),' - ',COALESCE(dt.truckno,''),' / ',COALESCE(s.shiftname,'')),'')
             'CONCAT_WS(' - ', dt.YearAndModel, dt.truckno, s.shiftname)
             Dim cmd As New MySqlCommand("SELECT IFNULL(dt.truckname, '') AS 'truckshiftinfo' FROM deliverytruckshifts dts " &
-                            "LEFT JOIN deliverytrucks dt ON dts.deliverytruckid = dt.rowid LEFT JOIN shifts s ON dts.shiftid = s.rowid WHERE dts.organizationid = " & Z_OrganizationID & " AND dts.`status` = 'Active' GROUP BY dts.rowid ", globalconn)
+                            "LEFT JOIN deliverytrucks dt ON dts.deliverytruckid = dt.rowid LEFT JOIN shifts s ON dts.shiftid = s.rowid WHERE dts.organizationid = " & Z_OrganizationID & " AND dts.`status` = 'Active' GROUP BY dts.rowid ORDER BY IFNULL(dt.truckname, '') ", globalconn)
             Dim ds As New DataSet
             Dim da As New MySqlDataAdapter(cmd)
             da.Fill(ds, "list")
