@@ -1,6 +1,0 @@
-E:\Repositories\EasyCompletionComboBox-1.1.5\TestCombo\SergeUtils\bin\Debug\SergeUtils.dll
-E:\Repositories\EasyCompletionComboBox-1.1.5\TestCombo\SergeUtils\bin\Debug\SergeUtils.pdb
-E:\Repositories\EasyCompletionComboBox-1.1.5\TestCombo\SergeUtils\obj\Debug\SergeUtils.csproj.AssemblyReference.cache
-E:\Repositories\EasyCompletionComboBox-1.1.5\TestCombo\SergeUtils\obj\Debug\SergeUtils.csproj.CoreCompileInputs.cache
-E:\Repositories\EasyCompletionComboBox-1.1.5\TestCombo\SergeUtils\obj\Debug\SergeUtils.dll
-E:\Repositories\EasyCompletionComboBox-1.1.5\TestCombo\SergeUtils\obj\Debug\SergeUtils.pdb

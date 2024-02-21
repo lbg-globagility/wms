@@ -22,3 +22,5 @@ System.Core/bin/Release
 System.Infrastructure/bin/Release
 System.Utilities/bin/Release
 Output
+System.CustomUserControl/bin/Debug
+System.CustomUserControl/obj/Debug
