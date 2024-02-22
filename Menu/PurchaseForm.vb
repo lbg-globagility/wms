@@ -1455,6 +1455,8 @@ Public Class PurchaseForm
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
             conn.Close()
+            Dim items = cboBy.Items.OfType(Of Object).ToList()
+            cboBy.SelectedItem = items?.FirstOrDefault()
         End Try
         Me.Cursor = Cursors.Default
     End Sub
