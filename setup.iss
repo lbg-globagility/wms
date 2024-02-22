@@ -105,6 +105,7 @@ Source: "D:\Lambert\Repos\dreamhearts-warehousing-system\bin\Debug\Pomelo.Entity
 Source: "D:\Lambert\Repos\dreamhearts-warehousing-system\bin\Debug\Pomelo.JsonObject.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "D:\Lambert\Repos\dreamhearts-warehousing-system\bin\Debug\Remotion.Linq.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "D:\Lambert\Repos\dreamhearts-warehousing-system\bin\Debug\Remotion.Linq.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "D:\Lambert\Repos\dreamhearts-warehousing-system\bin\Debug\SergeUtils.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "D:\Lambert\Repos\dreamhearts-warehousing-system\bin\Debug\ShockwaveFlashObjects.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "D:\Lambert\Repos\dreamhearts-warehousing-system\bin\Debug\Spire.Barcode.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "D:\Lambert\Repos\dreamhearts-warehousing-system\bin\Debug\Spire.Barcode.xml"; DestDir: "{app}"; Flags: ignoreversion
