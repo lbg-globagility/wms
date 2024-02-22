@@ -52,6 +52,13 @@ Public Class PurchaseForm
             conn.Close()
         End Try
         Me.Cursor = Cursors.Default
+
+        If IsThurston Then
+            cboByPhrase2.Visible = IsThurston
+            cboByPhrase2.BringToFront()
+            cboByPhrase.Enabled = Not IsThurston
+            cboByPhrase.SendToBack()
+        End If
     End Sub
 
     Private Sub PurchaseOrderForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
@@ -1676,10 +1683,6 @@ Public Class PurchaseForm
                 globalautocompleteByProductCode(cboByPhrase, Me)
                 globalautopopulateByProductCode(cboByPhrase, Me)
                 visibleAddProductItems(fraud, legit, fraud, legit, legit)
-
-                Dim productCodes = cboByPhrase.AutoCompleteCustomSource.Cast(Of String).ToArray()
-                EasyCompletionComboBox1.Items.Clear()
-                EasyCompletionComboBox1.Items.AddRange(items:=productCodes)
             ElseIf cboBy.Text = "SKU" Then
                 globalautocompleteBySKU(cboByPhrase, Me)
                 globalautopopulateBySKU(cboByPhrase, Me)
@@ -1691,6 +1694,10 @@ Public Class PurchaseForm
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
             conn.Close()
+
+            Dim productCodes = cboByPhrase.AutoCompleteCustomSource.Cast(Of String).ToArray()
+            cboByPhrase2.Items.Clear()
+            If If(productCodes?.Any(), False) Then cboByPhrase2.Items.AddRange(items:=productCodes)
         End Try
         Me.Cursor = Cursors.Default
     End Sub
