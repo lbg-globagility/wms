@@ -46,6 +46,7 @@ Public Class CustomerOrdersForm2
 
         Await LoadInventoryLocationsAsync()
         Await LoadCustomersAsync()
+        cboCustomerName_DropDown(cboCustomerName, New EventArgs())
         Await LoadAgentsAsync()
 
         Await LoadCustomerOrdersAsync()
@@ -106,6 +107,7 @@ Public Class CustomerOrdersForm2
             OfType(Of Object).
             Select(Function(t) New InvetoryTypeModel(CType(t, InventoryLocationType))).
             ToList()
+        cboCustomerOrderType.BindingContext = New BindingContext()
         cboCustomerOrderType.DataSource = customerOrderTypes
     End Sub
 
@@ -115,6 +117,7 @@ Public Class CustomerOrdersForm2
 
         cboInventoryLocation.ValueMember = "RowID"
         cboInventoryLocation.DisplayMember = "Name"
+        cboInventoryLocation.BindingContext = New BindingContext()
         cboInventoryLocation.DataSource = inventoryLocations.
             OrderByDescending(Function(t) t.IsMainWarehouse).
             ThenBy(Function(t) t.Name).
@@ -125,11 +128,14 @@ Public Class CustomerOrdersForm2
         Dim accountDataService = GetRequiredService(Of IAccountDataService)()
         Dim accounts = Await accountDataService.GetManyByOrganizationIdAndTypeAsync(organizationId:=Z_OrganizationID, type:=AccountType.Customer)
 
-        cboCustomerName.ValueMember = "RowID"
-        cboCustomerName.DisplayMember = "CompanyName"
-        cboCustomerName.DataSource = accounts.
-            OrderBy(Function(t) t.CompanyName).
-            ToList()
+        With cboCustomerName
+            .ValueMember = "RowID"
+            .DisplayMember = "CompanyName"
+            .BindingContext = New BindingContext()
+            .DataSource = accounts.
+                OrderBy(Function(t) t.CompanyName).
+                ToList()
+        End With
     End Function
 
     Private Async Function LoadAgentsAsync() As Task
@@ -139,6 +145,7 @@ Public Class CustomerOrdersForm2
 
         cboAgent.ValueMember = "RowID"
         cboAgent.DisplayMember = "FullNameLastNameFirst"
+        cboAgent.BindingContext = New BindingContext()
         cboAgent.DataSource = agents.OrderBy(Function(t) t.FullNameLastNameFirst).ToList()
     End Function
 
@@ -265,18 +272,18 @@ Public Class CustomerOrdersForm2
         End If
     End Sub
 
-    Private Sub cboCustomerName_DropDown(sender As Object, e As EventArgs) Handles cboCustomerName.DropDown
+    Private Sub cboCustomerName_DropDown(sender As Object, e As EventArgs) 'Handles cboCustomerName.DropDown
 
-        Dim organizations = CType(cboCustomerName.DataSource, List(Of Account))
+        Dim customerList = CType(cboCustomerName.DataSource, List(Of Account))
 
-        If Not organizations.Any() Then Return
+        If Not customerList.Any() Then Return
 
         Static font As Font = cboCustomerName.Font
         Dim grp As Graphics = cboCustomerName.CreateGraphics()
 
         Dim vertScrollBarWidth As Integer = If(cboCustomerName.Items.Count > cboCustomerName.MaxDropDownItems, SystemInformation.VerticalScrollBarWidth, 0)
 
-        Dim longestWord = organizations.
+        Dim longestWord = customerList.
             OrderByDescending(Function(o) o.CompanyName.Length).
             Select(Function(o) o.CompanyName).
             FirstOrDefault()
