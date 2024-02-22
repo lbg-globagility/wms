@@ -1998,6 +1998,30 @@ Public Class PurchaseForm
         Me.Cursor = Cursors.Default
     End Sub
 
+    Private Sub cboByPhrase2_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboByPhrase2.SelectedIndexChanged
+
+    End Sub
+
+    Private Sub cboByPhrase2_SelectedValueChanged(sender As Object, e As EventArgs) Handles cboByPhrase2.SelectedValueChanged
+        cboByPhrase.SelectedItem = cboByPhrase2.SelectedItem
+        cboByPhrase_Leave(sender:=sender, e:=e)
+
+        dgProductColors.CurrentCell = dgProductColors.Rows?.
+            OfType(Of DataGridViewRow)?.
+            Select(Function(t) t.Cells(c_seqno.Name))?.
+            FirstOrDefault()
+        dgProductColors.Select()
+
+        dgProductColors_CellClick(sender:=dgProductColors,
+            e:=New DataGridViewCellEventArgs(columnIndex:=dgProductColors.CurrentCell?.RowIndex, rowIndex:=dgProductColors.CurrentCell?.ColumnIndex))
+
+        dgProductSizes.CurrentCell = dgProductSizes.Rows?.
+            OfType(Of DataGridViewRow)?.
+            Select(Function(t) t.Cells(s_sizes.Name))?.
+            FirstOrDefault()
+        dgProductSizes.Select()
+    End Sub
+
     Private Sub dgSupplierOrderItems_CellEndEdit(sender As Object, e As DataGridViewCellEventArgs) Handles dgSupplierOrderItems.CellEndEdit
         Try
             supplierorderitemscomputations()
