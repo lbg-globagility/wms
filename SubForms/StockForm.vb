@@ -412,7 +412,7 @@ Public Class StockForm
             If dgReceivingItem.Rows.Count <> 0 Then
                 For i As Integer = 0 To dgReceivingItem.Rows.Count - 1
                     If dgReceivingItem.Rows(i).Cells(ci_itemtype.Index).Value = "A" Then
-                        dgReceivingItem.Rows(i).DefaultCellStyle.BackColor = Color.BurlyWood
+                        dgReceivingItem.Rows(i).DefaultCellStyle.BackColor = Drawing.Color.BurlyWood
                     End If
                     If CStr(dgReceivingItem.Rows(i).Cells("ci_colorvalue").Value) <> "" Then
                         readcolor = colorconverter.ConvertFromString(CStr(dgReceivingItem.Rows(i).Cells("ci_colorvalue").Value))
