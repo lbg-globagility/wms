@@ -10,6 +10,8 @@ Imports System.Diagnostics
 Imports System.Runtime.InteropServices
 Imports System.Text.RegularExpressions
 Imports OfficeOpenXml.FormulaParsing.Excel.Functions.Information
+Imports WarehouseManagementSystem.Core.Interfaces
+Imports WarehouseManagementSystem.Core.Entities
 Public Class StockForm
     Dim manager As New sqlModule.Manager
     Dim conn As New MySqlConnection(manager.GetConnString)
@@ -22,7 +24,12 @@ Public Class StockForm
     Public sfseqno As String
     Public stockformcue As Boolean = False
     Public sforderitemid, sfprodcolorsizeid, sforderid, sfinventorylocationid, sfqtyOrdered, sfdamageqtyOrdered As Integer
-    Private Sub StockForm_Load(sender As Object, e As EventArgs) Handles Me.Load
+    Private _systemOwner As SystemOwner
+
+    Private Async Sub StockForm_Load(sender As Object, e As EventArgs) Handles Me.Load
+        Dim _systemOwnerService = GetRequiredService(Of ISystemOwnerService)()
+        _systemOwner = Await _systemOwnerService.GetCurrentSystemOwnerEntityAsync()
+
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
@@ -110,12 +117,12 @@ Public Class StockForm
                 cboRack.Focus()
                 Exit Try
             End If
-            If LTrim(cboColumn.Text) = "" Then
+            If LTrim(cboColumn.Text) = "" AndAlso Not IsThurston Then
                 errProvider.SetError(btnAddRackColumnShelf, "Please choose for column.")
                 cboColumn.Focus()
                 Exit Try
             End If
-            If LTrim(cboShelf.Text) = "" Then
+            If LTrim(cboShelf.Text) = "" AndAlso Not IsThurston Then
                 errProvider.SetError(btnAddRackColumnShelf, "Please choose for shelf.")
                 cboShelf.Focus()
                 Exit Try
@@ -859,4 +866,10 @@ Public Class StockForm
         Me.Cursor = Cursors.Default
     End Sub
 #End Region
+
+    Private ReadOnly Property IsThurston As Boolean
+        Get
+            Return _systemOwner.IsThurston
+        End Get
+    End Property
 End Class
