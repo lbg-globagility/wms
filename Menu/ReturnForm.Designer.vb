@@ -176,6 +176,7 @@ Partial Class ReturnForm
         Me.Label1 = New System.Windows.Forms.Label()
         Me.dgProductColors = New DevComponents.DotNetBar.Controls.DataGridViewX()
         Me.pbClose = New System.Windows.Forms.PictureBox()
+        Me.cboByPhrase2 = New SergeUtils.EasyCompletionComboBox()
         Me.gbReturnOrderItems.SuspendLayout()
         CType(Me.dgReturnOrderItems, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.errProvider, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -209,7 +210,7 @@ Partial Class ReturnForm
         Me.Label17.AutoSize = True
         Me.Label17.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label17.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label17.Location = New System.Drawing.Point(640, 104)
+        Me.Label17.Location = New System.Drawing.Point(640, 87)
         Me.Label17.Name = "Label17"
         Me.Label17.Size = New System.Drawing.Size(16, 15)
         Me.Label17.TabIndex = 466
@@ -235,7 +236,7 @@ Partial Class ReturnForm
         Me.gbReturnOrderItems.ForeColor = System.Drawing.SystemColors.ControlText
         Me.gbReturnOrderItems.Location = New System.Drawing.Point(6, 287)
         Me.gbReturnOrderItems.Name = "gbReturnOrderItems"
-        Me.gbReturnOrderItems.Size = New System.Drawing.Size(815, 130)
+        Me.gbReturnOrderItems.Size = New System.Drawing.Size(815, 113)
         Me.gbReturnOrderItems.TabIndex = 5
         Me.gbReturnOrderItems.TabStop = False
         '
@@ -243,7 +244,7 @@ Partial Class ReturnForm
         '
         Me.TxtTotalBadQty.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.TxtTotalBadQty.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TxtTotalBadQty.Location = New System.Drawing.Point(513, 101)
+        Me.TxtTotalBadQty.Location = New System.Drawing.Point(513, 84)
         Me.TxtTotalBadQty.Name = "TxtTotalBadQty"
         Me.TxtTotalBadQty.ReadOnly = True
         Me.TxtTotalBadQty.Size = New System.Drawing.Size(75, 21)
@@ -256,7 +257,7 @@ Partial Class ReturnForm
         Me.Label19.AutoSize = True
         Me.Label19.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label19.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label19.Location = New System.Drawing.Point(441, 96)
+        Me.Label19.Location = New System.Drawing.Point(441, 79)
         Me.Label19.Name = "Label19"
         Me.Label19.Size = New System.Drawing.Size(75, 30)
         Me.Label19.TabIndex = 468
@@ -267,7 +268,7 @@ Partial Class ReturnForm
         Me.chkOtherInfo.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.chkOtherInfo.AutoSize = True
         Me.chkOtherInfo.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.chkOtherInfo.Location = New System.Drawing.Point(5, 100)
+        Me.chkOtherInfo.Location = New System.Drawing.Point(5, 83)
         Me.chkOtherInfo.Name = "chkOtherInfo"
         Me.chkOtherInfo.Size = New System.Drawing.Size(105, 17)
         Me.chkOtherInfo.TabIndex = 41
@@ -278,7 +279,7 @@ Partial Class ReturnForm
         '
         Me.txtTotalPrice.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.txtTotalPrice.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtTotalPrice.Location = New System.Drawing.Point(659, 101)
+        Me.txtTotalPrice.Location = New System.Drawing.Point(659, 84)
         Me.txtTotalPrice.Name = "txtTotalPrice"
         Me.txtTotalPrice.ReadOnly = True
         Me.txtTotalPrice.Size = New System.Drawing.Size(129, 21)
@@ -291,7 +292,7 @@ Partial Class ReturnForm
         Me.Label13.AutoSize = True
         Me.Label13.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label13.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label13.Location = New System.Drawing.Point(597, 97)
+        Me.Label13.Location = New System.Drawing.Point(597, 80)
         Me.Label13.Name = "Label13"
         Me.Label13.Size = New System.Drawing.Size(44, 30)
         Me.Label13.TabIndex = 465
@@ -301,7 +302,7 @@ Partial Class ReturnForm
         '
         Me.txtTotalItems.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.txtTotalItems.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtTotalItems.Location = New System.Drawing.Point(210, 101)
+        Me.txtTotalItems.Location = New System.Drawing.Point(210, 84)
         Me.txtTotalItems.Name = "txtTotalItems"
         Me.txtTotalItems.ReadOnly = True
         Me.txtTotalItems.Size = New System.Drawing.Size(65, 21)
@@ -314,7 +315,7 @@ Partial Class ReturnForm
         Me.Label8.AutoSize = True
         Me.Label8.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label8.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label8.Location = New System.Drawing.Point(122, 104)
+        Me.Label8.Location = New System.Drawing.Point(122, 87)
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(82, 15)
         Me.Label8.TabIndex = 463
@@ -324,7 +325,7 @@ Partial Class ReturnForm
         '
         Me.txtTotalGoodQty.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.txtTotalGoodQty.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtTotalGoodQty.Location = New System.Drawing.Point(364, 101)
+        Me.txtTotalGoodQty.Location = New System.Drawing.Point(364, 84)
         Me.txtTotalGoodQty.Name = "txtTotalGoodQty"
         Me.txtTotalGoodQty.ReadOnly = True
         Me.txtTotalGoodQty.Size = New System.Drawing.Size(75, 21)
@@ -337,7 +338,7 @@ Partial Class ReturnForm
         Me.Label7.AutoSize = True
         Me.Label7.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label7.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label7.Location = New System.Drawing.Point(279, 94)
+        Me.Label7.Location = New System.Drawing.Point(279, 77)
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(84, 30)
         Me.Label7.TabIndex = 461
@@ -384,7 +385,7 @@ Partial Class ReturnForm
         Me.dgReturnOrderItems.RowHeadersDefaultCellStyle = DataGridViewCellStyle3
         Me.dgReturnOrderItems.RowHeadersVisible = False
         Me.dgReturnOrderItems.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgReturnOrderItems.Size = New System.Drawing.Size(800, 75)
+        Me.dgReturnOrderItems.Size = New System.Drawing.Size(800, 58)
         Me.dgReturnOrderItems.TabIndex = 40
         '
         'ci_rowid
@@ -1521,6 +1522,7 @@ Partial Class ReturnForm
         '
         'gbAddProductItem
         '
+        Me.gbAddProductItem.Controls.Add(Me.cboByPhrase2)
         Me.gbAddProductItem.Controls.Add(Me.TxtBadQty)
         Me.gbAddProductItem.Controls.Add(Me.Label10)
         Me.gbAddProductItem.Controls.Add(Me.txtGoodQty)
@@ -1680,6 +1682,14 @@ Partial Class ReturnForm
         Me.pbClose.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
         Me.pbClose.TabIndex = 246
         Me.pbClose.TabStop = False
+        '
+        'cboByPhrase2
+        '
+        Me.cboByPhrase2.FormattingEnabled = True
+        Me.cboByPhrase2.Location = New System.Drawing.Point(117, 13)
+        Me.cboByPhrase2.Name = "cboByPhrase2"
+        Me.cboByPhrase2.Size = New System.Drawing.Size(280, 21)
+        Me.cboByPhrase2.TabIndex = 472
         '
         'ReturnForm
         '
@@ -1872,4 +1882,5 @@ Partial Class ReturnForm
     Friend WithEvents ci_sku As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents ci_remarks As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents ci_option As System.Windows.Forms.DataGridViewButtonColumn
+    Friend WithEvents cboByPhrase2 As SergeUtils.EasyCompletionComboBox
 End Class

@@ -47,6 +47,26 @@ Partial Class ReturnsForm
         Me.txtTotalQty = New System.Windows.Forms.TextBox()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.dgPullOutItems = New DevComponents.DotNetBar.Controls.DataGridViewX()
+        Me.ci_rowid = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ci_pcsrowid = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ci_bid = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ci_colorvalue = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ci_seqno = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ci_productcode = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ci_colorname = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ci_color = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ci_size = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ci_seasoncode = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ci_unitofmeasure = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ci_qtyordered = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ci_qtyreceived = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ci_qtybad = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ci_srp = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ci_totalprice = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ci_sku = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ci_remarks = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ci_reason = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ci_option = New System.Windows.Forms.DataGridViewButtonColumn()
         Me.gbPullOutItems = New System.Windows.Forms.GroupBox()
         Me.Label15 = New System.Windows.Forms.Label()
         Me.dgProductSizes = New DevComponents.DotNetBar.Controls.DataGridViewX()
@@ -153,26 +173,7 @@ Partial Class ReturnsForm
         Me.dgProductColors = New DevComponents.DotNetBar.Controls.DataGridViewX()
         Me.c_rowid = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.c_colorvalue = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ci_rowid = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ci_pcsrowid = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ci_bid = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ci_colorvalue = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ci_seqno = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ci_productcode = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ci_colorname = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ci_color = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ci_size = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ci_seasoncode = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ci_unitofmeasure = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ci_qtyordered = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ci_qtyreceived = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ci_qtybad = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ci_srp = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ci_totalprice = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ci_sku = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ci_remarks = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ci_reason = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.ci_option = New System.Windows.Forms.DataGridViewButtonColumn()
+        Me.cboByPhrase2 = New SergeUtils.EasyCompletionComboBox()
         CType(Me.dgPullOutItems, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.gbPullOutItems.SuspendLayout()
         CType(Me.dgProductSizes, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -327,6 +328,135 @@ Partial Class ReturnsForm
         Me.dgPullOutItems.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.dgPullOutItems.Size = New System.Drawing.Size(800, 220)
         Me.dgPullOutItems.TabIndex = 34
+        '
+        'ci_rowid
+        '
+        Me.ci_rowid.HeaderText = "rowid"
+        Me.ci_rowid.Name = "ci_rowid"
+        Me.ci_rowid.Visible = False
+        '
+        'ci_pcsrowid
+        '
+        Me.ci_pcsrowid.HeaderText = "pcsrowid"
+        Me.ci_pcsrowid.Name = "ci_pcsrowid"
+        Me.ci_pcsrowid.Visible = False
+        '
+        'ci_bid
+        '
+        Me.ci_bid.HeaderText = "bid"
+        Me.ci_bid.Name = "ci_bid"
+        Me.ci_bid.Visible = False
+        '
+        'ci_colorvalue
+        '
+        Me.ci_colorvalue.HeaderText = "colorvalue"
+        Me.ci_colorvalue.Name = "ci_colorvalue"
+        Me.ci_colorvalue.Visible = False
+        '
+        'ci_seqno
+        '
+        Me.ci_seqno.HeaderText = "Seq. No."
+        Me.ci_seqno.Name = "ci_seqno"
+        Me.ci_seqno.ReadOnly = True
+        Me.ci_seqno.Width = 40
+        '
+        'ci_productcode
+        '
+        Me.ci_productcode.HeaderText = "Product Code"
+        Me.ci_productcode.Name = "ci_productcode"
+        Me.ci_productcode.ReadOnly = True
+        Me.ci_productcode.Width = 120
+        '
+        'ci_colorname
+        '
+        Me.ci_colorname.HeaderText = "Color Name"
+        Me.ci_colorname.Name = "ci_colorname"
+        Me.ci_colorname.ReadOnly = True
+        Me.ci_colorname.Width = 60
+        '
+        'ci_color
+        '
+        Me.ci_color.HeaderText = ""
+        Me.ci_color.Name = "ci_color"
+        Me.ci_color.ReadOnly = True
+        Me.ci_color.Width = 30
+        '
+        'ci_size
+        '
+        Me.ci_size.HeaderText = "Size"
+        Me.ci_size.Name = "ci_size"
+        Me.ci_size.ReadOnly = True
+        Me.ci_size.Width = 40
+        '
+        'ci_seasoncode
+        '
+        Me.ci_seasoncode.HeaderText = "Season Code"
+        Me.ci_seasoncode.Name = "ci_seasoncode"
+        Me.ci_seasoncode.ReadOnly = True
+        Me.ci_seasoncode.Width = 70
+        '
+        'ci_unitofmeasure
+        '
+        Me.ci_unitofmeasure.HeaderText = "Unit Of Measure"
+        Me.ci_unitofmeasure.Name = "ci_unitofmeasure"
+        Me.ci_unitofmeasure.Width = 70
+        '
+        'ci_qtyordered
+        '
+        Me.ci_qtyordered.HeaderText = "Return Qty."
+        Me.ci_qtyordered.Name = "ci_qtyordered"
+        Me.ci_qtyordered.Width = 60
+        '
+        'ci_qtyreceived
+        '
+        Me.ci_qtyreceived.HeaderText = "Qty. Received (Good)"
+        Me.ci_qtyreceived.Name = "ci_qtyreceived"
+        Me.ci_qtyreceived.ReadOnly = True
+        Me.ci_qtyreceived.Width = 105
+        '
+        'ci_qtybad
+        '
+        Me.ci_qtybad.HeaderText = "Qty. Received (Bad)"
+        Me.ci_qtybad.Name = "ci_qtybad"
+        Me.ci_qtybad.ReadOnly = True
+        Me.ci_qtybad.Width = 105
+        '
+        'ci_srp
+        '
+        Me.ci_srp.HeaderText = "SRP"
+        Me.ci_srp.Name = "ci_srp"
+        Me.ci_srp.Width = 80
+        '
+        'ci_totalprice
+        '
+        Me.ci_totalprice.HeaderText = "Total Price"
+        Me.ci_totalprice.Name = "ci_totalprice"
+        Me.ci_totalprice.ReadOnly = True
+        '
+        'ci_sku
+        '
+        Me.ci_sku.HeaderText = "SKU"
+        Me.ci_sku.Name = "ci_sku"
+        Me.ci_sku.ReadOnly = True
+        '
+        'ci_remarks
+        '
+        Me.ci_remarks.HeaderText = "Reason for Returns"
+        Me.ci_remarks.Name = "ci_remarks"
+        '
+        'ci_reason
+        '
+        Me.ci_reason.HeaderText = "Reason"
+        Me.ci_reason.Name = "ci_reason"
+        Me.ci_reason.ReadOnly = True
+        '
+        'ci_option
+        '
+        Me.ci_option.HeaderText = ""
+        Me.ci_option.Name = "ci_option"
+        Me.ci_option.Text = "Delete"
+        Me.ci_option.UseColumnTextForButtonValue = True
+        Me.ci_option.Width = 50
         '
         'gbPullOutItems
         '
@@ -1359,6 +1489,7 @@ Partial Class ReturnsForm
         '
         'gbAddProductItem
         '
+        Me.gbAddProductItem.Controls.Add(Me.cboByPhrase2)
         Me.gbAddProductItem.Controls.Add(Me.txtQtyOrdered)
         Me.gbAddProductItem.Controls.Add(Me.cboByPhrase)
         Me.gbAddProductItem.Controls.Add(Me.btnAddProduct)
@@ -1501,134 +1632,14 @@ Partial Class ReturnsForm
         Me.c_colorvalue.ReadOnly = True
         Me.c_colorvalue.Visible = False
         '
-        'ci_rowid
+        'cboByPhrase2
         '
-        Me.ci_rowid.HeaderText = "rowid"
-        Me.ci_rowid.Name = "ci_rowid"
-        Me.ci_rowid.Visible = False
-        '
-        'ci_pcsrowid
-        '
-        Me.ci_pcsrowid.HeaderText = "pcsrowid"
-        Me.ci_pcsrowid.Name = "ci_pcsrowid"
-        Me.ci_pcsrowid.Visible = False
-        '
-        'ci_bid
-        '
-        Me.ci_bid.HeaderText = "bid"
-        Me.ci_bid.Name = "ci_bid"
-        Me.ci_bid.Visible = False
-        '
-        'ci_colorvalue
-        '
-        Me.ci_colorvalue.HeaderText = "colorvalue"
-        Me.ci_colorvalue.Name = "ci_colorvalue"
-        Me.ci_colorvalue.Visible = False
-        '
-        'ci_seqno
-        '
-        Me.ci_seqno.HeaderText = "Seq. No."
-        Me.ci_seqno.Name = "ci_seqno"
-        Me.ci_seqno.ReadOnly = True
-        Me.ci_seqno.Width = 40
-        '
-        'ci_productcode
-        '
-        Me.ci_productcode.HeaderText = "Product Code"
-        Me.ci_productcode.Name = "ci_productcode"
-        Me.ci_productcode.ReadOnly = True
-        Me.ci_productcode.Width = 120
-        '
-        'ci_colorname
-        '
-        Me.ci_colorname.HeaderText = "Color Name"
-        Me.ci_colorname.Name = "ci_colorname"
-        Me.ci_colorname.ReadOnly = True
-        Me.ci_colorname.Width = 60
-        '
-        'ci_color
-        '
-        Me.ci_color.HeaderText = ""
-        Me.ci_color.Name = "ci_color"
-        Me.ci_color.ReadOnly = True
-        Me.ci_color.Width = 30
-        '
-        'ci_size
-        '
-        Me.ci_size.HeaderText = "Size"
-        Me.ci_size.Name = "ci_size"
-        Me.ci_size.ReadOnly = True
-        Me.ci_size.Width = 40
-        '
-        'ci_seasoncode
-        '
-        Me.ci_seasoncode.HeaderText = "Season Code"
-        Me.ci_seasoncode.Name = "ci_seasoncode"
-        Me.ci_seasoncode.ReadOnly = True
-        Me.ci_seasoncode.Width = 70
-        '
-        'ci_unitofmeasure
-        '
-        Me.ci_unitofmeasure.HeaderText = "Unit Of Measure"
-        Me.ci_unitofmeasure.Name = "ci_unitofmeasure"
-        Me.ci_unitofmeasure.Width = 70
-        '
-        'ci_qtyordered
-        '
-        Me.ci_qtyordered.HeaderText = "Return Qty."
-        Me.ci_qtyordered.Name = "ci_qtyordered"
-        Me.ci_qtyordered.Width = 60
-        '
-        'ci_qtyreceived
-        '
-        Me.ci_qtyreceived.HeaderText = "Qty. Received (Good)"
-        Me.ci_qtyreceived.Name = "ci_qtyreceived"
-        Me.ci_qtyreceived.ReadOnly = True
-        Me.ci_qtyreceived.Width = 105
-        '
-        'ci_qtybad
-        '
-        Me.ci_qtybad.HeaderText = "Qty. Received (Bad)"
-        Me.ci_qtybad.Name = "ci_qtybad"
-        Me.ci_qtybad.ReadOnly = True
-        Me.ci_qtybad.Width = 105
-        '
-        'ci_srp
-        '
-        Me.ci_srp.HeaderText = "SRP"
-        Me.ci_srp.Name = "ci_srp"
-        Me.ci_srp.Width = 80
-        '
-        'ci_totalprice
-        '
-        Me.ci_totalprice.HeaderText = "Total Price"
-        Me.ci_totalprice.Name = "ci_totalprice"
-        Me.ci_totalprice.ReadOnly = True
-        '
-        'ci_sku
-        '
-        Me.ci_sku.HeaderText = "SKU"
-        Me.ci_sku.Name = "ci_sku"
-        Me.ci_sku.ReadOnly = True
-        '
-        'ci_remarks
-        '
-        Me.ci_remarks.HeaderText = "Reason for Returns"
-        Me.ci_remarks.Name = "ci_remarks"
-        '
-        'ci_reason
-        '
-        Me.ci_reason.HeaderText = "Reason"
-        Me.ci_reason.Name = "ci_reason"
-        Me.ci_reason.ReadOnly = True
-        '
-        'ci_option
-        '
-        Me.ci_option.HeaderText = ""
-        Me.ci_option.Name = "ci_option"
-        Me.ci_option.Text = "Delete"
-        Me.ci_option.UseColumnTextForButtonValue = True
-        Me.ci_option.Width = 50
+        Me.cboByPhrase2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cboByPhrase2.FormattingEnabled = True
+        Me.cboByPhrase2.Location = New System.Drawing.Point(142, 11)
+        Me.cboByPhrase2.Name = "cboByPhrase2"
+        Me.cboByPhrase2.Size = New System.Drawing.Size(280, 23)
+        Me.cboByPhrase2.TabIndex = 473
         '
         'ReturnsForm
         '
@@ -1819,4 +1830,5 @@ Partial Class ReturnsForm
     Friend WithEvents ci_remarks As DataGridViewTextBoxColumn
     Friend WithEvents ci_reason As DataGridViewTextBoxColumn
     Friend WithEvents ci_option As DataGridViewButtonColumn
+    Friend WithEvents cboByPhrase2 As SergeUtils.EasyCompletionComboBox
 End Class

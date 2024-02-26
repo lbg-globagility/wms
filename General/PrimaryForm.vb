@@ -70,6 +70,10 @@ Public Class PrimaryForm
 
         Dim appSettings = ConfigurationManager.AppSettings
         ToolStripLabelVersion.Text = $"v{appSettings.Get("system.version")}"
+
+        If IsThurston Then
+            msBundles.Visible = Not IsThurston
+        End If
     End Sub
 
     Private Sub PrimaryForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing

@@ -10,6 +10,7 @@ Imports System.Diagnostics
 Imports System.Runtime.InteropServices
 Imports System.Text.RegularExpressions
 Imports WarehouseManagementSystem.Core.Enums
+Imports WarehouseManagementSystem.Core.Interfaces
 
 Public Class AdditionalItemsForm
     Dim manager As New sqlModule.Manager
@@ -22,8 +23,12 @@ Public Class AdditionalItemsForm
     Public aifordertype As String
     Public additionalitemsformcue As Boolean = False
     Public aiforderid, aifrrid, aifaccountid As Integer
+    Private _systemOwner As WarehouseManagementSystem.Core.Entities.SystemOwner
 
-    Private Sub AdditionalItemsForm_Load(sender As Object, e As EventArgs) Handles Me.Load
+    Private Async Sub ReturnForm_Load(sender As Object, e As EventArgs) Handles Me.Load
+        Dim _systemOwnerService = GetRequiredService(Of ISystemOwnerService)()
+        _systemOwner = Await _systemOwnerService.GetCurrentSystemOwnerEntityAsync()
+
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
@@ -40,6 +45,14 @@ Public Class AdditionalItemsForm
             conn.Close()
         End Try
         Me.Cursor = Cursors.Default
+
+        cboByPhrase2.Visible = IsThurston
+
+        If IsThurston Then
+            cboByPhrase2.BringToFront()
+            cboByPhrase.Enabled = Not IsThurston
+            cboByPhrase.SendToBack()
+        End If
     End Sub
 
 #Region "Function"
@@ -196,10 +209,14 @@ Public Class AdditionalItemsForm
     Sub autopopulatecboBy()
         Try
             cboBy.Items.Clear()
-            cboBy.Items.Add("Combination")
-            cboBy.Items.Add("ProductCode")
-            cboBy.Items.Add("SKU")
-            cboBy.Items.Add("")
+            If IsThurston Then
+                cboBy.Items.Add("ProductCode")
+            Else
+                cboBy.Items.Add("Combination")
+                cboBy.Items.Add("ProductCode")
+                cboBy.Items.Add("SKU")
+                cboBy.Items.Add("")
+            End If
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -564,6 +581,10 @@ Public Class AdditionalItemsForm
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
             conn.Close()
+
+            Dim productCodes = cboByPhrase.AutoCompleteCustomSource.Cast(Of String).ToArray()
+            cboByPhrase2.Items.Clear()
+            If If(productCodes?.Any(), False) Then cboByPhrase2.Items.AddRange(items:=productCodes)
         End Try
         Me.Cursor = Cursors.Default
     End Sub
@@ -1189,4 +1210,33 @@ Public Class AdditionalItemsForm
 
 #End Region
 
+    Private Sub cboByPhrase2_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboByPhrase2.SelectedIndexChanged
+
+    End Sub
+
+    Private Sub cboByPhrase2_SelectedValueChanged(sender As Object, e As EventArgs) Handles cboByPhrase2.SelectedValueChanged
+        cboByPhrase.SelectedItem = cboByPhrase2.SelectedItem
+        cboByPhrase_SelectedIndexChanged(sender:=sender, e:=e)
+
+        dgProductColors.CurrentCell = dgProductColors.Rows?.
+            OfType(Of DataGridViewRow)?.
+            Select(Function(t) t.Cells(c_seqno.Name))?.
+            FirstOrDefault()
+        dgProductColors.Select()
+
+        dgProductColors_CellClick(sender:=dgProductColors,
+            e:=New DataGridViewCellEventArgs(columnIndex:=dgProductColors.CurrentCell?.RowIndex, rowIndex:=dgProductColors.CurrentCell?.ColumnIndex))
+
+        dgProductSizes.CurrentCell = dgProductSizes.Rows?.
+            OfType(Of DataGridViewRow)?.
+            Select(Function(t) t.Cells(s_sizes.Name))?.
+            FirstOrDefault()
+        dgProductSizes.Select()
+    End Sub
+
+    Private ReadOnly Property IsThurston As Boolean
+        Get
+            Return _systemOwner.IsThurston
+        End Get
+    End Property
 End Class

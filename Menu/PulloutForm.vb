@@ -9,6 +9,7 @@ Imports System.Data
 Imports System.Diagnostics
 Imports System.Runtime.InteropServices
 Imports System.Text.RegularExpressions
+Imports WarehouseManagementSystem.Core.Interfaces
 Public Class PulloutForm
     Dim manager As New sqlModule.Manager
     Dim conn As New MySqlConnection(manager.GetConnString)
@@ -26,7 +27,12 @@ Public Class PulloutForm
     Dim pototalqtyordered, poqtyordered, poitotalqtyordered, poiqtyordered As Integer
     Dim pocustomerid, poorderid, poproductcolorsizesid, poproductid, poproductbundleid As Integer
     Dim simplesearchphrase, datephrase, commonphrase, pagefilter1, pagefilter2, pagefilter3, pagefilter4 As String
-    Private Sub PullOutForm_Load(sender As Object, e As EventArgs) Handles Me.Load
+    Private _systemOwner As WarehouseManagementSystem.Core.Entities.SystemOwner
+
+    Private Async Sub PullOutForm_Load(sender As Object, e As EventArgs) Handles Me.Load
+        Dim _systemOwnerService = GetRequiredService(Of ISystemOwnerService)()
+        _systemOwner = Await _systemOwnerService.GetCurrentSystemOwnerEntityAsync()
+
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
@@ -42,6 +48,14 @@ Public Class PulloutForm
             conn.Close()
         End Try
         Me.Cursor = Cursors.Default
+
+        cboByPhrase2.Visible = IsThurston
+
+        If IsThurston Then
+            cboByPhrase2.BringToFront()
+            cboByPhrase.Enabled = Not IsThurston
+            cboByPhrase.SendToBack()
+        End If
     End Sub
     Private Sub PullOutForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
         Me.Cursor = Cursors.WaitCursor
@@ -634,10 +648,14 @@ Public Class PulloutForm
     Sub autopopulatecboBy()
         Try
             cboBy.Items.Clear()
-            cboBy.Items.Add("Combination")
-            cboBy.Items.Add("ProductCode")
-            cboBy.Items.Add("SKU")
-            cboBy.Items.Add("")
+            If IsThurston Then
+                cboBy.Items.Add("ProductCode")
+            Else
+                cboBy.Items.Add("Combination")
+                cboBy.Items.Add("ProductCode")
+                cboBy.Items.Add("SKU")
+                cboBy.Items.Add("")
+            End If
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -1322,6 +1340,9 @@ Public Class PulloutForm
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
             conn.Close()
+
+            Dim items = cboBy.Items.OfType(Of Object).ToList()
+            cboBy.SelectedItem = items?.FirstOrDefault()
         End Try
         Me.Cursor = Cursors.Default
     End Sub
@@ -1555,6 +1576,10 @@ Public Class PulloutForm
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
             conn.Close()
+
+            Dim productCodes = cboByPhrase.AutoCompleteCustomSource.Cast(Of String).ToArray()
+            cboByPhrase2.Items.Clear()
+            If If(productCodes?.Any(), False) Then cboByPhrase2.Items.AddRange(items:=productCodes)
         End Try
         Me.Cursor = Cursors.Default
     End Sub
@@ -2943,4 +2968,35 @@ Public Class PulloutForm
         Me.Cursor = Cursors.Default
     End Sub
 #End Region
+
+    Private Sub cboByPhrase2_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboByPhrase2.SelectedIndexChanged
+
+    End Sub
+
+    Private Sub cboByPhrase2_SelectedValueChanged(sender As Object, e As EventArgs) Handles cboByPhrase2.SelectedValueChanged
+        cboByPhrase.SelectedItem = cboByPhrase2.SelectedItem
+        cboByPhrase_Leave(sender:=sender, e:=e)
+
+        dgProductColors.CurrentCell = dgProductColors.Rows?.
+            OfType(Of DataGridViewRow)?.
+            Select(Function(t) t.Cells(c_seqno.Name))?.
+            FirstOrDefault()
+        dgProductColors.Select()
+
+        dgProductColors_CellClick(sender:=dgProductColors,
+            e:=New DataGridViewCellEventArgs(columnIndex:=dgProductColors.CurrentCell?.RowIndex, rowIndex:=dgProductColors.CurrentCell?.ColumnIndex))
+
+        dgProductSizes.CurrentCell = dgProductSizes.Rows?.
+            OfType(Of DataGridViewRow)?.
+            Select(Function(t) t.Cells(s_sizes.Name))?.
+            FirstOrDefault()
+        dgProductSizes.Select()
+    End Sub
+
+    Private ReadOnly Property IsThurston As Boolean
+        Get
+            Return _systemOwner.IsThurston
+        End Get
+    End Property
+
 End Class
