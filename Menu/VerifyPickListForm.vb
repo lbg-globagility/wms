@@ -982,10 +982,10 @@ Public Class VerifyPickListForm
                                 Exit Try
                             End If
                         Else
-                            MessageBox.Show("This pick list item has been verified already.", "Verifying", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                            If Not IsVerifyAll Then MessageBox.Show("This pick list item has been verified already.", "Verifying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                             Exit Try
                         End If
-                        If MessageBox.Show("NOTE: Verifying this pick list item means that you have completely checked the quality and quantity of this/these item/s." & vbNewLine & "" & vbNewLine & "Do you want to proceed verifying this pick list item/s?", "Verifying", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
+                        If If(IsVerifyAll, DialogResult.Yes, MessageBox.Show("NOTE: Verifying this pick list item means that you have completely checked the quality and quantity of this/these item/s." & vbNewLine & "" & vbNewLine & "Do you want to proceed verifying this pick list item/s?", "Verifying", MessageBoxButtons.YesNo, MessageBoxIcon.Question)) = Windows.Forms.DialogResult.Yes Then
                             Me.Cursor = Cursors.WaitCursor
                             PrimaryForm.MainLoadingBar.Visible = legit
                             PrimaryForm.MainLoadingBar.Maximum = vplloadingbar
@@ -1070,8 +1070,17 @@ Public Class VerifyPickListForm
     End Sub
 
     Private Sub ButtonVerifyAll_Click(sender As Object, e As EventArgs) Handles ButtonVerifyAll.Click
-        _IsVerifyAll = True
+        Dim rows = dgPickListItems.Rows?.OfType(Of DataGridViewRow)
+        _IsVerifyAll = If(rows?.Any(), False)
 
+        If Not _IsVerifyAll Then Return
+
+        For Each r In rows
+            dgPickListItems.CurrentCell = dgPickListItems.Item(columnIndex:=pli_verify.Index, rowIndex:=r.Index)
+            dgPickListItems_CellContentClick(sender:=dgPickListItems, e:=New DataGridViewCellEventArgs(columnIndex:=pli_verify.Index, rowIndex:=r.Index))
+        Next
+
+        _IsVerifyAll = False
     End Sub
 
     Private Sub cmsOutright_Click(sender As Object, e As EventArgs) Handles cmsOutright.Click
