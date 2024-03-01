@@ -435,7 +435,7 @@ Public Class CustomerOrdersForm2
             dtpOrderDate.DataBindings.Add(dtpOrderDateBinding)
 
             RemoveHandler cboCustomerName.SelectedIndexChanged, AddressOf cboCustomerName_SelectedIndexChanged
-            cboCustomerName.DataBindings.Add("SelectedValue", order, "AccountID", False, updateMode)
+            cboCustomerName.DataBindings.Add("SelectedValue", order, "AccountID", True, updateMode)
             AddHandler cboCustomerName.SelectedIndexChanged, AddressOf cboCustomerName_SelectedIndexChanged
 
             cboAgent.DataBindings.Add("SelectedValue", order, "AgentID", False, updateMode)
@@ -715,7 +715,7 @@ Public Class CustomerOrdersForm2
     End Sub
 
     Private Sub cboCustomerName_SelectedIndexChanged1(sender As Object, e As EventArgs) Handles cboCustomerName.SelectedIndexChanged
-
+        Console.WriteLine($"order: {_selectedOrder?.AccountID}, cboCustomerName: {cboCustomerName.SelectedItem} or {cboCustomerName.SelectedValue}")
     End Sub
 
     Private Sub cboCustomerName_SelectedIndexChanged(sender As Object, e As EventArgs)

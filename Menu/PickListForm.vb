@@ -1654,7 +1654,7 @@ Public Class PickListForm
             If conn.State = ConnectionState.Closed Then conn.Open()
             Dim sql1 As String = "SELECT DISTINCT  o.OrderDate AS Date
 	                                , o.OrderNumber AS 'S.O. No.'
-	                                , o.CustomerAddress AS 'Ship To'
+	                                , CONCAT_WS('\n', CONCAT(acc.CompanyName, '\n'), o.CustomerAddress) AS 'Ship To'
 	                                , o.TargetDate AS 'Ship Date'
 	                                , p.ProductCode AS Item
 	                                , CONCAT(p.Description	, ' ', c.ColorName, ' ', pcs.Size ) AS Description	
@@ -1670,6 +1670,7 @@ Public Class PickListForm
                                 JOIN colors c ON pc.ColorID = c.RowID)
 
                                 JOIN picklistorders plo ON o.RowID = plo.OrderID)
+                                INNER JOIN accounts acc ON acc.RowID=o.AccountID
                                 WHERE o.OrderNumber = " & orderNumber & "
                                 ORDER BY p.ProductCode ASC"
             Dim cmd1 As New MySqlCommand(sql1, conn)
@@ -1677,7 +1678,18 @@ Public Class PickListForm
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             While reader1.Read()
                 If reader1.HasRows Then
-                    printdatasetthurston.AddSetGRow("", CStr(reader1(0)), CStr(reader1(1)), CStr(reader1(2)), CStr(reader1(3)), "", CStr(reader1(4)), CStr(reader1(5)), CStr(reader1(6)), getPickQty(CInt(CStr(reader1(7)))), "", "")
+                    printdatasetthurston.AddSetGRow(String.Empty,
+                        If(IsDBNull(reader1(0)), String.Empty, reader1(0)),
+                        If(IsDBNull(reader1(1)), String.Empty, reader1(1)),
+                        If(IsDBNull(reader1(2)), String.Empty, reader1(2)),
+                        If(IsDBNull(reader1(3)), String.Empty, reader1(3)),
+                        String.Empty,
+                        If(IsDBNull(reader1(4)), String.Empty, reader1(4)),
+                        If(IsDBNull(reader1(5)), String.Empty, reader1(5)),
+                        If(IsDBNull(reader1(6)), String.Empty, reader1(6)),
+                        getPickQty(If(IsDBNull(reader1(7)), 0, CInt(reader1(7)))),
+                        String.Empty,
+                        String.Empty)
                 End If
             End While
             reader1.Close()

@@ -1,4 +1,5 @@
 ﻿Imports MySql.Data.MySqlClient
+Imports WarehouseManagementSystem.Core.Interfaces
 
 Public Class VerifyPickListForm
     Dim manager As New sqlModule.Manager
@@ -19,8 +20,12 @@ Public Class VerifyPickListForm
     Dim spagenum, countpagenum, numofpages, validpages As Integer
     Dim pageequation1, pageequation2, pageequation3, additionalpage As Decimal
     Dim vpltotalqtypicked, vplqtypicked, vplqtypickedsum, vplpicklistorderstatus As Integer
+    Private _systemOwner As WarehouseManagementSystem.Core.Entities.SystemOwner
 
-    Private Sub VerifyPickListForm_Load(sender As Object, e As EventArgs) Handles Me.Load
+    Private Async Sub VerifyPickListForm_Load(sender As Object, e As EventArgs) Handles Me.Load
+        Dim _systemOwnerService = GetRequiredService(Of ISystemOwnerService)()
+        _systemOwner = Await _systemOwnerService.GetCurrentSystemOwnerEntityAsync()
+
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
@@ -167,7 +172,7 @@ Public Class VerifyPickListForm
         End Try
     End Sub
 
-    Sub clickpicklist()
+    Private Async Function clickpicklist() As Task
         Try
             clearPickListInformation()
             dgPickListItems.Rows.Clear()
@@ -182,7 +187,7 @@ Public Class VerifyPickListForm
                 enableANDvisibleMS(legit)
             End If
             displayPickListInformation(CInt(dgPickList.CurrentRow.Cells("pl_rowid").Value))
-            displayPickListItemsA(CInt(dgPickList.CurrentRow.Cells("pl_rowid").Value))
+            Await displayPickListItemsA(CInt(dgPickList.CurrentRow.Cells("pl_rowid").Value))
             colorCoding() : verifypicklistcomputation()
             txtComments.Focus()
         Catch ex As Exception
@@ -190,7 +195,7 @@ Public Class VerifyPickListForm
         Finally
             conn.Close()
         End Try
-    End Sub
+    End Function
 
     Sub verifypicklist()
         Try
@@ -434,7 +439,7 @@ Public Class VerifyPickListForm
         End Try
     End Sub
 
-    Sub displayPickListItemsA(ByVal ipicklistid As Integer)
+    Private Async Function displayPickListItemsA(ByVal ipicklistid As Integer) As Task
         Try
             dgPickListItems.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
@@ -444,7 +449,7 @@ Public Class VerifyPickListForm
                     "LEFT JOIN products p ON pc.productid = p.rowid LEFT JOIN orders o ON o.RowID=oi.OrderID LEFT JOIN inventorylocations il ON il.RowID=o.InventoryLocationID WHERE plo.organizationid = " & Z_OrganizationID & " AND (plo.`status` != 'Inactive' AND plo.`status` != 'Cancelled') " &
                     "AND plo.picklistid = " & ipicklistid & " GROUP BY oi.productcolorsizeid ORDER BY p.productcode,c.colorname,pcs.size "
             Dim cmd1 As New MySqlCommand(sql1, conn)
-            Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
+            Dim reader1 As MySqlDataReader = Await cmd1.ExecuteReaderAsync()
             Dim n As Integer = 0
             Dim seqno As Integer = 1
             While reader1.Read()
@@ -498,7 +503,7 @@ Public Class VerifyPickListForm
         Finally
             conn.Close()
         End Try
-    End Sub
+    End Function
 
     Sub displayPickListItemsB(ByVal epicklistid As Integer, ByVal eproductcolorsizeid As Integer)
         Try
@@ -672,18 +677,32 @@ Public Class VerifyPickListForm
             If conn.State = ConnectionState.Closed Then conn.Open()
             Dim sql1 As String = "SELECT COALESCE(o.rowid,0),COALESCE(p.productcode,''),COALESCE(co.colorname,''),COALESCE(pcs.size,''),COALESCE(pli.qtypicked,0),COALESCE(pl.picklistno,'')," &
                         "COALESCE(CONCAT(COALESCE(c.firstname,''),' ',COALESCE(c.middlename,''),' ',COALESCE(c.lastname,''),' ',COALESCE(c.suffix,''),' - ',COALESCE(c.contactno,'')),''),COALESCE(DATE_FORMAT(pl.picklistdate,'%d-%b-%Y')),COALESCE(il.name,''),COALESCE(pcs.seasoncode,''),COALESCE(o.referencenumber,'')," &
-                        "COALESCE(bc.branchname,''),COALESCE(bc.branchcode,''),COALESCE(DATE_FORMAT(o.orderdate,'%d-%b-%Y'),''),COALESCE(DATE_FORMAT(o.targetdate,'%d-%b-%Y'),''),COALESCE(DATE_FORMAT(o.enddate,'%d-%b-%Y'),''),COALESCE(CONCAT(COALESCE(c1.codename,''),', ',COALESCE(c1.codeno,'')),''),COALESCE(o.ordernumber,''),COALESCE(p.unitprice,0.00) " &
+                        "COALESCE(o.CustomerName,''),COALESCE(bc.branchcode,''),COALESCE(DATE_FORMAT(o.orderdate,'%d-%b-%Y'),''),COALESCE(DATE_FORMAT(o.targetdate,'%d-%b-%Y'),''),COALESCE(DATE_FORMAT(o.enddate,'%d-%b-%Y'),''),COALESCE(CONCAT(COALESCE(c1.codename,''),', ',COALESCE(c1.codeno,'')),''),COALESCE(o.ordernumber,''),COALESCE(pil.UnitPriceOfUOM2,0.00) " &
                         "FROM picklistorderitems pli LEFT JOIN picklistorders plo ON pli.picklistorderid = plo.rowid LEFT JOIN orders o ON plo.orderid = o.rowid LEFT JOIN branches bc ON o.branchid = bc.rowid LEFT JOIN picklist pl ON plo.picklistid = pl.rowid LEFT JOIN inventorylocations il ON pl.inventorylocationid = il.rowid " &
                         "LEFT JOIN combinecodings cc ON o.combinecodingid = cc.rowid LEFT JOIN codings c1 ON cc.codingida = c1.rowid LEFT JOIN contacts c ON pl.contactid = c.rowid LEFT JOIN productinventorylocation pil ON pli.productinventorylocationid = pil.rowid LEFT JOIN rackshelfcolumn rsc ON pil.rackshelfcolumnid = rsc.rowid " &
                         "LEFT JOIN productcolorsizes pcs ON pil.productcolorsizeid = pcs.rowid LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN colors co ON pc.colorid = co.rowid LEFT JOIN products p ON pc.productid = p.rowid WHERE pl.organizationid = " & Z_OrganizationID & " " &
-                        "AND pl.rowid = " & ipicklistid & " AND plo.`status` != 'Inactive' AND pli.`status` != 'Inactive' AND pli.qtypicked > 0 ORDER BY p.productcode,o.referencenumber,bc.branchname ASC "
+                        "AND pl.rowid = " & ipicklistid & " AND plo.`status` != 'Inactive' AND pli.`status` != 'Inactive' AND pli.qtypicked > 0 ORDER BY p.productcode,o.referencenumber,o.CustomerName ASC "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             cmd1.CommandTimeout = commantimeoutlimit
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             While reader1.Read()
                 If reader1.HasRows Then
                     productimage = Nothing
-                    printdataset.AddSetARow(CStr(reader1(0)), CStr(reader1(1)), CStr(reader1(2)), CStr(reader1(3)), CInt(reader1(4)), "ENTRY DATE: " & CStr(reader1(13)) & "", "RECEIPT DATE: " & CStr(reader1(14)) & "", "DEPT: " & CStr(reader1(16)) & "", "CANCEL DATE: " & CStr(reader1(15)) & "", "" & CStr(reader1(10)) & "" & vbNewLine & "" & CStr(reader1(17)) & "", CStr(reader1(11)), productimage, CStr(reader1(12)), "PICK LIST NO.: " & CStr(reader1(5)) & "", "" & CStr(reader1(18)) & " - " & CStr(reader1(9)) & "")
+                    printdataset.AddSetARow(CStr(reader1(0)),
+                        CStr(reader1(1)),
+                        CStr(reader1(2)),
+                        CStr(reader1(3)),
+                        CInt(reader1(4)),
+                        "ENTRY DATE: " & CStr(reader1(13)) & "",
+                        "RECEIPT DATE: " & CStr(reader1(14)) & "",
+                        "DEPT: " & CStr(reader1(16)) & "",
+                        "CANCEL DATE: " & CStr(reader1(15)) & "",
+                        "" & CStr(reader1(10)) & "" & vbNewLine & "" & CStr(reader1(17)) & "",
+                        CStr(reader1(11)),
+                        productimage,
+                        CStr(reader1(12)),
+                        "PICK LIST NO.: " & CStr(reader1(5)) & "",
+                        "" & CStr(reader1(18)) & " - " & CStr(reader1(9)) & "")
                 End If
             End While
             reader1.Close()
@@ -705,12 +724,12 @@ Public Class VerifyPickListForm
             '            "LEFT JOIN productcolorsizes pcs ON pil.productcolorsizeid = pcs.rowid LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN colors co ON pc.colorid = co.rowid LEFT JOIN products p ON pc.productid = p.rowid WHERE pl.organizationid = " & Z_OrganizationID & " " & _
             '            "AND pl.rowid = " & ipicklistid & " AND plo.`status` != 'Inactive' AND pli.`status` != 'Inactive' AND pli.qtypicked > 0 ORDER BY o.ordernumber ASC "
             Dim sql1 As String = "SELECT COALESCE(o.rowid,0),COALESCE(p.productcode,''),COALESCE(co.colorname,''),COALESCE(pcs.size,''),COALESCE(pli.qtypicked,0),COALESCE(pl.picklistno,'')," &
-                        "COALESCE(CONCAT(COALESCE(c.firstname,''),' ',COALESCE(c.middlename,''),' ',COALESCE(c.lastname,''),' ',COALESCE(c.suffix,''),' - ',COALESCE(c.contactno,'')),''),COALESCE(DATE_FORMAT(pl.picklistdate,'%d-%b-%Y'),''),COALESCE(il.name,''),COALESCE(pcs.seasoncode,''),COALESCE(o.referencenumber,''),COALESCE(bc.branchname,'')," &
-                        "COALESCE(bc.branchcode,''),COALESCE(DATE_FORMAT(o.orderdate,'%d-%b-%Y'),''),COALESCE(DATE_FORMAT(o.targetdate,'%d-%b-%Y'),''),COALESCE(DATE_FORMAT(o.enddate,'%d-%b-%Y'),''),COALESCE(CONCAT(COALESCE(c1.codename,''),', ',COALESCE(c1.codeno,'')),''),COALESCE(o.ordernumber,''),COALESCE(p.unitprice,0.00) " &
+                        "COALESCE(CONCAT(COALESCE(c.firstname,''),' ',COALESCE(c.middlename,''),' ',COALESCE(c.lastname,''),' ',COALESCE(c.suffix,''),' - ',COALESCE(c.contactno,'')),''),COALESCE(DATE_FORMAT(pl.picklistdate,'%d-%b-%Y'),''),COALESCE(il.name,''),COALESCE(pcs.seasoncode,''),COALESCE(o.referencenumber,''),COALESCE(o.CustomerName,'')," &
+                        "COALESCE(bc.branchcode,''),COALESCE(DATE_FORMAT(o.orderdate,'%d-%b-%Y'),''),COALESCE(DATE_FORMAT(o.targetdate,'%d-%b-%Y'),''),COALESCE(DATE_FORMAT(o.enddate,'%d-%b-%Y'),''),COALESCE(CONCAT(COALESCE(c1.codename,''),', ',COALESCE(c1.codeno,'')),''),COALESCE(o.ordernumber,''),COALESCE(pil.UnitPriceOfUOM2,0.00) " &
                         "FROM picklistorderitems pli LEFT JOIN picklistorders plo ON pli.picklistorderid = plo.rowid LEFT JOIN orders o ON plo.orderid = o.rowid LEFT JOIN branches bc ON o.branchid = bc.rowid LEFT JOIN picklist pl ON plo.picklistid = pl.rowid LEFT JOIN inventorylocations il ON pl.inventorylocationid = il.rowid " &
                         "LEFT JOIN combinecodings cc ON o.combinecodingid = cc.rowid LEFT JOIN codings c1 ON cc.codingida = c1.rowid LEFT JOIN contacts c ON pl.contactid = c.rowid LEFT JOIN productinventorylocation pil ON pli.productinventorylocationid = pil.rowid LEFT JOIN rackshelfcolumn rsc ON pil.rackshelfcolumnid = rsc.rowid " &
                         "LEFT JOIN productcolorsizes pcs ON pil.productcolorsizeid = pcs.rowid LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN colors co ON pc.colorid = co.rowid LEFT JOIN products p ON pc.productid = p.rowid WHERE pl.organizationid = " & Z_OrganizationID & " " &
-                        "AND pl.rowid = " & ipicklistid & " AND plo.`status` != 'Inactive' AND pli.`status` != 'Inactive' AND pli.qtypicked > 0 ORDER BY o.ordernumber,p.productcode ASC,bc.branchname ASC "
+                        "AND pl.rowid = " & ipicklistid & " AND plo.`status` != 'Inactive' AND pli.`status` != 'Inactive' AND pli.qtypicked > 0 ORDER BY o.ordernumber,p.productcode ASC,o.CustomerName ASC "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             cmd1.CommandTimeout = commantimeoutlimit
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -803,11 +822,15 @@ Public Class VerifyPickListForm
         Me.Cursor = Cursors.Default
     End Sub
 
-    Private Sub dgPickList_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgPickList.CellClick
+    Private Sub dgPickList_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgPickList.CellContentClick
+
+    End Sub
+
+    Private Async Sub dgPickList_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgPickList.CellClick
         Me.Cursor = Cursors.WaitCursor
         Try
             If dgPickList.Rows.Count <> 0 Then
-                clickpicklist()
+                Await clickpicklist()
             End If
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
@@ -817,12 +840,12 @@ Public Class VerifyPickListForm
         Me.Cursor = Cursors.Default
     End Sub
 
-    Private Sub dgPickList_KeyUp(sender As Object, e As KeyEventArgs) Handles dgPickList.KeyUp
+    Private Async Sub dgPickList_KeyUp(sender As Object, e As KeyEventArgs) Handles dgPickList.KeyUp
         Me.Cursor = Cursors.WaitCursor
         Try
             If dgPickList.Rows.Count <> 0 Then
                 If e.KeyCode = Keys.Up Or e.KeyCode = Keys.Down Or e.KeyCode = Keys.PageUp Or e.KeyCode = Keys.PageDown Or e.KeyCode = Keys.Enter Or e.KeyCode = Keys.Tab Then
-                    clickpicklist()
+                    Await clickpicklist()
                 End If
             End If
         Catch ex As Exception
@@ -929,7 +952,7 @@ Public Class VerifyPickListForm
                             MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                             Exit Try
                         End If
-                        If globalcreateflg = "Y" Then
+                        If globalcreateflg = "Y" AndAlso Not IsThurston Then
                             MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                             Exit Try
                         End If
@@ -1046,6 +1069,11 @@ Public Class VerifyPickListForm
         Me.Cursor = Cursors.Default
     End Sub
 
+    Private Sub ButtonVerifyAll_Click(sender As Object, e As EventArgs) Handles ButtonVerifyAll.Click
+        _IsVerifyAll = True
+
+    End Sub
+
     Private Sub cmsOutright_Click(sender As Object, e As EventArgs) Handles cmsOutright.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1063,7 +1091,7 @@ Public Class VerifyPickListForm
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
-                If globalcreateflg = "Y" Then
+                If globalcreateflg = "Y" AndAlso Not IsThurston Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
@@ -1242,6 +1270,7 @@ Public Class VerifyPickListForm
             conn.Close()
         End Try
         Me.Cursor = Cursors.Default
+        Dim fsdfsd = pli_verify.Name
     End Sub
 
 #Region "Search/Page Setup"
@@ -1516,5 +1545,13 @@ Public Class VerifyPickListForm
     End Sub
 
 #End Region
+
+    Private ReadOnly Property IsVerifyAll As Boolean
+
+    Private ReadOnly Property IsThurston As Boolean
+        Get
+            Return _systemOwner.IsThurston
+        End Get
+    End Property
 
 End Class

@@ -1673,7 +1673,7 @@ Public Class ViewEditLineUpDeliveryForm
             If conn.State = ConnectionState.Closed Then conn.Open()
             Dim sql1 As String = "SELECT
 	                                CONCAT(COALESCE(c.FirstName, ''), ' ', COALESCE(c.MiddleName, ''), ' ', COALESCE(c.LastName, '')) AS Driver,
-	                                CONCAT_WS('\r\n', CONCAT_WS(
+	                                REPLACE(CONCAT_WS('\r\n', CONCAT_WS(
                                         ' ',
                                         COALESCE(c2.FirstName, ''),
                                         NULLIF(COALESCE(c2.MiddleName, ''), ''),
@@ -1684,10 +1684,10 @@ Public Class ViewEditLineUpDeliveryForm
                                         COALESCE(c3.FirstName, ''),
                                         NULLIF(COALESCE(c3.MiddleName, ''), ''),
                                         COALESCE(c3.LastName, '')
-                                    )) AS Helper,
+                                    )), '\n\n', '\b') AS Helper,
 	                                lu.LineUpDate AS 'Date',
-	                                o.CustomerName AS Customer,
-	                                o.ReferenceNumber AS 'P.O. NO.',
+	                                GROUP_CONCAT(DISTINCT o.CustomerName) AS Customer,
+	                                GROUP_CONCAT(DISTINCT o.ReferenceNumber) AS 'P.O. NO.',
 	                                SUM(plci.QtyInCarton) AS Qty,
 	                                GROUP_CONCAT(IFNULL(IFNULL(p.ProductCode, IFNULL(pcs.SKU, pcs.SKU2)), '[NO SKU]'), '/', IFNULL(plci.QtyInCarton, '') SEPARATOR ' , ') AS 'Item / Description'
 
@@ -1705,8 +1705,7 @@ Public Class ViewEditLineUpDeliveryForm
  		                                JOIN productcolors pc ON pc.RowID=pcs.ProductColorID
  		                                JOIN products p ON p.RowID=pc.ProductID
 
-			                                WHERE lu.LineUpNo = " & lineUpNo & " AND plci.`Status` = 'Lined Up'
-				                                GROUP BY lc.RowID"
+			                                WHERE lu.LineUpNo = " & lineUpNo & " GROUP BY p.`Description`"
             Dim cmd1 As New MySqlCommand(sql1, conn)
             cmd1.CommandTimeout = commantimeoutlimit
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
