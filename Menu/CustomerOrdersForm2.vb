@@ -431,7 +431,8 @@ Public Class CustomerOrdersForm2
             txtStatus.DataBindings.Add("Text", order, "StatusDisplayText", False, DataSourceUpdateMode.Never)
 
             Dim dtpOrderDateBinding = New Binding("Value", order, "OrderDate") With {
-            .DataSourceUpdateMode = updateMode}
+            .DataSourceUpdateMode = updateMode,
+            .FormattingEnabled = True}
             dtpOrderDate.DataBindings.Add(dtpOrderDateBinding)
 
             RemoveHandler cboCustomerName.SelectedIndexChanged, AddressOf cboCustomerName_SelectedIndexChanged
