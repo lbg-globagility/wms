@@ -54,5 +54,9 @@ namespace WarehouseManagementSystem.Core.Entities
             foreach (var productColorSize in productColorSizes)
                 ProductColorSizes.Add(productColorSize);
         }
+
+        public string ColorName => Color?.ColorName ?? string.Empty;
+
+        public string ProductCode => Product?.ProductCode ?? string.Empty;
     }
 }

@@ -52,7 +52,11 @@ Public Class ProductImportation
                 Dim products = Await productDataService.GetManyByProductCodesAsync(organizationId:=Z_OrganizationID,
                     productCodes:=productCodes)
 
+                Dim productColorDataService = GetRequiredService(Of IProductColorDataService)()
+                Dim productColors = Await productColorDataService.GetByOrganizationAsync(Z_OrganizationID)
+
                 Dim newProductColors = New List(Of ProductColor)
+                Dim modifiedProductColors = New List(Of ProductColor)
 
                 For Each colorItem In groupByColorList
                     Dim colorName = colorItem.Key
@@ -79,32 +83,56 @@ Public Class ProductImportation
                                 userId:=Z_UserID)
                         End If
 
-                        Dim newProductColor = ProductColor.NewProductColor(organizationId:=Z_OrganizationID,
+                        Dim colorId = color.RowID.Value
+                        Dim productId = product.RowID.Value
+
+                        If Not productColors.Any(Function(t) t.ColorID = colorId AndAlso t.ProductID = productId) Then
+                            Dim newProductColor = ProductColor.NewProductColor(organizationId:=Z_OrganizationID,
                             userId:=Z_UserID,
-                            colorId:=color.RowID.Value,
-                            productId:=product.RowID.Value)
+                            colorId:=colorId,
+                            productId:=productId)
 
-                        Dim groupBySizeList = productItem.
-                            GroupBy(Function(c) c.Style).
-                            ToList()
-                        For Each sizeItem In groupBySizeList
-                            Dim newProductColorSize = ProductColorSize.NewProductColorSize(organizationId:=Z_OrganizationID,
-                                userId:=Z_UserID,
-                                size:=CDec(sizeItem.Key),
-                                sku:=sizeItem.FirstOrDefault().SKU,
-                                sku2:=sizeItem.FirstOrDefault().SKU2,
-                                seasonCode:=sizeItem.FirstOrDefault().SeasonCode)
+                            Dim groupBySizeList = productItem.
+                                GroupBy(Function(c) c.Style).
+                                ToList()
+                            For Each sizeItem In groupBySizeList
+                                Dim newProductColorSize = ProductColorSize.NewProductColorSize(organizationId:=Z_OrganizationID,
+                                    userId:=Z_UserID,
+                                    size:=CDec(sizeItem.Key),
+                                    sku:=sizeItem.FirstOrDefault().SKU,
+                                    sku2:=sizeItem.FirstOrDefault().SKU2,
+                                    seasonCode:=sizeItem.FirstOrDefault().SeasonCode)
 
-                            newProductColor.AddProductColorSizes(productColorSizes:=New List(Of ProductColorSize) From {newProductColorSize})
-                        Next
+                                newProductColor.AddProductColorSizes(productColorSizes:=New List(Of ProductColorSize) From {newProductColorSize})
+                            Next
 
-                        newProductColors.Add(newProductColor)
-                        color.AddProductColors(New List(Of ProductColor) From {newProductColor})
+                            newProductColors.Add(newProductColor)
+                            color.AddProductColors(New List(Of ProductColor) From {newProductColor})
+                        Else
+                            Dim productColor = productColors.FirstOrDefault(Function(t) t.ColorID = colorId AndAlso t.ProductID = productId)
+
+                            Dim groupBySizeList = productItem.
+                                GroupBy(Function(c) c.Style).
+                                ToList()
+                            For Each sizeItem In groupBySizeList
+                                Dim newProductColorSize = ProductColorSize.NewProductColorSize(organizationId:=Z_OrganizationID,
+                                    userId:=Z_UserID,
+                                    size:=CDec(sizeItem.Key),
+                                    sku:=sizeItem.FirstOrDefault().SKU,
+                                    sku2:=sizeItem.FirstOrDefault().SKU2,
+                                    seasonCode:=sizeItem.FirstOrDefault().SeasonCode)
+
+                                productColor.AddProductColorSizes(productColorSizes:=New List(Of ProductColorSize) From {newProductColorSize})
+                            Next
+
+                            modifiedProductColors.Add(productColor)
+                        End If
                     Next
                 Next
 
-                Dim productColorDataService = GetRequiredService(Of IProductColorDataService)()
-                Await productColorDataService.SaveManyAsync(entities:=newProductColors, userId:=Z_UserID)
+                Await productColorDataService.SaveManyChangesAsync(added:=newProductColors,
+                    updated:=modifiedProductColors,
+                    userId:=Z_UserID)
 
                 Dim inventoryLocationDataService = GetRequiredService(Of IInventoryLocationDataService)()
 

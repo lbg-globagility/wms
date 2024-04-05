@@ -57,6 +57,8 @@ Public Class ImportProductForm
         '    productCodes:=groupByColorList)
         Dim products = Await productDataService.GetManyByOrganizationIdAsync(organizationId:=Z_OrganizationID)
 
+        Dim productColorDataService = GetRequiredService(Of IProductColorDataService)()
+
         Dim hasColorAndSize =
             Function(t As ProductRowRecord)
                 Dim size = CDec(t.Style)
