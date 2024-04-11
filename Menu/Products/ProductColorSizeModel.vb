@@ -1,6 +1,8 @@
 ﻿Option Strict On
 
+Imports System.Web.UI.WebControls.WebParts
 Imports WarehouseManagementSystem.Core.Entities
+Imports WarehouseManagementSystem.Utilities.Extensions
 
 Public Class ProductColorSizeModel
 
@@ -225,4 +227,45 @@ Public Class ProductColorSizeModel
 
     Public ReadOnly Property UnitOfMeasure2 As String
     Public ReadOnly Property UnitPriceOfUOM2 As Decimal?
+
+    Public Function AdvanceSearch(searchText As String) As Boolean
+        Dim splitted = Split(searchText, ",")
+        If splitted.Count() = 1 AndAlso Not searchText.Contains(":") Then
+            Return ProductCode.SimilarTo(searchText)
+        End If
+
+        Dim conditions = New List(Of Boolean)()
+
+        For Each query In splitted
+            Dim tup = Split(query, ":")
+            Dim attrib = tup.FirstOrDefault()?.Trim()
+            Dim param = tup.LastOrDefault()?.Trim()
+            If String.IsNullOrEmpty(attrib) Or String.IsNullOrEmpty(param) Then Continue For
+
+            If {"code", "c"}.Contains(attrib) Then
+                conditions.Add(ProductCode.SimilarTo(param))
+            ElseIf {"category", "cat"}.Contains(attrib) Then
+                conditions.Add(Category.SimilarTo(param))
+            ElseIf {"brand", "b"}.Contains(attrib) Then
+                conditions.Add(BrandName.SimilarTo(param))
+            ElseIf {"unit", "u"}.Contains(attrib) Then
+                conditions.Add(UnitOfMeasure2.SimilarTo(param))
+            ElseIf {"desc", "d"}.Contains(attrib) Then
+                conditions.Add(Description.SimilarTo(param))
+            ElseIf {"color", "col"}.Contains(attrib) AndAlso If(_productColor?.RowID, 0) > 0 Then
+                conditions.Add(If(_productColor.Color?.ColorName?.SimilarTo(param), False))
+            ElseIf {"style", "s"}.Contains(attrib) Then
+                conditions.Add(Style.SimilarTo(param))
+            ElseIf {"sku", "sku"}.Contains(attrib) Then
+                conditions.Add(Sku.SimilarTo(param))
+            ElseIf {"sku2", "sku2"}.Contains(attrib) Then
+                conditions.Add(Sku2.SimilarTo(param))
+            Else
+                Continue For
+            End If
+        Next
+
+        Return conditions.Where(Function(t) t).Count() = conditions.Count()
+    End Function
+
 End Class

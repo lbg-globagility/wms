@@ -2012,7 +2012,7 @@ Public Class InventoryLocationsForm
         If _ProductColorSizeModels Is Nothing Then Return
 
         Dim searchedDataSource = _ProductColorSizeModels.
-            Where(Function(t) t.ProductCode.SimilarTo(txtSearch.Text)).
+            Where(Function(t) t.AdvanceSearch(searchText:=txtSearch.Text)).
             ToList()
         gridProductColorSizes.DataSource = searchedDataSource
     End Sub
