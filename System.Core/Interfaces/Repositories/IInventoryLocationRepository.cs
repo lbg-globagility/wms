@@ -9,7 +9,7 @@ namespace WarehouseManagementSystem.Core.Interfaces.Repositories
     {
         Task<InventoryLocation> GetByNameAsync(string name);
 
-        Task<List<InventoryLocation>> GetAllByOrganizationIdAsync(int organizationId);
+        Task<List<InventoryLocation>> GetAllByOrganizationIdAsync(int organizationId, string status = "Active");
         Task<List<InventoryLocation>> GetManyByTypeAsync(int organizationId, InventoryLocationType inventoryLocationType);
     }
 }

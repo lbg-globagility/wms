@@ -1,0 +1,5 @@
+# 2:38 PM 4/11/2024
+
+ALTER TABLE `productcolorsizes`
+	DROP INDEX `Index_productcolorsize`,
+	ADD UNIQUE INDEX `Index_productcolorsize` (`OrganizationID`, `ProductColorID`, `SeasonCode`, `UnitOfMeasure2`, `UnitPriceOfUOM2`, `Size`) USING BTREE;

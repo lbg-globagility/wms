@@ -405,6 +405,10 @@ Public Class CustomerOrdersForm2
     End Sub
 
     Private Async Function ReloadDisplayForm(Optional order As Order = Nothing) As Task(Of Integer)
+        'RemoveHandler cboCustomerOrderType.SelectedIndexChanged, AddressOf cboCustomerOrderType_SelectedIndexChanged
+        RemoveHandler cboCustomerOrderType.SelectedValueChanged, AddressOf cboCustomerOrderType_SelectedValueChanged
+        RemoveHandler cboInventoryLocation.SelectedValueChanged, AddressOf cboInventoryLocation_SelectedValueChanged
+
         gridOrderItems.DataSource = Enumerable.Empty(Of OrderItemModel)()
 
         For Each textBox In SplitContainer2.Panel1.Controls.OfType(Of Control).OfType(Of TextBox)
@@ -441,19 +445,19 @@ Public Class CustomerOrdersForm2
 
             cboAgent.DataBindings.Add("SelectedValue", order, "AgentID", False, updateMode)
 
-            RemoveHandler cboCustomerOrderType.SelectedIndexChanged, AddressOf cboCustomerOrderType_SelectedIndexChanged
-            RemoveHandler cboCustomerOrderType.SelectedValueChanged, AddressOf cboCustomerOrderType_SelectedValueChanged
-            RemoveHandler cboInventoryLocation.SelectedValueChanged, AddressOf cboInventoryLocation_SelectedValueChanged
-
-            cboInventoryLocation.DataBindings.Add("SelectedValue", order, "InventoryLocationID", False, updateMode)
+            cboInventoryLocation.DataBindings.Add("SelectedValue", order, "InventoryLocationID", True, updateMode)
 
             cboCustomerOrderType.SelectedValue = If(order?.InventoryLocation?.Type, InventoryLocationType.Main)
 
-            AddHandler cboInventoryLocation.SelectedValueChanged, AddressOf cboInventoryLocation_SelectedValueChanged
-            cboInventoryLocation_SelectedValueChanged(cboInventoryLocation, New EventArgs())
-            AddHandler cboCustomerOrderType.SelectedValueChanged, AddressOf cboCustomerOrderType_SelectedValueChanged
-            cboCustomerOrderType_SelectedValueChanged(cboCustomerOrderType, New EventArgs())
-            AddHandler cboCustomerOrderType.SelectedIndexChanged, AddressOf cboCustomerOrderType_SelectedIndexChanged
+            If updateMode = DataSourceUpdateMode.OnPropertyChanged Then
+                AddHandler cboInventoryLocation.SelectedValueChanged, AddressOf cboInventoryLocation_SelectedValueChanged
+                AddHandler cboCustomerOrderType.SelectedValueChanged, AddressOf cboCustomerOrderType_SelectedValueChanged
+                If cboInventoryLocation.SelectedValue Is Nothing Then
+                    cboInventoryLocation_SelectedValueChanged(cboInventoryLocation, New EventArgs())
+                    cboCustomerOrderType_SelectedValueChanged(cboCustomerOrderType, New EventArgs())
+                End If
+                'AddHandler cboCustomerOrderType.SelectedIndexChanged, AddressOf cboCustomerOrderType_SelectedIndexChanged
+            End If
 
             txtDRNumber.DataBindings.Add("Text", order, "DRNumber", False, DataSourceUpdateMode.OnPropertyChanged)
 

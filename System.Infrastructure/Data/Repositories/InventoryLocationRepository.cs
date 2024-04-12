@@ -37,11 +37,12 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
             .AsNoTracking()
             .FirstOrDefaultAsync(t => t.RowID == id);
 
-        public async Task<List<InventoryLocation>> GetAllByOrganizationIdAsync(int organizationId) => await _context.InventoryLocations
+        public async Task<List<InventoryLocation>> GetAllByOrganizationIdAsync(int organizationId, string status = "Active") => await _context.InventoryLocations
             .Include(i => i.RackShelfColumns)
                 .ThenInclude(r => r.ProductInventoryLocations)
             .AsNoTracking()
             .Where(i => i.OrganizationID == organizationId)
+            .Where(i => i.Status == status)
             .ToListAsync();
 
         public async Task<List<InventoryLocation>> GetManyByTypeAsync(int organizationId, InventoryLocationType inventoryLocationType)

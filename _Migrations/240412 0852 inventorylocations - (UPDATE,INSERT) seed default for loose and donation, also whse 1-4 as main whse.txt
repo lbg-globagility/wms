@@ -1,0 +1,21 @@
+# 8:52 AM 4/12/2024
+
+UPDATE `wmsdb_thurston`.`inventorylocations` SET `Type`='Main' WHERE  `RowID`=2;
+UPDATE `wmsdb_thurston`.`inventorylocations` SET `Type`='Main' WHERE  `RowID`=4;
+UPDATE `wmsdb_thurston`.`inventorylocations` SET `Type`='Main' WHERE  `RowID`=5;
+UPDATE `wmsdb_thurston`.`inventorylocations` SET `Name`='Sample' WHERE  `RowID`=7;
+INSERT INTO `wmsdb_thurston`.`inventorylocations` (`OrganizationID`, `Created`, `CreatedBy`, `LastUpd`, `LastUpdBy`, `Name`, `Type`, `MainPhone`, `MobilePhone`, `FaxNumber`, `Status`, `Comments`) VALUES (1, CURRENT_TIMESTAMP(), 1, CURRENT_TIMESTAMP(), 1, 'Donation', 'Donation', '', '', '', 'Active', '') ON DUPLICATE KEY UPDATE LastUpd=CURRENT_TIMESTAMP();
+INSERT INTO `wmsdb_thurston`.`inventorylocations` (`OrganizationID`, `Created`, `CreatedBy`, `LastUpd`, `LastUpdBy`, `Name`, `Type`, `MainPhone`, `MobilePhone`, `FaxNumber`, `Status`, `Comments`) VALUES (1, CURRENT_TIMESTAMP(), 1, CURRENT_TIMESTAMP(), 1, 'Loose', 'Loose', '', '', '', 'Active', '') ON DUPLICATE KEY UPDATE LastUpd=CURRENT_TIMESTAMP();
+
+INSERT INTO `wmsdb_thurston`.`rackshelfcolumn` (`OrganizationID`, `Created`, `CreatedBy`, `InventoryLocationID`, `RackNo`, `Status`) VALUES (1, CURRENT_TIMESTAMP(), 1, 8, '', 'Active') ON DUPLICATE KEY UPDATE LastUpd=CURRENT_TIMESTAMP();
+INSERT INTO `wmsdb_thurston`.`rackshelfcolumn` (`OrganizationID`, `Created`, `CreatedBy`, `InventoryLocationID`, `RackNo`, `Status`) VALUES (1, CURRENT_TIMESTAMP(), 1, 9, '', 'Active') ON DUPLICATE KEY UPDATE LastUpd=CURRENT_TIMESTAMP();
+
+INSERT INTO `wmsdb_thurston`.`productinventorylocation` (`OrganizationID`, `Created`, `CreatedBy`, `LastUpd`, `LastUpdBy`, `RackShelfColumnID`, `ProductColorSizeID`, `TotalAvailableQty`, `TotalAllocatedQty`, `TotalReserveQty`, `TotalDamageQty`, `TotalSupplierProblemQty`, `TotalInRepairQty`, `TotalToReceiveQty`, `RunningTotalQty`, `UnitPrice`, `LastInventoryCount`, `UnitOfMeasure`, `UnitOfMeasure2`, `UnitPriceOfUOM2`)
+SELECT
+pcs.OrganizationID, CURRENT_TIMESTAMP(), 1, CURRENT_TIMESTAMP(), NULL, r.RowID `RackShelfColumnID`, pcs.RowID `ProductColorSizeID`, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, pcs.UnitPriceOfUOM2, NULL, pcs.UnitOfMeasure2, pcs.UnitOfMeasure2, pcs.UnitPriceOfUOM2
+FROM `wmsdb_thurston`.productcolorsizes pcs
+INNER JOIN (SELECT * FROM `wmsdb_thurston`.rackshelfcolumn r WHERE r.InventoryLocationID=8
+            UNION
+            SELECT * FROM `wmsdb_thurston`.rackshelfcolumn r WHERE r.InventoryLocationID=9) r ON r.RowID IS NOT NULL
+;
+
