@@ -244,8 +244,8 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
                 return Task.FromResult(new PaginatedList<Order>(items: orders1, total: count1));
             }
 
+            var count = query.AsEnumerable().Count();
             var orders = query.Page(pageOptions).AsEnumerable();
-            var count = orders.Count();
 
             return Task.FromResult(new PaginatedList<Order>(items: orders, total: count));
         }
