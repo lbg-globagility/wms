@@ -158,9 +158,10 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
 
                     var qty = packingListCartonItem.QtyInCarton ?? 0;
 
-                    productInventoryLocation.TotalReserveQty -= qty;
+                    // DO NOT DO THIS HERE. IT IS ALREADY PERFORMED SOMEWHERE ELSE
+                    //productInventoryLocation.TotalReserveQty -= qty;
 
-                    // DO NOT EXECUTE THIS, WILL RESULT TO REDUNDANT DECREMENT
+                    // DO NOT EXECUTE THIS AND NEVER ALLOW, WILL RESULT TO REDUNDANT DECREMENT
                     //productInventoryLocation.TotalAvailableQty -= qty;
 
                     updatedProductInventoryLocations.Add(productInventoryLocation);
