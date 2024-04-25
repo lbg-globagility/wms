@@ -816,7 +816,7 @@ Public Class CustomerOrdersForm2
     End Sub
 
     Private Sub txtStatus_TextChanged(sender As Object, e As EventArgs) Handles txtStatus.TextChanged
-        ToolStripButtonApproved.Enabled = txtStatus.Text = OrderStatus.[New].ToString()
+        ToolStripButtonApproved.Enabled = ToolStripButtonNew.Enabled AndAlso txtStatus.Text = OrderStatus.[New].ToString()
     End Sub
 
     Private Sub Print()
