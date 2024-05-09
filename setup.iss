@@ -233,6 +233,7 @@ Source: ".\bin\Debug\WarehouseManagementSystem.Infrastructure.pdb"; DestDir: "{a
 Source: ".\bin\Debug\WarehouseManagementSystem.Utilities.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: ".\bin\Debug\WarehouseManagementSystem.Utilities.pdb"; DestDir: "{app}"; Flags: ignoreversion
 Source: ".\bin\Debug\Import Templates\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: ".\Import Templates\*.xlsx"; DestDir: "{app}\Import Templates"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
