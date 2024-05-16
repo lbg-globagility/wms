@@ -769,6 +769,7 @@
       <DependentUpon>GatePass2.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Report Files\GatePass\GatePassDto.vb" />
     <Compile Include="Report Files\PickList.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1063,6 +1064,7 @@
     <Compile Include="SubForms\LineupDelivery\ViewEditLineUpDeliveryForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Utils\SaveFileDialogHelper.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Admin\OrganizationForm.resx">
@@ -1536,6 +1538,12 @@
       <DependentUpon>DataSetA.xsd</DependentUpon>
     </None>
     <None Include="Report Files\DeliveryReceipt\DeliveryReceipt.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Report Files\GatePass\GatePass.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Report Files\GatePass\GatePass.xlsx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Warehouse Management System_TemporaryKey.pfx" />

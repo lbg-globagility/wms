@@ -1,12 +1,17 @@
 ﻿Imports System.IO
 Imports System.Runtime.Remoting
+Imports System.Web.UI
 Imports CrystalDecisions.CrystalReports.Engine
+Imports DevComponents.DotNetBar.Controls
 Imports Microsoft.Extensions.DependencyInjection
 Imports MySql.Data.MySqlClient
 Imports Newtonsoft.Json
+Imports OfficeOpenXml
+Imports OfficeOpenXml.DataValidation
 Imports WarehouseManagementSystem.Core.Enums
 Imports WarehouseManagementSystem.Core.Interfaces
 Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
+Imports WarehouseManagementSystem.Desktop.Helpers
 Imports WarehouseManagementSystem.Desktop.Utilities
 
 Public Class ViewEditLineUpDeliveryForm
@@ -1914,6 +1919,113 @@ Public Class ViewEditLineUpDeliveryForm
             printdatatable = Nothing
             printdatasetIthurston.Clear()
         End If
+    End Sub
+
+    Private Sub GatePassToolStripMenuItem_Click2(sender As Object, e As EventArgs) Handles GatePassToolStripMenuItem.Click
+        If Not IsThurston Then Return
+
+        Dim saveFileDialogHelperOutPut = SaveFileDialogHelper.BrowseFile(defaultFileName:="gate-pass.xlsx",
+            defaultExtension:="xlsx",
+            filter:="Excel Files|*.xls;*.xlsx;")
+
+        If saveFileDialogHelperOutPut.IsSuccess = False Then Return
+
+        File.Copy(sourceFileName:="Report Files\GatePass\GatePass.xlsx",
+            destFileName:=saveFileDialogHelperOutPut.FileInfo.FullName)
+
+        Dim fileInfo = saveFileDialogHelperOutPut.FileInfo
+
+        Using package As New ExcelPackage(fileInfo)
+            Dim defaultWorksheet = package.Workbook.
+                Worksheets.
+                OfType(Of ExcelWorksheet).
+                FirstOrDefault(Function(s) s.Name = "Sheet1")
+            If defaultWorksheet Is Nothing Then defaultWorksheet = package.Workbook.Worksheets.Add(Name:="Sheet1")
+
+            Dim sql = <![CDATA[
+                SELECT
+                dt.TruckName,
+                CONCAT_WS(' ', NULLIF(SUBSTRING_INDEX(SUBSTRING_INDEX(c.FirstName, '(', -1), ')', 1), ''), LEFT(c.LastName, 1)) `Driver`,
+                CONCAT_WS(' ', c2.FirstName, LEFT(c2.LastName, 1)) `Helper1`,
+                CONCAT_WS(' ', c3.FirstName, LEFT(c3.LastName, 1)) `Helper2`
+
+                FROM lineups lu
+                INNER JOIN deliverytruckshifts dts ON dts.RowID=lu.DeliveryTruckShiftID
+                INNER JOIN deliverytrucks dt ON dt.RowID=dts.DeliveryTruckID
+
+                INNER JOIN lineupcartons lc ON lu.RowID = lc.LineUpID
+                LEFT JOIN contacts c ON lu.ContactID = c.RowID
+                LEFT JOIN contacts c2 ON lu.Helper1Id = c2.RowID
+                LEFT JOIN contacts c3 ON lu.Helper2Id = c3.RowID
+                INNER JOIN orders o ON lu.OrderID = o.RowID
+                INNER JOIN accounts a ON a.RowID=o.AccountID
+                LEFT JOIN address ad ON ad.RowID=a.PrimaryAddressID
+                INNER JOIN packinglistcartonitems plci ON lc.PackingListCartonID = plci.PackingListCartonID
+                INNER JOIN orderitems oi ON plci.OrderItemID = oi.RowID
+                INNER JOIN productcolorsizes pcs ON oi.ProductColorSizeID = pcs.RowID
+                INNER JOIN productcolors pc ON pc.RowID=pcs.ProductColorID
+                INNER JOIN products p ON p.RowID=pc.ProductID
+                WHERE lu.LineUpNo = @lineupNo
+                GROUP BY p.ProductCode;
+                ]]>.Value
+
+            Using connection As New MySqlConnection(connectionString:=manager.GetConnString()),
+                command As New MySqlCommand(sql, connection)
+
+                With command.Parameters
+                    .AddWithValue("@lineupNo", If(dgLineUpList.CurrentRow?.Cells(lu_lineupno.Name).Value, DBNull.Value))
+                End With
+
+                Dim adapter = New MySqlDataAdapter()
+                adapter.SelectCommand = command
+                Dim dt As New DataTable
+                adapter.Fill(dt)
+
+                Dim row = dt.Rows.OfType(Of DataRow).FirstOrDefault()
+
+                'Date
+                Dim curdate = Date.Now.ToShortDateString()
+                With defaultWorksheet
+                    .Cells("B4").Value = curdate
+                    .Cells("B14").Value = curdate
+                    .Cells("B24").Value = curdate
+                End With
+
+                'Truck#
+                Dim truck = row("TruckName")
+                With defaultWorksheet
+                    .Cells("B5").Value = truck
+                    .Cells("B15").Value = truck
+                    .Cells("B25").Value = truck
+                End With
+
+                'Driver
+                Dim driver = row("Driver")
+                With defaultWorksheet
+                    .Cells("B6").Value = driver
+                    .Cells("B16").Value = driver
+                    .Cells("B26").Value = driver
+                End With
+
+                'Helper
+                Dim helper1 = row("Helper1")
+                Dim helper2 = row("Helper2")
+                With defaultWorksheet
+                    .Cells("B7").Value = helper1
+                    .Cells("B8").Value = helper2
+
+                    .Cells("B17").Value = helper1
+                    .Cells("B18").Value = helper2
+
+                    .Cells("B27").Value = helper1
+                    .Cells("B28").Value = helper2
+                End With
+
+                package.Save()
+            End Using
+        End Using
+
+        Process.Start(saveFileDialogHelperOutPut.FileInfo.FullName)
     End Sub
 
     Private Sub dgLineUpList_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgLineUpList.CellClick
