@@ -35,7 +35,7 @@ Partial Class ReportViewer
         Me.CrystalReportViewer.Dock = System.Windows.Forms.DockStyle.Fill
         Me.CrystalReportViewer.Location = New System.Drawing.Point(0, 0)
         Me.CrystalReportViewer.Name = "CrystalReportViewer"
-        Me.CrystalReportViewer.Size = New System.Drawing.Size(934, 438)
+        Me.CrystalReportViewer.Size = New System.Drawing.Size(784, 561)
         Me.CrystalReportViewer.TabIndex = 1
         Me.CrystalReportViewer.ToolPanelView = CrystalDecisions.Windows.Forms.ToolPanelViewType.None
         '
@@ -43,7 +43,7 @@ Partial Class ReportViewer
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(934, 438)
+        Me.ClientSize = New System.Drawing.Size(784, 561)
         Me.Controls.Add(Me.CrystalReportViewer)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "ReportViewer"

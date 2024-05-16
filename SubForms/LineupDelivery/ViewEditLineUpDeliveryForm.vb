@@ -1,5 +1,9 @@
-﻿Imports Microsoft.Extensions.DependencyInjection
+﻿Imports System.IO
+Imports System.Runtime.Remoting
+Imports CrystalDecisions.CrystalReports.Engine
+Imports Microsoft.Extensions.DependencyInjection
 Imports MySql.Data.MySqlClient
+Imports Newtonsoft.Json
 Imports WarehouseManagementSystem.Core.Enums
 Imports WarehouseManagementSystem.Core.Interfaces
 Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
@@ -1778,6 +1782,107 @@ Public Class ViewEditLineUpDeliveryForm
             printdatatable = Nothing
             printdatasetHthurston.Clear()
         End If
+    End Sub
+
+    Private Sub DeliveryScheduleToolStripMenuItem_Click2(sender As Object, e As EventArgs) Handles DeliveryScheduleToolStripMenuItem.Click
+        If Not IsThurston Then Return
+
+        Dim printreport As New DeliveryReceipt
+
+        Dim fileContent = String.Join(separator:=Environment.NewLine, File.ReadAllLines("Report Files\DeliveryReceipt\DeliveryReceipt.json"))
+        Dim deliveryReceiptDto = JsonConvert.DeserializeObject(Of DeliveryReceiptDto)(fileContent)
+
+        Dim section = printreport.ReportDefinition.Sections.OfType(Of Section).FirstOrDefault()
+        Dim companyNameTitle As TextObject = section?.ReportObjects("CompanyNameTitle1")
+        companyNameTitle.Text = deliveryReceiptDto.CompanyNameTitle
+
+        Dim supportingInfo As TextObject = section?.ReportObjects("SupportingInfo1")
+        supportingInfo.Text = deliveryReceiptDto.SupportingInfo
+
+        Dim deliveryReceiptCaption As TextObject = section?.ReportObjects("DeliveryReceiptCaption1")
+        deliveryReceiptCaption.Text = deliveryReceiptDto.DeliveryReceiptCaption
+
+        Dim receivedNote As TextObject = section?.ReportObjects("ReceivedNote1")
+        receivedNote.Text = deliveryReceiptDto.ReceivedNote
+
+        Dim footerNote As TextObject = section?.ReportObjects("FooterNote1")
+        footerNote.Text = deliveryReceiptDto.FooterNote
+
+        Dim accreditation As TextObject = section?.ReportObjects("Accreditation1")
+        accreditation.Text = deliveryReceiptDto.Accreditation
+
+
+        Dim sql = <![CDATA[
+            SELECT
+            o.DRNumber `DRNo`,
+            #a.*,
+            a.CompanyName,
+            CONCAT_WS(', ', ad.StreetAddress1, ad.StreetAddress2, ad.Barangay, ad.CityTown, ad.Province, ad.State, ad.ZipCode, ad.Country) `Address`,
+            lu.LineUpDate,
+            oi.QtyOrdered `DataColumn1`,
+            pcs.UnitOfMeasure2 `DataColumn2`,
+            CONCAT_WS(' - ', p.ProductCode, p.`Description`) `DataColumn3`
+
+            FROM lineups lu
+            JOIN lineupcartons lc ON lu.RowID = lc.LineUpID
+            LEFT JOIN contacts c ON lu.ContactID = c.RowID
+            LEFT JOIN contacts c2 ON lu.Helper1Id = c2.RowID
+            LEFT JOIN contacts c3 ON lu.Helper2Id = c3.RowID
+            INNER JOIN orders o ON lu.OrderID = o.RowID
+            INNER JOIN accounts a ON a.RowID=o.AccountID
+            LEFT JOIN address ad ON ad.RowID=a.PrimaryAddressID
+            INNER JOIN packinglistcartonitems plci ON lc.PackingListCartonID = plci.PackingListCartonID
+            INNER JOIN orderitems oi ON plci.OrderItemID = oi.RowID
+            INNER JOIN productcolorsizes pcs ON oi.ProductColorSizeID = pcs.RowID
+            INNER JOIN productcolors pc ON pc.RowID=pcs.ProductColorID
+            INNER JOIN products p ON p.RowID=pc.ProductID
+            WHERE lu.LineUpNo = @lineupNo
+            GROUP BY p.ProductCode
+            ]]>.Value
+
+        Using connection As New MySqlConnection(connectionString:=manager.GetConnString()),
+            command As New MySqlCommand(sql, connection)
+
+            With command.Parameters
+                .AddWithValue("@lineupNo", If(dgLineUpList.CurrentRow?.Cells(lu_lineupno.Name).Value, DBNull.Value))
+            End With
+
+            Dim adapter = New MySqlDataAdapter()
+            adapter.SelectCommand = command
+            Dim dt As New DataTable
+            adapter.Fill(dt)
+
+            If dt IsNot Nothing Then
+                printreport.SetDataSource(dt)
+            End If
+
+            Dim row = dt.Rows.OfType(Of DataRow).FirstOrDefault()
+
+            Dim deliveryReceiptNo As TextObject = section?.ReportObjects("TextDeliveryReceiptNumber")
+            deliveryReceiptNo.Text = row?.Item("DRNo")
+
+            Dim deliveredTo As TextObject = section?.ReportObjects("TextDeliveredTo")
+            deliveredTo.Text = row?.Item("CompanyName")
+
+            Dim address As TextObject = section?.ReportObjects("TextAddress")
+            address.Text = row?.Item("Address")
+
+            'Dim tin As TextObject = section?.ReportObjects("TextTin")
+            'tin.Text = String.Empty
+
+            Dim [date] As TextObject = section?.ReportObjects("TextDate")
+            [date].Text = row?.Item("LineUpDate")
+
+            'Dim terms As TextObject = section?.ReportObjects("TextTerms")
+            'terms.Text = String.Empty
+
+            'Dim invoiceNo As TextObject = section?.ReportObjects("TextInvoiceNo")
+            'invoiceNo.Text = String.Empty
+        End Using
+
+        Dim openreportviewer As New ReportViewer
+        openreportviewer.CrystalReportViewer.ReportSource = printreport
+        openreportviewer.Show()
     End Sub
 
     Private Sub TripTicketToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles TripTicketToolStripMenuItem.Click

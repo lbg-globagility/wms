@@ -282,12 +282,12 @@
       <DependentUpon>DailyDeliveriesReport.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="CrystalReports\DataSet\ReportDataTableCollection.Designer.vb">
+    <Compile Include="CrystalReports\ReportProviders\ReportDataTableCollection.Designer.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ReportDataTableCollection.xsd</DependentUpon>
     </Compile>
-    <Compile Include="CrystalReports\DataSet\ReportDataTableCollection.vb">
+    <Compile Include="CrystalReports\ReportProviders\ReportDataTableCollection.vb">
       <DependentUpon>ReportDataTableCollection.xsd</DependentUpon>
     </Compile>
     <Compile Include="CrystalReports\DefaultReportViewerForm.Designer.vb">
@@ -744,6 +744,13 @@
       <DependentUpon>VerifyPickListPrintB.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Report Files\DeliveryReceipt.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DeliveryReceipt.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Report Files\DeliveryReceipt\DeliveryReceiptDto.vb" />
     <Compile Include="Report Files\DeliverySchedule.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -756,10 +763,22 @@
       <DependentUpon>GatePass.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Report Files\GatePass2.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GatePass2.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Report Files\PickList.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>PickList.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Report Files\PickList2.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PickList2.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Report Files\TripTicket.vb">
@@ -1304,6 +1323,10 @@
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>VerifyPickListPrintB.vb</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Report Files\DeliveryReceipt.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>DeliveryReceipt.vb</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Report Files\DeliverySchedule.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>DeliverySchedule.vb</LastGenOutput>
@@ -1312,9 +1335,17 @@
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>GatePass.vb</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Report Files\GatePass2.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>GatePass2.vb</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Report Files\PickList.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>PickList.vb</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report Files\PickList2.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>PickList2.vb</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Report Files\TripTicket.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
@@ -1464,15 +1495,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />
-    <None Include="CrystalReports\DataSet\ReportDataTableCollection.xsc">
+    <None Include="CrystalReports\ReportProviders\ReportDataTableCollection.xsc">
       <DependentUpon>ReportDataTableCollection.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\ReportDataTableCollection.xsd">
+    <None Include="CrystalReports\ReportProviders\ReportDataTableCollection.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>ReportDataTableCollection.Designer.vb</LastGenOutput>
     </None>
-    <None Include="CrystalReports\DataSet\ReportDataTableCollection.xss">
+    <None Include="CrystalReports\ReportProviders\ReportDataTableCollection.xss">
       <DependentUpon>ReportDataTableCollection.xsd</DependentUpon>
     </None>
     <None Include="Import Templates\product-color-size-template.xlsx">
@@ -1503,6 +1534,9 @@
     </None>
     <None Include="Print\DataSetA.xss">
       <DependentUpon>DataSetA.xsd</DependentUpon>
+    </None>
+    <None Include="Report Files\DeliveryReceipt\DeliveryReceipt.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Warehouse Management System_TemporaryKey.pfx" />
   </ItemGroup>
@@ -1559,6 +1593,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="CrystalReports\DataSet\" />
     <Folder Include="UserControls\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
