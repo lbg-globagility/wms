@@ -234,6 +234,8 @@ Source: ".\bin\Debug\WarehouseManagementSystem.Utilities.dll"; DestDir: "{app}";
 Source: ".\bin\Debug\WarehouseManagementSystem.Utilities.pdb"; DestDir: "{app}"; Flags: ignoreversion
 Source: ".\bin\Debug\Import Templates\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: ".\Import Templates\*.xlsx"; DestDir: "{app}\Import Templates"; Flags: ignoreversion
+Source: ".\Report Files\DeliveryReceipt\*.json"; DestDir: "{app}\Report Files\DeliveryReceipt"; Flags: ignoreversion
+Source: ".\Report Files\GatePass\*.xlsx"; DestDir: "{app}\Report Files\GatePass"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
