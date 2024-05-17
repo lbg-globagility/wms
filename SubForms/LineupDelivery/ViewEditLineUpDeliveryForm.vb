@@ -1789,7 +1789,7 @@ Public Class ViewEditLineUpDeliveryForm
         End If
     End Sub
 
-    Private Sub DeliveryScheduleToolStripMenuItem_Click2(sender As Object, e As EventArgs) Handles DeliveryScheduleToolStripMenuItem.Click
+    Private Async Sub DeliveryScheduleToolStripMenuItem_Click2(sender As Object, e As EventArgs) Handles DeliveryScheduleToolStripMenuItem.Click
         If Not IsThurston Then Return
 
         Dim printreport As New DeliveryReceipt
@@ -1845,45 +1845,50 @@ Public Class ViewEditLineUpDeliveryForm
             GROUP BY p.ProductCode
             ]]>.Value
 
-        Using connection As New MySqlConnection(connectionString:=manager.GetConnString()),
+        Await FunctionUtils.TryCatchFunctionAsync(messageTitle:="",
+            Async Function()
+                Using connection As New MySqlConnection(connectionString:=manager.GetConnString()),
             command As New MySqlCommand(sql, connection)
 
-            With command.Parameters
-                .AddWithValue("@lineupNo", If(dgLineUpList.CurrentRow?.Cells(lu_lineupno.Name).Value, DBNull.Value))
-            End With
+                    With command.Parameters
+                        .AddWithValue("@lineupNo", If(dgLineUpList.CurrentRow?.Cells(lu_lineupno.Name).Value, DBNull.Value))
+                    End With
 
-            Dim adapter = New MySqlDataAdapter()
-            adapter.SelectCommand = command
-            Dim dt As New DataTable
-            adapter.Fill(dt)
+                    Dim adapter = New MySqlDataAdapter()
+                    adapter.SelectCommand = command
+                    Dim dt As New DataTable
+                    Await Task.Run(Sub()
+                                       adapter.Fill(dt)
+                                   End Sub)
 
-            If dt IsNot Nothing Then
-                printreport.SetDataSource(dt)
-            End If
+                    If dt IsNot Nothing Then
+                        printreport.SetDataSource(dt)
+                    End If
 
-            Dim row = dt.Rows.OfType(Of DataRow).FirstOrDefault()
+                    Dim row = dt.Rows.OfType(Of DataRow).FirstOrDefault()
 
-            Dim deliveryReceiptNo As TextObject = section?.ReportObjects("TextDeliveryReceiptNumber")
-            deliveryReceiptNo.Text = row?.Item("DRNo")
+                    Dim deliveryReceiptNo As TextObject = section?.ReportObjects("TextDeliveryReceiptNumber")
+                    deliveryReceiptNo.Text = row?.Item("DRNo")
 
-            Dim deliveredTo As TextObject = section?.ReportObjects("TextDeliveredTo")
-            deliveredTo.Text = row?.Item("CompanyName")
+                    Dim deliveredTo As TextObject = section?.ReportObjects("TextDeliveredTo")
+                    deliveredTo.Text = row?.Item("CompanyName")
 
-            Dim address As TextObject = section?.ReportObjects("TextAddress")
-            address.Text = row?.Item("Address")
+                    Dim address As TextObject = section?.ReportObjects("TextAddress")
+                    address.Text = row?.Item("Address")
 
-            'Dim tin As TextObject = section?.ReportObjects("TextTin")
-            'tin.Text = String.Empty
+                    'Dim tin As TextObject = section?.ReportObjects("TextTin")
+                    'tin.Text = String.Empty
 
-            Dim [date] As TextObject = section?.ReportObjects("TextDate")
-            [date].Text = row?.Item("LineUpDate")
+                    Dim [date] As TextObject = section?.ReportObjects("TextDate")
+                    [date].Text = row?.Item("LineUpDate")
 
-            'Dim terms As TextObject = section?.ReportObjects("TextTerms")
-            'terms.Text = String.Empty
+                    'Dim terms As TextObject = section?.ReportObjects("TextTerms")
+                    'terms.Text = String.Empty
 
-            'Dim invoiceNo As TextObject = section?.ReportObjects("TextInvoiceNo")
-            'invoiceNo.Text = String.Empty
-        End Using
+                    'Dim invoiceNo As TextObject = section?.ReportObjects("TextInvoiceNo")
+                    'invoiceNo.Text = String.Empty
+                End Using
+            End Function)
 
         Dim openreportviewer As New ReportViewer
         openreportviewer.CrystalReportViewer.ReportSource = printreport
@@ -1921,28 +1926,30 @@ Public Class ViewEditLineUpDeliveryForm
         End If
     End Sub
 
-    Private Sub GatePassToolStripMenuItem_Click2(sender As Object, e As EventArgs) Handles GatePassToolStripMenuItem.Click
+    Private Async Sub GatePassToolStripMenuItem_Click2(sender As Object, e As EventArgs) Handles GatePassToolStripMenuItem.Click
         If Not IsThurston Then Return
 
-        Dim saveFileDialogHelperOutPut = SaveFileDialogHelper.BrowseFile(defaultFileName:="gate-pass.xlsx",
-            defaultExtension:="xlsx",
-            filter:="Excel Files|*.xls;*.xlsx;")
+        Await FunctionUtils.TryCatchFunctionAsync(messageTitle:="Print Gate Pass",
+                Async Function()
+                    Dim saveFileDialogHelperOutPut = SaveFileDialogHelper.BrowseFile(defaultFileName:="gate-pass.xlsx",
+                        defaultExtension:="xlsx",
+                        filter:="Excel Files|*.xls;*.xlsx;")
 
-        If saveFileDialogHelperOutPut.IsSuccess = False Then Return
+                    If saveFileDialogHelperOutPut.IsSuccess = False Then Return
 
-        File.Copy(sourceFileName:="Report Files\GatePass\GatePass.xlsx",
-            destFileName:=saveFileDialogHelperOutPut.FileInfo.FullName)
+                    File.Copy(sourceFileName:="Report Files\GatePass\GatePass.xlsx",
+                        destFileName:=saveFileDialogHelperOutPut.FileInfo.FullName)
 
-        Dim fileInfo = saveFileDialogHelperOutPut.FileInfo
+                    Dim fileInfo = saveFileDialogHelperOutPut.FileInfo
 
-        Using package As New ExcelPackage(fileInfo)
-            Dim defaultWorksheet = package.Workbook.
-                Worksheets.
-                OfType(Of ExcelWorksheet).
-                FirstOrDefault(Function(s) s.Name = "Sheet1")
-            If defaultWorksheet Is Nothing Then defaultWorksheet = package.Workbook.Worksheets.Add(Name:="Sheet1")
+                    Using package As New ExcelPackage(fileInfo)
+                        Dim defaultWorksheet = package.Workbook.
+                            Worksheets.
+                            OfType(Of ExcelWorksheet).
+                            FirstOrDefault(Function(s) s.Name = "Sheet1")
+                        If defaultWorksheet Is Nothing Then defaultWorksheet = package.Workbook.Worksheets.Add(Name:="Sheet1")
 
-            Dim sql = <![CDATA[
+                        Dim sql = <![CDATA[
                 SELECT
                 dt.TruckName,
                 CONCAT_WS(' ', NULLIF(SUBSTRING_INDEX(SUBSTRING_INDEX(c.FirstName, '(', -1), ')', 1), ''), LEFT(c.LastName, 1)) `Driver`,
@@ -1968,64 +1975,61 @@ Public Class ViewEditLineUpDeliveryForm
                 WHERE lu.LineUpNo = @lineupNo
                 GROUP BY p.ProductCode;
                 ]]>.Value
+                        Using connection As New MySqlConnection(connectionString:=manager.GetConnString()),
+                                    command As New MySqlCommand(sql, connection)
 
-            Using connection As New MySqlConnection(connectionString:=manager.GetConnString()),
-                command As New MySqlCommand(sql, connection)
+                            With command.Parameters
+                                .AddWithValue("@lineupNo", If(dgLineUpList.CurrentRow?.Cells(lu_lineupno.Name).Value, DBNull.Value))
+                            End With
 
-                With command.Parameters
-                    .AddWithValue("@lineupNo", If(dgLineUpList.CurrentRow?.Cells(lu_lineupno.Name).Value, DBNull.Value))
-                End With
+                            Dim adapter = New MySqlDataAdapter()
+                            adapter.SelectCommand = command
+                            Dim dt As New DataTable
+                            Await Task.Run(Sub()
+                                               adapter.Fill(dt)
+                                           End Sub)
 
-                Dim adapter = New MySqlDataAdapter()
-                adapter.SelectCommand = command
-                Dim dt As New DataTable
-                adapter.Fill(dt)
+                            Dim row = dt.Rows.OfType(Of DataRow).FirstOrDefault()
 
-                Dim row = dt.Rows.OfType(Of DataRow).FirstOrDefault()
+                            With defaultWorksheet
+                                'Date
+                                Dim curdate = Date.Now.ToShortDateString()
+                                .Cells("B4").Value = curdate
+                                .Cells("B14").Value = curdate
+                                .Cells("B24").Value = curdate
 
-                'Date
-                Dim curdate = Date.Now.ToShortDateString()
-                With defaultWorksheet
-                    .Cells("B4").Value = curdate
-                    .Cells("B14").Value = curdate
-                    .Cells("B24").Value = curdate
-                End With
+                                'Truck#
+                                Dim truck = row("TruckName")
+                                .Cells("B5").Value = truck
+                                .Cells("B15").Value = truck
+                                .Cells("B25").Value = truck
 
-                'Truck#
-                Dim truck = row("TruckName")
-                With defaultWorksheet
-                    .Cells("B5").Value = truck
-                    .Cells("B15").Value = truck
-                    .Cells("B25").Value = truck
-                End With
+                                'Driver
+                                Dim driver = row("Driver")
+                                .Cells("B6").Value = driver
+                                .Cells("B16").Value = driver
+                                .Cells("B26").Value = driver
 
-                'Driver
-                Dim driver = row("Driver")
-                With defaultWorksheet
-                    .Cells("B6").Value = driver
-                    .Cells("B16").Value = driver
-                    .Cells("B26").Value = driver
-                End With
+                                'Helper
+                                Dim helper1 = row("Helper1")
+                                Dim helper2 = row("Helper2")
+                                .Cells("B7").Value = helper1
+                                .Cells("B8").Value = helper2
 
-                'Helper
-                Dim helper1 = row("Helper1")
-                Dim helper2 = row("Helper2")
-                With defaultWorksheet
-                    .Cells("B7").Value = helper1
-                    .Cells("B8").Value = helper2
+                                .Cells("B17").Value = helper1
+                                .Cells("B18").Value = helper2
 
-                    .Cells("B17").Value = helper1
-                    .Cells("B18").Value = helper2
+                                .Cells("B27").Value = helper1
+                                .Cells("B28").Value = helper2
+                            End With
 
-                    .Cells("B27").Value = helper1
-                    .Cells("B28").Value = helper2
-                End With
+                            package.Save()
+                        End Using
 
-                package.Save()
-            End Using
-        End Using
+                    End Using
 
-        Process.Start(saveFileDialogHelperOutPut.FileInfo.FullName)
+                    Process.Start(saveFileDialogHelperOutPut.FileInfo.FullName)
+                End Function)
     End Sub
 
     Private Sub dgLineUpList_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgLineUpList.CellClick
