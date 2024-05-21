@@ -23,7 +23,7 @@ Public Class CustomerOrdersForm2
 
     Private ReadOnly _userId As Integer
     Private _selectedOrder As Order
-    Private _pageOptions As PageOptions
+    Private _pageOptions As New PageOptions(pageIndex:=0, pageSize:=20, sort:="Created", direction:="desc")
 
     Public Sub New(userId As Integer)
 
@@ -36,7 +36,6 @@ Public Class CustomerOrdersForm2
     End Sub
 
     Private Async Sub CustomerOrdersForm2_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        _pageOptions = PageOptions.Default
         gridOrders.AutoGenerateColumns = False
         gridOrderItems.AutoGenerateColumns = False
 
@@ -93,7 +92,6 @@ Public Class CustomerOrdersForm2
         Dim result = Await orderDataService.GetCustomerOrdersAsync(organizationId:=Z_OrganizationID, pageOptions:=_pageOptions)
 
         gridOrders.DataSource = result.Items.
-            OrderByDescending(Function(t) t.Created).
             ToList()
 
         Return result.TotalCount
