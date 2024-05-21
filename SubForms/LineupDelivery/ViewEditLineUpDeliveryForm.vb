@@ -1774,21 +1774,6 @@ Public Class ViewEditLineUpDeliveryForm
         End Try
     End Sub
 
-    Private Sub DeliveryScheduleToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeliveryScheduleToolStripMenuItem.Click
-        If IsThurston Then
-            printDeliveryScheduleThurston(CInt(dgLineUpList.CurrentRow.Cells("lu_lineupno").Value))
-            Dim printreport As New DeliverySchedule
-            Dim openreportviewer As New ReportViewer
-            openreportviewer.CrystalReportViewer.ReportSource = printreport
-            printdatatable = printdatasetHthurston
-            printreport.SetDataSource(printdatatable)
-            openreportviewer.Show()
-            printdatatable.Dispose()
-            printdatatable = Nothing
-            printdatasetHthurston.Clear()
-        End If
-    End Sub
-
     Private Async Sub DeliveryScheduleToolStripMenuItem_Click2(sender As Object, e As EventArgs) Handles DeliveryScheduleToolStripMenuItem.Click
         If Not IsThurston Then Return
 
