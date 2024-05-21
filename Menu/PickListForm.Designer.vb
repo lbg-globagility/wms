@@ -70,6 +70,17 @@ Partial Class PickListForm
         Me.tabDetails = New System.Windows.Forms.TabPage()
         Me.gbRackShelfColumn = New System.Windows.Forms.GroupBox()
         Me.dgRackShelfColumn = New DevComponents.DotNetBar.Controls.DataGridViewX()
+        Me.rsc_rowid = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.rsc_rack = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.rsc_column = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.rsc_shelf = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.rsc_qtytopick = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.rsc_qtyavailable = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.rsc_qtyallocated = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.rsc_qtyorderable = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.rsc_pickorderno = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.rsc_issueflg = New System.Windows.Forms.DataGridViewCheckBoxColumn()
+        Me.rsc_remarks = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.txtQtyToPick = New System.Windows.Forms.TextBox()
         Me.Label8 = New System.Windows.Forms.Label()
         Me.Label13 = New System.Windows.Forms.Label()
@@ -149,17 +160,6 @@ Partial Class PickListForm
         Me.errProvider = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.pbClose = New System.Windows.Forms.PictureBox()
         Me.lblTitle = New System.Windows.Forms.Label()
-        Me.rsc_rowid = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.rsc_rack = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.rsc_column = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.rsc_shelf = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.rsc_qtytopick = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.rsc_qtyavailable = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.rsc_qtyallocated = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.rsc_qtyorderable = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.rsc_pickorderno = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.rsc_issueflg = New System.Windows.Forms.DataGridViewCheckBoxColumn()
-        Me.rsc_remarks = New System.Windows.Forms.DataGridViewTextBoxColumn()
         CType(Me.dgPickList, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ToolStrip3.SuspendLayout()
         Me.gbPickList.SuspendLayout()
@@ -592,7 +592,7 @@ Partial Class PickListForm
         Me.gbRackShelfColumn.ForeColor = System.Drawing.SystemColors.ControlText
         Me.gbRackShelfColumn.Location = New System.Drawing.Point(7, 396)
         Me.gbRackShelfColumn.Name = "gbRackShelfColumn"
-        Me.gbRackShelfColumn.Size = New System.Drawing.Size(785, 200)
+        Me.gbRackShelfColumn.Size = New System.Drawing.Size(768, 200)
         Me.gbRackShelfColumn.TabIndex = 6
         Me.gbRackShelfColumn.TabStop = False
         '
@@ -637,6 +637,80 @@ Partial Class PickListForm
         Me.dgRackShelfColumn.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.dgRackShelfColumn.Size = New System.Drawing.Size(570, 175)
         Me.dgRackShelfColumn.TabIndex = 32
+        '
+        'rsc_rowid
+        '
+        Me.rsc_rowid.HeaderText = "rowid"
+        Me.rsc_rowid.Name = "rsc_rowid"
+        Me.rsc_rowid.Visible = False
+        '
+        'rsc_rack
+        '
+        Me.rsc_rack.HeaderText = "Rack"
+        Me.rsc_rack.Name = "rsc_rack"
+        Me.rsc_rack.ReadOnly = True
+        Me.rsc_rack.Width = 50
+        '
+        'rsc_column
+        '
+        Me.rsc_column.HeaderText = "Column"
+        Me.rsc_column.Name = "rsc_column"
+        Me.rsc_column.ReadOnly = True
+        Me.rsc_column.Width = 60
+        '
+        'rsc_shelf
+        '
+        Me.rsc_shelf.HeaderText = "Shelf"
+        Me.rsc_shelf.Name = "rsc_shelf"
+        Me.rsc_shelf.ReadOnly = True
+        Me.rsc_shelf.Width = 50
+        '
+        'rsc_qtytopick
+        '
+        Me.rsc_qtytopick.HeaderText = "Qty. To Pick"
+        Me.rsc_qtytopick.Name = "rsc_qtytopick"
+        Me.rsc_qtytopick.Width = 67
+        '
+        'rsc_qtyavailable
+        '
+        Me.rsc_qtyavailable.HeaderText = "Qty. Available"
+        Me.rsc_qtyavailable.Name = "rsc_qtyavailable"
+        Me.rsc_qtyavailable.ReadOnly = True
+        Me.rsc_qtyavailable.Visible = False
+        Me.rsc_qtyavailable.Width = 60
+        '
+        'rsc_qtyallocated
+        '
+        Me.rsc_qtyallocated.HeaderText = "Qty. Allocated"
+        Me.rsc_qtyallocated.Name = "rsc_qtyallocated"
+        Me.rsc_qtyallocated.ReadOnly = True
+        Me.rsc_qtyallocated.Visible = False
+        Me.rsc_qtyallocated.Width = 60
+        '
+        'rsc_qtyorderable
+        '
+        Me.rsc_qtyorderable.HeaderText = "Qty. Orderable"
+        Me.rsc_qtyorderable.Name = "rsc_qtyorderable"
+        Me.rsc_qtyorderable.ReadOnly = True
+        Me.rsc_qtyorderable.Width = 60
+        '
+        'rsc_pickorderno
+        '
+        Me.rsc_pickorderno.HeaderText = "Pick Order No."
+        Me.rsc_pickorderno.Name = "rsc_pickorderno"
+        Me.rsc_pickorderno.ReadOnly = True
+        Me.rsc_pickorderno.Width = 83
+        '
+        'rsc_issueflg
+        '
+        Me.rsc_issueflg.HeaderText = "With Issue"
+        Me.rsc_issueflg.Name = "rsc_issueflg"
+        Me.rsc_issueflg.Width = 50
+        '
+        'rsc_remarks
+        '
+        Me.rsc_remarks.HeaderText = "Remarks"
+        Me.rsc_remarks.Name = "rsc_remarks"
         '
         'txtQtyToPick
         '
@@ -704,7 +778,7 @@ Partial Class PickListForm
         Me.gbCustomerOrders.ForeColor = System.Drawing.SystemColors.ControlText
         Me.gbCustomerOrders.Location = New System.Drawing.Point(372, 5)
         Me.gbCustomerOrders.Name = "gbCustomerOrders"
-        Me.gbCustomerOrders.Size = New System.Drawing.Size(433, 190)
+        Me.gbCustomerOrders.Size = New System.Drawing.Size(416, 190)
         Me.gbCustomerOrders.TabIndex = 4
         Me.gbCustomerOrders.TabStop = False
         '
@@ -750,7 +824,7 @@ Partial Class PickListForm
         Me.dgCustomerOrders.RowHeadersDefaultCellStyle = DataGridViewCellStyle8
         Me.dgCustomerOrders.RowHeadersVisible = False
         Me.dgCustomerOrders.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgCustomerOrders.Size = New System.Drawing.Size(418, 136)
+        Me.dgCustomerOrders.Size = New System.Drawing.Size(401, 136)
         Me.dgCustomerOrders.TabIndex = 24
         '
         'co_rowid
@@ -903,7 +977,7 @@ Partial Class PickListForm
         Me.gbCustomerOrderItems.ForeColor = System.Drawing.SystemColors.ControlText
         Me.gbCustomerOrderItems.Location = New System.Drawing.Point(7, 195)
         Me.gbCustomerOrderItems.Name = "gbCustomerOrderItems"
-        Me.gbCustomerOrderItems.Size = New System.Drawing.Size(798, 200)
+        Me.gbCustomerOrderItems.Size = New System.Drawing.Size(781, 200)
         Me.gbCustomerOrderItems.TabIndex = 5
         Me.gbCustomerOrderItems.TabStop = False
         '
@@ -1446,80 +1520,6 @@ Partial Class PickListForm
         Me.lblTitle.TabIndex = 234
         Me.lblTitle.Text = "Pick List"
         Me.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'rsc_rowid
-        '
-        Me.rsc_rowid.HeaderText = "rowid"
-        Me.rsc_rowid.Name = "rsc_rowid"
-        Me.rsc_rowid.Visible = False
-        '
-        'rsc_rack
-        '
-        Me.rsc_rack.HeaderText = "Rack"
-        Me.rsc_rack.Name = "rsc_rack"
-        Me.rsc_rack.ReadOnly = True
-        Me.rsc_rack.Width = 50
-        '
-        'rsc_column
-        '
-        Me.rsc_column.HeaderText = "Column"
-        Me.rsc_column.Name = "rsc_column"
-        Me.rsc_column.ReadOnly = True
-        Me.rsc_column.Width = 60
-        '
-        'rsc_shelf
-        '
-        Me.rsc_shelf.HeaderText = "Shelf"
-        Me.rsc_shelf.Name = "rsc_shelf"
-        Me.rsc_shelf.ReadOnly = True
-        Me.rsc_shelf.Width = 50
-        '
-        'rsc_qtytopick
-        '
-        Me.rsc_qtytopick.HeaderText = "Qty. To Pick"
-        Me.rsc_qtytopick.Name = "rsc_qtytopick"
-        Me.rsc_qtytopick.Width = 67
-        '
-        'rsc_qtyavailable
-        '
-        Me.rsc_qtyavailable.HeaderText = "Qty. Available"
-        Me.rsc_qtyavailable.Name = "rsc_qtyavailable"
-        Me.rsc_qtyavailable.ReadOnly = True
-        Me.rsc_qtyavailable.Visible = False
-        Me.rsc_qtyavailable.Width = 60
-        '
-        'rsc_qtyallocated
-        '
-        Me.rsc_qtyallocated.HeaderText = "Qty. Allocated"
-        Me.rsc_qtyallocated.Name = "rsc_qtyallocated"
-        Me.rsc_qtyallocated.ReadOnly = True
-        Me.rsc_qtyallocated.Visible = False
-        Me.rsc_qtyallocated.Width = 60
-        '
-        'rsc_qtyorderable
-        '
-        Me.rsc_qtyorderable.HeaderText = "Qty. Orderable"
-        Me.rsc_qtyorderable.Name = "rsc_qtyorderable"
-        Me.rsc_qtyorderable.ReadOnly = True
-        Me.rsc_qtyorderable.Width = 60
-        '
-        'rsc_pickorderno
-        '
-        Me.rsc_pickorderno.HeaderText = "Pick Order No."
-        Me.rsc_pickorderno.Name = "rsc_pickorderno"
-        Me.rsc_pickorderno.ReadOnly = True
-        Me.rsc_pickorderno.Width = 83
-        '
-        'rsc_issueflg
-        '
-        Me.rsc_issueflg.HeaderText = "With Issue"
-        Me.rsc_issueflg.Name = "rsc_issueflg"
-        Me.rsc_issueflg.Width = 50
-        '
-        'rsc_remarks
-        '
-        Me.rsc_remarks.HeaderText = "Remarks"
-        Me.rsc_remarks.Name = "rsc_remarks"
         '
         'PickListForm
         '

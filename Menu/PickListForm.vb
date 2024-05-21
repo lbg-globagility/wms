@@ -1,9 +1,13 @@
 ﻿
 
+Imports CrystalDecisions.CrystalReports.Engine
 Imports Microsoft.Extensions.DependencyInjection
 Imports MySql.Data.MySqlClient
+Imports Newtonsoft.Json
+Imports WarehouseManagementSystem.Core.Entities
 Imports WarehouseManagementSystem.Core.Enums
 Imports WarehouseManagementSystem.Core.Interfaces
+Imports WarehouseManagementSystem.Desktop.Utilities
 
 Public Class PickListForm
     Dim manager As New sqlModule.Manager
@@ -1164,20 +1168,20 @@ Public Class PickListForm
             If dgPickList.Rows.Count <> 0 Then
                 For i As Integer = 0 To dgPickList.Rows.Count - 1
                     If dgPickList.Rows(i).Cells(pl_status.Index).Value = "New" Then
-                        dgPickList.Rows(i).DefaultCellStyle.BackColor = Color.LightYellow
+                        dgPickList.Rows(i).DefaultCellStyle.BackColor = Drawing.Color.LightYellow
                     ElseIf dgPickList.Rows(i).Cells(pl_status.Index).Value = "Modified" Then
-                        dgPickList.Rows(i).DefaultCellStyle.BackColor = Color.PowderBlue
+                        dgPickList.Rows(i).DefaultCellStyle.BackColor = Drawing.Color.PowderBlue
                     ElseIf dgPickList.Rows(i).Cells(pl_status.Index).Value = "Cancelled" Then
-                        dgPickList.Rows(i).DefaultCellStyle.BackColor = Color.MistyRose
+                        dgPickList.Rows(i).DefaultCellStyle.BackColor = Drawing.Color.MistyRose
                     ElseIf dgPickList.Rows(i).Cells(pl_status.Index).Value = "Completed" Then
-                        dgPickList.Rows(i).DefaultCellStyle.BackColor = Color.Honeydew
+                        dgPickList.Rows(i).DefaultCellStyle.BackColor = Drawing.Color.Honeydew
                     End If
                 Next
             End If
             If dgCustomerOrderItems.Rows.Count <> 0 Then
                 For i As Integer = 0 To dgCustomerOrderItems.Rows.Count - 1
                     If dgCustomerOrderItems.Rows(i).Cells(ci_type.Index).Value = "B" Then
-                        dgCustomerOrderItems.Rows(i).DefaultCellStyle.BackColor = Color.PaleGreen
+                        dgCustomerOrderItems.Rows(i).DefaultCellStyle.BackColor = Drawing.Color.PaleGreen
                     Else
                         If CStr(dgCustomerOrderItems.Rows(i).Cells("ci_colorvalue").Value) <> "" Then
                             readcolor = colorconverter.ConvertFromString(CStr(dgCustomerOrderItems.Rows(i).Cells("ci_colorvalue").Value))
@@ -1188,7 +1192,7 @@ Public Class PickListForm
             End If
             If dgRackShelfColumn.Rows.Count <> 0 Then
                 For i As Integer = 0 To dgRackShelfColumn.Rows.Count - 1
-                    dgRackShelfColumn.Rows(i).Cells("rsc_qtytopick").Style.BackColor = Color.Gainsboro
+                    dgRackShelfColumn.Rows(i).Cells("rsc_qtytopick").Style.BackColor = Drawing.Color.Gainsboro
                 Next
             End If
         Catch ex As Exception
@@ -1915,7 +1919,7 @@ Public Class PickListForm
 
     Private Sub pbAddPicker_MouseEnter(sender As Object, e As EventArgs) Handles pbAddPicker.MouseEnter
         Try
-            pbAddPicker.BackColor = Color.MediumSpringGreen
+            pbAddPicker.BackColor = Drawing.Color.MediumSpringGreen
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -1925,7 +1929,7 @@ Public Class PickListForm
 
     Private Sub pbAddPicker_MouseLeave(sender As Object, e As EventArgs) Handles pbAddPicker.MouseLeave
         Try
-            pbAddPicker.BackColor = Color.Transparent
+            pbAddPicker.BackColor = Drawing.Color.Transparent
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -2593,6 +2597,8 @@ Public Class PickListForm
     End Sub
 
     Private Async Sub msPrint_Click(sender As Object, e As EventArgs) Handles msPrint.Click
+        If IsThurston Then Return
+
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
@@ -2647,34 +2653,34 @@ Public Class PickListForm
                                 Dim systemOwnerService = MainServiceProvider.GetRequiredService(Of ISystemOwnerService)
                                 Dim currentSystemOwner = Await systemOwnerService.GetCurrentSystemOwnerEntityAsync()
                                 If currentSystemOwner.IsThurston Then
-                                        If dgCustomerOrders.CurrentRow.Selected Then
-                                            printPickListThurston(CInt(dgCustomerOrders.CurrentRow.Cells("co_customerorderno").Value), plinventorylocationdid)
-                                            Dim printreport As New PickList
-                                            Dim openreportviewer As New ReportViewer
-                                            openreportviewer.CrystalReportViewer.ReportSource = printreport
-                                            printdatatable = printdatasetthurston
-                                            printreport.SetDataSource(printdatatable)
-                                            openreportviewer.Show()
-                                            printdatatable.Dispose()
-                                            printdatatable = Nothing
-                                            printdatasetthurston.Clear()
-                                        Else
-                                            MessageBox.Show("Select a customer order")
-                                        End If
-                                    Else
-                                        printPickList(CInt(dgPickList.CurrentRow.Cells("pl_rowid").Value), plinventorylocationdid)
-                                        Dim printreport As New PickListPrint
+                                    If dgCustomerOrders.CurrentRow.Selected Then
+                                        printPickListThurston(CInt(dgCustomerOrders.CurrentRow.Cells("co_customerorderno").Value), plinventorylocationdid)
+                                        Dim printreport As New PickList
                                         Dim openreportviewer As New ReportViewer
                                         openreportviewer.CrystalReportViewer.ReportSource = printreport
-                                        printdatatable = printdataset
+                                        printdatatable = printdatasetthurston
                                         printreport.SetDataSource(printdatatable)
                                         openreportviewer.Show()
                                         printdatatable.Dispose()
                                         printdatatable = Nothing
-                                        printdataset.Clear()
+                                        printdatasetthurston.Clear()
+                                    Else
+                                        MessageBox.Show("Select a customer order")
                                     End If
+                                Else
+                                    printPickList(CInt(dgPickList.CurrentRow.Cells("pl_rowid").Value), plinventorylocationdid)
+                                    Dim printreport As New PickListPrint
+                                    Dim openreportviewer As New ReportViewer
+                                    openreportviewer.CrystalReportViewer.ReportSource = printreport
+                                    printdatatable = printdataset
+                                    printreport.SetDataSource(printdatatable)
+                                    openreportviewer.Show()
+                                    printdatatable.Dispose()
+                                    printdatatable = Nothing
+                                    printdataset.Clear()
                                 End If
-                                Exit Try
+                            End If
+                            Exit Try
                         Else
                             Exit Try
                         End If
@@ -2732,6 +2738,62 @@ Public Class PickListForm
             conn.Close()
         End Try
         Me.Cursor = Cursors.Default
+    End Sub
+
+    Private Async Sub PrintPickListReportForm_Click(sender As Object, e As EventArgs) Handles msPrint.Click
+        Dim pickListId = If(dgPickList.CurrentRow Is Nothing, 0,
+            CInt(dgPickList.CurrentRow?.Cells("pl_rowid").Value))
+        If Not IsThurston AndAlso pickListId = 0 Then Return
+
+        Dim printreport As New DeliverySchedule
+
+        Dim sql = <![CDATA[
+            SELECT
+            a.CompanyName `customer`,
+            GROUP_CONCAT(DISTINCT o.ReferenceNumber) `poNo`,
+            SUM(oi.QtyOrdered) `qty`,
+            GROUP_CONCAT(DISTINCT pil.UnitOfMeasure2 SEPARATOR '\n') `unit`,
+            GROUP_CONCAT(p.ProductCode ORDER BY oi.RowID SEPARATOR ', ') `itemDescription`,
+            DATE_FORMAT(CURDATE(), '%M %e, %Y') `deliveryDate`
+            FROM picklistorders plo
+            INNER JOIN orders o ON o.RowID=plo.OrderID
+            INNER JOIN accounts a ON a.RowID=o.AccountID
+            INNER JOIN orderitems oi ON oi.RowID=plo.OrderItemID
+            INNER JOIN productinventorylocation pil ON pil.RowID=oi.ProductInventoryLocationId
+            INNER JOIN productcolorsizes pcs ON pcs.RowID=pil.ProductColorSizeID
+            INNER JOIN productcolors pc ON pc.RowID=pcs.ProductColorID
+            INNER JOIN products p ON p.RowID=pc.ProductID
+            WHERE plo.PickListID = @pickListId
+            GROUP BY a.RowID, o.ReferenceNumber, pil.UnitOfMeasure2
+            ORDER BY a.CompanyName;
+            ]]>.Value
+
+        Await FunctionUtils.TryCatchFunctionAsync(messageTitle:="Print Picklist",
+            Async Function()
+                Using connection As New MySqlConnection(connectionString:=manager.GetConnString()),
+            command As New MySqlCommand(sql, connection)
+
+                    With command.Parameters
+                        .AddWithValue("@pickListId", pickListId)
+                    End With
+
+                    Dim adapter = New MySqlDataAdapter()
+                    adapter.SelectCommand = command
+                    Dim dt As New DataTable
+                    Await Task.Run(Sub()
+                                       adapter.Fill(dt)
+                                   End Sub)
+
+                    If dt IsNot Nothing Then
+                        printreport.SetDataSource(dt)
+                    End If
+
+                End Using
+            End Function)
+
+        Dim openreportviewer As New ReportViewer
+        openreportviewer.CrystalReportViewer.ReportSource = printreport
+        openreportviewer.Show()
     End Sub
 
 #Region "Search/Page Setup"
