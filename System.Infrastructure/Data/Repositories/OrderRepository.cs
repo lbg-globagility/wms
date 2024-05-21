@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
 using OfficeOpenXml.Style;
 using System;
@@ -242,6 +243,13 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
                 var count1 = orders1.Count();
 
                 return Task.FromResult(new PaginatedList<Order>(items: orders1, total: count1));
+            }
+
+            if (!string.IsNullOrWhiteSpace(pageOptions.Sort) &&
+                !string.IsNullOrWhiteSpace(pageOptions.Direction))
+            {
+                if (pageOptions.Sort == "Created")
+                    query = query.OrderBy(x => x.Created, pageOptions.Direction);
             }
 
             var count = query.AsEnumerable().Count();
