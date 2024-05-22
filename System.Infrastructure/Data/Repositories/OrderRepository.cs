@@ -237,25 +237,35 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
             if (!string.IsNullOrEmpty(searchText))
             {
                 var orders1 = query
-                    .Page(pageOptions)
                     .AsEnumerable()
-                    .Where(t => t.CustomerOrderSearchableString.SimilarTo(searchText));
+                    .Where(t => t.CustomerOrderSearchableString.SimilarTo(searchText))
+                    .AsQueryable()
+                    .Page(pageOptions);
                 var count1 = orders1.Count();
+
+                orders1 = SortMethod(q: orders1);
 
                 return Task.FromResult(new PaginatedList<Order>(items: orders1, total: count1));
             }
 
-            if (!string.IsNullOrWhiteSpace(pageOptions.Sort) &&
-                !string.IsNullOrWhiteSpace(pageOptions.Direction))
-            {
-                if (pageOptions.Sort == "Created")
-                    query = query.OrderBy(x => x.Created, pageOptions.Direction);
-            }
+            query = SortMethod(q: query);
 
             var count = query.AsEnumerable().Count();
             var orders = query.Page(pageOptions).AsEnumerable();
 
             return Task.FromResult(new PaginatedList<Order>(items: orders, total: count));
+
+            IQueryable<Order> SortMethod(IQueryable<Order> q)
+            {
+                if (!string.IsNullOrWhiteSpace(pageOptions.Sort) &&
+                    !string.IsNullOrWhiteSpace(pageOptions.Direction))
+                {
+                    if (pageOptions.Sort == "Created")
+                        q = q.OrderBy(x => x.Created, pageOptions.Direction);
+                }
+
+                return q;
+            }
         }
     }
 }

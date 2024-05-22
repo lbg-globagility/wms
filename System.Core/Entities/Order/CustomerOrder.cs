@@ -80,7 +80,7 @@ namespace WarehouseManagementSystem.Core.Entities
                     SealNo,
                     ArrivedIn,
                     InventoryLocationName};
-                return string.Join(string.Empty, texts.Where(t => !string.IsNullOrEmpty(t)));
+                return string.Join(Environment.NewLine, texts.Where(t => !string.IsNullOrEmpty(t)));
             }
         }
     }
