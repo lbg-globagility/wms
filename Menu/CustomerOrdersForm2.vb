@@ -23,7 +23,8 @@ Public Class CustomerOrdersForm2
 
     Private ReadOnly _userId As Integer
     Private _selectedOrder As Order
-    Private _pageOptions As New PageOptions(pageIndex:=0, pageSize:=20, sort:="Created", direction:="desc")
+    Private ReadOnly DEFAULT_PAGEOPTIONS As PageOptions = New PageOptions(pageIndex:=0, pageSize:=20, sort:="Created", direction:="desc")
+    Private _pageOptions As PageOptions = DEFAULT_PAGEOPTIONS
 
     Public Sub New(userId As Integer)
 
@@ -52,6 +53,19 @@ Public Class CustomerOrdersForm2
 
         gridOrders_SelectionChanged(gridOrders, New EventArgs())
         AddHandler gridOrders.SelectionChanged, AddressOf gridOrders_SelectionChanged
+
+        InitButtonClearSearch()
+    End Sub
+
+    Private Sub InitButtonClearSearch()
+        With btnClearSearch
+            .Size = New Size(width:=TextBoxSearch.ClientSize.Height, height:=TextBoxSearch.ClientSize.Height)
+            .Location = New Point(x:=TextBoxSearch.ClientSize.Width - (btnClearSearch.Size.Width - 1), y:=0)
+            .Font = New Font("Segoe UI", 7.5!, FontStyle.Regular, GraphicsUnit.Point, CType(0, Byte))
+            .Cursor = Cursors.Default
+        End With
+
+        TextBoxSearch.Controls.Add(btnClearSearch)
     End Sub
 
     Private Async Function ScrutinateUserPrivilegeAsync() As Task
@@ -89,7 +103,10 @@ Public Class CustomerOrdersForm2
 
     Private Async Function LoadCustomerOrdersAsync() As Task(Of Integer)
         Dim orderDataService = GetRequiredService(Of IOrderDataService)()
-        Dim result = Await orderDataService.GetCustomerOrdersAsync(organizationId:=Z_OrganizationID, pageOptions:=_pageOptions)
+        Dim result = Await orderDataService.GetCustomerOrdersAsync(
+            organizationId:=Z_OrganizationID,
+            pageOptions:=_pageOptions,
+            searchText:=TextBoxSearch.Text)
 
         gridOrders.DataSource = result.Items.
             ToList()
@@ -519,7 +536,7 @@ Public Class CustomerOrdersForm2
             Async Function()
                 ToolStripButtonNew.Enabled = True
 
-                Await DefaultReloadCustomerOrdersAsync()
+                Await DefaultReloadCustomerOrdersAsync(order:=_selectedOrder)
 
                 ToolStripButtonSave.Enabled = True
 
@@ -582,7 +599,7 @@ Public Class CustomerOrdersForm2
             Async Function()
                 ToolStripButtonNew.Enabled = True
 
-                Await DefaultReloadCustomerOrdersAsync()
+                Await DefaultReloadCustomerOrdersAsync(order:=_selectedOrder)
 
                 ToolStripButtonApproved.Enabled = True
             End Function
@@ -611,7 +628,7 @@ Public Class CustomerOrdersForm2
             Async Function()
                 ToolStripButtonNew.Enabled = True
 
-                Await DefaultReloadCustomerOrdersAsync()
+                Await DefaultReloadCustomerOrdersAsync(order:=_selectedOrder)
 
                 ToolStripButtonCancel.Enabled = True
 
@@ -691,7 +708,7 @@ Public Class CustomerOrdersForm2
             Async Function()
                 ToolStripButtonNew.Enabled = True
 
-                Await DefaultReloadCustomerOrdersAsync()
+                Await DefaultReloadCustomerOrdersAsync(order:=_selectedOrder)
 
                 ToolStripButtonRevoke.Enabled = True
             End Function
@@ -756,12 +773,35 @@ Public Class CustomerOrdersForm2
         linkFirst.Location = New Point(x:=(linkPrev.Location.X - linkFirst.Width), y:=linkFirst.Location.Y)
     End Sub
 
+    Private Async Function DefaultReloadCustomerOrdersAsync(order As Order) As Task
+        Dim row = gridOrders.Rows?.OfType(Of DataGridViewRow)?.
+            Where(Function(r) If(DirectCast(r.DataBoundItem, Order)?.RowID = order.RowID, False)).
+            FirstOrDefault()
+
+        SetPageOptionToCurrentPageIndex()
+
+        Await DefaultReloadCustomerOrdersAsync(rowIndex:=If(row?.Index < 0, 0, If(row?.Index, 0)))
+    End Function
+
+    Private Async Function DefaultReloadCustomerOrdersAsync(rowIndex As Integer) As Task
+
+        SetPageOptionToCurrentPageIndex()
+
+        Await DefaultReloadCustomerOrdersAsync().
+            ContinueWith(
+            Sub()
+                If Not rowIndex < 0 Then
+                    gridOrders.CurrentCell = gridOrders.Item(columnIndex:=Column13.Index, rowIndex:=rowIndex)
+                    gridOrders_SelectionChanged(gridOrders, New EventArgs())
+                End If
+            End Sub, TaskScheduler.FromCurrentSynchronizationContext)
+    End Function
+
     Private Async Function DefaultReloadCustomerOrdersAsync() As Task
         RemoveHandler gridOrders.SelectionChanged, AddressOf gridOrders_SelectionChanged
 
         Panel5.Enabled = False
 
-        _pageOptions.MoveToFirst()
         Await LoadCustomerOrdersAsync().
             ContinueWith(
             Sub()
@@ -769,7 +809,12 @@ Public Class CustomerOrdersForm2
                 gridOrders_SelectionChanged(gridOrders, New EventArgs())
                 AddHandler gridOrders.SelectionChanged, AddressOf gridOrders_SelectionChanged
             End Sub, TaskScheduler.FromCurrentSynchronizationContext)
+
     End Function
+
+    Private Sub SetPageOptionToCurrentPageIndex()
+        _pageOptions = DEFAULT_PAGEOPTIONS
+    End Sub
 
     Private Async Sub Pagination_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles linkFirst.LinkClicked,
             linkPrev.LinkClicked,
@@ -780,8 +825,7 @@ Public Class CustomerOrdersForm2
 
         Dim control = CType(sender, LinkLabel)
         If control.Name = linkFirst.Name Then
-            Await DefaultReloadCustomerOrdersAsync()
-            Return
+            _pageOptions.MoveToFirst()
         ElseIf control.Name = linkPrev.Name Then
             _pageOptions.MoveToPrevious()
         ElseIf control.Name = linkNext.Name Then
@@ -831,5 +875,27 @@ Public Class CustomerOrdersForm2
 
     Private Sub ToolStripButtonPrint_Click(sender As Object, e As EventArgs) Handles ToolStripButtonPrint.Click
         Print()
+    End Sub
+
+    Private Sub TextBoxSearch_TextChanged(sender As Object, e As EventArgs) Handles TextBoxSearch.TextChanged
+        btnClearSearch.Visible = Not String.IsNullOrEmpty(TextBoxSearch.Text)
+    End Sub
+
+    Private Sub ButtonSearch_Click(sender As Object, e As EventArgs) Handles ButtonSearch.Click
+        Pagination_LinkClicked(sender:=linkFirst, e:=New LinkLabelLinkClickedEventArgs(link:=New LinkLabel.Link))
+    End Sub
+
+    Private Sub TextBoxSearch_KeyPress(sender As Object, e As KeyPressEventArgs) Handles TextBoxSearch.KeyPress
+
+    End Sub
+
+    Private Sub TextBoxSearch_KeyDown(sender As Object, e As KeyEventArgs) Handles TextBoxSearch.KeyDown
+        If Not e.KeyCode = Keys.Enter Then Return
+        ButtonSearch_Click(sender:=ButtonSearch, e:=New EventArgs())
+    End Sub
+
+    Private Sub btnClearSearch_Click(sender As Object, e As EventArgs) Handles btnClearSearch.Click
+        TextBoxSearch.Clear()
+        TextBoxSearch.Focus()
     End Sub
 End Class
