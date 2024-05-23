@@ -34,6 +34,8 @@ Public Class CustomerOrdersForm2
         ' Add any initialization after the InitializeComponent() call.
 
         _userId = userId
+
+        InitButtonClearSearch()
     End Sub
 
     Private Async Sub CustomerOrdersForm2_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -54,7 +56,6 @@ Public Class CustomerOrdersForm2
         gridOrders_SelectionChanged(gridOrders, New EventArgs())
         AddHandler gridOrders.SelectionChanged, AddressOf gridOrders_SelectionChanged
 
-        InitButtonClearSearch()
     End Sub
 
     Private Sub InitButtonClearSearch()
@@ -66,6 +67,8 @@ Public Class CustomerOrdersForm2
         End With
 
         TextBoxSearch.Controls.Add(btnClearSearch)
+
+        TextBoxSearch_TextChanged(TextBoxSearch, New EventArgs())
     End Sub
 
     Private Async Function ScrutinateUserPrivilegeAsync() As Task
@@ -775,25 +778,25 @@ Public Class CustomerOrdersForm2
 
     Private Async Function DefaultReloadCustomerOrdersAsync(order As Order) As Task
         Dim row = gridOrders.Rows?.OfType(Of DataGridViewRow)?.
-            Where(Function(r) If(DirectCast(r.DataBoundItem, Order)?.RowID = order.RowID, False)).
-            FirstOrDefault()
+            FirstOrDefault(Function(r) If(DirectCast(r.DataBoundItem, Order)?.RowID = order.RowID, False))
 
-        SetPageOptionToCurrentPageIndex()
-
-        Await DefaultReloadCustomerOrdersAsync(rowIndex:=If(row?.Index < 0, 0, If(row?.Index, 0)))
+        Await DefaultReloadCustomerOrdersAsync(rowIndex:=If(row?.Index, 0))
     End Function
 
     Private Async Function DefaultReloadCustomerOrdersAsync(rowIndex As Integer) As Task
-
         SetPageOptionToCurrentPageIndex()
 
-        Await DefaultReloadCustomerOrdersAsync().
+        RemoveHandler gridOrders.SelectionChanged, AddressOf gridOrders_SelectionChanged
+
+        Panel5.Enabled = False
+
+        Await LoadCustomerOrdersAsync().
             ContinueWith(
             Sub()
-                If Not rowIndex < 0 Then
-                    gridOrders.CurrentCell = gridOrders.Item(columnIndex:=Column13.Index, rowIndex:=rowIndex)
-                    gridOrders_SelectionChanged(gridOrders, New EventArgs())
-                End If
+                Panel5.Enabled = True
+                gridOrders.CurrentCell = gridOrders.Item(columnIndex:=Column13.Index, rowIndex:=rowIndex)
+                gridOrders_SelectionChanged(gridOrders, New EventArgs())
+                AddHandler gridOrders.SelectionChanged, AddressOf gridOrders_SelectionChanged
             End Sub, TaskScheduler.FromCurrentSynchronizationContext)
     End Function
 
