@@ -110,9 +110,17 @@ Public Class DeliveryReceipt
     
     <Browsable(false),  _
      DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
-    Public ReadOnly Property Section5() As CrystalDecisions.CrystalReports.Engine.Section
+    Public ReadOnly Property ReportFooterSection3() As CrystalDecisions.CrystalReports.Engine.Section
         Get
             Return Me.ReportDefinition.Sections(7)
+        End Get
+    End Property
+    
+    <Browsable(false),  _
+     DesignerSerializationVisibilityAttribute(System.ComponentModel.DesignerSerializationVisibility.Hidden)>  _
+    Public ReadOnly Property Section5() As CrystalDecisions.CrystalReports.Engine.Section
+        Get
+            Return Me.ReportDefinition.Sections(8)
         End Get
     End Property
 End Class
