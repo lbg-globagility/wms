@@ -835,6 +835,8 @@ Public Class CustomerOrdersForm2
             _pageOptions.MoveToNext()
         End If
 
+        _pageOptions.All = CheckBoxShowAll.Checked 'PageOptions.AllData
+
         Await LoadCustomerOrdersAsync().
             ContinueWith(
             Sub()
@@ -900,5 +902,11 @@ Public Class CustomerOrdersForm2
     Private Sub btnClearSearch_Click(sender As Object, e As EventArgs) Handles btnClearSearch.Click
         TextBoxSearch.Clear()
         TextBoxSearch.Focus()
+    End Sub
+
+    Private Sub CheckBoxShowAll_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxShowAll.CheckedChanged
+        Panel5.Visible = Not CheckBoxShowAll.Checked
+
+        ButtonSearch_Click(ButtonSearch, New EventArgs())
     End Sub
 End Class
