@@ -1,7 +1,7 @@
-﻿using Microsoft.Extensions.Logging;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using WarehouseManagementSystem.Core.Entities;
 using WarehouseManagementSystem.Core.Enums;
@@ -104,25 +104,12 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
             if (order.IsStatusCancelled) BusinessLogicException.Throw(message: "Changes can't be made to this transaction, as it's already been cancelled.");
         }
 
-        private void CustomerOrderRecordUpdate(Order entity, Order oldEntity, List<UserActivityItem> userActivityItems)
+        private void CustomerOrderRecordUpdate(Order entity, Order oldEntity, string suffix = "")
         {
             if (!oldEntity.IsCustomerOrderType) return;
 
-            var suffix = $" of Customer Order #{entity.OrderNumber}";
-
-            if (entity.OrderDate != oldEntity.OrderDate)
-            {
-                userActivityItems.Add(UserActivityItem.NewUserActivityItem(entityId: oldEntity.RowID.Value,
-                    description: $"Change `Customer Order Date` from '{oldEntity.OrderDate.Value.Date.ToShortDateString()}' to '{entity.OrderDate.Value.Date.ToShortDateString()}'{suffix}",
-                    changedUserId: entity.LastUpdBy.Value));
-            }
-
-            if (entity.Comments != oldEntity.Comments)
-            {
-                userActivityItems.Add(UserActivityItem.NewUserActivityItem(entityId: oldEntity.RowID.Value,
-                    description: $"Change `Comments` from '{oldEntity.Comments}' to '{entity.Comments}'{suffix}",
-                    changedUserId: entity.LastUpdBy.Value));
-            }
+            suffix = $" of Customer Order #{entity.OrderNumber}";
+            
         }
 
         public async Task SaveManyCustomerOrderAsync(int userId,

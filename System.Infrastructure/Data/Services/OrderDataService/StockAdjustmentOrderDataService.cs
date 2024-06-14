@@ -68,25 +68,12 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
             await SaveManyAsync(entities: new List<Order>() { order }, userId: userId);
         }
 
-        private void StockAdjustmentRecordUpdate(Order entity, Order oldEntity, List<UserActivityItem> userActivityItems)
+        private void StockAdjustmentRecordUpdate(Order entity, Order oldEntity, string suffix = "")
         {
             if (!oldEntity.IsStockAdjustType) return;
 
-            var suffix = $" of Stock Adjustment #{entity.OrderNumber}";
+            suffix = $" of Stock Adjustment #{entity.OrderNumber}";
 
-            if (entity.OrderDate != oldEntity.OrderDate)
-            {
-                userActivityItems.Add(UserActivityItem.NewUserActivityItem(entityId: oldEntity.RowID.Value,
-                    description: $"Change `Stock Adjustment Date` from '{oldEntity.OrderDate.Value.Date.ToShortDateString()}' to '{entity.OrderDate.Value.Date.ToShortDateString()}'{suffix}",
-                    changedUserId: entity.LastUpdBy.Value));
-            }
-
-            if (entity.Comments != oldEntity.Comments)
-            {
-                userActivityItems.Add(UserActivityItem.NewUserActivityItem(entityId: oldEntity.RowID.Value,
-                    description: $"Change `Comments` from '{oldEntity.Comments}' to '{entity.Comments}'{suffix}",
-                    changedUserId: entity.LastUpdBy.Value));
-            }
         }
     }
 }

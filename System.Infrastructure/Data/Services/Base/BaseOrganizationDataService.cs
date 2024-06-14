@@ -54,7 +54,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data
             return Task.CompletedTask;
         }
 
-        protected virtual Task RecordUpdate(T entity, T oldEntity)
+        protected virtual Task RecordUpdate(T entity, T oldEntity, string suffix = "")
         {
             return Task.CompletedTask;
         }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using WarehouseManagementSystem.Core.Entities;
 using WarehouseManagementSystem.Core.Interfaces;
@@ -30,29 +31,11 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
 
         protected override string GetUserActivityName(MovementHistory entity) => _entityName;
 
-        protected async override Task RecordUpdate(MovementHistory entity, MovementHistory oldEntity)
+        protected async override Task RecordUpdate(MovementHistory entity, MovementHistory oldEntity, string suffix = "")
         {
             if (oldEntity == null) return;
 
-            var userActivityItems = new List<UserActivityItem>();
-            var entityName = _entityName.ToLower();
-
-            if (entity.QtyToApply != oldEntity.QtyToApply)
-            {
-                userActivityItems.Add(UserActivityItem.NewUserActivityItem(entityId: oldEntity.RowID.Value,
-                    description: $"Change `Quantity` {oldEntity.QtyToApply} → {entity.QtyToApply}",
-                    changedUserId: entity.LastUpdBy.Value));
-            }
-
-            if (userActivityItems.Any())
-            {
-                await _userActivityRepository.CreateRecordAsync(
-                    entity.LastUpdBy.Value,
-                    entityName,
-                    entity.OrganizationID.Value,
-                    UserActivity.RecordTypeEdit,
-                    userActivityItems);
-            }
+            await base.RecordUpdate(entity, oldEntity, suffix);
         }
     }
 }

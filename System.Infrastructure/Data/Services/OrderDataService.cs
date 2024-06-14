@@ -2,6 +2,7 @@
 using OfficeOpenXml.Style;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using WarehouseManagementSystem.Core.Entities;
 using WarehouseManagementSystem.Core.Enums;
@@ -167,30 +168,17 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
 
         protected override string GetUserActivityName(Order entity) => _entityName;
 
-        protected override async Task RecordUpdate(Order entity, Order oldEntity)
+        protected override async Task RecordUpdate(Order entity, Order oldEntity, string suffix = "")
         {
             if (oldEntity == null) return;
 
-            var userActivityItems = new List<UserActivityItem>();
-            var entityName = _entityName.ToLower();
+            StockAdjustmentRecordUpdate(entity, oldEntity, suffix);
 
-            //var suffixIdentifier = $"of {entityName}{CreateUserActivitySuffixIdentifier(oldEntity)}.";
+            StockTransferRecordUpdate(entity, oldEntity, suffix);
 
-            StockAdjustmentRecordUpdate(entity, oldEntity, userActivityItems);
+            CustomerOrderRecordUpdate(entity, oldEntity, suffix);
 
-            StockTransferRecordUpdate(entity, oldEntity, userActivityItems);
-
-            CustomerOrderRecordUpdate(entity, oldEntity, userActivityItems);
-            
-            if (userActivityItems.Any())
-            {
-                await _userActivityRepository.CreateRecordAsync(
-                    entity.LastUpdBy.Value,
-                    entityName,
-                    entity.OrganizationID.Value,
-                    UserActivity.RecordTypeEdit,
-                    userActivityItems);
-            }
+            await base.RecordUpdate(entity: entity, oldEntity: oldEntity, suffix: suffix);
         }
 
         protected override Task RecordAdd(Order entity)

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using WarehouseManagementSystem.Core.Entities;
 using WarehouseManagementSystem.Core.Exceptions;
@@ -72,6 +73,18 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
             await ScrutinateUserPrivilegeAsync(userId: userId, orderItems: updated);
 
             if ((added?.Any() ?? false) || (updated?.Any() ?? false)) await SaveManyAsync(userId: userId, added: added, updated: updated);
+        }
+
+        protected override Task RecordAdd(OrderItem entity)
+        {
+            return base.RecordAdd(entity);
+        }
+
+        protected override async Task RecordUpdate(OrderItem entity, OrderItem oldEntity, string suffix = "")
+        {
+            if (oldEntity == null) return;
+
+            await base.RecordUpdate(entity, oldEntity, suffix);
         }
     }
 }
