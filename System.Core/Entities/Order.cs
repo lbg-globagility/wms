@@ -144,5 +144,11 @@ namespace WarehouseManagementSystem.Core.Entities
             Status == OrderStatus.Received ? OrderStatus.Received.ToString() :
             Status == OrderStatus.ForApproval ? "For Approval" :
             Status == OrderStatus.SubmittedToWarehouse ? "Submitted To Warehouse" : OrderStatus.New.ToString();
+
+        public string TotalQuantitiesText => string.Join(separator: ", ",
+            OrderItems?
+            .GroupBy(_ => _.UnitOfMeasure)
+            .Select(_ => $"{_.Sum(t => t.QtyOrdered ?? 0)} {_.Key}")
+            .ToArray());
     }
 }

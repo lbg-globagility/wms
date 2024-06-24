@@ -908,5 +908,7 @@ Public Class CustomerOrdersForm2
         Panel5.Visible = Not CheckBoxShowAll.Checked
 
         ButtonSearch_Click(ButtonSearch, New EventArgs())
+
+        SplitContainer1_Panel1_SizeChanged(sender:=SplitContainer1.Panel1, e:=New EventArgs())
     End Sub
 End Class
