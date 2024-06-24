@@ -47,7 +47,7 @@ namespace SergeUtils
         /// </summary>
         public EasyCompletionComboBox()
         {
-            m_matchingMethod = StringMatchingMethod.NoWildcards;
+            m_matchingMethod = StringMatchingMethod.UseWildcards;
             // we're overriding these
             DropDownStyle = ComboBoxStyle.DropDown;
             AutoCompleteMode = AutoCompleteMode.None;
