@@ -1809,7 +1809,7 @@ Public Class ViewEditLineUpDeliveryForm
             a.CompanyName,
             CONCAT_WS(', ', ad.StreetAddress1, ad.StreetAddress2, ad.Barangay, ad.CityTown, ad.Province, ad.State, ad.ZipCode, ad.Country) `Address`,
             lu.LineUpDate,
-            oi.QtyOrdered `DataColumn1`,
+            plci.QtyInCarton `DataColumn1`,
             pcs.UnitOfMeasure2 `DataColumn2`,
             CONCAT_WS(' - ', p.ProductCode, p.`Description`) `DataColumn3`
 
