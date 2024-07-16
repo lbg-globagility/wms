@@ -20,7 +20,8 @@ AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
 DefaultDirName={autopf}\GLOBAGILITY\WMS
 DisableProgramGroupPage=yes
-; Remove the following line to run in administrative install mode (install for all users.)
+; Uncomment the following line to run in non administrative install mode (install for current user only.)
+; PrivilegesRequired=lowest
 PrivilegesRequired=lowest
 OutputBaseFilename={#MyAppName}-setup-v{#MyAppVersion}
 Compression=lzma
@@ -34,208 +35,16 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: ".\bin\Debug\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\AutoMapper.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\AutoMapper.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\CrystalDecisions.CrystalReports.Engine.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\CrystalDecisions.ReportAppServer.ClientDoc.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\CrystalDecisions.ReportAppServer.CommLayer.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\CrystalDecisions.ReportAppServer.CommonControls.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\CrystalDecisions.ReportAppServer.CommonObjectModel.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\CrystalDecisions.ReportAppServer.Controllers.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\CrystalDecisions.ReportAppServer.CubeDefModel.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\CrystalDecisions.ReportAppServer.DataDefModel.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\CrystalDecisions.ReportAppServer.DataSetConversion.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\CrystalDecisions.ReportAppServer.ObjectFactory.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\CrystalDecisions.ReportAppServer.Prompting.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\CrystalDecisions.ReportAppServer.ReportDefModel.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\CrystalDecisions.ReportAppServer.XmlSerialize.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\CrystalDecisions.ReportSource.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\CrystalDecisions.Shared.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\CrystalDecisions.Windows.Forms.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\DevComponents.DotNetBar2.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\EPPlus.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\EPPlus.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\FlashControlV71.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\INIFileParser.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\INIFileParser.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\log4.config"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\log4net.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\log4net.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\Microsoft.EntityFrameworkCore.Abstractions.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\Microsoft.EntityFrameworkCore.Abstractions.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\Microsoft.EntityFrameworkCore.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\Microsoft.EntityFrameworkCore.Relational.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\Microsoft.EntityFrameworkCore.Relational.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\Microsoft.EntityFrameworkCore.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\Microsoft.Extensions.Caching.Abstractions.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\Microsoft.Extensions.Caching.Abstractions.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\Microsoft.Extensions.Caching.Memory.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\Microsoft.Extensions.Caching.Memory.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\Microsoft.Extensions.Configuration.Abstractions.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\Microsoft.Extensions.Configuration.Abstractions.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\Microsoft.Extensions.Configuration.Binder.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\Microsoft.Extensions.Configuration.Binder.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\Microsoft.Extensions.Configuration.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\Microsoft.Extensions.Configuration.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\Microsoft.Extensions.DependencyInjection.Abstractions.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\Microsoft.Extensions.DependencyInjection.Abstractions.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\Microsoft.Extensions.DependencyInjection.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\Microsoft.Extensions.DependencyInjection.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\Microsoft.Extensions.Logging.Abstractions.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\Microsoft.Extensions.Logging.Abstractions.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\Microsoft.Extensions.Logging.Configuration.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\Microsoft.Extensions.Logging.Configuration.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\Microsoft.Extensions.Logging.Console.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\Microsoft.Extensions.Logging.Console.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\Microsoft.Extensions.Logging.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\Microsoft.Extensions.Logging.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\Microsoft.Extensions.Options.ConfigurationExtensions.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\Microsoft.Extensions.Options.ConfigurationExtensions.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\Microsoft.Extensions.Options.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\Microsoft.Extensions.Options.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\Microsoft.Extensions.Primitives.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\Microsoft.Extensions.Primitives.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\Microsoft.Win32.Primitives.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\MySqlConnector.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\netstandard.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\Newtonsoft.Json.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\Newtonsoft.Json.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\Pomelo.EntityFrameworkCore.MySql.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\Pomelo.JsonObject.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\Remotion.Linq.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\Remotion.Linq.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\SergeUtils.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\ShockwaveFlashObjects.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\Spire.Barcode.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\Spire.Barcode.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\stdole.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.AppContext.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Buffers.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Buffers.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Collections.Concurrent.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Collections.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Collections.Immutable.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Collections.Immutable.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Collections.NonGeneric.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Collections.Specialized.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.ComponentModel.Annotations.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.ComponentModel.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.ComponentModel.EventBasedAsync.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.ComponentModel.Primitives.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.ComponentModel.TypeConverter.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Console.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Data.Common.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Diagnostics.Contracts.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Diagnostics.Debug.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Diagnostics.DiagnosticSource.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Diagnostics.DiagnosticSource.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Diagnostics.FileVersionInfo.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Diagnostics.Process.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Diagnostics.StackTrace.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Diagnostics.TextWriterTraceListener.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Diagnostics.Tools.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Diagnostics.TraceSource.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Diagnostics.Tracing.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Drawing.Primitives.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Dynamic.Runtime.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Globalization.Calendars.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Globalization.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Globalization.Extensions.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Interactive.Async.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Interactive.Async.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.IO.Compression.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.IO.Compression.ZipFile.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.IO.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.IO.FileSystem.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.IO.FileSystem.DriveInfo.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.IO.FileSystem.Primitives.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.IO.FileSystem.Watcher.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.IO.IsolatedStorage.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.IO.MemoryMappedFiles.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.IO.Pipes.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.IO.UnmanagedMemoryStream.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Linq.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Linq.Expressions.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Linq.Parallel.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Linq.Queryable.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Memory.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Memory.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Net.Http.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Net.NameResolution.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Net.NetworkInformation.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Net.Ping.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Net.Primitives.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Net.Requests.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Net.Security.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Net.Sockets.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Net.WebHeaderCollection.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Net.WebSockets.Client.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Net.WebSockets.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Numerics.Vectors.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Numerics.Vectors.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.ObjectModel.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Reflection.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Reflection.Extensions.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Reflection.Primitives.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Resources.Reader.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Resources.ResourceManager.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Resources.Writer.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Runtime.CompilerServices.VisualC.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Runtime.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Runtime.Extensions.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Runtime.Handles.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Runtime.InteropServices.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Runtime.InteropServices.RuntimeInformation.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Runtime.Numerics.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Runtime.Serialization.Formatters.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Runtime.Serialization.Json.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Runtime.Serialization.Primitives.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Runtime.Serialization.Xml.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Security.Claims.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Security.Cryptography.Algorithms.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Security.Cryptography.Csp.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Security.Cryptography.Encoding.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Security.Cryptography.Primitives.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Security.Cryptography.X509Certificates.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Security.Principal.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Security.SecureString.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Text.Encoding.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Text.Encoding.Extensions.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Text.RegularExpressions.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Threading.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Threading.Overlapped.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Threading.Tasks.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Threading.Tasks.Extensions.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Threading.Tasks.Extensions.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Threading.Tasks.Parallel.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Threading.Thread.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Threading.ThreadPool.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Threading.Timer.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.ValueTuple.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Xml.ReaderWriter.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Xml.XDocument.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Xml.XmlDocument.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Xml.XmlSerializer.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Xml.XPath.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\System.Xml.XPath.XDocument.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\Warehouse Management System.application"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\Warehouse Management System.exe.config"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\Warehouse Management System.exe.manifest"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\Warehouse Management System.pdb"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\Warehouse Management System.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\WarehouseManagementSystem.Core.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\WarehouseManagementSystem.Core.pdb"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\WarehouseManagementSystem.Infrastructure.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\WarehouseManagementSystem.Infrastructure.pdb"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\WarehouseManagementSystem.Utilities.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\bin\Debug\WarehouseManagementSystem.Utilities.pdb"; DestDir: "{app}"; Flags: ignoreversion
+Source: "E:\Repositories\dreamhearts-warehousing-system\bin\Debug\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "E:\Repositories\dreamhearts-warehousing-system\bin\Debug\*.dll"; DestDir: "{app}"; Flags: ignoreversion
+
 Source: ".\bin\Debug\Import Templates\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: ".\Import Templates\*.xlsx"; DestDir: "{app}\Import Templates"; Flags: ignoreversion
 Source: ".\Report Files\DeliveryReceipt\*.json"; DestDir: "{app}\Report Files\DeliveryReceipt"; Flags: ignoreversion
 Source: ".\Report Files\GatePass\*.xlsx"; DestDir: "{app}\Report Files\GatePass"; Flags: ignoreversion
+
+Source: ".\bin\Debug\log4.config"; DestDir: "{app}"; Flags: ignoreversion
+Source: ".\bin\Debug\Warehouse Management System.exe.config"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
