@@ -973,22 +973,23 @@ Public Class PickListForm
         Try
             If conn1.State = ConnectionState.Closed Then conn1.Open()
             Dim sql1 As String = "SELECT co.rowid,COALESCE(co.ordernumber,''),COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),''),DATE_FORMAT(co.orderdate,'%d-%b-%Y')," &
-                        "DATE_FORMAT(co.targetdate,'%d-%b-%Y'),COALESCE(co.status,''),COALESCE(pg.groupname,''),COALESCE(co.referencenumber,''),DATE_FORMAT(co.enddate,'%d-%b-%Y'), IFNULL(il.Name, '') `InventoryLocation` FROM orders co " &
+                        "DATE_FORMAT(co.targetdate,'%d-%b-%Y'),COALESCE(co.status,''),COALESCE(pg.groupname,''),COALESCE(co.referencenumber,''),DATE_FORMAT(co.enddate,'%d-%b-%Y'), IFNULL(il.Name, '') `InventoryLocation`, co.accountid FROM orders co " &
                         "LEFT JOIN accounts cu ON co.accountid = cu.rowid LEFT JOIN picklistgroup pg ON cu.picklistgroupid = pg.rowid LEFT JOIN inventorylocations il ON il.RowID=co.InventoryLocationID WHERE co.rowid = " & icustomerorderid & " "
             Dim cmd1 As New MySqlCommand(sql1, conn1)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             While reader1.Read()
                 If reader1.HasRows Then
-                    dgCustomerOrders.Rows.Add()
-                    dgCustomerOrders.Rows(dgCustomerOrders.Rows.Count - 1).Cells("co_rowid").Value = reader1(0)
-                    dgCustomerOrders.Rows(dgCustomerOrders.Rows.Count - 1).Cells("co_customerorderno").Value = reader1(1)
-                    dgCustomerOrders.Rows(dgCustomerOrders.Rows.Count - 1).Cells("co_customername").Value = reader1(2)
-                    dgCustomerOrders.Rows(dgCustomerOrders.Rows.Count - 1).Cells("co_customerorderdate").Value = reader1(3)
-                    dgCustomerOrders.Rows(dgCustomerOrders.Rows.Count - 1).Cells("co_targetdate").Value = reader1(4)
-                    dgCustomerOrders.Rows(dgCustomerOrders.Rows.Count - 1).Cells("co_status").Value = reader1(5)
-                    dgCustomerOrders.Rows(dgCustomerOrders.Rows.Count - 1).Cells("co_pono").Value = reader1(7)
-                    dgCustomerOrders.Rows(dgCustomerOrders.Rows.Count - 1).Cells("co_canceldate").Value = reader1(8)
-                    dgCustomerOrders.Rows(dgCustomerOrders.Rows.Count - 1).Cells(co_inventorylocation.Name).Value = reader1(9)
+                    dim rowIndex = dgCustomerOrders.Rows.Add()
+                    dgCustomerOrders.Rows(rowIndex).Cells("co_rowid").Value = reader1(0)
+                    dgCustomerOrders.Rows(rowIndex).Cells("co_customerorderno").Value = reader1(1)
+                    dgCustomerOrders.Rows(rowIndex).Cells("co_customername").Value = reader1(2)
+                    dgCustomerOrders.Rows(rowIndex).Cells("co_customerorderdate").Value = reader1(3)
+                    dgCustomerOrders.Rows(rowIndex).Cells("co_targetdate").Value = reader1(4)
+                    dgCustomerOrders.Rows(rowIndex).Cells("co_status").Value = reader1(5)
+                    dgCustomerOrders.Rows(rowIndex).Cells("co_pono").Value = reader1(7)
+                    dgCustomerOrders.Rows(rowIndex).Cells("co_canceldate").Value = reader1(8)
+                    dgCustomerOrders.Rows(rowIndex).Cells(co_inventorylocation.Name).Value = reader1(9)
+                    dgCustomerOrders.Rows(rowIndex).Tag = CInt(reader1(10))
                 End If
             End While
             reader1.Close()
@@ -2743,7 +2744,8 @@ Public Class PickListForm
     Private Async Sub PrintPickListReportForm_Click(sender As Object, e As EventArgs) Handles msPrint.Click
         Dim pickListId = If(dgPickList.CurrentRow Is Nothing, 0,
             CInt(dgPickList.CurrentRow?.Cells("pl_rowid").Value))
-        If Not IsThurston AndAlso pickListId = 0 Then Return
+        Dim customerRows = dgCustomerOrders.SelectedRows.OfType(Of DataGridViewRow).ToList()
+        If Not IsThurston AndAlso pickListId = 0 AndAlso If(customerRows?.Any(), False) Then Return
 
         Dim printreport As New DeliverySchedule
 
@@ -2764,6 +2766,7 @@ Public Class PickListForm
             INNER JOIN productcolors pc ON pc.RowID=pcs.ProductColorID
             INNER JOIN products p ON p.RowID=pc.ProductID
             WHERE plo.PickListID = @pickListId
+            AND FIND_IN_SET(o.AccountID, @customerIds) > 0
             GROUP BY a.RowID, o.ReferenceNumber, pil.UnitOfMeasure2
             ORDER BY a.CompanyName;
             ]]>.Value
@@ -2775,6 +2778,9 @@ Public Class PickListForm
 
                     With command.Parameters
                         .AddWithValue("@pickListId", pickListId)
+
+                        Dim customerIds = String.Join(separator:=",", customerRows.Select(Function(t) CInt(t.Tag)).ToArray())
+                        .AddWithValue("@customerIds", customerIds)
                     End With
 
                     Dim adapter = New MySqlDataAdapter()
