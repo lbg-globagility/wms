@@ -1,17 +1,13 @@
 ﻿Imports System.IO
-Imports System.Runtime.Remoting
 Imports System.Web.UI
 Imports CrystalDecisions.CrystalReports.Engine
-Imports DevComponents.DotNetBar.Controls
 Imports Microsoft.Extensions.DependencyInjection
 Imports MySql.Data.MySqlClient
 Imports Newtonsoft.Json
 Imports OfficeOpenXml
-Imports OfficeOpenXml.DataValidation
 Imports WarehouseManagementSystem.Core.Enums
 Imports WarehouseManagementSystem.Core.Interfaces
 Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
-Imports WarehouseManagementSystem.Desktop.Helpers
 Imports WarehouseManagementSystem.Desktop.Utilities
 
 Public Class ViewEditLineUpDeliveryForm
@@ -1809,9 +1805,9 @@ Public Class ViewEditLineUpDeliveryForm
             a.CompanyName,
             CONCAT_WS(', ', ad.StreetAddress1, ad.StreetAddress2, ad.Barangay, ad.CityTown, ad.Province, ad.State, ad.ZipCode, ad.Country) `Address`,
             lu.LineUpDate,
-            plci.QtyInCarton `DataColumn1`,
+            SUM(plci.QtyInCarton) `DataColumn1`,
             pcs.UnitOfMeasure2 `DataColumn2`,
-            CONCAT_WS(' - ', p.ProductCode, p.`Description`) `DataColumn3`
+            GROUP_CONCAT(CONCAT_WS(' - ', p.ProductCode, p.`Description`)) `DataColumn3`
 
             FROM lineups lu
             JOIN lineupcartons lc ON lu.RowID = lc.LineUpID
@@ -1827,7 +1823,7 @@ Public Class ViewEditLineUpDeliveryForm
             INNER JOIN productcolors pc ON pc.RowID=pcs.ProductColorID
             INNER JOIN products p ON p.RowID=pc.ProductID
             WHERE lu.LineUpNo = @lineupNo
-            GROUP BY p.ProductCode
+            GROUP BY pcs.UnitOfMeasure2
             ]]>.Value
 
         Await FunctionUtils.TryCatchFunctionAsync(messageTitle:="",
@@ -1851,6 +1847,8 @@ Public Class ViewEditLineUpDeliveryForm
                     End If
 
                     Dim row = dt.Rows.OfType(Of DataRow).FirstOrDefault()
+
+                    If row Is Nothing Then Return
 
                     Dim deliveryReceiptNo As TextObject = section?.ReportObjects("TextDeliveryReceiptNumber")
                     deliveryReceiptNo.Text = row?.Item("DRNo")

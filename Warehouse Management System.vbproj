@@ -1549,6 +1549,9 @@
     <None Include="Report Files\DeliveryReceipt\DeliveryReceipt.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Report Files\DeliveryReceipt\DeliveryReceiptExcel.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Report Files\GatePass\GatePass.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
