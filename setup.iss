@@ -35,8 +35,8 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "E:\Repositories\dreamhearts-warehousing-system\bin\Debug\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "E:\Repositories\dreamhearts-warehousing-system\bin\Debug\*.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: ".\bin\Debug\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: ".\bin\Debug\*.dll"; DestDir: "{app}"; Flags: ignoreversion
 
 Source: ".\bin\Debug\Import Templates\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: ".\Import Templates\*.xlsx"; DestDir: "{app}\Import Templates"; Flags: ignoreversion
