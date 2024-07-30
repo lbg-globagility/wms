@@ -41,6 +41,7 @@ Source: "E:\Repositories\dreamhearts-warehousing-system\bin\Debug\*.dll"; DestDi
 Source: ".\bin\Debug\Import Templates\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: ".\Import Templates\*.xlsx"; DestDir: "{app}\Import Templates"; Flags: ignoreversion
 Source: ".\Report Files\DeliveryReceipt\*.json"; DestDir: "{app}\Report Files\DeliveryReceipt"; Flags: ignoreversion
+Source: ".\Report Files\DeliveryReceipt\*.xlsx"; DestDir: "{app}\Report Files\DeliveryReceipt"; Flags: ignoreversion
 Source: ".\Report Files\GatePass\*.xlsx"; DestDir: "{app}\Report Files\GatePass"; Flags: ignoreversion
 
 Source: ".\bin\Debug\log4.config"; DestDir: "{app}"; Flags: ignoreversion

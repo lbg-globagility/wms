@@ -1895,10 +1895,11 @@ Public Class ViewEditLineUpDeliveryForm
             Dim row = dataTable.Rows.OfType(Of DataRow).FirstOrDefault()
 
             If row IsNot Nothing Then
-                worksheet.Cells("I3").Value = row?.Item("DRNo")
+                worksheet.Cells("E3").Value = row?.Item("DRNo")
                 worksheet.Cells("B3").Value = row?.Item("CompanyName")
                 worksheet.Cells("B4").Value = row?.Item("Address")
-                worksheet.Cells("I4").Value = row?.Item("LineUpDate")
+                worksheet.Cells("E4").Value = row?.Item("LineUpDate")
+                worksheet.Cells("E4").Style.Numberformat.Format = "MMM/dd/yyyy"
             End If
 
             Dim index = 6
@@ -1907,7 +1908,9 @@ Public Class ViewEditLineUpDeliveryForm
                 worksheet.Cells($"B{index}").Value = dr("DataColumn1")
                 worksheet.Cells($"C{index}").Value = dr("DataColumn2")
                 worksheet.Cells($"D{index}").Value = dr("DataColumn3")
-                worksheet.Row(index).Style.WrapText = True
+                worksheet.Cells($"D{index}").Style.WrapText = True
+                worksheet.Cells($"D{index}").Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.General
+                'worksheet.Row(index).
 
                 index += 1
             Next
