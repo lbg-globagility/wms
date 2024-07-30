@@ -1872,7 +1872,7 @@ Public Class ViewEditLineUpDeliveryForm
                         'invoiceNo.Text = String.Empty
                     End If
 
-                    PrintDeliveryReceipt(dt)
+                    PrintDeliveryReceiptExcel(dt)
 
                 End Using
             End Function)
@@ -1882,7 +1882,7 @@ Public Class ViewEditLineUpDeliveryForm
         openreportviewer.Show()
     End Sub
 
-    Private Sub PrintDeliveryReceipt(dataTable As Data.DataTable)
+    Private Sub PrintDeliveryReceiptExcel(dataTable As Data.DataTable)
         Dim fileName = Path.Combine(Path.GetTempPath(), "DeliveryReceiptExcel.xlsx")
         Dim template = Path.Combine(My.Application.Info.DirectoryPath, "Report Files\DeliveryReceipt\DeliveryReceiptExcel.xlsx")
 
@@ -1914,6 +1914,8 @@ Public Class ViewEditLineUpDeliveryForm
 
                 index += 1
             Next
+
+            worksheet.Cells($"B{index}").Value = dataTable.Select("CompanyName IS NOT NULL").Sum(Function(t) t("DataColumn1"))
 
             excel.Save()
 
