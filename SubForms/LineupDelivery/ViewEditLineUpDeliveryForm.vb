@@ -2,6 +2,7 @@
 Imports System.Web.UI
 Imports CrystalDecisions.CrystalReports.Engine
 Imports Microsoft.Extensions.DependencyInjection
+Imports Microsoft.Office.Interop.Excel
 Imports MySql.Data.MySqlClient
 Imports Newtonsoft.Json
 Imports OfficeOpenXml
@@ -28,7 +29,7 @@ Public Class ViewEditLineUpDeliveryForm
     Dim simplesearchphrase, datephrase, commonphrase, pagefilter1, pagefilter2, pagefilter3, pagefilter4 As String
     Dim veludtotalqtyincarton, veludqtyincartonbalance, veludqtytodeliver As Integer
     Dim veludcustomerid, veludcontactid, veluddeliverytruckshiftid, veludpackinglistid, veludlineupid, veludorderid, veluddeliverytruckid, veludpackinglistcartonid, veludlineupcbmid As Integer
-    Dim printdatatable As New DataTable
+    Dim printdatatable As New Data.DataTable()
     Dim printdatasetHthurston As New DataSetA.SetHDataTable
     Dim printdatasetJthurston As New DataSetA.SetJDataTable
     Dim printdatasetIthurston As New DataSetA.SetIDataTable
@@ -252,7 +253,7 @@ Public Class ViewEditLineUpDeliveryForm
                 errProvider.SetError(pbAddTruckShiftInfo, "System cannot find the track shift info.")
                 Exit Try
             End If
-            If MessageBox.Show("Would you like to add this box in this line up?", "Adding", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
+            If MessageBox.Show("Would you like to add this box in this line up?", "Adding", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
                 Me.Cursor = Cursors.WaitCursor
                 If dgLineUpList.Rows.Count <> 0 Then
                     getLineUpStatus(CInt(dgLineUpList.CurrentRow.Cells("lu_rowid").Value), Me)
@@ -301,7 +302,7 @@ Public Class ViewEditLineUpDeliveryForm
     Sub getTotalQtyInCarton(ByVal epackinglistid As Integer, ByVal eorderitemid As Integer)
         Try
             veludtotalqtyincarton = 0
-            Dim dtGtq As New DataTable
+            Dim dtGtq As New Data.DataTable
             dtGtq = getDataTableForSQL("SELECT COALESCE(SUM(pci.qtyincarton),0) FROM packinglistcartonitems pci LEFT JOIN packinglistcartons pc ON pci.packinglistcartonid = pc.rowid WHERE pc.packinglistid = " & epackinglistid & " AND pci.organizationid = " & Z_OrganizationID & " AND pci.`status` != 'Inactive' AND pci.orderitemid = " & eorderitemid & " ")
             If dtGtq.Rows.Count <> 0 Then
                 veludtotalqtyincarton = dtGtq.Rows(0)(0)
@@ -316,7 +317,7 @@ Public Class ViewEditLineUpDeliveryForm
     Sub getDeliveryTruckCBM(ByVal edeliverytruckid As Integer)
         Try
             veluddeliverytruckcbm = 0
-            Dim dtGcbm As New DataTable
+            Dim dtGcbm As New Data.DataTable
             dtGcbm = getDataTableForSQL("SELECT COALESCE(dt.cbm,0) FROM deliverytrucks dt WHERE dt.rowid = " & edeliverytruckid & " ")
             If dtGcbm.Rows.Count <> 0 Then
                 veluddeliverytruckcbm = dtGcbm.Rows(0)(0)
@@ -352,7 +353,7 @@ Public Class ViewEditLineUpDeliveryForm
     Sub getLineUpBoxesCBM(ByVal ilineupid As Integer)
         Try
             veludlineupboxescbm = 0
-            Dim dtGcbm As New DataTable
+            Dim dtGcbm As New Data.DataTable
             dtGcbm = getDataTableForSQL("SELECT COALESCE(SUM(luc.cbm),0.0) FROM lineupcartons luc WHERE luc.lineupid = " & ilineupid & " AND luc.`status` != 'Inactive' AND luc.organizationid = " & Z_OrganizationID & " ")
             If dtGcbm.Rows.Count <> 0 Then
                 veludlineupboxescbm = dtGcbm.Rows(0)(0)
@@ -545,7 +546,7 @@ Public Class ViewEditLineUpDeliveryForm
         Try
             countpagenum = 0
             If conn.State = ConnectionState.Open Then conn.Close()
-            Dim dtCid As New DataTable
+            Dim dtCid As New Data.DataTable
             dtCid = getDataTableForSQL("SELECT COALESCE(COUNT(lu.rowid),0) FROM lineups lu WHERE lu.organizationid = " & Z_OrganizationID & " ")
             If dtCid.Rows.Count <> 0 Then
                 countpagenum = dtCid.Rows(0)(0)
@@ -584,7 +585,7 @@ Public Class ViewEditLineUpDeliveryForm
         Try
             countpagenum = 0
             If conn.State = ConnectionState.Open Then conn.Close()
-            Dim dtCid As New DataTable
+            Dim dtCid As New Data.DataTable
             dtCid = getDataTableForSQL("SELECT COALESCE(COUNT(lu.rowid),0) FROM lineups lu LEFT JOIN orders o ON lu.orderid = o.rowid LEFT JOIN accounts a ON o.accountid = a.rowid WHERE lu.organizationid = " & Z_OrganizationID & " " &
                             "AND (lu.deliveryno LIKE ""%" & esearchstring & "%"" OR o.ordernumber LIKE ""%" & esearchstring & "%"" OR lu.lineupno LIKE ""%" & esearchstring & "%"" OR a.companyname LIKE ""%" & esearchstring & "%"" OR lu.status LIKE ""%" & esearchstring & "%"") ")
             If dtCid.Rows.Count <> 0 Then
@@ -624,7 +625,7 @@ Public Class ViewEditLineUpDeliveryForm
         Try
             countpagenum = 0
             If conn.State = ConnectionState.Open Then conn.Close()
-            Dim dtCid As New DataTable
+            Dim dtCid As New Data.DataTable
             dtCid = getDataTableForSQL("SELECT COALESCE(COUNT(lu.rowid),0) FROM lineups lu WHERE lu.organizationid = " & Z_OrganizationID & " AND " &
                             "(" & edatesearch & " >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " &
                             "" & edatesearch & " <= '" & dtpToSearch.Value.Year & "-" & dtpToSearch.Value.Month & "-" & dtpToSearch.Value.Day & "' ) ")
@@ -665,7 +666,7 @@ Public Class ViewEditLineUpDeliveryForm
         Try
             countpagenum = 0
             If conn.State = ConnectionState.Open Then conn.Close()
-            Dim dtCid As New DataTable
+            Dim dtCid As New Data.DataTable
             dtCid = getDataTableForSQL("SELECT COALESCE(COUNT(lu.rowid),0) FROM lineups lu WHERE lu.organizationid = " & Z_OrganizationID & " AND " & ecommonstring & " " & edatesearch & " ")
             If dtCid.Rows.Count <> 0 Then
                 countpagenum = dtCid.Rows(0)(0)
@@ -704,7 +705,7 @@ Public Class ViewEditLineUpDeliveryForm
         Try
             countpagenum = 0
             If conn.State = ConnectionState.Open Then conn.Close()
-            Dim dtCid As New DataTable
+            Dim dtCid As New Data.DataTable
             dtCid = getDataTableForSQL("SELECT COALESCE(COUNT(lu.rowid),0) FROM lineups lu WHERE lu.organizationid = " & Z_OrganizationID & " AND lu.lineupdate = '" & elineupdate & "' " & econditionstring & " ")
             If dtCid.Rows.Count <> 0 Then
                 countpagenum = dtCid.Rows(0)(0)
@@ -1269,7 +1270,7 @@ Public Class ViewEditLineUpDeliveryForm
 
     Sub displayLineUpInformation(ByVal ilineupid As Integer)
         Try
-            Dim dtLUinfo As New DataTable
+            Dim dtLUinfo As New Data.DataTable
             dtLUinfo = getDataTableForSQL("SELECT COALESCE(lu.lineupno,''),COALESCE(DATE_FORMAT(lu.lineupdate,'%d-%b-%Y'),''),COALESCE(o.drnumber,''),COALESCE(DATE_FORMAT(IFNULL(lu.deliverydate, lu.ConfirmedDeliveryTimeStamp),'%d-%b-%Y'),''),IFNULL(dt.truckname, ''),COALESCE(lu.status,'')," &
                         "COALESCE(CONCAT(COALESCE(c.firstname,''),' ',COALESCE(c.middlename,''),' ',COALESCE(c.lastname,''),' ',COALESCE(c.suffix,''),' - ',COALESCE(c.contactno,'')),''),COALESCE(CONCAT(COALESCE(o.ordernumber,''),' (C.O. No.) / ', COALESCE(a.companyname,''),' - ', COALESCE(a.accountno,''),' / ',CONCAT(COALESCE(pl.packinglistno,''),' (Pa.L. No.)')),'')," &
                         "COALESCE(DATE_FORMAT(o.orderdate,'%d-%b-%Y'),''),COALESCE(DATE_FORMAT(o.targetdate,'%d-%b-%Y'),''),COALESCE(o.customeraddress,''),COALESCE(lu.comments,''),COALESCE(o.deliveryhours,''),COALESCE(lu.packinglistid,0),COALESCE(lu.orderid,0),COALESCE(o.referencenumber,''),COALESCE(DATE_FORMAT(o.enddate,'%d-%b-%Y'),''),COALESCE(CONCAT(COALESCE(bc.branchcode,''),' - ',COALESCE(bc.branchname,'')),'')," &
@@ -1418,7 +1419,7 @@ Public Class ViewEditLineUpDeliveryForm
 
     Sub getPickListOrderID(ByVal iorderid As Integer, ByVal iorderitemid As Integer, ByVal iqtyincarton As Integer)
         Try
-            Dim dtGid As New DataTable
+            Dim dtGid As New Data.DataTable
             dtGid = getDataTableForSQL("SELECT COALESCE(plo.rowid,0) FROM picklistorders plo WHERE plo.organizationid = " & Z_OrganizationID & " AND plo.orderitemid = " & iorderitemid & " AND plo.orderid = " & iorderid & " AND (plo.`status` != 'Inactive' AND plo.`status` != 'Cancelled') ")
             If dtGid.Rows.Count <> 0 Then
                 updatePackingListCartonItemsD(CInt(dtGid.Rows(0)(0)), iqtyincarton)
@@ -1837,7 +1838,7 @@ Public Class ViewEditLineUpDeliveryForm
 
                     Dim adapter = New MySqlDataAdapter()
                     adapter.SelectCommand = command
-                    Dim dt As New DataTable
+                    Dim dt As New Data.DataTable()
                     Await Task.Run(Sub()
                                        adapter.Fill(dt)
                                    End Sub)
@@ -1848,34 +1849,73 @@ Public Class ViewEditLineUpDeliveryForm
 
                     Dim row = dt.Rows.OfType(Of DataRow).FirstOrDefault()
 
-                    If row Is Nothing Then Return
+                    If row IsNot Nothing Then
+                        Dim deliveryReceiptNo As TextObject = section?.ReportObjects("TextDeliveryReceiptNumber")
+                        deliveryReceiptNo.Text = row?.Item("DRNo")
 
-                    Dim deliveryReceiptNo As TextObject = section?.ReportObjects("TextDeliveryReceiptNumber")
-                    deliveryReceiptNo.Text = row?.Item("DRNo")
+                        Dim deliveredTo As TextObject = section?.ReportObjects("TextDeliveredTo")
+                        deliveredTo.Text = row?.Item("CompanyName")
 
-                    Dim deliveredTo As TextObject = section?.ReportObjects("TextDeliveredTo")
-                    deliveredTo.Text = row?.Item("CompanyName")
+                        Dim address As TextObject = section?.ReportObjects("TextAddress")
+                        address.Text = row?.Item("Address")
 
-                    Dim address As TextObject = section?.ReportObjects("TextAddress")
-                    address.Text = row?.Item("Address")
+                        'Dim tin As TextObject = section?.ReportObjects("TextTin")
+                        'tin.Text = String.Empty
 
-                    'Dim tin As TextObject = section?.ReportObjects("TextTin")
-                    'tin.Text = String.Empty
+                        Dim [date] As TextObject = section?.ReportObjects("TextDate")
+                        [date].Text = row?.Item("LineUpDate")
 
-                    Dim [date] As TextObject = section?.ReportObjects("TextDate")
-                    [date].Text = row?.Item("LineUpDate")
+                        'Dim terms As TextObject = section?.ReportObjects("TextTerms")
+                        'terms.Text = String.Empty
 
-                    'Dim terms As TextObject = section?.ReportObjects("TextTerms")
-                    'terms.Text = String.Empty
+                        'Dim invoiceNo As TextObject = section?.ReportObjects("TextInvoiceNo")
+                        'invoiceNo.Text = String.Empty
+                    End If
 
-                    'Dim invoiceNo As TextObject = section?.ReportObjects("TextInvoiceNo")
-                    'invoiceNo.Text = String.Empty
+                    PrintDeliveryReceipt(dt)
+
                 End Using
             End Function)
 
         Dim openreportviewer As New ReportViewer
         openreportviewer.CrystalReportViewer.ReportSource = printreport
         openreportviewer.Show()
+    End Sub
+
+    Private Sub PrintDeliveryReceipt(dataTable As Data.DataTable)
+        Dim fileName = Path.Combine(Path.GetTempPath(), "DeliveryReceiptExcel.xlsx")
+        Dim template = Path.Combine(My.Application.Info.DirectoryPath, "Report Files\DeliveryReceipt\DeliveryReceiptExcel.xlsx")
+
+        File.Copy(sourceFileName:=template, destFileName:=fileName, overwrite:=True)
+
+        Using excel = New ExcelPackage(New FileInfo(fileName))
+
+            Dim worksheet = excel.Workbook.Worksheets.FirstOrDefault()
+
+            Dim row = dataTable.Rows.OfType(Of DataRow).FirstOrDefault()
+
+            If row IsNot Nothing Then
+                worksheet.Cells("I3").Value = row?.Item("DRNo")
+                worksheet.Cells("B3").Value = row?.Item("CompanyName")
+                worksheet.Cells("B4").Value = row?.Item("Address")
+                worksheet.Cells("I4").Value = row?.Item("LineUpDate")
+            End If
+
+            Dim index = 6
+
+            For Each dr As DataRow In dataTable.Rows
+                worksheet.Cells($"B{index}").Value = dr("DataColumn1")
+                worksheet.Cells($"C{index}").Value = dr("DataColumn2")
+                worksheet.Cells($"D{index}").Value = dr("DataColumn3")
+                worksheet.Row(index).Style.WrapText = True
+
+                index += 1
+            Next
+
+            excel.Save()
+
+            Process.Start(fileName:=fileName)
+        End Using
     End Sub
 
     Private Sub TripTicketToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles TripTicketToolStripMenuItem.Click
@@ -1967,7 +2007,7 @@ Public Class ViewEditLineUpDeliveryForm
 
                             Dim adapter = New MySqlDataAdapter()
                             adapter.SelectCommand = command
-                            Dim dt As New DataTable
+                            Dim dt As New Data.DataTable
                             Await Task.Run(Sub()
                                                adapter.Fill(dt)
                                            End Sub)
@@ -2260,7 +2300,7 @@ Public Class ViewEditLineUpDeliveryForm
                         MessageBox.Show("The box has been updated, click the line-up again to check the status.", "Removing", MessageBoxButtons.OK, MessageBoxIcon.Information)
                         Exit Try
                     End If
-                    If MessageBox.Show("Would you like to remove this box from this line up?", "Removing", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
+                    If MessageBox.Show("Would you like to remove this box from this line up?", "Removing", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
                         Me.Cursor = Cursors.WaitCursor
                         If dgLineUpList.Rows.Count <> 0 Then
                             getLineUpStatus(CInt(dgLineUpList.CurrentRow.Cells("lu_rowid").Value), Me)
@@ -2472,7 +2512,7 @@ Public Class ViewEditLineUpDeliveryForm
                 errProvider.SetError(pbAddTruckShiftInfo, "Please choose the track and shift info.")
                 Exit Try
             End If
-            If MessageBox.Show("Would you like to save the changes in this page?", "Saving", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
+            If MessageBox.Show("Would you like to save the changes in this page?", "Saving", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
                 Me.Cursor = Cursors.WaitCursor
                 If dgLineUpList.Rows.Count <> 0 Then
                     getLineUpStatus(CInt(dgLineUpList.CurrentRow.Cells("lu_rowid").Value), Me)
@@ -2591,7 +2631,7 @@ Public Class ViewEditLineUpDeliveryForm
                 errProvider.SetError(txtSIDRNo, "Please enter the S.I./D.R. No.")
                 Exit Try
             End If
-            If MessageBox.Show("Would you like to deliver this line-up?", "Delivering", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
+            If MessageBox.Show("Would you like to deliver this line-up?", "Delivering", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
                 Me.Cursor = Cursors.WaitCursor
                 If dgLineUpList.Rows.Count <> 0 Then
                     getLineUpStatus(CInt(dgLineUpList.CurrentRow.Cells("lu_rowid").Value), Me)
@@ -2685,7 +2725,7 @@ Public Class ViewEditLineUpDeliveryForm
                 errProvider.SetError(txtLineUpNo, "System cannot find the line up.")
                 Exit Try
             End If
-            If MessageBox.Show("NOTE: Once you cancelled this line-up, you cannot open this line-up again." & vbNewLine & "" & vbNewLine & "Do you want to proceed cancelling this line-up?", "Cancelling", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
+            If MessageBox.Show("NOTE: Once you cancelled this line-up, you cannot open this line-up again." & vbNewLine & "" & vbNewLine & "Do you want to proceed cancelling this line-up?", "Cancelling", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
                 Me.Cursor = Cursors.WaitCursor
                 cancelLineUpCartons(CInt(dgLineUpList.CurrentRow.Cells("lu_rowid").Value))
                 If myModule.systemerrorfound = False Then

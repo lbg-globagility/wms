@@ -33,5 +33,6 @@ Public Class AboutForm
 
     Private Sub AboutForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         LoadVersionNo()
+        Dim dt = New DataTable()
     End Sub
 End Class
