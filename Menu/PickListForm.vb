@@ -935,14 +935,14 @@ Public Class PickListForm
         Try
             dgCustomerOrders.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT COALESCE(plo.orderid,0) FROM picklistorders plo LEFT JOIN orders co ON plo.orderid = co.rowid " &
+            Dim sql1 As String = "SELECT GROUP_CONCAT(i.`Result`) FROM (SELECT COALESCE(plo.orderid,0) `Result` FROM picklistorders plo LEFT JOIN orders co ON plo.orderid = co.rowid " &
                     "WHERE plo.organizationid = " & Z_OrganizationID & " AND plo.picklistid = " & ipicklistid & " AND plo.status != 'Inactive' " &
-                    "GROUP BY plo.orderid ORDER BY co.targetdate ASC "
+                    "GROUP BY plo.orderid ORDER BY co.targetdate ASC) i;"
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             While reader1.Read()
                 If reader1.HasRows Then
-                    displayCustomerOrdersB(CInt(reader1(0)))
+                    displayCustomerOrdersB(reader1(0))
                 End If
             End While
             reader1.Close()
@@ -969,17 +969,17 @@ Public Class PickListForm
         End Try
     End Sub
 
-    Sub displayCustomerOrdersB(ByVal icustomerorderid As Integer)
+    Sub displayCustomerOrdersB(ByVal icustomerorderid As String)
         Try
             If conn1.State = ConnectionState.Closed Then conn1.Open()
             Dim sql1 As String = "SELECT co.rowid,COALESCE(co.ordernumber,''),COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),''),DATE_FORMAT(co.orderdate,'%d-%b-%Y')," &
                         "DATE_FORMAT(co.targetdate,'%d-%b-%Y'),COALESCE(co.status,''),COALESCE(pg.groupname,''),COALESCE(co.referencenumber,''),DATE_FORMAT(co.enddate,'%d-%b-%Y'), IFNULL(il.Name, '') `InventoryLocation`, co.accountid FROM orders co " &
-                        "LEFT JOIN accounts cu ON co.accountid = cu.rowid LEFT JOIN picklistgroup pg ON cu.picklistgroupid = pg.rowid LEFT JOIN inventorylocations il ON il.RowID=co.InventoryLocationID WHERE co.rowid = " & icustomerorderid & " "
+                        "LEFT JOIN accounts cu ON co.accountid = cu.rowid LEFT JOIN picklistgroup pg ON cu.picklistgroupid = pg.rowid LEFT JOIN inventorylocations il ON il.RowID=co.InventoryLocationID WHERE co.rowid IN (" & icustomerorderid & ");"
             Dim cmd1 As New MySqlCommand(sql1, conn1)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             While reader1.Read()
                 If reader1.HasRows Then
-                    dim rowIndex = dgCustomerOrders.Rows.Add()
+                    Dim rowIndex = dgCustomerOrders.Rows.Add()
                     dgCustomerOrders.Rows(rowIndex).Cells("co_rowid").Value = reader1(0)
                     dgCustomerOrders.Rows(rowIndex).Cells("co_customerorderno").Value = reader1(1)
                     dgCustomerOrders.Rows(rowIndex).Cells("co_customername").Value = reader1(2)
@@ -1881,6 +1881,10 @@ Public Class PickListForm
         Me.Cursor = Cursors.Default
     End Sub
 
+    Private Sub dgPickList_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgPickList.CellContentClick
+
+    End Sub
+
     Private Sub dgPickList_KeyUp(sender As Object, e As KeyEventArgs) Handles dgPickList.KeyUp
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -2758,7 +2762,7 @@ Public Class PickListForm
             GROUP_CONCAT(p.ProductCode ORDER BY oi.RowID SEPARATOR ', ') `itemDescription`,
             DATE_FORMAT(CURDATE(), '%M %e, %Y') `deliveryDate`
             FROM picklistorders plo
-            INNER JOIN orders o ON o.RowID=plo.OrderID
+            INNER JOIN orders o ON o.RowID=plo.OrderID AND FIND_IN_SET(o.ReferenceNumber, @referenceNos) > 0
             INNER JOIN accounts a ON a.RowID=o.AccountID
             INNER JOIN orderitems oi ON oi.RowID=plo.OrderItemID
             INNER JOIN productinventorylocation pil ON pil.RowID=oi.ProductInventoryLocationId
@@ -2781,6 +2785,9 @@ Public Class PickListForm
 
                         Dim customerIds = String.Join(separator:=",", customerRows.Select(Function(t) CInt(t.Tag)).ToArray())
                         .AddWithValue("@customerIds", customerIds)
+
+                        Dim poNos = String.Join(separator:=",", customerRows.Select(Function(t) CInt(t.Cells(co_pono.Name).Value)).ToArray())
+                        .AddWithValue("@referenceNos", poNos)
                     End With
 
                     Dim adapter = New MySqlDataAdapter()

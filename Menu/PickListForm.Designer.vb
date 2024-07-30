@@ -592,7 +592,7 @@ Partial Class PickListForm
         Me.gbRackShelfColumn.ForeColor = System.Drawing.SystemColors.ControlText
         Me.gbRackShelfColumn.Location = New System.Drawing.Point(7, 396)
         Me.gbRackShelfColumn.Name = "gbRackShelfColumn"
-        Me.gbRackShelfColumn.Size = New System.Drawing.Size(751, 200)
+        Me.gbRackShelfColumn.Size = New System.Drawing.Size(734, 200)
         Me.gbRackShelfColumn.TabIndex = 6
         Me.gbRackShelfColumn.TabStop = False
         '
@@ -778,7 +778,7 @@ Partial Class PickListForm
         Me.gbCustomerOrders.ForeColor = System.Drawing.SystemColors.ControlText
         Me.gbCustomerOrders.Location = New System.Drawing.Point(372, 5)
         Me.gbCustomerOrders.Name = "gbCustomerOrders"
-        Me.gbCustomerOrders.Size = New System.Drawing.Size(399, 190)
+        Me.gbCustomerOrders.Size = New System.Drawing.Size(382, 190)
         Me.gbCustomerOrders.TabIndex = 4
         Me.gbCustomerOrders.TabStop = False
         '
@@ -823,7 +823,7 @@ Partial Class PickListForm
         Me.dgCustomerOrders.RowHeadersDefaultCellStyle = DataGridViewCellStyle8
         Me.dgCustomerOrders.RowHeadersVisible = False
         Me.dgCustomerOrders.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgCustomerOrders.Size = New System.Drawing.Size(384, 136)
+        Me.dgCustomerOrders.Size = New System.Drawing.Size(367, 136)
         Me.dgCustomerOrders.TabIndex = 24
         '
         'co_rowid
@@ -976,7 +976,7 @@ Partial Class PickListForm
         Me.gbCustomerOrderItems.ForeColor = System.Drawing.SystemColors.ControlText
         Me.gbCustomerOrderItems.Location = New System.Drawing.Point(7, 195)
         Me.gbCustomerOrderItems.Name = "gbCustomerOrderItems"
-        Me.gbCustomerOrderItems.Size = New System.Drawing.Size(764, 200)
+        Me.gbCustomerOrderItems.Size = New System.Drawing.Size(747, 200)
         Me.gbCustomerOrderItems.TabIndex = 5
         Me.gbCustomerOrderItems.TabStop = False
         '
