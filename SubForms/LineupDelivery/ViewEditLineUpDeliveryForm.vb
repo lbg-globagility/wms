@@ -1807,8 +1807,8 @@ Public Class ViewEditLineUpDeliveryForm
             CONCAT_WS(', ', ad.StreetAddress1, ad.StreetAddress2, ad.Barangay, ad.CityTown, ad.Province, ad.State, ad.ZipCode, ad.Country) `Address`,
             lu.LineUpDate,
             SUM(plci.QtyInCarton) `DataColumn1`,
-            pcs.UnitOfMeasure2 `DataColumn2`,
-            GROUP_CONCAT(CONCAT_WS(' - ', p.ProductCode, p.`Description`)) `DataColumn3`
+            pil.UnitOfMeasure2 `DataColumn2`,
+            GROUP_CONCAT(CONCAT(p.ProductCode, '(', plci.QtyInCarton, ')') SEPARATOR ', ') `DataColumn3`
 
             FROM lineups lu
             JOIN lineupcartons lc ON lu.RowID = lc.LineUpID
@@ -1823,8 +1823,9 @@ Public Class ViewEditLineUpDeliveryForm
             INNER JOIN productcolorsizes pcs ON oi.ProductColorSizeID = pcs.RowID
             INNER JOIN productcolors pc ON pc.RowID=pcs.ProductColorID
             INNER JOIN products p ON p.RowID=pc.ProductID
+            INNER JOIN productinventorylocation pil ON pil.RowID=oi.ProductInventoryLocationId
             WHERE lu.LineUpNo = @lineupNo
-            GROUP BY pcs.UnitOfMeasure2
+            GROUP BY pil.UnitOfMeasure2
             ]]>.Value
 
         Await FunctionUtils.TryCatchFunctionAsync(messageTitle:="",
