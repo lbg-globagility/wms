@@ -1,14 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore.Internal;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using WarehouseManagementSystem.Core.Entities;
+using WarehouseManagementSystem.Core.Helpers;
 using WarehouseManagementSystem.Core.Interfaces;
 using WarehouseManagementSystem.Core.Interfaces.DomainServices;
 using WarehouseManagementSystem.Core.Interfaces.Repositories;
-using WarehouseManagementSystem.Infrastructure.Data.Repositories;
 
 namespace WarehouseManagementSystem.Infrastructure.Data.Services
 {
@@ -72,5 +70,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
                 updated: updated,
                 deleted: deleted);
         }
+
+        public async Task<PaginatedList<PickList>> GetPaginatedPickListsAsync(PageOptions pageOptions, int organizationId, string searchText = "") => await _pickListRepository.GetPaginatedPickListsAsync(pageOptions: pageOptions, organizationId: organizationId, searchText: searchText);
     }
 }

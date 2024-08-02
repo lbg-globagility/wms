@@ -569,6 +569,27 @@ namespace WarehouseManagementSystem.Infrastructure.Data
                     .WithOne(x => x.PickListOrder)
                     .HasForeignKey(x => x.PickListOrderID)
                     .HasPrincipalKey(x => x.RowID);
+
+                // entity value
+                Expression<Func<string, PickListOrderStatus>> stringToPickListOrderStatus()
+                {
+                    return s => s == PickListOrderStatus.New.ToString() ? PickListOrderStatus.New : s == PickListOrderStatus.Inactive.ToString() ? PickListOrderStatus.Inactive : s == PickListOrderStatus.Modified.ToString() ? PickListOrderStatus.Modified : s == PickListOrderStatus.Verified.ToString() ? PickListOrderStatus.Verified : PickListOrderStatus.Cancelled;
+                }
+
+                // database value
+                Expression<Func<PickListOrderStatus, string>> pickListOrderStatusToString()
+                {
+                    return p => p == PickListOrderStatus.New ? PickListOrderStatus.New.ToString() :
+                    p == PickListOrderStatus.Inactive ? PickListOrderStatus.Inactive.ToString() :
+                    p == PickListOrderStatus.Modified ? PickListOrderStatus.Modified.ToString() :
+                    p == PickListOrderStatus.Verified ? PickListOrderStatus.Verified.ToString() :
+                    PickListOrderStatus.Cancelled.ToString();
+                }
+                var converter = new ValueConverter<PickListOrderStatus, string>(convertToProviderExpression: pickListOrderStatusToString(),
+                    convertFromProviderExpression: stringToPickListOrderStatus());
+
+                t.Property(x => x.Status)
+                    .HasConversion(converter);
             });
 
             modelBuilder.Entity<PickList>(t =>
@@ -577,6 +598,32 @@ namespace WarehouseManagementSystem.Infrastructure.Data
                     .WithOne(x => x.PickList)
                     .HasForeignKey(x => x.PickListID)
                     .HasPrincipalKey(x => x.RowID);
+
+                // entity value
+                Expression<Func<string, PickListStatus>> stringToPickListStatus()
+                {
+                    return s => s == PickListStatus.New.ToString() ? PickListStatus.New :
+                        s == PickListStatus.Modified.ToString() ? PickListStatus.Modified :
+                        s == "Partially Verified" ? PickListStatus.PartiallyVerified :
+                        s == PickListStatus.Completed.ToString() ? PickListStatus.Completed :
+                        PickListStatus.Cancelled;
+                }
+
+                // database value
+                Expression<Func<PickListStatus, string>> pickListStatusToString()
+                {
+                    return p => p == PickListStatus.New ? PickListStatus.New.ToString() :
+                        p == PickListStatus.Modified ? PickListStatus.Modified.ToString() :
+                        p == PickListStatus.PartiallyVerified ? "Partially Verified" :
+                        p == PickListStatus.Completed ? PickListStatus.Completed.ToString() :
+                        PickListStatus.Cancelled.ToString();
+                }
+
+                var converter = new ValueConverter<PickListStatus, string>(convertToProviderExpression: pickListStatusToString(),
+                    convertFromProviderExpression: stringToPickListStatus());
+
+                t.Property(x => x.Status)
+                    .HasConversion(converter);
             });
 
             modelBuilder.Entity<SystemInfo>(t =>

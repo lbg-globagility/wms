@@ -1,12 +1,9 @@
-﻿
-
-Imports CrystalDecisions.CrystalReports.Engine
-Imports Microsoft.Extensions.DependencyInjection
+﻿Imports Microsoft.Extensions.DependencyInjection
 Imports MySql.Data.MySqlClient
-Imports Newtonsoft.Json
-Imports WarehouseManagementSystem.Core.Entities
 Imports WarehouseManagementSystem.Core.Enums
+Imports WarehouseManagementSystem.Core.Helpers
 Imports WarehouseManagementSystem.Core.Interfaces
+Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
 Imports WarehouseManagementSystem.Desktop.Utilities
 
 Public Class PickListForm
@@ -33,6 +30,9 @@ Public Class PickListForm
     Dim pluserid, plcountcos, plloadingbar, plinventorylocationdid, plpicklistid, plpicklistorderid, plcontactid, plpicklistorderitemid, plcustomerid, pllistofvalueid As Integer
     Dim ploverallqtyordered, pltotalqtyordered, pltotalqtypicked, ploverallqtytopick, plqtytopick, plqtytopickbalance, plqtyorderedsum, pltotalqtytopicksum, plqtytopicksum As Integer
     Private _systemOwner As WarehouseManagementSystem.Core.Entities.SystemOwner
+
+    Private ReadOnly DEFAULT_PAGEOPTIONS As PageOptions = New PageOptions(pageIndex:=0, pageSize:=100, sort:="PickListDate,PickListNo", direction:="desc,asc")
+    Private _pageOptions As PageOptions = DEFAULT_PAGEOPTIONS
 
     Private Async Sub PickListForm_Load(sender As Object, e As EventArgs) Handles Me.Load
         Dim _systemOwnerService = GetRequiredService(Of ISystemOwnerService)()
@@ -764,26 +764,37 @@ Public Class PickListForm
 
 #Region "Datagrids"
 
-    Sub displayPickList(ByVal istartpage As Integer)
+    Async Sub displayPickList(ByVal istartpage As Integer)
         Try
             dgPickList.Rows.Clear()
-            If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT pl.rowid,COALESCE(pl.picklistno,''),DATE_FORMAT(pl.picklistdate,'%d-%b-%Y'),COALESCE(pl.status,'') FROM picklist pl " &
-                        "WHERE pl.organizationid = " & Z_OrganizationID & " ORDER BY pl.picklistdate DESC,pl.picklistno LIMIT " & istartpage & "," & pagedivisor & " "
-            Dim cmd1 As New MySqlCommand(sql1, conn)
-            Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
+            'If conn.State = ConnectionState.Closed Then conn.Open()
+            'Dim sql1 As String = "SELECT pl.rowid,COALESCE(pl.picklistno,''),DATE_FORMAT(pl.picklistdate,'%d-%b-%Y'),COALESCE(pl.status,'') FROM picklist pl " &
+            '            "WHERE pl.organizationid = " & Z_OrganizationID & " ORDER BY pl.picklistdate DESC,pl.picklistno LIMIT " & istartpage & "," & pagedivisor & " "
+            'Dim cmd1 As New MySqlCommand(sql1, conn)
+            'Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             Dim n As Integer = 0
-            While reader1.Read()
-                If reader1.HasRows Then
-                    dgPickList.Rows.Add()
-                    dgPickList.Item(pl_rowid.Index, n).Value = reader1(0)
-                    dgPickList.Item(pl_picklistno.Index, n).Value = reader1(1)
-                    dgPickList.Item(pl_picklistdate.Index, n).Value = reader1(2)
-                    dgPickList.Item(pl_status.Index, n).Value = reader1(3)
-                    n = n + 1
-                End If
-            End While
-            reader1.Close()
+            'While reader1.Read()
+            '    If reader1.HasRows Then
+            '        dgPickList.Rows.Add()
+            '        dgPickList.Item(pl_rowid.Index, n).Value = reader1(0)
+            '        dgPickList.Item(pl_picklistno.Index, n).Value = reader1(1)
+            '        dgPickList.Item(pl_picklistdate.Index, n).Value = reader1(2)
+            '        dgPickList.Item(pl_status.Index, n).Value = reader1(3)
+            '        n = n + 1
+            '    End If
+            'End While
+            'reader1.Close()
+
+            Dim pickLists = (Await LoadPickListsAsync()).Items
+            For Each pickList In pickLists
+                dgPickList.Rows.Add()
+                dgPickList.Item(pl_rowid.Name, n).Value = pickList.RowID
+                dgPickList.Item(pl_picklistno.Name, n).Value = pickList.PickListNo
+                dgPickList.Item(pl_picklistdate.Name, n).Value = $"{pickList.PickListDate:MMM dd, yyyy}"
+                dgPickList.Item(pl_status.Name, n).Value = pickList.Status.ToString()
+                n += 1
+            Next
+
             dgPickList.Columns("pl_picklistno").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
             dgPickList.Columns("pl_picklistdate").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
             dgPickList.Columns("pl_status").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
@@ -796,6 +807,15 @@ Public Class PickListForm
             conn.Close()
         End Try
     End Sub
+
+    Private Async Function LoadPickListsAsync() As Task(Of PaginatedList(Of WarehouseManagementSystem.Core.Entities.PickList))
+        Dim pickListDataService = GetRequiredService(Of IPickListDataService)()
+        Dim result = Await pickListDataService.GetPaginatedPickListsAsync(
+            pageOptions:=_pageOptions,
+            organizationId:=Z_OrganizationID,
+            searchText:=String.Empty)
+        Return result
+    End Function
 
     Sub displaySearchPhrase(ByVal isearchphrase As String, ByVal istartpage As Integer)
         Try
@@ -931,21 +951,32 @@ Public Class PickListForm
         End Try
     End Sub
 
-    Sub displayCustomerOrdersA(ByVal ipicklistid As Integer)
+    Async Sub displayCustomerOrdersA(ByVal ipicklistid As Integer)
         Try
             dgCustomerOrders.Rows.Clear()
-            If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT GROUP_CONCAT(i.`Result`) FROM (SELECT COALESCE(plo.orderid,0) `Result` FROM picklistorders plo LEFT JOIN orders co ON plo.orderid = co.rowid " &
-                    "WHERE plo.organizationid = " & Z_OrganizationID & " AND plo.picklistid = " & ipicklistid & " AND plo.status != 'Inactive' " &
-                    "GROUP BY plo.orderid ORDER BY co.targetdate ASC) i;"
-            Dim cmd1 As New MySqlCommand(sql1, conn)
-            Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
-            While reader1.Read()
-                If reader1.HasRows Then
-                    displayCustomerOrdersB(reader1(0))
-                End If
-            End While
-            reader1.Close()
+
+            Dim sql = <![CDATA[SELECT GROUP_CONCAT(i.`Result`) `Result` FROM (SELECT COALESCE(plo.orderid,0) `Result` FROM picklistorders plo LEFT JOIN orders co ON plo.orderid = co.rowid WHERE plo.organizationid = @organizationId AND plo.picklistid = @picklistid AND plo.`status` != 'Inactive' GROUP BY plo.orderid ORDER BY co.targetdate ASC) i;]]>.Value
+
+            Using connection As New MySqlConnection(manager.GetConnString),
+                command As New MySqlCommand(sql, connection)
+
+                With command.Parameters
+                    .AddWithValue("@organizationId", Z_OrganizationID)
+                    .AddWithValue("@picklistid", ipicklistid)
+                End With
+
+                Await connection.OpenAsync()
+                Dim reader = Await command.ExecuteReaderAsync()
+
+                While Await reader.ReadAsync()
+                    Dim icustomerorderid As String = ""
+
+                    If Not reader.IsDBNull(0) Then icustomerorderid = reader.GetFieldValue(Of String)(0)
+
+                    displayCustomerOrdersB(icustomerorderid)
+                End While
+            End Using
+
             dgCustomerOrders.Columns("co_seqno").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
             dgCustomerOrders.Columns("co_customerorderno").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
             dgCustomerOrders.Columns("co_pono").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
@@ -954,14 +985,6 @@ Public Class PickListForm
             dgCustomerOrders.Columns("co_canceldate").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
             dgCustomerOrders.Columns("co_status").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
             dgCustomerOrders.Columns("co_option").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
-            If dgCustomerOrders.Rows.Count <> 0 Then
-                itemno = 1
-                For i As Integer = 0 To dgCustomerOrders.Rows.Count - 1
-                    dgCustomerOrders.Rows(i).Cells("co_seqno").Value = itemno
-                    itemno = itemno + 1
-                Next i
-                dgCustomerOrders.CurrentRow.Selected = False
-            End If
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -969,30 +992,38 @@ Public Class PickListForm
         End Try
     End Sub
 
-    Sub displayCustomerOrdersB(ByVal icustomerorderid As String)
+    Async Sub displayCustomerOrdersB(ByVal icustomerorderid As String)
         Try
-            If conn1.State = ConnectionState.Closed Then conn1.Open()
-            Dim sql1 As String = "SELECT co.rowid,COALESCE(co.ordernumber,''),COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),''),DATE_FORMAT(co.orderdate,'%d-%b-%Y')," &
-                        "DATE_FORMAT(co.targetdate,'%d-%b-%Y'),COALESCE(co.status,''),COALESCE(pg.groupname,''),COALESCE(co.referencenumber,''),DATE_FORMAT(co.enddate,'%d-%b-%Y'), IFNULL(il.Name, '') `InventoryLocation`, co.accountid FROM orders co " &
-                        "LEFT JOIN accounts cu ON co.accountid = cu.rowid LEFT JOIN picklistgroup pg ON cu.picklistgroupid = pg.rowid LEFT JOIN inventorylocations il ON il.RowID=co.InventoryLocationID WHERE co.rowid IN (" & icustomerorderid & ");"
-            Dim cmd1 As New MySqlCommand(sql1, conn1)
-            Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
-            While reader1.Read()
-                If reader1.HasRows Then
+            Dim sql = <![CDATA[SELECT co.rowid,COALESCE(co.ordernumber,''),COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),''),DATE_FORMAT(co.orderdate,'%d-%b-%Y'),DATE_FORMAT(co.targetdate,'%d-%b-%Y'),COALESCE(co.status,''),COALESCE(pg.groupname,''),COALESCE(co.referencenumber,''),DATE_FORMAT(co.enddate,'%d-%b-%Y'), IFNULL(il.Name, '') `InventoryLocation`, co.accountid FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid LEFT JOIN picklistgroup pg ON cu.picklistgroupid = pg.rowid LEFT JOIN inventorylocations il ON il.RowID=co.InventoryLocationID WHERE FIND_IN_SET(co.rowid, @orderIds) > 0;]]>.Value
+
+            Using connection As New MySqlConnection(manager.GetConnString),
+                command As New MySqlCommand(sql, connection)
+
+                With command.Parameters
+                    .AddWithValue("@organizationId", Z_OrganizationID)
+                    .AddWithValue("@orderIds", icustomerorderid)
+                End With
+
+                Await connection.OpenAsync()
+                Dim reader = Await command.ExecuteReaderAsync()
+
+                While Await reader.ReadAsync()
                     Dim rowIndex = dgCustomerOrders.Rows.Add()
-                    dgCustomerOrders.Rows(rowIndex).Cells("co_rowid").Value = reader1(0)
-                    dgCustomerOrders.Rows(rowIndex).Cells("co_customerorderno").Value = reader1(1)
-                    dgCustomerOrders.Rows(rowIndex).Cells("co_customername").Value = reader1(2)
-                    dgCustomerOrders.Rows(rowIndex).Cells("co_customerorderdate").Value = reader1(3)
-                    dgCustomerOrders.Rows(rowIndex).Cells("co_targetdate").Value = reader1(4)
-                    dgCustomerOrders.Rows(rowIndex).Cells("co_status").Value = reader1(5)
-                    dgCustomerOrders.Rows(rowIndex).Cells("co_pono").Value = reader1(7)
-                    dgCustomerOrders.Rows(rowIndex).Cells("co_canceldate").Value = reader1(8)
-                    dgCustomerOrders.Rows(rowIndex).Cells(co_inventorylocation.Name).Value = reader1(9)
-                    dgCustomerOrders.Rows(rowIndex).Tag = CInt(reader1(10))
-                End If
-            End While
-            reader1.Close()
+                    With dgCustomerOrders.Rows(rowIndex)
+                        .Cells(co_seqno.Name).Value = rowIndex + 1
+                        .Cells(co_rowid.Name).Value = reader(0)
+                        .Cells(co_customerorderno.Name).Value = reader(1)
+                        .Cells(co_customername.Name).Value = reader(2)
+                        .Cells(co_customerorderdate.Name).Value = reader(3)
+                        .Cells(co_targetdate.Name).Value = reader(4)
+                        .Cells(co_status.Name).Value = reader(5)
+                        .Cells(co_pono.Name).Value = reader(7)
+                        .Cells(co_canceldate.Name).Value = reader(8)
+                        .Cells(co_inventorylocation.Name).Value = reader(9)
+                        .Tag = CInt(reader(10))
+                    End With
+                End While
+            End Using
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -1000,68 +1031,68 @@ Public Class PickListForm
         End Try
     End Sub
 
-    Sub displayCustomerOrderItems(ByVal ipicklistid As Integer, ByVal icustomerorderid As Integer)
+    Async Sub displayCustomerOrderItems(ByVal ipicklistid As Integer, ByVal icustomerorderid As Integer)
         Try
             dgCustomerOrderItems.Rows.Clear()
-            If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT ci.rowid,COALESCE(ci.productcolorsizeid,0),COALESCE(ci.productbundleid,0),COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(b.bundlename,'')," &
-                    "COALESCE(c.colorname,''),COALESCE(pcs.size,''),COALESCE(pcs.seasoncode,''),COALESCE(ci.qtyordered,0),COALESCE(pcs.sku,''),COALESCE(b.sku,''),COALESCE(ci.unitofmeasure,''),COALESCE(ci.itemtype,'')," &
-                    "COALESCE(ci.remarks,''),(SELECT plo.status FROM picklistorders plo WHERE plo.picklistid = " & ipicklistid & " AND plo.orderid = " & icustomerorderid & " AND plo.organizationid = " & Z_OrganizationID & " AND  plo.orderitemid = ci.rowid)," &
-                    "COALESCE(CONCAT(COALESCE(vb.firstname,''),' ',COALESCE(vb.lastname,''),' - ',COALESCE(vb.rowid,'')),''),COALESCE(DATE_FORMAT(ci.verifieddate,'%d-%b-%Y'),''),COALESCE(ci.sku,'') FROM orderitems ci " &
-                    "LEFT JOIN productbundles b ON ci.productbundleid = b.rowid LEFT JOIN productcolorsizes pcs ON ci.productcolorsizeid = pcs.rowid LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid " &
-                    "LEFT JOIN colors c ON pc.colorid = c.rowid LEFT JOIN products p ON pc.productid = p.rowid LEFT JOIN users vb ON ci.verifiedby = vb.rowid WHERE ci.orderid = " & icustomerorderid & " " &
-                    "AND ci.organizationid = " & Z_OrganizationID & " AND ci.status != 'Inactive' AND ci.itemtype != 'BI' ORDER BY ci.rowid "
-            Dim cmd1 As New MySqlCommand(sql1, conn)
-            Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
-            Dim n As Integer = 0
-            Dim seqno As Integer = 1
-            While reader1.Read()
-                If reader1.HasRows Then
-                    dgCustomerOrderItems.Rows.Add()
-                    dgCustomerOrderItems.Item(ci_seqno.Index, n).Value = seqno
-                    dgCustomerOrderItems.Item(ci_rowid.Index, n).Value = reader1(0)
-                    dgCustomerOrderItems.Item(ci_pcsrowid.Index, n).Value = reader1(1)
-                    dgCustomerOrderItems.Item(ci_bid.Index, n).Value = reader1(2)
-                    dgCustomerOrderItems.Item(ci_colorvalue.Index, n).Value = reader1(3)
-                    If CInt(reader1(1)) <> 0 Then
-                        dgCustomerOrderItems.Item(ci_itemcode.Index, n).Value = reader1(4)
+
+            Dim sql = <![CDATA[SELECT ci.rowid,COALESCE(ci.productcolorsizeid,0),COALESCE(ci.productbundleid,0),COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(b.bundlename,''),COALESCE(c.colorname,''),COALESCE(pcs.size,''),COALESCE(pcs.seasoncode,''),COALESCE(ci.qtyordered,0),COALESCE(pcs.sku,''),COALESCE(b.sku,''),COALESCE(ci.unitofmeasure,''),COALESCE(ci.itemtype,''),COALESCE(ci.remarks,''),(SELECT plo.status FROM picklistorders plo WHERE plo.picklistid = @ipicklistid AND plo.orderid = @icustomerorderid AND plo.organizationid = @organizationId AND  plo.orderitemid = ci.rowid),COALESCE(CONCAT(COALESCE(vb.firstname,''),' ',COALESCE(vb.lastname,''),' - ',COALESCE(vb.rowid,'')),''),COALESCE(DATE_FORMAT(ci.verifieddate,'%d-%b-%Y'),''),COALESCE(ci.sku,'') FROM orderitems ci LEFT JOIN productbundles b ON ci.productbundleid = b.rowid LEFT JOIN productcolorsizes pcs ON ci.productcolorsizeid = pcs.rowid LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN colors c ON pc.colorid = c.rowid LEFT JOIN products p ON pc.productid = p.rowid LEFT JOIN users vb ON ci.verifiedby = vb.rowid WHERE ci.orderid = @icustomerorderid AND ci.organizationid = @organizationId AND ci.status != 'Inactive' AND ci.itemtype != 'BI' ORDER BY ci.rowid;]]>.Value
+
+            Using connection As New MySqlConnection(manager.GetConnString),
+                command As New MySqlCommand(sql, connection)
+
+                With command.Parameters
+                    .AddWithValue("@organizationId", Z_OrganizationID)
+                    .AddWithValue("@ipicklistid", ipicklistid)
+                    .AddWithValue("@icustomerorderid", icustomerorderid)
+                End With
+
+                Await connection.OpenAsync()
+                Dim reader = Await command.ExecuteReaderAsync()
+
+                While Await reader.ReadAsync()
+                    Dim n = dgCustomerOrderItems.Rows.Add()
+                    dgCustomerOrderItems.Item(ci_seqno.Index, n).Value = n 
+                    dgCustomerOrderItems.Item(ci_rowid.Index, n).Value = reader(0)
+                    dgCustomerOrderItems.Item(ci_pcsrowid.Index, n).Value = reader(1)
+                    dgCustomerOrderItems.Item(ci_bid.Index, n).Value = reader(2)
+                    dgCustomerOrderItems.Item(ci_colorvalue.Index, n).Value = reader(3)
+                    If CInt(reader(1)) <> 0 Then
+                        dgCustomerOrderItems.Item(ci_itemcode.Index, n).Value = reader(4)
                     Else
-                        dgCustomerOrderItems.Item(ci_itemcode.Index, n).Value = reader1(5)
+                        dgCustomerOrderItems.Item(ci_itemcode.Index, n).Value = reader(5)
                     End If
-                    dgCustomerOrderItems.Item(ci_colorname.Index, n).Value = reader1(6)
-                    dgCustomerOrderItems.Item(ci_size.Index, n).Value = reader1(7)
-                    dgCustomerOrderItems.Item(ci_seasoncode.Index, n).Value = reader1(8)
-                    dgCustomerOrderItems.Item(ci_qtyordered.Index, n).Value = reader1(9)
-                    getPickListOrderID(CInt(dgPickList.CurrentRow.Cells("pl_rowid").Value), CInt(dgCustomerOrders.CurrentRow.Cells("co_rowid").Value), CInt(reader1(0)), Me)
+                    dgCustomerOrderItems.Item(ci_colorname.Index, n).Value = reader(6)
+                    dgCustomerOrderItems.Item(ci_size.Index, n).Value = reader(7)
+                    dgCustomerOrderItems.Item(ci_seasoncode.Index, n).Value = reader(8)
+                    dgCustomerOrderItems.Item(ci_qtyordered.Index, n).Value = reader(9)
+                    getPickListOrderID(CInt(dgPickList.CurrentRow.Cells("pl_rowid").Value), CInt(dgCustomerOrders.CurrentRow.Cells("co_rowid").Value), CInt(reader(0)), Me)
                     plpicklistorderid = globalpicklistorderid : getTotalQtyPickedA(plpicklistorderid)
-                    If CInt(reader1(1)) <> 0 Then
+                    If CInt(reader(1)) <> 0 Then
                         dgCustomerOrderItems.Item(ci_totalqtytopick.Index, n).Value = pltotalqtypicked
-                        If LTrim(CStr(reader1(18))) = "" Then
-                            dgCustomerOrderItems.Item(ci_sku.Index, n).Value = reader1(10)
+                        If LTrim(CStr(reader(18))) = "" Then
+                            dgCustomerOrderItems.Item(ci_sku.Index, n).Value = reader(10)
                         Else
-                            dgCustomerOrderItems.Item(ci_sku.Index, n).Value = reader1(18)
+                            dgCustomerOrderItems.Item(ci_sku.Index, n).Value = reader(18)
                         End If
                     Else
-                        dgCustomerOrderItems.Item(ci_sku.Index, n).Value = reader1(11)
+                        dgCustomerOrderItems.Item(ci_sku.Index, n).Value = reader(11)
                         dgCustomerOrderItems.Item(ci_totalqtytopick.Index, n).Value = ""
                     End If
-                    dgCustomerOrderItems.Item(ci_unitofmeasure.Index, n).Value = reader1(12)
-                    dgCustomerOrderItems.Item(ci_type.Index, n).Value = reader1(13)
-                    dgCustomerOrderItems.Item(ci_remarks.Index, n).Value = reader1(14)
-                    If CInt(reader1(1)) <> 0 Then
-                        dgCustomerOrderItems.Item(ci_status.Index, n).Value = reader1(15)
-                        dgCustomerOrderItems.Item(ci_verifiedby.Index, n).Value = reader1(16)
-                        dgCustomerOrderItems.Item(ci_verifieddate.Index, n).Value = reader1(17)
+                    dgCustomerOrderItems.Item(ci_unitofmeasure.Index, n).Value = reader(12)
+                    dgCustomerOrderItems.Item(ci_type.Index, n).Value = reader(13)
+                    dgCustomerOrderItems.Item(ci_remarks.Index, n).Value = reader(14)
+                    If CInt(reader(1)) <> 0 Then
+                        dgCustomerOrderItems.Item(ci_status.Index, n).Value = reader(15)
+                        dgCustomerOrderItems.Item(ci_verifiedby.Index, n).Value = reader(16)
+                        dgCustomerOrderItems.Item(ci_verifieddate.Index, n).Value = reader(17)
                     Else
                         dgCustomerOrderItems.Item(ci_status.Index, n).Value = ""
                         dgCustomerOrderItems.Item(ci_verifiedby.Index, n).Value = ""
                         dgCustomerOrderItems.Item(ci_verifieddate.Index, n).Value = ""
                     End If
-                    seqno = seqno + 1
-                    n = n + 1
-                End If
-            End While
-            reader1.Close()
+                End While
+            End Using
+
             dgCustomerOrderItems.Columns("ci_seqno").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
             dgCustomerOrderItems.Columns("ci_itemcode").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
             dgCustomerOrderItems.Columns("ci_colorname").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
@@ -1846,6 +1877,10 @@ Public Class PickListForm
         Me.Cursor = Cursors.Default
     End Sub
 
+    Private Sub dgPickList_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgPickList.CellContentClick
+
+    End Sub
+
     Private Sub dgPickList_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgPickList.CellClick
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1879,10 +1914,6 @@ Public Class PickListForm
             conn.Close()
         End Try
         Me.Cursor = Cursors.Default
-    End Sub
-
-    Private Sub dgPickList_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgPickList.CellContentClick
-
     End Sub
 
     Private Sub dgPickList_KeyUp(sender As Object, e As KeyEventArgs) Handles dgPickList.KeyUp
@@ -2928,6 +2959,7 @@ Public Class PickListForm
     End Sub
 
     Private Sub cmdFirst_Click(sender As Object, e As EventArgs) Handles cmdFirst.Click
+        _pageOptions.MoveToFirst()
         Me.Cursor = Cursors.WaitCursor
         Try
             clearRightPage()
@@ -2952,6 +2984,7 @@ Public Class PickListForm
     End Sub
 
     Private Sub cmdPrev_Click(sender As Object, e As EventArgs) Handles cmdPrev.Click
+        _pageOptions.MoveToPrevious()
         Me.Cursor = Cursors.WaitCursor
         Try
             clearRightPage()
@@ -2984,6 +3017,7 @@ Public Class PickListForm
     End Sub
 
     Private Sub cmdNext_Click(sender As Object, e As EventArgs) Handles cmdNext.Click
+        _pageOptions.MoveToNext()
         Me.Cursor = Cursors.WaitCursor
         Try
             clearRightPage()
@@ -3011,7 +3045,9 @@ Public Class PickListForm
         Me.Cursor = Cursors.Default
     End Sub
 
-    Private Sub cmdLast_Click(sender As Object, e As EventArgs) Handles cmdLast.Click
+    Private Async Sub cmdLast_Click(sender As Object, e As EventArgs) Handles cmdLast.Click
+        _pageOptions.MoveToLast(total:=(Await LoadPickListsAsync()).TotalCount)
+
         Me.Cursor = Cursors.WaitCursor
         Try
             clearRightPage()

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using System.Text;
 using WarehouseManagementSystem.Core.Entities.Base;
 using WarehouseManagementSystem.Core.Enums;
 
@@ -16,7 +15,7 @@ namespace WarehouseManagementSystem.Core.Entities
         public string PickListNo { get; set; }
         public DateTime? PickListDate { get; set; }
         public DateTime? CompletedDate { get; set; }
-        public string Status { get; set; }
+        public PickListStatus Status { get; set; }
         public string Comments { get; set; }
     }
 
@@ -25,20 +24,22 @@ namespace WarehouseManagementSystem.Core.Entities
         public virtual ICollection<PickListOrder> PickListOrders { get; set; }
         public void SetStatusToCancelled()
         {
-            Status = $"{OrderStatus.Cancelled}";
+            Status = PickListStatus.Cancelled;
 
             if(PickListOrders?.Any() ?? false)
                 foreach (var pickListOrder in PickListOrders)
                 {
-                    pickListOrder.Status = Status;
+                    pickListOrder.Status = PickListOrderStatus.Cancelled;
                     pickListOrder.SetEdited();
 
                     foreach (var item in pickListOrder.PickListOrderItems)
                     {
-                        item.Status = Status;
+                        item.Status = Status.ToString();
                         item.SetEdited();
                     }
                 }
         }
+
+        public string SearchableText => string.Empty;
     }
 }

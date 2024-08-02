@@ -1,7 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using WarehouseManagementSystem.Core.Entities.Base;
+using WarehouseManagementSystem.Core.Enums;
 
 namespace WarehouseManagementSystem.Core.Entities
 {
@@ -12,7 +12,7 @@ namespace WarehouseManagementSystem.Core.Entities
         public int OrderID { get; set; }
         public int OrderItemID { get; set; }
         public char? ModifiedFlg { get; set; }
-        public string Status { get; set; }
+        public PickListOrderStatus Status { get; set; }
     }
 
     public partial class PickListOrder
