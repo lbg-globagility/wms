@@ -1115,42 +1115,48 @@ Public Class PickListForm
         End Try
     End Sub
 
-    Sub displayRackShelfColumn(ByVal iproductcolorsizeid As Integer, ByVal iinventorylocationid As Integer)
+    Async Sub displayRackShelfColumn(ByVal iproductcolorsizeid As Integer, ByVal iinventorylocationid As Integer)
         Try
             dgRackShelfColumn.Rows.Clear()
-            If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT pil.rowid,COALESCE(rsc.rackno,''),COALESCE(rsc.shelfno,''),COALESCE(rsc.columnno,''),COALESCE(pil.totalavailableqty,0),COALESCE(rsc.pickorderno,0),COALESCE(pil.totalallocatedqty,0) " &
-                            "FROM productinventorylocation pil LEFT JOIN rackshelfcolumn rsc ON pil.rackshelfcolumnid = rsc.rowid WHERE pil.organizationid = " & Z_OrganizationID & " " &
-                            "AND pil.productcolorsizeid = " & iproductcolorsizeid & "  AND rsc.inventorylocationid = " & iinventorylocationid & " ORDER BY rsc.pickorderno ASC "
-            Dim cmd1 As New MySqlCommand(sql1, conn)
-            Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
-            Dim n As Integer = 0
-            While reader1.Read()
-                If reader1.HasRows Then
-                    dgRackShelfColumn.Rows.Add()
-                    dgRackShelfColumn.Item(rsc_rowid.Index, n).Value = reader1(0)
-                    dgRackShelfColumn.Item(rsc_rack.Index, n).Value = reader1(1)
-                    dgRackShelfColumn.Item(rsc_shelf.Index, n).Value = reader1(2)
-                    dgRackShelfColumn.Item(rsc_column.Index, n).Value = reader1(3)
+
+            Dim sql = <![CDATA[SELECT pil.rowid,COALESCE(rsc.rackno,''),COALESCE(rsc.shelfno,''),COALESCE(rsc.columnno,''),COALESCE(pil.totalavailableqty,0),COALESCE(rsc.pickorderno,0),COALESCE(pil.totalallocatedqty,0) FROM productinventorylocation pil LEFT JOIN rackshelfcolumn rsc ON pil.rackshelfcolumnid = rsc.rowid WHERE pil.organizationid = @organizationId AND pil.productcolorsizeid = @iproductcolorsizeid  AND rsc.inventorylocationid = @iinventorylocationid ORDER BY rsc.pickorderno ASC;]]>.Value
+
+            Using connection As New MySqlConnection(manager.GetConnString),
+            command As New MySqlCommand(sql, connection)
+
+                With command.Parameters
+                    .AddWithValue("@organizationId", Z_OrganizationID)
+                    .AddWithValue("@iproductcolorsizeid", iproductcolorsizeid)
+                    .AddWithValue("@iinventorylocationid", iinventorylocationid)
+                End With
+
+                Await connection.OpenAsync()
+                Dim reader = Await command.ExecuteReaderAsync()
+
+                While Await reader.ReadAsync()
+                    Dim n = dgRackShelfColumn.Rows.Add()
+                    dgRackShelfColumn.Item(rsc_rowid.Name, n).Value = reader(0)
+                    dgRackShelfColumn.Item(rsc_rack.Name, n).Value = reader(1)
+                    dgRackShelfColumn.Item(rsc_shelf.Name, n).Value = reader(2)
+                    dgRackShelfColumn.Item(rsc_column.Name, n).Value = reader(3)
                     getPickListOrderID(CInt(dgPickList.CurrentRow.Cells("pl_rowid").Value), CInt(dgCustomerOrders.CurrentRow.Cells("co_rowid").Value), CInt(dgCustomerOrderItems.CurrentRow.Cells("ci_rowid").Value), Me)
                     plpicklistorderid = globalpicklistorderid
-                    getTotalQtyPickedB(plpicklistorderid, CInt(reader1(0)))
-                    getPickListOrderItemInfo(plpicklistorderid, CInt(reader1(0)), Me)
-                    dgRackShelfColumn.Item(rsc_qtytopick.Index, n).Value = pltotalqtypicked
-                    dgRackShelfColumn.Item(rsc_qtyavailable.Index, n).Value = reader1(4)
-                    dgRackShelfColumn.Item(rsc_pickorderno.Index, n).Value = reader1(5)
-                    dgRackShelfColumn.Item(rsc_qtyallocated.Index, n).Value = reader1(6)
-                    dgRackShelfColumn.Item(rsc_qtyorderable.Index, n).Value = CInt(reader1(4)) - CInt(reader1(6))
+                    getTotalQtyPickedB(plpicklistorderid, CInt(reader(0)))
+                    getPickListOrderItemInfo(plpicklistorderid, CInt(reader(0)), Me)
+                    dgRackShelfColumn.Item(rsc_qtytopick.Name, n).Value = pltotalqtypicked
+                    dgRackShelfColumn.Item(rsc_qtyavailable.Name, n).Value = reader(4)
+                    dgRackShelfColumn.Item(rsc_pickorderno.Name, n).Value = reader(5)
+                    dgRackShelfColumn.Item(rsc_qtyallocated.Name, n).Value = reader(6)
+                    dgRackShelfColumn.Item(rsc_qtyorderable.Name, n).Value = CInt(reader(4)) - CInt(reader(6))
                     If globalpicklistorderitemissueflg = "Y" Then
-                        dgRackShelfColumn.Item(rsc_issueflg.Index, n).Value = legit
+                        dgRackShelfColumn.Item(rsc_issueflg.Name, n).Value = legit
                     Else
-                        dgRackShelfColumn.Item(rsc_issueflg.Index, n).Value = fraud
+                        dgRackShelfColumn.Item(rsc_issueflg.Name, n).Value = fraud
                     End If
-                    dgRackShelfColumn.Item(rsc_remarks.Index, n).Value = globalpicklistorderitemremarks
-                    n = n + 1
-                End If
-            End While
-            reader1.Close()
+                    dgRackShelfColumn.Item(rsc_remarks.Name, n).Value = globalpicklistorderitemremarks
+                End While
+            End Using
+
             dgRackShelfColumn.Columns("rsc_rack").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
             dgRackShelfColumn.Columns("rsc_shelf").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
             dgRackShelfColumn.Columns("rsc_column").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
@@ -2057,6 +2063,10 @@ Public Class PickListForm
             conn.Close()
         End Try
         Me.Cursor = Cursors.Default
+    End Sub
+
+    Private Sub dgCustomerOrderItems_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgCustomerOrderItems.CellContentClick
+
     End Sub
 
     Private Sub dgCustomerOrderItems_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgCustomerOrderItems.CellClick
