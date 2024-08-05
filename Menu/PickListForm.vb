@@ -1,5 +1,6 @@
 ﻿Imports Microsoft.Extensions.DependencyInjection
 Imports MySql.Data.MySqlClient
+Imports OfficeOpenXml.FormulaParsing.Excel.Functions.Math
 Imports WarehouseManagementSystem.Core.Enums
 Imports WarehouseManagementSystem.Core.Helpers
 Imports WarehouseManagementSystem.Core.Interfaces
@@ -223,6 +224,7 @@ Public Class PickListForm
             dgCustomerOrders.Rows.Clear()
             dgCustomerOrderItems.Rows.Clear()
             dgRackShelfColumn.Rows.Clear()
+            msPrint.Text = "&Print"
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -1010,6 +1012,7 @@ Public Class PickListForm
                 While Await reader.ReadAsync()
                     Dim rowIndex = dgCustomerOrders.Rows.Add()
                     With dgCustomerOrders.Rows(rowIndex)
+                        '.Cells(TickBoxOrdersColumn.Name).Value = False
                         .Cells(co_seqno.Name).Value = rowIndex + 1
                         .Cells(co_rowid.Name).Value = reader(0)
                         .Cells(co_customerorderno.Name).Value = reader(1)
@@ -1031,14 +1034,15 @@ Public Class PickListForm
         End Try
     End Sub
 
-    Async Sub displayCustomerOrderItems(ByVal ipicklistid As Integer, ByVal icustomerorderid As Integer)
+    Private Async Function displayCustomerOrderItems(ByVal ipicklistid As Integer, ByVal icustomerorderid As Integer) As Task
         Try
             dgCustomerOrderItems.Rows.Clear()
 
-            Dim sql = <![CDATA[SELECT ci.rowid,COALESCE(ci.productcolorsizeid,0),COALESCE(ci.productbundleid,0),COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(b.bundlename,''),COALESCE(c.colorname,''),COALESCE(pcs.size,''),COALESCE(pcs.seasoncode,''),COALESCE(ci.qtyordered,0),COALESCE(pcs.sku,''),COALESCE(b.sku,''),COALESCE(ci.unitofmeasure,''),COALESCE(ci.itemtype,''),COALESCE(ci.remarks,''),(SELECT plo.status FROM picklistorders plo WHERE plo.picklistid = @ipicklistid AND plo.orderid = @icustomerorderid AND plo.organizationid = @organizationId AND  plo.orderitemid = ci.rowid),COALESCE(CONCAT(COALESCE(vb.firstname,''),' ',COALESCE(vb.lastname,''),' - ',COALESCE(vb.rowid,'')),''),COALESCE(DATE_FORMAT(ci.verifieddate,'%d-%b-%Y'),''),COALESCE(ci.sku,'') FROM orderitems ci LEFT JOIN productbundles b ON ci.productbundleid = b.rowid LEFT JOIN productcolorsizes pcs ON ci.productcolorsizeid = pcs.rowid LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN colors c ON pc.colorid = c.rowid LEFT JOIN products p ON pc.productid = p.rowid LEFT JOIN users vb ON ci.verifiedby = vb.rowid WHERE ci.orderid = @icustomerorderid AND ci.organizationid = @organizationId AND ci.status != 'Inactive' AND ci.itemtype != 'BI' ORDER BY ci.rowid;]]>.Value
+            Dim sql = <![CDATA[SELECT ci.rowid,COALESCE(ci.productcolorsizeid,0),COALESCE(ci.productbundleid,0),COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(b.bundlename,''),COALESCE(c.colorname,''),COALESCE(pcs.size,''),COALESCE(pcs.seasoncode,''),COALESCE(ci.qtyordered,0),COALESCE(pcs.sku,''),COALESCE(b.sku,''),COALESCE(ci.unitofmeasure,''),COALESCE(ci.itemtype,''),COALESCE(ci.remarks,''),plo.`Status`,COALESCE(CONCAT(COALESCE(vb.firstname,''),' ',COALESCE(vb.lastname,''),' - ',COALESCE(vb.rowid,'')),''),COALESCE(DATE_FORMAT(ci.verifieddate,'%d-%b-%Y'),''),COALESCE(ci.sku,'') FROM orderitems ci LEFT JOIN productbundles b ON ci.productbundleid = b.rowid LEFT JOIN productcolorsizes pcs ON ci.productcolorsizeid = pcs.rowid LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN colors c ON pc.colorid = c.rowid LEFT JOIN products p ON pc.productid = p.rowid LEFT JOIN users vb ON ci.verifiedby = vb.rowid INNER JOIN picklistorders plo ON plo.picklistid = @ipicklistid AND plo.orderid = ci.OrderID AND plo.organizationid = ci.organizationid AND plo.orderitemid = ci.rowid WHERE ci.orderid = @icustomerorderid AND ci.organizationid = @organizationId AND ci.status != 'Inactive' AND ci.itemtype != 'BI' ORDER BY ci.rowid;]]>.Value
 
             Using connection As New MySqlConnection(manager.GetConnString),
-                command As New MySqlCommand(sql, connection)
+                command As New MySqlCommand(sql, connection),
+                adapter As New MySqlDataAdapter
 
                 With command.Parameters
                     .AddWithValue("@organizationId", Z_OrganizationID)
@@ -1047,50 +1051,55 @@ Public Class PickListForm
                 End With
 
                 Await connection.OpenAsync()
-                Dim reader = Await command.ExecuteReaderAsync()
 
-                While Await reader.ReadAsync()
+                adapter.SelectCommand = command
+                Dim dataSet As New DataSet
+                adapter.Fill(dataSet)
+                Dim datasource = dataSet.Tables.OfType(Of DataTable).FirstOrDefault()
+
+                For Each drow As DataRow In datasource.Rows
                     Dim n = dgCustomerOrderItems.Rows.Add()
-                    dgCustomerOrderItems.Item(ci_seqno.Index, n).Value = n 
-                    dgCustomerOrderItems.Item(ci_rowid.Index, n).Value = reader(0)
-                    dgCustomerOrderItems.Item(ci_pcsrowid.Index, n).Value = reader(1)
-                    dgCustomerOrderItems.Item(ci_bid.Index, n).Value = reader(2)
-                    dgCustomerOrderItems.Item(ci_colorvalue.Index, n).Value = reader(3)
-                    If CInt(reader(1)) <> 0 Then
-                        dgCustomerOrderItems.Item(ci_itemcode.Index, n).Value = reader(4)
+
+                    dgCustomerOrderItems.Item(ci_seqno.Index, n).Value = n
+                    dgCustomerOrderItems.Item(ci_rowid.Index, n).Value = drow(0)
+                    dgCustomerOrderItems.Item(ci_pcsrowid.Index, n).Value = drow(1)
+                    dgCustomerOrderItems.Item(ci_bid.Index, n).Value = drow(2)
+                    dgCustomerOrderItems.Item(ci_colorvalue.Index, n).Value = drow(3)
+                    If CInt(drow(1)) <> 0 Then
+                        dgCustomerOrderItems.Item(ci_itemcode.Index, n).Value = drow(4)
                     Else
-                        dgCustomerOrderItems.Item(ci_itemcode.Index, n).Value = reader(5)
+                        dgCustomerOrderItems.Item(ci_itemcode.Index, n).Value = drow(5)
                     End If
-                    dgCustomerOrderItems.Item(ci_colorname.Index, n).Value = reader(6)
-                    dgCustomerOrderItems.Item(ci_size.Index, n).Value = reader(7)
-                    dgCustomerOrderItems.Item(ci_seasoncode.Index, n).Value = reader(8)
-                    dgCustomerOrderItems.Item(ci_qtyordered.Index, n).Value = reader(9)
-                    getPickListOrderID(CInt(dgPickList.CurrentRow.Cells("pl_rowid").Value), CInt(dgCustomerOrders.CurrentRow.Cells("co_rowid").Value), CInt(reader(0)), Me)
+                    dgCustomerOrderItems.Item(ci_colorname.Index, n).Value = drow(6)
+                    dgCustomerOrderItems.Item(ci_size.Index, n).Value = drow(7)
+                    dgCustomerOrderItems.Item(ci_seasoncode.Index, n).Value = drow(8)
+                    dgCustomerOrderItems.Item(ci_qtyordered.Index, n).Value = drow(9)
+                    getPickListOrderID(CInt(dgPickList.CurrentRow.Cells("pl_rowid").Value), CInt(dgCustomerOrders.CurrentRow.Cells("co_rowid").Value), CInt(drow(0)), Me)
                     plpicklistorderid = globalpicklistorderid : getTotalQtyPickedA(plpicklistorderid)
-                    If CInt(reader(1)) <> 0 Then
+                    If CInt(drow(1)) <> 0 Then
                         dgCustomerOrderItems.Item(ci_totalqtytopick.Index, n).Value = pltotalqtypicked
-                        If LTrim(CStr(reader(18))) = "" Then
-                            dgCustomerOrderItems.Item(ci_sku.Index, n).Value = reader(10)
+                        If LTrim(CStr(drow(18))) = "" Then
+                            dgCustomerOrderItems.Item(ci_sku.Index, n).Value = drow(10)
                         Else
-                            dgCustomerOrderItems.Item(ci_sku.Index, n).Value = reader(18)
+                            dgCustomerOrderItems.Item(ci_sku.Index, n).Value = drow(18)
                         End If
                     Else
-                        dgCustomerOrderItems.Item(ci_sku.Index, n).Value = reader(11)
+                        dgCustomerOrderItems.Item(ci_sku.Index, n).Value = drow(11)
                         dgCustomerOrderItems.Item(ci_totalqtytopick.Index, n).Value = ""
                     End If
-                    dgCustomerOrderItems.Item(ci_unitofmeasure.Index, n).Value = reader(12)
-                    dgCustomerOrderItems.Item(ci_type.Index, n).Value = reader(13)
-                    dgCustomerOrderItems.Item(ci_remarks.Index, n).Value = reader(14)
-                    If CInt(reader(1)) <> 0 Then
-                        dgCustomerOrderItems.Item(ci_status.Index, n).Value = reader(15)
-                        dgCustomerOrderItems.Item(ci_verifiedby.Index, n).Value = reader(16)
-                        dgCustomerOrderItems.Item(ci_verifieddate.Index, n).Value = reader(17)
+                    dgCustomerOrderItems.Item(ci_unitofmeasure.Index, n).Value = drow(12)
+                    dgCustomerOrderItems.Item(ci_type.Index, n).Value = drow(13)
+                    dgCustomerOrderItems.Item(ci_remarks.Index, n).Value = drow(14)
+                    If CInt(drow(1)) <> 0 Then
+                        dgCustomerOrderItems.Item(ci_status.Index, n).Value = drow(15)
+                        dgCustomerOrderItems.Item(ci_verifiedby.Index, n).Value = drow(16)
+                        dgCustomerOrderItems.Item(ci_verifieddate.Index, n).Value = drow(17)
                     Else
                         dgCustomerOrderItems.Item(ci_status.Index, n).Value = ""
                         dgCustomerOrderItems.Item(ci_verifiedby.Index, n).Value = ""
                         dgCustomerOrderItems.Item(ci_verifieddate.Index, n).Value = ""
                     End If
-                End While
+                Next
             End Using
 
             dgCustomerOrderItems.Columns("ci_seqno").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
@@ -1113,16 +1122,17 @@ Public Class PickListForm
         Finally
             conn.Close()
         End Try
-    End Sub
+    End Function
 
-    Async Sub displayRackShelfColumn(ByVal iproductcolorsizeid As Integer, ByVal iinventorylocationid As Integer)
+    Private Async Function displayRackShelfColumn(ByVal iproductcolorsizeid As Integer, ByVal iinventorylocationid As Integer) As Task
         Try
             dgRackShelfColumn.Rows.Clear()
 
-            Dim sql = <![CDATA[SELECT pil.rowid,COALESCE(rsc.rackno,''),COALESCE(rsc.shelfno,''),COALESCE(rsc.columnno,''),COALESCE(pil.totalavailableqty,0),COALESCE(rsc.pickorderno,0),COALESCE(pil.totalallocatedqty,0) FROM productinventorylocation pil LEFT JOIN rackshelfcolumn rsc ON pil.rackshelfcolumnid = rsc.rowid WHERE pil.organizationid = @organizationId AND pil.productcolorsizeid = @iproductcolorsizeid  AND rsc.inventorylocationid = @iinventorylocationid ORDER BY rsc.pickorderno ASC;]]>.Value
+            Dim sql = <![CDATA[SELECT pil.rowid,COALESCE(rsc.rackno,''),COALESCE(rsc.shelfno,''),COALESCE(rsc.columnno,''),COALESCE(pil.totalavailableqty,0),COALESCE(rsc.pickorderno,0),COALESCE(pil.totalallocatedqty,0) FROM productinventorylocation pil INNER JOIN rackshelfcolumn rsc ON pil.rackshelfcolumnid = rsc.rowid AND rsc.inventorylocationid = @iinventorylocationid WHERE pil.organizationid = @organizationId AND pil.productcolorsizeid = @iproductcolorsizeid ORDER BY rsc.pickorderno ASC;]]>.Value
 
             Using connection As New MySqlConnection(manager.GetConnString),
-            command As New MySqlCommand(sql, connection)
+            command As New MySqlCommand(sql, connection),
+                adapter As New MySqlDataAdapter
 
                 With command.Parameters
                     .AddWithValue("@organizationId", Z_OrganizationID)
@@ -1131,30 +1141,34 @@ Public Class PickListForm
                 End With
 
                 Await connection.OpenAsync()
-                Dim reader = Await command.ExecuteReaderAsync()
 
-                While Await reader.ReadAsync()
+                adapter.SelectCommand = command
+                Dim dataSet As New DataSet
+                adapter.Fill(dataSet)
+                Dim datasource = dataSet.Tables.OfType(Of DataTable).FirstOrDefault()
+
+                For Each drow As DataRow In datasource.Rows
                     Dim n = dgRackShelfColumn.Rows.Add()
-                    dgRackShelfColumn.Item(rsc_rowid.Name, n).Value = reader(0)
-                    dgRackShelfColumn.Item(rsc_rack.Name, n).Value = reader(1)
-                    dgRackShelfColumn.Item(rsc_shelf.Name, n).Value = reader(2)
-                    dgRackShelfColumn.Item(rsc_column.Name, n).Value = reader(3)
+                    dgRackShelfColumn.Item(rsc_rowid.Name, n).Value = drow(0)
+                    dgRackShelfColumn.Item(rsc_rack.Name, n).Value = drow(1)
+                    dgRackShelfColumn.Item(rsc_shelf.Name, n).Value = drow(2)
+                    dgRackShelfColumn.Item(rsc_column.Name, n).Value = drow(3)
                     getPickListOrderID(CInt(dgPickList.CurrentRow.Cells("pl_rowid").Value), CInt(dgCustomerOrders.CurrentRow.Cells("co_rowid").Value), CInt(dgCustomerOrderItems.CurrentRow.Cells("ci_rowid").Value), Me)
                     plpicklistorderid = globalpicklistorderid
-                    getTotalQtyPickedB(plpicklistorderid, CInt(reader(0)))
-                    getPickListOrderItemInfo(plpicklistorderid, CInt(reader(0)), Me)
+                    getTotalQtyPickedB(plpicklistorderid, CInt(drow(0)))
+                    getPickListOrderItemInfo(plpicklistorderid, CInt(drow(0)), Me)
                     dgRackShelfColumn.Item(rsc_qtytopick.Name, n).Value = pltotalqtypicked
-                    dgRackShelfColumn.Item(rsc_qtyavailable.Name, n).Value = reader(4)
-                    dgRackShelfColumn.Item(rsc_pickorderno.Name, n).Value = reader(5)
-                    dgRackShelfColumn.Item(rsc_qtyallocated.Name, n).Value = reader(6)
-                    dgRackShelfColumn.Item(rsc_qtyorderable.Name, n).Value = CInt(reader(4)) - CInt(reader(6))
+                    dgRackShelfColumn.Item(rsc_qtyavailable.Name, n).Value = drow(4)
+                    dgRackShelfColumn.Item(rsc_pickorderno.Name, n).Value = drow(5)
+                    dgRackShelfColumn.Item(rsc_qtyallocated.Name, n).Value = drow(6)
+                    dgRackShelfColumn.Item(rsc_qtyorderable.Name, n).Value = CInt(drow(4)) - CInt(drow(6))
                     If globalpicklistorderitemissueflg = "Y" Then
                         dgRackShelfColumn.Item(rsc_issueflg.Name, n).Value = legit
                     Else
                         dgRackShelfColumn.Item(rsc_issueflg.Name, n).Value = fraud
                     End If
                     dgRackShelfColumn.Item(rsc_remarks.Name, n).Value = globalpicklistorderitemremarks
-                End While
+                Next
             End Using
 
             dgRackShelfColumn.Columns("rsc_rack").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
@@ -1173,7 +1187,7 @@ Public Class PickListForm
         Finally
             conn.Close()
         End Try
-    End Sub
+    End Function
 
     Function getPickQty(ByVal orderItemId As Integer)
         Try
@@ -2029,13 +2043,15 @@ Public Class PickListForm
         Me.Cursor = Cursors.Default
     End Sub
 
-    Private Sub dgCustomerOrders_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgCustomerOrders.CellClick
-        Me.Cursor = Cursors.WaitCursor
+    Private Async Sub dgCustomerOrders_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgCustomerOrders.CellClick
+        If Not dgCustomerOrders.Rows.Count <> 0 Then Return
+
         Try
-            If dgCustomerOrders.Rows.Count <> 0 Then
+            If Not e.ColumnIndex = dgCustomerOrders.Columns(TickBoxOrdersColumn.Name).Index Then
+
                 errProvider.Clear()
                 dgRackShelfColumn.Rows.Clear() : enableGB(legit, legit, fraud) : lnkViewEditBundleItems.Visible = fraud
-                displayCustomerOrderItems(CInt(dgPickList.CurrentRow.Cells("pl_rowid").Value), CInt(dgCustomerOrders.CurrentRow.Cells("co_rowid").Value))
+                Await displayCustomerOrderItems(CInt(dgPickList.CurrentRow.Cells("pl_rowid").Value), CInt(dgCustomerOrders.CurrentRow.Cells("co_rowid").Value))
                 colorCoding() : picklistformcomputations()
             End If
         Catch ex As Exception
@@ -2043,17 +2059,16 @@ Public Class PickListForm
         Finally
             conn.Close()
         End Try
-        Me.Cursor = Cursors.Default
     End Sub
 
-    Private Sub dgCustomerOrders_KeyUp(sender As Object, e As KeyEventArgs) Handles dgCustomerOrders.KeyUp
+    Private Async Sub dgCustomerOrders_KeyUp(sender As Object, e As KeyEventArgs) Handles dgCustomerOrders.KeyUp
         Me.Cursor = Cursors.WaitCursor
         Try
             If dgCustomerOrders.Rows.Count <> 0 Then
                 If e.KeyCode = Keys.Up Or e.KeyCode = Keys.Down Or e.KeyCode = Keys.PageUp Or e.KeyCode = Keys.PageDown Or e.KeyCode = Keys.Enter Or e.KeyCode = Keys.Tab Then
                     errProvider.Clear()
                     dgRackShelfColumn.Rows.Clear() : enableGB(legit, legit, fraud) : lnkViewEditBundleItems.Visible = fraud
-                    displayCustomerOrderItems(CInt(dgPickList.CurrentRow.Cells("pl_rowid").Value), CInt(dgCustomerOrders.CurrentRow.Cells("co_rowid").Value))
+                    Await displayCustomerOrderItems(CInt(dgPickList.CurrentRow.Cells("pl_rowid").Value), CInt(dgCustomerOrders.CurrentRow.Cells("co_rowid").Value))
                     colorCoding() : picklistformcomputations()
                 End If
             End If
@@ -2069,8 +2084,7 @@ Public Class PickListForm
 
     End Sub
 
-    Private Sub dgCustomerOrderItems_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgCustomerOrderItems.CellClick
-        Me.Cursor = Cursors.WaitCursor
+    Private Async Sub dgCustomerOrderItems_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgCustomerOrderItems.CellClick
         Try
             If dgCustomerOrderItems.Rows.Count <> 0 Then
                 errProvider.Clear()
@@ -2095,7 +2109,7 @@ Public Class PickListForm
 
                     plinventorylocationdid = globalinventorylocationid
                     If plinventorylocationdid <> 0 Then
-                        displayRackShelfColumn(CInt(dgCustomerOrderItems.CurrentRow.Cells("ci_pcsrowid").Value), plinventorylocationdid)
+                        Await displayRackShelfColumn(CInt(dgCustomerOrderItems.CurrentRow.Cells("ci_pcsrowid").Value), plinventorylocationdid)
                     Else
                         errProvider.SetError(cboLocationName, "Please choose or enter the location name.")
                     End If
@@ -2110,10 +2124,9 @@ Public Class PickListForm
         Finally
             conn.Close()
         End Try
-        Me.Cursor = Cursors.Default
     End Sub
 
-    Private Sub dgCustomerOrderItems_KeyUp(sender As Object, e As KeyEventArgs) Handles dgCustomerOrderItems.KeyUp
+    Private Async Sub dgCustomerOrderItems_KeyUp(sender As Object, e As KeyEventArgs) Handles dgCustomerOrderItems.KeyUp
         Me.Cursor = Cursors.WaitCursor
         Try
             If dgCustomerOrderItems.Rows.Count <> 0 Then
@@ -2134,7 +2147,7 @@ Public Class PickListForm
                         getInventorylocationIDA(cboLocationName.Text, Me)
                         plinventorylocationdid = globalinventorylocationid
                         If plinventorylocationdid <> 0 Then
-                            displayRackShelfColumn(CInt(dgCustomerOrderItems.CurrentRow.Cells("ci_pcsrowid").Value), plinventorylocationdid)
+                            Await displayRackShelfColumn(CInt(dgCustomerOrderItems.CurrentRow.Cells("ci_pcsrowid").Value), plinventorylocationdid)
                         Else
                             errProvider.SetError(cboLocationName, "Please choose or enter the location name.")
                         End If
@@ -2186,7 +2199,7 @@ Public Class PickListForm
         Me.Cursor = Cursors.Default
     End Sub
 
-    Private Sub msSaveRSC_Click(sender As Object, e As EventArgs) Handles msSaveRSC.Click
+    Private Async Sub msSaveRSC_Click(sender As Object, e As EventArgs) Handles msSaveRSC.Click
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
@@ -2326,7 +2339,7 @@ Public Class PickListForm
                     If myModule.systemerrorfound = False Then
                         myBalloon("Successfully Save Rack / Column / Shelf assignment.", "Save", lblsavemsg, -15, -65)
                         dgRackShelfColumn.Rows.Clear() : enableGB(legit, legit, fraud) : lnkViewEditBundleItems.Visible = fraud
-                        displayCustomerOrderItems(CInt(dgPickList.CurrentRow.Cells("pl_rowid").Value), CInt(dgCustomerOrders.CurrentRow.Cells("co_rowid").Value))
+                        Await displayCustomerOrderItems(CInt(dgPickList.CurrentRow.Cells("pl_rowid").Value), CInt(dgCustomerOrders.CurrentRow.Cells("co_rowid").Value))
                         colorCoding() : picklistformcomputations()
                     End If
                 End If
@@ -2414,32 +2427,42 @@ Public Class PickListForm
     End Sub
 
     Private Sub dgCustomerOrders_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgCustomerOrders.CellContentClick
-        Me.Cursor = Cursors.WaitCursor
+        If Not dgCustomerOrders.Rows.Count <> 0 Then Return
+
         Try
-            If dgCustomerOrders.Rows.Count <> 0 Then
-                If e.ColumnIndex = dgCustomerOrders.Columns("co_option").Index Then
-                    errProvider.Clear()
-                    myModule.systemerrorfound = False
-                    If globalpositionid <> 0 Then
-                        getPositionView(globalpositionid, "Pick List", Me)
-                        If globaldisableflg = "Y" Then
-                            MessageBox.Show("The user is not allowed to enter this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
-                            PrimaryForm.PLForm = False
-                            Me.Close()
-                        End If
-                        If globalreadonlyflg = "Y" Then
-                            MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
-                            Exit Try
-                        End If
-                        If globalcreateflg = "Y" Then
-                            MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
-                            Exit Try
-                        End If
-                    Else
-                        MessageBox.Show("System cannot find the position of the user.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
+
+            If e.ColumnIndex = dgCustomerOrders.Columns("co_option").Index Then
+                errProvider.Clear()
+                myModule.systemerrorfound = False
+                If globalpositionid <> 0 Then
+                    getPositionView(globalpositionid, "Pick List", Me)
+                    If globaldisableflg = "Y" Then
+                        MessageBox.Show("The user is not allowed to enter this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                        PrimaryForm.PLForm = False
+                        Me.Close()
+                    End If
+                    If globalreadonlyflg = "Y" Then
+                        MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                         Exit Try
                     End If
-                    If dgPickList.Rows.Count <> 0 Then
+                    If globalcreateflg = "Y" Then
+                        MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                        Exit Try
+                    End If
+                Else
+                    MessageBox.Show("System cannot find the position of the user.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                    Exit Try
+                End If
+                If dgPickList.Rows.Count <> 0 Then
+                    getPickListStatus(CInt(dgPickList.CurrentRow.Cells("pl_rowid").Value), Me)
+                    If globalpickliststatus <> "New" Then
+                        If globalpickliststatus <> "Modified" Then
+                            MessageBox.Show("This pick list has been updated by other user, please click refresh button to check the new status of this pick list.", "Update", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                            Exit Try
+                        End If
+                    End If
+                    If MessageBox.Show("NOTE: Once you remove this order, you cannot add this order again." & vbNewLine & "" & vbNewLine & "Do you want to proceed deleting this order?", "Deleting", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
+                        Me.Cursor = Cursors.WaitCursor
                         getPickListStatus(CInt(dgPickList.CurrentRow.Cells("pl_rowid").Value), Me)
                         If globalpickliststatus <> "New" Then
                             If globalpickliststatus <> "Modified" Then
@@ -2447,70 +2470,69 @@ Public Class PickListForm
                                 Exit Try
                             End If
                         End If
-                        If MessageBox.Show("NOTE: Once you remove this order, you cannot add this order again." & vbNewLine & "" & vbNewLine & "Do you want to proceed deleting this order?", "Deleting", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
-                            Me.Cursor = Cursors.WaitCursor
-                            getPickListStatus(CInt(dgPickList.CurrentRow.Cells("pl_rowid").Value), Me)
-                            If globalpickliststatus <> "New" Then
-                                If globalpickliststatus <> "Modified" Then
-                                    MessageBox.Show("This pick list has been updated by other user, please click refresh button to check the new status of this pick list.", "Update", MessageBoxButtons.OK, MessageBoxIcon.Information)
-                                    Exit Try
-                                End If
-                            End If
-                            getAllPickListOrdersID(CInt(dgPickList.CurrentRow.Cells("pl_rowid").Value), CInt(dgCustomerOrders.CurrentRow.Cells("co_rowid").Value))
-                            If myModule.systemerrorfound = False Then
-                                U_OrderStatus(CInt(dgCustomerOrders.CurrentRow.Cells("co_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, "New", Me)
-                            End If
-                            If myModule.systemerrorfound = False Then
-                                getCountPickListOrder(CInt(dgPickList.CurrentRow.Cells("pl_rowid").Value), "AND (plo.status = 'New' OR plo.status = 'Modified' OR plo.status = 'Verified')", Me)
-                                If globalpicklistordercount = 0 Then
-                                    getInventorylocationIDA(cboLocationName.Text, Me)
-                                    plinventorylocationdid = globalinventorylocationid
-                                    getContactID(cboPickerName.Text, "Picker", Me)
-                                    plcontactid = globalcontactid
-                                    U_PickList(CInt(dgPickList.CurrentRow.Cells("pl_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, If(plinventorylocationdid = 0, DBNull.Value, plinventorylocationdid), If(plcontactid = 0, DBNull.Value, plcontactid), txtComments.Text, "Cancelled", Me)
-                                    myBalloon("Successfully Deleted", "Delete", lblsavemsg, -15, -65)
-                                    tsrefreshperformclick()
-                                    Exit Try
-                                End If
-                            End If
-                            If myModule.systemerrorfound = False Then
+                        getAllPickListOrdersID(CInt(dgPickList.CurrentRow.Cells("pl_rowid").Value), CInt(dgCustomerOrders.CurrentRow.Cells("co_rowid").Value))
+                        If myModule.systemerrorfound = False Then
+                            U_OrderStatus(CInt(dgCustomerOrders.CurrentRow.Cells("co_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, "New", Me)
+                        End If
+                        If myModule.systemerrorfound = False Then
+                            getCountPickListOrder(CInt(dgPickList.CurrentRow.Cells("pl_rowid").Value), "AND (plo.status = 'New' OR plo.status = 'Modified' OR plo.status = 'Verified')", Me)
+                            If globalpicklistordercount = 0 Then
+                                getInventorylocationIDA(cboLocationName.Text, Me)
+                                plinventorylocationdid = globalinventorylocationid
+                                getContactID(cboPickerName.Text, "Picker", Me)
+                                plcontactid = globalcontactid
+                                U_PickList(CInt(dgPickList.CurrentRow.Cells("pl_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, If(plinventorylocationdid = 0, DBNull.Value, plinventorylocationdid), If(plcontactid = 0, DBNull.Value, plcontactid), txtComments.Text, "Cancelled", Me)
                                 myBalloon("Successfully Deleted", "Delete", lblsavemsg, -15, -65)
-                                cue = "Edit"
-                                errProvider.Clear()
-                                clearPickListInformation()
-                                clearCustomerOrders()
-                                clearCustomerOrderItems()
-                                clearRackShelfColumn()
-                                clearDatagrids()
-                                displayPickListInformation(CInt(dgPickList.CurrentRow.Cells("pl_rowid").Value))
-                                displayCustomerOrdersA(CInt(dgPickList.CurrentRow.Cells("pl_rowid").Value))
-                                picklistformcomputations()
-                                enableGB(legit, legit, fraud)
-                                visibleCustomerOrderItems(fraud)
-                                If txtStatus.Text = "New" Then
-                                    enableANDvisibleMS(legit, legit, legit, legit)
-                                ElseIf txtStatus.Text = "Modified" Then
-                                    enableANDvisibleMS(legit, legit, legit, legit)
-                                ElseIf txtStatus.Text = "Partially Verified" Then
-                                    enableANDvisibleMS(legit, legit, legit, fraud)
-                                Else
-                                    enableANDvisibleMS(legit, fraud, fraud, fraud)
-                                End If
-                                cboPickerName.Focus()
+                                tsrefreshperformclick()
+                                Exit Try
                             End If
                         End If
-                    Else
-                        errProvider.SetError(txtPickListNo, "System cannot find the Pick List to be updated.")
-                        Exit Try
+                        If myModule.systemerrorfound = False Then
+                            myBalloon("Successfully Deleted", "Delete", lblsavemsg, -15, -65)
+                            cue = "Edit"
+                            errProvider.Clear()
+                            clearPickListInformation()
+                            clearCustomerOrders()
+                            clearCustomerOrderItems()
+                            clearRackShelfColumn()
+                            clearDatagrids()
+                            displayPickListInformation(CInt(dgPickList.CurrentRow.Cells("pl_rowid").Value))
+                            displayCustomerOrdersA(CInt(dgPickList.CurrentRow.Cells("pl_rowid").Value))
+                            picklistformcomputations()
+                            enableGB(legit, legit, fraud)
+                            visibleCustomerOrderItems(fraud)
+                            If txtStatus.Text = "New" Then
+                                enableANDvisibleMS(legit, legit, legit, legit)
+                            ElseIf txtStatus.Text = "Modified" Then
+                                enableANDvisibleMS(legit, legit, legit, legit)
+                            ElseIf txtStatus.Text = "Partially Verified" Then
+                                enableANDvisibleMS(legit, legit, legit, fraud)
+                            Else
+                                enableANDvisibleMS(legit, fraud, fraud, fraud)
+                            End If
+                            cboPickerName.Focus()
+                        End If
                     End If
+                Else
+                    errProvider.SetError(txtPickListNo, "System cannot find the Pick List to be updated.")
+                    Exit Try
                 End If
+
+            ElseIf e.ColumnIndex = TickBoxOrdersColumn.Index Then
+                txtOverallQtyOrdered.Focus()
+                dgCustomerOrders.CurrentCell = dgCustomerOrders.Item(columnIndex:=co_seqno.Index, rowIndex:=e.RowIndex)
+                dgCustomerOrders.EndEdit()
+                dgCustomerOrders.CurrentCell = dgCustomerOrders.Item(columnIndex:=e.ColumnIndex, rowIndex:=e.RowIndex)
+
+                Dim count = If(dgCustomerOrders.Rows.OfType(Of DataGridViewRow).Where(Function(t) CBool(t.Cells(TickBoxOrdersColumn.Name).Value))?.ToList()?.Count(), 0)
+                msPrint.Text = If(count = 0, "&Print", $"&Print({count})")
             End If
+
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
             conn.Close()
         End Try
-        Me.Cursor = Cursors.Default
     End Sub
 
     Private Sub msOrder_Click(sender As Object, e As EventArgs) Handles msOrder.Click
@@ -2789,7 +2811,7 @@ Public Class PickListForm
     Private Async Sub PrintPickListReportForm_Click(sender As Object, e As EventArgs) Handles msPrint.Click
         Dim pickListId = If(dgPickList.CurrentRow Is Nothing, 0,
             CInt(dgPickList.CurrentRow?.Cells("pl_rowid").Value))
-        Dim customerRows = dgCustomerOrders.SelectedRows.OfType(Of DataGridViewRow).ToList()
+        Dim customerRows = dgCustomerOrders.Rows.OfType(Of DataGridViewRow).Where(Function(t) CBool(t.Cells(TickBoxOrdersColumn.Name).Value))?.ToList()
         If Not IsThurston AndAlso pickListId = 0 AndAlso If(customerRows?.Any(), False) Then Return
 
         Dim printreport As New DeliverySchedule
@@ -3339,4 +3361,11 @@ Public Class PickListForm
         End If
     End Sub
 
+    Private Sub dgCustomerOrders_CellBeginEdit(sender As Object, e As DataGridViewCellCancelEventArgs) Handles dgCustomerOrders.CellBeginEdit
+        If If(dgCustomerOrders.Rows?.Count(), 0) = 0 Then Return
+
+        If e.ColumnIndex = TickBoxOrdersColumn.Index Then
+
+        End If
+    End Sub
 End Class
