@@ -40,6 +40,7 @@ namespace WarehouseManagementSystem.Core.Entities
         //public longblob? Image { get; set; }
         public string UnitOfMeasure2 { get; set; }
         public decimal? UnitPriceOfUOM2 { get; set; }
+        public string ProductGroupName { get; set; }
     }
 
     public partial class Product
@@ -52,6 +53,7 @@ namespace WarehouseManagementSystem.Core.Entities
             int userId,
             int categoryId,
             string productCode,
+            string productGroupName,
             string description,
             string unitOfMeasure,
             decimal? unitPrice,
@@ -80,6 +82,7 @@ namespace WarehouseManagementSystem.Core.Entities
             int userId,
             int categoryId,
             string productCode,
+            string productGroupName,
             string description,
             string unitOfMeasure,
             decimal? unitPrice,
@@ -89,6 +92,7 @@ namespace WarehouseManagementSystem.Core.Entities
                 categoryId: categoryId,
                 userId: userId,
                 productCode: productCode,
+                productGroupName: productGroupName,
                 description: description,
                 unitOfMeasure: unitOfMeasure,
                 unitPrice: unitPrice,

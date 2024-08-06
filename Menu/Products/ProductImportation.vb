@@ -74,6 +74,7 @@ Public Class ProductImportation
                                     userId:=Z_UserID,
                                     categoryId:=category.RowID.Value,
                                     productCode:=productItem.FirstOrDefault().ProductCode,
+                                    productGroupName:=productItem.FirstOrDefault().ProductGroupName,
                                     description:=productItem.FirstOrDefault().Description,
                                     unitOfMeasure:=productItem.FirstOrDefault().UnitOfMeasure,
                                     unitPrice:=productItem.FirstOrDefault().SRP,

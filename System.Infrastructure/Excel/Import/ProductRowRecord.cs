@@ -9,6 +9,9 @@ namespace WarehouseManagementSystem.Infrastructure.Excel.Import
         [ColumnName("Product Code")]
         public string ProductCode { get; set; }
 
+        [ColumnName("Product Name")]
+        public string ProductGroupName { get; set; }
+
         [ColumnName("Brand Name")]
         public string BrandName { get; set; }
 
