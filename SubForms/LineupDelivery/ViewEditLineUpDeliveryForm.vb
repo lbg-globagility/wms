@@ -1774,6 +1774,12 @@ Public Class ViewEditLineUpDeliveryForm
     Private Async Sub DeliveryScheduleToolStripMenuItem_Click2(sender As Object, e As EventArgs) Handles DeliveryScheduleToolStripMenuItem.Click
         If Not IsThurston Then Return
 
+        Dim prompt = MessageBox.Show(text:="Do you want to print DR with price? (Default: No)",
+            caption:="Print DR with price (Default: No)",
+            buttons:=MessageBoxButtons.YesNo,
+            icon:=MessageBoxIcon.Question,
+            defaultButton:=MessageBoxDefaultButton.Button2)
+
         Dim printreport As New DeliveryReceipt
 
         Dim fileContent = String.Join(separator:=Environment.NewLine, File.ReadAllLines("Report Files\DeliveryReceipt\DeliveryReceipt.json"))
@@ -1808,7 +1814,8 @@ Public Class ViewEditLineUpDeliveryForm
             lu.LineUpDate,
             SUM(plci.QtyInCarton) `DataColumn1`,
             pil.UnitOfMeasure2 `DataColumn2`,
-            GROUP_CONCAT(CONCAT(p.ProductCode, '(', plci.QtyInCarton, ')') SEPARATOR ', ') `DataColumn3`
+            CONCAT('**', p.ProductGroupName, '**\n', GROUP_CONCAT(CONCAT(p.ProductCode, '(', plci.QtyInCarton, ')') SEPARATOR ', ')) `DataColumn3`,
+            0 `DataColumn4`
 
             FROM lineups lu
             JOIN lineupcartons lc ON lu.RowID = lc.LineUpID
@@ -1825,7 +1832,37 @@ Public Class ViewEditLineUpDeliveryForm
             INNER JOIN products p ON p.RowID=pc.ProductID
             INNER JOIN productinventorylocation pil ON pil.RowID=oi.ProductInventoryLocationId
             WHERE lu.LineUpNo = @lineupNo
-            GROUP BY pil.UnitOfMeasure2
+            GROUP BY p.ProductGroupName, pil.UnitOfMeasure2
+            ]]>.Value
+
+        If prompt = DialogResult.Yes Then sql = <![CDATA[
+            SELECT
+            o.DRNumber `DRNo`,
+            #a.*,
+            a.CompanyName,
+            CONCAT_WS(', ', ad.StreetAddress1, ad.StreetAddress2, ad.Barangay, ad.CityTown, ad.Province, ad.State, ad.ZipCode, ad.Country) `Address`,
+            lu.LineUpDate,
+            SUM(plci.QtyInCarton) `DataColumn1`,
+            pil.UnitOfMeasure2 `DataColumn2`,
+            CONCAT('**', p.ProductGroupName, '**\n', GROUP_CONCAT(CONCAT(p.ProductCode, '(', plci.QtyInCarton, '×', pil.UnitPriceOfUOM2, ')') SEPARATOR ', '), '\n', 'Sub-Total: ', CAST(FORMAT(SUM(plci.QtyInCarton * pil.UnitPriceOfUOM2), 2) AS CHAR CHARACTER SET utf8)) `DataColumn3`,
+            SUM(plci.QtyInCarton * pil.UnitPriceOfUOM2) `DataColumn4`
+
+            FROM lineups lu
+            JOIN lineupcartons lc ON lu.RowID = lc.LineUpID
+            LEFT JOIN contacts c ON lu.ContactID = c.RowID
+            LEFT JOIN contacts c2 ON lu.Helper1Id = c2.RowID
+            LEFT JOIN contacts c3 ON lu.Helper2Id = c3.RowID
+            INNER JOIN orders o ON lu.OrderID = o.RowID
+            INNER JOIN accounts a ON a.RowID=o.AccountID
+            LEFT JOIN address ad ON ad.RowID=a.PrimaryAddressID
+            INNER JOIN packinglistcartonitems plci ON lc.PackingListCartonID = plci.PackingListCartonID
+            INNER JOIN orderitems oi ON plci.OrderItemID = oi.RowID
+            INNER JOIN productcolorsizes pcs ON oi.ProductColorSizeID = pcs.RowID
+            INNER JOIN productcolors pc ON pc.RowID=pcs.ProductColorID
+            INNER JOIN products p ON p.RowID=pc.ProductID
+            INNER JOIN productinventorylocation pil ON pil.RowID=oi.ProductInventoryLocationId
+            WHERE lu.LineUpNo = @lineupNo
+            GROUP BY p.ProductGroupName, pil.UnitOfMeasure2
             ]]>.Value
 
         Await FunctionUtils.TryCatchFunctionAsync(messageTitle:="",
