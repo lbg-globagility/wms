@@ -1844,8 +1844,8 @@ Public Class ViewEditLineUpDeliveryForm
             lu.LineUpDate,
             SUM(plci.QtyInCarton) `DataColumn1`,
             pil.UnitOfMeasure2 `DataColumn2`,
-            CONCAT('**', p.ProductGroupName, '**\n', GROUP_CONCAT(CONCAT(p.ProductCode, '(', plci.QtyInCarton, '×', pil.UnitPriceOfUOM2, ')') SEPARATOR ', '), '\n', 'Sub-Total: ', CAST(FORMAT(SUM(plci.QtyInCarton * pil.UnitPriceOfUOM2), 2) AS CHAR CHARACTER SET utf8)) `DataColumn3`,
-            SUM(plci.QtyInCarton * pil.UnitPriceOfUOM2) `DataColumn4`
+            CONCAT('**', p.ProductGroupName, '**\n', GROUP_CONCAT(CONCAT(p.ProductCode, '(', plci.QtyInCarton, '×', oi.SRP, ')') SEPARATOR ', '), '\n', 'Sub-Total: ', CAST(FORMAT(SUM(plci.QtyInCarton * oi.SRP), 2) AS CHAR CHARACTER SET utf8)) `DataColumn3`,
+            SUM(plci.QtyInCarton * oi.SRP) `DataColumn4`
 
             FROM lineups lu
             JOIN lineupcartons lc ON lu.RowID = lc.LineUpID
