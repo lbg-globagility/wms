@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "WMS"
-#define MyAppVersion "2.0.70"
+#define MyAppVersion "2.1.0"
 #define MyAppPublisher "Globagility, Inc."
 #define MyAppURL "globagilityinc.com"
 #define MyAppExeName "Warehouse Management System.exe"
