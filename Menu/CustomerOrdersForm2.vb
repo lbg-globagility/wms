@@ -42,6 +42,8 @@ Public Class CustomerOrdersForm2
         gridOrders.AutoGenerateColumns = False
         gridOrderItems.AutoGenerateColumns = False
 
+        ColumnUnitOfLength.Items.AddRange(New String() {"Meter", "Yard"})
+
         Await ScrutinateUserPrivilegeAsync()
 
         LoadInventorySourceType()
@@ -751,7 +753,7 @@ Public Class CustomerOrdersForm2
         If customer Is Nothing Then Return
 
         txtDeliveryAddress.Text = customer.FullAddress
-        cboAgent.SelectedValue = If(customer.AgentID, 0)
+        cboAgent.SelectedValue = If(customer?.AgentID, 0)
     End Sub
 
     Private Sub cboInventoryLocation_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboInventoryLocation.SelectedIndexChanged
@@ -910,5 +912,13 @@ Public Class CustomerOrdersForm2
         ButtonSearch_Click(ButtonSearch, New EventArgs())
 
         SplitContainer1_Panel1_SizeChanged(sender:=SplitContainer1.Panel1, e:=New EventArgs())
+    End Sub
+
+    Private Sub CustomerOrdersForm2_Resize(sender As Object, e As EventArgs) Handles MyBase.Resize
+        SplitContainer1_Panel1_SizeChanged(sender, e)
+    End Sub
+
+    Private Sub LinkLabelRefresh_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabelRefresh.LinkClicked
+        Pagination_LinkClicked(sender:=LinkLabelRefresh, e:=New LinkLabelLinkClickedEventArgs(link:=New LinkLabel.Link))
     End Sub
 End Class

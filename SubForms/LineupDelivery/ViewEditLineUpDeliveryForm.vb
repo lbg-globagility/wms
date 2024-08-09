@@ -1,10 +1,7 @@
 ﻿Imports System.IO
 Imports System.Web.UI
-Imports CrystalDecisions.CrystalReports.Engine
 Imports Microsoft.Extensions.DependencyInjection
-Imports Microsoft.Office.Interop.Excel
 Imports MySql.Data.MySqlClient
-Imports Newtonsoft.Json
 Imports OfficeOpenXml
 Imports WarehouseManagementSystem.Core.Enums
 Imports WarehouseManagementSystem.Core.Interfaces
@@ -1771,194 +1768,14 @@ Public Class ViewEditLineUpDeliveryForm
         End Try
     End Sub
 
-    Private Async Sub DeliveryScheduleToolStripMenuItem_Click2(sender As Object, e As EventArgs) Handles DeliveryScheduleToolStripMenuItem.Click
+    Private Sub DeliveryScheduleToolStripMenuItem_Click2(sender As Object, e As EventArgs) Handles DeliveryScheduleToolStripMenuItem.Click
         If Not IsThurston Then Return
 
-        Dim prompt = MessageBox.Show(text:="Do you want to print DR with price? (Default: No)",
-            caption:="Print DR with price (Default: No)",
-            buttons:=MessageBoxButtons.YesNo,
-            icon:=MessageBoxIcon.Question,
-            defaultButton:=MessageBoxDefaultButton.Button2)
-
-        Dim printreport As New DeliveryReceipt
-
-        Dim fileContent = String.Join(separator:=Environment.NewLine, File.ReadAllLines("Report Files\DeliveryReceipt\DeliveryReceipt.json"))
-        Dim deliveryReceiptDto = JsonConvert.DeserializeObject(Of DeliveryReceiptDto)(fileContent)
-
-        Dim section = printreport.ReportDefinition.Sections.OfType(Of Section).FirstOrDefault()
-        Dim companyNameTitle As TextObject = section?.ReportObjects("CompanyNameTitle1")
-        companyNameTitle.Text = deliveryReceiptDto.CompanyNameTitle
-
-        Dim supportingInfo As TextObject = section?.ReportObjects("SupportingInfo1")
-        supportingInfo.Text = deliveryReceiptDto.SupportingInfo
-
-        Dim deliveryReceiptCaption As TextObject = section?.ReportObjects("DeliveryReceiptCaption1")
-        deliveryReceiptCaption.Text = deliveryReceiptDto.DeliveryReceiptCaption
-
-        Dim receivedNote As TextObject = section?.ReportObjects("ReceivedNote1")
-        receivedNote.Text = deliveryReceiptDto.ReceivedNote
-
-        Dim footerNote As TextObject = section?.ReportObjects("FooterNote1")
-        footerNote.Text = deliveryReceiptDto.FooterNote
-
-        Dim accreditation As TextObject = section?.ReportObjects("Accreditation1")
-        accreditation.Text = deliveryReceiptDto.Accreditation
-
-
-        Dim sql = <![CDATA[
-            SELECT
-            o.DRNumber `DRNo`,
-            #a.*,
-            a.CompanyName,
-            CONCAT_WS(', ', ad.StreetAddress1, ad.StreetAddress2, ad.Barangay, ad.CityTown, ad.Province, ad.State, ad.ZipCode, ad.Country) `Address`,
-            lu.LineUpDate,
-            SUM(plci.QtyInCarton) `DataColumn1`,
-            pil.UnitOfMeasure2 `DataColumn2`,
-            CONCAT('**', p.ProductGroupName, '**\n', GROUP_CONCAT(CONCAT(p.ProductCode, '(', plci.QtyInCarton, ')') SEPARATOR ', ')) `DataColumn3`,
-            0 `DataColumn4`
-
-            FROM lineups lu
-            JOIN lineupcartons lc ON lu.RowID = lc.LineUpID
-            LEFT JOIN contacts c ON lu.ContactID = c.RowID
-            LEFT JOIN contacts c2 ON lu.Helper1Id = c2.RowID
-            LEFT JOIN contacts c3 ON lu.Helper2Id = c3.RowID
-            INNER JOIN orders o ON lu.OrderID = o.RowID
-            INNER JOIN accounts a ON a.RowID=o.AccountID
-            LEFT JOIN address ad ON ad.RowID=a.PrimaryAddressID
-            INNER JOIN packinglistcartonitems plci ON lc.PackingListCartonID = plci.PackingListCartonID
-            INNER JOIN orderitems oi ON plci.OrderItemID = oi.RowID
-            INNER JOIN productcolorsizes pcs ON oi.ProductColorSizeID = pcs.RowID
-            INNER JOIN productcolors pc ON pc.RowID=pcs.ProductColorID
-            INNER JOIN products p ON p.RowID=pc.ProductID
-            INNER JOIN productinventorylocation pil ON pil.RowID=oi.ProductInventoryLocationId
-            WHERE lu.LineUpNo = @lineupNo
-            GROUP BY p.ProductGroupName, pil.UnitOfMeasure2
-            ]]>.Value
-
-        If prompt = DialogResult.Yes Then sql = <![CDATA[
-            SELECT
-            o.DRNumber `DRNo`,
-            #a.*,
-            a.CompanyName,
-            CONCAT_WS(', ', ad.StreetAddress1, ad.StreetAddress2, ad.Barangay, ad.CityTown, ad.Province, ad.State, ad.ZipCode, ad.Country) `Address`,
-            lu.LineUpDate,
-            SUM(plci.QtyInCarton) `DataColumn1`,
-            pil.UnitOfMeasure2 `DataColumn2`,
-            CONCAT('**', p.ProductGroupName, '**\n', GROUP_CONCAT(CONCAT(p.ProductCode, '(', plci.QtyInCarton, '×', oi.SRP, ')') SEPARATOR ', '), '\n', 'Sub-Total: ', CAST(FORMAT(SUM(plci.QtyInCarton * oi.SRP), 2) AS CHAR CHARACTER SET utf8)) `DataColumn3`,
-            SUM(plci.QtyInCarton * oi.SRP) `DataColumn4`
-
-            FROM lineups lu
-            JOIN lineupcartons lc ON lu.RowID = lc.LineUpID
-            LEFT JOIN contacts c ON lu.ContactID = c.RowID
-            LEFT JOIN contacts c2 ON lu.Helper1Id = c2.RowID
-            LEFT JOIN contacts c3 ON lu.Helper2Id = c3.RowID
-            INNER JOIN orders o ON lu.OrderID = o.RowID
-            INNER JOIN accounts a ON a.RowID=o.AccountID
-            LEFT JOIN address ad ON ad.RowID=a.PrimaryAddressID
-            INNER JOIN packinglistcartonitems plci ON lc.PackingListCartonID = plci.PackingListCartonID
-            INNER JOIN orderitems oi ON plci.OrderItemID = oi.RowID
-            INNER JOIN productcolorsizes pcs ON oi.ProductColorSizeID = pcs.RowID
-            INNER JOIN productcolors pc ON pc.RowID=pcs.ProductColorID
-            INNER JOIN products p ON p.RowID=pc.ProductID
-            INNER JOIN productinventorylocation pil ON pil.RowID=oi.ProductInventoryLocationId
-            WHERE lu.LineUpNo = @lineupNo
-            GROUP BY p.ProductGroupName, pil.UnitOfMeasure2
-            ]]>.Value
-
-        Await FunctionUtils.TryCatchFunctionAsync(messageTitle:="",
-            Async Function()
-                Using connection As New MySqlConnection(connectionString:=manager.GetConnString()),
-            command As New MySqlCommand(sql, connection)
-
-                    With command.Parameters
-                        .AddWithValue("@lineupNo", If(dgLineUpList.CurrentRow?.Cells(lu_lineupno.Name).Value, DBNull.Value))
-                    End With
-
-                    Dim adapter = New MySqlDataAdapter()
-                    adapter.SelectCommand = command
-                    Dim dt As New Data.DataTable()
-                    Await Task.Run(Sub()
-                                       adapter.Fill(dt)
-                                   End Sub)
-
-                    If dt IsNot Nothing Then
-                        printreport.SetDataSource(dt)
-                    End If
-
-                    Dim row = dt.Rows.OfType(Of DataRow).FirstOrDefault()
-
-                    If row IsNot Nothing Then
-                        Dim deliveryReceiptNo As TextObject = section?.ReportObjects("TextDeliveryReceiptNumber")
-                        deliveryReceiptNo.Text = row?.Item("DRNo")
-
-                        Dim deliveredTo As TextObject = section?.ReportObjects("TextDeliveredTo")
-                        deliveredTo.Text = row?.Item("CompanyName")
-
-                        Dim address As TextObject = section?.ReportObjects("TextAddress")
-                        address.Text = row?.Item("Address")
-
-                        'Dim tin As TextObject = section?.ReportObjects("TextTin")
-                        'tin.Text = String.Empty
-
-                        Dim [date] As TextObject = section?.ReportObjects("TextDate")
-                        [date].Text = row?.Item("LineUpDate")
-
-                        'Dim terms As TextObject = section?.ReportObjects("TextTerms")
-                        'terms.Text = String.Empty
-
-                        'Dim invoiceNo As TextObject = section?.ReportObjects("TextInvoiceNo")
-                        'invoiceNo.Text = String.Empty
-                    End If
-
-                    PrintDeliveryReceiptExcel(dt)
-
-                End Using
-            End Function)
-
-        Dim openreportviewer As New ReportViewer
-        openreportviewer.CrystalReportViewer.ReportSource = printreport
-        openreportviewer.Show()
-    End Sub
-
-    Private Sub PrintDeliveryReceiptExcel(dataTable As Data.DataTable)
-        Dim fileName = Path.Combine(Path.GetTempPath(), "DeliveryReceiptExcel.xlsx")
-        Dim template = Path.Combine(My.Application.Info.DirectoryPath, "Report Files\DeliveryReceipt\DeliveryReceiptExcel.xlsx")
-
-        File.Copy(sourceFileName:=template, destFileName:=fileName, overwrite:=True)
-
-        Using excel = New ExcelPackage(New FileInfo(fileName))
-
-            Dim worksheet = excel.Workbook.Worksheets.FirstOrDefault()
-
-            Dim row = dataTable.Rows.OfType(Of DataRow).FirstOrDefault()
-
-            If row IsNot Nothing Then
-                worksheet.Cells("E3").Value = row?.Item("DRNo")
-                worksheet.Cells("B3").Value = row?.Item("CompanyName")
-                worksheet.Cells("B4").Value = row?.Item("Address")
-                worksheet.Cells("E4").Value = row?.Item("LineUpDate")
-                worksheet.Cells("E4").Style.Numberformat.Format = "MMM/dd/yyyy"
-            End If
-
-            Dim index = 6
-
-            For Each dr As DataRow In dataTable.Rows
-                worksheet.Cells($"B{index}").Value = dr("DataColumn1")
-                worksheet.Cells($"C{index}").Value = dr("DataColumn2")
-                worksheet.Cells($"D{index}").Value = dr("DataColumn3")
-                worksheet.Cells($"D{index}").Style.WrapText = True
-                worksheet.Cells($"D{index}").Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.General
-                'worksheet.Row(index).
-
-                index += 1
-            Next
-
-            worksheet.Cells($"B{index}").Value = dataTable.Select("CompanyName IS NOT NULL").Sum(Function(t) t("DataColumn1"))
-
-            excel.Save()
-
-            Process.Start(fileName:=fileName)
-        End Using
+        Dim currRowCell = dgLineUpList.CurrentRow?.Cells(lu_lineupno.Name)
+        Dim form = New DeliveryReceiptPrintOptions()
+        If form.ShowDialog() = DialogResult.OK Then
+            form.Print(lineupNo:=If(currRowCell Is Nothing, New Integer?, CInt(currRowCell.Value)))
+        End If
     End Sub
 
     Private Sub TripTicketToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles TripTicketToolStripMenuItem.Click

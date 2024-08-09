@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using WarehouseManagementSystem.Core.Entities.Base;
 using WarehouseManagementSystem.Core.Enums;
 
@@ -44,6 +45,8 @@ namespace WarehouseManagementSystem.Core.Entities
         public string Reasons { get; set; }
         public int? ProductInventoryLocationId { get; set; }
         public int? RackShelfColumnId { get; set; }
+        public string UnitOfLength { get; set; }
+        public decimal? UnitOfLengthNumber { get; set; }
     }
 
     public partial class OrderItem
@@ -113,5 +116,16 @@ namespace WarehouseManagementSystem.Core.Entities
         public string ViewName => View.CUSTOMER_ORDERS_VIEW;
 
         public virtual ICollection<PackingListCartonItem> PackingListCartonItems { get; set; }
+
+        public decimal TotalItemPrice => (QtyOrdered ?? 0) * (SRP ?? 0);
+        public decimal UnitOfLengthPrice
+        {
+            get
+            {
+                var qty = QtyOrdered ?? 0;
+                var unitOfLengthNumber = UnitOfLengthNumber ?? 0;
+                return qty > 0 && unitOfLengthNumber > 0 ? (SRP ?? 0) / unitOfLengthNumber : 0;
+            }
+        }
     }
 }

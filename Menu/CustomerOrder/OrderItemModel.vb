@@ -21,6 +21,9 @@ Public Class OrderItemModel
         _Sku2 = orderItem.SKU2
         _Remarks = orderItem.Remarks
         _IsNew = orderItem.IsNewEntity
+        _UnitOfLength = orderItem.UnitOfLength
+        _UnitOfLengthNumber = orderItem.UnitOfLengthNumber
+        _UnitOfLengthPrice = orderItem.UnitOfLengthPrice
 
         RowID = orderItem.RowID
         ProductColorSizeId = orderItem.ProductColorSizeID
@@ -38,11 +41,14 @@ Public Class OrderItemModel
         _SeasonCode = productColorSize?.SeasonCode
         _QuantityOrdered = If(orderItem.QtyOrdered, 0)
         _UnitPrice = If(orderItem.SRP, 0)
-        _UnitOfMeasure = orderItem.UnitOfMeasure
+        _UnitOfMeasure = If(String.IsNullOrEmpty(orderItem.UnitOfMeasure), productInventoryLocation.UnitOfMeasure2, orderItem.UnitOfMeasure)
         _Sku = orderItem.SKU
         _Sku2 = orderItem.SKU2
         _Remarks = orderItem.Remarks
         _IsNew = orderItem.IsNewEntity
+        _UnitOfLength = orderItem.UnitOfLength
+        _UnitOfLengthNumber = orderItem.UnitOfLengthNumber
+        _UnitOfLengthPrice = orderItem.UnitOfLengthPrice
 
         RowID = orderItem.RowID
         ProductColorSizeId = orderItem.ProductColorSizeID
@@ -70,10 +76,20 @@ Public Class OrderItemModel
     Public Property Remarks As String
     Public ReadOnly Property IsNew As Boolean
     Public ReadOnly Property IsDelete As Boolean
+    Public Property UnitOfLength As String
+    Public Property UnitOfLengthNumber As Decimal?
+    Public ReadOnly Property UnitOfLengthPrice As Decimal
 
     Public ReadOnly Property TotalItemPrice As Decimal
         Get
             Return UnitPrice * QuantityOrdered
+        End Get
+    End Property
+
+    Public ReadOnly Property UnitOfLengthPriceText As String
+        Get
+            Dim pricePerUnitOfLength = $"{UnitOfLengthPrice:N2}/{UnitOfLength}".ToLower()
+            Return If(pricePerUnitOfLength = "0.00/", String.Empty, pricePerUnitOfLength)
         End Get
     End Property
 
@@ -84,6 +100,8 @@ Public Class OrderItemModel
         _orderItem.SKU = orderItemModel.Sku
         _orderItem.SKU2 = orderItemModel.Sku2
         _orderItem.Remarks = orderItemModel.Remarks
+        _orderItem.UnitOfLength = orderItemModel.UnitOfLength
+        _orderItem.UnitOfLengthNumber = orderItemModel.UnitOfLengthNumber
     End Sub
 
     Public Sub SetDelete()

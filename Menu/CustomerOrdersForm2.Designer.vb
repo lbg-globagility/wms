@@ -24,14 +24,25 @@ Partial Class CustomerOrdersForm2
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(CustomerOrdersForm2))
-        Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle7 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
         Me.gridOrders = New DevComponents.DotNetBar.Controls.DataGridViewX()
+        Me.Column13 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column14 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column19 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column16 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column18 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column21 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column15 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column17 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column20 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column12 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Panel5 = New System.Windows.Forms.Panel()
         Me.linkFirst = New System.Windows.Forms.LinkLabel()
         Me.linkPrev = New System.Windows.Forms.LinkLabel()
@@ -42,6 +53,7 @@ Partial Class CustomerOrdersForm2
         Me.btnClearSearch = New System.Windows.Forms.Button()
         Me.ButtonSearch = New System.Windows.Forms.Button()
         Me.TextBoxSearch = New System.Windows.Forms.TextBox()
+        Me.LinkLabelRefresh = New System.Windows.Forms.LinkLabel()
         Me.SplitContainer2 = New System.Windows.Forms.SplitContainer()
         Me.Label25 = New System.Windows.Forms.Label()
         Me.txtComments = New System.Windows.Forms.TextBox()
@@ -118,6 +130,9 @@ Partial Class CustomerOrdersForm2
         Me.Column9 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column6 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column7 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColumnUnitOfLength = New System.Windows.Forms.DataGridViewComboBoxColumn()
+        Me.Column22 = New DevComponents.DotNetBar.Controls.DataGridViewDoubleInputColumn()
+        Me.ColumnUnitOfLengthPriceText = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column8 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column10 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column11 = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -126,16 +141,6 @@ Partial Class CustomerOrdersForm2
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.btnAddOrderItem = New System.Windows.Forms.Button()
         Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
-        Me.Column13 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column14 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column19 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column16 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column18 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column21 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column15 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column17 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column20 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column12 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
@@ -200,6 +205,79 @@ Partial Class CustomerOrdersForm2
         Me.gridOrders.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.gridOrders.Size = New System.Drawing.Size(331, 549)
         Me.gridOrders.TabIndex = 2
+        '
+        'Column13
+        '
+        Me.Column13.DataPropertyName = "OrderNumber"
+        Me.Column13.HeaderText = "Customer Order No."
+        Me.Column13.Name = "Column13"
+        Me.Column13.ReadOnly = True
+        '
+        'Column14
+        '
+        Me.Column14.DataPropertyName = "ReferenceNumber"
+        Me.Column14.HeaderText = "P.O. No."
+        Me.Column14.Name = "Column14"
+        Me.Column14.ReadOnly = True
+        '
+        'Column19
+        '
+        Me.Column19.DataPropertyName = "StatusDisplayText"
+        Me.Column19.HeaderText = "Status"
+        Me.Column19.Name = "Column19"
+        Me.Column19.ReadOnly = True
+        '
+        'Column16
+        '
+        Me.Column16.DataPropertyName = "OrderDate"
+        Me.Column16.HeaderText = "Customer Order Date"
+        Me.Column16.Name = "Column16"
+        Me.Column16.ReadOnly = True
+        '
+        'Column18
+        '
+        Me.Column18.DataPropertyName = "CustomerNameText"
+        Me.Column18.HeaderText = "Customer Name"
+        Me.Column18.Name = "Column18"
+        Me.Column18.ReadOnly = True
+        '
+        'Column21
+        '
+        Me.Column21.DataPropertyName = "AgentNameText"
+        Me.Column21.HeaderText = "Agent Name"
+        Me.Column21.Name = "Column21"
+        Me.Column21.ReadOnly = True
+        '
+        'Column15
+        '
+        Me.Column15.DataPropertyName = "DRNumber"
+        Me.Column15.HeaderText = "D.R. No."
+        Me.Column15.Name = "Column15"
+        Me.Column15.ReadOnly = True
+        '
+        'Column17
+        '
+        Me.Column17.DataPropertyName = "DateSubmitted"
+        Me.Column17.HeaderText = "Date Sent to Warehouse"
+        Me.Column17.Name = "Column17"
+        Me.Column17.ReadOnly = True
+        '
+        'Column20
+        '
+        Me.Column20.DataPropertyName = "TotalAmount"
+        DataGridViewCellStyle1.Format = "N2"
+        DataGridViewCellStyle1.NullValue = Nothing
+        Me.Column20.DefaultCellStyle = DataGridViewCellStyle1
+        Me.Column20.HeaderText = "Total Amount"
+        Me.Column20.Name = "Column20"
+        Me.Column20.ReadOnly = True
+        '
+        'Column12
+        '
+        Me.Column12.DataPropertyName = "TotalQuantitiesText"
+        Me.Column12.HeaderText = "Total Quantities"
+        Me.Column12.Name = "Column12"
+        Me.Column12.ReadOnly = True
         '
         'Panel5
         '
@@ -273,6 +351,7 @@ Partial Class CustomerOrdersForm2
         Me.Panel3.Controls.Add(Me.btnClearSearch)
         Me.Panel3.Controls.Add(Me.ButtonSearch)
         Me.Panel3.Controls.Add(Me.TextBoxSearch)
+        Me.Panel3.Controls.Add(Me.LinkLabelRefresh)
         Me.Panel3.Dock = System.Windows.Forms.DockStyle.Top
         Me.Panel3.Location = New System.Drawing.Point(0, 0)
         Me.Panel3.Name = "Panel3"
@@ -303,7 +382,7 @@ Partial Class CustomerOrdersForm2
         'ButtonSearch
         '
         Me.ButtonSearch.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonSearch.Location = New System.Drawing.Point(244, 80)
+        Me.ButtonSearch.Location = New System.Drawing.Point(244, 60)
         Me.ButtonSearch.Name = "ButtonSearch"
         Me.ButtonSearch.Size = New System.Drawing.Size(75, 23)
         Me.ButtonSearch.TabIndex = 1
@@ -314,10 +393,25 @@ Partial Class CustomerOrdersForm2
         '
         Me.TextBoxSearch.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TextBoxSearch.Location = New System.Drawing.Point(11, 52)
+        Me.TextBoxSearch.Location = New System.Drawing.Point(11, 32)
         Me.TextBoxSearch.Name = "TextBoxSearch"
         Me.TextBoxSearch.Size = New System.Drawing.Size(308, 22)
         Me.TextBoxSearch.TabIndex = 0
+        '
+        'LinkLabelRefresh
+        '
+        Me.LinkLabelRefresh.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.LinkLabelRefresh.Image = CType(resources.GetObject("LinkLabelRefresh.Image"), System.Drawing.Image)
+        Me.LinkLabelRefresh.ImageAlign = System.Drawing.ContentAlignment.TopLeft
+        Me.LinkLabelRefresh.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline
+        Me.LinkLabelRefresh.LinkColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(155, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.LinkLabelRefresh.Location = New System.Drawing.Point(255, 105)
+        Me.LinkLabelRefresh.Name = "LinkLabelRefresh"
+        Me.LinkLabelRefresh.Size = New System.Drawing.Size(64, 18)
+        Me.LinkLabelRefresh.TabIndex = 4
+        Me.LinkLabelRefresh.TabStop = True
+        Me.LinkLabelRefresh.Text = "Refresh"
+        Me.LinkLabelRefresh.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'SplitContainer2
         '
@@ -1051,15 +1145,15 @@ Partial Class CustomerOrdersForm2
         '
         Me.gridOrderItems.AllowUserToAddRows = False
         Me.gridOrderItems.AllowUserToDeleteRows = False
-        Me.gridOrderItems.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column1, Me.Column2, Me.Column3, Me.Column4, Me.Column5, Me.Column9, Me.Column6, Me.Column7, Me.Column8, Me.Column10, Me.Column11, Me.ColumnDelete})
-        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle6.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.gridOrderItems.DefaultCellStyle = DataGridViewCellStyle6
+        Me.gridOrderItems.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column1, Me.Column2, Me.Column3, Me.Column4, Me.Column5, Me.Column9, Me.Column6, Me.Column7, Me.ColumnUnitOfLength, Me.Column22, Me.ColumnUnitOfLengthPriceText, Me.Column8, Me.Column10, Me.Column11, Me.ColumnDelete})
+        DataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle7.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.gridOrderItems.DefaultCellStyle = DataGridViewCellStyle7
         Me.gridOrderItems.Dock = System.Windows.Forms.DockStyle.Fill
         Me.gridOrderItems.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
         Me.gridOrderItems.Location = New System.Drawing.Point(0, 35)
@@ -1100,8 +1194,9 @@ Partial Class CustomerOrdersForm2
         Me.Column5.DataPropertyName = "QuantityOrdered"
         DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
         Me.Column5.DefaultCellStyle = DataGridViewCellStyle3
-        Me.Column5.HeaderText = "Quantity Ordered"
+        Me.Column5.HeaderText = "Number of Roll(s)"
         Me.Column5.Name = "Column5"
+        Me.Column5.Width = 120
         '
         'Column9
         '
@@ -1109,6 +1204,7 @@ Partial Class CustomerOrdersForm2
         Me.Column9.HeaderText = "Unit of Measure"
         Me.Column9.Name = "Column9"
         Me.Column9.ReadOnly = True
+        Me.Column9.Visible = False
         '
         'Column6
         '
@@ -1117,7 +1213,7 @@ Partial Class CustomerOrdersForm2
         DataGridViewCellStyle4.Format = "N2"
         DataGridViewCellStyle4.NullValue = Nothing
         Me.Column6.DefaultCellStyle = DataGridViewCellStyle4
-        Me.Column6.HeaderText = "Unit Price"
+        Me.Column6.HeaderText = "Price per Roll"
         Me.Column6.Name = "Column6"
         '
         'Column7
@@ -1127,9 +1223,38 @@ Partial Class CustomerOrdersForm2
         DataGridViewCellStyle5.Format = "N2"
         DataGridViewCellStyle5.NullValue = Nothing
         Me.Column7.DefaultCellStyle = DataGridViewCellStyle5
-        Me.Column7.HeaderText = "Total Item Price"
+        Me.Column7.HeaderText = "Total Item Price (Roll)"
         Me.Column7.Name = "Column7"
         Me.Column7.ReadOnly = True
+        Me.Column7.Width = 128
+        '
+        'ColumnUnitOfLength
+        '
+        Me.ColumnUnitOfLength.DataPropertyName = "UnitOfLength"
+        Me.ColumnUnitOfLength.HeaderText = "Unit Of Length"
+        Me.ColumnUnitOfLength.Name = "ColumnUnitOfLength"
+        Me.ColumnUnitOfLength.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
+        '
+        'Column22
+        '
+        '
+        '
+        '
+        Me.Column22.BackgroundStyle.Class = "DataGridViewNumericBorder"
+        Me.Column22.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
+        Me.Column22.DataPropertyName = "UnitOfLengthNumber"
+        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopRight
+        Me.Column22.DefaultCellStyle = DataGridViewCellStyle6
+        Me.Column22.HeaderText = "Unit Length Number"
+        Me.Column22.Increment = 1.0R
+        Me.Column22.Name = "Column22"
+        '
+        'ColumnUnitOfLengthPriceText
+        '
+        Me.ColumnUnitOfLengthPriceText.DataPropertyName = "UnitOfLengthPriceText"
+        Me.ColumnUnitOfLengthPriceText.HeaderText = "Price Per Unit (Meter/Yard)"
+        Me.ColumnUnitOfLengthPriceText.Name = "ColumnUnitOfLengthPriceText"
+        Me.ColumnUnitOfLengthPriceText.Width = 144
         '
         'Column8
         '
@@ -1193,79 +1318,6 @@ Partial Class CustomerOrdersForm2
         '
         Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
         Me.ContextMenuStrip1.Size = New System.Drawing.Size(61, 4)
-        '
-        'Column13
-        '
-        Me.Column13.DataPropertyName = "OrderNumber"
-        Me.Column13.HeaderText = "Customer Order No."
-        Me.Column13.Name = "Column13"
-        Me.Column13.ReadOnly = True
-        '
-        'Column14
-        '
-        Me.Column14.DataPropertyName = "ReferenceNumber"
-        Me.Column14.HeaderText = "P.O. No."
-        Me.Column14.Name = "Column14"
-        Me.Column14.ReadOnly = True
-        '
-        'Column19
-        '
-        Me.Column19.DataPropertyName = "StatusDisplayText"
-        Me.Column19.HeaderText = "Status"
-        Me.Column19.Name = "Column19"
-        Me.Column19.ReadOnly = True
-        '
-        'Column16
-        '
-        Me.Column16.DataPropertyName = "OrderDate"
-        Me.Column16.HeaderText = "Customer Order Date"
-        Me.Column16.Name = "Column16"
-        Me.Column16.ReadOnly = True
-        '
-        'Column18
-        '
-        Me.Column18.DataPropertyName = "CustomerNameText"
-        Me.Column18.HeaderText = "Customer Name"
-        Me.Column18.Name = "Column18"
-        Me.Column18.ReadOnly = True
-        '
-        'Column21
-        '
-        Me.Column21.DataPropertyName = "AgentNameText"
-        Me.Column21.HeaderText = "Agent Name"
-        Me.Column21.Name = "Column21"
-        Me.Column21.ReadOnly = True
-        '
-        'Column15
-        '
-        Me.Column15.DataPropertyName = "DRNumber"
-        Me.Column15.HeaderText = "D.R. No."
-        Me.Column15.Name = "Column15"
-        Me.Column15.ReadOnly = True
-        '
-        'Column17
-        '
-        Me.Column17.DataPropertyName = "DateSubmitted"
-        Me.Column17.HeaderText = "Date Sent to Warehouse"
-        Me.Column17.Name = "Column17"
-        Me.Column17.ReadOnly = True
-        '
-        'Column20
-        '
-        Me.Column20.DataPropertyName = "TotalAmount"
-        DataGridViewCellStyle1.Format = "N2"
-        DataGridViewCellStyle1.NullValue = Nothing
-        Me.Column20.DefaultCellStyle = DataGridViewCellStyle1
-        Me.Column20.HeaderText = "Total Amount"
-        Me.Column20.Name = "Column20"
-        Me.Column20.ReadOnly = True
-        '
-        'Column12
-        '
-        Me.Column12.DataPropertyName = "TotalQuantitiesText"
-        Me.Column12.HeaderText = "Total Quantities"
-        Me.Column12.Name = "Column12"
-        Me.Column12.ReadOnly = True
         '
         'CustomerOrdersForm2
         '
@@ -1379,18 +1431,6 @@ Partial Class CustomerOrdersForm2
     Friend WithEvents linkPrev As LinkLabel
     Friend WithEvents linkFirst As LinkLabel
     Friend WithEvents linkLast As LinkLabel
-    Friend WithEvents Column1 As DataGridViewTextBoxColumn
-    Friend WithEvents Column2 As DataGridViewTextBoxColumn
-    Friend WithEvents Column3 As DataGridViewTextBoxColumn
-    Friend WithEvents Column4 As DataGridViewTextBoxColumn
-    Friend WithEvents Column5 As DataGridViewTextBoxColumn
-    Friend WithEvents Column9 As DataGridViewTextBoxColumn
-    Friend WithEvents Column6 As DataGridViewTextBoxColumn
-    Friend WithEvents Column7 As DataGridViewTextBoxColumn
-    Friend WithEvents Column8 As DataGridViewTextBoxColumn
-    Friend WithEvents Column10 As DataGridViewTextBoxColumn
-    Friend WithEvents Column11 As DataGridViewTextBoxColumn
-    Friend WithEvents ColumnDelete As DevComponents.DotNetBar.Controls.DataGridViewButtonXColumn
     Friend WithEvents ToolStripLabel3 As ToolStripLabel
     Friend WithEvents ContextMenuStrip1 As ContextMenuStrip
     Friend WithEvents ToolStripLabel4 As ToolStripLabel
@@ -1413,4 +1453,20 @@ Partial Class CustomerOrdersForm2
     Friend WithEvents Column17 As DataGridViewTextBoxColumn
     Friend WithEvents Column20 As DataGridViewTextBoxColumn
     Friend WithEvents Column12 As DataGridViewTextBoxColumn
+    Friend WithEvents LinkLabelRefresh As LinkLabel
+    Friend WithEvents Column1 As DataGridViewTextBoxColumn
+    Friend WithEvents Column2 As DataGridViewTextBoxColumn
+    Friend WithEvents Column3 As DataGridViewTextBoxColumn
+    Friend WithEvents Column4 As DataGridViewTextBoxColumn
+    Friend WithEvents Column5 As DataGridViewTextBoxColumn
+    Friend WithEvents Column9 As DataGridViewTextBoxColumn
+    Friend WithEvents Column6 As DataGridViewTextBoxColumn
+    Friend WithEvents Column7 As DataGridViewTextBoxColumn
+    Friend WithEvents ColumnUnitOfLength As DataGridViewComboBoxColumn
+    Friend WithEvents Column22 As DevComponents.DotNetBar.Controls.DataGridViewDoubleInputColumn
+    Friend WithEvents ColumnUnitOfLengthPriceText As DataGridViewTextBoxColumn
+    Friend WithEvents Column8 As DataGridViewTextBoxColumn
+    Friend WithEvents Column10 As DataGridViewTextBoxColumn
+    Friend WithEvents Column11 As DataGridViewTextBoxColumn
+    Friend WithEvents ColumnDelete As DevComponents.DotNetBar.Controls.DataGridViewButtonXColumn
 End Class
