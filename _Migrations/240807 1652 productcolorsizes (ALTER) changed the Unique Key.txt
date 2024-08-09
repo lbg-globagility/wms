@@ -1,0 +1,4 @@
+
+ALTER TABLE `productcolorsizes`
+	DROP INDEX `Index_productcolorsize`,
+	ADD UNIQUE INDEX `Index_productcolorsize` (`OrganizationID`, `ProductColorID`, `SeasonCode`, `Size`) USING BTREE;
