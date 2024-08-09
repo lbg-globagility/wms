@@ -23,7 +23,6 @@ Public Class OrderItemModel
         _IsNew = orderItem.IsNewEntity
         _UnitOfLength = orderItem.UnitOfLength
         _UnitOfLengthNumber = orderItem.UnitOfLengthNumber
-        _UnitOfLengthPrice = orderItem.UnitOfLengthPrice
 
         RowID = orderItem.RowID
         ProductColorSizeId = orderItem.ProductColorSizeID
@@ -48,7 +47,6 @@ Public Class OrderItemModel
         _IsNew = orderItem.IsNewEntity
         _UnitOfLength = orderItem.UnitOfLength
         _UnitOfLengthNumber = orderItem.UnitOfLengthNumber
-        _UnitOfLengthPrice = orderItem.UnitOfLengthPrice
 
         RowID = orderItem.RowID
         ProductColorSizeId = orderItem.ProductColorSizeID
@@ -78,7 +76,14 @@ Public Class OrderItemModel
     Public ReadOnly Property IsDelete As Boolean
     Public Property UnitOfLength As String
     Public Property UnitOfLengthNumber As Decimal?
+
     Public ReadOnly Property UnitOfLengthPrice As Decimal
+        Get
+            Return If(QuantityOrdered > 0 AndAlso If(UnitOfLengthNumber.HasValue, UnitOfLengthNumber.Value, 0D) > 0,
+                UnitPrice / UnitOfLengthNumber.Value,
+                0D)
+        End Get
+    End Property
 
     Public ReadOnly Property TotalItemPrice As Decimal
         Get
