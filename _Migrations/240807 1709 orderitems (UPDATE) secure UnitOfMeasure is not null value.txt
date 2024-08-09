@@ -1,0 +1,6 @@
+UPDATE orderitems oi
+INNER JOIN productinventorylocation pil ON pil.RowID=oi.ProductInventoryLocationId AND IFNULL(oi.UnitOfMeasure, '') = ''
+SET oi.UnitOfMeasure=pil.UnitOfMeasure2
+WHERE oi.RowID IS NOT NULL
+;
+
