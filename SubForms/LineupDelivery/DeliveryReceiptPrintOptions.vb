@@ -85,7 +85,8 @@ Public Class DeliveryReceiptPrintOptions
             unitOfMeasureClause,
             detailsClause,
             subTotalClause,
-            " FROM lineups lu
+            ", o.ReferenceNumber 
+            FROM lineups lu
             JOIN lineupcartons lc ON lu.RowID = lc.LineUpID
             LEFT JOIN contacts c ON lu.ContactID = c.RowID
             LEFT JOIN contacts c2 ON lu.Helper1Id = c2.RowID
@@ -143,8 +144,8 @@ Public Class DeliveryReceiptPrintOptions
                         Dim [date] As TextObject = CType((section?.ReportObjects("TextDate")), TextObject)
                         [date].Text = $"{CDate(row?.Item("LineUpDate")):MMM dd, yyyy}"
 
-                        'Dim terms As TextObject = section?.ReportObjects("TextTerms")
-                        'terms.Text = String.Empty
+                        Dim terms As TextObject = CType((section?.ReportObjects("TextTerms")), TextObject)
+                        terms.Text = CStr((row?.Item("ReferenceNumber")))
                     End If
 
                     PrintDeliveryReceiptExcel(dt)
