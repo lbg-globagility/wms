@@ -42,7 +42,6 @@ Partial Class DeliveryReceiptPrintOptions
         '
         'Panel1
         '
-        Me.Panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Panel1.Controls.Add(Me.GroupBox3)
         Me.Panel1.Controls.Add(Me.GroupBox2)
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
@@ -57,7 +56,7 @@ Partial Class DeliveryReceiptPrintOptions
         Me.GroupBox3.Dock = System.Windows.Forms.DockStyle.Fill
         Me.GroupBox3.Location = New System.Drawing.Point(0, 128)
         Me.GroupBox3.Name = "GroupBox3"
-        Me.GroupBox3.Size = New System.Drawing.Size(254, 76)
+        Me.GroupBox3.Size = New System.Drawing.Size(256, 78)
         Me.GroupBox3.TabIndex = 1
         Me.GroupBox3.TabStop = False
         Me.GroupBox3.Text = "Others"
@@ -82,7 +81,7 @@ Partial Class DeliveryReceiptPrintOptions
         Me.GroupBox2.Dock = System.Windows.Forms.DockStyle.Top
         Me.GroupBox2.Location = New System.Drawing.Point(0, 0)
         Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(254, 128)
+        Me.GroupBox2.Size = New System.Drawing.Size(256, 128)
         Me.GroupBox2.TabIndex = 0
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "Unit of Measure"
