@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WarehouseManagementSystem.Core.Entities;
+using WarehouseManagementSystem.Core.Enums;
 using WarehouseManagementSystem.Core.Interfaces.Repositories;
 using WarehouseManagementSystem.Infrastructure.Data.Repositories.Base;
 
@@ -22,6 +23,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
                 .ThenInclude(pc => pc.Color)
             .AsNoTracking()
             .Where(x => x.OrganizationID == organizationId)
+            .Where(x => x.Status == ProductStatus.Active.ToString())
             .ToListAsync();
     }
 }

@@ -103,10 +103,10 @@ Public Class AgingReportForm
         Try
             dgProductColorSizes.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT pcs.rowid,COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(c.colorname,''),COALESCE(pcs.size,''),COALESCE(pcs.seasoncode,'')," & _
-                    "COALESCE(DATE_FORMAT(pcs.lastshipmentdate,'%d-%b-%Y'),''),COALESCE(DATE_FORMAT(pcs.lastsolddate,'%d-%b-%Y'),''),COALESCE(pcs.sku,'') FROM productcolorsizes pcs " & _
-                    "LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN colors c ON pc.colorid = c.rowid LEFT JOIN products p ON pc.productid = p.rowid " & _
-                    "WHERE pcs.organizationid = " & Z_OrganizationID & " AND " & iconditionstring & " ORDER BY p.productcode,c.colorname,pcs.size "
+            Dim sql1 As String = "SELECT pcs.rowid,COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(c.colorname,''),COALESCE(pcs.size,''),COALESCE(pcs.seasoncode,'')," &
+                    "COALESCE(DATE_FORMAT(pcs.lastshipmentdate,'%d-%b-%Y'),''),COALESCE(DATE_FORMAT(pcs.lastsolddate,'%d-%b-%Y'),''),COALESCE(pcs.sku,'') FROM productcolorsizes pcs " &
+                    "LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN colors c ON pc.colorid = c.rowid LEFT JOIN products p ON pc.productid = p.rowid " &
+                    "WHERE pcs.`Status`='Active' AND pcs.organizationid = " & Z_OrganizationID & " AND " & iconditionstring & " ORDER BY p.productcode,c.colorname,pcs.size "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             Dim n As Integer = 0
@@ -178,10 +178,10 @@ Public Class AgingReportForm
         Try
             dgProductColorSizes.Rows.Clear() : aptotalqtyorderablesum = 0
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT pcs.rowid,COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(c.colorname,''),COALESCE(pcs.size,''),COALESCE(pcs.seasoncode,'')," & _
-                    "COALESCE(DATE_FORMAT(pcs.lastshipmentdate,'%d-%b-%Y'),''),COALESCE(DATE_FORMAT(pcs.lastsolddate,'%d-%b-%Y'),''),COALESCE(pcs.sku,'') FROM productcolorsizes pcs " & _
-                    "LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN colors c ON pc.colorid = c.rowid LEFT JOIN products p ON pc.productid = p.rowid " & _
-                    "WHERE pcs.organizationid = " & Z_OrganizationID & " AND " & iconditionstring & " ORDER BY p.productcode,c.colorname,pcs.size "
+            Dim sql1 As String = "SELECT pcs.rowid,COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(c.colorname,''),COALESCE(pcs.size,''),COALESCE(pcs.seasoncode,'')," &
+                    "COALESCE(DATE_FORMAT(pcs.lastshipmentdate,'%d-%b-%Y'),''),COALESCE(DATE_FORMAT(pcs.lastsolddate,'%d-%b-%Y'),''),COALESCE(pcs.sku,'') FROM productcolorsizes pcs " &
+                    "LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN colors c ON pc.colorid = c.rowid LEFT JOIN products p ON pc.productid = p.rowid " &
+                    "WHERE pcs.`Status`='Active' AND pcs.organizationid = " & Z_OrganizationID & " AND " & iconditionstring & " ORDER BY p.productcode,c.colorname,pcs.size "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             Dim n As Integer = 0

@@ -74,8 +74,8 @@ Public Class StockLevelForm
         Try
             dgProductColorSizes.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT pcs.rowid,COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(c.colorname,''),COALESCE(pcs.size,0.0),COALESCE(pcs.seasoncode,''),COALESCE(p.unitprice,0.00),COALESCE(pcs.sku,'') FROM productcolorsizes pcs LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid " & _
-                        "LEFT JOIN colors c ON pc.colorid = c.rowid LEFT JOIN products p ON pc.productid = p.rowid LEFT JOIN companies v ON p.companyid = v.rowid LEFT JOIN brands b ON p.brandid = b.rowid WHERE pcs.organizationid = " & Z_OrganizationID & " AND " & iconditionstring & " ORDER BY b.brandname,p.productcode,c.colorname "
+            Dim sql1 As String = "SELECT pcs.rowid,COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(c.colorname,''),COALESCE(pcs.size,0.0),COALESCE(pcs.seasoncode,''),COALESCE(p.unitprice,0.00),COALESCE(pcs.sku,'') FROM productcolorsizes pcs LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid " &
+                        "LEFT JOIN colors c ON pc.colorid = c.rowid LEFT JOIN products p ON pc.productid = p.rowid LEFT JOIN companies v ON p.companyid = v.rowid LEFT JOIN brands b ON p.brandid = b.rowid WHERE pcs.`Status`='Active' AND pcs.organizationid = " & Z_OrganizationID & " AND " & iconditionstring & " ORDER BY b.brandname,p.productcode,c.colorname "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             Dim seqno As Integer = 1
@@ -121,8 +121,8 @@ Public Class StockLevelForm
         Try
             dgProductColorSizes.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT pcs.rowid,COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(c.colorname,''),COALESCE(pcs.size,0.0),COALESCE(pcs.seasoncode,''),COALESCE(p.unitprice,0.00),COALESCE(pcs.totaldamageqty,0),COALESCE(pcs.sku,'') FROM productcolorsizes pcs LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid " & _
-                        "LEFT JOIN colors c ON pc.colorid = c.rowid LEFT JOIN products p ON pc.productid = p.rowid LEFT JOIN companies v ON p.companyid = v.rowid LEFT JOIN brands b ON p.brandid = b.rowid WHERE pcs.organizationid = " & Z_OrganizationID & " AND " & iconditionstring & " ORDER BY b.brandname,p.productcode,c.colorname "
+            Dim sql1 As String = "SELECT pcs.rowid,COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(c.colorname,''),COALESCE(pcs.size,0.0),COALESCE(pcs.seasoncode,''),COALESCE(p.unitprice,0.00),COALESCE(pcs.totaldamageqty,0),COALESCE(pcs.sku,'') FROM productcolorsizes pcs LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid " &
+                        "LEFT JOIN colors c ON pc.colorid = c.rowid LEFT JOIN products p ON pc.productid = p.rowid LEFT JOIN companies v ON p.companyid = v.rowid LEFT JOIN brands b ON p.brandid = b.rowid WHERE pcs.`Status`='Active' AND pcs.organizationid = " & Z_OrganizationID & " AND " & iconditionstring & " ORDER BY b.brandname,p.productcode,c.colorname "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             Dim seqno As Integer = 1
@@ -207,8 +207,8 @@ Public Class StockLevelForm
     Sub printDamageStocks(ByVal iconditionstring As String)
         Try
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT pcs.rowid,COALESCE(p.productcode,''),COALESCE(c.colorname,''),COALESCE(pcs.size,0.0),COALESCE(pcs.seasoncode,''),COALESCE(p.unitprice,0.00),COALESCE(pcs.sku,''),COALESCE(b.brandname,''),p.image,COALESCE(pcs.totaldamageqty,0) FROM productcolorsizes pcs LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid " & _
-                        "LEFT JOIN colors c ON pc.colorid = c.rowid LEFT JOIN products p ON pc.productid = p.rowid LEFT JOIN companies v ON p.companyid = v.rowid LEFT JOIN brands b ON p.brandid = b.rowid WHERE pcs.organizationid = " & Z_OrganizationID & " AND " & iconditionstring & " ORDER BY b.brandname,p.productcode,c.colorname,pcs.rowid ASC "
+            Dim sql1 As String = "SELECT pcs.rowid,COALESCE(p.productcode,''),COALESCE(c.colorname,''),COALESCE(pcs.size,0.0),COALESCE(pcs.seasoncode,''),COALESCE(p.unitprice,0.00),COALESCE(pcs.sku,''),COALESCE(b.brandname,''),p.image,COALESCE(pcs.totaldamageqty,0) FROM productcolorsizes pcs LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid " &
+                        "LEFT JOIN colors c ON pc.colorid = c.rowid LEFT JOIN products p ON pc.productid = p.rowid LEFT JOIN companies v ON p.companyid = v.rowid LEFT JOIN brands b ON p.brandid = b.rowid WHERE pcs.`Status`='Active' AND pcs.organizationid = " & Z_OrganizationID & " AND " & iconditionstring & " ORDER BY b.brandname,p.productcode,c.colorname,pcs.rowid ASC "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             While reader1.Read()

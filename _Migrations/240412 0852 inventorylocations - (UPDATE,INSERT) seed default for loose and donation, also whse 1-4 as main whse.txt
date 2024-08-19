@@ -17,5 +17,6 @@ FROM `wmsdb_thurston`.productcolorsizes pcs
 INNER JOIN (SELECT * FROM `wmsdb_thurston`.rackshelfcolumn r WHERE r.InventoryLocationID=8
             UNION
             SELECT * FROM `wmsdb_thurston`.rackshelfcolumn r WHERE r.InventoryLocationID=9) r ON r.RowID IS NOT NULL
+ON DUPLICATE KEY UPDATE LastUpd=CURRENT_TIMESTAMP()
 ;
 

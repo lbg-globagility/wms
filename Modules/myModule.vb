@@ -1846,7 +1846,7 @@ Module myModule
             If globalconn.State = ConnectionState.Open Then globalconn.Close()
             Dim dtGid As New DataTable
             dtGid = getDataTableForSQL("SELECT COALESCE(pcs.rowid,0) FROM productcolorsizes pcs LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN products p ON pc.productid = p.rowid LEFT JOIN colors c ON pc.colorid = c.rowid " &
-                            "WHERE pcs.organizationid = " & Z_OrganizationID & " AND CONCAT(COALESCE(p.productcode,''),' / ',COALESCE(c.colorname,''),' / ',COALESCE(pcs.size,''),' / ',COALESCE(pcs.seasoncode,'')) = """ & globalicombination & """ ")
+                            "WHERE pcs.`Status`='Active' AND pcs.organizationid = " & Z_OrganizationID & " AND CONCAT(COALESCE(p.productcode,''),' / ',COALESCE(c.colorname,''),' / ',COALESCE(pcs.size,''),' / ',COALESCE(pcs.seasoncode,'')) = """ & globalicombination & """ ")
             If dtGid.Rows.Count <> 0 Then
                 globalproductcolorsizesid = dtGid.Rows(0)(0)
             Else
@@ -1864,7 +1864,7 @@ Module myModule
             globalproductcolorsizesid = 0
             If globalconn.State = ConnectionState.Open Then globalconn.Close()
             Dim dtGid As New DataTable
-            dtGid = getDataTableForSQL("SELECT COALESCE(pcs.rowid,0) FROM productcolorsizes pcs WHERE pcs.rowid != " & globaliproductcolorsizeid & " AND pcs.productcolorid = " & globaliproductcolorid & " AND pcs.size = """ & globalisize & """ AND pcs.seasoncode = """ & globaliseasoncode & """ AND pcs.organizationid = " & Z_OrganizationID & " ")
+            dtGid = getDataTableForSQL("SELECT COALESCE(pcs.rowid,0) FROM productcolorsizes pcs WHERE pcs.`Status`='Active' AND pcs.rowid != " & globaliproductcolorsizeid & " AND pcs.productcolorid = " & globaliproductcolorid & " AND pcs.size = """ & globalisize & """ AND pcs.seasoncode = """ & globaliseasoncode & """ AND pcs.organizationid = " & Z_OrganizationID & " ")
             If dtGid.Rows.Count <> 0 Then
                 globalproductcolorsizesid = dtGid.Rows(0)(0)
             Else

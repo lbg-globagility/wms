@@ -226,7 +226,7 @@ Public Class SellThroughForm
             streceiptdate = ""
             Dim dtLsd As New DataTable
             dtLsd = getDataTableForSQL("SELECT COALESCE(DATE_FORMAT(pcs.lastshipmentdate,'%d-%b-%Y'),'') FROM productcolorsizes pcs LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN products p ON pc.productid = p.rowid " &
-                            "WHERE pcs.organizationid = " & Z_OrganizationID & " AND p.rowid = " & iproductid & " AND pcs.lastshipmentdate IS NOT NULL ORDER BY pcs.lastshipmentdate ASC LIMIT 0,1 ")
+                            "WHERE pcs.`Status`='Active' AND pcs.organizationid = " & Z_OrganizationID & " AND p.rowid = " & iproductid & " AND pcs.lastshipmentdate IS NOT NULL ORDER BY pcs.lastshipmentdate ASC LIMIT 0,1 ")
             If dtLsd.Rows.Count <> 0 Then
                 streceiptdate = dtLsd.Rows(0)(0)
             Else

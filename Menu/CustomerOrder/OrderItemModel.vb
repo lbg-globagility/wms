@@ -79,8 +79,9 @@ Public Class OrderItemModel
 
     Public ReadOnly Property UnitOfLengthPrice As Decimal
         Get
+            'UnitPrice TotalItemPrice
             Return If(QuantityOrdered > 0 AndAlso If(UnitOfLengthNumber.HasValue, UnitOfLengthNumber.Value, 0D) > 0,
-                UnitPrice / UnitOfLengthNumber.Value,
+                TotalItemPrice / UnitOfLengthNumber.Value,
                 0D)
         End Get
     End Property

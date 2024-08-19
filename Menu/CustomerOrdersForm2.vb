@@ -796,7 +796,7 @@ Public Class CustomerOrdersForm2
             ContinueWith(
             Sub()
                 Panel5.Enabled = True
-                gridOrders.CurrentCell = gridOrders.Item(columnIndex:=Column13.Index, rowIndex:=rowIndex)
+                If If(gridOrders.Rows.OfType(Of DataGridViewRow)?.Any(), False) Then gridOrders.CurrentCell = gridOrders.Item(columnIndex:=Column13.Index, rowIndex:=rowIndex)
                 gridOrders_SelectionChanged(gridOrders, New EventArgs())
                 AddHandler gridOrders.SelectionChanged, AddressOf gridOrders_SelectionChanged
             End Sub, TaskScheduler.FromCurrentSynchronizationContext)

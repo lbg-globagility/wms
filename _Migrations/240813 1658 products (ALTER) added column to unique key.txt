@@ -1,0 +1,4 @@
+
+ALTER TABLE `products`
+	DROP INDEX `Index 5`,
+	ADD UNIQUE INDEX `Index 5` (`ProductCode`, `OrganizationID`, `UnitOfMeasure2`, `UnitPriceOfUOM2`) USING BTREE;

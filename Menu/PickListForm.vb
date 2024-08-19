@@ -2822,7 +2822,7 @@ Public Class PickListForm
             GROUP_CONCAT(DISTINCT o.ReferenceNumber) `poNo`,
             SUM(oi.QtyOrdered) `qty`,
             GROUP_CONCAT(DISTINCT pil.UnitOfMeasure2 SEPARATOR '\n') `unit`,
-            GROUP_CONCAT(p.ProductCode ORDER BY oi.RowID SEPARATOR ', ') `itemDescription`,
+            GROUP_CONCAT(CONCAT(p.ProductCode, ' (', ploi.QtyPicked, ')') ORDER BY oi.RowID SEPARATOR ', ') `itemDescription`,
             DATE_FORMAT(CURDATE(), '%M %e, %Y') `deliveryDate`
             FROM picklistorders plo
             INNER JOIN orders o ON o.RowID=plo.OrderID AND FIND_IN_SET(o.ReferenceNumber, @referenceNos) > 0
@@ -2832,6 +2832,7 @@ Public Class PickListForm
             INNER JOIN productcolorsizes pcs ON pcs.RowID=pil.ProductColorSizeID
             INNER JOIN productcolors pc ON pc.RowID=pcs.ProductColorID
             INNER JOIN products p ON p.RowID=pc.ProductID
+            INNER JOIN picklistorderitems ploi ON ploi.PickListOrderID=plo.RowID
             WHERE plo.PickListID = @pickListId
             AND FIND_IN_SET(o.AccountID, @customerIds) > 0
             GROUP BY a.RowID, o.ReferenceNumber, pil.UnitOfMeasure2

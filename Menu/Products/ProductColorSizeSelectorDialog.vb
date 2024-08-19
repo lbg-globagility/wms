@@ -1,6 +1,7 @@
 ﻿Option Strict On
 
 Imports Microsoft.Extensions.DependencyInjection
+Imports OfficeOpenXml.FormulaParsing.Excel.Functions.RefAndLookup
 Imports WarehouseManagementSystem.Core.Entities
 Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
 Imports WarehouseManagementSystem.Core.Interfaces.Repositories
@@ -182,4 +183,41 @@ Public Class ProductColorSizeSelectorDialog
             columnIndex:=currentRow.Cells(isSelectedColumn.Name).ColumnIndex,
             rowIndex:=e.RowIndex))
     End Sub
+
+    Private Sub grid_DataSourceChanged(sender As Object, e As EventArgs) Handles grid.DataSourceChanged
+        If Not If(grid.Rows.OfType(Of DataGridViewRow)?.Any(), False) Then Return
+
+        Dim fsdfsdfsd = grid.Rows.OfType(Of DataGridViewRow).
+            Where(Function(t) CDbl(t.Cells(Column4.Index).Value) = 0).
+            ToList()
+
+        For Each row In fsdfsdfsd
+            Dim origColor = grid.Item(columnIndex:=Column4.Index, row.Index).Style.ForeColor
+            grid.Item(columnIndex:=Column4.Index, row.Index).Style.ForeColor = Lighten(origColor, 48)
+        Next
+    End Sub
+
+    Function Lighten(orig As Drawing.Color, Optional percent As Integer = 80) As Drawing.Color
+        'get remainders
+        Dim rr As Integer = 255 - orig.R
+        Dim gr As Integer = 255 - orig.G
+        Dim br As Integer = 255 - orig.B
+
+        'add a percentage of the remainder, plus original value
+        Dim r As Integer = CInt(percent / 100 * rr) + orig.R
+        Dim g As Integer = CInt(percent / 100 * gr) + orig.G
+        Dim b As Integer = CInt(percent / 100 * br) + orig.B
+
+        Return Drawing.Color.FromArgb(r, g, b)
+    End Function
+
+    Function Darken(orig As Drawing.Color, Optional percent As Integer = 80) As Drawing.Color
+        'subtract the percentage of the original value from the original value
+        Dim r As Integer = orig.R - CInt(percent / 100 * orig.R)
+        Dim g As Integer = orig.G - CInt(percent / 100 * orig.G)
+        Dim b As Integer = orig.B - CInt(percent / 100 * orig.B)
+
+        Return Drawing.Color.FromArgb(r, g, b)
+    End Function
+
 End Class

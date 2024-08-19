@@ -832,7 +832,7 @@ Public Class ProductsForm
         Try
             dgProductSizes.Rows.Clear()
             If conn1.State = ConnectionState.Closed Then conn1.Open()
-            Dim sql1 As String = $"SELECT pcs.rowid,COALESCE(pcs.size,''),COALESCE(pcs.status,''),COALESCE(pcs.seasoncode,''), p.ProductCode FROM productcolorsizes pcs INNER JOIN productcolors pc ON pc.RowID=pcs.ProductColorID INNER JOIN products p ON p.RowID=pc.ProductID WHERE pcs.organizationid = {Z_OrganizationID} AND pcs.productcolorid = {iproductcolorid} ORDER BY pcs.size ASC;"
+            Dim sql1 As String = $"SELECT pcs.rowid,COALESCE(pcs.size,''),COALESCE(pcs.status,''),COALESCE(pcs.seasoncode,''), p.ProductCode FROM productcolorsizes pcs INNER JOIN productcolors pc ON pc.RowID=pcs.ProductColorID INNER JOIN products p ON p.RowID=pc.ProductID WHERE pcs.organizationid = {Z_OrganizationID} AND pcs.`Status`='Active' AND pcs.productcolorid = {iproductcolorid} ORDER BY pcs.size ASC;"
             Dim cmd1 As New MySqlCommand(sql1, conn1)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             Dim n As Integer = 0
