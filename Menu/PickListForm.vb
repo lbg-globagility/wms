@@ -1,6 +1,5 @@
 ﻿Imports Microsoft.Extensions.DependencyInjection
 Imports MySql.Data.MySqlClient
-Imports OfficeOpenXml.FormulaParsing.Excel.Functions.Math
 Imports WarehouseManagementSystem.Core.Enums
 Imports WarehouseManagementSystem.Core.Helpers
 Imports WarehouseManagementSystem.Core.Interfaces
@@ -2178,19 +2177,29 @@ Public Class PickListForm
                     End If
                 End If
             End If
-            'If dgRackShelfColumn.Rows.Count <> 0 Then
-            '    For i = 0 To dgRackShelfColumn.Rows.Count - 1
-            '        If IsNumeric(dgRackShelfColumn.Rows(i).Cells("rsc_qtytopick").Value) Then
-            '            If CInt(dgRackShelfColumn.Rows(i).Cells("rsc_qtytopick").Value) > CInt(dgRackShelfColumn.Rows(i).Cells("rsc_qtyallocated").Value) Then
-            '                dgRackShelfColumn.Rows(i).Cells("rsc_qtytopick").ErrorText = "Qty. To Pick should not be greater than Qty. Allocated."
-            '            Else
-            '                dgRackShelfColumn.Rows(i).Cells("rsc_qtytopick").ErrorText = Nothing
-            '            End If
-            '        Else
-            '            dgRackShelfColumn.Rows(i).Cells("rsc_qtytopick").ErrorText = Nothing
-            '        End If
-            '    Next
-            'End If
+
+            If IsThurston Then
+                If (If(dgCustomerOrderItems.Rows.OfType(Of DataGridViewRow)?.Any(), False) And dgCustomerOrderItems.CurrentRow IsNot Nothing) AndAlso
+                If(dgRackShelfColumn.Rows.OfType(Of DataGridViewRow)?.Any(), False) Then
+
+                    Dim userTotalPickedQty = dgRackShelfColumn.Rows.
+                        OfType(Of DataGridViewRow).
+                        Sum(Function(r) r.Cells(rsc_qtytopick.Name).Value)
+
+                    Dim qty = CInt(dgCustomerOrderItems.CurrentRow.Cells(ci_qtyordered.Name).Value)
+
+                    Dim boolSatisfied = userTotalPickedQty = qty
+                    msSaveRSC.Enabled = boolSatisfied
+
+                    If Not boolSatisfied Then
+                        errProvider.SetError(txtQtyToPick, $"it should be {qty}")
+                    Else
+                        errProvider.SetError(txtQtyToPick, String.Empty)
+                    End If
+                Else
+                    msSaveRSC.Enabled = False
+                End If
+            End If
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -3369,4 +3378,5 @@ Public Class PickListForm
 
         End If
     End Sub
+
 End Class

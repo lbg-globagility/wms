@@ -32,21 +32,13 @@ Public Class PackingListForm
         Dim _systemOwnerService = GetRequiredService(Of ISystemOwnerService)()
         _systemOwner = Await _systemOwnerService.GetCurrentSystemOwnerEntityAsync()
 
-        If IsThurston Then
-            ci_totalqtyincarton.HeaderText = "Total Qty. In Truck"
-            Label3.Text = $"Total Qty.{Environment.NewLine}In Truck (Sum):"
-            Label5.Text = "Qty. In Truck (Sum):"
-            cai_qtyincarton.HeaderText = "Qty. In Truck"
-            Label1.Text = "Truck Items:"
-            ca_cartonno.HeaderText = "Truck No."
-
-            gbCartons.Visible = False
-            gbCartonItems.Visible = False
-        End If
+        Dim bool = Not IsThurston
+        gbCartons.Visible = bool
+        gbCartonItems.Visible = bool
 
         Me.Cursor = Cursors.WaitCursor
         Try
-            Spire.Barcode.BarcodeSettings.ApplyKey("LNAVJZFGXY6-NWBQG-FGB9V-34L5T")
+            BarcodeSettings.ApplyKey("LNAVJZFGXY6-NWBQG-FGB9V-34L5T")
             errProvider.Clear()
             clearfields()
             callAutoPopulateFunctions()
@@ -1031,9 +1023,9 @@ SELECT plo.OrderItemID, SUM(plo.QtyInCarton) `QtyInCarton`
 FROM packinglistcartonitems plo
 INNER JOIN orderitems oi ON oi.RowID=plo.OrderItemID
 INNER JOIN packinglistcartons plc ON plc.RowID=plo.PackingListCartonID
-INNER JOIN packinglist pl ON pl.RowID=plc.PackingListID
+INNER JOIN packinglist pl ON pl.RowID=plc.PackingListID  AND pl.PackingListNo = {If(dgPackingList.CurrentRow?.Cells(pal_packinglistno.Name).Value, 0)}
 INNER JOIN orders o ON o.RowID=pl.OrderID AND o.RowID = {palorderid}
-WHERE plo.OrganizationID = {Z_OrganizationID} AND pl.PackingListNo = {If(dgPackingList.CurrentRow?.Cells(pal_packinglistno.Name).Value, 0)}
+WHERE plo.OrganizationID = {Z_OrganizationID}
 GROUP BY OrderItemID) plo ON plo.OrderItemID=ci.RowID
 
 LEFT JOIN (
@@ -1041,13 +1033,15 @@ SELECT plo.OrderItemID, SUM(plo.QtyInCarton) `QtyInCarton`
 FROM packinglistcartonitems plo
 INNER JOIN orderitems oi ON oi.RowID=plo.OrderItemID
 INNER JOIN packinglistcartons plc ON plc.RowID=plo.PackingListCartonID
-INNER JOIN packinglist pl ON pl.RowID=plc.PackingListID
+INNER JOIN packinglist pl ON pl.RowID=plc.PackingListID AND pl.PackingListNo != {If(dgPackingList.CurrentRow?.Cells(pal_packinglistno.Name).Value, 0)}
 INNER JOIN orders o ON o.RowID=pl.OrderID AND o.RowID = {palorderid}
 WHERE plo.OrganizationID = {Z_OrganizationID}
+AND plo.`Status` NOT IN ('Active', 'Cancelled')
 GROUP BY OrderItemID) plo2 ON plo2.OrderItemID=ci.RowID
 
 WHERE ci.orderid = {palorderid} AND ci.organizationid = {Z_OrganizationID} AND ci.status != 'Inactive' AND ci.itemtype != 'BI'
 #AND (IFNULL(ci.qtyordered,0) - IFNULL(plo.QtyInCarton, 0)) > 0
+AND ci.QtyOrdered > (IFNULL(plo.QtyInCarton, 0) - IFNULL(plo2.QtyInCarton, 0))
 ORDER BY ci.rowid;"
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -1078,13 +1072,21 @@ ORDER BY ci.rowid;"
                     '    dgCustomerOrderItems.Item(ci_qtypicked.Index, n).Value = paltotalqtypicked
                     dgCustomerOrderItems.Item(ci_qtypicked.Index, n).Value = reader1.GetInt32("QtyOrdered")
                     'Else
-                    dgCustomerOrderItems.Item(ci_totalqtyincarton.Index, n).Value =
-                        If(reader1.GetInt32("QtyInCarton") = 0, 1, reader1.GetInt32("QtyInCarton"))
+
+                    Dim dynamicQtyInCarton = If(reader1.GetInt32("QtyInCarton") = 0, 1, reader1.GetInt32("QtyInCarton"))
+
+                    dgCustomerOrderItems.Item(ci_totalqtyincarton.Index, n).Value = dynamicQtyInCarton
+
                     'dgCustomerOrderItems.Item(ci_qtypicked.Index, n).Value = 1
                     'End If
 
                     Dim qtyToPack = CInt(dgCustomerOrderItems.Item(ci_qtypicked.Index, n).Value) -
-                        If(reader1.GetInt32("QtyInCarton2") = 0, 1, reader1.GetInt32("QtyInCarton2"))
+                        {dynamicQtyInCarton, reader1.GetInt32("QtyInCarton2")}.Max() -
+                        {dynamicQtyInCarton, reader1.GetInt32("QtyInCarton2")}.Min()
+
+                    If Not msNew.Enabled Then qtyToPack = CInt(dgCustomerOrderItems.Item(ci_qtypicked.Index, n).Value) -
+                        {dynamicQtyInCarton, reader1.GetInt32("QtyInCarton2")}.Sum()
+
                     dgCustomerOrderItems.Item(ci_qtytopack.Index, n).Value = If(qtyToPack < 0, "-", qtyToPack)
 
 
@@ -1697,7 +1699,7 @@ ORDER BY ci.rowid;"
             txtPackingListNo.Text = CStr(globalpackinglistno)
             txtStatus.Text = "New"
             txtPackingListDate.Text = Date.Now.ToString("dd-MMM-yyyy")
-            globalautocompleteOrderInfoA(cboCustomerOrderInfo, globaliordertype:=OrderType.CO.ToString(), "For Packing", Me)
+            If Not IsThurston Then globalautocompleteOrderInfoA(cboCustomerOrderInfo, globaliordertype:=OrderType.CO.ToString(), "For Packing", Me)
             globalautopopulateOrderInfoA(cboCustomerOrderInfo, globaliordertype:=OrderType.CO.ToString(), "For Packing", Me)
             cboCustomerOrderInfo.Enabled = legit
             txtPackingListNo.Focus()

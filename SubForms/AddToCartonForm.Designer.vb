@@ -24,9 +24,9 @@ Partial Class AddToCartonForm
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(AddToCartonForm))
-        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.lblTitle = New System.Windows.Forms.Label()
         Me.msMenu = New System.Windows.Forms.MenuStrip()
         Me.msSave = New System.Windows.Forms.ToolStripMenuItem()
@@ -88,6 +88,9 @@ Partial Class AddToCartonForm
         Me.Label9 = New System.Windows.Forms.Label()
         Me.errProvider = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.chkPackAll = New System.Windows.Forms.CheckBox()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.Panel2 = New System.Windows.Forms.Panel()
+        Me.Panel3 = New System.Windows.Forms.Panel()
         Me.msMenu.SuspendLayout()
         CType(Me.dgCustomerOrderItems, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.gbOptions.SuspendLayout()
@@ -95,6 +98,9 @@ Partial Class AddToCartonForm
         CType(Me.pbAddSize, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbAddPacker, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.errProvider, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.Panel1.SuspendLayout()
+        Me.Panel2.SuspendLayout()
+        Me.Panel3.SuspendLayout()
         Me.SuspendLayout()
         '
         'lblTitle
@@ -130,7 +136,7 @@ Partial Class AddToCartonForm
         'txtPackingListNo
         '
         Me.txtPackingListNo.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtPackingListNo.Location = New System.Drawing.Point(138, 49)
+        Me.txtPackingListNo.Location = New System.Drawing.Point(116, 6)
         Me.txtPackingListNo.Name = "txtPackingListNo"
         Me.txtPackingListNo.ReadOnly = True
         Me.txtPackingListNo.Size = New System.Drawing.Size(125, 21)
@@ -141,7 +147,7 @@ Partial Class AddToCartonForm
         Me.Label52.AutoSize = True
         Me.Label52.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label52.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label52.Location = New System.Drawing.Point(38, 52)
+        Me.Label52.Location = New System.Drawing.Point(12, 12)
         Me.Label52.Name = "Label52"
         Me.Label52.Size = New System.Drawing.Size(98, 15)
         Me.Label52.TabIndex = 497
@@ -150,7 +156,7 @@ Partial Class AddToCartonForm
         'txtCustomerOrderInfo
         '
         Me.txtCustomerOrderInfo.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtCustomerOrderInfo.Location = New System.Drawing.Point(404, 49)
+        Me.txtCustomerOrderInfo.Location = New System.Drawing.Point(376, 6)
         Me.txtCustomerOrderInfo.Name = "txtCustomerOrderInfo"
         Me.txtCustomerOrderInfo.ReadOnly = True
         Me.txtCustomerOrderInfo.Size = New System.Drawing.Size(235, 21)
@@ -160,7 +166,7 @@ Partial Class AddToCartonForm
         '
         Me.Label10.AutoSize = True
         Me.Label10.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label10.Location = New System.Drawing.Point(278, 52)
+        Me.Label10.Location = New System.Drawing.Point(247, 12)
         Me.Label10.Name = "Label10"
         Me.Label10.Size = New System.Drawing.Size(123, 15)
         Me.Label10.TabIndex = 499
@@ -173,39 +179,40 @@ Partial Class AddToCartonForm
         Me.dgCustomerOrderItems.AllowUserToOrderColumns = True
         Me.dgCustomerOrderItems.AllowUserToResizeRows = False
         Me.dgCustomerOrderItems.BackgroundColor = System.Drawing.Color.White
-        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgCustomerOrderItems.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
+        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle4.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgCustomerOrderItems.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle4
         Me.dgCustomerOrderItems.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.dgCustomerOrderItems.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ci_rowid, Me.ci_colorvalue, Me.ci_seqno, Me.ci_productcode, Me.ci_colorname, Me.ci_color, Me.ci_size, Me.ci_seasoncode, Me.ci_qtyordered, Me.ci_qtypicked, Me.ci_totalqtyincarton, Me.ci_qtytopack, Me.ci_status, Me.ci_sku, Me.ci_unitofmeasure, Me.ci_remarks, Me.ci_tags, Me.ci_packedby, Me.ci_packeddate})
-        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.dgCustomerOrderItems.DefaultCellStyle = DataGridViewCellStyle2
+        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle5.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.dgCustomerOrderItems.DefaultCellStyle = DataGridViewCellStyle5
+        Me.dgCustomerOrderItems.Dock = System.Windows.Forms.DockStyle.Top
         Me.dgCustomerOrderItems.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
-        Me.dgCustomerOrderItems.Location = New System.Drawing.Point(12, 76)
+        Me.dgCustomerOrderItems.Location = New System.Drawing.Point(0, 86)
         Me.dgCustomerOrderItems.MultiSelect = False
         Me.dgCustomerOrderItems.Name = "dgCustomerOrderItems"
-        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle3.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgCustomerOrderItems.RowHeadersDefaultCellStyle = DataGridViewCellStyle3
+        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle6.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgCustomerOrderItems.RowHeadersDefaultCellStyle = DataGridViewCellStyle6
         Me.dgCustomerOrderItems.RowHeadersVisible = False
         Me.dgCustomerOrderItems.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgCustomerOrderItems.Size = New System.Drawing.Size(660, 210)
+        Me.dgCustomerOrderItems.Size = New System.Drawing.Size(684, 234)
         Me.dgCustomerOrderItems.TabIndex = 4
         '
         'ci_rowid
@@ -338,7 +345,7 @@ Partial Class AddToCartonForm
         'txtTotalQtyInCartonSum
         '
         Me.txtTotalQtyInCartonSum.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtTotalQtyInCartonSum.Location = New System.Drawing.Point(555, 292)
+        Me.txtTotalQtyInCartonSum.Location = New System.Drawing.Point(541, 8)
         Me.txtTotalQtyInCartonSum.Name = "txtTotalQtyInCartonSum"
         Me.txtTotalQtyInCartonSum.ReadOnly = True
         Me.txtTotalQtyInCartonSum.Size = New System.Drawing.Size(90, 21)
@@ -347,20 +354,19 @@ Partial Class AddToCartonForm
         '
         'Label3
         '
-        Me.Label3.AutoSize = True
         Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label3.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label3.Location = New System.Drawing.Point(465, 290)
+        Me.Label3.Location = New System.Drawing.Point(434, 3)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(82, 26)
+        Me.Label3.Size = New System.Drawing.Size(99, 37)
         Me.Label3.TabIndex = 506
         Me.Label3.Text = "Total Qty. In " & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Box (Sum):"
-        Me.Label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.Label3.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'txtTotalItems
         '
         Me.txtTotalItems.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtTotalItems.Location = New System.Drawing.Point(169, 292)
+        Me.txtTotalItems.Location = New System.Drawing.Point(155, 8)
         Me.txtTotalItems.Name = "txtTotalItems"
         Me.txtTotalItems.ReadOnly = True
         Me.txtTotalItems.Size = New System.Drawing.Size(90, 21)
@@ -369,32 +375,30 @@ Partial Class AddToCartonForm
         '
         'Label8
         '
-        Me.Label8.AutoSize = True
         Me.Label8.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label8.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label8.Location = New System.Drawing.Point(122, 289)
+        Me.Label8.Location = New System.Drawing.Point(91, 3)
         Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(41, 26)
+        Me.Label8.Size = New System.Drawing.Size(58, 37)
         Me.Label8.TabIndex = 505
         Me.Label8.Text = "Total" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Items:"
-        Me.Label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.Label8.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'Label7
         '
-        Me.Label7.AutoSize = True
         Me.Label7.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label7.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label7.Location = New System.Drawing.Point(283, 290)
+        Me.Label7.Location = New System.Drawing.Point(251, 3)
         Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(63, 26)
+        Me.Label7.Size = New System.Drawing.Size(81, 37)
         Me.Label7.TabIndex = 504
         Me.Label7.Text = "Total Qty." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Picked:"
-        Me.Label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.Label7.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'txtTotalQtyPicked
         '
         Me.txtTotalQtyPicked.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtTotalQtyPicked.Location = New System.Drawing.Point(352, 292)
+        Me.txtTotalQtyPicked.Location = New System.Drawing.Point(338, 8)
         Me.txtTotalQtyPicked.Name = "txtTotalQtyPicked"
         Me.txtTotalQtyPicked.ReadOnly = True
         Me.txtTotalQtyPicked.Size = New System.Drawing.Size(90, 21)
@@ -403,38 +407,19 @@ Partial Class AddToCartonForm
         '
         'gbOptions
         '
-        Me.gbOptions.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.gbOptions.Controls.Add(Me.pbAutoAddA)
-        Me.gbOptions.Controls.Add(Me.pbAddSize)
-        Me.gbOptions.Controls.Add(Me.cboSizeInfo)
-        Me.gbOptions.Controls.Add(Me.lblSizeInfo)
-        Me.gbOptions.Controls.Add(Me.lblPesoSign)
-        Me.gbOptions.Controls.Add(Me.txtAmount)
-        Me.gbOptions.Controls.Add(Me.lblAmount)
-        Me.gbOptions.Controls.Add(Me.lblWeightUOM)
-        Me.gbOptions.Controls.Add(Me.cboWeightUOM)
-        Me.gbOptions.Controls.Add(Me.txtWeight)
-        Me.gbOptions.Controls.Add(Me.lblWeight)
-        Me.gbOptions.Controls.Add(Me.dtpPackedDate)
-        Me.gbOptions.Controls.Add(Me.lblPackedDate)
-        Me.gbOptions.Controls.Add(Me.pbAddPacker)
-        Me.gbOptions.Controls.Add(Me.cboPackerName)
-        Me.gbOptions.Controls.Add(Me.lblPackerName)
-        Me.gbOptions.Controls.Add(Me.txtCartonNo)
-        Me.gbOptions.Controls.Add(Me.lblCartonNoA)
-        Me.gbOptions.Controls.Add(Me.lblCartonNoAsteriskA)
+        Me.gbOptions.Controls.Add(Me.Panel3)
         Me.gbOptions.Controls.Add(Me.lblCartonNoAsteriskE)
         Me.gbOptions.Controls.Add(Me.cboCartonNo)
         Me.gbOptions.Controls.Add(Me.lblCartonNoE)
         Me.gbOptions.Controls.Add(Me.rbtnAddNewCarton)
         Me.gbOptions.Controls.Add(Me.rbtnExistingCarton)
         Me.gbOptions.Controls.Add(Me.Label9)
+        Me.gbOptions.Dock = System.Windows.Forms.DockStyle.Fill
         Me.gbOptions.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.gbOptions.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.gbOptions.Location = New System.Drawing.Point(33, 320)
+        Me.gbOptions.Location = New System.Drawing.Point(0, 364)
         Me.gbOptions.Name = "gbOptions"
-        Me.gbOptions.Size = New System.Drawing.Size(620, 197)
+        Me.gbOptions.Size = New System.Drawing.Size(684, 197)
         Me.gbOptions.TabIndex = 9
         Me.gbOptions.TabStop = False
         '
@@ -443,7 +428,7 @@ Partial Class AddToCartonForm
         Me.pbAutoAddA.BackColor = System.Drawing.Color.Transparent
         Me.pbAutoAddA.Cursor = System.Windows.Forms.Cursors.Hand
         Me.pbAutoAddA.Image = CType(resources.GetObject("pbAutoAddA.Image"), System.Drawing.Image)
-        Me.pbAutoAddA.Location = New System.Drawing.Point(476, 123)
+        Me.pbAutoAddA.Location = New System.Drawing.Point(467, 41)
         Me.pbAutoAddA.Name = "pbAutoAddA"
         Me.pbAutoAddA.Size = New System.Drawing.Size(19, 16)
         Me.pbAutoAddA.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
@@ -456,7 +441,7 @@ Partial Class AddToCartonForm
         Me.pbAddSize.BackColor = System.Drawing.Color.Transparent
         Me.pbAddSize.Cursor = System.Windows.Forms.Cursors.Hand
         Me.pbAddSize.Image = CType(resources.GetObject("pbAddSize.Image"), System.Drawing.Image)
-        Me.pbAddSize.Location = New System.Drawing.Point(407, 149)
+        Me.pbAddSize.Location = New System.Drawing.Point(398, 67)
         Me.pbAddSize.Name = "pbAddSize"
         Me.pbAddSize.Size = New System.Drawing.Size(14, 18)
         Me.pbAddSize.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
@@ -468,7 +453,7 @@ Partial Class AddToCartonForm
         '
         Me.cboSizeInfo.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cboSizeInfo.FormattingEnabled = True
-        Me.cboSizeInfo.Location = New System.Drawing.Point(113, 147)
+        Me.cboSizeInfo.Location = New System.Drawing.Point(104, 65)
         Me.cboSizeInfo.Name = "cboSizeInfo"
         Me.cboSizeInfo.Size = New System.Drawing.Size(290, 23)
         Me.cboSizeInfo.TabIndex = 18
@@ -478,7 +463,7 @@ Partial Class AddToCartonForm
         Me.lblSizeInfo.AutoSize = True
         Me.lblSizeInfo.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblSizeInfo.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.lblSizeInfo.Location = New System.Drawing.Point(50, 150)
+        Me.lblSizeInfo.Location = New System.Drawing.Point(41, 68)
         Me.lblSizeInfo.Name = "lblSizeInfo"
         Me.lblSizeInfo.Size = New System.Drawing.Size(57, 15)
         Me.lblSizeInfo.TabIndex = 528
@@ -489,7 +474,7 @@ Partial Class AddToCartonForm
         Me.lblPesoSign.AutoSize = True
         Me.lblPesoSign.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblPesoSign.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.lblPesoSign.Location = New System.Drawing.Point(487, 150)
+        Me.lblPesoSign.Location = New System.Drawing.Point(478, 68)
         Me.lblPesoSign.Name = "lblPesoSign"
         Me.lblPesoSign.Size = New System.Drawing.Size(23, 15)
         Me.lblPesoSign.TabIndex = 526
@@ -498,7 +483,7 @@ Partial Class AddToCartonForm
         'txtAmount
         '
         Me.txtAmount.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtAmount.Location = New System.Drawing.Point(511, 147)
+        Me.txtAmount.Location = New System.Drawing.Point(502, 65)
         Me.txtAmount.Name = "txtAmount"
         Me.txtAmount.Size = New System.Drawing.Size(95, 21)
         Me.txtAmount.TabIndex = 19
@@ -508,7 +493,7 @@ Partial Class AddToCartonForm
         Me.lblAmount.AutoSize = True
         Me.lblAmount.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblAmount.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.lblAmount.Location = New System.Drawing.Point(434, 150)
+        Me.lblAmount.Location = New System.Drawing.Point(425, 68)
         Me.lblAmount.Name = "lblAmount"
         Me.lblAmount.Size = New System.Drawing.Size(52, 15)
         Me.lblAmount.TabIndex = 525
@@ -519,7 +504,7 @@ Partial Class AddToCartonForm
         Me.lblWeightUOM.AutoSize = True
         Me.lblWeightUOM.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblWeightUOM.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.lblWeightUOM.Location = New System.Drawing.Point(496, 123)
+        Me.lblWeightUOM.Location = New System.Drawing.Point(487, 41)
         Me.lblWeightUOM.Name = "lblWeightUOM"
         Me.lblWeightUOM.Size = New System.Drawing.Size(104, 15)
         Me.lblWeightUOM.TabIndex = 523
@@ -529,7 +514,7 @@ Partial Class AddToCartonForm
         '
         Me.cboWeightUOM.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cboWeightUOM.FormattingEnabled = True
-        Me.cboWeightUOM.Location = New System.Drawing.Point(407, 120)
+        Me.cboWeightUOM.Location = New System.Drawing.Point(398, 38)
         Me.cboWeightUOM.Name = "cboWeightUOM"
         Me.cboWeightUOM.Size = New System.Drawing.Size(64, 23)
         Me.cboWeightUOM.TabIndex = 17
@@ -537,7 +522,7 @@ Partial Class AddToCartonForm
         'txtWeight
         '
         Me.txtWeight.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtWeight.Location = New System.Drawing.Point(335, 120)
+        Me.txtWeight.Location = New System.Drawing.Point(326, 38)
         Me.txtWeight.Name = "txtWeight"
         Me.txtWeight.Size = New System.Drawing.Size(66, 21)
         Me.txtWeight.TabIndex = 16
@@ -547,7 +532,7 @@ Partial Class AddToCartonForm
         Me.lblWeight.AutoSize = True
         Me.lblWeight.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblWeight.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.lblWeight.Location = New System.Drawing.Point(282, 120)
+        Me.lblWeight.Location = New System.Drawing.Point(273, 38)
         Me.lblWeight.Name = "lblWeight"
         Me.lblWeight.Size = New System.Drawing.Size(48, 15)
         Me.lblWeight.TabIndex = 522
@@ -560,7 +545,7 @@ Partial Class AddToCartonForm
         Me.dtpPackedDate.CustomFormat = "dd-MMM-yyyy"
         Me.dtpPackedDate.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.dtpPackedDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom
-        Me.dtpPackedDate.Location = New System.Drawing.Point(132, 120)
+        Me.dtpPackedDate.Location = New System.Drawing.Point(123, 38)
         Me.dtpPackedDate.Name = "dtpPackedDate"
         Me.dtpPackedDate.Size = New System.Drawing.Size(110, 21)
         Me.dtpPackedDate.TabIndex = 15
@@ -569,7 +554,7 @@ Partial Class AddToCartonForm
         '
         Me.lblPackedDate.AutoSize = True
         Me.lblPackedDate.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblPackedDate.Location = New System.Drawing.Point(50, 120)
+        Me.lblPackedDate.Location = New System.Drawing.Point(41, 38)
         Me.lblPackedDate.Name = "lblPackedDate"
         Me.lblPackedDate.Size = New System.Drawing.Size(80, 15)
         Me.lblPackedDate.TabIndex = 454
@@ -580,7 +565,7 @@ Partial Class AddToCartonForm
         Me.pbAddPacker.BackColor = System.Drawing.Color.Transparent
         Me.pbAddPacker.Cursor = System.Windows.Forms.Cursors.Hand
         Me.pbAddPacker.Image = CType(resources.GetObject("pbAddPacker.Image"), System.Drawing.Image)
-        Me.pbAddPacker.Location = New System.Drawing.Point(589, 94)
+        Me.pbAddPacker.Location = New System.Drawing.Point(583, 12)
         Me.pbAddPacker.Name = "pbAddPacker"
         Me.pbAddPacker.Size = New System.Drawing.Size(14, 18)
         Me.pbAddPacker.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
@@ -592,7 +577,7 @@ Partial Class AddToCartonForm
         '
         Me.cboPackerName.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cboPackerName.FormattingEnabled = True
-        Me.cboPackerName.Location = New System.Drawing.Point(335, 92)
+        Me.cboPackerName.Location = New System.Drawing.Point(326, 10)
         Me.cboPackerName.Name = "cboPackerName"
         Me.cboPackerName.Size = New System.Drawing.Size(251, 23)
         Me.cboPackerName.TabIndex = 14
@@ -601,7 +586,7 @@ Partial Class AddToCartonForm
         '
         Me.lblPackerName.AutoSize = True
         Me.lblPackerName.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblPackerName.Location = New System.Drawing.Point(245, 95)
+        Me.lblPackerName.Location = New System.Drawing.Point(236, 13)
         Me.lblPackerName.Name = "lblPackerName"
         Me.lblPackerName.Size = New System.Drawing.Size(85, 15)
         Me.lblPackerName.TabIndex = 452
@@ -610,7 +595,7 @@ Partial Class AddToCartonForm
         'txtCartonNo
         '
         Me.txtCartonNo.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtCartonNo.Location = New System.Drawing.Point(120, 92)
+        Me.txtCartonNo.Location = New System.Drawing.Point(111, 10)
         Me.txtCartonNo.Name = "txtCartonNo"
         Me.txtCartonNo.Size = New System.Drawing.Size(110, 21)
         Me.txtCartonNo.TabIndex = 13
@@ -620,7 +605,7 @@ Partial Class AddToCartonForm
         Me.lblCartonNoA.AutoSize = True
         Me.lblCartonNoA.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblCartonNoA.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.lblCartonNoA.Location = New System.Drawing.Point(50, 95)
+        Me.lblCartonNoA.Location = New System.Drawing.Point(41, 13)
         Me.lblCartonNoA.Name = "lblCartonNoA"
         Me.lblCartonNoA.Size = New System.Drawing.Size(53, 15)
         Me.lblCartonNoA.TabIndex = 449
@@ -631,7 +616,7 @@ Partial Class AddToCartonForm
         Me.lblCartonNoAsteriskA.AutoSize = True
         Me.lblCartonNoAsteriskA.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblCartonNoAsteriskA.ForeColor = System.Drawing.Color.Red
-        Me.lblCartonNoAsteriskA.Location = New System.Drawing.Point(105, 92)
+        Me.lblCartonNoAsteriskA.Location = New System.Drawing.Point(96, 10)
         Me.lblCartonNoAsteriskA.Name = "lblCartonNoAsteriskA"
         Me.lblCartonNoAsteriskA.Size = New System.Drawing.Size(16, 20)
         Me.lblCartonNoAsteriskA.TabIndex = 450
@@ -683,7 +668,7 @@ Partial Class AddToCartonForm
         '
         Me.rbtnExistingCarton.AutoSize = True
         Me.rbtnExistingCarton.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.rbtnExistingCarton.Location = New System.Drawing.Point(36, 19)
+        Me.rbtnExistingCarton.Location = New System.Drawing.Point(36, 18)
         Me.rbtnExistingCarton.Name = "rbtnExistingCarton"
         Me.rbtnExistingCarton.Size = New System.Drawing.Size(104, 19)
         Me.rbtnExistingCarton.TabIndex = 10
@@ -712,12 +697,65 @@ Partial Class AddToCartonForm
         Me.chkPackAll.AutoSize = True
         Me.chkPackAll.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.chkPackAll.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkPackAll.Location = New System.Drawing.Point(27, 293)
+        Me.chkPackAll.Location = New System.Drawing.Point(13, 10)
         Me.chkPackAll.Name = "chkPackAll"
         Me.chkPackAll.Size = New System.Drawing.Size(72, 19)
         Me.chkPackAll.TabIndex = 5
         Me.chkPackAll.Text = "Pack All:"
         Me.chkPackAll.UseVisualStyleBackColor = True
+        '
+        'Panel1
+        '
+        Me.Panel1.Controls.Add(Me.Label52)
+        Me.Panel1.Controls.Add(Me.txtPackingListNo)
+        Me.Panel1.Controls.Add(Me.txtCustomerOrderInfo)
+        Me.Panel1.Controls.Add(Me.Label10)
+        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
+        Me.Panel1.Location = New System.Drawing.Point(0, 53)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(684, 33)
+        Me.Panel1.TabIndex = 507
+        '
+        'Panel2
+        '
+        Me.Panel2.Controls.Add(Me.chkPackAll)
+        Me.Panel2.Controls.Add(Me.txtTotalQtyPicked)
+        Me.Panel2.Controls.Add(Me.Label7)
+        Me.Panel2.Controls.Add(Me.Label8)
+        Me.Panel2.Controls.Add(Me.txtTotalItems)
+        Me.Panel2.Controls.Add(Me.txtTotalQtyInCartonSum)
+        Me.Panel2.Controls.Add(Me.Label3)
+        Me.Panel2.Dock = System.Windows.Forms.DockStyle.Top
+        Me.Panel2.Location = New System.Drawing.Point(0, 320)
+        Me.Panel2.Name = "Panel2"
+        Me.Panel2.Size = New System.Drawing.Size(684, 44)
+        Me.Panel2.TabIndex = 508
+        '
+        'Panel3
+        '
+        Me.Panel3.Controls.Add(Me.lblCartonNoA)
+        Me.Panel3.Controls.Add(Me.pbAutoAddA)
+        Me.Panel3.Controls.Add(Me.pbAddSize)
+        Me.Panel3.Controls.Add(Me.txtCartonNo)
+        Me.Panel3.Controls.Add(Me.cboSizeInfo)
+        Me.Panel3.Controls.Add(Me.lblPackerName)
+        Me.Panel3.Controls.Add(Me.lblSizeInfo)
+        Me.Panel3.Controls.Add(Me.cboPackerName)
+        Me.Panel3.Controls.Add(Me.lblPesoSign)
+        Me.Panel3.Controls.Add(Me.pbAddPacker)
+        Me.Panel3.Controls.Add(Me.txtAmount)
+        Me.Panel3.Controls.Add(Me.lblPackedDate)
+        Me.Panel3.Controls.Add(Me.lblAmount)
+        Me.Panel3.Controls.Add(Me.dtpPackedDate)
+        Me.Panel3.Controls.Add(Me.lblWeightUOM)
+        Me.Panel3.Controls.Add(Me.lblWeight)
+        Me.Panel3.Controls.Add(Me.cboWeightUOM)
+        Me.Panel3.Controls.Add(Me.txtWeight)
+        Me.Panel3.Controls.Add(Me.lblCartonNoAsteriskA)
+        Me.Panel3.Location = New System.Drawing.Point(36, 92)
+        Me.Panel3.Name = "Panel3"
+        Me.Panel3.Size = New System.Drawing.Size(642, 100)
+        Me.Panel3.TabIndex = 532
         '
         'AddToCartonForm
         '
@@ -725,20 +763,11 @@ Partial Class AddToCartonForm
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.AutoScroll = True
         Me.BackColor = System.Drawing.Color.White
-        Me.ClientSize = New System.Drawing.Size(684, 512)
-        Me.Controls.Add(Me.chkPackAll)
+        Me.ClientSize = New System.Drawing.Size(684, 561)
         Me.Controls.Add(Me.gbOptions)
-        Me.Controls.Add(Me.txtTotalQtyInCartonSum)
-        Me.Controls.Add(Me.Label3)
-        Me.Controls.Add(Me.txtTotalItems)
-        Me.Controls.Add(Me.Label8)
-        Me.Controls.Add(Me.Label7)
-        Me.Controls.Add(Me.txtTotalQtyPicked)
+        Me.Controls.Add(Me.Panel2)
         Me.Controls.Add(Me.dgCustomerOrderItems)
-        Me.Controls.Add(Me.Label10)
-        Me.Controls.Add(Me.txtCustomerOrderInfo)
-        Me.Controls.Add(Me.txtPackingListNo)
-        Me.Controls.Add(Me.Label52)
+        Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.msMenu)
         Me.Controls.Add(Me.lblTitle)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
@@ -757,6 +786,12 @@ Partial Class AddToCartonForm
         CType(Me.pbAddSize, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.pbAddPacker, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.errProvider, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.Panel1.ResumeLayout(False)
+        Me.Panel1.PerformLayout()
+        Me.Panel2.ResumeLayout(False)
+        Me.Panel2.PerformLayout()
+        Me.Panel3.ResumeLayout(False)
+        Me.Panel3.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -822,4 +857,7 @@ Partial Class AddToCartonForm
     Friend WithEvents ci_tags As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents ci_packedby As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents ci_packeddate As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents Panel2 As Panel
+    Friend WithEvents Panel1 As Panel
+    Friend WithEvents Panel3 As Panel
 End Class

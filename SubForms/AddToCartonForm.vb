@@ -1,17 +1,7 @@
 ﻿Imports MySql.Data.MySqlClient
-Imports System.IO
-Imports System.Windows.Forms
-Imports CrystalDecisions.CrystalReports.Engine
-Imports System.Linq
-Imports System.Collections
-Imports System.Collections.Generic
-Imports System.Data
-Imports System.Diagnostics
-Imports System.Runtime.InteropServices
-Imports System.Text.RegularExpressions
-Imports System.ComponentModel
 Imports WarehouseManagementSystem.Core.Entities
 Imports WarehouseManagementSystem.Core.Interfaces
+
 Public Class AddToCartonForm
     Dim manager As New sqlModule.Manager
     Dim conn As New MySqlConnection(Manager.GetConnString)
@@ -29,16 +19,6 @@ Public Class AddToCartonForm
     Private Async Sub AddToCartonForm_Load(sender As Object, e As EventArgs) Handles Me.Load
         Dim _systemOwnerService = GetRequiredService(Of ISystemOwnerService)()
         _systemOwner = Await _systemOwnerService.GetCurrentSystemOwnerEntityAsync()
-
-        If IsThurston Then
-            lblTitle.Text = "Add To Truck"
-            ci_totalqtyincarton.HeaderText = "Total Qty. In Truck"
-            rbtnAddNewCarton.Text = "Add New Truck"
-            rbtnExistingCarton.Text = "Existing Truck"
-            lblCartonNoA.Text = "Truck No.:"
-            lblCartonNoE.Text = "Truck No.:"
-            Label3.Text = $"Total Qty. In {ChrW(10)}{ChrW(10)}Truck (Sum):"
-        End If
 
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -128,6 +108,7 @@ Public Class AddToCartonForm
     End Sub
     Sub clearAddNewCarton(ByVal ivisible As Boolean)
         Try
+            Panel3.Visible = ivisible
             lblCartonNoA.Visible = ivisible
             lblCartonNoAsteriskA.Visible = ivisible
             txtCartonNo.Visible = ivisible
@@ -157,6 +138,18 @@ Public Class AddToCartonForm
             cboWeightUOM.SelectedItem = Nothing
             cboWeightUOM.Text = "kg"
             dtpPackedDate.Value = Now.Date
+
+            cboSizeInfo.SelectedIndex = -1
+            cboPackerName.SelectedItem = cboPackerName.Items.OfType(Of Object)?.FirstOrDefault()
+            txtWeight.Text = 0
+            cboWeightUOM.Text = String.Empty
+            txtAmount.Text = 0
+
+            If IsThurston Then
+                For Each control In Panel3.Controls.OfType(Of Control).Where(Function(c) Not {lblCartonNoA.Name, lblCartonNoAsteriskA.Name, txtCartonNo.Name}.Contains(c.Name))
+                    control.Visible = False
+                Next
+            End If
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -646,6 +639,11 @@ Public Class AddToCartonForm
             conn.Close()
         End Try
     End Sub
+
+    Private Sub cboCartonNo_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboCartonNo.SelectedIndexChanged
+
+    End Sub
+
     Private Sub pbAddSize_Click(sender As Object, e As EventArgs) Handles pbAddSize.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -688,6 +686,7 @@ Public Class AddToCartonForm
             conn.Close()
         End Try
     End Sub
+
     Private Sub pbAutoAddA_MouseLeave(sender As Object, e As EventArgs) Handles pbAutoAddA.MouseLeave
         Try
             pbAutoAddA.BackColor = Drawing.Color.Transparent
@@ -989,6 +988,15 @@ Public Class AddToCartonForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
+    Private Sub cboCartonNo_KeyDown(sender As Object, e As KeyEventArgs) Handles cboCartonNo.KeyDown
+        e.Handled = True
+    End Sub
+
+    Private Sub cboCartonNo_KeyPress(sender As Object, e As KeyPressEventArgs) Handles cboCartonNo.KeyPress
+        e.Handled = True
+    End Sub
+
 #End Region
 
     Private ReadOnly Property IsThurston As Boolean

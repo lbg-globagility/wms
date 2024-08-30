@@ -1307,15 +1307,14 @@ Public Class ViewEditLineUpDeliveryForm
         Try
             dgCartons.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT luc.rowid,luc.packinglistcartonid,COALESCE(pc.cartonno,''),COALESCE(CONCAT(COALESCE(c.firstname,''),' ',COALESCE(c.middlename,''),' ',COALESCE(c.lastname,''),' ',COALESCE(c.suffix,''),' - ',COALESCE(c.contactno,'')),''),COALESCE(DATE_FORMAT(pc.packeddate,'%d-%b-%Y'),''),COALESCE(luc.`status`,''),COALESCE(cs.sizename,''),COALESCE(cs.`length`,0)," &
-                        $"COALESCE(cs.`width`,0),COALESCE(cs.`height`,0) FROM packinglistcartons pc
-                        INNER JOIN packinglist pl ON pl.RowID=pc.PackingListID
-                        INNER JOIN lineupcartons luc ON luc.PackingListCartonID=pc.RowID
-                        INNER JOIN lineups lu ON lu.RowID=luc.LineUpID AND lu.LineUpNo={ilineupid}
-                        LEFT JOIN contacts c ON pc.contactid = c.rowid
-                        LEFT JOIN cartonsizes cs ON pc.cartonsizeid = cs.rowid
-                        INNER JOIN packinglistcartonitems plci ON plci.PackingListCartonID=pc.RowID
-                        WHERE luc.organizationid = " & Z_OrganizationID & " AND luc.`status` != 'Inactive' HAVING COUNT(plci.RowID) > 0 ORDER BY pc.cartonno "
+            Dim sql1 As String = $"SELECT luc.rowid,luc.packinglistcartonid, COALESCE(plc.CartonNo,''), COALESCE(CONCAT(COALESCE(c.firstname,''),' ', COALESCE(c.middlename,''),' ', COALESCE(c.lastname,''),' ', COALESCE(c.suffix,''),' - ', COALESCE(c.contactno,'')),''), COALESCE(DATE_FORMAT(plc.PackedDate,'%d-%b-%Y'),''), COALESCE(luc.`status`,''), COALESCE(cs.sizename,''), COALESCE(cs.`length`,0), COALESCE(cs.`width`,0), COALESCE(cs.`height`,0)
+FROM lineupcartons luc
+INNER JOIN lineups lu ON lu.RowID=luc.LineUpID AND lu.RowID={ilineupid}
+INNER JOIN packinglistcartons plc ON plc.RowID=luc.PackingListCartonID
+INNER JOIN packinglist pl ON pl.RowID=plc.PackingListID
+LEFT JOIN contacts c ON plc.ContactID=c.RowID
+LEFT JOIN cartonsizes cs ON plc.CartonSizeID=cs.RowID
+WHERE luc.OrganizationID={Z_OrganizationID};"
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             Dim n As Integer = 0

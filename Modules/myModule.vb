@@ -1,4 +1,5 @@
 ﻿Imports System.IO
+Imports System.Security.Cryptography
 Imports log4net
 Imports Microsoft.Extensions.DependencyInjection
 Imports MySql.Data.MySqlClient
@@ -454,7 +455,8 @@ Module myModule
         End Try
     End Sub
 
-    Private fsdfsd As String = "
+    Private Function appendUnionClause(orgId As Integer) As String
+        Return $"
         UNION
         SELECT
         DISTINCT CONCAT(COALESCE(a.CompanyName,''),' - ',COALESCE(a.AccountNo,''),' / ',CONCAT(COALESCE(o.OrderNumber,''),' (C.O. No.)'))
@@ -464,13 +466,43 @@ Module myModule
         INNER JOIN packinglist pl ON pl.RowID=plc.PackingListID
         INNER JOIN orders o ON o.RowID=pl.OrderID AND o.OrderType='CO'
         INNER JOIN accounts a ON a.RowID=o.AccountID
-        WHERE (plo.QtyInCarton MOD oi.QtyOrdered) != 0"
+
+        LEFT JOIN (
+        SELECT plo.OrderItemID, SUM(plo.QtyInCarton) `QtyInCarton`
+        FROM packinglistcartonitems plo
+        INNER JOIN orderitems oi ON oi.RowID=plo.OrderItemID
+        INNER JOIN packinglistcartons plc ON plc.RowID=plo.PackingListCartonID
+        INNER JOIN packinglist pl ON pl.RowID=plc.PackingListID
+        INNER JOIN orders o ON o.RowID=pl.OrderID
+        WHERE plo.OrganizationID = {orgId}
+        GROUP BY OrderItemID) plo2 ON plo2.OrderItemID=oi.RowID
+
+        LEFT JOIN (SELECT
+        SUM(plci.QtyInCarton) `TotalQtyInCarton`,
+        GROUP_CONCAT(plci.PackingListCartonID) `PackingListCartonIds`,
+        oi.QtyOrdered,
+        plci.*,
+        pl.RowID `PackingListId`,
+        pl.OrderID
+        FROM lineups lu
+        INNER JOIN lineupcartons luc ON luc.LineUpID=lu.RowID
+        INNER JOIN packinglist pl ON pl.RowID=lu.PackingListID
+        INNER JOIN packinglistcartons plc ON plc.PackingListID=pl.RowID
+        INNER JOIN packinglistcartonitems plci ON plci.PackingListCartonID=plc.RowID AND plci.`Status` NOT IN ('Active', 'Cancelled')
+        INNER JOIN orderitems oi ON oi.RowID=plci.OrderItemID
+        WHERE lu.OrganizationID = {orgId}
+        AND lu.`Status`!='Cancelled'
+        GROUP BY plci.OrderItemID) i ON i.OrderID=oi.OrderID
+
+        WHERE (plo.QtyInCarton MOD oi.QtyOrdered) != 0
+        AND oi.QtyOrdered > (IFNULL(plo2.`QtyInCarton`, 0) - IFNULL(i.`TotalQtyInCarton`, 0))"
+    End Function
 
     Sub globalautocompleteOrderInfoA(ByVal globalicombobox As ComboBox, ByVal globaliordertype As String, ByVal globaliorderstatus As String, ByVal globalformname As Object)
         Try
             Dim orderinfo As New AutoCompleteStringCollection
-            Dim cmd1 As New MySqlCommand($"SELECT COALESCE(CONCAT(COALESCE(a.companyname,''),' - ',COALESCE(a.accountno,''),' / ',CONCAT(COALESCE(o.ordernumber,''),' (C.O. No.)')),'') AS 'companyname' FROM orders o LEFT JOIN accounts a ON o.accountid = a.rowid WHERE o.organizationid = {Z_OrganizationID} AND o.`status` = '{globaliorderstatus}' AND o.ordertype = '{globaliordertype}' GROUP BY o.rowid {fsdfsd}", globalconn)
-            Dim cmd2 As New MySqlCommand($"SELECT COALESCE(CONCAT(COALESCE(o.ordernumber,''),' (C.O. No.) / ',COALESCE(a.companyname,''),' - ',COALESCE(a.accountno,'')),'') AS 'ordernumber' FROM orders o LEFT JOIN accounts a ON o.accountid = a.rowid WHERE o.organizationid = {Z_OrganizationID} AND o.`status` = '{globaliorderstatus}' AND o.ordertype = '{globaliordertype}' GROUP BY o.rowid {fsdfsd}", globalconn)
+            Dim cmd1 As New MySqlCommand($"SELECT COALESCE(CONCAT(COALESCE(a.companyname,''),' - ',COALESCE(a.accountno,''),' / ',CONCAT(COALESCE(o.ordernumber,''),' (C.O. No.)')),'') AS 'companyname' FROM orders o LEFT JOIN accounts a ON o.accountid = a.rowid WHERE o.organizationid = {Z_OrganizationID} AND o.`status` = '{globaliorderstatus}' AND o.ordertype = '{globaliordertype}' GROUP BY o.rowid {appendUnionClause(Z_OrganizationID)}", globalconn)
+            Dim cmd2 As New MySqlCommand($"SELECT COALESCE(CONCAT(COALESCE(o.ordernumber,''),' (C.O. No.) / ',COALESCE(a.companyname,''),' - ',COALESCE(a.accountno,'')),'') AS 'ordernumber' FROM orders o LEFT JOIN accounts a ON o.accountid = a.rowid WHERE o.organizationid = {Z_OrganizationID} AND o.`status` = '{globaliorderstatus}' AND o.ordertype = '{globaliordertype}' GROUP BY o.rowid {appendUnionClause(Z_OrganizationID)}", globalconn)
             Dim da1 As New MySqlDataAdapter(cmd1)
             Dim da2 As New MySqlDataAdapter(cmd2)
             Dim ds1 As New DataSet
@@ -957,7 +989,38 @@ Module myModule
         Try
             globalicombobox.Items.Clear()
             If globalconn.State = ConnectionState.Open Then globalconn.Close()
-            Dim sql1 As String = $"(SELECT COALESCE(CONCAT(COALESCE(o.ordernumber,''),' (C.O. No.) / ',COALESCE(a.companyname,''),' - ',COALESCE(a.accountno,'')),'') AS 'ordernumber' FROM orders o LEFT JOIN accounts a ON o.accountid = a.rowid WHERE o.organizationid = {Z_OrganizationID} AND o.status = '{globaliorderstatus}' AND o.ordertype = '{globaliordertype}' GROUP BY o.rowid ORDER BY o.ordernumber) {fsdfsd}"
+            Dim sql1 As String = $"(SELECT COALESCE(CONCAT(COALESCE(o.ordernumber,''),' (C.O. No.) / ',COALESCE(a.companyname,''),' - ',COALESCE(a.accountno,'')),'') AS 'ordernumber' FROM orders o LEFT JOIN accounts a ON o.accountid = a.rowid
+
+INNER JOIN orderitems oi ON oi.OrderID=o.RowID
+
+LEFT JOIN (
+SELECT plo.OrderItemID, SUM(plo.QtyInCarton) `QtyInCarton`
+FROM packinglistcartonitems plo
+INNER JOIN orderitems oi ON oi.RowID=plo.OrderItemID
+INNER JOIN packinglistcartons plc ON plc.RowID=plo.PackingListCartonID
+INNER JOIN packinglist pl ON pl.RowID=plc.PackingListID
+INNER JOIN orders o ON o.RowID=pl.OrderID
+WHERE plo.OrganizationID = {Z_OrganizationID}
+GROUP BY OrderItemID) plo2 ON plo2.OrderItemID=oi.RowID
+
+LEFT JOIN (SELECT
+SUM(plci.QtyInCarton) `TotalQtyInCarton`,
+GROUP_CONCAT(plci.PackingListCartonID) `PackingListCartonIds`,
+oi.QtyOrdered,
+plci.*,
+pl.RowID `PackingListId`,
+pl.OrderID
+FROM lineups lu
+INNER JOIN lineupcartons luc ON luc.LineUpID=lu.RowID
+INNER JOIN packinglist pl ON pl.RowID=lu.PackingListID
+INNER JOIN packinglistcartons plc ON plc.PackingListID=pl.RowID
+INNER JOIN packinglistcartonitems plci ON plci.PackingListCartonID=plc.RowID
+INNER JOIN orderitems oi ON oi.RowID=plci.OrderItemID
+WHERE lu.OrganizationID={Z_OrganizationID}
+AND lu.`Status`!='Cancelled'
+GROUP BY plci.OrderItemID) i ON i.OrderID=o.RowID
+
+WHERE o.organizationid = {Z_OrganizationID} AND o.status = '{globaliorderstatus}' AND o.ordertype = '{globaliordertype}' AND oi.QtyOrdered > (IFNULL(plo2.`QtyInCarton`, 0) - IFNULL(i.`TotalQtyInCarton`, 0)) GROUP BY o.rowid ORDER BY o.ordernumber) {appendUnionClause(Z_OrganizationID)}"
             If globalconn.State = ConnectionState.Closed Then globalconn.Open()
             Dim cmd1 As New MySqlCommand(sql1, globalconn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader()
