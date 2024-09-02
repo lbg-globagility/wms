@@ -1009,6 +1009,58 @@ Public Class PackingListForm
         Try
             dgCustomerOrderItems.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
+            Dim addedConditionClause = If(Not msNew.Enabled,
+                "AND ci.QtyOrdered > (IFNULL(plo.QtyInCarton, 0) - IFNULL(plo2.QtyInCarton, 0))                
+                AND ci.QtyOrdered > (IFNULL(plo.QtyInCarton, 0) + IFNULL(plo2.QtyInCarton, 0))",
+                "AND ci.QtyOrdered > (IFNULL(plo.QtyInCarton, 0) - IFNULL(plo2.QtyInCarton, 0))")
+            'GREATEST(IFNULL(plo.QtyInCarton, 0), IFNULL(plo2.QtyInCarton, 0)) - LEAST(IFNULL(plo.QtyInCarton, 0), IFNULL(plo2.QtyInCarton, 0))
+
+            Dim appendedJoinClause = $"LEFT JOIN (
+SELECT plo.OrderItemID, SUM(plo.QtyInCarton) `QtyInCarton`
+FROM packinglistcartonitems plo
+INNER JOIN orderitems oi ON oi.RowID=plo.OrderItemID
+INNER JOIN packinglistcartons plc ON plc.RowID=plo.PackingListCartonID
+INNER JOIN packinglist pl ON pl.RowID=plc.PackingListID AND pl.PackingListNo = {If(dgPackingList.CurrentRow?.Cells(pal_packinglistno.Name).Value, 0)} AND pl.OrderID = {palorderid}
+WHERE plo.OrganizationID = {Z_OrganizationID}
+GROUP BY OrderItemID) plo ON plo.OrderItemID=ci.RowID
+
+LEFT JOIN (
+SELECT plo.OrderItemID, SUM(plo.QtyInCarton) `QtyInCarton`
+FROM packinglistcartonitems plo
+INNER JOIN orderitems oi ON oi.RowID=plo.OrderItemID
+INNER JOIN packinglistcartons plc ON plc.RowID=plo.PackingListCartonID
+INNER JOIN packinglist pl ON pl.RowID=plc.PackingListID AND pl.PackingListNo != {If(dgPackingList.CurrentRow?.Cells(pal_packinglistno.Name).Value, 0)} AND pl.OrderID = {palorderid}
+WHERE plo.OrganizationID = {Z_OrganizationID}
+AND plo.`Status` NOT IN ('Cancelled', 'Cancelled')#Active
+GROUP BY OrderItemID) plo2 ON plo2.OrderItemID=ci.RowID"
+
+            If Not msNew.Enabled Then appendedJoinClause = $"LEFT JOIN (SELECT 0 `QtyInCarton`, NULL `OrderItemID`) plo ON IFNULL(plo.OrderItemID, ci.RowID)=ci.RowID
+
+LEFT JOIN (
+SELECT plo.OrderItemID, SUM(plo.QtyInCarton) `QtyInCarton`
+FROM packinglistcartonitems plo
+INNER JOIN orderitems oi ON oi.RowID=plo.OrderItemID
+INNER JOIN packinglistcartons plc ON plc.RowID=plo.PackingListCartonID
+INNER JOIN packinglist pl ON pl.RowID=plc.PackingListID AND pl.OrderID = {palorderid}
+WHERE plo.OrganizationID = {Z_OrganizationID}
+AND plo.`Status` NOT IN ('Cancelled', 'Cancelled')#Active
+GROUP BY OrderItemID) plo2 ON plo2.OrderItemID=ci.RowID"
+
+            Dim packingListCurrRow = dgPackingList?.CurrentRow?.Cells(pal_rowid.Name)
+            Dim packingListCartonJoinClause = $"{Environment.NewLine}INNER JOIN packinglistcartons plc ON plc.PackingListID={If(packingListCurrRow Is Nothing, 0, CInt(packingListCurrRow.Value))}
+INNER JOIN packinglistcartonitems plci ON plci.OrderItemID=ci.RowID AND plci.PackingListCartonID=plc.RowID{Environment.NewLine}"
+            If Not msNew.Enabled Then packingListCartonJoinClause = String.Empty
+
+
+            Dim groupingClause = $"{Environment.NewLine}GROUP BY ci.rowid{Environment.NewLine}"
+            If Not msNew.Enabled Then groupingClause = String.Empty
+
+
+
+
+
+
+
             Dim sql1 = $"SELECT ci.rowid, COALESCE(ci.productcolorsizeid,0), COALESCE(ci.productbundleid,0), COALESCE(c.colorvalue,''), COALESCE(p.productcode,''), COALESCE(b.bundlename,''), COALESCE(c.colorname,''), COALESCE(pcs.size,''), COALESCE(pcs.seasoncode,''),(IFNULL(ci.qtyordered,0) - IFNULL(plo.QtyInCarton, 0)), COALESCE(pcs.sku,''), COALESCE(b.sku,''), COALESCE(ci.unitofmeasure,''), COALESCE(ci.itemtype,''), COALESCE(ci.remarks,''), COALESCE(ci.`status`,''), COALESCE(DATE_FORMAT(ci.packeddate,'%d-%b-%Y'),''), COALESCE(CONCAT(COALESCE(pa.firstname,''),' ', COALESCE(pa.middlename,''),' ', COALESCE(pa.lastname,''),' ', COALESCE(pa.suffix,''),' - ', COALESCE(pa.contactno,'')),''), COALESCE(ci.srp,''), COALESCE(ci.tags,''), COALESCE(ci.sku,''), IFNULL(ci.QtyOrdered,0) `QtyOrdered`, IFNULL(plo.QtyInCarton, 0) `QtyInCarton`, IFNULL(plo2.QtyInCarton, 0) `QtyInCarton2`
 FROM orderitems ci
 LEFT JOIN productbundles b ON ci.productbundleid = b.rowid
@@ -1018,30 +1070,13 @@ LEFT JOIN colors c ON pc.colorid = c.rowid
 LEFT JOIN products p ON pc.productid = p.rowid
 LEFT JOIN contacts pa ON ci.packedby = pa.rowid
 
-LEFT JOIN (
-SELECT plo.OrderItemID, SUM(plo.QtyInCarton) `QtyInCarton`
-FROM packinglistcartonitems plo
-INNER JOIN orderitems oi ON oi.RowID=plo.OrderItemID
-INNER JOIN packinglistcartons plc ON plc.RowID=plo.PackingListCartonID
-INNER JOIN packinglist pl ON pl.RowID=plc.PackingListID  AND pl.PackingListNo = {If(dgPackingList.CurrentRow?.Cells(pal_packinglistno.Name).Value, 0)}
-INNER JOIN orders o ON o.RowID=pl.OrderID AND o.RowID = {palorderid}
-WHERE plo.OrganizationID = {Z_OrganizationID}
-GROUP BY OrderItemID) plo ON plo.OrderItemID=ci.RowID
-
-LEFT JOIN (
-SELECT plo.OrderItemID, SUM(plo.QtyInCarton) `QtyInCarton`
-FROM packinglistcartonitems plo
-INNER JOIN orderitems oi ON oi.RowID=plo.OrderItemID
-INNER JOIN packinglistcartons plc ON plc.RowID=plo.PackingListCartonID
-INNER JOIN packinglist pl ON pl.RowID=plc.PackingListID AND pl.PackingListNo != {If(dgPackingList.CurrentRow?.Cells(pal_packinglistno.Name).Value, 0)}
-INNER JOIN orders o ON o.RowID=pl.OrderID AND o.RowID = {palorderid}
-WHERE plo.OrganizationID = {Z_OrganizationID}
-AND plo.`Status` NOT IN ('Active', 'Cancelled')
-GROUP BY OrderItemID) plo2 ON plo2.OrderItemID=ci.RowID
+{appendedJoinClause}
+{packingListCartonJoinClause}
 
 WHERE ci.orderid = {palorderid} AND ci.organizationid = {Z_OrganizationID} AND ci.status != 'Inactive' AND ci.itemtype != 'BI'
 #AND (IFNULL(ci.qtyordered,0) - IFNULL(plo.QtyInCarton, 0)) > 0
-AND ci.QtyOrdered > (IFNULL(plo.QtyInCarton, 0) - IFNULL(plo2.QtyInCarton, 0))
+{addedConditionClause}
+{groupingClause}
 ORDER BY ci.rowid;"
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -4109,7 +4144,11 @@ ORDER BY ci.rowid;"
                     cartonNo:=cartonNo,
                     amount:=amount)
 
-                Dim orderItems = packingList.Order.OrderItems
+                Dim oiRowIds = dgCustomerOrderItems.Rows.
+                    OfType(Of DataGridViewRow).
+                    Select(Function(t) CInt(t.Cells(ci_rowid.Name).Value)).
+                    ToList()
+                Dim orderItems = packingList.Order.OrderItems.Where(Function(t) oiRowIds.Contains(t.RowID))
                 For Each item In orderItems
                     Dim newPackingListCartonItem = PackingListCartonItem.NewPackingListCartonItem(organizationId:=Z_OrganizationID,
                         userId:=Z_UserID,
