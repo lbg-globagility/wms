@@ -1010,9 +1010,9 @@ Public Class PackingListForm
             dgCustomerOrderItems.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
             Dim addedConditionClause = If(Not msNew.Enabled,
-                "AND ci.QtyOrdered > (IFNULL(plo.QtyInCarton, 0) - IFNULL(plo2.QtyInCarton, 0))                
+                "AND ci.QtyOrdered >= (IFNULL(plo.QtyInCarton, 0) - IFNULL(plo2.QtyInCarton, 0))                
                 AND ci.QtyOrdered > (IFNULL(plo.QtyInCarton, 0) + IFNULL(plo2.QtyInCarton, 0))",
-                "AND ci.QtyOrdered > (IFNULL(plo.QtyInCarton, 0) - IFNULL(plo2.QtyInCarton, 0))")
+                "AND ci.QtyOrdered >= (IFNULL(plo.QtyInCarton, 0) - IFNULL(plo2.QtyInCarton, 0))")
             'GREATEST(IFNULL(plo.QtyInCarton, 0), IFNULL(plo2.QtyInCarton, 0)) - LEAST(IFNULL(plo.QtyInCarton, 0), IFNULL(plo2.QtyInCarton, 0))
 
             Dim appendedJoinClause = $"LEFT JOIN (
