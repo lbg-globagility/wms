@@ -1,0 +1,2 @@
+
+UPDATE `systeminfo` SET `Value`='2.1.2' WHERE  `Name`='system.version';
