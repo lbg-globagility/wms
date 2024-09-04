@@ -21,6 +21,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
             return await _context.ProductInventoryLocations
                 .Include(t => t.RackShelfColumn)
                     .ThenInclude(r => r.ProductInventoryLocations)
+                        .ThenInclude(pil => pil.RackShelfColumn)
                 .Include(t => t.ProductColorSize)
                     .ThenInclude(t => t.ProductColor)
                         .ThenInclude(t => t.Color)

@@ -1,7 +1,7 @@
 ﻿Option Strict On
 
-Imports System.Web.UI.WebControls.WebParts
 Imports WarehouseManagementSystem.Core.Entities
+Imports WarehouseManagementSystem.Core.Enums
 Imports WarehouseManagementSystem.Utilities.Extensions
 
 Public Class ProductColorSizeModel
@@ -19,7 +19,9 @@ Public Class ProductColorSizeModel
         productImageConfigParser As ProductImageConfigParser)
 
         '_productInventoryLocation = productInventoryLocation
-        _productInventoryLocations = productInventoryLocations
+        _productInventoryLocations = productInventoryLocations.
+            Where(Function(pil) pil.RackShelfColumn.Status = RackShelfColumnStatus.Active).
+            ToList()
         _ProductInventoryLocation = productInventoryLocations.
             OrderBy(Function(t) t.RackShelfColumn.PickOrderNo).
             FirstOrDefault()
