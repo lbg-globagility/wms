@@ -1127,7 +1127,7 @@ Public Class PickListForm
         Try
             dgRackShelfColumn.Rows.Clear()
 
-            Dim sql = <![CDATA[SELECT pil.rowid,COALESCE(rsc.rackno,''),COALESCE(rsc.shelfno,''),COALESCE(rsc.columnno,''),COALESCE(pil.totalavailableqty,0),COALESCE(rsc.pickorderno,0),COALESCE(pil.totalallocatedqty,0) FROM productinventorylocation pil INNER JOIN rackshelfcolumn rsc ON pil.rackshelfcolumnid = rsc.rowid AND rsc.inventorylocationid = @iinventorylocationid WHERE pil.organizationid = @organizationId AND pil.productcolorsizeid = @iproductcolorsizeid ORDER BY rsc.pickorderno ASC;]]>.Value
+            Dim sql = <![CDATA[SELECT pil.rowid,COALESCE(rsc.rackno,''),COALESCE(rsc.shelfno,''),COALESCE(rsc.columnno,''),COALESCE(pil.totalavailableqty,0),COALESCE(rsc.pickorderno,0),COALESCE(pil.totalallocatedqty,0) FROM productinventorylocation pil INNER JOIN rackshelfcolumn rsc ON rsc.`Status`!='Inactive' AND pil.rackshelfcolumnid = rsc.rowid AND rsc.inventorylocationid = @iinventorylocationid WHERE pil.organizationid = @organizationId AND pil.productcolorsizeid = @iproductcolorsizeid ORDER BY rsc.pickorderno ASC;]]>.Value
 
             Using connection As New MySqlConnection(manager.GetConnString),
             command As New MySqlCommand(sql, connection),
@@ -2286,6 +2286,32 @@ Public Class PickListForm
                         Exit Try
                     End If
                 End If
+
+                If IsThurston Then
+                    If (If(dgCustomerOrderItems.Rows.OfType(Of DataGridViewRow)?.Any(), False) And dgCustomerOrderItems.CurrentRow IsNot Nothing) AndAlso
+                If(dgRackShelfColumn.Rows.OfType(Of DataGridViewRow)?.Any(), False) Then
+
+                        Dim userTotalPickedQty = dgRackShelfColumn.Rows.
+                        OfType(Of DataGridViewRow).
+                        Sum(Function(r) r.Cells(rsc_qtytopick.Name).Value)
+
+                        Dim qty = CInt(dgCustomerOrderItems.CurrentRow.Cells(ci_qtyordered.Name).Value)
+
+                        Dim boolSatisfied = userTotalPickedQty = qty
+                        msSaveRSC.Enabled = boolSatisfied
+
+                        If Not boolSatisfied Then
+                            errProvider.SetError(txtQtyToPick, $"it should be {qty}")
+                        Else
+                            errProvider.SetError(txtQtyToPick, String.Empty)
+                        End If
+                    Else
+                        msSaveRSC.Enabled = False
+                    End If
+
+                    If Not msSaveRSC.Enabled Then Me.Cursor = Cursors.Default : Return
+                End If
+
                 If MessageBox.Show("Would you like to save the changes in the Rack / Column / Shelf assignment?", "Saving", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
                     Me.Cursor = Cursors.WaitCursor
                     getPickListOrderStatus(CInt(dgPickList.CurrentRow.Cells("pl_rowid").Value), CInt(dgCustomerOrders.CurrentRow.Cells("co_rowid").Value), CInt(dgCustomerOrderItems.CurrentRow.Cells("ci_rowid").Value), Me)
