@@ -84,7 +84,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
                     if (productInventoryLocation == null)
                         continue;
 
-                    var qty = packingListCartonItem.QtyInCarton ?? 0;
+                    var qty = packingListCartonItem?.OrderItem?.QtyOrdered ?? packingListCartonItem.QtyInCarton ?? 0;
 
                     productInventoryLocation.TotalReserveQty -= qty;
 
