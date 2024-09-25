@@ -74,8 +74,13 @@ Public Class StockLevelForm
         Try
             dgProductColorSizes.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT pcs.rowid,COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(c.colorname,''),COALESCE(pcs.size,0.0),COALESCE(pcs.seasoncode,''),COALESCE(p.unitprice,0.00),COALESCE(pcs.sku,'') FROM productcolorsizes pcs LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid " &
-                        "LEFT JOIN colors c ON pc.colorid = c.rowid LEFT JOIN products p ON pc.productid = p.rowid LEFT JOIN companies v ON p.companyid = v.rowid LEFT JOIN brands b ON p.brandid = b.rowid WHERE pcs.`Status`='Active' AND pcs.organizationid = " & Z_OrganizationID & " AND " & iconditionstring & " ORDER BY b.brandname,p.productcode,c.colorname "
+            Dim sql1 As String = "SELECT pcs.rowid,COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(c.colorname,''),COALESCE(pcs.size,0.0),COALESCE(pcs.seasoncode,''),COALESCE(p.unitprice,0.00),COALESCE(pcs.sku,'') FROM productcolorsizes pcs INNER JOIN productcolors pc ON pcs.productcolorid = pc.rowid
+INNER JOIN colors c ON pc.colorid = c.rowid
+INNER JOIN products p ON pc.productid = p.rowid
+LEFT JOIN companies v ON p.companyid = v.rowid
+LEFT JOIN brands b ON p.brandid = b.rowid
+INNER JOIN productinventorylocation pil ON pil.ProductColorSizeID=pcs.RowID AND pil.TotalAvailableQty > 0
+INNER JOIN rackshelfcolumn r ON r.RowID=pil.RackShelfColumnID AND r.`Status`='Active' WHERE pcs.`Status`='Active' AND pcs.organizationid = " & Z_OrganizationID & " AND " & iconditionstring & " ORDER BY b.brandname,p.productcode,c.colorname "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             Dim seqno As Integer = 1
@@ -194,7 +199,9 @@ Public Class StockLevelForm
                     If IsDBNull(slproductimage) Then
                         slproductimage = Nothing
                     End If
-                    printdataset.AddSetARow(CStr(reader1(7)), CStr(reader1(1)), CStr(reader1(2)), CInt(reader1(9)), CInt(reader1(8)), Format(CDec(reader1(3)), "#,##0"), Date.Now.ToString("dd-MMM-yyyy"), Z_UserName, CStr(reader1(4)), Format(CDec(reader1(5)), "#,##0.00"), "", slproductimage, "", "", "")
+
+                    Dim readerIndex9 = If(IsDBNull(reader1(9)), 0, CInt(reader1(9)))
+                    printdataset.AddSetARow(CStr(reader1(7)), CStr(reader1(1)), CStr(reader1(2)), readerIndex9, CInt(reader1(8)), Format(CDec(reader1(3)), "#,##0"), Date.Now.ToString("dd-MMM-yyyy"), Z_UserName, CStr(reader1(4)), Format(CDec(reader1(5)), "#,##0.00"), "", slproductimage, "", "", "")
                 End If
             End While
             reader1.Close()

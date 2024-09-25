@@ -2855,7 +2855,7 @@ Public Class PickListForm
             SELECT
             a.CompanyName `customer`,
             GROUP_CONCAT(DISTINCT o.ReferenceNumber) `poNo`,
-            SUM(oi.QtyOrdered) `qty`,
+            SUM(ploi.QtyPicked) `qty`,
             GROUP_CONCAT(DISTINCT pil.UnitOfMeasure2 SEPARATOR '\n') `unit`,
             GROUP_CONCAT(CONCAT(p.ProductCode, ' (', ploi.QtyPicked, ')') ORDER BY oi.RowID SEPARATOR ', ') `itemDescription`,
             DATE_FORMAT(CURDATE(), '%M %e, %Y') `deliveryDate`
@@ -2867,10 +2867,11 @@ Public Class PickListForm
             INNER JOIN productcolorsizes pcs ON pcs.RowID=pil.ProductColorSizeID
             INNER JOIN productcolors pc ON pc.RowID=pcs.ProductColorID
             INNER JOIN products p ON p.RowID=pc.ProductID
-            INNER JOIN picklistorderitems ploi ON ploi.PickListOrderID=plo.RowID
+            INNER JOIN picklistorderitems ploi ON ploi.PickListOrderID=plo.RowID AND IFNULL(ploi.QtyPicked, 0) > 0
             WHERE plo.PickListID = @pickListId
             AND FIND_IN_SET(o.AccountID, @customerIds) > 0
-            GROUP BY a.RowID, o.ReferenceNumber, pil.UnitOfMeasure2
+            # GROUP BY a.RowID, o.ReferenceNumber, pil.UnitOfMeasure2
+            GROUP BY a.RowID, o.ReferenceNumber, p.ProductGroupName
             ORDER BY a.CompanyName;
             ]]>.Value
 

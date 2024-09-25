@@ -1435,7 +1435,7 @@ WHERE o.organizationid = {Z_OrganizationID} AND o.status = '{globaliorderstatus}
         Try
             globaltotalqtyavailable = 0
             Dim dtTq As New DataTable
-            dtTq = getDataTableForSQL("SELECT COALESCE(SUM(pil.totalavailableqty),0) FROM productinventorylocation pil " &
+            dtTq = getDataTableForSQL("SELECT COALESCE(SUM(pil.totalavailableqty),0) FROM productinventorylocation pil INNER JOIN rackshelfcolumn r ON r.RowID=pil.RackShelfColumnID AND r.`Status`='Active' " &
                             "WHERE pil.organizationid = " & Z_OrganizationID & " AND pil.productcolorsizeid = " & globaliproductcolorsizeid & " ")
             If dtTq.Rows.Count <> 0 Then
                 globaltotalqtyavailable = dtTq.Rows(0)(0)

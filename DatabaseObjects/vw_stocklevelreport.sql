@@ -8,8 +8,44 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 DROP VIEW IF EXISTS `vw_stocklevelreport`;
+CREATE TABLE `vw_stocklevelreport` (
+	`RowID` INT(11) NOT NULL,
+	`productcode` VARCHAR(100) NULL COLLATE 'latin1_swedish_ci',
+	`colorname` VARCHAR(50) NULL COLLATE 'latin1_swedish_ci',
+	`size` DECIMAL(11,1) NOT NULL,
+	`seasoncode` VARCHAR(50) NULL COLLATE 'latin1_swedish_ci',
+	`unitprice` DECIMAL(10,2) NULL,
+	`sku` VARCHAR(50) NULL COLLATE 'latin1_swedish_ci',
+	`brandname` VARCHAR(100) NULL COLLATE 'latin1_swedish_ci',
+	`totalavailableqty` DECIMAL(32,0) NULL,
+	`printorder` INT(11) NULL,
+	`image` LONGBLOB NULL,
+	`organizationid` INT(11) NULL,
+	`brandid` INT(11) NULL,
+	`categoryid` INT(11) NULL
+) ENGINE=MyISAM;
+
+DROP VIEW IF EXISTS `vw_stocklevelreport`;
 DROP TABLE IF EXISTS `vw_stocklevelreport`;
-CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vw_stocklevelreport` AS select `pcs`.`RowID` AS `rowid`,coalesce(`p`.`ProductCode`,'') AS `productcode`,coalesce(`c`.`ColorName`,'') AS `colorname`,coalesce(`pcs`.`Size`,0.0) AS `COALESCE(pcs.size,0.0)`,coalesce(`pcs`.`SeasonCode`,'') AS `COALESCE(pcs.seasoncode,'')`,coalesce(`p`.`UnitPrice`,0.00) AS `COALESCE(p.unitprice,0.00)`,coalesce(`pcs`.`SKU`,'') AS `COALESCE(pcs.sku,'')`,coalesce(`b`.`BrandName`,'') AS `brandname`,(select coalesce(sum(`pil`.`TotalAvailableQty`),0) from `productinventorylocation` `pil` where `pil`.`OrganizationID` = `pcs`.`OrganizationID` and `pil`.`ProductColorSizeID` = `pcs`.`RowID`) AS `totalavailableqty`,(select coalesce(`printorder`.`PrintOrder`,0) from `printorder` where `printorder`.`OrganizationID` = `pcs`.`OrganizationID` and `printorder`.`PrintValue` = coalesce(`pcs`.`Size`,0.0)) AS `printorder`,`p`.`Image` AS `image`,`pcs`.`OrganizationID` AS `organizationid`,`p`.`BrandID` AS `brandid`,`p`.`CategoryID` AS `categoryid` from (((((`productcolorsizes` `pcs` left join `productcolors` `pc` on(`pcs`.`ProductColorID` = `pc`.`RowID`)) left join `colors` `c` on(`pc`.`ColorID` = `c`.`RowID`)) left join `products` `p` on(`pc`.`ProductID` = `p`.`RowID`)) left join `companies` `v` on(`p`.`CompanyID` = `v`.`RowID`)) left join `brands` `b` on(`p`.`BrandID` = `b`.`RowID`)) ;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `vw_stocklevelreport` AS SELECT pcs.RowID, COALESCE(p.ProductCode,'') `productcode`, COALESCE(c.ColorName,'') `colorname`, COALESCE(pcs.Size,0.0) `size`, COALESCE(pcs.SeasonCode,'') `seasoncode`, COALESCE(p.UnitPrice,0.00) `unitprice`, COALESCE(pcs.SKU,'') `sku`, COALESCE(b.BrandName,'') AS brandname,
+
+(
+SELECT COALESCE(SUM(pil.TotalAvailableQty),0)
+FROM productinventorylocation pil
+INNER JOIN rackshelfcolumn r ON r.RowID=pil.RackShelfColumnID AND r.Status='Active'
+WHERE pil.OrganizationID = pcs.OrganizationID AND pil.ProductColorSizeID = pcs.RowID) AS totalavailableqty,
+
+(
+SELECT COALESCE(`printorder`.PrintOrder,0)
+FROM `printorder`
+WHERE `printorder`.OrganizationID = pcs.OrganizationID AND `printorder`.PrintValue = COALESCE(pcs.Size,0.0)) AS `printorder`,p.Image AS image,pcs.OrganizationID AS organizationid,p.BrandID AS brandid,p.CategoryID AS categoryid
+FROM productcolorsizes pcs
+LEFT JOIN productcolors pc ON pcs.ProductColorID = pc.RowID
+LEFT JOIN colors c ON pc.ColorID = c.RowID
+LEFT JOIN products p ON pc.ProductID = p.RowID
+LEFT JOIN companies v ON p.CompanyID = v.RowID
+LEFT JOIN brands b ON p.BrandID = b.RowID
+WHERE pcs.`Status`='Active' ;
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
