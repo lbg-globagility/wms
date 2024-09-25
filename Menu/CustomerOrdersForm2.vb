@@ -684,6 +684,7 @@ Public Class CustomerOrdersForm2
                 orderItems.ForEach(Sub(oi)
                                        oi.RowID = Nothing
                                        oi.OrderID = Nothing
+                                       oi.Status = OrderItemStatus.New
                                    End Sub)
 
                 newOrder.AddCustomerOrderItems(orderItems)
