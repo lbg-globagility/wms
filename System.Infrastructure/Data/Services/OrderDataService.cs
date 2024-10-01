@@ -185,5 +185,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
         {
             return base.RecordAdd(entity);
         }
+
+        public async Task<List<Order>> GetManyByIdsAsync(int[] ids) => (await _orderRepository.GetManyByIdsAsync(ids)).ToList();
     }
 }

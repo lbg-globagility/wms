@@ -1771,7 +1771,7 @@ WHERE luc.OrganizationID={Z_OrganizationID};"
         If Not IsThurston Then Return
 
         Dim currRowCell = dgLineUpList.CurrentRow?.Cells(lu_lineupno.Name)
-        Dim form = New DeliveryReceiptPrintOptions()
+        Dim form = New DeliveryReceiptPrintOptions(poNo:=txtPONo.Text)
         If form.ShowDialog() = DialogResult.OK Then
             form.Print(lineupNo:=If(currRowCell Is Nothing, New Integer?, CInt(currRowCell.Value)))
         End If

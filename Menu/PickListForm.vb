@@ -1,12 +1,22 @@
-﻿Imports Microsoft.Extensions.DependencyInjection
+﻿Imports System.Runtime.InteropServices.WindowsRuntime
+Imports System.Threading
+Imports log4net
+Imports Microsoft.Extensions.DependencyInjection
+Imports Microsoft.VisualBasic.ApplicationServices
 Imports MySql.Data.MySqlClient
+Imports Spire.Barcode.Implementation
+Imports WarehouseManagementSystem.Core.Entities
 Imports WarehouseManagementSystem.Core.Enums
 Imports WarehouseManagementSystem.Core.Helpers
 Imports WarehouseManagementSystem.Core.Interfaces
 Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
+Imports WarehouseManagementSystem.Core.Services.PickListAutomation
 Imports WarehouseManagementSystem.Desktop.Utilities
+Imports WarehouseManagementSystem.Infrastructure.Data.Services
+Imports PickListEntity = WarehouseManagementSystem.Core.Entities.PickList
 
 Public Class PickListForm
+    Private _logger As ILog = LogManager.GetLogger("PickListLogger")
     Dim manager As New sqlModule.Manager
     Dim conn As New MySqlConnection(manager.GetConnString)
     Dim conn1 As New MySqlConnection(manager.GetConnString)
@@ -1097,6 +1107,17 @@ Public Class PickListForm
                         dgCustomerOrderItems.Item(ci_status.Index, n).Value = ""
                         dgCustomerOrderItems.Item(ci_verifiedby.Index, n).Value = ""
                         dgCustomerOrderItems.Item(ci_verifieddate.Index, n).Value = ""
+                    End If
+
+                    If Not CInt(dgCustomerOrderItems.Item(ci_qtyordered.Index, n).Value) = CInt(dgCustomerOrderItems.Item(ci_totalqtytopick.Index, n).Value) Then
+                        Dim row = dgCustomerOrderItems.Rows.OfType(Of DataGridViewRow).Where(Function(t) t.Index = n).FirstOrDefault()
+
+                        If row IsNot Nothing Then
+                            With row.DefaultCellStyle
+                                .ForeColor = Drawing.Color.Red
+                                .SelectionForeColor = Drawing.Color.Red
+                            End With
+                        End If
                     End If
                 Next
             End Using
@@ -2567,6 +2588,11 @@ Public Class PickListForm
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
             conn.Close()
+
+            Dim sdfsd = Panel1.Controls.OfType(Of RadioButton)
+            For Each s In sdfsd
+                s.Checked = False
+            Next
         End Try
     End Sub
 
@@ -3404,6 +3430,119 @@ Public Class PickListForm
         If e.ColumnIndex = TickBoxOrdersColumn.Index Then
 
         End If
+    End Sub
+
+    Private Async Sub RadioButtonAll_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonAll.CheckedChanged
+        If Not RadioButtonAll.Checked Then Return
+
+        If dgPickList.CurrentRow Is Nothing AndAlso dgCustomerOrders.CurrentRow Is Nothing Then Return
+
+        Await displayCustomerOrderItems(CInt(dgPickList.CurrentRow.Cells("pl_rowid").Value), CInt(dgCustomerOrders.CurrentRow.Cells("co_rowid").Value))
+
+        RadioButtonNotFullyPicked.Text = "Not fully picked"
+    End Sub
+
+    Private Sub RadioButtonNotFullyPicked_CheckedChanged(sender As Object, e As EventArgs) Handles RadioButtonNotFullyPicked.CheckedChanged
+
+        If Not RadioButtonNotFullyPicked.Checked Then Return
+
+        Dim fsdfsd = dgCustomerOrderItems.Rows.OfType(Of DataGridViewRow).
+            Where(Function(t) t.DefaultCellStyle.ForeColor = Drawing.Color.Red).
+            ToList()
+
+        dgCustomerOrderItems.Rows.Clear()
+        For Each row In fsdfsd
+            dgCustomerOrderItems.Rows.Add(row)
+        Next
+
+        RadioButtonNotFullyPicked.Text = $"Not fully picked ({fsdfsd.Count()})"
+    End Sub
+
+    Private Async Sub ButtonAutomatePickList_Click(sender As Object, e As EventArgs) Handles ButtonAutomatePickList.Click
+        ButtonAutomatePickList.Enabled = False
+        gbRackShelfColumn.Enabled = False
+
+        If Not (dgPickList.CurrentRow IsNot Nothing AndAlso MessageBox.Show($"Proceed automate-picking item(s) on rack(s) (shelf/column) for Pick List #{dgPickList.CurrentRow.Cells(pl_picklistno.Name).Value}?", "", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question) = DialogResult.Yes) Then Return
+
+        Dim pickListDataService = GetRequiredService(Of IPickListDataService)()
+        Dim pickList = Await pickListDataService.GetByIdAsync(id:=CInt(dgPickList.CurrentRow.Cells(pl_rowid.Name).Value))
+
+        If pickList.Status = PickListStatus.Cancelled Or
+            pickList.Status = PickListStatus.Completed Then
+
+            MessageBox.Show(text:=$"Automate-picking can not be performed on Pick List #{dgPickList.CurrentRow.Cells(pl_picklistno.Name).Value}.", caption:=String.Empty, buttons:=MessageBoxButtons.OK, icon:=MessageBoxIcon.Information)
+
+            ButtonAutomatePickList.Enabled = True
+            gbRackShelfColumn.Enabled = True
+
+            Return
+        End If
+
+        Dim pickLists = New List(Of PickListEntity) From {pickList}
+
+        Dim pickListOrderItems = New List(Of PickListOrderItem)
+        pickList.PickListOrders.ToList().ForEach(
+            Function(t)
+                pickListOrderItems.AddRange(t.PickListOrderItems.ToList())
+            End Function)
+
+        Dim orderDataService = GetRequiredService(Of IOrderDataService)()
+        Dim orderIds = pickList.PickListOrders.GroupBy(Function(t) t.OrderID).Select(Function(t) t.Key).ToArray()
+        Dim orders = Await orderDataService.GetManyByIdsAsync(ids:=orderIds)
+
+        Dim inventoryLocationIds = orders.GroupBy(Function(t) t.InventoryLocationID.Value).Select(Function(t) t.Key).ToArray()
+
+        Dim productColorSizeIds = New List(Of Integer)
+        orders.ForEach(Sub(t)
+                           productColorSizeIds.AddRange(t.OrderItems.Select(Function(f) f.ProductColorSizeID.Value).ToList())
+                       End Sub)
+        Dim productInventoryLocationDataService = GetRequiredService(Of IProductInventoryLocationDataService)()
+        Dim productInventoryLocations = (Await productInventoryLocationDataService.GetByInventoryLocationIdsAndProductColorSizeIdsAsync(inventoryLocationIds:=inventoryLocationIds,
+            productColorSizeIds:=productColorSizeIds.ToArray())).ToList()
+
+        Dim pickListAutomation = New PickListAutomation(pickLists, 1)
+
+        pickListAutomation.SetCurrentMessage("Loading resources...")
+        pickListAutomation.IncreaseProgress("Finished loading resources.")
+
+        Await Task.Run(
+            Async Function()
+                Await pickListAutomation.Start(orders:=orders,
+                    pickListOrderItems:=pickListOrderItems,
+                    productInventoryLocations:=productInventoryLocations)
+            End Function).
+        ContinueWith(
+            Async Function(antecedent1)
+                If Not antecedent1.IsCompleted Then Return
+
+                Dim poNos = orders.GroupBy(Function(t) t.ReferenceNumber).Select(Function(t) t.Key).ToArray()
+
+                MessageBox.Show($"Done automate-picking for Pick List #{dgPickList.CurrentRow.Cells(pl_picklistno.Name).Value} with P.O. no(s): {String.Join(", ", poNos)}.", caption:="Finish Automate-Picking", buttons:=MessageBoxButtons.OK, icon:=MessageBoxIcon.Information)
+
+            End Function,
+            cancellationToken:=CancellationToken.None,
+            continuationOptions:=TaskContinuationOptions.OnlyOnRanToCompletion,
+            scheduler:=TaskScheduler.FromCurrentSynchronizationContext).
+        ContinueWith(
+            Async Function(antecedent2)
+                If Not antecedent2.IsFaulted Then Return
+
+                MessageBox.Show("Something went wrong while generating the payroll . Please contact Globagility Inc. for assistance.", caption:="Fail Automate-Picking", buttons:=MessageBoxButtons.OK, icon:=MessageBoxIcon.Error)
+
+            End Function,
+            cancellationToken:=CancellationToken.None,
+            continuationOptions:=TaskContinuationOptions.OnlyOnFaulted,
+            scheduler:=TaskScheduler.FromCurrentSynchronizationContext).
+        ContinueWith(
+            Async Function()
+                Await displayCustomerOrderItems(CInt(dgPickList.CurrentRow.Cells("pl_rowid").Value), CInt(dgCustomerOrders.CurrentRow.Cells("co_rowid").Value))
+
+                ButtonAutomatePickList.Enabled = True
+                gbRackShelfColumn.Enabled = True
+
+            End Function,
+            scheduler:=TaskScheduler.FromCurrentSynchronizationContext)
+
     End Sub
 
 End Class

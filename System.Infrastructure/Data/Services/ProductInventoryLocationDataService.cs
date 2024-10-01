@@ -53,5 +53,8 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
         public async Task<ProductInventoryLocation> GetByInventoryLocationIdAndProductColorSizeIdAsync(int inventoryLocationId, int productColorSizeId) => await _productInventoryLocationRepository.GetByInventoryLocationIdAndProductColorSizeIdAsync(inventoryLocationId: inventoryLocationId, productColorSizeId: productColorSizeId);
 
         public async Task<ICollection<ProductInventoryLocation>> GetByInventoryLocationIdAndProductColorSizeIdsAsync(int inventoryLocationId, int[] productColorSizeIds) => await _productInventoryLocationRepository.GetByInventoryLocationIdAndProductColorSizeIdsAsync(inventoryLocationId: inventoryLocationId, productColorSizeIds: productColorSizeIds);
+
+        public async Task<ICollection<ProductInventoryLocation>> GetByInventoryLocationIdsAndProductColorSizeIdsAsync(int[] inventoryLocationIds,
+            int[] productColorSizeIds) => await _productInventoryLocationRepository.GetByInventoryLocationIdsAndProductColorSizeIdsAsync(inventoryLocationIds: inventoryLocationIds, productColorSizeIds: productColorSizeIds);
     }
 }

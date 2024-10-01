@@ -34,7 +34,7 @@ namespace WarehouseManagementSystem.Core.Entities
 
                     foreach (var item in pickListOrder.PickListOrderItems)
                     {
-                        item.Status = Status.ToString();
+                        item.Status = default;
                         item.SetEdited();
                     }
                 }

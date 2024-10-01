@@ -631,6 +631,29 @@ namespace WarehouseManagementSystem.Infrastructure.Data
                 t.HasKey(x => x.Name);
                 t.Property(x => x.Value);
             });
+
+            modelBuilder.Entity<PickListOrderItem>(t =>
+            {
+                // entity value
+                Expression<Func<string, PickListOrderItemStatus>> stringToPickListOrderItemStatus()
+                {
+                    return s => s == PickListOrderItemStatus.Active.ToString() ? PickListOrderItemStatus.Active : s == PickListOrderItemStatus.Verified.ToString() ? PickListOrderItemStatus.Verified : s == PickListOrderItemStatus.Cancelled.ToString() ? PickListOrderItemStatus.Cancelled : PickListOrderItemStatus.Inactive;
+                }
+
+                // database value
+                Expression<Func<PickListOrderItemStatus, string>> pickListOrderItemStatusToString()
+                {
+                    return p => p == PickListOrderItemStatus.Active ? PickListOrderItemStatus.Active.ToString() :
+                    p == PickListOrderItemStatus.Verified ? PickListOrderItemStatus.Verified.ToString() :
+                    p == PickListOrderItemStatus.Cancelled ? PickListOrderItemStatus.Cancelled.ToString() :
+                    PickListOrderItemStatus.Inactive.ToString();
+                }
+                var converter = new ValueConverter<PickListOrderItemStatus, string>(convertToProviderExpression: pickListOrderItemStatusToString(),
+                    convertFromProviderExpression: stringToPickListOrderItemStatus());
+
+                t.Property(x => x.Status)
+                    .HasConversion(converter);
+            });
         }
     }
 }

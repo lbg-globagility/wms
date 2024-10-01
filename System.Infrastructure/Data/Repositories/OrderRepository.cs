@@ -267,5 +267,11 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
                 return q;
             }
         }
+
+        public override async Task<ICollection<Order>> GetManyByIdsAsync(int[] ids) => await _context.Orders
+            .AsNoTracking()
+            .Include(o => o.OrderItems)
+            .Where(o => ids.Contains(o.RowID.Value))
+            .ToListAsync();
     }
 }

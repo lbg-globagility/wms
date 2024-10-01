@@ -84,6 +84,7 @@ Public Class DependencyInjectionHelper
             .AddTransient(Of IListOfValueRepository, ListOfValueRepository)
 
             .AddTransient(Of IPolicyHelper, PolicyHelper)
+            .AddTransient(Of IPickListAutomator, PickListAutomator)
 
             .AddTransient(GetType(IExcelParser(Of)), GetType(ExcelParser(Of)))
         End With

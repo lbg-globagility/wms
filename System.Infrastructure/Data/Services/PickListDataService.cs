@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Internal;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -72,5 +73,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
         }
 
         public async Task<PaginatedList<PickList>> GetPaginatedPickListsAsync(PageOptions pageOptions, int organizationId, string searchText = "") => await _pickListRepository.GetPaginatedPickListsAsync(pageOptions: pageOptions, organizationId: organizationId, searchText: searchText);
+
+        new public async Task<PickList> GetByIdAsync(int id) => await _pickListRepository.GetByIdAsync(id);
     }
 }

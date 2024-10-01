@@ -9,8 +9,10 @@ Imports WarehouseManagementSystem.Desktop.Utilities
 
 Public Class DeliveryReceiptPrintOptions
     ReadOnly _manager As New sqlModule.Manager
+    Private ReadOnly _poNo As String
 
-    Public Sub New()
+    Public Sub New(poNo As String)
+        _poNo = poNo
         ' This call is required by the designer.
         InitializeComponent()
 
@@ -85,13 +87,13 @@ Public Class DeliveryReceiptPrintOptions
             unitOfMeasureClause,
             detailsClause,
             subTotalClause,
-            ", o.ReferenceNumber 
+            $", o.ReferenceNumber 
             FROM lineups lu
             JOIN lineupcartons lc ON lu.RowID = lc.LineUpID
             LEFT JOIN contacts c ON lu.ContactID = c.RowID
             LEFT JOIN contacts c2 ON lu.Helper1Id = c2.RowID
             LEFT JOIN contacts c3 ON lu.Helper2Id = c3.RowID
-            INNER JOIN orders o ON lu.OrderID = o.RowID
+            INNER JOIN orders o ON lu.OrderID = o.RowID {If(CheckBoxBasedOnPOnumber.Checked, $" AND o.ReferenceNumber={_poNo}", String.Empty)}
             INNER JOIN accounts a ON a.RowID=o.AccountID
             LEFT JOIN address ad ON ad.RowID=a.PrimaryAddressID
             INNER JOIN packinglistcartonitems plci ON lc.PackingListCartonID = plci.PackingListCartonID
@@ -100,7 +102,9 @@ Public Class DeliveryReceiptPrintOptions
             INNER JOIN productcolors pc ON pc.RowID=pcs.ProductColorID
             INNER JOIN products p ON p.RowID=pc.ProductID
             INNER JOIN productinventorylocation pil ON pil.RowID=oi.ProductInventoryLocationId
-            WHERE lu.LineUpNo = @lineupNo
+            WHERE lu.RowID IS NOT NULL
+            AND lu.`Status` != 'Cancelled'
+            {If(CheckBoxBasedOnPOnumber.Checked, String.Empty, "AND lu.LineUpNo = @lineupNo")}
             GROUP BY p.ProductGroupName, ",
             unitOfMeasureGroupClause,
             ";")

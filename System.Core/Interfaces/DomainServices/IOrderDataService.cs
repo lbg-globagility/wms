@@ -41,5 +41,6 @@ namespace WarehouseManagementSystem.Core.Interfaces.DomainServices
         Task ApproveCustomerOrder(Order order, int userId);
         Task SaveManyCustomerOrderAsync(int userId, List<Order> added = null, List<Order> updated = null, List<Order> deleted = null);
         Task RevokeCustomerOrder(Order order, int userId);
+        Task<List<Order>> GetManyByIdsAsync(int[] ids);
     }
 }

@@ -102,5 +102,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
                 return q;
             }
         }
+
+        
     }
 }

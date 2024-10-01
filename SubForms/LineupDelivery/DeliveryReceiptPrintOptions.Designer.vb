@@ -24,6 +24,7 @@ Partial Class DeliveryReceiptPrintOptions
     Private Sub InitializeComponent()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
+        Me.CheckBoxBasedOnPOnumber = New System.Windows.Forms.CheckBox()
         Me.CheckBoxExcelCopyforDotMatrix = New System.Windows.Forms.CheckBox()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.CheckBoxDoNotDisplayUOM = New System.Windows.Forms.CheckBox()
@@ -47,19 +48,30 @@ Partial Class DeliveryReceiptPrintOptions
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel1.Location = New System.Drawing.Point(0, 0)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(256, 206)
+        Me.Panel1.Size = New System.Drawing.Size(256, 237)
         Me.Panel1.TabIndex = 0
         '
         'GroupBox3
         '
+        Me.GroupBox3.Controls.Add(Me.CheckBoxBasedOnPOnumber)
         Me.GroupBox3.Controls.Add(Me.CheckBoxExcelCopyforDotMatrix)
         Me.GroupBox3.Dock = System.Windows.Forms.DockStyle.Fill
         Me.GroupBox3.Location = New System.Drawing.Point(0, 128)
         Me.GroupBox3.Name = "GroupBox3"
-        Me.GroupBox3.Size = New System.Drawing.Size(256, 78)
+        Me.GroupBox3.Size = New System.Drawing.Size(256, 109)
         Me.GroupBox3.TabIndex = 1
         Me.GroupBox3.TabStop = False
         Me.GroupBox3.Text = "Others"
+        '
+        'CheckBoxBasedOnPOnumber
+        '
+        Me.CheckBoxBasedOnPOnumber.AutoSize = True
+        Me.CheckBoxBasedOnPOnumber.Location = New System.Drawing.Point(11, 46)
+        Me.CheckBoxBasedOnPOnumber.Name = "CheckBoxBasedOnPOnumber"
+        Me.CheckBoxBasedOnPOnumber.Size = New System.Drawing.Size(158, 17)
+        Me.CheckBoxBasedOnPOnumber.TabIndex = 1
+        Me.CheckBoxBasedOnPOnumber.Text = "Print DR based on PO No."
+        Me.CheckBoxBasedOnPOnumber.UseVisualStyleBackColor = True
         '
         'CheckBoxExcelCopyforDotMatrix
         '
@@ -144,7 +156,7 @@ Partial Class DeliveryReceiptPrintOptions
         Me.Panel2.Controls.Add(Me.ButtonCancel)
         Me.Panel2.Controls.Add(Me.ButtonOK)
         Me.Panel2.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Panel2.Location = New System.Drawing.Point(0, 206)
+        Me.Panel2.Location = New System.Drawing.Point(0, 237)
         Me.Panel2.Name = "Panel2"
         Me.Panel2.Size = New System.Drawing.Size(256, 36)
         Me.Panel2.TabIndex = 1
@@ -176,7 +188,7 @@ Partial Class DeliveryReceiptPrintOptions
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.White
-        Me.ClientSize = New System.Drawing.Size(256, 242)
+        Me.ClientSize = New System.Drawing.Size(256, 273)
         Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.Panel2)
         Me.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -208,4 +220,5 @@ Partial Class DeliveryReceiptPrintOptions
     Friend WithEvents CheckBoxRollWithPrice As CheckBox
     Friend WithEvents CheckBoxMeterYardWithPrice As CheckBox
     Friend WithEvents CheckBoxDoNotDisplayUOM As CheckBox
+    Friend WithEvents CheckBoxBasedOnPOnumber As CheckBox
 End Class
