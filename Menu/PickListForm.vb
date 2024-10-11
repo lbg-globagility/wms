@@ -2886,7 +2886,7 @@ Public Class PickListForm
             GROUP_CONCAT(CONCAT(p.ProductCode, ' (', ploi.QtyPicked, ')') ORDER BY oi.RowID SEPARATOR ', ') `itemDescription`,
             DATE_FORMAT(CURDATE(), '%M %e, %Y') `deliveryDate`
             FROM picklistorders plo
-            INNER JOIN orders o ON o.RowID=plo.OrderID AND FIND_IN_SET(o.ReferenceNumber, @referenceNos) > 0
+            INNER JOIN orders o ON o.RowID=plo.OrderID AND FIND_IN_SET(o.ReferenceNumber, @referenceNos) > 0 AND FIND_IN_SET(o.OrderNumber, @customerOrderNos) > 0
             INNER JOIN accounts a ON a.RowID=o.AccountID
             INNER JOIN orderitems oi ON oi.RowID=plo.OrderItemID
             INNER JOIN productinventorylocation pil ON pil.RowID=oi.ProductInventoryLocationId
@@ -2914,6 +2914,9 @@ Public Class PickListForm
 
                         Dim poNos = String.Join(separator:=",", customerRows.Select(Function(t) CInt(t.Cells(co_pono.Name).Value)).ToArray())
                         .AddWithValue("@referenceNos", poNos)
+
+                        Dim customerOrderNos = String.Join(separator:=",", customerRows.Select(Function(t) CInt(t.Cells(co_customerorderno.Name).Value)).ToArray())
+                        .AddWithValue("@customerOrderNos", customerOrderNos)
                     End With
 
                     Dim adapter = New MySqlDataAdapter()
