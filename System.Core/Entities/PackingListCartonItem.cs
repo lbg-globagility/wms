@@ -42,5 +42,7 @@ namespace WarehouseManagementSystem.Core.Entities
                 userId: userId,
                 orderItemId: orderItemId,
                 quantity: quantity);
+
+        public virtual PickListOrder PickListOrder { get; set; }
     }
 }

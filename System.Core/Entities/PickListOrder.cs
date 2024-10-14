@@ -19,5 +19,6 @@ namespace WarehouseManagementSystem.Core.Entities
     {
         public virtual PickList PickList { get; set; }
         public virtual ICollection<PickListOrderItem> PickListOrderItems { get; set; }
+        public virtual ICollection<PackingListCartonItem> PackingListCartonItems { get; set; }
     }
 }

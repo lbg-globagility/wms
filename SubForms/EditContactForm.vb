@@ -76,4 +76,19 @@ Public Class EditContactForm
             End Function)
     End Sub
 
+    Private Async Sub LinkLabelRemove_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabelRemove.LinkClicked
+
+        LinkLabelRemove.Enabled = False
+
+        Await FunctionUtils.TryCatchFunctionAsync(messageTitle:=String.Empty,
+            Async Function()
+                Dim contactDataService = GetRequiredService(Of IContactDataService)()
+
+                If _contact IsNot Nothing Then Await contactDataService.SaveManyAsync(deleted:=New List(Of Contact) From {_contact}, userId:=Z_UserID)
+
+                LinkLabelRemove.Enabled = True
+
+                DialogResult = DialogResult.OK
+            End Function)
+    End Sub
 End Class

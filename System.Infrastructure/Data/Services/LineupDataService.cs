@@ -147,6 +147,13 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
 
                 foreach (var packingListCartonItem in packingListCartonItems)
                 {
+                    var pickListOrderItems = packingListCartonItem.PickListOrder.PickListOrderItems?.Where(t => t.IsVerified);
+
+                    int[] fsdfsd = { 528, 531, 530, 529 };
+                    var fsdfsd1 = fsdfsd.Contains(packingListCartonItem.OrderItemID.Value);
+
+                    if (!(pickListOrderItems?.Any() ?? false)) continue;
+
                     var productColorSizeId = packingListCartonItem.OrderItem.ProductColorSizeID.Value;
                     var productInventoryLocation = productInventoryLocations
                         .Where(t => t.ProductColorSizeID == productColorSizeId)
@@ -161,8 +168,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
                     // DO NOT DO THIS HERE. IT IS ALREADY PERFORMED SOMEWHERE ELSE
                     //productInventoryLocation.TotalReserveQty -= qty;
 
-                    // DO NOT EXECUTE THIS AND NEVER ALLOW, WILL RESULT TO REDUNDANT DECREMENT
-                    //productInventoryLocation.TotalAvailableQty -= qty;
+                    productInventoryLocation.TotalAvailableQty -= qty;
 
                     updatedProductInventoryLocations.Add(productInventoryLocation);
                 }

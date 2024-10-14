@@ -70,5 +70,10 @@ namespace WarehouseManagementSystem.Core.Entities
             issueFlg: issueFlg,
             remarks: remarks,
             status: status);
+
+        public bool IsActive => Status == PickListOrderItemStatus.Active;
+        public bool IsVerified => Status == PickListOrderItemStatus.Verified;
+        public bool IsCancelled => Status == PickListOrderItemStatus.Cancelled;
+        public bool IsInactive => Status == PickListOrderItemStatus.Inactive;
     }
 }

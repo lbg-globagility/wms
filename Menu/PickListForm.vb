@@ -3465,7 +3465,11 @@ Public Class PickListForm
         ButtonAutomatePickList.Enabled = False
         gbRackShelfColumn.Enabled = False
 
-        If Not (dgPickList.CurrentRow IsNot Nothing AndAlso MessageBox.Show($"Proceed automate-picking item(s) on rack(s) (shelf/column) for Pick List #{dgPickList.CurrentRow.Cells(pl_picklistno.Name).Value}?", "", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question) = DialogResult.Yes) Then Return
+        If Not (dgPickList.CurrentRow IsNot Nothing AndAlso MessageBox.Show($"Proceed automate-picking item(s) on rack(s) (shelf/column) for Pick List #{dgPickList.CurrentRow.Cells(pl_picklistno.Name).Value}?", "", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question) = DialogResult.Yes) Then
+            ButtonAutomatePickList.Enabled = True
+            gbRackShelfColumn.Enabled = True
+            Return
+        End If
 
         Dim pickListDataService = GetRequiredService(Of IPickListDataService)()
         Dim pickList = Await pickListDataService.GetByIdAsync(id:=CInt(dgPickList.CurrentRow.Cells(pl_rowid.Name).Value))

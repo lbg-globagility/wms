@@ -335,6 +335,26 @@ namespace WarehouseManagementSystem.Infrastructure.Data
                     .WithOne(x => x.Lineup)
                     .HasForeignKey(x => x.LineUpID)
                     .HasPrincipalKey(x => x.RowID);
+
+                t.HasOne(x => x.DeliveryTruckShift)
+                    .WithMany(x => x.LineUps)
+                    .HasForeignKey(x => x.DeliveryTruckShiftID)
+                    .HasPrincipalKey(x => x.RowID);
+
+                t.HasOne(x => x.Driver)
+                    .WithMany(x => x.Lineups0)
+                    .HasForeignKey(x => x.ContactID)
+                    .HasPrincipalKey(x => x.RowID);
+
+                t.HasOne(x => x.Helper1)
+                    .WithMany(x => x.Lineups1)
+                    .HasForeignKey(x => x.Helper1Id)
+                    .HasPrincipalKey(x => x.RowID);
+
+                //t.HasOne(x => x.Helper2)
+                //    .WithMany(x => x.Lineups2)
+                //    .HasForeignKey(x => x.Helper2Id)
+                //    .HasPrincipalKey(x => x.RowID);
             });
 
             modelBuilder.Entity<Product>(t =>
@@ -421,6 +441,11 @@ namespace WarehouseManagementSystem.Infrastructure.Data
                 t.HasMany(x => x.Accounts)
                     .WithOne(x => x.Agent)
                     .HasForeignKey(x => x.AgentID)
+                    .HasPrincipalKey(x => x.RowID);
+
+                t.HasMany(x => x.Lineups2)
+                    .WithOne(x => x.Helper2)
+                    .HasForeignKey(x => x.Helper2Id)
                     .HasPrincipalKey(x => x.RowID);
 
                 //t.HasOne(o => o.UserCreate)
@@ -534,6 +559,11 @@ namespace WarehouseManagementSystem.Infrastructure.Data
                     .WithMany(x => x.PackingListCartonItems)
                     .HasForeignKey(x => x.OrderItemID)
                     .HasPrincipalKey(x => x.RowID);
+
+                t.HasOne(x => x.PickListOrder)
+                    .WithMany(x => x.PackingListCartonItems)
+                    .HasForeignKey(x => x.OrderItemID)
+                    .HasPrincipalKey(x => x.OrderItemID);
             });
 
             modelBuilder.Entity<CartonSize>(t =>

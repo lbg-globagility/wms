@@ -333,7 +333,7 @@ Public Class PackingListForm
     Sub getTotalQtyPickedB(ByVal ipicklistorderid As Integer)
         Try
             Dim dtGtq As New DataTable
-            dtGtq = getDataTableForSQL("SELECT COALESCE(SUM(pli.qtypicked),0) FROM picklistorderitems pli WHERE pli.organizationid = " & Z_OrganizationID & " AND pli.picklistorderid = " & ipicklistorderid & " AND (pli.`status` != 'Inactive' AND pli.`status` != 'Cancelled') ")
+            dtGtq = getDataTableForSQL("SELECT COALESCE(SUM(pli.qtypicked),0) FROM picklistorderitems pli WHERE pli.organizationid = " & Z_OrganizationID & " AND pli.picklistorderid = " & ipicklistorderid & " AND pli.`status` = 'Verified';")
             If dtGtq.Rows.Count <> 0 Then
                 paltotalqtypickedsum = paltotalqtypickedsum + dtGtq.Rows(0)(0)
             End If
@@ -381,7 +381,7 @@ Public Class PackingListForm
         Try
             palqtyincarton = 0
             Dim dtGtq As New DataTable
-            dtGtq = getDataTableForSQL("SELECT COALESCE(SUM(pci.qtyincarton),0) FROM packinglistcartonitems pci WHERE pci.packinglistcartonid = " & ipackinglistcartonid & " AND pci.organizationid = " & Z_OrganizationID & " AND pci.`status` != 'Inactive' ")
+            dtGtq = getDataTableForSQL("SELECT COALESCE(SUM(pci.qtyincarton),0) FROM packinglistcartonitems pci WHERE pci.packinglistcartonid = " & ipackinglistcartonid & " AND pci.organizationid = " & Z_OrganizationID & " AND pci.`Status` = 'Verified';")
             If dtGtq.Rows.Count <> 0 Then
                 palqtyincarton = dtGtq.Rows(0)(0)
             Else
@@ -1072,6 +1072,9 @@ LEFT JOIN contacts pa ON ci.packedby = pa.rowid
 
 {appendedJoinClause}
 {packingListCartonJoinClause}
+
+INNER JOIN picklistorders pilo ON pilo.OrderItemID=ci.RowID
+INNER JOIN picklistorderitems ploi ON ploi.PickListOrderID=pilo.RowID AND ploi.`Status` = 'Verified'
 
 WHERE ci.orderid = {palorderid} AND ci.organizationid = {Z_OrganizationID} AND ci.status != 'Inactive' AND ci.itemtype != 'BI'
 #AND (IFNULL(ci.qtyordered,0) - IFNULL(plo.QtyInCarton, 0)) > 0

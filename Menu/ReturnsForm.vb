@@ -1916,7 +1916,7 @@ Public Class ReturnsForm
 
                 If ask = MsgBoxResult.Yes Then
                     Dim lineUpRepository = MainServiceProvider.GetRequiredService(Of ILineupRepository)
-                    Dim lineUp = Await lineUpRepository.GetById(cboDRNo.Text)
+                    Dim lineUp = Await lineUpRepository.GetByIdAsync(cboDRNo.Text)
                     Dim orderRepository = MainServiceProvider.GetRequiredService(Of IOrderRepository)
                     Dim order = Await orderRepository.GetById(lineUp.OrderID)
                     Dim n As Integer = 0

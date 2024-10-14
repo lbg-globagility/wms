@@ -5,6 +5,7 @@ Imports CrystalDecisions.CrystalReports.Engine
 Imports MySql.Data.MySqlClient
 Imports Newtonsoft.Json
 Imports OfficeOpenXml
+Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
 Imports WarehouseManagementSystem.Desktop.Utilities
 
 Public Class DeliveryReceiptPrintOptions
@@ -23,8 +24,8 @@ Public Class DeliveryReceiptPrintOptions
 
     End Sub
 
-    Friend Async Sub Print(lineupNo As Integer?)
-        If Not lineupNo.HasValue Then Return
+    Friend Async Sub Print(lineupRowId As Integer?)
+        If Not lineupRowId.HasValue Then Return
 
         Dim printreport As New DeliveryReceipt
 
@@ -103,10 +104,10 @@ Public Class DeliveryReceiptPrintOptions
             INNER JOIN products p ON p.RowID=pc.ProductID
             INNER JOIN productinventorylocation pil ON pil.RowID=oi.ProductInventoryLocationId
             INNER JOIN picklistorders plo ON plo.OrderItemID=oi.RowID
-            INNER JOIN picklistorderitems ploi ON ploi.PickListOrderID=plo.RowID AND ploi.`status` NOT IN ('Inactive','Cancelled')
+            INNER JOIN picklistorderitems ploi ON ploi.PickListOrderID=plo.RowID AND ploi.`status` = 'Verified'
             WHERE lu.RowID IS NOT NULL
             AND lu.`Status` != 'Cancelled'
-            {If(CheckBoxBasedOnPOnumber.Checked, String.Empty, "AND lu.LineUpNo = @lineupNo")}
+            {If(CheckBoxBasedOnPOnumber.Checked, String.Empty, "AND lu.RowID = @lineupRowId")}
             GROUP BY p.ProductGroupName, ",
             unitOfMeasureGroupClause,
             ";")
@@ -117,10 +118,10 @@ Public Class DeliveryReceiptPrintOptions
             command As New MySqlCommand(sql, connection)
 
                     With command.Parameters
-                        If lineupNo.HasValue Then
-                            .AddWithValue("@lineupNo", lineupNo.Value)
+                        If lineupRowId.HasValue Then
+                            .AddWithValue("@lineupRowId", lineupRowId.Value)
                         Else
-                            .AddWithValue("@lineupNo", DBNull.Value)
+                            .AddWithValue("@lineupRowId", DBNull.Value)
                         End If
                     End With
 
@@ -153,6 +154,17 @@ Public Class DeliveryReceiptPrintOptions
                         Dim terms As TextObject = CType((section?.ReportObjects("TextTerms")), TextObject)
                         terms.Text = CStr((row?.Item("ReferenceNumber")))
                     End If
+
+
+                    Dim lineupDataService = GetRequiredService(Of ILineupDataService)()
+                    Dim lineup = Await lineupDataService.GetByIdAsync(lineupRowId.Value)
+
+                    Dim textDeliveredBy As TextObject = CType((section?.ReportObjects("TextDeliveredBy")), TextObject)
+                    textDeliveredBy.Text = $"{lineup.DeliveredBy}/{lineup.PlateNo}"
+
+                    Dim textHelpers As TextObject = CType((section?.ReportObjects("TextHelpers")), TextObject)
+                    textHelpers.Text = lineup.Helpers
+
 
                     PrintDeliveryReceiptExcel(dt)
 

@@ -1770,10 +1770,10 @@ WHERE luc.OrganizationID={Z_OrganizationID};"
     Private Sub DeliveryScheduleToolStripMenuItem_Click2(sender As Object, e As EventArgs) Handles DeliveryScheduleToolStripMenuItem.Click
         If Not IsThurston Then Return
 
-        Dim currRowCell = dgLineUpList.CurrentRow?.Cells(lu_lineupno.Name)
+        Dim currRowCell = dgLineUpList.CurrentRow?.Cells(lu_rowid.Name)
         Dim form = New DeliveryReceiptPrintOptions(poNo:=txtPONo.Text)
         If form.ShowDialog() = DialogResult.OK Then
-            form.Print(lineupNo:=If(currRowCell Is Nothing, New Integer?, CInt(currRowCell.Value)))
+            form.Print(lineupRowId:=If(currRowCell Is Nothing, New Integer?, CInt(currRowCell.Value)))
         End If
     End Sub
 

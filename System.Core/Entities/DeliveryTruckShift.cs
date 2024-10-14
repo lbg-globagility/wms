@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using WarehouseManagementSystem.Core.Entities.Base;
 
 namespace WarehouseManagementSystem.Core.Entities
@@ -14,5 +15,9 @@ namespace WarehouseManagementSystem.Core.Entities
     public partial class DeliveryTruckShift
     {
         private DeliveryTruckShift() { }
+
+        public virtual DeliveryTruck DeliveryTruck { get; set; }
+
+        public virtual ICollection<Lineup> LineUps { get; set; }
     }
 }

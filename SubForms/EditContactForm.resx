@@ -117,4 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="LinkLabelRemove.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        wgAADsIBFShKgAAAAM1JREFUOE+tk7ENgzAQRRklszCFSy8QBnDvhjSMREtHE9YIaWgvfpYt2cZBCqT4
+        knX3/5PPHI2IZNq2TTuNTlKImi79afDmNE/TJMYYUUpJd++8OFOjhwdvBgjh1VrrA8tzkfX1zkSN3jAM
+        QNYIiYCZRt8/dsFSeAJk9gB30FwNei1QE94wjgYwMl/t2t+ElwxZAP6RasYjkSHrAen127Y9VPSR+R/g
+        6giXH/HaZ4yLxBaeWqQA8KtMA3ptHGr0qqucQM79TKlc84ffWZoP+bBCdE/i6gkAAAAASUVORK5CYII=
+</value>
+  </data>
 </root>

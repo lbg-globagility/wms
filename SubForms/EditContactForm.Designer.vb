@@ -22,6 +22,7 @@ Partial Class EditContactForm
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(EditContactForm))
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.txtComments = New System.Windows.Forms.TextBox()
         Me.Label5 = New System.Windows.Forms.Label()
@@ -37,6 +38,7 @@ Partial Class EditContactForm
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.Panel3 = New System.Windows.Forms.Panel()
+        Me.LinkLabelRemove = New System.Windows.Forms.LinkLabel()
         Me.btnCancel = New System.Windows.Forms.Button()
         Me.btnSave = New System.Windows.Forms.Button()
         Me.Panel2.SuspendLayout()
@@ -181,6 +183,7 @@ Partial Class EditContactForm
         '
         'Panel3
         '
+        Me.Panel3.Controls.Add(Me.LinkLabelRemove)
         Me.Panel3.Controls.Add(Me.btnCancel)
         Me.Panel3.Controls.Add(Me.btnSave)
         Me.Panel3.Dock = System.Windows.Forms.DockStyle.Bottom
@@ -188,6 +191,21 @@ Partial Class EditContactForm
         Me.Panel3.Name = "Panel3"
         Me.Panel3.Size = New System.Drawing.Size(336, 36)
         Me.Panel3.TabIndex = 1
+        '
+        'LinkLabelRemove
+        '
+        Me.LinkLabelRemove.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.LinkLabelRemove.Image = CType(resources.GetObject("LinkLabelRemove.Image"), System.Drawing.Image)
+        Me.LinkLabelRemove.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.LinkLabelRemove.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline
+        Me.LinkLabelRemove.LinkColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(155, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.LinkLabelRemove.Location = New System.Drawing.Point(12, 11)
+        Me.LinkLabelRemove.Name = "LinkLabelRemove"
+        Me.LinkLabelRemove.Size = New System.Drawing.Size(64, 18)
+        Me.LinkLabelRemove.TabIndex = 5
+        Me.LinkLabelRemove.TabStop = True
+        Me.LinkLabelRemove.Text = "Remove"
+        Me.LinkLabelRemove.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'btnCancel
         '
@@ -250,4 +268,5 @@ Partial Class EditContactForm
     Friend WithEvents Label4 As Label
     Friend WithEvents Label7 As Label
     Friend WithEvents Label6 As Label
+    Friend WithEvents LinkLabelRemove As LinkLabel
 End Class

@@ -146,5 +146,8 @@ namespace WarehouseManagementSystem.Core.Entities
 
         public virtual ICollection<Account> Accounts { get; set; }
         public virtual ICollection<Order> Orders { get; set; }
+        public virtual ICollection<Lineup> Lineups0 { get; set; }
+        public virtual ICollection<Lineup> Lineups1 { get; set; }
+        public virtual ICollection<Lineup> Lineups2 { get; set; }
     }
 }

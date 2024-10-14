@@ -20,9 +20,14 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
             .Where(c => c.OrganizationID == organizationId)
             .ToListAsync();
 
-        public async Task<Lineup> GetById(int lineUpId) => await _context.Lineups
-            .Where(c => c.RowID == lineUpId)
+        public override async Task<Lineup> GetByIdAsync(int id) => await _context.Lineups
+            .Include(l => l.DeliveryTruckShift)
+                .ThenInclude(dts => dts.DeliveryTruck)
+            .Include(l => l.Driver)
+            .Include(l => l.Helper1)
+            .Include(l => l.Helper2)
             .AsNoTracking()
+            .Where(c => c.RowID == id)
             .FirstOrDefaultAsync();
 
         public Task<Lineup> GetByLineupIdAsync(int lineUpId)
@@ -33,6 +38,11 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
                 .ThenInclude(t => t.PackingListCarton)
                     .ThenInclude(t => t.PackingListCartonItems)
                         .ThenInclude(t => t.OrderItem)
+            .Include(t => t.LineupCartons)
+                .ThenInclude(t => t.PackingListCarton)
+                    .ThenInclude(t => t.PackingListCartonItems)
+                        .ThenInclude(t => t.PickListOrder)
+                            .ThenInclude(t=>t.PickListOrderItems)
             .Where(t => t.LineupCartons.FirstOrDefault().LineUpID == lineUpId)
             .AsNoTracking()
             .AsQueryable();
