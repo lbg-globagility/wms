@@ -12,5 +12,6 @@ namespace WarehouseManagementSystem.Core.Interfaces.DomainServices
         Task<ProductInventoryLocation> GetByInventoryLocationIdAndProductColorSizeIdAsync(int inventoryLocationId, int productColorSizeId);
         Task<ICollection<ProductInventoryLocation>> GetByInventoryLocationIdAndProductColorSizeIdsAsync(int inventoryLocationId, int[] productColorSizeIds);
         Task<ICollection<ProductInventoryLocation>> GetByInventoryLocationIdsAndProductColorSizeIdsAsync(int[] inventoryLocationIds, int[] productColorSizeIds);
+        Task<List<ProductInventoryLocation>> GetByInventoryLocationIdsAsync(int[] inventoryLocationIds);
     }
 }

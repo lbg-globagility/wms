@@ -29,6 +29,8 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
                     .ThenInclude(t => t.ProductColor)
                         .ThenInclude(t => t.Product)
                             .ThenInclude(t => t.Category)
+                .Include(t => t.RackShelfColumn)
+                    .ThenInclude(r => r.InventoryLocation)
                 .AsNoTracking()
                 .Where(t => t.RackShelfColumn.InventoryLocationID == inventoryLocationId)
                 .ToListAsync();
@@ -55,6 +57,12 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
 
         public override async Task<ICollection<ProductInventoryLocation>> GetManyByIdsAsync(int[] ids) => await _context.ProductInventoryLocations
             .Include(t => t.RackShelfColumn)
+            .Include(t => t.ProductColorSize)
+                .ThenInclude(t => t.ProductColor)
+                    .ThenInclude(t => t.Product)
+            .Include(t => t.ProductColorSize)
+                .ThenInclude(t => t.ProductColor)
+                    .ThenInclude(t => t.Color)
             .AsNoTracking()
             .Where(t => ids.Contains(t.RowID.Value))
             .ToListAsync();
@@ -102,5 +110,27 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
             .Where(t => productColorSizeIds.Contains(t.ProductColorSizeID))
             .Where(t => inventoryLocationIds.Contains(t.RackShelfColumn.InventoryLocationID))
             .ToListAsync();
+
+        public async Task<List<ProductInventoryLocation>> GetByInventoryLocationIdsAsync(int[] inventoryLocationIds)
+        {
+            if (!(inventoryLocationIds?.Any() ?? false)) return Enumerable.Empty<ProductInventoryLocation>().ToList();
+
+            return await _context.ProductInventoryLocations
+                .Include(t => t.RackShelfColumn)
+                    .ThenInclude(r => r.ProductInventoryLocations)
+                        .ThenInclude(pil => pil.RackShelfColumn)
+                .Include(t => t.ProductColorSize)
+                    .ThenInclude(t => t.ProductColor)
+                        .ThenInclude(t => t.Color)
+                .Include(t => t.ProductColorSize)
+                    .ThenInclude(t => t.ProductColor)
+                        .ThenInclude(t => t.Product)
+                            .ThenInclude(t => t.Category)
+                .Include(t => t.RackShelfColumn)
+                    .ThenInclude(r => r.InventoryLocation)
+                .AsNoTracking()
+                .Where(t => inventoryLocationIds.Contains(t.RackShelfColumn.InventoryLocationID))
+                .ToListAsync();
+        }
     }
 }

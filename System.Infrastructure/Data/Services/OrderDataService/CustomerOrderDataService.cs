@@ -94,7 +94,6 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
         private void CustomerOrderValidation(Order order)
         {
             if (!order.IsCustomerOrderType) return;
-            if ((order.InventoryLocationID ?? 0) == 0) BusinessLogicException.Throw(message: "Invalid Inventory Location value.");
             if (string.IsNullOrEmpty(order.ReferenceNumber)) BusinessLogicException.Throw(message: "Invalid P.O. number.");
             if ((order.AccountID ?? 0) == 0) BusinessLogicException.Throw(message: "Invalid Customer Name.");
             if ((order.AgentID ?? 0) == 0) BusinessLogicException.Throw(message: "Invalid Agent value.");

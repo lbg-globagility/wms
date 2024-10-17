@@ -77,18 +77,23 @@ Public Class OrderItemModel
     Public Property UnitOfLength As String
     Public Property UnitOfLengthNumber As Decimal?
 
+    Private _UnitOfLengthPrice As Decimal
+
     Public ReadOnly Property UnitOfLengthPrice As Decimal
         Get
-            'UnitPrice TotalItemPrice
+            If IsNonData Then Return _UnitOfLengthPrice
+
             Return If(QuantityOrdered > 0 AndAlso If(UnitOfLengthNumber.HasValue, UnitOfLengthNumber.Value, 0D) > 0,
                 TotalItemPrice / UnitOfLengthNumber.Value,
                 0D)
         End Get
     End Property
 
+    Private _TotalItemPrice As Decimal
+
     Public ReadOnly Property TotalItemPrice As Decimal
         Get
-            Return UnitPrice * QuantityOrdered
+            Return If(IsNonData, _TotalItemPrice, UnitPrice * QuantityOrdered)
         End Get
     End Property
 
@@ -111,7 +116,47 @@ Public Class OrderItemModel
     End Sub
 
     Public Sub SetDelete()
+        If IsNonData Then Return
+
         _orderItem.SetDelete()
         _IsDelete = _orderItem.IsDelete
     End Sub
+
+    Private Sub New()
+
+    End Sub
+
+    Public Property IsNonData As Boolean
+
+    Public Shared Function EmulatedGrandTotals(unitPrice As Decimal,
+        unitOfLengthNumber As Decimal,
+        unitOfLengthPrice As Decimal,
+        totalItemPrice As Decimal,
+        quantityOrdered As Integer) As OrderItemModel
+
+        Return New OrderItemModel() With {
+            .UnitPrice = unitPrice,
+            .UnitOfLengthNumber = unitOfLengthNumber,
+            ._UnitOfLengthPrice = unitOfLengthPrice,
+            ._TotalItemPrice = totalItemPrice,
+            .QuantityOrdered = quantityOrdered,
+            .IsNonData = True
+        }
+    End Function
+
+    Public Sub RefreshGrandTotals(unitPrice As Decimal,
+        unitOfLengthNumber As Decimal,
+        unitOfLengthPrice As Decimal,
+        totalItemPrice As Decimal,
+        quantityOrdered As Integer)
+
+        If Not IsNonData Then Return
+
+        _UnitPrice = unitPrice
+        _UnitOfLengthNumber = unitOfLengthNumber
+        _UnitOfLengthPrice = unitOfLengthPrice
+        _TotalItemPrice = totalItemPrice
+        _QuantityOrdered = quantityOrdered
+    End Sub
+
 End Class

@@ -162,5 +162,7 @@ namespace WarehouseManagementSystem.Core.Entities
         public virtual ICollection<Order> Orders { get; set; }
 
         public static Array GetTypes => Enum.GetValues(enumType: typeof(InventoryLocationType));
+
+        public string NameAlternative => string.IsNullOrEmpty(Name) ? Type.ToString() : Name;
     }
 }

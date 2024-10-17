@@ -4,7 +4,6 @@ Imports WarehouseManagementSystem.Core.Entities
 Imports WarehouseManagementSystem.Core.Enums
 Imports WarehouseManagementSystem.Core.Helpers
 Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
-Imports WarehouseManagementSystem.Core.Interfaces.Repositories
 Imports WarehouseManagementSystem.Desktop.Utilities
 Imports WarehouseManagementSystem.Utilities.Extensions
 
@@ -46,9 +45,6 @@ Public Class CustomerOrdersForm2
 
         Await ScrutinateUserPrivilegeAsync()
 
-        LoadInventorySourceType()
-
-        Await LoadInventoryLocationsAsync()
         Await LoadCustomersAsync()
         cboCustomerName_DropDown(cboCustomerName, New EventArgs())
         Await LoadAgentsAsync()
@@ -119,31 +115,6 @@ Public Class CustomerOrdersForm2
         Return result.TotalCount
     End Function
 
-    Private Sub LoadInventorySourceType()
-        cboCustomerOrderType.ValueMember = "Value"
-        cboCustomerOrderType.DisplayMember = "Name"
-
-        Dim customerOrderTypes = InventoryLocation.GetTypes.
-            OfType(Of Object).
-            Select(Function(t) New InvetoryTypeModel(CType(t, InventoryLocationType))).
-            ToList()
-        cboCustomerOrderType.BindingContext = New BindingContext()
-        cboCustomerOrderType.DataSource = customerOrderTypes
-    End Sub
-
-    Private Async Function LoadInventoryLocationsAsync() As Task
-        Dim inventoryLocationRepository = GetRequiredService(Of IInventoryLocationRepository)()
-        Dim inventoryLocations = Await inventoryLocationRepository.GetAllByOrganizationIdAsync(Z_OrganizationID)
-
-        cboInventoryLocation.ValueMember = "RowID"
-        cboInventoryLocation.DisplayMember = "Name"
-        cboInventoryLocation.BindingContext = New BindingContext()
-        cboInventoryLocation.DataSource = inventoryLocations.
-            OrderByDescending(Function(t) t.IsMainWarehouse).
-            ThenBy(Function(t) t.Name).
-            ToList()
-    End Function
-
     Private Async Function LoadCustomersAsync() As Task
         Dim accountDataService = GetRequiredService(Of IAccountDataService)()
         Dim accounts = Await accountDataService.GetManyByOrganizationIdAndTypeAsync(organizationId:=Z_OrganizationID, type:=AccountType.Customer)
@@ -170,15 +141,14 @@ Public Class CustomerOrdersForm2
     End Function
 
     Private Async Sub btnAddOrderItem_Click(sender As Object, e As EventArgs) Handles btnAddOrderItem.Click
-        Dim inventoryLocationId = CInt(cboInventoryLocation.SelectedValue)
 
         Dim hasOrder As Boolean = _selectedOrder IsNot Nothing
 
         Dim orderItemModels = GetOrderItemModels()
 
-        Dim form As New ProductColorSizeSelectorDialog(inventoryLocationId:=inventoryLocationId)
-        If hasOrder Then form.ProductColorSizeExceptionIds = orderItemModels.
-            Select(Function(t) t.ProductColorSizeId.Value).
+        Dim form As New ProductColorSizeSelectorDialog() 'inventoryLocationId:=inventoryLocationId
+        If hasOrder Then form.ProductInventoryLocationExceptionIds = orderItemModels.
+            Select(Function(t) t.ProductInventoryLocationId.Value).
             ToList()
 
         If hasOrder AndAlso form.ShowDialog() = DialogResult.OK Then
@@ -186,15 +156,15 @@ Public Class CustomerOrdersForm2
 
             Dim orderItemList As New List(Of OrderItem)
 
-            Dim productColorSizeIds = orderItemModels?.Select(Function(oi) oi.ProductColorSizeId.Value).ToArray().
-                Concat(selectedProductColorSizeModels.Select(Function(t) t.ProductColorSizeId).ToArray()).
-                ToArray()
+            'Dim productColorSizeIds = orderItemModels?.Select(Function(oi) oi.ProductColorSizeId.Value).ToArray().
+            '    Concat(selectedProductColorSizeModels.Select(Function(t) t.ProductColorSizeId).ToArray()).
+            '    ToArray()
 
-            Dim productInventoryLocationDataService = GetRequiredService(Of IProductInventoryLocationDataService)()
-            Dim productInventoryLocations = Await productInventoryLocationDataService.GetByInventoryLocationIdAndProductColorSizeIdsAsync(inventoryLocationId:=CInt(cboInventoryLocation.SelectedValue), productColorSizeIds:=productColorSizeIds)
+            'Dim productInventoryLocationDataService = GetRequiredService(Of IProductInventoryLocationDataService)()
+            'Dim productInventoryLocations = Await productInventoryLocationDataService.GetByInventoryLocationIdAndProductColorSizeIdsAsync(inventoryLocationId:=CInt(cboInventoryLocation.SelectedValue), productColorSizeIds:=productColorSizeIds)
 
             For Each item In selectedProductColorSizeModels
-                Dim orderItemModel = orderItemModels.FirstOrDefault(Function(t) If(t.ProductColorSizeId, 0) = item.ProductColorSizeId)
+                Dim orderItemModel = orderItemModels.FirstOrDefault(Function(t) If(t.ProductInventoryLocationId, 0) = item.ProductInventoryLocationId)
 
                 If orderItemModel Is Nothing Then
                     orderItemList.Add(OrderItem.NewCustomerOrderItem(organizationId:=Z_OrganizationID,
@@ -246,51 +216,6 @@ Public Class CustomerOrdersForm2
             Select(Function(t) GetOrderItemModel(t)).
             ToList()
     End Function
-
-
-    Private Sub cboCustomerOrderType_SelectedIndexChanged(sender As Object, e As EventArgs)
-        cboCustomerOrderType_SelectedValueChanged(sender, e)
-    End Sub
-
-    Private Sub cboCustomerOrderType_SelectedValueChanged(sender As Object, e As EventArgs)
-        'If cboCustomerOrderType.SelectedValue IsNot Nothing Then errProvider.SetError(cboCustomerOrderType, String.Empty)
-
-        If ToolStripButtonNew.Enabled AndAlso Not cboCustomerOrderType.SelectedIndex = -1 Then Return
-
-        Dim inventoryLocationType = CType(cboCustomerOrderType.SelectedValue, InventoryLocationType)
-
-        Dim source = cboInventoryLocation.Items?.
-            OfType(Of Object)
-        If Not If(source?.Any(), False) Then Return
-
-        Dim dataSource = source?.
-            Select(Function(t) CType(t, InventoryLocation)).
-            Where(Function(t) t.Type = inventoryLocationType).
-            ToList()
-
-        If Not dataSource.Any() Then
-            MessageBox.Show(text:=$"No Inventory Location for type `{inventoryLocationType}`.{Environment.NewLine}{Environment.NewLine}You need to create a new Inventory Location with type `{inventoryLocationType}`.{Environment.NewLine}{Environment.NewLine}Go to `Menu` > `Inventory Management` > `(L) Inventory Locations`",
-                caption:="No Inventory Location",
-                icon:=MessageBoxIcon.Error,
-                buttons:=MessageBoxButtons.OK)
-
-            cboCustomerOrderType.SelectedIndex = -1
-            Return
-        End If
-
-        If dataSource.Count() > 1 Then
-            Dim form = New CustomerOrderInventoryLocationSelectorDialog(inventoryLocations:=dataSource)
-            If form.ShowDialog() = DialogResult.OK Then
-                cboInventoryLocation.SelectedValue = form.InventoryLocationId
-            Else
-                cboCustomerOrderType.SelectedIndex = -1
-            End If
-        Else
-            'cboInventoryLocation.SelectedItem = dataSource.FirstOrDefault()
-            Dim id As Integer = If(dataSource.FirstOrDefault()?.RowID, 0)
-            cboInventoryLocation.SelectedValue = id
-        End If
-    End Sub
 
     Private Sub cboCustomerName_DropDown(sender As Object, e As EventArgs) 'Handles cboCustomerName.DropDown
 
@@ -357,6 +282,19 @@ Public Class CustomerOrdersForm2
                 Where(Function(t) Not t.IsDelete).
                 ToList()
 
+            Dim emulateGrandTotal = orderItemModel.EmulatedGrandTotals(unitPrice:=If(orderItemModels?.Sum(Function(t) t.UnitPrice), 0),
+                unitOfLengthNumber:=If(orderItemModels?.Sum(Function(t) t.UnitOfLengthNumber), 0),
+                unitOfLengthPrice:=If(orderItemModels?.Sum(Function(t) t.UnitOfLengthPrice), 0),
+                totalItemPrice:=If(orderItemModels?.Sum(Function(t) t.TotalItemPrice), 0),
+                quantityOrdered:=If(orderItemModels?.Sum(Function(t) t.QuantityOrdered), 0))
+
+            If If(orderItemModels?.Any(), False) AndAlso
+                Not orderItemModels.Any(Function(t) t.IsNonData) Then _
+                orderItemModels?.Add(emulateGrandTotal)
+            'orderItemModels = orderItemModels.
+            '    Concat(New List(Of OrderItemModel) From {emulateGrandTotal}).
+            '    ToList()
+
             gridOrderItems.DataSource = orderItemModels
             'End If
         End If
@@ -382,12 +320,31 @@ Public Class CustomerOrdersForm2
 
         selectedOrderItem.Refresh(orderItemModel:=selectedOrderItem)
 
+        Dim orderItemModels = GetOrderItemModels().
+            Where(Function(t) Not t.IsDelete).
+            ToList()
+
+        Dim orderItemDataModels = orderItemModels.
+            Where(Function(t) Not t.IsNonData).
+            ToList()
+
+        Dim fsdfsd = orderItemModels?.FirstOrDefault(Function(t) t.IsNonData)
+
+        fsdfsd?.RefreshGrandTotals(unitPrice:=If(orderItemDataModels?.Sum(Function(t) t.UnitPrice), 0),
+            unitOfLengthNumber:=If(orderItemDataModels?.Sum(Function(t) t.UnitOfLengthNumber), 0),
+            unitOfLengthPrice:=If(orderItemDataModels?.Sum(Function(t) t.UnitOfLengthPrice), 0),
+            totalItemPrice:=If(orderItemDataModels?.Sum(Function(t) t.TotalItemPrice), 0),
+            quantityOrdered:=If(orderItemDataModels?.Sum(Function(t) t.QuantityOrdered), 0))
+
+        gridOrderItems.Refresh()
+
     End Sub
 
     Private Sub gridOrderItems_CellMouseClick(sender As Object, e As DataGridViewCellMouseEventArgs) Handles gridOrderItems.CellMouseClick
-        If e.Button = MouseButtons.Right Then
-            MsgBox("gridOrderItems_CellMouseClick")
+        If e.Button = MouseButtons.Right AndAlso e.RowIndex >= 0 AndAlso e.ColumnIndex >= 0 Then
+
         End If
+
     End Sub
 
     Private Async Sub ToolStripButtonNew_Click(sender As Object, e As EventArgs) Handles ToolStripButtonNew.Click
@@ -425,9 +382,6 @@ Public Class CustomerOrdersForm2
     End Sub
 
     Private Async Function ReloadDisplayForm(Optional order As Order = Nothing) As Task(Of Integer)
-        'RemoveHandler cboCustomerOrderType.SelectedIndexChanged, AddressOf cboCustomerOrderType_SelectedIndexChanged
-        RemoveHandler cboCustomerOrderType.SelectedValueChanged, AddressOf cboCustomerOrderType_SelectedValueChanged
-        RemoveHandler cboInventoryLocation.SelectedValueChanged, AddressOf cboInventoryLocation_SelectedValueChanged
 
         gridOrderItems.DataSource = Enumerable.Empty(Of OrderItemModel)()
 
@@ -463,21 +417,7 @@ Public Class CustomerOrdersForm2
             cboCustomerName.DataBindings.Add("SelectedValue", order, "AccountID", True, updateMode)
             AddHandler cboCustomerName.SelectedIndexChanged, AddressOf cboCustomerName_SelectedIndexChanged
 
-            cboAgent.DataBindings.Add("SelectedValue", order, "AgentID", False, updateMode)
-
-            cboInventoryLocation.DataBindings.Add("SelectedValue", order, "InventoryLocationID", True, updateMode)
-
-            cboCustomerOrderType.SelectedValue = If(order?.InventoryLocation?.Type, InventoryLocationType.Main)
-
-            If updateMode = DataSourceUpdateMode.OnPropertyChanged Then
-                AddHandler cboInventoryLocation.SelectedValueChanged, AddressOf cboInventoryLocation_SelectedValueChanged
-                AddHandler cboCustomerOrderType.SelectedValueChanged, AddressOf cboCustomerOrderType_SelectedValueChanged
-                If cboInventoryLocation.SelectedValue Is Nothing Then
-                    cboInventoryLocation_SelectedValueChanged(cboInventoryLocation, New EventArgs())
-                    cboCustomerOrderType_SelectedValueChanged(cboCustomerOrderType, New EventArgs())
-                End If
-                'AddHandler cboCustomerOrderType.SelectedIndexChanged, AddressOf cboCustomerOrderType_SelectedIndexChanged
-            End If
+            cboAgent.DataBindings.Add("SelectedValue", order, "AgentID", True, updateMode)
 
             txtDRNumber.DataBindings.Add("Text", order, "DRNumber", False, DataSourceUpdateMode.OnPropertyChanged)
 
@@ -503,10 +443,15 @@ Public Class CustomerOrdersForm2
             Dim productColorSizeIds = If(order?.OrderItems?.Select(Function(oi) oi.ProductColorSizeID.Value).ToArray(),
                 Enumerable.Empty(Of Integer).ToArray())
 
+            Dim productInventoryLocationIds = If(order?.OrderItems?.Select(Function(oi) oi.ProductInventoryLocationId.Value).ToArray(),
+                Enumerable.Empty(Of Integer).ToArray())
+
             Dim productInventoryLocations = Enumerable.Empty(Of ProductInventoryLocation)()
-            If If(productColorSizeIds?.Any(), False) Then
+            If If(productColorSizeIds?.Any(), False) Or
+                If(productInventoryLocationIds?.Any(), False) Then
+
                 Dim productInventoryLocationDataService = GetRequiredService(Of IProductInventoryLocationDataService)()
-                productInventoryLocations = Await productInventoryLocationDataService.GetByInventoryLocationIdAndProductColorSizeIdsAsync(inventoryLocationId:=CInt(cboInventoryLocation.SelectedValue), productColorSizeIds:=productColorSizeIds)
+                productInventoryLocations = Await productInventoryLocationDataService.GetManyByIdsAsync(ids:=productInventoryLocationIds)
             End If
 
             Dim getOrderItemModel =
@@ -524,6 +469,19 @@ Public Class CustomerOrdersForm2
                 Where(Function(t) Not t.IsDelete).
                 OrderBy(Function(t) t.RowID).
                 ToList()
+
+            Dim emulateGrandTotal = OrderItemModel.EmulatedGrandTotals(unitPrice:=If(dataSource?.Sum(Function(t) t.UnitPrice), 0),
+                unitOfLengthNumber:=If(dataSource?.Sum(Function(t) t.UnitOfLengthNumber), 0),
+                unitOfLengthPrice:=If(dataSource?.Sum(Function(t) t.UnitOfLengthPrice), 0),
+                totalItemPrice:=If(dataSource?.Sum(Function(t) t.TotalItemPrice), 0),
+                quantityOrdered:=If(dataSource?.Sum(Function(t) t.QuantityOrdered), 0))
+
+            If If(dataSource?.Any(), False) AndAlso
+                Not dataSource.Any(Function(t) t.IsNonData) Then _
+                dataSource?.Add(emulateGrandTotal)
+            'dataSource = dataSource?.
+            '    Concat(New List(Of OrderItemModel) From {emulateGrandTotal}).
+            '    ToList()
 
             gridOrderItems.DataSource = If(dataSource, Enumerable.Empty(Of OrderItemModel)())
             'gridOrderItems.Refresh()
@@ -573,12 +531,12 @@ Public Class CustomerOrdersForm2
     Private Sub ApplyCustomerOrderChanges(order As Order)
         order.CustomerName = cboCustomerName.Text
 
-        If If(order.InventoryLocationID, 0) = 0 Then order.InventoryLocationID = CType(cboInventoryLocation.SelectedValue, Integer)
         If If(order.AccountID, 0) = 0 Then order.AccountID = CType(cboCustomerName.SelectedValue, Integer)
         If If(order.AgentID, 0) = 0 Then order.AgentID = CType(cboAgent.SelectedValue, Integer)
 
         Dim orderItemList = GetOrderItemModels().
             Where(Function(t) Not (t.IsDelete And t.IsNew)).
+            Where(Function(t) Not t.IsNonData).
             Select(Function(t) t.OrderItem).
             ToList()
         order.AddCustomerOrderItems(orderItemList)
@@ -757,19 +715,6 @@ Public Class CustomerOrdersForm2
         cboAgent.SelectedValue = If(customer?.AgentID, 0)
     End Sub
 
-    Private Sub cboInventoryLocation_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboInventoryLocation.SelectedIndexChanged
-        Console.WriteLine(_selectedOrder?.InventoryLocationID)
-    End Sub
-
-    Private Sub cboInventoryLocation_SelectedValueChanged1(sender As Object, e As EventArgs) Handles cboInventoryLocation.SelectedValueChanged
-        Console.WriteLine(_selectedOrder?.InventoryLocationID)
-    End Sub
-
-    Private Sub cboInventoryLocation_SelectedValueChanged(sender As Object, e As EventArgs)
-        Dim id = CInt(cboInventoryLocation.SelectedValue)
-        btnAddOrderItem.Enabled = id > 0
-    End Sub
-
     Private Sub SplitContainer1_Panel1_SizeChanged(sender As Object, e As EventArgs) Handles SplitContainer1.Panel1.SizeChanged
         Dim centerWidth = CInt(SplitContainer1.Panel1.Size.Width / 2)
         linkNext.Location = New Point(x:=centerWidth, y:=linkNext.Location.Y)
@@ -922,4 +867,11 @@ Public Class CustomerOrdersForm2
     Private Sub LinkLabelRefresh_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabelRefresh.LinkClicked
         Pagination_LinkClicked(sender:=LinkLabelRefresh, e:=New LinkLabelLinkClickedEventArgs(link:=New LinkLabel.Link))
     End Sub
+
+    Private Sub gridOrderItems_CellFormatting(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles gridOrderItems.CellFormatting
+        Dim model = CType(gridOrderItems.Rows(e.RowIndex).DataBoundItem, OrderItemModel)
+        If Not If(model?.IsNonData, False) Then gridOrderItems.Rows(e.RowIndex).HeaderCell.Value = $"{e.RowIndex + 1}"
+        If If(model?.IsNonData, False) Then gridOrderItems.Rows(e.RowIndex).ReadOnly = True
+    End Sub
+
 End Class

@@ -122,10 +122,6 @@ Public Class ProductColorSizeModel
     End Property
 
     Public ReadOnly Property ProductInventoryLocation As ProductInventoryLocation
-    '    Get
-    '        Return _productInventoryLocation
-    '    End Get
-    'End Property
 
     Public ReadOnly Property Photo As String
         Get
@@ -269,5 +265,18 @@ Public Class ProductColorSizeModel
 
         Return conditions.Where(Function(t) t).Count() = conditions.Count()
     End Function
+
+    Public ReadOnly Property ProductInventoryLocationId As Integer
+        Get
+            Return If(ProductInventoryLocation?.RowID, 0)
+        End Get
+    End Property
+
+
+    Public ReadOnly Property InventoryName As String
+        Get
+            Return ProductInventoryLocation?.RackShelfColumn?.InventoryLocation?.NameAlternative
+        End Get
+    End Property
 
 End Class
