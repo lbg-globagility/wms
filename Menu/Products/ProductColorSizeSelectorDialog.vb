@@ -1,7 +1,6 @@
 ﻿Option Strict On
 
 Imports Microsoft.Extensions.DependencyInjection
-Imports OfficeOpenXml.FormulaParsing.Excel.Functions.Logical
 Imports OfficeOpenXml.FormulaParsing.Excel.Functions.RefAndLookup
 Imports WarehouseManagementSystem.Core.Entities
 Imports WarehouseManagementSystem.Core.Enums
@@ -134,7 +133,10 @@ Public Class ProductColorSizeSelectorDialog
                 ToList()
         End If
 
+        Dim activeProductColorSizeIds = productInventoryLocations.Where(Function(t) t.RackShelfColumn.IsActive).GroupBy(Function(t) t.ProductColorSizeID).Select(Function(t) t.Key).ToArray()
+
         Return productColorSizes.
+            Where(Function(t) activeProductColorSizeIds.Contains(If(t.RowID, 0))).
             Select(selector).
             OrderBy(Function(t) t.ProductCode).
             ToList()
@@ -183,7 +185,7 @@ Public Class ProductColorSizeSelectorDialog
     End Sub
 
     Private Sub grid_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles grid.CellContentClick
-        If isSelectedColumn.Index = e.ColumnIndex Then
+        If isSelectedColumn.Index = e.ColumnIndex And e.RowIndex >= 0 Then
             txtSearch.Focus()
             grid.Item(isSelectedColumn.Index, e.RowIndex).Selected = False
             grid.Item(Column3.Index, e.RowIndex).Selected = True
@@ -289,14 +291,31 @@ Public Class ProductColorSizeSelectorDialog
         grid.AutoGenerateColumns = False
         If Not If(grid.Rows.OfType(Of DataGridViewRow)?.Any(), False) Then Return
 
-        Dim fsdfsdfsd = grid.Rows.OfType(Of DataGridViewRow).
-            Where(Function(t) CDbl(t.Cells(Column4.Index).Value) = 0).
-            ToList()
+        Dim allRows = grid.Rows.OfType(Of DataGridViewRow).ToList()
 
-        For Each row In fsdfsdfsd
+        Dim hasNoQtyRows = allRows.Where(Function(t) CDbl(t.Cells(Column4.Index).Value) = 0).ToList()
+        For Each row In hasNoQtyRows
             Dim origColor = grid.Item(columnIndex:=Column4.Index, row.Index).Style.ForeColor
-            grid.Item(columnIndex:=Column4.Index, row.Index).Style.ForeColor = Lighten(origColor, 48)
+            row.DefaultCellStyle.ForeColor = Lighten(origColor, 48)
+
         Next
+
+        For Each row In allRows
+            Dim model = CType(row.DataBoundItem, ProductColorSizeModel)
+            If model Is Nothing Then Continue For
+
+            Dim bool = Not If(model.ProductInventoryLocation?.RackShelfColumn?.IsActive, False)
+            row.ReadOnly = bool
+
+            If bool Then
+                Dim font = row.InheritedStyle.Font
+                row.DefaultCellStyle.Font = New Font(prototype:=font,
+                    newStyle:=FontStyle.Strikeout)
+
+            End If
+
+        Next
+
     End Sub
 
     Function Lighten(orig As Drawing.Color, Optional percent As Integer = 80) As Drawing.Color
@@ -438,6 +457,7 @@ Public Class ProductColorSizeSelectorDialog
                     Where(Function(t) t.ProductInventoryLocationId = model.ProductInventoryLocationId).
                     ToList()
             For Each item In items
+                item.IsSelected = False
                 _selectedProductColorSizeModels.Remove(item)
             Next
 
@@ -450,6 +470,11 @@ Public Class ProductColorSizeSelectorDialog
             Dim count = If(_selectedProductColorSizeModels?.Count(), 0)
             TabPage2.Text = If(count <= 0, "Selected", $"Selected ({count})")
         End If
+
+    End Sub
+
+    Private Sub grid_CellFormatting(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles grid.CellFormatting
+        If e.RowIndex >= 0 Then grid.Rows(e.RowIndex).HeaderCell.Value = $"{e.RowIndex + 1}"
 
     End Sub
 

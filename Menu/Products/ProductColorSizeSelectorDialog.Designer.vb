@@ -54,6 +54,9 @@ Partial Class ProductColorSizeSelectorDialog
         Me.Column13 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.TabPage2 = New System.Windows.Forms.TabPage()
         Me.gridSelectedItems = New DevComponents.DotNetBar.Controls.DataGridViewX()
+        Me.Column16 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column17 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column18 = New DevComponents.DotNetBar.Controls.DataGridViewButtonXColumn()
         Me.Panel4 = New System.Windows.Forms.Panel()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.Panel2 = New System.Windows.Forms.Panel()
@@ -69,9 +72,6 @@ Partial Class ProductColorSizeSelectorDialog
         Me.LabelInventoryName = New System.Windows.Forms.Label()
         Me.LabelInventorySource = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.Column16 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column17 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column18 = New DevComponents.DotNetBar.Controls.DataGridViewButtonXColumn()
         Me.Panel1.SuspendLayout()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
@@ -121,6 +121,7 @@ Partial Class ProductColorSizeSelectorDialog
         Me.grid.AllowUserToAddRows = False
         Me.grid.AllowUserToDeleteRows = False
         Me.grid.AllowUserToResizeRows = False
+        Me.grid.ColumnHeadersHeight = 40
         Me.grid.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.isSelectedColumn, Me.Column3, Me.Column11, Me.Column8, Me.Column2, Me.Column4, Me.Column5, Me.Column14, Me.Column15, Me.Column1, Me.Column6, Me.Column9, Me.Column7, Me.Column10, Me.Column12, Me.Column13})
         DataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
         DataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Window
@@ -131,9 +132,11 @@ Partial Class ProductColorSizeSelectorDialog
         DataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
         Me.grid.DefaultCellStyle = DataGridViewCellStyle8
         Me.grid.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.grid.EnableHeadersVisualStyles = False
         Me.grid.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
         Me.grid.Location = New System.Drawing.Point(3, 3)
         Me.grid.Name = "grid"
+        Me.grid.RowHeadersWidth = 67
         Me.grid.Size = New System.Drawing.Size(830, 348)
         Me.grid.TabIndex = 0
         '
@@ -298,6 +301,30 @@ Partial Class ProductColorSizeSelectorDialog
         Me.gridSelectedItems.Size = New System.Drawing.Size(830, 348)
         Me.gridSelectedItems.TabIndex = 1
         '
+        'Column16
+        '
+        Me.Column16.DataPropertyName = "InventoryName"
+        Me.Column16.HeaderText = "Inventory Name"
+        Me.Column16.Name = "Column16"
+        Me.Column16.ReadOnly = True
+        '
+        'Column17
+        '
+        Me.Column17.DataPropertyName = "ProductCode"
+        Me.Column17.HeaderText = "Product Code"
+        Me.Column17.Name = "Column17"
+        Me.Column17.ReadOnly = True
+        '
+        'Column18
+        '
+        Me.Column18.HeaderText = "Remove?"
+        Me.Column18.Image = CType(resources.GetObject("Column18.Image"), System.Drawing.Image)
+        Me.Column18.Name = "Column18"
+        Me.Column18.ReadOnly = True
+        Me.Column18.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.Column18.Text = Nothing
+        Me.Column18.Width = 64
+        '
         'Panel4
         '
         Me.Panel4.Controls.Add(Me.PictureBox1)
@@ -453,30 +480,6 @@ Partial Class ProductColorSizeSelectorDialog
         Me.Label1.Size = New System.Drawing.Size(138, 13)
         Me.Label1.TabIndex = 2
         Me.Label1.Text = "Search Product Code, etc."
-        '
-        'Column16
-        '
-        Me.Column16.DataPropertyName = "InventoryName"
-        Me.Column16.HeaderText = "Inventory Name"
-        Me.Column16.Name = "Column16"
-        Me.Column16.ReadOnly = True
-        '
-        'Column17
-        '
-        Me.Column17.DataPropertyName = "ProductCode"
-        Me.Column17.HeaderText = "Product Code"
-        Me.Column17.Name = "Column17"
-        Me.Column17.ReadOnly = True
-        '
-        'Column18
-        '
-        Me.Column18.HeaderText = "Remove?"
-        Me.Column18.Image = CType(resources.GetObject("Column18.Image"), System.Drawing.Image)
-        Me.Column18.Name = "Column18"
-        Me.Column18.ReadOnly = True
-        Me.Column18.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.Column18.Text = Nothing
-        Me.Column18.Width = 64
         '
         'ProductColorSizeSelectorDialog
         '

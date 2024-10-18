@@ -127,5 +127,15 @@ namespace WarehouseManagementSystem.Core.Entities
                 return qty > 0 && unitOfLengthNumber > 0 ? (SRP ?? 0) / unitOfLengthNumber : 0;
             }
         }
+
+        [NotMapped]
+        public string WarehouseName { get; private set; }
+
+        public void SetTemporaryWarehouseName(string name)
+        {
+            WarehouseName = name;
+        }
+
+        public int? InventoryLocationId => ProductInventoryLocation?.RackShelfColumn?.InventoryLocationID;
     }
 }

@@ -27,6 +27,9 @@ Public Class OrderItemModel
         RowID = orderItem.RowID
         ProductColorSizeId = orderItem.ProductColorSizeID
         ProductInventoryLocationId = orderItem.ProductInventoryLocationId
+
+        Dim wname = orderItem?.ProductInventoryLocation?.RackShelfColumn?.InventoryLocation?.NameAlternative
+        _WarehouseName = If(String.IsNullOrEmpty(wname), orderItem?.WarehouseName, wname)
     End Sub
 
     Public Sub New(orderItem As OrderItem, productInventoryLocation As ProductInventoryLocation)
@@ -51,6 +54,9 @@ Public Class OrderItemModel
         RowID = orderItem.RowID
         ProductColorSizeId = orderItem.ProductColorSizeID
         ProductInventoryLocationId = orderItem.ProductInventoryLocationId
+
+        Dim wname = orderItem?.ProductInventoryLocation?.RackShelfColumn?.InventoryLocation?.NameAlternative
+        _WarehouseName = If(String.IsNullOrEmpty(wname), orderItem?.WarehouseName, wname)
     End Sub
 
     Public ReadOnly Property OrderItem As OrderItem
@@ -76,6 +82,7 @@ Public Class OrderItemModel
     Public ReadOnly Property IsDelete As Boolean
     Public Property UnitOfLength As String
     Public Property UnitOfLengthNumber As Decimal?
+    Public ReadOnly Property WarehouseName As String
 
     Private _UnitOfLengthPrice As Decimal
 

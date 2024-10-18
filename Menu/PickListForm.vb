@@ -1005,7 +1005,24 @@ Public Class PickListForm
 
     Async Sub displayCustomerOrdersB(ByVal icustomerorderid As String)
         Try
-            Dim sql = <![CDATA[SELECT co.rowid,COALESCE(co.ordernumber,''),COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),''),DATE_FORMAT(co.orderdate,'%d-%b-%Y'),DATE_FORMAT(co.targetdate,'%d-%b-%Y'),COALESCE(co.status,''),COALESCE(pg.groupname,''),COALESCE(co.referencenumber,''),DATE_FORMAT(co.enddate,'%d-%b-%Y'), IFNULL(il.Name, '') `InventoryLocation`, co.accountid FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid LEFT JOIN picklistgroup pg ON cu.picklistgroupid = pg.rowid LEFT JOIN inventorylocations il ON il.RowID=co.InventoryLocationID WHERE FIND_IN_SET(co.rowid, @orderIds) > 0;]]>.Value
+            Dim sql = <![CDATA[
+                SELECT co.rowid,
+                COALESCE(co.ordernumber, ''),
+                COALESCE(CONCAT(COALESCE(cu.companyname, ''), ' - ', COALESCE(cu.accountno, '')), ''),
+                DATE_FORMAT(co.orderdate, '%d-%b-%Y'),
+                DATE_FORMAT(co.targetdate, '%d-%b-%Y'),
+                COALESCE(co.status, ''),
+                COALESCE(pg.groupname, ''),
+                COALESCE(co.referencenumber, ''),
+                DATE_FORMAT(co.enddate, '%d-%b-%Y'),
+                i.`InventoryLocationNames`,
+                co.accountid
+                FROM orders co
+                LEFT JOIN accounts cu ON co.accountid = cu.rowid
+                LEFT JOIN picklistgroup pg ON cu.picklistgroupid = pg.rowid
+                INNER JOIN (SELECT o.RowID, GROUP_CONCAT(IFNULL(il.Name, '')) `InventoryLocationNames` FROM orders o INNER JOIN orderitems oi ON oi.OrderID=o.RowID INNER JOIN productinventorylocation pil ON pil.RowID=oi.ProductInventoryLocationId INNER JOIN rackshelfcolumn r ON r.RowID=pil.RackShelfColumnID INNER JOIN inventorylocations il ON il.RowID=r.InventoryLocationID WHERE FIND_IN_SET(o.RowID, @orderIds) > 0 GROUP BY o.RowID) i ON i.RowID=co.RowID
+                WHERE FIND_IN_SET(co.rowid, @orderIds) > 0;
+            ]]>.Value
 
             Using connection As New MySqlConnection(manager.GetConnString),
                 command As New MySqlCommand(sql, connection)
@@ -1047,7 +1064,66 @@ Public Class PickListForm
         Try
             dgCustomerOrderItems.Rows.Clear()
 
-            Dim sql = <![CDATA[SELECT ci.rowid,COALESCE(ci.productcolorsizeid,0),COALESCE(ci.productbundleid,0),COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(b.bundlename,''),COALESCE(c.colorname,''),COALESCE(pcs.size,''),COALESCE(pcs.seasoncode,''),COALESCE(ci.qtyordered,0),COALESCE(pcs.sku,''),COALESCE(b.sku,''),COALESCE(ci.unitofmeasure,''),COALESCE(ci.itemtype,''),COALESCE(ci.remarks,''),plo.`Status`,COALESCE(CONCAT(COALESCE(vb.firstname,''),' ',COALESCE(vb.lastname,''),' - ',COALESCE(vb.rowid,'')),''),COALESCE(DATE_FORMAT(ci.verifieddate,'%d-%b-%Y'),''),COALESCE(ci.sku,'') FROM orderitems ci LEFT JOIN productbundles b ON ci.productbundleid = b.rowid LEFT JOIN productcolorsizes pcs ON ci.productcolorsizeid = pcs.rowid LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN colors c ON pc.colorid = c.rowid LEFT JOIN products p ON pc.productid = p.rowid LEFT JOIN users vb ON ci.verifiedby = vb.rowid INNER JOIN picklistorders plo ON plo.picklistid = @ipicklistid AND plo.orderid = ci.OrderID AND plo.organizationid = ci.organizationid AND plo.orderitemid = ci.rowid WHERE ci.orderid = @icustomerorderid AND ci.organizationid = @organizationId AND ci.status != 'Inactive' AND ci.itemtype != 'BI' ORDER BY ci.rowid;]]>.Value
+            Dim sql = <![CDATA[
+                SELECT
+	                ci.rowid,
+	                COALESCE(ci.productcolorsizeid, 0),
+	                COALESCE(ci.productbundleid, 0),
+	                COALESCE(c.colorvalue, ''),
+	                COALESCE(p.productcode, ''),
+	                COALESCE(b.bundlename, ''),
+	                COALESCE(c.colorname, ''),
+	                COALESCE(pcs.size, ''),
+	                COALESCE(pcs.seasoncode, ''),
+	                COALESCE(ci.qtyordered, 0),
+	                COALESCE(pcs.sku, ''),
+	                COALESCE(b.sku, ''),
+	                COALESCE(ci.unitofmeasure, ''),
+	                COALESCE(ci.itemtype, ''),
+	                COALESCE(ci.remarks, ''),
+	                plo.`Status`,
+	                COALESCE(
+		                CONCAT(
+			                COALESCE(vb.firstname, ''),
+			                ' ',
+			                COALESCE(vb.lastname, ''),
+			                ' - ',
+			                COALESCE(vb.rowid, '')
+		                ),
+		                ''
+	                ),
+	                COALESCE(
+		                DATE_FORMAT(ci.verifieddate, '%d-%b-%Y'),
+		                ''
+	                ),
+	                COALESCE(ci.sku, ''),
+					il.`Name` `InventoryLocationName`,
+					ci.ProductInventoryLocationId,
+					pil.RackShelfColumnID,
+					r.InventoryLocationID
+                FROM
+	                orderitems ci
+	                LEFT JOIN productbundles b ON ci.productbundleid = b.rowid
+	                LEFT JOIN productcolorsizes pcs ON ci.productcolorsizeid = pcs.rowid
+	                LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid
+	                LEFT JOIN colors c ON pc.colorid = c.rowid
+	                LEFT JOIN products p ON pc.productid = p.rowid
+	                LEFT JOIN users vb ON ci.verifiedby = vb.rowid
+	                INNER JOIN picklistorders plo ON plo.picklistid = @ipicklistid
+	                AND plo.orderid = ci.OrderID
+	                AND plo.organizationid = ci.organizationid
+	                AND plo.orderitemid = ci.rowid
+						INNER JOIN productinventorylocation pil ON pil.RowID=ci.ProductInventoryLocationId
+						INNER JOIN rackshelfcolumn r ON r.RowID=pil.RackShelfColumnID
+						INNER JOIN inventorylocations il ON il.RowID=r.InventoryLocationID
+                WHERE
+	                ci.orderid = @icustomerorderid
+	                AND ci.organizationid = @organizationId
+	                AND ci.status != 'Inactive'
+	                AND ci.itemtype != 'BI'
+                ORDER BY
+	                ci.rowid;
+            ]]>.Value
 
             Using connection As New MySqlConnection(manager.GetConnString),
                 command As New MySqlCommand(sql, connection),
@@ -1119,6 +1195,11 @@ Public Class PickListForm
                             End With
                         End If
                     End If
+
+                    dgCustomerOrderItems.Item(Column1.Name, n).Value = drow(19)
+                    dgCustomerOrderItems.Item(Column2.Name, n).Value = drow(20)
+                    dgCustomerOrderItems.Item(Column3.Name, n).Value = drow(21)
+                    dgCustomerOrderItems.Item(Column4.Name, n).Value = drow(22)
                 Next
             End Using
 
@@ -1148,7 +1229,26 @@ Public Class PickListForm
         Try
             dgRackShelfColumn.Rows.Clear()
 
-            Dim sql = <![CDATA[SELECT pil.rowid,COALESCE(rsc.rackno,''),COALESCE(rsc.shelfno,''),COALESCE(rsc.columnno,''),COALESCE(pil.totalavailableqty,0),COALESCE(rsc.pickorderno,0),COALESCE(pil.totalallocatedqty,0) FROM productinventorylocation pil INNER JOIN rackshelfcolumn rsc ON rsc.`Status`!='Inactive' AND pil.rackshelfcolumnid = rsc.rowid AND rsc.inventorylocationid = @iinventorylocationid WHERE pil.organizationid = @organizationId AND pil.productcolorsizeid = @iproductcolorsizeid ORDER BY rsc.pickorderno ASC;]]>.Value
+            Dim sql = <![CDATA[
+                SELECT
+	                pil.rowid,
+	                COALESCE(rsc.rackno, ''),
+	                COALESCE(rsc.shelfno, ''),
+	                COALESCE(rsc.columnno, ''),
+	                COALESCE(pil.totalavailableqty, 0),
+	                COALESCE(rsc.pickorderno, 0),
+	                COALESCE(pil.totalallocatedqty, 0)
+                FROM
+	                productinventorylocation pil
+	                INNER JOIN rackshelfcolumn rsc ON rsc.`Status` != 'Inactive'
+	                AND pil.rackshelfcolumnid = rsc.rowid
+	                AND rsc.inventorylocationid = @iinventorylocationid
+                WHERE
+	                pil.organizationid = @organizationId
+	                AND pil.productcolorsizeid = @iproductcolorsizeid
+                ORDER BY
+	                rsc.pickorderno ASC;
+            ]]>.Value
 
             Using connection As New MySqlConnection(manager.GetConnString),
             command As New MySqlCommand(sql, connection),
@@ -2129,7 +2229,8 @@ Public Class PickListForm
 
                     plinventorylocationdid = globalinventorylocationid
                     If plinventorylocationdid <> 0 Then
-                        Await displayRackShelfColumn(CInt(dgCustomerOrderItems.CurrentRow.Cells("ci_pcsrowid").Value), plinventorylocationdid)
+                        Await displayRackShelfColumn(CInt(dgCustomerOrderItems.CurrentRow.Cells("ci_pcsrowid").Value),
+                            iinventorylocationid:=CInt(dgCustomerOrderItems.CurrentRow.Cells(Column4.Name).Value))
                     Else
                         errProvider.SetError(cboLocationName, "Please choose or enter the location name.")
                     End If
@@ -2167,7 +2268,8 @@ Public Class PickListForm
                         getInventorylocationIDA(cboLocationName.Text, Me)
                         plinventorylocationdid = globalinventorylocationid
                         If plinventorylocationdid <> 0 Then
-                            Await displayRackShelfColumn(CInt(dgCustomerOrderItems.CurrentRow.Cells("ci_pcsrowid").Value), plinventorylocationdid)
+                            Await displayRackShelfColumn(CInt(dgCustomerOrderItems.CurrentRow.Cells("ci_pcsrowid").Value),
+                                iinventorylocationid:=CInt(dgCustomerOrderItems.CurrentRow.Cells(Column4.Name).Value))
                         Else
                             errProvider.SetError(cboLocationName, "Please choose or enter the location name.")
                         End If
@@ -3497,14 +3599,19 @@ Public Class PickListForm
         Dim orderIds = pickList.PickListOrders.GroupBy(Function(t) t.OrderID).Select(Function(t) t.Key).ToArray()
         Dim orders = Await orderDataService.GetManyByIdsAsync(ids:=orderIds)
 
-        Dim inventoryLocationIds = orders.GroupBy(Function(t) t.InventoryLocationID.Value).Select(Function(t) t.Key).ToArray()
+        Dim inventoryLocationIds = New List(Of Integer)
+        orders.
+            ForEach(Sub(o)
+                        inventoryLocationIds.AddRange(o.InventoryLocationIds)
+                    End Sub)
+        inventoryLocationIds = inventoryLocationIds.GroupBy(Function(t) t).Select(Function(t) t.Key).ToList()
 
         Dim productColorSizeIds = New List(Of Integer)
         orders.ForEach(Sub(t)
                            productColorSizeIds.AddRange(t.OrderItems.Select(Function(f) f.ProductColorSizeID.Value).ToList())
                        End Sub)
         Dim productInventoryLocationDataService = GetRequiredService(Of IProductInventoryLocationDataService)()
-        Dim productInventoryLocations = (Await productInventoryLocationDataService.GetByInventoryLocationIdsAndProductColorSizeIdsAsync(inventoryLocationIds:=inventoryLocationIds,
+        Dim productInventoryLocations = (Await productInventoryLocationDataService.GetByInventoryLocationIdsAndProductColorSizeIdsAsync(inventoryLocationIds:=inventoryLocationIds.ToArray(),
             productColorSizeIds:=productColorSizeIds.ToArray())).ToList()
 
         Dim pickListAutomation = New PickListAutomation(pickLists, 1)

@@ -22,7 +22,7 @@ Public Class CustomerOrdersForm2
 
     Private ReadOnly _userId As Integer
     Private _selectedOrder As Order
-    Private ReadOnly DEFAULT_PAGEOPTIONS As PageOptions = New PageOptions(pageIndex:=0, pageSize:=20, sort:="Created", direction:="desc")
+    Private ReadOnly DEFAULT_PAGEOPTIONS As PageOptions = New PageOptions(pageIndex:=0, pageSize:=20, sort:="OrderNumber", direction:="desc")
     Private _pageOptions As PageOptions = DEFAULT_PAGEOPTIONS
 
     Public Sub New(userId As Integer)
@@ -148,7 +148,8 @@ Public Class CustomerOrdersForm2
 
         Dim form As New ProductColorSizeSelectorDialog() 'inventoryLocationId:=inventoryLocationId
         If hasOrder Then form.ProductInventoryLocationExceptionIds = orderItemModels.
-            Select(Function(t) t.ProductInventoryLocationId.Value).
+            Where(Function(t) t.ProductInventoryLocationId.HasValue).
+            Select(Function(t) If(t.ProductInventoryLocationId, 0)).
             ToList()
 
         If hasOrder AndAlso form.ShowDialog() = DialogResult.OK Then
@@ -167,7 +168,7 @@ Public Class CustomerOrdersForm2
                 Dim orderItemModel = orderItemModels.FirstOrDefault(Function(t) If(t.ProductInventoryLocationId, 0) = item.ProductInventoryLocationId)
 
                 If orderItemModel Is Nothing Then
-                    orderItemList.Add(OrderItem.NewCustomerOrderItem(organizationId:=Z_OrganizationID,
+                    Dim oitem = OrderItem.NewCustomerOrderItem(organizationId:=Z_OrganizationID,
                         userId:=Z_UserID,
                         qtyOrdered:=0,
                         srp:=If(item.UnitPriceOfUOM2, 0),
@@ -177,7 +178,9 @@ Public Class CustomerOrdersForm2
                         productColorSizeId:=item.ProductColorSizeId,
                         productInventoryLocationId:=item.ProductInventoryLocation.RowID.Value,
                         itemCode:=item.ProductCode,
-                        accountId:=_selectedOrder.AccountID))
+                        accountId:=_selectedOrder.AccountID)
+                    oitem.SetTemporaryWarehouseName(name:=item?.InventoryName)
+                    orderItemList.Add(oitem)
 
                     Continue For
                 End If
@@ -193,6 +196,7 @@ Public Class CustomerOrdersForm2
                     productInventoryLocationId:=If(orderItemModel?.ProductInventoryLocationId, item.ProductInventoryLocation.RowID.Value),
                     itemCode:=StringExtensions.IfNullOrEmpty(orderItemModel?.ProductCode, item.ProductCode),
                     accountId:=_selectedOrder.AccountID)
+                thisOrderItem.SetTemporaryWarehouseName(name:=item?.InventoryName)
 
                 orderItemList.Add(thisOrderItem)
             Next
@@ -260,7 +264,7 @@ Public Class CustomerOrdersForm2
 
     End Sub
 
-    Private Sub gridOrderItems_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles gridOrderItems.CellClick
+    Private Async Sub gridOrderItems_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles gridOrderItems.CellClick
         Dim currentRow = gridOrderItems.CurrentRow
         If currentRow Is Nothing Then Return
 
@@ -278,26 +282,38 @@ Public Class CustomerOrdersForm2
 
             gridOrderItems.Refresh()
 
-            Dim orderItemModels = GetOrderItemModels().
+            Dim orderItemAllModels = GetOrderItemModels()
+
+            Dim orderItemNotDeleteModels = orderItemAllModels.
                 Where(Function(t) Not t.IsDelete).
+                Where(Function(t) Not t.IsNonData).
                 ToList()
 
-            Dim emulateGrandTotal = orderItemModel.EmulatedGrandTotals(unitPrice:=If(orderItemModels?.Sum(Function(t) t.UnitPrice), 0),
-                unitOfLengthNumber:=If(orderItemModels?.Sum(Function(t) t.UnitOfLengthNumber), 0),
-                unitOfLengthPrice:=If(orderItemModels?.Sum(Function(t) t.UnitOfLengthPrice), 0),
-                totalItemPrice:=If(orderItemModels?.Sum(Function(t) t.TotalItemPrice), 0),
-                quantityOrdered:=If(orderItemModels?.Sum(Function(t) t.QuantityOrdered), 0))
+            Dim emulateGrandTotal = orderItemAllModels?.FirstOrDefault(Function(t) t.IsNonData)
+            emulateGrandTotal?.RefreshGrandTotals(unitPrice:=If(orderItemNotDeleteModels?.Sum(Function(t) t.UnitPrice), 0),
+                unitOfLengthNumber:=If(orderItemNotDeleteModels?.Sum(Function(t) t.UnitOfLengthNumber), 0),
+                unitOfLengthPrice:=If(orderItemNotDeleteModels?.Sum(Function(t) t.UnitOfLengthPrice), 0),
+                totalItemPrice:=If(orderItemNotDeleteModels?.Sum(Function(t) t.TotalItemPrice), 0),
+                quantityOrdered:=If(orderItemNotDeleteModels?.Sum(Function(t) t.QuantityOrdered), 0))
 
-            If If(orderItemModels?.Any(), False) AndAlso
-                Not orderItemModels.Any(Function(t) t.IsNonData) Then _
-                orderItemModels?.Add(emulateGrandTotal)
-            'orderItemModels = orderItemModels.
-            '    Concat(New List(Of OrderItemModel) From {emulateGrandTotal}).
-            '    ToList()
+            orderItemNotDeleteModels.Add(emulateGrandTotal)
 
-            gridOrderItems.DataSource = orderItemModels
+            gridOrderItems.DataSource = orderItemNotDeleteModels
+
+            Dim selectedOrderItems = _selectedOrder?.OrderItems?.
+                Where(Function(t) t.IsNewEntity).
+                Where(Function(t) t.IsDelete).
+                ToList()
+
+            selectedOrderItems?.
+                ForEach(Sub(oi)
+                            _selectedOrder?.OrderItems?.Remove(oi)
+                        End Sub)
+
             'End If
+
         End If
+
     End Sub
 
     Private Sub gridOrderItems_SelectionChanged(sender As Object, e As EventArgs) Handles gridOrderItems.SelectionChanged
@@ -871,7 +887,20 @@ Public Class CustomerOrdersForm2
     Private Sub gridOrderItems_CellFormatting(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles gridOrderItems.CellFormatting
         Dim model = CType(gridOrderItems.Rows(e.RowIndex).DataBoundItem, OrderItemModel)
         If Not If(model?.IsNonData, False) Then gridOrderItems.Rows(e.RowIndex).HeaderCell.Value = $"{e.RowIndex + 1}"
-        If If(model?.IsNonData, False) Then gridOrderItems.Rows(e.RowIndex).ReadOnly = True
+
+        Dim bool = If(model?.IsNonData, False)
+        If bool Then
+            gridOrderItems.Rows(e.RowIndex).ReadOnly = bool
+
+            Dim font = gridOrderItems.Rows(e.RowIndex).InheritedStyle.Font
+            gridOrderItems.Rows(e.RowIndex).DefaultCellStyle.Font = New Font(familyName:=font.Name,
+                emSize:=9.0!,
+                style:=FontStyle.Bold)
+            'New Font(Me.Font.Name, 7.5!, FontStyle.Regular, GraphicsUnit.Point, CType(0, Byte))
+            'New Font(prototype:=font, newStyle:=FontStyle.Bold)
+
+        End If
+
     End Sub
 
 End Class

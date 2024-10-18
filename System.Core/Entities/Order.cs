@@ -150,5 +150,7 @@ namespace WarehouseManagementSystem.Core.Entities
             .GroupBy(_ => _.UnitOfMeasure)
             .Select(_ => $"{_.Sum(t => t.QtyOrdered ?? 0)} {_.Key}")
             .ToArray());
+
+        public int[] InventoryLocationIds => OrderItems?.GroupBy(t => t.ProductInventoryLocation?.RackShelfColumn?.InventoryLocationID ?? 0)?.Select(t => t.Key).ToArray() ?? Enumerable.Empty<int>().ToArray();
     }
 }

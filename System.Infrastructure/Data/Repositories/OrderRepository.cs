@@ -215,6 +215,8 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
                                 .ThenInclude(pc => pc.Product)
                     .Include(o => o.OrderItems)
                         .ThenInclude(oi => oi.ProductInventoryLocation)
+                            .ThenInclude(pil => pil.RackShelfColumn)
+                                .ThenInclude(r => r.InventoryLocation)
                     .Include(o => o.OrderItems)
                         .ThenInclude(oi => oi.RackShelfColumn)
                     .Include(o => o.Agent)
@@ -262,6 +264,8 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
                 {
                     if (pageOptions.Sort == "Created")
                         q = q.OrderBy(x => x.Created, pageOptions.Direction);
+                    if (pageOptions.Sort == "OrderNumber")
+                        q = q.OrderBy(x => Convert.ToInt32(x.OrderNumber), pageOptions.Direction);
                 }
 
                 return q;
@@ -269,8 +273,11 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
         }
 
         public override async Task<ICollection<Order>> GetManyByIdsAsync(int[] ids) => await _context.Orders
-            .AsNoTracking()
             .Include(o => o.OrderItems)
+                .ThenInclude(o => o.ProductInventoryLocation)
+                    .ThenInclude(p => p.RackShelfColumn)
+                        .ThenInclude(r => r.InventoryLocation)
+            .AsNoTracking()
             .Where(o => ids.Contains(o.RowID.Value))
             .ToListAsync();
     }
