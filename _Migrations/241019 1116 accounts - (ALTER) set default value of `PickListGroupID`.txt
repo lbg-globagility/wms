@@ -1,0 +1,9 @@
+ALTER TABLE `accounts`
+	CHANGE COLUMN `PickListGroupID` `PickListGroupID` INT(11) NULL DEFAULT '1' AFTER `ParentAccountID`;
+
+INSERT INTO `picklistgroup` (`RowID`, `OrganizationID`, `Created`, `CreatedBy`, `LastUpd`, `LastUpdBy`, `GroupName`, `Status`) VALUES (1, 1, CURRENT_TIMESTAMP(), 1, NULL, NULL, 'Default', 'Active') ON DUPLICATE KEY UPDATE LastUpd=CURRENT_TIMESTAMP();
+
+UPDATE `accounts` a
+SET a.PickListGroupID=1
+WHERE a.PickListGroupID IS NULL
+;

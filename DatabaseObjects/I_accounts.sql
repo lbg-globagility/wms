@@ -41,6 +41,9 @@ CREATE PROCEDURE `I_accounts`(
 	IN `I_AgentID` INT
 )
 BEGIN
+
+SET @defaultPickListGroupId=(SELECT RowID FROM picklistgroup p WHERE p.OrganizationID=I_OrganizationID ORDER BY p.RowID LIMIT 1);
+
 INSERT INTO accounts
 (
 	OrganizationID, 
@@ -76,7 +79,7 @@ VALUES
 	I_PrimaryContactID,
 	I_PrimaryAddressID,  
 	I_ParentAccountID,
-	I_PickListGroupID,
+	IFNULL(I_PickListGroupID, @defaultPickListGroupId),
 	I_BranchID,  
 	I_AccountNo,   
 	I_AccountType,  

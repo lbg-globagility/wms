@@ -2228,9 +2228,12 @@ Public Class PickListForm
                     End If
 
                     plinventorylocationdid = globalinventorylocationid
-                    If plinventorylocationdid <> 0 Then
+                    If IsThurston Then
                         Await displayRackShelfColumn(CInt(dgCustomerOrderItems.CurrentRow.Cells("ci_pcsrowid").Value),
                             iinventorylocationid:=CInt(dgCustomerOrderItems.CurrentRow.Cells(Column4.Name).Value))
+                    ElseIf plinventorylocationdid <> 0 Then
+                        Await displayRackShelfColumn(CInt(dgCustomerOrderItems.CurrentRow.Cells("ci_pcsrowid").Value),
+                            iinventorylocationid:=plinventorylocationdid)
                     Else
                         errProvider.SetError(cboLocationName, "Please choose or enter the location name.")
                     End If
