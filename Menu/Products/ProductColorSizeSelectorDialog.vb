@@ -92,6 +92,8 @@ Public Class ProductColorSizeSelectorDialog
 
         ShowSelectedStatus()
 
+        inventorySourceOnChange()
+
     End Sub
 
     Private Async Function GetProductColorSizes(Optional inventoryId As Integer? = Nothing) As Task(Of List(Of ProductColorSizeModel))
@@ -360,6 +362,31 @@ Public Class ProductColorSizeSelectorDialog
     End Sub
 
     Private Sub cboInventorySource_SelectedValueChanged(sender As Object, e As EventArgs)
+
+        ''If _currentSelectedInventorySource = CType(cboInventorySource.SelectedValue, InventoryLocationType) Then Return
+        '_currentSelectedInventorySource = CType(cboInventorySource.SelectedValue, InventoryLocationType)
+
+        'Dim inventoryLocationType = CType(cboInventorySource.SelectedValue, InventoryLocationType)
+
+        'Dim hasSelectedItemInventorySource = cboInventorySource.SelectedValue IsNot Nothing
+        'cboInventoryName.Enabled = hasSelectedItemInventorySource
+
+        'cboInventoryName.Enabled = False
+        'Dim inventoryLocations = _inventoryLocations.
+        '    Where(Function(t) t.Type = inventoryLocationType).
+        '    ToList()
+
+        'cboInventoryName.DisplayMember = "NameAlternative"
+        'cboInventoryName.ValueMember = "RowID"
+        'cboInventoryName.DataSource = inventoryLocations
+
+        'cboInventoryName.Enabled = hasSelectedItemInventorySource And
+        '    If(inventoryLocations?.Any(), False)
+
+        inventorySourceOnChange()
+    End Sub
+
+    Private Sub inventorySourceOnChange()
         'If _currentSelectedInventorySource = CType(cboInventorySource.SelectedValue, InventoryLocationType) Then Return
         _currentSelectedInventorySource = CType(cboInventorySource.SelectedValue, InventoryLocationType)
 

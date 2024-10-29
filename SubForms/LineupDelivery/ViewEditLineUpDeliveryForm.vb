@@ -1092,7 +1092,7 @@ Public Class ViewEditLineUpDeliveryForm
         Try
             dgLineUpList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT lu.rowid,COALESCE(lu.lineupno,''),COALESCE(o.drnumber,''),COALESCE(CONCAT(COALESCE(o.ordernumber,''),' (C.O. No.) / ',COALESCE(a.companyname,''),' - ',COALESCE(a.accountno,'')),'')," &
+            Dim sql1 As String = "SELECT lu.rowid,COALESCE(lu.lineupno,''),COALESCE(lu.deliveryno,''),COALESCE(CONCAT(COALESCE(o.ordernumber,''),' (C.O. No.) / ',COALESCE(a.companyname,''),' - ',COALESCE(a.accountno,'')),'')," &
                         "COALESCE(DATE_FORMAT(lu.lineupdate,'%d-%b-%Y'),'') FROM lineups lu LEFT JOIN orders o ON lu.orderid = o.rowid LEFT JOIN accounts a ON o.accountid = a.rowid WHERE lu.organizationid = " & Z_OrganizationID & " " &
                         "ORDER BY lu.deliveryno DESC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
@@ -1127,7 +1127,7 @@ Public Class ViewEditLineUpDeliveryForm
         Try
             dgLineUpList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT lu.rowid,COALESCE(lu.lineupno,''),COALESCE(o.drnumber,''),COALESCE(CONCAT(COALESCE(o.ordernumber,''),' (C.O. No.) / ',COALESCE(a.companyname,''),' - ',COALESCE(a.accountno,'')),'')," &
+            Dim sql1 As String = "SELECT lu.rowid,COALESCE(lu.lineupno,''),COALESCE(lu.deliveryno,''),COALESCE(CONCAT(COALESCE(o.ordernumber,''),' (C.O. No.) / ',COALESCE(a.companyname,''),' - ',COALESCE(a.accountno,'')),'')," &
                         "COALESCE(DATE_FORMAT(lu.lineupdate,'%d-%b-%Y'),'') FROM lineups lu LEFT JOIN orders o ON lu.orderid = o.rowid LEFT JOIN accounts a ON o.accountid = a.rowid WHERE lu.organizationid = " & Z_OrganizationID & " " &
                         "AND (lu.deliveryno LIKE ""%" & isearchphrase & "%"" OR o.ordernumber LIKE ""%" & isearchphrase & "%"" OR lu.lineupno LIKE ""%" & isearchphrase & "%"" OR a.companyname LIKE ""%" & isearchphrase & "%"" OR lu.status LIKE ""%" & isearchphrase & "%"") " &
                         "ORDER BY lu.deliveryno DESC LIMIT " & istartpage & "," & pagedivisor & " "
@@ -1163,7 +1163,7 @@ Public Class ViewEditLineUpDeliveryForm
         Try
             dgLineUpList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT lu.rowid,COALESCE(lu.lineupno,''),COALESCE(o.drnumber,''),COALESCE(CONCAT(COALESCE(o.ordernumber,''),' (C.O. No.) / ',COALESCE(a.companyname,''),' - ',COALESCE(a.accountno,'')),'')," &
+            Dim sql1 As String = "SELECT lu.rowid,COALESCE(lu.lineupno,''),COALESCE(lu.deliveryno,''),COALESCE(CONCAT(COALESCE(o.ordernumber,''),' (C.O. No.) / ',COALESCE(a.companyname,''),' - ',COALESCE(a.accountno,'')),'')," &
                         "COALESCE(DATE_FORMAT(lu.lineupdate,'%d-%b-%Y'),'') FROM lineups lu LEFT JOIN orders o ON lu.orderid = o.rowid LEFT JOIN accounts a ON o.accountid = a.rowid WHERE lu.organizationid = " & Z_OrganizationID & " " &
                         "AND (" & idatesearch & " >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " & idatesearch & " <= '" & dtpToSearch.Value.Year & "-" & dtpToSearch.Value.Month & "-" & dtpToSearch.Value.Day & "' ) " &
                         "GROUP BY lu.rowid ORDER BY lu.deliveryno DESC LIMIT " & istartpage & "," & pagedivisor & " "
@@ -1199,7 +1199,7 @@ Public Class ViewEditLineUpDeliveryForm
         Try
             dgLineUpList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT lu.rowid,COALESCE(lu.lineupno,''),COALESCE(o.drnumber,''),COALESCE(CONCAT(COALESCE(o.ordernumber,''),' (C.O. No.) / ',COALESCE(a.companyname,''),' - ',COALESCE(a.accountno,'')),'')," &
+            Dim sql1 As String = "SELECT lu.rowid,COALESCE(lu.lineupno,''),COALESCE(lu.deliveryno,''),COALESCE(CONCAT(COALESCE(o.ordernumber,''),' (C.O. No.) / ',COALESCE(a.companyname,''),' - ',COALESCE(a.accountno,'')),'')," &
                         "COALESCE(DATE_FORMAT(lu.lineupdate,'%d-%b-%Y'),'') FROM lineups lu LEFT JOIN orders o ON lu.orderid = o.rowid LEFT JOIN accounts a ON o.accountid = a.rowid WHERE lu.organizationid = " & Z_OrganizationID & " " &
                         "AND " & icommonphrase & " " & idatesearch & " ORDER BY lu.deliveryno DESC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
@@ -1268,7 +1268,7 @@ Public Class ViewEditLineUpDeliveryForm
     Sub displayLineUpInformation(ByVal ilineupid As Integer)
         Try
             Dim dtLUinfo As New Data.DataTable
-            dtLUinfo = getDataTableForSQL("SELECT COALESCE(lu.lineupno,''),COALESCE(DATE_FORMAT(lu.lineupdate,'%d-%b-%Y'),''),COALESCE(o.drnumber,''),COALESCE(DATE_FORMAT(IFNULL(lu.deliverydate, lu.ConfirmedDeliveryTimeStamp),'%d-%b-%Y'),''),IFNULL(dt.truckname, ''),COALESCE(lu.status,'')," &
+            dtLUinfo = getDataTableForSQL("SELECT COALESCE(lu.lineupno,''),COALESCE(DATE_FORMAT(lu.lineupdate,'%d-%b-%Y'),''),COALESCE(lu.deliveryno,''),COALESCE(DATE_FORMAT(IFNULL(lu.deliverydate, lu.ConfirmedDeliveryTimeStamp),'%d-%b-%Y'),''),IFNULL(dt.truckname, ''),COALESCE(lu.status,'')," &
                         "COALESCE(CONCAT(COALESCE(c.firstname,''),' ',COALESCE(c.middlename,''),' ',COALESCE(c.lastname,''),' ',COALESCE(c.suffix,''),' - ',COALESCE(c.contactno,'')),''),COALESCE(CONCAT(COALESCE(o.ordernumber,''),' (C.O. No.) / ', COALESCE(a.companyname,''),' - ', COALESCE(a.accountno,''),' / ',CONCAT(COALESCE(pl.packinglistno,''),' (Pa.L. No.)')),'')," &
                         "COALESCE(DATE_FORMAT(o.orderdate,'%d-%b-%Y'),''),COALESCE(DATE_FORMAT(o.targetdate,'%d-%b-%Y'),''),COALESCE(o.customeraddress,''),COALESCE(lu.comments,''),COALESCE(o.deliveryhours,''),COALESCE(lu.packinglistid,0),COALESCE(lu.orderid,0),COALESCE(o.referencenumber,''),COALESCE(DATE_FORMAT(o.enddate,'%d-%b-%Y'),''),COALESCE(CONCAT(COALESCE(bc.branchcode,''),' - ',COALESCE(bc.branchname,'')),'')," &
                         "COALESCE(CONCAT(COALESCE(ve.companyname,''),' - ',COALESCE(ve.companycode,'')),''),COALESCE(CONCAT(COALESCE(cc.codename,''),' / ',COALESCE(c1.codeno,''),'-',COALESCE(c2.codeno,''),'-',COALESCE(c3.codeno,'')),''), lu.AgentId, lu.Helper1Id, lu.Helper2Id FROM lineups lu LEFT JOIN orders o ON lu.orderid = o.rowid LEFT JOIN deliverytruckshifts dts ON lu.deliverytruckshiftid = dts.rowid LEFT JOIN combinecodings cc ON o.combinecodingid = cc.rowid LEFT JOIN codings c1 ON cc.codingida = c1.rowid " &

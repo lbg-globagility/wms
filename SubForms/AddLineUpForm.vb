@@ -536,7 +536,7 @@ Public Class AddLineUpForm
                     txtReceiptDate.Text = globaltargetdate
                     txtCancelDate.Text = globalordercanceldate
                     txtDeliveryAddress.Text = globaladdressname
-                    txtSIDRNo.Text = globalordersidrno
+                    'txtSIDRNo.Text = globalordersidrno
                     txtBranchCodeNameInfo.Text = globalbranchname
                     txtVendorCodeNameInfo.Text = globalvendorname
                     txtClassDescription.Text = globalorderclassdescription
@@ -618,7 +618,7 @@ Public Class AddLineUpForm
                     txtReceiptDate.Text = globaltargetdate
                     txtCancelDate.Text = globalordercanceldate
                     txtDeliveryAddress.Text = globaladdressname
-                    txtSIDRNo.Text = globalordersidrno
+                    'txtSIDRNo.Text = globalordersidrno
                     txtBranchCodeNameInfo.Text = globalbranchname
                     txtVendorCodeNameInfo.Text = globalvendorname
                     txtClassDescription.Text = globalorderclassdescription
