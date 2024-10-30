@@ -35,6 +35,7 @@ Partial Class DeliveryReceiptPrintOptions
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.ButtonCancel = New System.Windows.Forms.Button()
         Me.ButtonOK = New System.Windows.Forms.Button()
+        Me.CheckBoxFontCalibri = New System.Windows.Forms.CheckBox()
         Me.Panel1.SuspendLayout()
         Me.GroupBox3.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
@@ -53,6 +54,7 @@ Partial Class DeliveryReceiptPrintOptions
         '
         'GroupBox3
         '
+        Me.GroupBox3.Controls.Add(Me.CheckBoxFontCalibri)
         Me.GroupBox3.Controls.Add(Me.CheckBoxBasedOnPOnumber)
         Me.GroupBox3.Controls.Add(Me.CheckBoxExcelCopyforDotMatrix)
         Me.GroupBox3.Dock = System.Windows.Forms.DockStyle.Fill
@@ -183,6 +185,16 @@ Partial Class DeliveryReceiptPrintOptions
         Me.ButtonOK.Text = "O&K"
         Me.ButtonOK.UseVisualStyleBackColor = True
         '
+        'CheckBoxFontCalibri
+        '
+        Me.CheckBoxFontCalibri.AutoSize = True
+        Me.CheckBoxFontCalibri.Location = New System.Drawing.Point(11, 69)
+        Me.CheckBoxFontCalibri.Name = "CheckBoxFontCalibri"
+        Me.CheckBoxFontCalibri.Size = New System.Drawing.Size(89, 17)
+        Me.CheckBoxFontCalibri.TabIndex = 2
+        Me.CheckBoxFontCalibri.Text = "Font: Calibri"
+        Me.CheckBoxFontCalibri.UseVisualStyleBackColor = True
+        '
         'DeliveryReceiptPrintOptions
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -221,4 +233,5 @@ Partial Class DeliveryReceiptPrintOptions
     Friend WithEvents CheckBoxMeterYardWithPrice As CheckBox
     Friend WithEvents CheckBoxDoNotDisplayUOM As CheckBox
     Friend WithEvents CheckBoxBasedOnPOnumber As CheckBox
+    Friend WithEvents CheckBoxFontCalibri As CheckBox
 End Class

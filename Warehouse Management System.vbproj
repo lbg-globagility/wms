@@ -766,6 +766,12 @@
       <DependentUpon>DeliveryReceipt.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Report Files\DeliveryReceiptCalibri.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DeliveryReceiptCalibri.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Report Files\DeliveryReceipt\DeliveryReceiptDto.vb" />
     <Compile Include="Report Files\DeliverySchedule.vb">
       <AutoGen>True</AutoGen>
@@ -1353,6 +1359,10 @@
     <EmbeddedResource Include="Report Files\DeliveryReceipt.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>DeliveryReceipt.vb</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report Files\DeliveryReceiptCalibri.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>DeliveryReceiptCalibri.vb</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Report Files\DeliverySchedule.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>

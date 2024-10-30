@@ -27,7 +27,9 @@ Public Class DeliveryReceiptPrintOptions
     Friend Async Sub Print(lineupRowId As Integer?)
         If Not lineupRowId.HasValue Then Return
 
-        Dim printreport As New DeliveryReceipt
+        Dim printreport As ReportClass = New DeliveryReceipt
+
+        If CheckBoxFontCalibri.Checked Then printreport = New DeliveryReceiptCalibri
 
         Dim fileContent = String.Join(separator:=Environment.NewLine, File.ReadAllLines("Report Files\DeliveryReceipt\DeliveryReceipt.json"))
         Dim deliveryReceiptDto = JsonConvert.DeserializeObject(Of DeliveryReceiptDto)(fileContent)
