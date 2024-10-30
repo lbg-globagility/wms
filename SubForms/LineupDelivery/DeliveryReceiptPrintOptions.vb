@@ -84,7 +84,7 @@ Public Class DeliveryReceiptPrintOptions
             o.DRNumber `DRNo`,
             #a.*,
             a.CompanyName,
-            CONCAT_WS(', ', ad.StreetAddress1, ad.StreetAddress2, ad.Barangay, ad.CityTown, ad.Province, ad.State, ad.ZipCode, ad.Country) `Address`,
+            CONCAT_WS(', ', NULLIF(ad.StreetAddress1, ''), NULLIF(ad.StreetAddress2, ''), NULLIF(ad.Barangay, ''), NULLIF(ad.CityTown, ''), NULLIF(ad.Province, ''), NULLIF(ad.State, ''), NULLIF(ad.ZipCode, ''), NULLIF(ad.Country, '')) `Address`,
             lu.LineUpDate,",
             quantityClause,
             unitOfMeasureClause,
