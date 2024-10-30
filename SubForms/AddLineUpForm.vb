@@ -1039,6 +1039,13 @@ Public Class AddLineUpForm
     Private Sub msSave_Click(sender As Object, e As EventArgs) Handles msSave.Click
         Me.Cursor = Cursors.WaitCursor
         Try
+            If IsThurston AndAlso String.IsNullOrEmpty(txtSIDRNo.Text) Then
+                txtSIDRNo.Focus()
+                Me.Cursor = Cursors.Default
+                MessageBox.Show("Please input DR No.", "Invalid DR No.", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                Return
+            End If
+
             errProvider.Clear()
             dgCartons.CommitEdit(legit) : dgCartons.ClearSelection() : dgCartons.CurrentCell = Nothing
             getPositionID(Me)
