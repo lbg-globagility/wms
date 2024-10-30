@@ -38,12 +38,14 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
                 .ThenInclude(t => t.PackingListCarton)
                     .ThenInclude(t => t.PackingListCartonItems)
                         .ThenInclude(t => t.OrderItem)
+                            .ThenInclude(oi => oi.ProductInventoryLocation)
+                                .ThenInclude(pil => pil.RackShelfColumn)
             .Include(t => t.LineupCartons)
                 .ThenInclude(t => t.PackingListCarton)
                     .ThenInclude(t => t.PackingListCartonItems)
                         .ThenInclude(t => t.PickListOrder)
                             .ThenInclude(t=>t.PickListOrderItems)
-            .Where(t => t.LineupCartons.FirstOrDefault().LineUpID == lineUpId)
+            .Where(t => t.LineupCartons.Any(luc => luc.LineUpID == lineUpId))
             .AsNoTracking()
             .AsQueryable();
 

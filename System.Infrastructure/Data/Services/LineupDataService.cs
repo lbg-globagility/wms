@@ -122,6 +122,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
 
             var order = lineup.Order;
             var productColorSizeIds = new List<int>();
+            var inventoryLocationIds = new List<int>();
             foreach (var item1 in lineup.LineupCartons)
             {
                 var packingListCartonItems = item1.PackingListCarton.PackingListCartonItems;
@@ -130,10 +131,13 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
 
                 foreach (var packingListCartonItem in packingListCartonItems)
                     productColorSizeIds.Add(packingListCartonItem.OrderItem.ProductColorSizeID.Value);
+
+                foreach (var packingListCartonItem in packingListCartonItems)
+                    inventoryLocationIds.Add(packingListCartonItem.OrderItem.ProductInventoryLocation.RackShelfColumn.InventoryLocationID);
             }
 
-            var productInventoryLocations = await _productInventoryLocationDataService.GetByInventoryLocationIdAndProductColorSizeIdsAsync(
-                inventoryLocationId: order.InventoryLocationID.Value,
+            var productInventoryLocations = await _productInventoryLocationDataService.GetByInventoryLocationIdsAndProductColorSizeIdsAsync(
+                inventoryLocationIds: inventoryLocationIds.ToArray(),
                 productColorSizeIds: productColorSizeIds.ToArray());
 
             // For Each productColorSizeId In productColorSizeIds
@@ -149,14 +153,13 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
                 {
                     var pickListOrderItems = packingListCartonItem.PickListOrder.PickListOrderItems?.Where(t => t.IsVerified);
 
-                    int[] fsdfsd = { 528, 531, 530, 529 };
-                    var fsdfsd1 = fsdfsd.Contains(packingListCartonItem.OrderItemID.Value);
-
                     if (!(pickListOrderItems?.Any() ?? false)) continue;
 
                     var productColorSizeId = packingListCartonItem.OrderItem.ProductColorSizeID.Value;
+                    var inventoryLocationId = packingListCartonItem.OrderItem.ProductInventoryLocation.RackShelfColumn.InventoryLocationID;
                     var productInventoryLocation = productInventoryLocations
                         .Where(t => t.ProductColorSizeID == productColorSizeId)
+                        .Where(t => t.RackShelfColumn.InventoryLocationID == inventoryLocationId)
                         .Where(t => (t.TotalReserveQty ?? 0) > 0 && (t.TotalReserveQty ?? 0) >= (packingListCartonItem.QtyInCarton ?? 0))
                         .FirstOrDefault();
 
