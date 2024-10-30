@@ -349,7 +349,7 @@ Public Class EditBundleItemsBForm
             conn.Close()
         End Try
     End Sub
-    Private Sub msSaveRSC_Click(sender As Object, e As EventArgs) Handles msSaveRSC.Click
+    Private Async Sub msSaveRSC_Click(sender As Object, e As EventArgs) Handles msSaveRSC.Click
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
@@ -364,7 +364,7 @@ Public Class EditBundleItemsBForm
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
-                If globalcreateflg = "Y" Then
+                If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
@@ -430,7 +430,7 @@ Public Class EditBundleItemsBForm
                             getTotalQtyAllocatedC(CInt(dgRackShelfColumn.Rows(a).Cells("rsc_rowid").Value), Me)
                             If CInt(dgRackShelfColumn.Rows(a).Cells("rsc_qtytopick").Value) < CInt(dgBundleItems.CurrentRow.Cells("bi_qtyordered").Value) Then
                                 If ebibpicklistorderitemid = 0 Then
-                                    I_PickListOrderItems(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, ebibpicklistorderid, CInt(dgRackShelfColumn.Rows(a).Cells("rsc_rowid").Value), CInt(dgRackShelfColumn.Rows(a).Cells("rsc_qtytopick").Value), _
+                                    I_PickListOrderItems(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, ebibpicklistorderid, CInt(dgRackShelfColumn.Rows(a).Cells("rsc_rowid").Value), CInt(dgRackShelfColumn.Rows(a).Cells("rsc_qtytopick").Value),
                                         If(IsNumeric(dgRackShelfColumn.Rows(a).Cells("rsc_qtyavailable").Value), CInt(dgRackShelfColumn.Rows(a).Cells("rsc_qtyavailable").Value), 0), If(dgRackShelfColumn.Rows(a).Cells("rsc_issueflg").Value = legit, "Y", "N"), "Active", CStr(dgRackShelfColumn.Rows(a).Cells("rsc_remarks").Value), Me)
                                     U_ProductInventoryLocationQtyAllocated(CInt(dgRackShelfColumn.Rows(a).Cells("rsc_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, globaltotalqtyallocated + CInt(dgRackShelfColumn.Rows(a).Cells("rsc_qtytopick").Value), Me)
                                 Else
@@ -439,12 +439,12 @@ Public Class EditBundleItemsBForm
                                     ElseIf globalpicklistorderitemqtypicked < CInt(dgRackShelfColumn.Rows(a).Cells("rsc_qtytopick").Value) Then
                                         U_ProductInventoryLocationQtyAllocated(CInt(dgRackShelfColumn.Rows(a).Cells("rsc_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, globaltotalqtyallocated + (CInt(dgRackShelfColumn.Rows(a).Cells("rsc_qtytopick").Value) - globalpicklistorderitemqtypicked), Me)
                                     End If
-                                    U_PickListOrderItems(ebibpicklistorderitemid, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, CInt(dgRackShelfColumn.Rows(a).Cells("rsc_qtytopick").Value), If(IsNumeric(dgRackShelfColumn.Rows(a).Cells("rsc_qtyavailable").Value), CInt(dgRackShelfColumn.Rows(a).Cells("rsc_qtyavailable").Value), 0), _
+                                    U_PickListOrderItems(ebibpicklistorderitemid, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, CInt(dgRackShelfColumn.Rows(a).Cells("rsc_qtytopick").Value), If(IsNumeric(dgRackShelfColumn.Rows(a).Cells("rsc_qtyavailable").Value), CInt(dgRackShelfColumn.Rows(a).Cells("rsc_qtyavailable").Value), 0),
                                         If(dgRackShelfColumn.Rows(a).Cells("rsc_issueflg").Value = legit, "Y", "N"), CStr(dgRackShelfColumn.Rows(a).Cells("rsc_remarks").Value), Me)
                                 End If
                             ElseIf CInt(dgRackShelfColumn.Rows(a).Cells("rsc_qtytopick").Value) = CInt(dgBundleItems.CurrentRow.Cells("bi_qtyordered").Value) Then
                                 If ebibpicklistorderitemid = 0 Then
-                                    I_PickListOrderItems(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, ebibpicklistorderid, CInt(dgRackShelfColumn.Rows(a).Cells("rsc_rowid").Value), CInt(dgRackShelfColumn.Rows(a).Cells("rsc_qtytopick").Value), _
+                                    I_PickListOrderItems(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, ebibpicklistorderid, CInt(dgRackShelfColumn.Rows(a).Cells("rsc_rowid").Value), CInt(dgRackShelfColumn.Rows(a).Cells("rsc_qtytopick").Value),
                                         If(IsNumeric(dgRackShelfColumn.Rows(a).Cells("rsc_qtyavailable").Value), CInt(dgRackShelfColumn.Rows(a).Cells("rsc_qtyavailable").Value), 0), If(dgRackShelfColumn.Rows(a).Cells("rsc_issueflg").Value = legit, "Y", "N"), "Active", CStr(dgRackShelfColumn.Rows(a).Cells("rsc_remarks").Value), Me)
                                     U_ProductInventoryLocationQtyAllocated(CInt(dgRackShelfColumn.Rows(a).Cells("rsc_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, globaltotalqtyallocated + CInt(dgRackShelfColumn.Rows(a).Cells("rsc_qtytopick").Value), Me)
                                 Else
@@ -453,7 +453,7 @@ Public Class EditBundleItemsBForm
                                     ElseIf globalpicklistorderitemqtypicked < CInt(dgRackShelfColumn.Rows(a).Cells("rsc_qtytopick").Value) Then
                                         U_ProductInventoryLocationQtyAllocated(CInt(dgRackShelfColumn.Rows(a).Cells("rsc_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, globaltotalqtyallocated + (CInt(dgRackShelfColumn.Rows(a).Cells("rsc_qtytopick").Value) - globalpicklistorderitemqtypicked), Me)
                                     End If
-                                    U_PickListOrderItems(ebibpicklistorderitemid, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, CInt(dgRackShelfColumn.Rows(a).Cells("rsc_qtytopick").Value), If(IsNumeric(dgRackShelfColumn.Rows(a).Cells("rsc_qtyavailable").Value), CInt(dgRackShelfColumn.Rows(a).Cells("rsc_qtyavailable").Value), 0), _
+                                    U_PickListOrderItems(ebibpicklistorderitemid, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, CInt(dgRackShelfColumn.Rows(a).Cells("rsc_qtytopick").Value), If(IsNumeric(dgRackShelfColumn.Rows(a).Cells("rsc_qtyavailable").Value), CInt(dgRackShelfColumn.Rows(a).Cells("rsc_qtyavailable").Value), 0),
                                         If(dgRackShelfColumn.Rows(a).Cells("rsc_issueflg").Value = legit, "Y", "N"), CStr(dgRackShelfColumn.Rows(a).Cells("rsc_remarks").Value), Me)
                                 End If
                             End If

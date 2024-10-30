@@ -831,7 +831,7 @@ Public Class StockTransferForm
         Me.Cursor = Cursors.Default
     End Sub
 
-    Private Sub msNew_Click(sender As Object, e As EventArgs) Handles msNew.Click
+    Private Async Sub msNew_Click(sender As Object, e As EventArgs) Handles msNew.Click
         Me.Cursor = Cursors.WaitCursor
         Try
             getPositionID(Me)
@@ -846,7 +846,7 @@ Public Class StockTransferForm
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
-                If globalcreateflg = "Y" Then
+                If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
@@ -1057,7 +1057,7 @@ Public Class StockTransferForm
         Me.Cursor = Cursors.Default
     End Sub
 
-    Private Sub msSave_Click(sender As Object, e As EventArgs) Handles msSave.Click
+    Private Async Sub msSave_Click(sender As Object, e As EventArgs) Handles msSave.Click
         Me.Cursor = Cursors.WaitCursor
         Try
             getPositionID(Me)
@@ -1072,7 +1072,7 @@ Public Class StockTransferForm
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
-                If globalcreateflg = "Y" Then
+                If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If

@@ -847,7 +847,7 @@ Public Class UserForm
     '    End Try
     '    Me.Cursor = Cursors.Default
     'End Sub
-    Private Sub btnAddFile_Click(sender As Object, e As EventArgs) Handles btnAddFile.Click
+    Private Async Sub btnAddFile_Click(sender As Object, e As EventArgs) Handles btnAddFile.Click
         Me.Cursor = Cursors.WaitCursor
         Try
             getPositionID(Me)
@@ -867,7 +867,7 @@ Public Class UserForm
                 Exit Try
             End If
             If cue = "Edit" Then
-                If globalcreateflg = "Y" Then
+                If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
@@ -1005,7 +1005,7 @@ Public Class UserForm
         Me.Cursor = Cursors.Default
     End Sub
 
-    Private Sub msSave_Click(sender As Object, e As EventArgs) Handles msSave.Click
+    Private Async Sub msSave_Click(sender As Object, e As EventArgs) Handles msSave.Click
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
@@ -1031,7 +1031,7 @@ Public Class UserForm
             If cue = "New" Then
                 getUserID(encryptusername)
             ElseIf cue = "Edit" Then
-                If globalcreateflg = "Y" Then
+                If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
@@ -1114,7 +1114,7 @@ Public Class UserForm
         Me.Cursor = Cursors.Default
     End Sub
 
-    Private Sub dgAttachments_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgAttachments.CellContentClick
+    Private Async Sub dgAttachments_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgAttachments.CellContentClick
         Try
             itemno = 1
             dgAttachments.CommitEdit(True)
@@ -1136,7 +1136,7 @@ Public Class UserForm
                 Exit Try
             End If
             If cue = "Edit" Then
-                If globalcreateflg = "Y" Then
+                If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If

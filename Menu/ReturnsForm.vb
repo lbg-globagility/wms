@@ -1999,7 +1999,7 @@ Public Class ReturnsForm
         End Try
     End Sub
 
-    Private Sub msOrder_Click(sender As Object, e As EventArgs) Handles msOrder.Click
+    Private Async Sub msOrder_Click(sender As Object, e As EventArgs) Handles msOrder.Click
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
@@ -2016,7 +2016,7 @@ Public Class ReturnsForm
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
-                If globalcreateflg = "Y" Then
+                If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
@@ -2071,7 +2071,7 @@ Public Class ReturnsForm
         Me.Cursor = Cursors.Default
     End Sub
 
-    Private Sub msSave_Click(sender As Object, e As EventArgs) Handles msSave.Click
+    Private Async Sub msSave_Click(sender As Object, e As EventArgs) Handles msSave.Click
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
@@ -2118,7 +2118,7 @@ Public Class ReturnsForm
                     Exit Try
                 End If
             ElseIf cue = "Edit" Then
-                If globalcreateflg = "Y" Then
+                If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
@@ -2266,7 +2266,7 @@ Public Class ReturnsForm
         Me.Cursor = Cursors.Default
     End Sub
 
-    Private Sub dgPullOutItems_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgPullOutItems.CellContentClick
+    Private Async Sub dgPullOutItems_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgPullOutItems.CellContentClick
         Me.Cursor = Cursors.WaitCursor
         Try
             If dgPullOutItems.Rows.Count <> 0 Then
@@ -2291,7 +2291,7 @@ Public Class ReturnsForm
                                         MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                                         Exit Try
                                     End If
-                                    If globalcreateflg = "Y" Then
+                                    If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) Then
                                         MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                                         Exit Try
                                     End If

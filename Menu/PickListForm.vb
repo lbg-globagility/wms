@@ -2349,7 +2349,7 @@ Public Class PickListForm
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
-                If globalcreateflg = "Y" Then
+                If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
@@ -2516,7 +2516,7 @@ Public Class PickListForm
         Me.Cursor = Cursors.Default
     End Sub
 
-    Private Sub msSave_Click(sender As Object, e As EventArgs) Handles msSave.Click
+    Private Async Sub msSave_Click(sender As Object, e As EventArgs) Handles msSave.Click
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
@@ -2533,7 +2533,7 @@ Public Class PickListForm
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
-                If globalcreateflg = "Y" Then
+                If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
@@ -2587,7 +2587,7 @@ Public Class PickListForm
         Me.Cursor = Cursors.Default
     End Sub
 
-    Private Sub dgCustomerOrders_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgCustomerOrders.CellContentClick
+    Private Async Sub dgCustomerOrders_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgCustomerOrders.CellContentClick
         If Not dgCustomerOrders.Rows.Count <> 0 Then Return
 
         Try
@@ -2606,7 +2606,7 @@ Public Class PickListForm
                         MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                         Exit Try
                     End If
-                    If globalcreateflg = "Y" Then
+                    If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) Then
                         MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                         Exit Try
                     End If
@@ -2701,7 +2701,7 @@ Public Class PickListForm
         End Try
     End Sub
 
-    Private Sub msOrder_Click(sender As Object, e As EventArgs) Handles msOrder.Click
+    Private Async Sub msOrder_Click(sender As Object, e As EventArgs) Handles msOrder.Click
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
@@ -2718,7 +2718,7 @@ Public Class PickListForm
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
-                If globalcreateflg = "Y" Then
+                If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
@@ -2771,7 +2771,7 @@ Public Class PickListForm
         Me.Cursor = Cursors.Default
     End Sub
 
-    Private Sub lnkViewEditBundleItems_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles lnkViewEditBundleItems.LinkClicked
+    Private Async Sub lnkViewEditBundleItems_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles lnkViewEditBundleItems.LinkClicked
         Me.Cursor = Cursors.WaitCursor
         Try
             If globalpositionid <> 0 Then
@@ -2785,7 +2785,7 @@ Public Class PickListForm
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
-                If globalcreateflg = "Y" Then
+                If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If

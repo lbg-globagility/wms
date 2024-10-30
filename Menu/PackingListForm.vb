@@ -2509,7 +2509,7 @@ ORDER BY ci.rowid;"
         Me.Cursor = Cursors.Default
     End Sub
 
-    Private Sub lnkViewEditBundleItems_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles lnkViewEditBundleItems.LinkClicked
+    Private Async Sub lnkViewEditBundleItems_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles lnkViewEditBundleItems.LinkClicked
         Me.Cursor = Cursors.WaitCursor
         Try
             getPositionID(Me)
@@ -2524,7 +2524,7 @@ ORDER BY ci.rowid;"
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
-                If globalcreateflg = "Y" AndAlso Not IsThurston Then
+                If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) AndAlso Not IsThurston Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
@@ -2565,7 +2565,7 @@ ORDER BY ci.rowid;"
         Me.Cursor = Cursors.Default
     End Sub
 
-    Private Sub cmsEdit_Click(sender As Object, e As EventArgs) Handles cmsEdit.Click
+    Private Async Sub cmsEdit_Click(sender As Object, e As EventArgs) Handles cmsEdit.Click
         Me.Cursor = Cursors.WaitCursor
         Try
             getPositionID(Me)
@@ -2580,7 +2580,7 @@ ORDER BY ci.rowid;"
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
-                If globalcreateflg = "Y" AndAlso Not IsThurston Then
+                If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) AndAlso Not IsThurston Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
@@ -2673,7 +2673,7 @@ ORDER BY ci.rowid;"
                     Exit Try
                 End If
             ElseIf cue = "Edit" Then
-                If globalcreateflg = "Y" AndAlso Not IsThurston Then
+                If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) AndAlso Not IsThurston Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
@@ -2776,7 +2776,7 @@ ORDER BY ci.rowid;"
         Me.Cursor = Cursors.Default
     End Sub
 
-    Private Sub cmsDelete_Click(sender As Object, e As EventArgs) Handles cmsDelete.Click
+    Private Async Sub cmsDelete_Click(sender As Object, e As EventArgs) Handles cmsDelete.Click
         Me.Cursor = Cursors.WaitCursor
         Try
             getPositionID(Me)
@@ -2791,7 +2791,7 @@ ORDER BY ci.rowid;"
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
-                If globalcreateflg = "Y" AndAlso Not IsThurston Then
+                If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) AndAlso Not IsThurston Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
@@ -2833,7 +2833,7 @@ ORDER BY ci.rowid;"
         Me.Cursor = Cursors.Default
     End Sub
 
-    Private Sub dgCartonItems_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgCartonItems.CellContentClick
+    Private Async Sub dgCartonItems_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgCartonItems.CellContentClick
         Me.Cursor = Cursors.WaitCursor
         Try
             getPositionID(Me)
@@ -2848,7 +2848,7 @@ ORDER BY ci.rowid;"
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
-                If globalcreateflg = "Y" AndAlso Not IsThurston Then
+                If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) AndAlso Not IsThurston Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
@@ -2908,7 +2908,7 @@ ORDER BY ci.rowid;"
         Me.Cursor = Cursors.Default
     End Sub
 
-    Private Sub msOrder_Click(sender As Object, e As EventArgs) Handles msOrder.Click
+    Private Async Sub msOrder_Click(sender As Object, e As EventArgs) Handles msOrder.Click
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
@@ -2925,7 +2925,7 @@ ORDER BY ci.rowid;"
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
-                If globalcreateflg = "Y" AndAlso Not IsThurston Then
+                If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) AndAlso Not IsThurston Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
@@ -3007,7 +3007,7 @@ ORDER BY ci.rowid;"
         Me.Cursor = Cursors.Default
     End Sub
 
-    Private Sub msOutright_Click(sender As Object, e As EventArgs) Handles msOutrightA.Click
+    Private Async Sub msOutright_Click(sender As Object, e As EventArgs) Handles msOutrightA.Click
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
@@ -3024,7 +3024,7 @@ ORDER BY ci.rowid;"
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
-                If globalcreateflg = "Y" AndAlso Not IsThurston Then
+                If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) AndAlso Not IsThurston Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
@@ -3101,7 +3101,7 @@ ORDER BY ci.rowid;"
         '            MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
         '            Exit Try
         '        End If
-        '        If globalcreateflg = "Y" AndAlso Not IsThurston Then
+        '        If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) AndAlso Not IsThurston Then
         '            MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
         '            Exit Try
         '        End If
@@ -3158,7 +3158,7 @@ ORDER BY ci.rowid;"
         'Me.Cursor = Cursors.Default
     End Sub
 
-    Private Sub tsExtraSmall_Click(sender As Object, e As EventArgs) Handles tsExtraSmall.Click
+    Private Async Sub tsExtraSmall_Click(sender As Object, e As EventArgs) Handles tsExtraSmall.Click
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
@@ -3175,7 +3175,7 @@ ORDER BY ci.rowid;"
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
-                If globalcreateflg = "Y" AndAlso Not IsThurston Then
+                If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) AndAlso Not IsThurston Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
@@ -3232,7 +3232,7 @@ ORDER BY ci.rowid;"
         Me.Cursor = Cursors.Default
     End Sub
 
-    Private Sub tsSmall_Click(sender As Object, e As EventArgs) Handles tsSmall.Click
+    Private Async Sub tsSmall_Click(sender As Object, e As EventArgs) Handles tsSmall.Click
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
@@ -3249,7 +3249,7 @@ ORDER BY ci.rowid;"
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
-                If globalcreateflg = "Y" AndAlso Not IsThurston Then
+                If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) AndAlso Not IsThurston Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
@@ -3306,7 +3306,7 @@ ORDER BY ci.rowid;"
         Me.Cursor = Cursors.Default
     End Sub
 
-    Private Sub tsMedium_Click(sender As Object, e As EventArgs) Handles tsMedium.Click
+    Private Async Sub tsMedium_Click(sender As Object, e As EventArgs) Handles tsMedium.Click
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
@@ -3323,7 +3323,7 @@ ORDER BY ci.rowid;"
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
-                If globalcreateflg = "Y" AndAlso Not IsThurston Then
+                If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) AndAlso Not IsThurston Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
@@ -3380,7 +3380,7 @@ ORDER BY ci.rowid;"
         Me.Cursor = Cursors.Default
     End Sub
 
-    Private Sub tsLarge_Click(sender As Object, e As EventArgs) Handles tsLarge.Click
+    Private Async Sub tsLarge_Click(sender As Object, e As EventArgs) Handles tsLarge.Click
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
@@ -3397,7 +3397,7 @@ ORDER BY ci.rowid;"
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
-                If globalcreateflg = "Y" AndAlso Not IsThurston Then
+                If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) AndAlso Not IsThurston Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
@@ -3454,7 +3454,7 @@ ORDER BY ci.rowid;"
         Me.Cursor = Cursors.Default
     End Sub
 
-    Private Sub tsExtraLarge_Click(sender As Object, e As EventArgs) Handles tsExtraLarge.Click
+    Private Async Sub tsExtraLarge_Click(sender As Object, e As EventArgs) Handles tsExtraLarge.Click
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
@@ -3471,7 +3471,7 @@ ORDER BY ci.rowid;"
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
-                If globalcreateflg = "Y" AndAlso Not IsThurston Then
+                If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) AndAlso Not IsThurston Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
@@ -3529,7 +3529,7 @@ ORDER BY ci.rowid;"
         Me.Cursor = Cursors.Default
     End Sub
 
-    Private Sub msConsignor_Click(sender As Object, e As EventArgs) Handles msConsignor.Click
+    Private Async Sub msConsignor_Click(sender As Object, e As EventArgs) Handles msConsignor.Click
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
@@ -3546,7 +3546,7 @@ ORDER BY ci.rowid;"
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
-                If globalcreateflg = "Y" AndAlso Not IsThurston Then
+                If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) AndAlso Not IsThurston Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If

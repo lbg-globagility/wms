@@ -76,7 +76,7 @@ namespace WarehouseManagementSystem.Core.Entities
         {
             get
             {
-                string[] helperNames = { Helper1.FirstName, Helper2.FirstName };
+                string[] helperNames = { Helper1?.FirstName, Helper2?.FirstName };
 
                 return string.Join(" & ", helperNames.Where(t => !string.IsNullOrEmpty(t)));
             }

@@ -182,7 +182,7 @@ Public Class ViewEditLineUpDeliveryForm
         End Try
     End Sub
 
-    Sub btnAddperformclick()
+    Async Sub btnAddperformclick()
         Try
             errProvider.Clear()
             myModule.systemerrorfound = False
@@ -197,7 +197,7 @@ Public Class ViewEditLineUpDeliveryForm
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
-                If globalcreateflg = "Y" Then
+                If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
@@ -2112,7 +2112,7 @@ WHERE luc.OrganizationID={Z_OrganizationID};"
     '    End Try
     '    Me.Cursor = Cursors.Default
     'End Sub
-    Private Sub dgCartons_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgCartons.CellContentClick
+    Private Async Sub dgCartons_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgCartons.CellContentClick
         Me.Cursor = Cursors.WaitCursor
         Try
             If dgCartons.Rows.Count <> 0 Then
@@ -2133,7 +2133,7 @@ WHERE luc.OrganizationID={Z_OrganizationID};"
                             MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                             Exit Try
                         End If
-                        If globalcreateflg = "Y" Then
+                        If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) Then
                             MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                             Exit Try
                         End If
@@ -2312,7 +2312,7 @@ WHERE luc.OrganizationID={Z_OrganizationID};"
         Me.Cursor = Cursors.Default
     End Sub
 
-    Private Sub msSave_Click(sender As Object, e As EventArgs) Handles msSave.Click
+    Private Async Sub msSave_Click(sender As Object, e As EventArgs) Handles msSave.Click
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
@@ -2328,7 +2328,7 @@ WHERE luc.OrganizationID={Z_OrganizationID};"
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
-                If globalcreateflg = "Y" Then
+                If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If

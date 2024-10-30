@@ -1716,7 +1716,7 @@ Public Class ReceivingForm
         End Try
     End Sub
 
-    Private Sub btnAddAdditionalItems_Click(sender As Object, e As EventArgs) Handles btnAddAdditionalItems.Click
+    Private Async Sub btnAddAdditionalItems_Click(sender As Object, e As EventArgs) Handles btnAddAdditionalItems.Click
         Me.Cursor = Cursors.WaitCursor
         Try
             getPositionID(Me)
@@ -1736,7 +1736,7 @@ Public Class ReceivingForm
                 Exit Try
             End If
             If cue = "Edit" Then
-                If globalcreateflg = "Y" Then
+                If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
@@ -2062,7 +2062,7 @@ Public Class ReceivingForm
         Me.Cursor = Cursors.Default
     End Sub
 
-    Private Sub msOrder_Click(sender As Object, e As EventArgs) Handles msOrder.Click
+    Private Async Sub msOrder_Click(sender As Object, e As EventArgs) Handles msOrder.Click
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
@@ -2079,7 +2079,7 @@ Public Class ReceivingForm
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
-                If globalcreateflg = "Y" Then
+                If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
@@ -2227,7 +2227,7 @@ Public Class ReceivingForm
         Me.Cursor = Cursors.Default
     End Sub
 
-    Private Sub dgReceivingOrderItems_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgReceivingItems.CellContentClick
+    Private Async Sub dgReceivingOrderItems_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgReceivingItems.CellContentClick
         Me.Cursor = Cursors.WaitCursor
         Try
             If dgReceivingItems.Rows.Count <> 0 Then
@@ -2253,7 +2253,7 @@ Public Class ReceivingForm
                                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                                     Exit Try
                                 End If
-                                If globalcreateflg = "Y" Then
+                                If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) Then
                                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                                     Exit Try
                                 End If

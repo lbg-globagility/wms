@@ -872,7 +872,7 @@ Public Class VerifyPickListForm
         Me.Cursor = Cursors.Default
     End Sub
 
-    Private Sub msSave_Click(sender As Object, e As EventArgs) Handles msSave.Click
+    Private Async Sub msSave_Click(sender As Object, e As EventArgs) Handles msSave.Click
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
@@ -889,7 +889,7 @@ Public Class VerifyPickListForm
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
-                If globalcreateflg = "Y" Then
+                If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
@@ -933,7 +933,7 @@ Public Class VerifyPickListForm
         Me.Cursor = Cursors.Default
     End Sub
 
-    Private Sub dgPickListItems_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgPickListItems.CellContentClick
+    Private Async Sub dgPickListItems_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgPickListItems.CellContentClick
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
@@ -952,7 +952,7 @@ Public Class VerifyPickListForm
                             MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                             Exit Try
                         End If
-                        If globalcreateflg = "Y" AndAlso Not IsThurston Then
+                        If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) AndAlso Not IsThurston Then
                             MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                             Exit Try
                         End If
@@ -1083,7 +1083,7 @@ Public Class VerifyPickListForm
         _IsVerifyAll = False
     End Sub
 
-    Private Sub cmsOutright_Click(sender As Object, e As EventArgs) Handles cmsOutright.Click
+    Private Async Sub cmsOutright_Click(sender As Object, e As EventArgs) Handles cmsOutright.Click
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
@@ -1100,7 +1100,7 @@ Public Class VerifyPickListForm
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
-                If globalcreateflg = "Y" AndAlso Not IsThurston Then
+                If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) AndAlso Not IsThurston Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
@@ -1149,7 +1149,7 @@ Public Class VerifyPickListForm
         Me.Cursor = Cursors.Default
     End Sub
 
-    Private Sub cmsConsignor_Click(sender As Object, e As EventArgs) Handles cmsConsignor.Click
+    Private Async Sub cmsConsignor_Click(sender As Object, e As EventArgs) Handles cmsConsignor.Click
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
@@ -1166,7 +1166,7 @@ Public Class VerifyPickListForm
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
-                If globalcreateflg = "Y" Then
+                If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
@@ -1215,7 +1215,7 @@ Public Class VerifyPickListForm
         Me.Cursor = Cursors.Default
     End Sub
 
-    Private Sub cmsSKU_Click(sender As Object, e As EventArgs) Handles cmsSKU.Click
+    Private Async Sub cmsSKU_Click(sender As Object, e As EventArgs) Handles cmsSKU.Click
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
@@ -1232,7 +1232,7 @@ Public Class VerifyPickListForm
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
-                If globalcreateflg = "Y" Then
+                If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If

@@ -1710,7 +1710,7 @@ Public Class AccountsForm
         End Try
     End Sub
 
-    Private Sub pbEditDeliveryAddress_Click(sender As Object, e As EventArgs) Handles pbEditDeliveryAddress.Click
+    Private Async Sub pbEditDeliveryAddress_Click(sender As Object, e As EventArgs) Handles pbEditDeliveryAddress.Click
         Me.Cursor = Cursors.WaitCursor
         Try
             getPositionID(Me)
@@ -1730,7 +1730,7 @@ Public Class AccountsForm
                 Exit Try
             End If
             If cueA = "Edit" Then
-                If globalcreateflg = "Y" Then
+                If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
@@ -1772,7 +1772,7 @@ Public Class AccountsForm
         End Try
     End Sub
 
-    Private Sub pbEditContactPersonA_Click(sender As Object, e As EventArgs) Handles pbEditContactPersonA.Click
+    Private Async Sub pbEditContactPersonA_Click(sender As Object, e As EventArgs) Handles pbEditContactPersonA.Click
         Me.Cursor = Cursors.WaitCursor
         Try
             getPositionID(Me)
@@ -1792,7 +1792,7 @@ Public Class AccountsForm
                 Exit Try
             End If
             If cueA = "Edit" Then
-                If globalcreateflg = "Y" Then
+                If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
@@ -1868,7 +1868,7 @@ Public Class AccountsForm
         Me.Cursor = Cursors.Default
     End Sub
 
-    Private Sub msSaveA_Click(sender As Object, e As EventArgs) Handles msSaveA.Click
+    Private Async Sub msSaveA_Click(sender As Object, e As EventArgs) Handles msSaveA.Click
         Console.WriteLine(cboAgent.SelectedValue)
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1891,7 +1891,7 @@ Public Class AccountsForm
                 Exit Try
             End If
             If cueA = "Edit" Then
-                If globalcreateflg = "Y" Then
+                If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
@@ -2095,7 +2095,7 @@ Public Class AccountsForm
         End Try
     End Sub
 
-    Private Sub pbEditContactPerson_Click(sender As Object, e As EventArgs) Handles pbEditContactPerson.Click
+    Private Async Sub pbEditContactPerson_Click(sender As Object, e As EventArgs) Handles pbEditContactPerson.Click
         Me.Cursor = Cursors.WaitCursor
         Try
             getPositionID(Me)
@@ -2115,7 +2115,7 @@ Public Class AccountsForm
                 Exit Try
             End If
             If cueB = "Edit" Then
-                If globalcreateflg = "Y" Then
+                If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
@@ -2137,7 +2137,7 @@ Public Class AccountsForm
         Me.Cursor = Cursors.Default
     End Sub
 
-    Private Sub msSave_Click(sender As Object, e As EventArgs) Handles msSave.Click
+    Private Async Sub msSave_Click(sender As Object, e As EventArgs) Handles msSave.Click
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
@@ -2159,7 +2159,7 @@ Public Class AccountsForm
                 Exit Try
             End If
             If cueB = "Edit" Then
-                If globalcreateflg = "Y" Then
+                If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If

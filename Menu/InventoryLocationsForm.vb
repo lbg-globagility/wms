@@ -1238,7 +1238,7 @@ Public Class InventoryLocationsForm
         End Try
     End Sub
 
-    Private Sub pbEditAddress_Click(sender As Object, e As EventArgs) Handles pbEditAddress.Click
+    Private Async Sub pbEditAddress_Click(sender As Object, e As EventArgs) Handles pbEditAddress.Click
         Me.Cursor = Cursors.WaitCursor
         Try
             If globalpositionid <> 0 Then
@@ -1257,7 +1257,7 @@ Public Class InventoryLocationsForm
                 Exit Try
             End If
             If cue = "Edit" Then
-                If globalcreateflg = "Y" Then
+                If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
@@ -2179,7 +2179,7 @@ Public Class InventoryLocationsForm
         Me.Cursor = Cursors.Default
     End Sub
 
-    Private Sub cmsEdit_Click(sender As Object, e As EventArgs) Handles cmsEdit.Click
+    Private Async Sub cmsEdit_Click(sender As Object, e As EventArgs) Handles cmsEdit.Click
         Me.Cursor = Cursors.WaitCursor
         Try
             getPositionID(Me)
@@ -2194,7 +2194,7 @@ Public Class InventoryLocationsForm
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
-                If globalcreateflg = "Y" Then
+                If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
@@ -2257,7 +2257,7 @@ Public Class InventoryLocationsForm
             If cue = "New" Then
                 getInventorylocationIDA(txtLocationName.Text, Me)
             ElseIf cue = "Edit" Then
-                If globalcreateflg = "Y" Then
+                If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If

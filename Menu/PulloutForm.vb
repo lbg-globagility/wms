@@ -1875,7 +1875,7 @@ Public Class PulloutForm
             conn.Close()
         End Try
     End Sub
-    Private Sub msOrder_Click(sender As Object, e As EventArgs) Handles msOrder.Click
+    Private Async Sub msOrder_Click(sender As Object, e As EventArgs) Handles msOrder.Click
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
@@ -1892,7 +1892,7 @@ Public Class PulloutForm
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
-                If globalcreateflg = "Y" Then
+                If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
@@ -1946,7 +1946,7 @@ Public Class PulloutForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
-    Private Sub msSave_Click(sender As Object, e As EventArgs) Handles msSave.Click
+    Private Async Sub msSave_Click(sender As Object, e As EventArgs) Handles msSave.Click
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
@@ -1993,7 +1993,7 @@ Public Class PulloutForm
                     Exit Try
                 End If
             ElseIf cue = "Edit" Then
-                If globalcreateflg = "Y" Then
+                If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
@@ -2052,16 +2052,16 @@ Public Class PulloutForm
                                 If IsNumeric(dgPullOutItems.Rows(a).Cells("ci_pcsrowid").Value) Then
                                     If CInt(dgPullOutItems.Rows(a).Cells("ci_pcsrowid").Value) <> 0 Then
                                         getTotalQtyAvailableA(CInt(dgPullOutItems.Rows(a).Cells("ci_pcsrowid").Value), Me)
-                                        M_I_OrderItemsA(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, pocustomerid, poorderid, CInt(dgPullOutItems.Rows(a).Cells("ci_pcsrowid").Value), DBNull.Value, _
-                                            If(IsNumeric(dgPullOutItems.Rows(a).Cells("ci_qtyordered").Value), CInt(dgPullOutItems.Rows(a).Cells("ci_qtyordered").Value), 0), globaltotalqtyavailable, "S", _
-                                            "" & CStr(dgPullOutItems.Rows(a).Cells("ci_productcode").Value) & " / " & CStr(dgPullOutItems.Rows(a).Cells("ci_colorname").Value) & " / " & CStr(dgPullOutItems.Rows(a).Cells("ci_size").Value) & " / " & CStr(dgPullOutItems.Rows(a).Cells("ci_seasoncode").Value) & "", _
+                                        M_I_OrderItemsA(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, pocustomerid, poorderid, CInt(dgPullOutItems.Rows(a).Cells("ci_pcsrowid").Value), DBNull.Value,
+                                            If(IsNumeric(dgPullOutItems.Rows(a).Cells("ci_qtyordered").Value), CInt(dgPullOutItems.Rows(a).Cells("ci_qtyordered").Value), 0), globaltotalqtyavailable, "S",
+                                            "" & CStr(dgPullOutItems.Rows(a).Cells("ci_productcode").Value) & " / " & CStr(dgPullOutItems.Rows(a).Cells("ci_colorname").Value) & " / " & CStr(dgPullOutItems.Rows(a).Cells("ci_size").Value) & " / " & CStr(dgPullOutItems.Rows(a).Cells("ci_seasoncode").Value) & "",
                                             CStr(dgPullOutItems.Rows(a).Cells("ci_sku").Value), CStr(dgPullOutItems.Rows(a).Cells("ci_unitofmeasure").Value), CStr(dgPullOutItems.Rows(a).Cells("ci_remarks").Value), If(IsNumeric(dgPullOutItems.Rows(a).Cells("ci_srp").Value), CDec(dgPullOutItems.Rows(a).Cells("ci_srp").Value), 0.0), "Active", Me)
                                     End If
                                 End If
                                 If IsNumeric(dgPullOutItems.Rows(a).Cells("ci_bid").Value) Then
                                     If CInt(dgPullOutItems.Rows(a).Cells("ci_bid").Value) <> 0 Then
-                                        M_I_OrderItemsA(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, pocustomerid, poorderid, DBNull.Value, CInt(dgPullOutItems.Rows(a).Cells("ci_bid").Value), If(IsNumeric(dgPullOutItems.Rows(a).Cells("ci_qtyordered").Value), CInt(dgPullOutItems.Rows(a).Cells("ci_qtyordered").Value), 0), _
-                                            0, "S", CStr(dgPullOutItems.Rows(a).Cells("ci_productcode").Value), CStr(dgPullOutItems.Rows(a).Cells("ci_sku").Value), CStr(dgPullOutItems.Rows(a).Cells("ci_unitofmeasure").Value), CStr(dgPullOutItems.Rows(a).Cells("ci_remarks").Value), _
+                                        M_I_OrderItemsA(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, pocustomerid, poorderid, DBNull.Value, CInt(dgPullOutItems.Rows(a).Cells("ci_bid").Value), If(IsNumeric(dgPullOutItems.Rows(a).Cells("ci_qtyordered").Value), CInt(dgPullOutItems.Rows(a).Cells("ci_qtyordered").Value), 0),
+                                            0, "S", CStr(dgPullOutItems.Rows(a).Cells("ci_productcode").Value), CStr(dgPullOutItems.Rows(a).Cells("ci_sku").Value), CStr(dgPullOutItems.Rows(a).Cells("ci_unitofmeasure").Value), CStr(dgPullOutItems.Rows(a).Cells("ci_remarks").Value),
                                             If(IsNumeric(dgPullOutItems.Rows(a).Cells("ci_srp").Value), CDec(dgPullOutItems.Rows(a).Cells("ci_srp").Value), 0.0), "Active", Me)
                                     End If
                                 End If
@@ -2083,30 +2083,30 @@ Public Class PulloutForm
                             errProvider.SetError(txtPullOutNo, "Pull-Out No. has been created already, please type a new one.")
                             Exit Try
                         End If
-                        M_U_OrderA(CInt(dgPullOutList.CurrentRow.Cells("so_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, pocustomerid, txtPullOutNo.Text, dtpPullOutDate.Value, _
+                        M_U_OrderA(CInt(dgPullOutList.CurrentRow.Cells("so_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, pocustomerid, txtPullOutNo.Text, dtpPullOutDate.Value,
                            Now.Date, txtComments.Text, Math.Round(poitotalprice, 2), Me)
                         If dgPullOutItems.Rows.Count <> 0 Then
                             For a = 0 To dgPullOutItems.Rows.Count - 1
                                 If myModule.systemerrorfound = False Then
                                     If IsNumeric(dgPullOutItems.Rows(a).Cells("ci_rowid").Value) Then
                                         If CInt(dgPullOutItems.Rows(a).Cells("ci_rowid").Value) <> 0 Then
-                                            MB_U_OrderItemsA(CInt(dgPullOutItems.Rows(a).Cells("ci_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, If(IsNumeric(dgPullOutItems.Rows(a).Cells("ci_qtyordered").Value), CInt(dgPullOutItems.Rows(a).Cells("ci_qtyordered").Value), 0), _
+                                            MB_U_OrderItemsA(CInt(dgPullOutItems.Rows(a).Cells("ci_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, If(IsNumeric(dgPullOutItems.Rows(a).Cells("ci_qtyordered").Value), CInt(dgPullOutItems.Rows(a).Cells("ci_qtyordered").Value), 0),
                                                     If(IsNumeric(dgPullOutItems.Rows(a).Cells("ci_srp").Value), CDec(dgPullOutItems.Rows(a).Cells("ci_srp").Value), 0.0), CStr(dgPullOutItems.Rows(a).Cells("ci_unitofmeasure").Value), CStr(dgPullOutItems.Rows(a).Cells("ci_remarks").Value), Me)
                                         End If
                                     Else
                                         If IsNumeric(dgPullOutItems.Rows(a).Cells("ci_pcsrowid").Value) Then
                                             If CInt(dgPullOutItems.Rows(a).Cells("ci_pcsrowid").Value) <> 0 Then
                                                 getTotalQtyAvailableA(CInt(dgPullOutItems.Rows(a).Cells("ci_pcsrowid").Value), Me)
-                                                M_I_OrderItemsA(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, pocustomerid, CInt(dgPullOutList.CurrentRow.Cells("so_rowid").Value), CInt(dgPullOutItems.Rows(a).Cells("ci_pcsrowid").Value), DBNull.Value, _
-                                                    If(IsNumeric(dgPullOutItems.Rows(a).Cells("ci_qtyordered").Value), CInt(dgPullOutItems.Rows(a).Cells("ci_qtyordered").Value), 0), globaltotalqtyavailable, "S", _
-                                                    "" & CStr(dgPullOutItems.Rows(a).Cells("ci_productcode").Value) & " / " & CStr(dgPullOutItems.Rows(a).Cells("ci_colorname").Value) & " / " & CStr(dgPullOutItems.Rows(a).Cells("ci_size").Value) & " / " & CStr(dgPullOutItems.Rows(a).Cells("ci_seasoncode").Value) & "", _
+                                                M_I_OrderItemsA(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, pocustomerid, CInt(dgPullOutList.CurrentRow.Cells("so_rowid").Value), CInt(dgPullOutItems.Rows(a).Cells("ci_pcsrowid").Value), DBNull.Value,
+                                                    If(IsNumeric(dgPullOutItems.Rows(a).Cells("ci_qtyordered").Value), CInt(dgPullOutItems.Rows(a).Cells("ci_qtyordered").Value), 0), globaltotalqtyavailable, "S",
+                                                    "" & CStr(dgPullOutItems.Rows(a).Cells("ci_productcode").Value) & " / " & CStr(dgPullOutItems.Rows(a).Cells("ci_colorname").Value) & " / " & CStr(dgPullOutItems.Rows(a).Cells("ci_size").Value) & " / " & CStr(dgPullOutItems.Rows(a).Cells("ci_seasoncode").Value) & "",
                                                     CStr(dgPullOutItems.Rows(a).Cells("ci_sku").Value), CStr(dgPullOutItems.Rows(a).Cells("ci_unitofmeasure").Value), CStr(dgPullOutItems.Rows(a).Cells("ci_remarks").Value), If(IsNumeric(dgPullOutItems.Rows(a).Cells("ci_srp").Value), CDec(dgPullOutItems.Rows(a).Cells("ci_srp").Value), 0.0), "Active", Me)
                                             End If
                                         End If
                                         If IsNumeric(dgPullOutItems.Rows(a).Cells("ci_bid").Value) Then
                                             If CInt(dgPullOutItems.Rows(a).Cells("ci_bid").Value) <> 0 Then
-                                                M_I_OrderItemsA(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, pocustomerid, CInt(dgPullOutList.CurrentRow.Cells("so_rowid").Value), DBNull.Value, CInt(dgPullOutItems.Rows(a).Cells("ci_bid").Value), If(IsNumeric(dgPullOutItems.Rows(a).Cells("ci_qtyordered").Value), CInt(dgPullOutItems.Rows(a).Cells("ci_qtyordered").Value), 0), _
-                                                    0, "S", CStr(dgPullOutItems.Rows(a).Cells("ci_productcode").Value), CStr(dgPullOutItems.Rows(a).Cells("ci_sku").Value), CStr(dgPullOutItems.Rows(a).Cells("ci_unitofmeasure").Value), CStr(dgPullOutItems.Rows(a).Cells("ci_remarks").Value), _
+                                                M_I_OrderItemsA(Z_OrganizationID, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, Z_UserID, pocustomerid, CInt(dgPullOutList.CurrentRow.Cells("so_rowid").Value), DBNull.Value, CInt(dgPullOutItems.Rows(a).Cells("ci_bid").Value), If(IsNumeric(dgPullOutItems.Rows(a).Cells("ci_qtyordered").Value), CInt(dgPullOutItems.Rows(a).Cells("ci_qtyordered").Value), 0),
+                                                    0, "S", CStr(dgPullOutItems.Rows(a).Cells("ci_productcode").Value), CStr(dgPullOutItems.Rows(a).Cells("ci_sku").Value), CStr(dgPullOutItems.Rows(a).Cells("ci_unitofmeasure").Value), CStr(dgPullOutItems.Rows(a).Cells("ci_remarks").Value),
                                                     If(IsNumeric(dgPullOutItems.Rows(a).Cells("ci_srp").Value), CDec(dgPullOutItems.Rows(a).Cells("ci_srp").Value), 0.0), "Active", Me)
                                             End If
                                         End If
@@ -2133,7 +2133,7 @@ Public Class PulloutForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
-    Private Sub dgPullOutItems_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgPullOutItems.CellContentClick
+    Private Async Sub dgPullOutItems_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgPullOutItems.CellContentClick
         Me.Cursor = Cursors.WaitCursor
         Try
             If dgPullOutItems.Rows.Count <> 0 Then
@@ -2158,7 +2158,7 @@ Public Class PulloutForm
                                         MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                                         Exit Try
                                     End If
-                                    If globalcreateflg = "Y" Then
+                                    If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) Then
                                         MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                                         Exit Try
                                     End If

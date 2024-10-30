@@ -546,7 +546,7 @@ Public Class OrganizationForm
         End Try
     End Sub
 
-    Private Sub pbEditPrimAddress_Click(sender As Object, e As EventArgs) Handles pbEditPrimAddress.Click
+    Private Async Sub pbEditPrimAddress_Click(sender As Object, e As EventArgs) Handles pbEditPrimAddress.Click
         Me.Cursor = Cursors.WaitCursor
         Try
             getPositionID(Me)
@@ -566,7 +566,7 @@ Public Class OrganizationForm
                 Exit Try
             End If
             If cue = "Edit" Then
-                If globalcreateflg = "Y" Then
+                If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
@@ -588,7 +588,7 @@ Public Class OrganizationForm
         Me.Cursor = Cursors.Default
     End Sub
 
-    Private Sub pbEditPremAddress_Click(sender As Object, e As EventArgs) Handles pbEditPremAddress.Click
+    Private Async Sub pbEditPremAddress_Click(sender As Object, e As EventArgs) Handles pbEditPremAddress.Click
         Me.Cursor = Cursors.WaitCursor
         Try
             getPositionID(Me)
@@ -608,7 +608,7 @@ Public Class OrganizationForm
                 Exit Try
             End If
             If cue = "Edit" Then
-                If globalcreateflg = "Y" Then
+                If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
@@ -630,7 +630,7 @@ Public Class OrganizationForm
         Me.Cursor = Cursors.Default
     End Sub
 
-    Private Sub pbEditContactPerson_Click(sender As Object, e As EventArgs) Handles pbEditContactPerson.Click
+    Private Async Sub pbEditContactPerson_Click(sender As Object, e As EventArgs) Handles pbEditContactPerson.Click
         Me.Cursor = Cursors.WaitCursor
         Try
             getPositionID(Me)
@@ -650,7 +650,7 @@ Public Class OrganizationForm
                 Exit Try
             End If
             If cue = "Edit" Then
-                If globalcreateflg = "Y" Then
+                If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
@@ -672,7 +672,7 @@ Public Class OrganizationForm
         Me.Cursor = Cursors.Default
     End Sub
 
-    Private Sub btnChangeLogo_Click(sender As Object, e As EventArgs) Handles btnChangeLogo.Click
+    Private Async Sub btnChangeLogo_Click(sender As Object, e As EventArgs) Handles btnChangeLogo.Click
         Me.Cursor = Cursors.WaitCursor
         Try
             getPositionID(Me)
@@ -692,7 +692,7 @@ Public Class OrganizationForm
                 Exit Try
             End If
             If cue = "Edit" Then
-                If globalcreateflg = "Y" Then
+                If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
@@ -710,7 +710,7 @@ Public Class OrganizationForm
         Me.Cursor = Cursors.Default
     End Sub
 
-    Private Sub btnRemoveLogo_Click(sender As Object, e As EventArgs) Handles btnRemoveLogo.Click
+    Private Async Sub btnRemoveLogo_Click(sender As Object, e As EventArgs) Handles btnRemoveLogo.Click
         Me.Cursor = Cursors.WaitCursor
         Try
             getPositionID(Me)
@@ -730,7 +730,7 @@ Public Class OrganizationForm
                 Exit Try
             End If
             If cue = "Edit" Then
-                If globalcreateflg = "Y" Then
+                If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
@@ -758,7 +758,7 @@ Public Class OrganizationForm
         Me.Cursor = Cursors.Default
     End Sub
 
-    Private Sub msSave_Click(sender As Object, e As EventArgs) Handles msSave.Click
+    Private Async Sub msSave_Click(sender As Object, e As EventArgs) Handles msSave.Click
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
@@ -780,7 +780,7 @@ Public Class OrganizationForm
                 Exit Try
             End If
             If cue = "Edit" Then
-                If globalcreateflg = "Y" Then
+                If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If

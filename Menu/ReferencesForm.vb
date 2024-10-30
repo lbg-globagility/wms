@@ -1763,7 +1763,7 @@ Public Class ReferencesForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
-    Private Sub msSave_Click(sender As Object, e As EventArgs) Handles msSave.Click
+    Private Async Sub msSave_Click(sender As Object, e As EventArgs) Handles msSave.Click
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
@@ -1780,7 +1780,7 @@ Public Class ReferencesForm
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
-                If globalcreateflg = "Y" Then
+                If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
@@ -1968,7 +1968,7 @@ Public Class ReferencesForm
                     getCartonSizeIDA(txtSizeName.Text, "AND rowid != " & CInt(dgBoxSizes.CurrentRow.Cells("bs_rowid").Value) & "", Me)
                     rfcartonsizeid = globalcartonsizeid
                     If rfcartonsizeid = 0 Then
-                        U_CartonSizes(CInt(dgBoxSizes.CurrentRow.Cells("bs_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, If(IsNumeric(txtLength.Text), CDec(txtLength.Text), 0.0), If(IsNumeric(txtWidth.Text), CDec(txtWidth.Text), 0.0), _
+                        U_CartonSizes(CInt(dgBoxSizes.CurrentRow.Cells("bs_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, If(IsNumeric(txtLength.Text), CDec(txtLength.Text), 0.0), If(IsNumeric(txtWidth.Text), CDec(txtWidth.Text), 0.0),
                             If(IsNumeric(txtHeight.Text), CDec(txtHeight.Text), 0.0), cboLengthUOM.Text, cboWidthUOM.Text, cboHeightUOM.Text, cboBoxSizeStatus.Text, Me)
                     End If
                 ElseIf cboReferenceType.Text = "Branches" Then

@@ -3,6 +3,7 @@ Imports System.Security.Cryptography
 Imports log4net
 Imports Microsoft.Extensions.DependencyInjection
 Imports MySql.Data.MySqlClient
+Imports WarehouseManagementSystem.Core.Interfaces
 
 Module myModule
     Dim formatcount As Integer
@@ -3445,5 +3446,16 @@ WHERE o.organizationid = {Z_OrganizationID} AND o.status = '{globaliorderstatus}
 
         'comboBox.DropDownStyle = ComboBoxStyle.DropDownList
     End Sub
+
+    Public Async Function IsValidCreateAccessAsync(createFlag As Char,
+        updateFlag As Char) As Task(Of Boolean)
+
+        Dim _systemOwnerService = GetRequiredService(Of ISystemOwnerService)()
+        Dim systemOwner = Await _systemOwnerService.GetCurrentSystemOwnerEntityAsync()
+
+        If systemOwner.IsThurston AndAlso (createFlag = "Y" OrElse updateFlag = "Y") Then Return False
+
+        Return createFlag = "Y"
+    End Function
 
 End Module

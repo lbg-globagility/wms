@@ -209,7 +209,7 @@ Public Class EditCartonForm
     '        conn.Close()
     '    End Try
     'End Sub
-    Private Sub msSave_Click(sender As Object, e As EventArgs) Handles msSave.Click
+    Private Async Sub msSave_Click(sender As Object, e As EventArgs) Handles msSave.Click
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
@@ -225,7 +225,7 @@ Public Class EditCartonForm
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
-                If globalcreateflg = "Y" Then
+                If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
@@ -272,7 +272,7 @@ Public Class EditCartonForm
                 End If
                 getContactID(cboPackerName.Text, "Packer", Me)
                 getCartonSizeIDB(cboSizeInfo.Text, Me)
-                U_PackingListCartons(ecpackinglistcartonid, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, If(globalcontactid = 0, DBNull.Value, globalcontactid), If(globalcartonsizeid = 0, DBNull.Value, globalcartonsizeid), _
+                U_PackingListCartons(ecpackinglistcartonid, Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, If(globalcontactid = 0, DBNull.Value, globalcontactid), If(globalcartonsizeid = 0, DBNull.Value, globalcartonsizeid),
                         txtCartonNo.Text, dtpPackedDate.Value, cboWeightUOM.Text, If(IsNumeric(txtWeight.Text), CDec(txtWeight.Text), 0.0), If(IsNumeric(txtAmount.Text), CDec(txtAmount.Text), 0.0), Me)
                 If myModule.systemerrorfound = False Then
                     getListOfValuesID(cboWeightUOM.Text, "Unit Of Measure", Me)

@@ -1316,7 +1316,7 @@ Public Class CycleCountForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
-    Private Sub msReportCycle1_Click(sender As Object, e As EventArgs) Handles msReportCycle1.Click
+    Private Async Sub msReportCycle1_Click(sender As Object, e As EventArgs) Handles msReportCycle1.Click
         Try
             errProvider.Clear()
             myModule.systemerrorfound = False
@@ -1332,7 +1332,7 @@ Public Class CycleCountForm
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
-                If globalcreateflg = "Y" Then
+                If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
@@ -1368,7 +1368,7 @@ Public Class CycleCountForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
-    Private Sub msReportCycle2_Click(sender As Object, e As EventArgs) Handles msReportCycle2.Click
+    Private Async Sub msReportCycle2_Click(sender As Object, e As EventArgs) Handles msReportCycle2.Click
         Try
             errProvider.Clear()
             myModule.systemerrorfound = False
@@ -1384,7 +1384,7 @@ Public Class CycleCountForm
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
-                If globalcreateflg = "Y" Then
+                If Await IsValidCreateAccessAsync(createFlag:=globalcreateflg, updateFlag:=globalupdateflg) Then
                     MessageBox.Show("The user is not allowed to make any changes in this form.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                     Exit Try
                 End If
