@@ -33,6 +33,11 @@ BEGIN
 
 DECLARE newLineUpID INT(11);
 
+UPDATE orders o
+SET o.DRNumber=I_DeliveryNo
+WHERE o.RowID=I_OrderID
+AND IFNULL(o.DRNumber,0)!=I_DeliveryNo;
+
 INSERT INTO lineups
 (
 	OrganizationID,
