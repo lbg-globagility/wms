@@ -435,7 +435,7 @@ Public Class CustomerOrdersForm2
 
             cboAgent.DataBindings.Add("SelectedValue", order, "AgentID", True, updateMode)
 
-            txtDRNumber.DataBindings.Add("Text", order, "DRNumber", False, DataSourceUpdateMode.OnPropertyChanged)
+            txtDRNumber.DataBindings.Add("Text", order, "DRNumber", False, DataSourceUpdateMode.Never)
 
             txtDeliveryAddress.DataBindings.Add("Text", order, "CustomerAddress", False, updateMode)
 
