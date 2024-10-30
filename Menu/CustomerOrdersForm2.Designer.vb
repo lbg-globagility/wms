@@ -116,15 +116,6 @@ Partial Class CustomerOrdersForm2
         Me.ToolStripButtonReEncode = New System.Windows.Forms.ToolStripButton()
         Me.Label9 = New System.Windows.Forms.Label()
         Me.gridOrderItems = New DevComponents.DotNetBar.Controls.DataGridViewX()
-        Me.Panel2 = New System.Windows.Forms.Panel()
-        Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.btnAddOrderItem = New System.Windows.Forms.Button()
-        Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
-        Me.ContextMenuStrip2 = New System.Windows.Forms.ContextMenuStrip(Me.components)
-        Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripMenuItem3 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ContextMenuStrip3 = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.Column23 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -141,6 +132,15 @@ Partial Class CustomerOrdersForm2
         Me.Column10 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column11 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.ColumnDelete = New DevComponents.DotNetBar.Controls.DataGridViewButtonXColumn()
+        Me.Panel2 = New System.Windows.Forms.Panel()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.btnAddOrderItem = New System.Windows.Forms.Button()
+        Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.ContextMenuStrip2 = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripMenuItem3 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ContextMenuStrip3 = New System.Windows.Forms.ContextMenuStrip(Me.components)
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
@@ -675,6 +675,7 @@ Partial Class CustomerOrdersForm2
         Me.txtDRNumber.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtDRNumber.Location = New System.Drawing.Point(564, 56)
         Me.txtDRNumber.Name = "txtDRNumber"
+        Me.txtDRNumber.ReadOnly = True
         Me.txtDRNumber.Size = New System.Drawing.Size(208, 22)
         Me.txtDRNumber.TabIndex = 10
         '
@@ -1096,70 +1097,6 @@ Partial Class CustomerOrdersForm2
         Me.gridOrderItems.Size = New System.Drawing.Size(925, 336)
         Me.gridOrderItems.TabIndex = 1
         '
-        'Panel2
-        '
-        Me.Panel2.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Panel2.Location = New System.Drawing.Point(0, 371)
-        Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(925, 35)
-        Me.Panel2.TabIndex = 5
-        '
-        'Panel1
-        '
-        Me.Panel1.Controls.Add(Me.btnAddOrderItem)
-        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
-        Me.Panel1.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Panel1.Location = New System.Drawing.Point(0, 0)
-        Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(925, 35)
-        Me.Panel1.TabIndex = 1
-        '
-        'btnAddOrderItem
-        '
-        Me.btnAddOrderItem.Image = CType(resources.GetObject("btnAddOrderItem.Image"), System.Drawing.Image)
-        Me.btnAddOrderItem.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.btnAddOrderItem.Location = New System.Drawing.Point(6, 6)
-        Me.btnAddOrderItem.Name = "btnAddOrderItem"
-        Me.btnAddOrderItem.Size = New System.Drawing.Size(112, 23)
-        Me.btnAddOrderItem.TabIndex = 0
-        Me.btnAddOrderItem.Text = "Add Order Item"
-        Me.btnAddOrderItem.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.btnAddOrderItem.UseVisualStyleBackColor = True
-        '
-        'ContextMenuStrip1
-        '
-        Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
-        Me.ContextMenuStrip1.Size = New System.Drawing.Size(61, 4)
-        '
-        'ContextMenuStrip2
-        '
-        Me.ContextMenuStrip2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem1, Me.ToolStripMenuItem2, Me.ToolStripMenuItem3})
-        Me.ContextMenuStrip2.Name = "ContextMenuStrip2"
-        Me.ContextMenuStrip2.Size = New System.Drawing.Size(121, 70)
-        '
-        'ToolStripMenuItem1
-        '
-        Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
-        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(120, 22)
-        Me.ToolStripMenuItem1.Text = "Copy"
-        '
-        'ToolStripMenuItem2
-        '
-        Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
-        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(120, 22)
-        Me.ToolStripMenuItem2.Text = "Paste"
-        '
-        'ToolStripMenuItem3
-        '
-        Me.ToolStripMenuItem3.Name = "ToolStripMenuItem3"
-        Me.ToolStripMenuItem3.Size = New System.Drawing.Size(120, 22)
-        Me.ToolStripMenuItem3.Text = "Make All"
-        '
-        'ContextMenuStrip3
-        '
-        Me.ContextMenuStrip3.Name = "ContextMenuStrip3"
-        Me.ContextMenuStrip3.Size = New System.Drawing.Size(61, 4)
-        '
         'Column23
         '
         Me.Column23.DataPropertyName = "WarehouseName"
@@ -1288,6 +1225,70 @@ Partial Class CustomerOrdersForm2
         Me.ColumnDelete.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
         Me.ColumnDelete.Text = Nothing
         Me.ColumnDelete.Width = 48
+        '
+        'Panel2
+        '
+        Me.Panel2.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.Panel2.Location = New System.Drawing.Point(0, 371)
+        Me.Panel2.Name = "Panel2"
+        Me.Panel2.Size = New System.Drawing.Size(925, 35)
+        Me.Panel2.TabIndex = 5
+        '
+        'Panel1
+        '
+        Me.Panel1.Controls.Add(Me.btnAddOrderItem)
+        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
+        Me.Panel1.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Panel1.Location = New System.Drawing.Point(0, 0)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(925, 35)
+        Me.Panel1.TabIndex = 1
+        '
+        'btnAddOrderItem
+        '
+        Me.btnAddOrderItem.Image = CType(resources.GetObject("btnAddOrderItem.Image"), System.Drawing.Image)
+        Me.btnAddOrderItem.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.btnAddOrderItem.Location = New System.Drawing.Point(6, 6)
+        Me.btnAddOrderItem.Name = "btnAddOrderItem"
+        Me.btnAddOrderItem.Size = New System.Drawing.Size(112, 23)
+        Me.btnAddOrderItem.TabIndex = 0
+        Me.btnAddOrderItem.Text = "Add Order Item"
+        Me.btnAddOrderItem.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.btnAddOrderItem.UseVisualStyleBackColor = True
+        '
+        'ContextMenuStrip1
+        '
+        Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(61, 4)
+        '
+        'ContextMenuStrip2
+        '
+        Me.ContextMenuStrip2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem1, Me.ToolStripMenuItem2, Me.ToolStripMenuItem3})
+        Me.ContextMenuStrip2.Name = "ContextMenuStrip2"
+        Me.ContextMenuStrip2.Size = New System.Drawing.Size(121, 70)
+        '
+        'ToolStripMenuItem1
+        '
+        Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
+        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(120, 22)
+        Me.ToolStripMenuItem1.Text = "Copy"
+        '
+        'ToolStripMenuItem2
+        '
+        Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
+        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(120, 22)
+        Me.ToolStripMenuItem2.Text = "Paste"
+        '
+        'ToolStripMenuItem3
+        '
+        Me.ToolStripMenuItem3.Name = "ToolStripMenuItem3"
+        Me.ToolStripMenuItem3.Size = New System.Drawing.Size(120, 22)
+        Me.ToolStripMenuItem3.Text = "Make All"
+        '
+        'ContextMenuStrip3
+        '
+        Me.ContextMenuStrip3.Name = "ContextMenuStrip3"
+        Me.ContextMenuStrip3.Size = New System.Drawing.Size(61, 4)
         '
         'CustomerOrdersForm2
         '
