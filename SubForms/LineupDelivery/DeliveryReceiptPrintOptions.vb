@@ -81,7 +81,7 @@ Public Class DeliveryReceiptPrintOptions
         Dim unitOfMeasureGroupClause = If(RadioBtnUnitRoll.Checked, "pil.UnitOfMeasure2", "IFNULL(oi.UnitOfLength, '')")
 
         Dim sql = String.Concat("SELECT
-            o.DRNumber `DRNo`,
+            IFNULL(o.DRNumber, lu.DeliveryNo) `DRNo`,
             #a.*,
             a.CompanyName,
             CONCAT_WS(', ', NULLIF(ad.StreetAddress1, ''), NULLIF(ad.StreetAddress2, ''), NULLIF(ad.Barangay, ''), NULLIF(ad.CityTown, ''), NULLIF(ad.Province, ''), NULLIF(ad.State, ''), NULLIF(ad.ZipCode, ''), NULLIF(ad.Country, '')) `Address`,
