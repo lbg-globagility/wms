@@ -39,5 +39,7 @@ namespace WarehouseManagementSystem.Core.Entities
                     item.SetEdited();
                 }
         }
+
+
     }
 }

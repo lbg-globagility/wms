@@ -1,0 +1,6 @@
+# 3:41 PM 11/5/2024
+
+ALTER TABLE `picklistorderitems`
+	DROP FOREIGN KEY `picklistorderitems_ibfk_4`;
+ALTER TABLE `picklistorderitems`
+	ADD CONSTRAINT `picklistorderitems_ibfk_4` FOREIGN KEY (`PickListOrderID`) REFERENCES `picklistorders` (`RowID`) ON UPDATE RESTRICT ON DELETE CASCADE;

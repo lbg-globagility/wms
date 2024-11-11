@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using WarehouseManagementSystem.Core.Entities.Base;
 using WarehouseManagementSystem.Core.Enums;
 
@@ -17,8 +18,18 @@ namespace WarehouseManagementSystem.Core.Entities
 
     public partial class PickListOrder
     {
+        public bool IsNewStatus => Status == PickListOrderStatus.New;
+        public bool IsInactiveStatus => Status == PickListOrderStatus.Inactive;
+        public bool IsModifiedStatus => Status == PickListOrderStatus.Modified;
+        public bool IsVerifiedStatus => Status == PickListOrderStatus.Verified;
+        public bool IsCancelledStatus => Status == PickListOrderStatus.Cancelled;
+
         public virtual PickList PickList { get; set; }
         public virtual ICollection<PickListOrderItem> PickListOrderItems { get; set; }
+        public PickListOrderItem PickListOrderItem => PickListOrderItems?.FirstOrDefault();
         public virtual ICollection<PackingListCartonItem> PackingListCartonItems { get; set; }
+        public virtual Order Order { get; set; }
+        public virtual OrderItem OrderItem { get; set; }
+        public string ProductCode => OrderItem?.ProductColorSize?.ProductColor.ProductCode;
     }
 }

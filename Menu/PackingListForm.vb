@@ -1,4 +1,5 @@
 ﻿Imports MySql.Data.MySqlClient
+Imports Remotion.Linq.Clauses
 Imports Spire.Barcode
 Imports WarehouseManagementSystem.Core.Entities
 Imports WarehouseManagementSystem.Core.Enums
@@ -392,7 +393,7 @@ Public Class PackingListForm
         End Try
     End Sub
 
-    Sub packinglistcomputations(ByVal iorderid As Integer, ByVal ipackinglistid As Integer)
+    Async Sub packinglistcomputations(ByVal iorderid As Integer, ByVal ipackinglistid As Integer)
         Try
             palqtyincartonsum = 0 : paltotalqtyincartonsum = 0 : palqtytopacksum = 0
             palqtypicked = 0 : paltotalpricesum = 0.0 : palqtytopackerrorcue = fraud
@@ -443,7 +444,19 @@ Public Class PackingListForm
                 Next
             End If
             txtTotalItems.Text = dgCustomerOrderItems.Rows.Count
-            txtTotalQtyPicked.Text = Format(paltotalqtypickedsum, "#,##0")
+
+            Dim pickListOrderDataService = GetRequiredService(Of IPickListOrderDataService)()
+            Dim pickListOrders = Await pickListOrderDataService.GetByOrderIdAsync(orderId:=iorderid)
+
+            Dim gridOrderItemIds = If(dgCustomerOrderItems.Rows?.OfType(Of DataGridViewRow)?.Select(Function(t) CInt(t.Cells(ci_rowid.Name).Value)).ToArray(), Enumerable.Empty(Of Integer).ToArray())
+
+            Dim verifiedPickListItems = pickListOrders.
+                Where(Function(t) t.IsVerifiedStatus).
+                Where(Function(t) gridOrderItemIds.Contains(If(t?.OrderItemID, 0)))?.
+                ToList()
+
+            txtTotalQtyPicked.Text = If(verifiedPickListItems?.Sum(Function(t) t.PickListOrderItem.QtyPicked), 0)
+
             txtTotalQtyInCartonSum.Text = Format(paltotalqtyincartonsum + palqtytopacksum, "#,##0")
             txtQtyInCartonSum.Text = Format(palqtyincartonsum, "#,##0")
             txtTotalPrice.Text = Format(paltotalpricesum, "#,##0.00")
@@ -4147,16 +4160,27 @@ ORDER BY ci.rowid;"
                     cartonNo:=cartonNo,
                     amount:=amount)
 
-                Dim oiRowIds = dgCustomerOrderItems.Rows.
-                    OfType(Of DataGridViewRow).
-                    Select(Function(t) CInt(t.Cells(ci_rowid.Name).Value)).
+                Dim orderItems = packingList?.PackingListCartons?.
+                    FirstOrDefault(Function(t) t.HasPackingListCartonItems)?.
+                    PackingListCartonItems?.
+                    Where(Function(t) If(t.PickListOrder?.IsVerifiedStatus, False))?.
+                    Select(Function(t) t?.OrderItem).
                     ToList()
-                Dim orderItems = packingList.Order.OrderItems.Where(Function(t) oiRowIds.Contains(t.RowID))
+
+                If Not If(orderItems?.Any(), False) Then
+                    Dim pickListOrderDataService = GetRequiredService(Of IPickListOrderDataService)()
+                    Dim pickListOrders = Await pickListOrderDataService.GetByOrderIdAsync(orderId:=orderId)
+
+                    Dim verifiedItemsId = pickListOrders.Select(Function(t) t.OrderItemID).ToArray()
+
+                    orderItems = packingList?.Order?.OrderItems?.Where(Function(t) verifiedItemsId.Contains(t.RowID.Value)).ToList()
+                End If
+
                 For Each item In orderItems
                     Dim newPackingListCartonItem = PackingListCartonItem.NewPackingListCartonItem(organizationId:=Z_OrganizationID,
                         userId:=Z_UserID,
                         orderItemId:=item.RowID.Value,
-                        quantity:=1) 'item.QtyOrdered
+                        quantity:=1) 'quantity = 1, as default, since we give the freedom to user to perform partial deliveries during `Packing List`
 
                     newPackingListCarton.AddPackingListCartonItems(packingListCartonItems:=New List(Of PackingListCartonItem) From {newPackingListCartonItem})
 

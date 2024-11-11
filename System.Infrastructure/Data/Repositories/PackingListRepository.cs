@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Remotion.Linq.Clauses;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WarehouseManagementSystem.Core.Entities;
@@ -13,20 +15,20 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
         {
         }
 
-        public async override Task<PackingList> GetByIdAsync(int id)
-        {
-            return await _context.PackingLists
-                .Include(t => t.PackingListCartons)
-                .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.RowID == id);
-        }
+        public async override Task<PackingList> GetByIdAsync(int id) => await _context.PackingLists
+            .Include(t => t.PackingListCartons)
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.RowID == id);
 
-        public async Task<PackingList> GetByOrderIdAsync(int orderId)
-        {
-            return await _context.PackingLists
-                .Include(t => t.PackingListCartons)
-                .AsNoTracking()
-                .FirstOrDefaultAsync(t => t.OrderID == orderId);
-        }
+        public async Task<PackingList> GetByOrderIdAsync(int orderId) => await _context.PackingLists
+            .Include(t => t.PackingListCartons)
+            .AsNoTracking()
+            .FirstOrDefaultAsync(t => t.OrderID == orderId);
+
+        public async Task<ICollection<PackingList>> GetManyByOrderIdsAsync(int[] ids) => await _context.PackingLists
+            .Include(t => t.PackingListCartons)
+            .AsNoTracking()
+            .Where(t => ids.Contains(t.OrderID.Value))
+            .ToListAsync();
     }
 }

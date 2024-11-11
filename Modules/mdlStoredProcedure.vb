@@ -3229,7 +3229,7 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_Company", Company)
                 .Parameters.AddWithValue("U_Description", Description)
                 .Parameters.AddWithValue("U_UnitPrice", UnitPrice)
-                .Parameters.AddWithValue("U_Image", Image)
+                .Parameters.AddWithValue("U_Image", If(String.IsNullOrEmpty(Image), DBNull.Value, Image))
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
             Catch ex As Exception

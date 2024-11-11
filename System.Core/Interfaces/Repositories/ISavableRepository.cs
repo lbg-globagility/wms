@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using WarehouseManagementSystem.Core.Entities;
 using WarehouseManagementSystem.Core.Entities.Base;
 
 namespace WarehouseManagementSystem.Core.Interfaces.Repositories
@@ -17,7 +18,7 @@ namespace WarehouseManagementSystem.Core.Interfaces.Repositories
         T GetById(int id);
 
         Task<T> GetByIdAsync(int id);
-
+        
         Task<ICollection<T>> GetManyByIdsAsync(int[] ids);
 
         Task<ICollection<T>> GetManyByOrganizationIdsAsync(int organizationId);

@@ -437,6 +437,13 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Menu\PickList\PickListAutomation.vb" />
+    <Compile Include="Menu\PickList\PickListOrderDto.vb" />
+    <Compile Include="Menu\PickList\PickListVerficationForm.Designer.vb">
+      <DependentUpon>PickListVerficationForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Menu\PickList\PickListVerficationForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Menu\ProductInventoryLocation\RackShelfColumnForm.Designer.vb">
       <DependentUpon>RackShelfColumnForm.vb</DependentUpon>
     </Compile>
@@ -1175,6 +1182,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Menu\PickList\AutomatePickingOfPickListForm.resx">
       <DependentUpon>AutomatePickingOfPickListForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Menu\PickList\PickListVerficationForm.resx">
+      <DependentUpon>PickListVerficationForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Menu\ProductInventoryLocation\RackShelfColumnForm.resx">
       <DependentUpon>RackShelfColumnForm.vb</DependentUpon>

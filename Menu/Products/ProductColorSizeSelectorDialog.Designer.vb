@@ -41,10 +41,10 @@ Partial Class ProductColorSizeSelectorDialog
         Me.Column11 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column8 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column15 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column14 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column15 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column6 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column9 = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -122,7 +122,7 @@ Partial Class ProductColorSizeSelectorDialog
         Me.grid.AllowUserToDeleteRows = False
         Me.grid.AllowUserToResizeRows = False
         Me.grid.ColumnHeadersHeight = 40
-        Me.grid.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.isSelectedColumn, Me.Column3, Me.Column11, Me.Column8, Me.Column2, Me.Column4, Me.Column5, Me.Column14, Me.Column15, Me.Column1, Me.Column6, Me.Column9, Me.Column7, Me.Column10, Me.Column12, Me.Column13})
+        Me.grid.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.isSelectedColumn, Me.Column3, Me.Column11, Me.Column8, Me.Column2, Me.Column15, Me.Column4, Me.Column5, Me.Column14, Me.Column1, Me.Column6, Me.Column9, Me.Column7, Me.Column10, Me.Column12, Me.Column13})
         DataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
         DataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Window
         DataGridViewCellStyle8.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -180,12 +180,21 @@ Partial Class ProductColorSizeSelectorDialog
         Me.Column2.Name = "Column2"
         Me.Column2.ReadOnly = True
         '
+        'Column15
+        '
+        Me.Column15.DataPropertyName = "TotalOrderableQty"
+        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.Column15.DefaultCellStyle = DataGridViewCellStyle3
+        Me.Column15.HeaderText = "Total Orderable Qty"
+        Me.Column15.Name = "Column15"
+        Me.Column15.ReadOnly = True
+        '
         'Column4
         '
         Me.Column4.DataPropertyName = "TotalAvailableQty"
-        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle3.NullValue = Nothing
-        Me.Column4.DefaultCellStyle = DataGridViewCellStyle3
+        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle4.NullValue = Nothing
+        Me.Column4.DefaultCellStyle = DataGridViewCellStyle4
         Me.Column4.HeaderText = "Total Available Qty"
         Me.Column4.Name = "Column4"
         Me.Column4.ReadOnly = True
@@ -193,8 +202,8 @@ Partial Class ProductColorSizeSelectorDialog
         'Column5
         '
         Me.Column5.DataPropertyName = "TotalAllocatedQty"
-        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.Column5.DefaultCellStyle = DataGridViewCellStyle4
+        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.Column5.DefaultCellStyle = DataGridViewCellStyle5
         Me.Column5.HeaderText = "Total Allocated Qty"
         Me.Column5.Name = "Column5"
         Me.Column5.ReadOnly = True
@@ -202,20 +211,11 @@ Partial Class ProductColorSizeSelectorDialog
         'Column14
         '
         Me.Column14.DataPropertyName = "TotalReserveQty"
-        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.Column14.DefaultCellStyle = DataGridViewCellStyle5
+        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.Column14.DefaultCellStyle = DataGridViewCellStyle6
         Me.Column14.HeaderText = "Total Reserve Qty"
         Me.Column14.Name = "Column14"
         Me.Column14.ReadOnly = True
-        '
-        'Column15
-        '
-        Me.Column15.DataPropertyName = "TotalOrderableQty"
-        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.Column15.DefaultCellStyle = DataGridViewCellStyle6
-        Me.Column15.HeaderText = "Total Orderable Qty"
-        Me.Column15.Name = "Column15"
-        Me.Column15.ReadOnly = True
         '
         'Column1
         '
@@ -493,7 +493,6 @@ Partial Class ProductColorSizeSelectorDialog
         Me.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
         Me.KeyPreview = True
-        Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "ProductColorSizeSelectorDialog"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
@@ -528,22 +527,6 @@ Partial Class ProductColorSizeSelectorDialog
     Friend WithEvents cboInventoryName As ComboBox
     Friend WithEvents LabelInventoryName As Label
     Friend WithEvents LabelInventorySource As Label
-    Friend WithEvents isSelectedColumn As DataGridViewCheckBoxColumn
-    Friend WithEvents Column3 As DataGridViewTextBoxColumn
-    Friend WithEvents Column11 As DataGridViewTextBoxColumn
-    Friend WithEvents Column8 As DataGridViewTextBoxColumn
-    Friend WithEvents Column2 As DataGridViewTextBoxColumn
-    Friend WithEvents Column4 As DataGridViewTextBoxColumn
-    Friend WithEvents Column5 As DataGridViewTextBoxColumn
-    Friend WithEvents Column14 As DataGridViewTextBoxColumn
-    Friend WithEvents Column15 As DataGridViewTextBoxColumn
-    Friend WithEvents Column1 As DataGridViewTextBoxColumn
-    Friend WithEvents Column6 As DataGridViewTextBoxColumn
-    Friend WithEvents Column9 As DataGridViewTextBoxColumn
-    Friend WithEvents Column7 As DataGridViewTextBoxColumn
-    Friend WithEvents Column10 As DataGridViewTextBoxColumn
-    Friend WithEvents Column12 As DataGridViewTextBoxColumn
-    Friend WithEvents Column13 As DataGridViewTextBoxColumn
     Friend WithEvents btnClearSearch As Button
     Friend WithEvents TabControl1 As TabControl
     Friend WithEvents TabPage1 As TabPage
@@ -552,4 +535,20 @@ Partial Class ProductColorSizeSelectorDialog
     Friend WithEvents Column16 As DataGridViewTextBoxColumn
     Friend WithEvents Column17 As DataGridViewTextBoxColumn
     Friend WithEvents Column18 As DevComponents.DotNetBar.Controls.DataGridViewButtonXColumn
+    Friend WithEvents isSelectedColumn As DataGridViewCheckBoxColumn
+    Friend WithEvents Column3 As DataGridViewTextBoxColumn
+    Friend WithEvents Column11 As DataGridViewTextBoxColumn
+    Friend WithEvents Column8 As DataGridViewTextBoxColumn
+    Friend WithEvents Column2 As DataGridViewTextBoxColumn
+    Friend WithEvents Column15 As DataGridViewTextBoxColumn
+    Friend WithEvents Column4 As DataGridViewTextBoxColumn
+    Friend WithEvents Column5 As DataGridViewTextBoxColumn
+    Friend WithEvents Column14 As DataGridViewTextBoxColumn
+    Friend WithEvents Column1 As DataGridViewTextBoxColumn
+    Friend WithEvents Column6 As DataGridViewTextBoxColumn
+    Friend WithEvents Column9 As DataGridViewTextBoxColumn
+    Friend WithEvents Column7 As DataGridViewTextBoxColumn
+    Friend WithEvents Column10 As DataGridViewTextBoxColumn
+    Friend WithEvents Column12 As DataGridViewTextBoxColumn
+    Friend WithEvents Column13 As DataGridViewTextBoxColumn
 End Class

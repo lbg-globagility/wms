@@ -19,7 +19,25 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
         {
             return await _context.PickLists
                 .Include(t => t.PickListOrders)
+                    .ThenInclude(t => t.Order)
+                        .ThenInclude(t => t.Customer)
+                .Include(t => t.PickListOrders)
                     .ThenInclude(t => t.PickListOrderItems)
+                .Include(t => t.PickListOrders)
+                    .ThenInclude(t => t.OrderItem)
+                        .ThenInclude(t => t.ProductColorSize)
+                            .ThenInclude(t => t.ProductColor)
+                                .ThenInclude(t => t.Product)
+                .Include(t => t.PickListOrders)
+                    .ThenInclude(t => t.OrderItem)
+                        .ThenInclude(t => t.ProductColorSize)
+                            .ThenInclude(t => t.ProductColor)
+                                .ThenInclude(t => t.Color)
+                .Include(t => t.PickListOrders)
+                    .ThenInclude(t => t.OrderItem)
+                        .ThenInclude(t => t.ProductInventoryLocation)
+                            .ThenInclude(t => t.RackShelfColumn)
+                                .ThenInclude(t => t.InventoryLocation)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(t => t.RowID == id);
         }

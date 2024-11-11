@@ -1,7 +1,12 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading.Tasks;
 using WarehouseManagementSystem.Core.Entities;
+using WarehouseManagementSystem.Core.Enums;
 using WarehouseManagementSystem.Core.Interfaces.Repositories;
 using WarehouseManagementSystem.Infrastructure.Data.Repositories.Base;
 
@@ -11,6 +16,22 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
     {
         public PickListOrderRepository(SystemContext context) : base(context)
         {
+        }
+
+        public async Task<ICollection<PickListOrder>> GetByOrderIdAsync(int orderId)
+        {
+            var query = _context
+                .PickListOrders
+                .Include(t => t.PickList)
+                .Include(t => t.PickListOrderItems)
+                .AsNoTracking()
+                .Where(t => t.OrderID == orderId)
+                .AsQueryable();
+
+            return await query.
+                Where(t => t.PickList.Status != PickListStatus.Cancelled).
+                Where(t => t.IsVerifiedStatus).
+                ToListAsync();
         }
     }
 }

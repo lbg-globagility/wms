@@ -23,44 +23,27 @@ Partial Class VerifyPickListForm
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle7 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle8 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(VerifyPickListForm))
-        Dim DataGridViewCellStyle9 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle10 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.gbPickListItems = New System.Windows.Forms.GroupBox()
-        Me.chkOtherInfo = New System.Windows.Forms.CheckBox()
         Me.dgPickListItems = New DevComponents.DotNetBar.Controls.DataGridViewX()
-        Me.pli_rowid = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.pli_colorvalue = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.pli_seqno = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.pli_productcode = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.pli_colorname = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.pli_color = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.pli_size = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.pli_seasoncode = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.pli_qtypicked = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.pli_sku = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.pli_unitofmeasure = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.pli_status = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.pli_verify = New System.Windows.Forms.DataGridViewButtonColumn()
-        Me.pli_verifiedby = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.pli_verifieddate = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.pli_inventorylocation = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.txtTotalQtyPicked = New System.Windows.Forms.TextBox()
-        Me.Label15 = New System.Windows.Forms.Label()
+        Me.Panel2 = New System.Windows.Forms.Panel()
+        Me.chkOtherInfo = New System.Windows.Forms.CheckBox()
         Me.Label11 = New System.Windows.Forms.Label()
+        Me.txtTotalQtyPicked = New System.Windows.Forms.TextBox()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.linkManageVerification = New System.Windows.Forms.LinkLabel()
+        Me.Label15 = New System.Windows.Forms.Label()
         Me.pbClose = New System.Windows.Forms.PictureBox()
         Me.lblTitle = New System.Windows.Forms.Label()
         Me.errProvider = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.Label16 = New System.Windows.Forms.Label()
         Me.Label17 = New System.Windows.Forms.Label()
         Me.dgPickList = New DevComponents.DotNetBar.Controls.DataGridViewX()
-        Me.pl_rowid = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.pl_picklistno = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.pl_status = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.pl_completeddate = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.txtPickListNo = New System.Windows.Forms.TextBox()
         Me.Label52 = New System.Windows.Forms.Label()
         Me.txtPickerName = New System.Windows.Forms.TextBox()
@@ -100,11 +83,50 @@ Partial Class VerifyPickListForm
         Me.cmsOutright = New System.Windows.Forms.ToolStripMenuItem()
         Me.cmsConsignor = New System.Windows.Forms.ToolStripMenuItem()
         Me.cmsSKU = New System.Windows.Forms.ToolStripMenuItem()
-        Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.Panel2 = New System.Windows.Forms.Panel()
-        Me.ButtonVerifyAll = New System.Windows.Forms.Button()
+        Me.DataGridViewTextBoxColumn1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn5 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn6 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn7 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn8 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn9 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn10 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn11 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn12 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn13 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn14 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn15 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn16 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewButtonColumn1 = New System.Windows.Forms.DataGridViewButtonColumn()
+        Me.DataGridViewTextBoxColumn17 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn18 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn19 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.pl_rowid = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.pl_picklistno = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.pl_status = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.pl_completeddate = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.pli_rowid = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.pli_colorvalue = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.pli_seqno = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.pli_productcode = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.pli_colorname = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.pli_color = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.pli_size = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.pli_seasoncode = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.pli_qtypicked = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.pli_sku = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.pli_unitofmeasure = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.pli_status = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.pli_verify = New System.Windows.Forms.DataGridViewButtonColumn()
+        Me.pli_verifiedby = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.pli_verifieddate = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.pli_inventorylocation = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.gbPickListItems.SuspendLayout()
         CType(Me.dgPickListItems, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.Panel2.SuspendLayout()
+        Me.Panel1.SuspendLayout()
         CType(Me.pbClose, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.errProvider, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.dgPickList, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -122,8 +144,6 @@ Partial Class VerifyPickListForm
         Me.ToolStrip3.SuspendLayout()
         Me.msMenu.SuspendLayout()
         Me.cmsOptions.SuspendLayout()
-        Me.Panel1.SuspendLayout()
-        Me.Panel2.SuspendLayout()
         Me.SuspendLayout()
         '
         'gbPickListItems
@@ -142,6 +162,60 @@ Partial Class VerifyPickListForm
         Me.gbPickListItems.TabIndex = 4
         Me.gbPickListItems.TabStop = False
         '
+        'dgPickListItems
+        '
+        Me.dgPickListItems.AllowUserToAddRows = False
+        Me.dgPickListItems.AllowUserToDeleteRows = False
+        Me.dgPickListItems.AllowUserToOrderColumns = True
+        Me.dgPickListItems.AllowUserToResizeRows = False
+        Me.dgPickListItems.BackgroundColor = System.Drawing.Color.White
+        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgPickListItems.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
+        Me.dgPickListItems.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.dgPickListItems.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.pli_rowid, Me.pli_colorvalue, Me.pli_seqno, Me.pli_productcode, Me.pli_colorname, Me.pli_color, Me.pli_size, Me.pli_seasoncode, Me.pli_qtypicked, Me.pli_sku, Me.pli_unitofmeasure, Me.pli_status, Me.pli_verify, Me.pli_verifiedby, Me.pli_verifieddate, Me.pli_inventorylocation})
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.dgPickListItems.DefaultCellStyle = DataGridViewCellStyle2
+        Me.dgPickListItems.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.dgPickListItems.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
+        Me.dgPickListItems.Location = New System.Drawing.Point(3, 54)
+        Me.dgPickListItems.MultiSelect = False
+        Me.dgPickListItems.Name = "dgPickListItems"
+        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle3.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgPickListItems.RowHeadersDefaultCellStyle = DataGridViewCellStyle3
+        Me.dgPickListItems.RowHeadersVisible = False
+        Me.dgPickListItems.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
+        Me.dgPickListItems.Size = New System.Drawing.Size(809, 283)
+        Me.dgPickListItems.TabIndex = 16
+        '
+        'Panel2
+        '
+        Me.Panel2.Controls.Add(Me.chkOtherInfo)
+        Me.Panel2.Controls.Add(Me.Label11)
+        Me.Panel2.Controls.Add(Me.txtTotalQtyPicked)
+        Me.Panel2.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.Panel2.Location = New System.Drawing.Point(3, 337)
+        Me.Panel2.Name = "Panel2"
+        Me.Panel2.Size = New System.Drawing.Size(809, 35)
+        Me.Panel2.TabIndex = 474
+        '
         'chkOtherInfo
         '
         Me.chkOtherInfo.AutoSize = True
@@ -154,154 +228,16 @@ Partial Class VerifyPickListForm
         Me.chkOtherInfo.Text = "View Other Info.:"
         Me.chkOtherInfo.UseVisualStyleBackColor = True
         '
-        'dgPickListItems
+        'Label11
         '
-        Me.dgPickListItems.AllowUserToAddRows = False
-        Me.dgPickListItems.AllowUserToDeleteRows = False
-        Me.dgPickListItems.AllowUserToOrderColumns = True
-        Me.dgPickListItems.AllowUserToResizeRows = False
-        Me.dgPickListItems.BackgroundColor = System.Drawing.Color.White
-        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle6.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgPickListItems.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle6
-        Me.dgPickListItems.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgPickListItems.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.pli_rowid, Me.pli_colorvalue, Me.pli_seqno, Me.pli_productcode, Me.pli_colorname, Me.pli_color, Me.pli_size, Me.pli_seasoncode, Me.pli_qtypicked, Me.pli_sku, Me.pli_unitofmeasure, Me.pli_status, Me.pli_verify, Me.pli_verifiedby, Me.pli_verifieddate, Me.pli_inventorylocation})
-        DataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle7.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.dgPickListItems.DefaultCellStyle = DataGridViewCellStyle7
-        Me.dgPickListItems.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.dgPickListItems.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
-        Me.dgPickListItems.Location = New System.Drawing.Point(3, 54)
-        Me.dgPickListItems.MultiSelect = False
-        Me.dgPickListItems.Name = "dgPickListItems"
-        DataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle8.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgPickListItems.RowHeadersDefaultCellStyle = DataGridViewCellStyle8
-        Me.dgPickListItems.RowHeadersVisible = False
-        Me.dgPickListItems.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgPickListItems.Size = New System.Drawing.Size(809, 283)
-        Me.dgPickListItems.TabIndex = 16
-        '
-        'pli_rowid
-        '
-        Me.pli_rowid.HeaderText = "rowid"
-        Me.pli_rowid.Name = "pli_rowid"
-        Me.pli_rowid.Visible = False
-        '
-        'pli_colorvalue
-        '
-        Me.pli_colorvalue.HeaderText = "colorvalue"
-        Me.pli_colorvalue.Name = "pli_colorvalue"
-        Me.pli_colorvalue.Visible = False
-        '
-        'pli_seqno
-        '
-        Me.pli_seqno.HeaderText = "Seq. No."
-        Me.pli_seqno.Name = "pli_seqno"
-        Me.pli_seqno.ReadOnly = True
-        Me.pli_seqno.Width = 50
-        '
-        'pli_productcode
-        '
-        Me.pli_productcode.HeaderText = "Product Code"
-        Me.pli_productcode.Name = "pli_productcode"
-        Me.pli_productcode.ReadOnly = True
-        Me.pli_productcode.Width = 120
-        '
-        'pli_colorname
-        '
-        Me.pli_colorname.HeaderText = "Color Name"
-        Me.pli_colorname.Name = "pli_colorname"
-        Me.pli_colorname.ReadOnly = True
-        Me.pli_colorname.Width = 60
-        '
-        'pli_color
-        '
-        Me.pli_color.HeaderText = ""
-        Me.pli_color.Name = "pli_color"
-        Me.pli_color.ReadOnly = True
-        Me.pli_color.Width = 30
-        '
-        'pli_size
-        '
-        Me.pli_size.HeaderText = "Size"
-        Me.pli_size.Name = "pli_size"
-        Me.pli_size.ReadOnly = True
-        Me.pli_size.Width = 40
-        '
-        'pli_seasoncode
-        '
-        Me.pli_seasoncode.HeaderText = "Season Code"
-        Me.pli_seasoncode.Name = "pli_seasoncode"
-        Me.pli_seasoncode.ReadOnly = True
-        Me.pli_seasoncode.Width = 70
-        '
-        'pli_qtypicked
-        '
-        Me.pli_qtypicked.HeaderText = "Qty. Picked"
-        Me.pli_qtypicked.Name = "pli_qtypicked"
-        Me.pli_qtypicked.ReadOnly = True
-        Me.pli_qtypicked.Width = 60
-        '
-        'pli_sku
-        '
-        Me.pli_sku.HeaderText = "SKU"
-        Me.pli_sku.Name = "pli_sku"
-        Me.pli_sku.ReadOnly = True
-        '
-        'pli_unitofmeasure
-        '
-        Me.pli_unitofmeasure.HeaderText = "Unit Of Measure"
-        Me.pli_unitofmeasure.Name = "pli_unitofmeasure"
-        Me.pli_unitofmeasure.ReadOnly = True
-        Me.pli_unitofmeasure.Width = 75
-        '
-        'pli_status
-        '
-        Me.pli_status.HeaderText = "Status"
-        Me.pli_status.Name = "pli_status"
-        Me.pli_status.ReadOnly = True
-        Me.pli_status.Width = 80
-        '
-        'pli_verify
-        '
-        Me.pli_verify.HeaderText = ""
-        Me.pli_verify.Name = "pli_verify"
-        Me.pli_verify.Text = "Verify"
-        Me.pli_verify.UseColumnTextForButtonValue = True
-        '
-        'pli_verifiedby
-        '
-        Me.pli_verifiedby.HeaderText = "Verified By"
-        Me.pli_verifiedby.Name = "pli_verifiedby"
-        Me.pli_verifiedby.ReadOnly = True
-        '
-        'pli_verifieddate
-        '
-        Me.pli_verifieddate.HeaderText = "Verified Date"
-        Me.pli_verifieddate.Name = "pli_verifieddate"
-        Me.pli_verifieddate.ReadOnly = True
-        '
-        'pli_inventorylocation
-        '
-        Me.pli_inventorylocation.HeaderText = "Inventory Location"
-        Me.pli_inventorylocation.Name = "pli_inventorylocation"
-        Me.pli_inventorylocation.ReadOnly = True
+        Me.Label11.AutoSize = True
+        Me.Label11.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label11.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.Label11.Location = New System.Drawing.Point(255, 10)
+        Me.Label11.Name = "Label11"
+        Me.Label11.Size = New System.Drawing.Size(118, 15)
+        Me.Label11.TabIndex = 472
+        Me.Label11.Text = "Total Qty. Picked:"
         '
         'txtTotalQtyPicked
         '
@@ -312,6 +248,29 @@ Partial Class VerifyPickListForm
         Me.txtTotalQtyPicked.Size = New System.Drawing.Size(104, 21)
         Me.txtTotalQtyPicked.TabIndex = 18
         Me.txtTotalQtyPicked.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        '
+        'Panel1
+        '
+        Me.Panel1.Controls.Add(Me.linkManageVerification)
+        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
+        Me.Panel1.Location = New System.Drawing.Point(3, 16)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(809, 38)
+        Me.Panel1.TabIndex = 473
+        '
+        'linkManageVerification
+        '
+        Me.linkManageVerification.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.linkManageVerification.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.linkManageVerification.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline
+        Me.linkManageVerification.LinkColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(155, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.linkManageVerification.Location = New System.Drawing.Point(700, 19)
+        Me.linkManageVerification.Name = "linkManageVerification"
+        Me.linkManageVerification.Size = New System.Drawing.Size(106, 16)
+        Me.linkManageVerification.TabIndex = 8
+        Me.linkManageVerification.TabStop = True
+        Me.linkManageVerification.Text = "Manage Verification"
+        Me.linkManageVerification.TextAlign = System.Drawing.ContentAlignment.TopCenter
         '
         'Label15
         '
@@ -324,17 +283,6 @@ Partial Class VerifyPickListForm
         Me.Label15.Size = New System.Drawing.Size(111, 17)
         Me.Label15.TabIndex = 228
         Me.Label15.Text = "Pick List Items:"
-        '
-        'Label11
-        '
-        Me.Label11.AutoSize = True
-        Me.Label11.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label11.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label11.Location = New System.Drawing.Point(255, 10)
-        Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(118, 15)
-        Me.Label11.TabIndex = 472
-        Me.Label11.Text = "Total Qty. Picked:"
         '
         'pbClose
         '
@@ -397,24 +345,24 @@ Partial Class VerifyPickListForm
         Me.dgPickList.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.dgPickList.BackgroundColor = System.Drawing.Color.White
-        DataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle9.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgPickList.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle9
+        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle4.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgPickList.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle4
         Me.dgPickList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.dgPickList.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.pl_rowid, Me.pl_picklistno, Me.pl_status, Me.pl_completeddate})
-        DataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle10.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle10.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle10.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle10.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.dgPickList.DefaultCellStyle = DataGridViewCellStyle10
+        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle5.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.dgPickList.DefaultCellStyle = DataGridViewCellStyle5
         Me.dgPickList.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
         Me.dgPickList.Location = New System.Drawing.Point(8, 68)
         Me.dgPickList.MultiSelect = False
@@ -423,31 +371,6 @@ Partial Class VerifyPickListForm
         Me.dgPickList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.dgPickList.Size = New System.Drawing.Size(324, 339)
         Me.dgPickList.TabIndex = 9
-        '
-        'pl_rowid
-        '
-        Me.pl_rowid.HeaderText = "rowid"
-        Me.pl_rowid.Name = "pl_rowid"
-        Me.pl_rowid.ReadOnly = True
-        Me.pl_rowid.Visible = False
-        '
-        'pl_picklistno
-        '
-        Me.pl_picklistno.HeaderText = "Pick List No."
-        Me.pl_picklistno.Name = "pl_picklistno"
-        Me.pl_picklistno.ReadOnly = True
-        '
-        'pl_status
-        '
-        Me.pl_status.HeaderText = "Status"
-        Me.pl_status.Name = "pl_status"
-        Me.pl_status.ReadOnly = True
-        '
-        'pl_completeddate
-        '
-        Me.pl_completeddate.HeaderText = "Completed Date"
-        Me.pl_completeddate.Name = "pl_completeddate"
-        Me.pl_completeddate.ReadOnly = True
         '
         'txtPickListNo
         '
@@ -867,35 +790,264 @@ Partial Class VerifyPickListForm
         Me.cmsSKU.Size = New System.Drawing.Size(129, 22)
         Me.cmsSKU.Text = "&SKU"
         '
-        'Panel1
+        'DataGridViewTextBoxColumn1
         '
-        Me.Panel1.Controls.Add(Me.ButtonVerifyAll)
-        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
-        Me.Panel1.Location = New System.Drawing.Point(3, 16)
-        Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(809, 38)
-        Me.Panel1.TabIndex = 473
+        Me.DataGridViewTextBoxColumn1.HeaderText = "rowid"
+        Me.DataGridViewTextBoxColumn1.Name = "DataGridViewTextBoxColumn1"
+        Me.DataGridViewTextBoxColumn1.Visible = False
         '
-        'Panel2
+        'DataGridViewTextBoxColumn2
         '
-        Me.Panel2.Controls.Add(Me.chkOtherInfo)
-        Me.Panel2.Controls.Add(Me.Label11)
-        Me.Panel2.Controls.Add(Me.txtTotalQtyPicked)
-        Me.Panel2.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Panel2.Location = New System.Drawing.Point(3, 337)
-        Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(809, 35)
-        Me.Panel2.TabIndex = 474
+        Me.DataGridViewTextBoxColumn2.HeaderText = "Pick List No."
+        Me.DataGridViewTextBoxColumn2.Name = "DataGridViewTextBoxColumn2"
         '
-        'ButtonVerifyAll
+        'DataGridViewTextBoxColumn3
         '
-        Me.ButtonVerifyAll.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonVerifyAll.Location = New System.Drawing.Point(722, 8)
-        Me.ButtonVerifyAll.Name = "ButtonVerifyAll"
-        Me.ButtonVerifyAll.Size = New System.Drawing.Size(75, 23)
-        Me.ButtonVerifyAll.TabIndex = 0
-        Me.ButtonVerifyAll.Text = "Verify All"
-        Me.ButtonVerifyAll.UseVisualStyleBackColor = True
+        Me.DataGridViewTextBoxColumn3.HeaderText = "Status"
+        Me.DataGridViewTextBoxColumn3.Name = "DataGridViewTextBoxColumn3"
+        '
+        'DataGridViewTextBoxColumn4
+        '
+        Me.DataGridViewTextBoxColumn4.HeaderText = "Completed Date"
+        Me.DataGridViewTextBoxColumn4.Name = "DataGridViewTextBoxColumn4"
+        '
+        'DataGridViewTextBoxColumn5
+        '
+        Me.DataGridViewTextBoxColumn5.HeaderText = "rowid"
+        Me.DataGridViewTextBoxColumn5.Name = "DataGridViewTextBoxColumn5"
+        Me.DataGridViewTextBoxColumn5.Visible = False
+        '
+        'DataGridViewTextBoxColumn6
+        '
+        Me.DataGridViewTextBoxColumn6.HeaderText = "colorvalue"
+        Me.DataGridViewTextBoxColumn6.Name = "DataGridViewTextBoxColumn6"
+        Me.DataGridViewTextBoxColumn6.Visible = False
+        '
+        'DataGridViewTextBoxColumn7
+        '
+        Me.DataGridViewTextBoxColumn7.HeaderText = "Seq. No."
+        Me.DataGridViewTextBoxColumn7.Name = "DataGridViewTextBoxColumn7"
+        Me.DataGridViewTextBoxColumn7.ReadOnly = True
+        Me.DataGridViewTextBoxColumn7.Width = 50
+        '
+        'DataGridViewTextBoxColumn8
+        '
+        Me.DataGridViewTextBoxColumn8.HeaderText = "Product Code"
+        Me.DataGridViewTextBoxColumn8.Name = "DataGridViewTextBoxColumn8"
+        Me.DataGridViewTextBoxColumn8.ReadOnly = True
+        Me.DataGridViewTextBoxColumn8.Width = 120
+        '
+        'DataGridViewTextBoxColumn9
+        '
+        Me.DataGridViewTextBoxColumn9.HeaderText = "Color Name"
+        Me.DataGridViewTextBoxColumn9.Name = "DataGridViewTextBoxColumn9"
+        Me.DataGridViewTextBoxColumn9.ReadOnly = True
+        Me.DataGridViewTextBoxColumn9.Width = 60
+        '
+        'DataGridViewTextBoxColumn10
+        '
+        Me.DataGridViewTextBoxColumn10.HeaderText = ""
+        Me.DataGridViewTextBoxColumn10.Name = "DataGridViewTextBoxColumn10"
+        Me.DataGridViewTextBoxColumn10.ReadOnly = True
+        Me.DataGridViewTextBoxColumn10.Width = 30
+        '
+        'DataGridViewTextBoxColumn11
+        '
+        Me.DataGridViewTextBoxColumn11.HeaderText = "Size"
+        Me.DataGridViewTextBoxColumn11.Name = "DataGridViewTextBoxColumn11"
+        Me.DataGridViewTextBoxColumn11.ReadOnly = True
+        Me.DataGridViewTextBoxColumn11.Width = 40
+        '
+        'DataGridViewTextBoxColumn12
+        '
+        Me.DataGridViewTextBoxColumn12.HeaderText = "Season Code"
+        Me.DataGridViewTextBoxColumn12.Name = "DataGridViewTextBoxColumn12"
+        Me.DataGridViewTextBoxColumn12.ReadOnly = True
+        Me.DataGridViewTextBoxColumn12.Width = 70
+        '
+        'DataGridViewTextBoxColumn13
+        '
+        Me.DataGridViewTextBoxColumn13.HeaderText = "Qty. Picked"
+        Me.DataGridViewTextBoxColumn13.Name = "DataGridViewTextBoxColumn13"
+        Me.DataGridViewTextBoxColumn13.ReadOnly = True
+        Me.DataGridViewTextBoxColumn13.Width = 60
+        '
+        'DataGridViewTextBoxColumn14
+        '
+        Me.DataGridViewTextBoxColumn14.HeaderText = "SKU"
+        Me.DataGridViewTextBoxColumn14.Name = "DataGridViewTextBoxColumn14"
+        Me.DataGridViewTextBoxColumn14.ReadOnly = True
+        '
+        'DataGridViewTextBoxColumn15
+        '
+        Me.DataGridViewTextBoxColumn15.HeaderText = "Unit Of Measure"
+        Me.DataGridViewTextBoxColumn15.Name = "DataGridViewTextBoxColumn15"
+        Me.DataGridViewTextBoxColumn15.ReadOnly = True
+        Me.DataGridViewTextBoxColumn15.Width = 75
+        '
+        'DataGridViewTextBoxColumn16
+        '
+        Me.DataGridViewTextBoxColumn16.HeaderText = "Status"
+        Me.DataGridViewTextBoxColumn16.Name = "DataGridViewTextBoxColumn16"
+        Me.DataGridViewTextBoxColumn16.ReadOnly = True
+        Me.DataGridViewTextBoxColumn16.Width = 80
+        '
+        'DataGridViewButtonColumn1
+        '
+        Me.DataGridViewButtonColumn1.HeaderText = ""
+        Me.DataGridViewButtonColumn1.Name = "DataGridViewButtonColumn1"
+        Me.DataGridViewButtonColumn1.Text = "Verify"
+        Me.DataGridViewButtonColumn1.UseColumnTextForButtonValue = True
+        '
+        'DataGridViewTextBoxColumn17
+        '
+        Me.DataGridViewTextBoxColumn17.HeaderText = "Verified By"
+        Me.DataGridViewTextBoxColumn17.Name = "DataGridViewTextBoxColumn17"
+        Me.DataGridViewTextBoxColumn17.ReadOnly = True
+        '
+        'DataGridViewTextBoxColumn18
+        '
+        Me.DataGridViewTextBoxColumn18.HeaderText = "Verified Date"
+        Me.DataGridViewTextBoxColumn18.Name = "DataGridViewTextBoxColumn18"
+        Me.DataGridViewTextBoxColumn18.ReadOnly = True
+        '
+        'DataGridViewTextBoxColumn19
+        '
+        Me.DataGridViewTextBoxColumn19.HeaderText = "Inventory Location"
+        Me.DataGridViewTextBoxColumn19.Name = "DataGridViewTextBoxColumn19"
+        Me.DataGridViewTextBoxColumn19.ReadOnly = True
+        '
+        'pl_rowid
+        '
+        Me.pl_rowid.HeaderText = "rowid"
+        Me.pl_rowid.Name = "pl_rowid"
+        Me.pl_rowid.ReadOnly = True
+        Me.pl_rowid.Visible = False
+        '
+        'pl_picklistno
+        '
+        Me.pl_picklistno.HeaderText = "Pick List No."
+        Me.pl_picklistno.Name = "pl_picklistno"
+        Me.pl_picklistno.ReadOnly = True
+        '
+        'pl_status
+        '
+        Me.pl_status.HeaderText = "Status"
+        Me.pl_status.Name = "pl_status"
+        Me.pl_status.ReadOnly = True
+        '
+        'pl_completeddate
+        '
+        Me.pl_completeddate.HeaderText = "Completed Date"
+        Me.pl_completeddate.Name = "pl_completeddate"
+        Me.pl_completeddate.ReadOnly = True
+        '
+        'pli_rowid
+        '
+        Me.pli_rowid.HeaderText = "rowid"
+        Me.pli_rowid.Name = "pli_rowid"
+        Me.pli_rowid.Visible = False
+        '
+        'pli_colorvalue
+        '
+        Me.pli_colorvalue.HeaderText = "colorvalue"
+        Me.pli_colorvalue.Name = "pli_colorvalue"
+        Me.pli_colorvalue.Visible = False
+        '
+        'pli_seqno
+        '
+        Me.pli_seqno.HeaderText = "Seq. No."
+        Me.pli_seqno.Name = "pli_seqno"
+        Me.pli_seqno.ReadOnly = True
+        Me.pli_seqno.Width = 50
+        '
+        'pli_productcode
+        '
+        Me.pli_productcode.HeaderText = "Product Code"
+        Me.pli_productcode.Name = "pli_productcode"
+        Me.pli_productcode.ReadOnly = True
+        Me.pli_productcode.Width = 120
+        '
+        'pli_colorname
+        '
+        Me.pli_colorname.HeaderText = "Color Name"
+        Me.pli_colorname.Name = "pli_colorname"
+        Me.pli_colorname.ReadOnly = True
+        Me.pli_colorname.Width = 60
+        '
+        'pli_color
+        '
+        Me.pli_color.HeaderText = ""
+        Me.pli_color.Name = "pli_color"
+        Me.pli_color.ReadOnly = True
+        Me.pli_color.Width = 30
+        '
+        'pli_size
+        '
+        Me.pli_size.HeaderText = "Size"
+        Me.pli_size.Name = "pli_size"
+        Me.pli_size.ReadOnly = True
+        Me.pli_size.Width = 40
+        '
+        'pli_seasoncode
+        '
+        Me.pli_seasoncode.HeaderText = "Season Code"
+        Me.pli_seasoncode.Name = "pli_seasoncode"
+        Me.pli_seasoncode.ReadOnly = True
+        Me.pli_seasoncode.Width = 70
+        '
+        'pli_qtypicked
+        '
+        Me.pli_qtypicked.HeaderText = "Qty. Picked"
+        Me.pli_qtypicked.Name = "pli_qtypicked"
+        Me.pli_qtypicked.ReadOnly = True
+        Me.pli_qtypicked.Width = 60
+        '
+        'pli_sku
+        '
+        Me.pli_sku.HeaderText = "SKU"
+        Me.pli_sku.Name = "pli_sku"
+        Me.pli_sku.ReadOnly = True
+        '
+        'pli_unitofmeasure
+        '
+        Me.pli_unitofmeasure.HeaderText = "Unit Of Measure"
+        Me.pli_unitofmeasure.Name = "pli_unitofmeasure"
+        Me.pli_unitofmeasure.ReadOnly = True
+        Me.pli_unitofmeasure.Width = 75
+        '
+        'pli_status
+        '
+        Me.pli_status.HeaderText = "Status"
+        Me.pli_status.Name = "pli_status"
+        Me.pli_status.ReadOnly = True
+        Me.pli_status.Width = 80
+        '
+        'pli_verify
+        '
+        Me.pli_verify.HeaderText = ""
+        Me.pli_verify.Name = "pli_verify"
+        Me.pli_verify.Text = "Verify"
+        Me.pli_verify.UseColumnTextForButtonValue = True
+        Me.pli_verify.Visible = False
+        '
+        'pli_verifiedby
+        '
+        Me.pli_verifiedby.HeaderText = "Verified By"
+        Me.pli_verifiedby.Name = "pli_verifiedby"
+        Me.pli_verifiedby.ReadOnly = True
+        '
+        'pli_verifieddate
+        '
+        Me.pli_verifieddate.HeaderText = "Verified Date"
+        Me.pli_verifieddate.Name = "pli_verifieddate"
+        Me.pli_verifieddate.ReadOnly = True
+        '
+        'pli_inventorylocation
+        '
+        Me.pli_inventorylocation.HeaderText = "Inventory Location"
+        Me.pli_inventorylocation.Name = "pli_inventorylocation"
+        Me.pli_inventorylocation.ReadOnly = True
         '
         'VerifyPickListForm
         '
@@ -915,6 +1067,9 @@ Partial Class VerifyPickListForm
         Me.gbPickListItems.ResumeLayout(False)
         Me.gbPickListItems.PerformLayout()
         CType(Me.dgPickListItems, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.Panel2.ResumeLayout(False)
+        Me.Panel2.PerformLayout()
+        Me.Panel1.ResumeLayout(False)
         CType(Me.pbClose, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.errProvider, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.dgPickList, System.ComponentModel.ISupportInitialize).EndInit()
@@ -939,9 +1094,6 @@ Partial Class VerifyPickListForm
         Me.msMenu.ResumeLayout(False)
         Me.msMenu.PerformLayout()
         Me.cmsOptions.ResumeLayout(False)
-        Me.Panel1.ResumeLayout(False)
-        Me.Panel2.ResumeLayout(False)
-        Me.Panel2.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -1000,6 +1152,9 @@ Partial Class VerifyPickListForm
     Friend WithEvents cmsOutright As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents cmsConsignor As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents cmsSKU As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents Panel2 As Panel
+    Friend WithEvents Panel1 As Panel
+    Friend WithEvents linkManageVerification As LinkLabel
     Friend WithEvents pli_rowid As DataGridViewTextBoxColumn
     Friend WithEvents pli_colorvalue As DataGridViewTextBoxColumn
     Friend WithEvents pli_seqno As DataGridViewTextBoxColumn
@@ -1016,7 +1171,24 @@ Partial Class VerifyPickListForm
     Friend WithEvents pli_verifiedby As DataGridViewTextBoxColumn
     Friend WithEvents pli_verifieddate As DataGridViewTextBoxColumn
     Friend WithEvents pli_inventorylocation As DataGridViewTextBoxColumn
-    Friend WithEvents Panel2 As Panel
-    Friend WithEvents Panel1 As Panel
-    Friend WithEvents ButtonVerifyAll As Button
+    Friend WithEvents DataGridViewTextBoxColumn1 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn2 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn3 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn4 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn5 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn6 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn7 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn8 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn9 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn10 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn11 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn12 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn13 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn14 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn15 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn16 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewButtonColumn1 As DataGridViewButtonColumn
+    Friend WithEvents DataGridViewTextBoxColumn17 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn18 As DataGridViewTextBoxColumn
+    Friend WithEvents DataGridViewTextBoxColumn19 As DataGridViewTextBoxColumn
 End Class

@@ -137,5 +137,9 @@ namespace WarehouseManagementSystem.Core.Entities
         }
 
         public int? InventoryLocationId => ProductInventoryLocation?.RackShelfColumn?.InventoryLocationID;
+
+        public virtual ICollection<PickListOrder> PickListOrders { get; set; }
+
+        public string InventoryLocationName => ProductInventoryLocation?.RackShelfColumn?.InventoryLocation?.Name;
     }
 }

@@ -1,4 +1,5 @@
-﻿Imports MySql.Data.MySqlClient
+﻿Imports System.Threading
+Imports MySql.Data.MySqlClient
 Imports WarehouseManagementSystem.Core.Interfaces
 
 Public Class VerifyPickListForm
@@ -957,6 +958,7 @@ Public Class VerifyPickListForm
                             Exit Try
                         End If
                     Else
+
                         MessageBox.Show("System cannot find the position of the user.", "Displaying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                         Exit Try
                     End If
@@ -982,10 +984,10 @@ Public Class VerifyPickListForm
                                 Exit Try
                             End If
                         Else
-                            If Not IsVerifyAll Then MessageBox.Show("This pick list item has been verified already.", "Verifying", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                            MessageBox.Show("This pick list item has been verified already.", "Verifying", MessageBoxButtons.OK, MessageBoxIcon.Information)
                             Exit Try
                         End If
-                        If If(IsVerifyAll, DialogResult.Yes, MessageBox.Show("NOTE: Verifying this pick list item means that you have completely checked the quality and quantity of this/these item/s." & vbNewLine & "" & vbNewLine & "Do you want to proceed verifying this pick list item/s?", "Verifying", MessageBoxButtons.YesNo, MessageBoxIcon.Question)) = Windows.Forms.DialogResult.Yes Then
+                        If MessageBox.Show("NOTE: Verifying this pick list item means that you have completely checked the quality and quantity of this/these item/s." & vbNewLine & "" & vbNewLine & "Do you want to proceed verifying this pick list item/s?", "Verifying", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
                             Me.Cursor = Cursors.WaitCursor
                             PrimaryForm.MainLoadingBar.Visible = legit
                             PrimaryForm.MainLoadingBar.Maximum = vplloadingbar
@@ -1069,20 +1071,6 @@ Public Class VerifyPickListForm
         Me.Cursor = Cursors.Default
     End Sub
 
-    Private Sub ButtonVerifyAll_Click(sender As Object, e As EventArgs) Handles ButtonVerifyAll.Click
-        Dim rows = dgPickListItems.Rows?.OfType(Of DataGridViewRow)
-        _IsVerifyAll = If(rows?.Any(), False)
-
-        If Not _IsVerifyAll Then Return
-
-        For Each r In rows
-            dgPickListItems.CurrentCell = dgPickListItems.Item(columnIndex:=pli_verify.Index, rowIndex:=r.Index)
-            dgPickListItems_CellContentClick(sender:=dgPickListItems, e:=New DataGridViewCellEventArgs(columnIndex:=pli_verify.Index, rowIndex:=r.Index))
-        Next
-
-        _IsVerifyAll = False
-    End Sub
-
     Private Async Sub cmsOutright_Click(sender As Object, e As EventArgs) Handles cmsOutright.Click
         Me.Cursor = Cursors.WaitCursor
         Try
@@ -1147,6 +1135,18 @@ Public Class VerifyPickListForm
             conn.Close()
         End Try
         Me.Cursor = Cursors.Default
+    End Sub
+
+    Private Sub linkManageVerification_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles linkManageVerification.LinkClicked
+
+        If dgPickList.CurrentRow Is Nothing Then Return
+
+        Dim form = New PickListVerficationForm(CInt(dgPickList.CurrentRow.Cells("pl_rowid").Value))
+
+        If Not form.ShowDialog() = DialogResult.OK Then Return
+
+        cmdFirst_Click(sender:=cmdFirst, e:=New EventArgs())
+
     End Sub
 
     Private Async Sub cmsConsignor_Click(sender As Object, e As EventArgs) Handles cmsConsignor.Click
@@ -1554,8 +1554,6 @@ Public Class VerifyPickListForm
     End Sub
 
 #End Region
-
-    Private ReadOnly Property IsVerifyAll As Boolean
 
     Private ReadOnly Property IsThurston As Boolean
         Get

@@ -2008,8 +2008,22 @@ Public Class ProductsForm
                     End If
                     getProductIDA(CInt(dgProductList.CurrentRow.Cells("p_rowid").Value), txtProductCode.Text, Me)
                     If pfproductid = 0 Then
-                        U_Products(CInt(dgProductList.CurrentRow.Cells("p_rowid").Value), Date.Now.ToString("yyyy/MM/dd HH:mm:ss"), Z_UserID, If(pfcategoryid = 0, DBNull.Value, pfcategoryid), If(pfbrandid = 0, DBNull.Value, pfbrandid), If(pfcompanyid = 0, DBNull.Value, pfcompanyid),
-                         txtProductCode.Text, txtProductCode.Text, cboUnitOfMeasure.Text, cboBrandName.Text, cboCategory.Text, cboCompany.Text, txtDescription.Text, If(IsNumeric(txtSRP.Text), CDec(txtSRP.Text), 0.0), If(txtImagePath.Text <> "", ImageData, DBNull.Value), Me)
+                        U_Products(RowID:=CInt(dgProductList.CurrentRow.Cells("p_rowid").Value),
+                            LastUpd:=Date.Now.ToString("yyyy/MM/dd HH:mm:ss"),
+                            LastUpdby:=Z_UserID,
+                            CategoryID:=If(pfcategoryid = 0, DBNull.Value, pfcategoryid),
+                            BrandID:=If(pfbrandid = 0, DBNull.Value, pfbrandid),
+                            CompanyID:=If(pfcompanyid = 0, DBNull.Value, pfcompanyid),
+                            ProductCode:=txtProductCode.Text,
+                            ProductName:=txtProductCode.Text,
+                            UnitOfMeasure:=cboUnitOfMeasure.Text,
+                            BrandName:=cboBrandName.Text,
+                            Category:=cboCategory.Text,
+                            Company:=cboCompany.Text,
+                            Description:=txtDescription.Text,
+                            UnitPrice:=If(IsNumeric(txtSRP.Text), CDec(txtSRP.Text), 0.0),
+                            Image:=txtImagePath.Text,
+                            globalformname:=Me)
                     End If
                     If myModule.systemerrorfound = True Then
                         Exit Try

@@ -1,15 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using WarehouseManagementSystem.Core.Entities;
-using WarehouseManagementSystem.Core.Enums;
 using WarehouseManagementSystem.Core.Interfaces;
 using WarehouseManagementSystem.Core.Interfaces.DomainServices;
 using WarehouseManagementSystem.Core.Interfaces.Repositories;
-using WarehouseManagementSystem.Infrastructure.Data.Repositories;
 
 namespace WarehouseManagementSystem.Infrastructure.Data.Services
 {
@@ -61,6 +57,13 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
         public async Task<PackingList> GetPackingListByOrderIdAsync(int orderId)
         {
             return await _context.PackingLists
+                .Include(t => t.PackingListCartons)
+                    .ThenInclude(t => t.PackingListCartonItems)
+                        .ThenInclude(t => t.PickListOrder)
+                            .ThenInclude(t => t.PickListOrderItems)
+                .Include(t => t.PackingListCartons)
+                    .ThenInclude(t => t.PackingListCartonItems)
+                        .ThenInclude(t => t.OrderItem)
                 .Include(t => t.Order)
                     .ThenInclude(o => o.OrderItems)
                 .AsNoTracking()
@@ -70,6 +73,13 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
         public async Task<PackingList> GetPackingListByOrderIdAsync(int orderId, string packingListNo)
         {
             return await _context.PackingLists
+                .Include(t => t.PackingListCartons)
+                    .ThenInclude(t => t.PackingListCartonItems)
+                        .ThenInclude(t => t.PickListOrder)
+                            .ThenInclude(t => t.PickListOrderItems)
+                .Include(t => t.PackingListCartons)
+                    .ThenInclude(t => t.PackingListCartonItems)
+                        .ThenInclude(t => t.OrderItem)
                 .Include(t => t.Order)
                     .ThenInclude(o => o.OrderItems)
                 .AsNoTracking()
@@ -77,5 +87,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
         }
 
         public async Task<PackingList> GetByOrderIdAsync(int orderId) => await _packingListRepository.GetByOrderIdAsync(orderId);
+
+        public async Task<ICollection<PackingList>> GetManyByOrderIdsAsync(int[] ids) => await _packingListRepository.GetManyByOrderIdsAsync(ids);
     }
 }

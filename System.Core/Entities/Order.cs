@@ -152,5 +152,7 @@ namespace WarehouseManagementSystem.Core.Entities
             .ToArray());
 
         public int[] InventoryLocationIds => OrderItems?.GroupBy(t => t.ProductInventoryLocation?.RackShelfColumn?.InventoryLocationID ?? 0)?.Select(t => t.Key).ToArray() ?? Enumerable.Empty<int>().ToArray();
+
+        public virtual ICollection<PickListOrder> PickListOrders { get; set; }
     }
 }

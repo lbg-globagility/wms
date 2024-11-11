@@ -1145,7 +1145,7 @@ Public Class PickListForm
                 For Each drow As DataRow In datasource.Rows
                     Dim n = dgCustomerOrderItems.Rows.Add()
 
-                    dgCustomerOrderItems.Item(ci_seqno.Index, n).Value = n
+                    dgCustomerOrderItems.Item(ci_seqno.Index, n).Value = n + 1
                     dgCustomerOrderItems.Item(ci_rowid.Index, n).Value = drow(0)
                     dgCustomerOrderItems.Item(ci_pcsrowid.Index, n).Value = drow(1)
                     dgCustomerOrderItems.Item(ci_bid.Index, n).Value = drow(2)

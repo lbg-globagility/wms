@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DatagridViewCheckBoxHeaderCell.cs" />
     <Compile Include="DropdownControl.cs">
       <SubType>Component</SubType>
     </Compile>
