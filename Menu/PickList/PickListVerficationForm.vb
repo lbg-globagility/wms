@@ -64,9 +64,10 @@ Public Class PickListVerficationForm
 
         data.ForEach(Sub(t)
                          t.IsVerified = state
+                         dataGrid.EndEdit()
+                         dataGrid.Refresh()
                      End Sub)
 
-        dataGrid.Refresh()
     End Sub
 
     Private Sub dataGrid_CellFormatting(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles dataGrid.CellFormatting
@@ -95,6 +96,20 @@ Public Class PickListVerficationForm
                     Return pickListOrder
                 End Function).
             ToList()
+
+        '        Dim pickListOrderItems = updated.
+        '            Where(Function(t) t.IsVerifiedStatus).
+        '            Select(Function(t) t.PickListOrderItem).
+        '            ToList()
+
+        '        For Each item In pickListOrderItems
+        '            item.Status = PickListOrderItemStatus.Verified
+        '            item.SetEdited()
+        '        Next
+
+        '        Dim pickListOrderItemDataService = GetRequiredService(Of IPickListOrderItemDataService)()
+        '        Task.WhenAll(pickListOrderItemDataService.SaveManyAsync(updated:=pickListOrderItems, userId:=Z_UserID),
+        ')
 
         Await pickListOrderDataService.SaveManyAsync(updated:=updated, userId:=Z_UserID).
             ContinueWith(

@@ -1,18 +1,13 @@
-﻿Imports System.Runtime.InteropServices.WindowsRuntime
-Imports System.Threading
+﻿Imports System.Threading
 Imports log4net
 Imports Microsoft.Extensions.DependencyInjection
-Imports Microsoft.VisualBasic.ApplicationServices
 Imports MySql.Data.MySqlClient
-Imports Spire.Barcode.Implementation
 Imports WarehouseManagementSystem.Core.Entities
 Imports WarehouseManagementSystem.Core.Enums
 Imports WarehouseManagementSystem.Core.Helpers
 Imports WarehouseManagementSystem.Core.Interfaces
 Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
-Imports WarehouseManagementSystem.Core.Services.PickListAutomation
 Imports WarehouseManagementSystem.Desktop.Utilities
-Imports WarehouseManagementSystem.Infrastructure.Data.Services
 Imports PickListEntity = WarehouseManagementSystem.Core.Entities.PickList
 
 Public Class PickListForm
@@ -1918,7 +1913,19 @@ Public Class PickListForm
         Me.Cursor = Cursors.Default
     End Sub
 
+    Private Sub msNew_Click2(sender As Object, e As EventArgs) Handles msNew.Click
+        If Not IsThurston Then Return
+
+        Dim form = New GeneratePickListCustomerOrderSelectorForm(organizationId:=Z_OrganizationID, userId:=Z_UserID)
+        If Not form.ShowDialog() = DialogResult.OK Then Return
+
+        cmdFirst_Click(cmdFirst, New EventArgs())
+
+    End Sub
+
     Private Sub msNew_Click(sender As Object, e As EventArgs) Handles msNew.Click
+        If IsThurston Then Return
+
         Me.Cursor = Cursors.WaitCursor
         Try
             myModule.systemerrorfound = False : plnewpicklistcreated = ""

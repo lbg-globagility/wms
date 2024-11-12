@@ -11,5 +11,7 @@ namespace WarehouseManagementSystem.Core.Interfaces.Repositories
         Task<PaginatedList<PickList>> GetPaginatedPickListsAsync(PageOptions pageOptions,
             int organizationId,
             string searchText = "");
+
+        Task<PickList> GetLastAsync(int organizationId);
     }
 }

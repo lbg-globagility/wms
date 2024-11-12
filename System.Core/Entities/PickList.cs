@@ -41,5 +41,49 @@ namespace WarehouseManagementSystem.Core.Entities
         }
 
         public string SearchableText => string.Empty;
+
+        private PickList () { }
+
+        public PickList (int organizationId,
+            int userId,
+            string pickListNo,
+            int? inventoryLocationID = null,
+            int? contactID = null,
+            PickListStatus status = default,
+            string comments = "")
+        {
+            InventoryLocationID = inventoryLocationID;
+            ContactID = contactID;
+            PickListNo = pickListNo;
+            PickListDate = DateTime.Now;
+            Status = status;
+            Comments = comments;
+            OrganizationID = organizationId;
+            AuditUser(userId);
+        }
+
+        public static PickList NewPickList(int organizationId,
+            int userId,
+            string pickListNo,
+            int? inventoryLocationID = null,
+            int? contactID = null,
+            PickListStatus status = default,
+            string comments = "") => new PickList(organizationId: organizationId,
+            userId: userId,
+            inventoryLocationID: inventoryLocationID,
+            contactID: contactID,
+            pickListNo: pickListNo,
+            status: status,
+            comments: comments);
+
+        public int PickListNumberInt
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(PickListNo)) return 0;
+
+                return int.Parse(PickListNo);
+            }
+        }
     }
 }

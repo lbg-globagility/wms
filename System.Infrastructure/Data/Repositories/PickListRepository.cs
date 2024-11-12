@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using WarehouseManagementSystem.Core.Entities;
+using WarehouseManagementSystem.Core.Enums;
 using WarehouseManagementSystem.Core.Helpers;
 using WarehouseManagementSystem.Core.Interfaces.Repositories;
 using WarehouseManagementSystem.Infrastructure.Data.Repositories.Base;
@@ -52,6 +53,20 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
 
             return Task.FromResult(query.AsEnumerable()
                 .Where(t => t.PickListOrders.Any(x => x.OrderID == orderId))
+                .FirstOrDefault());
+        }
+
+        public Task<PickList> GetLastAsync(int organizationId)
+        {
+            var query = _context.PickLists
+                .AsNoTracking()
+                .Where(o => o.OrganizationID == organizationId)
+                .AsQueryable();
+
+            return Task.FromResult(
+                query
+                .AsEnumerable()
+                .OrderByDescending(o => o.PickListNumberInt)
                 .FirstOrDefault());
         }
 

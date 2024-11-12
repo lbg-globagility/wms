@@ -5,9 +5,7 @@ using WarehouseManagementSystem.Core.Entities;
 using WarehouseManagementSystem.Core.Enums;
 using WarehouseManagementSystem.Core.Interfaces;
 using WarehouseManagementSystem.Core.Interfaces.DomainServices;
-using WarehouseManagementSystem.Core.Interfaces.Repositories;
 using WarehouseManagementSystem.Core.Services.PickListAutomation;
-using WarehouseManagementSystem.Infrastructure.Data.Services;
 
 namespace WarehouseManagementSystem.Infrastructure.Data
 {

@@ -12,5 +12,7 @@ namespace WarehouseManagementSystem.Core.Interfaces.DomainServices
         Task<PaginatedList<PickList>> GetPaginatedPickListsAsync(PageOptions pageOptions,
             int organizationId,
             string searchText = "");
+
+        Task<PickList> GetLastAsync(int organizationId);
     }
 }
