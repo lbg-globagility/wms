@@ -24,3 +24,6 @@ System.Utilities/bin/Release
 Output
 System.CustomUserControl/bin/Debug
 System.CustomUserControl/obj/Debug
+Wms.Test/bin/Debug/net461
+Wms.Test/obj/Debug/net461
+Wms.Test/obj/project.nuget*.cache
