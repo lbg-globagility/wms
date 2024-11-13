@@ -25,7 +25,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
             IOrderDataService orderDataService,
             IOrderItemDataService orderItemDataService,
             IPickListOrderItemDataService pickListOrderItemDataService) :
-            
+
             base(pickListOrderRepository,
                 userActivityRepository,
                 context,
@@ -81,7 +81,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
                     t.SetEdited();
                 });
 
-                if(pickListOrderItems?.Any() ?? false) await _pickListOrderItemDataService.SaveManyAsync(userId: userId, updated: pickListOrderItems);
+                if (pickListOrderItems?.Any() ?? false) await _pickListOrderItemDataService.SaveManyAsync(userId: userId, updated: pickListOrderItems);
 
                 if (updatedOrderItems?.Any() ?? false) await _orderItemDataService.SaveManyAsync(userId: userId, updated: updatedOrderItems);
 

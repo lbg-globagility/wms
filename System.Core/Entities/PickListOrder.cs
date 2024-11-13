@@ -26,7 +26,7 @@ namespace WarehouseManagementSystem.Core.Entities
 
         public virtual PickList PickList { get; set; }
         public virtual ICollection<PickListOrderItem> PickListOrderItems { get; set; }
-        public PickListOrderItem PickListOrderItem => PickListOrderItems?.FirstOrDefault();
+        public PickListOrderItem PickListOrderItem => PickListOrderItems?.FirstOrDefault(t => t.IsActive) ?? PickListOrderItems?.FirstOrDefault();
         public virtual ICollection<PackingListCartonItem> PackingListCartonItems { get; set; }
         public virtual Order Order { get; set; }
         public virtual OrderItem OrderItem { get; set; }

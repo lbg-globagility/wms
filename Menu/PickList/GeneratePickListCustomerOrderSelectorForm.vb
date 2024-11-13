@@ -32,15 +32,13 @@ Public Class GeneratePickListCustomerOrderSelectorForm
     Private Sub cbHeaderIsSelected_CheckBoxClicked(state As Boolean)
         Dim data = dataGrid.Rows.OfType(Of DataGridViewRow).
             ToList()
-        '            Select(Function(r) CType(r.DataBoundItem, GeneratePickListOrderDto)).
-        '
+
         data.ForEach(Sub(t)
-                         't.IsSelected = state
                          t.Cells(Column1.Name).Value = state
-                         dataGrid.EndEdit()
-                         dataGrid.Refresh()
                      End Sub)
 
+        dataGrid.EndEdit()
+        dataGrid.Refresh()
     End Sub
 
     Private Sub GeneratePickListCustomerOrderSelectorForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
