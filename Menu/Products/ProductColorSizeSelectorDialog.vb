@@ -198,7 +198,7 @@ Public Class ProductColorSizeSelectorDialog
 
             Dim model = CType(grid.Rows(e.RowIndex).DataBoundItem, ProductColorSizeModel)
             If model.IsSelected Then
-                If ProductInventoryLocationExceptionIds.Contains(model.ProductInventoryLocationId) Then
+                If If(ProductInventoryLocationExceptionIds?.Contains(model.ProductInventoryLocationId), False) Then
                     MessageBox.Show(text:="This item already exists on the base `order`.",
                         caption:="Invalid Item",
                         icon:=MessageBoxIcon.Error,
@@ -421,7 +421,7 @@ Public Class ProductColorSizeSelectorDialog
         _currentSelectedInventoryName = CType(cboInventoryName.SelectedValue, Integer)
 
         _baseSource = (Await GetProductColorSizes(inventoryId:=CType(cboInventoryName.SelectedValue, Integer))).
-            Where(Function(t) Not ProductInventoryLocationExceptionIds.Contains(t.ProductInventoryLocationId)).
+            Where(Function(t) Not If(ProductInventoryLocationExceptionIds?.Contains(t.ProductInventoryLocationId), False)).
             ToList()
 
         grid.AutoGenerateColumns = False

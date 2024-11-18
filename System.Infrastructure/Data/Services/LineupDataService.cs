@@ -51,20 +51,21 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
             if (lineup.IsCancelled) BusinessLogicException.Throw("Invalid command: Delivery already cancelled.");
 
             var order = lineup.Order;
-            var productColorSizeIds = new List<int>();
+            var pcsIdsAndinvIds = new List<(int pcsId, int invId)>();
             foreach (var item1 in lineup.LineupCartons)
             {
                 var packingListCartonItems = item1.PackingListCarton.PackingListCartonItems;
-                if (!packingListCartonItems.Any())
+                if (!(packingListCartonItems?.Any() ?? false))
                     continue;
 
                 foreach (var packingListCartonItem in packingListCartonItems)
-                    productColorSizeIds.Add(packingListCartonItem.OrderItem.ProductColorSizeID.Value);
+                    pcsIdsAndinvIds.Add((pcsId: packingListCartonItem.OrderItem.ProductColorSizeID.Value, invId: packingListCartonItem.OrderItem.ProductInventoryLocation.RackShelfColumn.InventoryLocationID));
             }
 
-            var productInventoryLocations = await _productInventoryLocationDataService.GetByInventoryLocationIdAndProductColorSizeIdsAsync(
-                inventoryLocationId: order.InventoryLocationID.Value,
-                productColorSizeIds: productColorSizeIds.ToArray());
+            var productInventoryLocations = await _productInventoryLocationDataService.GetByProductColorSizeIdsAndInventoryLocationIdsAsync(
+                organizationId: lineup.OrganizationID ?? 0,
+                userId: userId,
+                productColorSizeIdsAndInventoryIds: pcsIdsAndinvIds);
 
             var updatedProductInventoryLocations = new List<ProductInventoryLocation>();
             foreach (var item1 in lineup.LineupCartons)
@@ -151,9 +152,11 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
 
                 foreach (var packingListCartonItem in packingListCartonItems)
                 {
-                    var pickListOrderItems = packingListCartonItem.PickListOrder.PickListOrderItems?.Where(t => t.IsVerified);
+                    var isSameOrderItemId = packingListCartonItem.PickListOrder.OrderItemID == (packingListCartonItem.OrderItemID ?? 0);
+                    var pickListOrderItems = packingListCartonItem.PickListOrder.PickListOrderItems?
+                        .Where(t => t.IsVerified);
 
-                    if (!(pickListOrderItems?.Any() ?? false)) continue;
+                    if (!isSameOrderItemId && !(pickListOrderItems?.Any() ?? false)) continue;
 
                     var productColorSizeId = packingListCartonItem.OrderItem.ProductColorSizeID.Value;
                     var inventoryLocationId = packingListCartonItem.OrderItem.ProductInventoryLocation.RackShelfColumn.InventoryLocationID;

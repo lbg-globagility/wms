@@ -85,5 +85,11 @@ namespace WarehouseManagementSystem.Core.Entities
                 return int.Parse(PickListNo);
             }
         }
+
+        public bool IsStatusNew => Status == PickListStatus.New;
+        public bool IsStatusModified => Status == PickListStatus.Modified;
+        public bool IsStatusPartiallyVerified => Status == PickListStatus.PartiallyVerified;
+        public bool IsStatusCompleted => Status == PickListStatus.Completed;
+        public bool IsStatusCancelled => Status == PickListStatus.Cancelled;
     }
 }

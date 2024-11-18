@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using WarehouseManagementSystem.Core.Entities;
 using WarehouseManagementSystem.Core.Interfaces.Repositories;
@@ -130,6 +132,28 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
                     .ThenInclude(r => r.InventoryLocation)
                 .AsNoTracking()
                 .Where(t => inventoryLocationIds.Contains(t.RackShelfColumn.InventoryLocationID))
+                .ToListAsync();
+        }
+
+        public async Task<ICollection<ProductInventoryLocation>> GetByProductColorSizeIdsAndInventoryLocationIdsAsync(
+            int organizationId,
+            int userId,
+            List<(int productColorSizeId, int inventoryLocationId)> productColorSizeIdsAndInventoryIds)
+        {
+
+            Expression<Func<ProductInventoryLocation, bool>> predicate = t => productColorSizeIdsAndInventoryIds
+                .Any(x => x.productColorSizeId == t.ProductColorSizeID && 
+                    x.inventoryLocationId == t.RackShelfColumn.InventoryLocationID);
+
+            return await _context.ProductInventoryLocations
+                .Include(t => t.RackShelfColumn)
+                .Include(t => t.ProductColorSize)
+                    .ThenInclude(t => t.ProductColor)
+                        .ThenInclude(t => t.Product)
+                .Include(t => t.ProductColorSize)
+                    .ThenInclude(t => t.ProductColor)
+                        .ThenInclude(t => t.Color)
+                .Where(predicate)
                 .ToListAsync();
         }
     }

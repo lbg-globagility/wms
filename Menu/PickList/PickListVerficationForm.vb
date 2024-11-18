@@ -28,7 +28,11 @@ Public Class PickListVerficationForm
         Dim packingListDataService = GetRequiredService(Of IPackingListDataService)()
         Dim packingLists = Await packingListDataService.GetManyByOrderIdsAsync(ids:=orderIds)
 
-        Dim isTrue = Not If(packingLists?.Any(), False)
+        Dim isTrue = If(picklist.IsStatusCompleted Or picklist.IsStatusCancelled,
+            False,
+            If((Not picklist.IsStatusCompleted) Or (Not picklist.IsStatusCancelled),
+                True,
+                Not If(packingLists?.Any(), False)))
 
         btnOK.Visible = isTrue
 

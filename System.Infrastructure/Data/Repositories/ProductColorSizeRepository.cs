@@ -25,5 +25,16 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
             .Where(x => x.OrganizationID == organizationId)
             .Where(x => x.Status == ProductStatus.Active.ToString())
             .ToListAsync();
+
+        public override async Task<ICollection<ProductColorSize>> GetManyByIdsAsync(int[] ids) => await _context.ProductColorSizes
+            .Include(pcs => pcs.ProductColor)
+                .ThenInclude(pc => pc.Product)
+                    .ThenInclude(p => p.Category)
+            .Include(pcs => pcs.ProductColor)
+                .ThenInclude(pc => pc.Color)
+            .AsNoTracking()
+            .Where(x => ids.Contains(x.RowID ?? 0))
+            .Where(x => x.Status == ProductStatus.Active.ToString())
+            .ToListAsync();
     }
 }

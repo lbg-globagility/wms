@@ -74,5 +74,12 @@ namespace WarehouseManagementSystem.Core.Entities
         public int TotalOrderableQty => (TotalAvailableQty ?? 0) - ((TotalAllocatedQty ?? 0) + (TotalReserveQty ?? 0));
 
         public virtual ICollection<OrderItem> OrderItems { get; set; }
+
+        public bool IsOrderable => TotalOrderableQty > 0;
+
+        public void SetRackShelfColumn(RackShelfColumn rackShelfColumn)
+        {
+            if (rackShelfColumn != null) RackShelfColumn = rackShelfColumn;
+        }
     }
 }

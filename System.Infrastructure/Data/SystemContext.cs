@@ -416,7 +416,9 @@ namespace WarehouseManagementSystem.Infrastructure.Data
                     .WithMany(x => x.ProductInventoryLocations);
 
                 t.HasOne(x => x.RackShelfColumn)
-                    .WithMany(x => x.ProductInventoryLocations);
+                    .WithMany(x => x.ProductInventoryLocations)
+                    .HasForeignKey(x => x.RackShelfColumnID)
+                    .HasPrincipalKey(x => x.RowID);
 
                 t.HasMany(x => x.MovementHistories)
                     .WithOne(x => x.ProductInventoryLocation);
@@ -425,7 +427,9 @@ namespace WarehouseManagementSystem.Infrastructure.Data
             modelBuilder.Entity<RackShelfColumn>(t =>
             {
                 t.HasMany(x => x.ProductInventoryLocations)
-                    .WithOne(x => x.RackShelfColumn);
+                    .WithOne(x => x.RackShelfColumn)
+                    .HasForeignKey(x => x.RackShelfColumnID)
+                    .HasPrincipalKey(x => x.RowID);
 
                 t.Property(x => x.Status)
                     .HasConversion(new EnumToStringConverter<RackShelfColumnStatus>());

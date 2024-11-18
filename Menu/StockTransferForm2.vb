@@ -382,12 +382,18 @@ Public Class StockTransferForm2
             Dim productInventoryLocationDataService = GetRequiredService(Of IProductInventoryLocationDataService)()
             Dim productInventoryLocationsSource = Await productInventoryLocationDataService.GetByInventoryLocationIdAsync(inventoryLocationId:=inventoryLocationIdFrom)
 
-            Dim productInventoryLocationsRecepient = Await productInventoryLocationDataService.GetByInventoryLocationIdAsync(inventoryLocationId:=inventoryLocationIdTo)
+            Dim productInventoryLocationsRecepient = Await productInventoryLocationDataService.GetByInventoryLocationIdAndProductColorSizeIdsAsync(
+                    organizationId:=Z_OrganizationID,
+                    userId:=Z_UserID,
+                    inventoryLocationId:=inventoryLocationIdTo,
+                    productColorSizeIds:=selectedProductColorSizeModels.GroupBy(Function(t) t.ProductColorSizeId).Select(Function(t) t.Key).ToArray())
 
             For Each productColorSizeModel In selectedProductColorSizeModels
                 Dim fromProductInventoryLocation = productInventoryLocationsSource.
                     Where(Function(t) t.ProductColorSizeID = productColorSizeModel.ProductColorSizeId).
                     Where(Function(t) t.RackShelfColumn.InventoryLocationID = inventoryLocationIdFrom).
+                    Where(Function(t) t.RackShelfColumn.IsActive).
+                    Where(Function(t) t.IsOrderable).
                     FirstOrDefault()
                 Dim newMovementHistoryFrom = MovementHistory.NewMovementHistory(organizationId:=Z_OrganizationID,
                     userId:=_userId,
@@ -404,6 +410,7 @@ Public Class StockTransferForm2
                 Dim toProductInventoryLocation = productInventoryLocationsRecepient.
                     Where(Function(t) t.ProductColorSizeID = productColorSizeModel.ProductColorSizeId).
                     Where(Function(t) t.RackShelfColumn.InventoryLocationID = inventoryLocationIdTo).
+                    Where(Function(t) t.RackShelfColumn.IsActive).
                     FirstOrDefault()
                 Dim newMovementHistoryTo = MovementHistory.NewMovementHistory(organizationId:=Z_OrganizationID,
                     userId:=_userId,
