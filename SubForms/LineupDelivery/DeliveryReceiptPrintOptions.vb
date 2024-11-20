@@ -106,7 +106,7 @@ Public Class DeliveryReceiptPrintOptions
             INNER JOIN products p ON p.RowID=pc.ProductID
             INNER JOIN productinventorylocation pil ON pil.RowID=oi.ProductInventoryLocationId
             INNER JOIN picklistorders plo ON plo.OrderItemID=oi.RowID
-            INNER JOIN picklistorderitems ploi ON ploi.PickListOrderID=plo.RowID AND ploi.`status` = 'Verified'
+            INNER JOIN picklistorderitems ploi ON ploi.PickListOrderID=plo.RowID AND ploi.`status` NOT IN ('Cancelled', 'Inactive')
             WHERE lu.RowID IS NOT NULL
             AND lu.`Status` != 'Cancelled'
             {If(CheckBoxBasedOnPOnumber.Checked, String.Empty, "AND lu.RowID = @lineupRowId")}

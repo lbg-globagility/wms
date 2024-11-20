@@ -1087,7 +1087,7 @@ LEFT JOIN contacts pa ON ci.packedby = pa.rowid
 {packingListCartonJoinClause}
 
 INNER JOIN picklistorders pilo ON pilo.OrderItemID=ci.RowID
-INNER JOIN picklistorderitems ploi ON ploi.PickListOrderID=pilo.RowID AND ploi.`Status` = 'Verified'
+INNER JOIN picklistorderitems ploi ON ploi.PickListOrderID=pilo.RowID AND ploi.`Status` NOT IN ('Cancelled', 'Inactive')
 
 WHERE ci.orderid = {palorderid} AND ci.organizationid = {Z_OrganizationID} AND ci.status != 'Inactive' AND ci.itemtype != 'BI'
 #AND (IFNULL(ci.qtyordered,0) - IFNULL(plo.QtyInCarton, 0)) > 0

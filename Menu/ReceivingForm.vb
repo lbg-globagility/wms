@@ -1357,7 +1357,7 @@ Public Class ReceivingForm
                 txtRRNo.Text = CStr(globalorderno)
                 ci_option.Visible = fraud
                 cboAccountName.Enabled = fraud
-                btnStockToWarehouse.Enabled = fraud
+                'btnStockToWarehouse.Enabled = fraud
                 btnAddAdditionalItems.Enabled = fraud
                 rrrelatedorderid = newrrlinkform.nrorderid
                 cboInventorySource.Enabled = legit
@@ -1413,7 +1413,7 @@ Public Class ReceivingForm
                 End If
                 dgReceivingList.CurrentRow.Selected = legit
                 cboAccountName.Enabled = fraud
-                btnStockToWarehouse.Enabled = fraud
+                'btnStockToWarehouse.Enabled = fraud
                 btnAddAdditionalItems.Enabled = legit
                 cboInventorySource.Enabled = fraud
                 displayReceivingInformation(CInt(dgReceivingList.CurrentRow.Cells("rr_rowid").Value))
@@ -1532,7 +1532,7 @@ Public Class ReceivingForm
                     viewHideReceivingItems(fraud)
                 End If
                 cboAccountName.Enabled = fraud
-                btnStockToWarehouse.Enabled = fraud
+                'btnStockToWarehouse.Enabled = fraud
                 btnAddAdditionalItems.Enabled = legit
                 cboInventorySource.Enabled = fraud
                 displayReceivingInformation(CInt(dgReceivingList.CurrentRow.Cells("rr_rowid").Value))
@@ -1589,7 +1589,7 @@ Public Class ReceivingForm
                         viewHideReceivingItems(fraud)
                     End If
                     cboAccountName.Enabled = fraud
-                    btnStockToWarehouse.Enabled = fraud
+                    'btnStockToWarehouse.Enabled = fraud
                     btnAddAdditionalItems.Enabled = legit
                     displayReceivingInformation(CInt(dgReceivingList.CurrentRow.Cells("rr_rowid").Value))
                     If txtRRType.Text <> "Blank" Then
@@ -1693,9 +1693,9 @@ Public Class ReceivingForm
             If cue = "Edit" Then
                 If dgReceivingItems.Rows.Count <> 0 Then
                     If dgReceivingItems.CurrentRow.Cells("ci_app").Value = "Y" Then
-                        btnStockToWarehouse.Enabled = legit
+                        'btnStockToWarehouse.Enabled = legit
                     Else
-                        btnStockToWarehouse.Enabled = fraud
+                        'btnStockToWarehouse.Enabled = fraud
                     End If
                 End If
             End If
@@ -2190,7 +2190,7 @@ Public Class ReceivingForm
             stocklinkform.ShowDialog()
             If stocklinkform.stockformcue = legit Then
                 cboAccountName.Enabled = fraud
-                btnStockToWarehouse.Enabled = fraud
+                'btnStockToWarehouse.Enabled = fraud
                 btnAddAdditionalItems.Enabled = legit
                 displayReceivingInformation(CInt(dgReceivingList.CurrentRow.Cells("rr_rowid").Value))
                 If txtRRType.Text <> "Blank" Then
