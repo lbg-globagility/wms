@@ -25,10 +25,15 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
             .AsNoTracking()
             .FirstOrDefaultAsync(t => t.OrderID == orderId);
 
-        public async Task<ICollection<PackingList>> GetManyByOrderIdsAsync(int[] ids) => await _context.PackingLists
-            .Include(t => t.PackingListCartons)
-            .AsNoTracking()
-            .Where(t => ids.Contains(t.OrderID.Value))
-            .ToListAsync();
+        public async Task<ICollection<PackingList>> GetManyByOrderIdsAsync(int[] ids)
+        {
+            if (ids?.Any() ?? false) return Enumerable.Empty<PackingList>().ToList();
+
+            return await _context.PackingLists
+                .Include(t => t.PackingListCartons)
+                .AsNoTracking()
+                .Where(t => ids.Contains(t.OrderID.Value))
+                .ToListAsync();
+        }
     }
 }

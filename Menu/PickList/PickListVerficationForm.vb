@@ -23,7 +23,7 @@ Public Class PickListVerficationForm
 
         Dim pickListDataService = GetRequiredService(Of IPickListDataService)()
         Dim picklist = Await pickListDataService.GetByIdAsync(_pickListId)
-        Dim orderIds = picklist.PickListOrders.GroupBy(Function(t) t.OrderID).Select(Function(t) t.Key).ToArray()
+        Dim orderIds = picklist?.PickListOrders?.GroupBy(Function(t) t.OrderID)?.Select(Function(t) t.Key)?.ToArray()
 
         Dim packingListDataService = GetRequiredService(Of IPackingListDataService)()
         Dim packingLists = Await packingListDataService.GetManyByOrderIdsAsync(ids:=orderIds)
