@@ -115,6 +115,10 @@ Public Class ProductColorSizeSelectorDialog
         Dim productColorSizeRepository = GetRequiredService(Of IProductColorSizeRepository)()
         Dim productColorSizes = Await productColorSizeRepository.GetManyByOrganizationIdsAsync(Z_OrganizationID)
 
+        Dim correctInventoryId = If(inventoryId.HasValue,
+            inventoryId.Value,
+            _inventoryLocations.Select(Function(t) t.RowID.Value).ToArray().FirstOrDefault())
+
         Dim selector As Func(Of ProductColorSize, ProductColorSizeModel) =
             Function(t)
                 Dim productInventoryLocation = productInventoryLocations.
@@ -122,7 +126,8 @@ Public Class ProductColorSizeSelectorDialog
                 Dim productInventoryLocationItems = productInventoryLocations.
                     Where(Function(i) i.ProductColorSizeID = t.RowID.Value).
                     ToList()
-                Return New ProductColorSizeModel(productInventoryLocations:=productInventoryLocationItems,
+                Return New ProductColorSizeModel(inventoryLocationId:=correctInventoryId,
+                    productInventoryLocations:=productInventoryLocationItems,
                     productColorSize:=t,
                     _picp)
             End Function
@@ -295,26 +300,36 @@ Public Class ProductColorSizeSelectorDialog
 
         Dim allRows = grid.Rows.OfType(Of DataGridViewRow).ToList()
 
-        Dim hasNoQtyRows = allRows.Where(Function(t) CDbl(t.Cells(Column4.Index).Value) = 0).ToList()
+        Dim hasNoQtyRows = allRows.
+            Where(Function(t)
+                      Dim model = CType(t.DataBoundItem, ProductColorSizeModel)
+
+                      Return model.TotalAvailableQty <= 0
+                  End Function).
+            ToList()
+
         For Each row In hasNoQtyRows
             Dim origColor = grid.Item(columnIndex:=Column4.Index, row.Index).Style.ForeColor
             row.DefaultCellStyle.ForeColor = Lighten(origColor, 48)
 
         Next
 
-        For Each row In allRows
+        Dim isInActiveRacks = allRows.Where(
+            Function(t)
+                Dim model = CType(t.DataBoundItem, ProductColorSizeModel)
+
+                Return If(model.ProductInventoryLocation?.RackShelfColumn?.IsInactive, False)
+            End Function).
+            ToList()
+
+        For Each row In isInActiveRacks
             Dim model = CType(row.DataBoundItem, ProductColorSizeModel)
-            If model Is Nothing Then Continue For
 
-            Dim bool = Not If(model.ProductInventoryLocation?.RackShelfColumn?.IsActive, False)
-            row.ReadOnly = bool
+            Dim isInactive = If(model.ProductInventoryLocation?.RackShelfColumn?.IsInactive, False)
+            row.ReadOnly = isInactive
 
-            If bool Then
-                Dim font = row.InheritedStyle.Font
-                row.DefaultCellStyle.Font = New Font(prototype:=font,
-                    newStyle:=FontStyle.Strikeout)
-
-            End If
+            Dim font = row.InheritedStyle.Font
+            row.DefaultCellStyle.Font = New Font(prototype:=font, newStyle:=FontStyle.Strikeout)
 
         Next
 

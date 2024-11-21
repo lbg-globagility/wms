@@ -1503,7 +1503,8 @@ Public Class InventoryLocationsForm
                        Dim productInventoryLocationItems = productInventoryLocations.
                         Where(Function(i) i.ProductColorSizeID = t.RowID.Value).
                         ToList()
-                       Return New ProductColorSizeModel(productInventoryLocations:=productInventoryLocationItems,
+                       Return New ProductColorSizeModel(inventoryLocationId:=inventoryLocationId,
+                            productInventoryLocations:=productInventoryLocationItems,
                             productColorSize:=t,
                             _picp)
                    End Function).
