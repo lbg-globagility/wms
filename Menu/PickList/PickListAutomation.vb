@@ -46,9 +46,18 @@ Public Class PickListAutomation
                         FirstOrDefault(Function(t) t.PickListOrderID = If(pickListOrder.RowID, 0))
 
                     Dim productInventoryLocationQuery = productInventoryLocations.
+                        Where(Function(t) If(t.RowID = orderItem.ProductInventoryLocationId, False)).
                         Where(Function(t) t.RackShelfColumn.IsActive).
                         Where(Function(t) t.RackShelfColumn.InventoryLocationID = If(orderItem.InventoryLocationId, 0)).
                         Where(Function(t) t.ProductColorSizeID = If(orderItem.ProductColorSizeID, 0)).
+                        Where(Function(t) t.IsOrderable).
+                        OrderBy(Function(t) t.RackShelfColumn.PickOrderNo)
+
+                    If productInventoryLocationQuery Is Nothing Then productInventoryLocationQuery = productInventoryLocations.
+                        Where(Function(t) t.RackShelfColumn.IsActive).
+                        Where(Function(t) t.RackShelfColumn.InventoryLocationID = If(orderItem.InventoryLocationId, 0)).
+                        Where(Function(t) t.ProductColorSizeID = If(orderItem.ProductColorSizeID, 0)).
+                        Where(Function(t) t.IsOrderable).
                         OrderBy(Function(t) t.RackShelfColumn.PickOrderNo)
 
                     If If(productInventoryLocationQuery?.Count(), 0) > 1 Then
