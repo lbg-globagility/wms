@@ -371,7 +371,7 @@ Public Class StockForm
             dgRackColumnShelf.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
             Dim sql1 As String = "SELECT pil.rowid,COALESCE(rcs.rackNo,''),COALESCE(rcs.columnno,''),COALESCE(rcs.shelfno,''),COALESCE(pil.totalavailableqty,0),pil.rackshelfcolumnid FROM productinventorylocation pil " &
-                        "LEFT JOIN rackshelfcolumn rcs ON pil.rackshelfcolumnid = rcs.rowid WHERE pil.productcolorsizeid = " & iproductcolorsizeid & " AND pil.organizationid = " & Z_OrganizationID & " AND rcs.inventorylocationid = " & sfinventorylocationid & " ORDER BY rcs.pickorderno ASC "
+                        "LEFT JOIN rackshelfcolumn rcs ON pil.rackshelfcolumnid = rcs.rowid WHERE pil.productcolorsizeid = " & iproductcolorsizeid & " AND pil.organizationid = " & Z_OrganizationID & " AND rcs.inventorylocationid = " & sfinventorylocationid & " AND rcs.`Status`!='Inactive' ORDER BY rcs.pickorderno ASC "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             Dim n As Integer = 0
