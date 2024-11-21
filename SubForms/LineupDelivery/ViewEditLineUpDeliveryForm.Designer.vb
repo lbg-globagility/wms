@@ -51,7 +51,6 @@ Partial Class ViewEditLineUpDeliveryForm
         Me.Label21 = New System.Windows.Forms.Label()
         Me.tabSearch = New System.Windows.Forms.TabControl()
         Me.tabSimple = New System.Windows.Forms.TabPage()
-        Me.Button1 = New System.Windows.Forms.Button()
         Me.txtSimpleSearch = New System.Windows.Forms.TextBox()
         Me.Label30 = New System.Windows.Forms.Label()
         Me.tabCommon = New System.Windows.Forms.TabPage()
@@ -432,7 +431,6 @@ Partial Class ViewEditLineUpDeliveryForm
         '
         'tabSimple
         '
-        Me.tabSimple.Controls.Add(Me.Button1)
         Me.tabSimple.Controls.Add(Me.txtSimpleSearch)
         Me.tabSimple.Controls.Add(Me.Label30)
         Me.tabSimple.Location = New System.Drawing.Point(4, 29)
@@ -442,15 +440,6 @@ Partial Class ViewEditLineUpDeliveryForm
         Me.tabSimple.TabIndex = 1
         Me.tabSimple.Text = "       Simple       "
         Me.tabSimple.UseVisualStyleBackColor = True
-        '
-        'Button1
-        '
-        Me.Button1.Location = New System.Drawing.Point(96, 71)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(75, 23)
-        Me.Button1.TabIndex = 7
-        Me.Button1.Text = "Button1"
-        Me.Button1.UseVisualStyleBackColor = True
         '
         'txtSimpleSearch
         '
@@ -1661,6 +1650,5 @@ Partial Class ViewEditLineUpDeliveryForm
     Friend WithEvents DeliveryScheduleToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents TripTicketToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents GatePassToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents Button1 As Button
     Friend WithEvents FlowLayoutPanel1 As FlowLayoutPanel
 End Class
