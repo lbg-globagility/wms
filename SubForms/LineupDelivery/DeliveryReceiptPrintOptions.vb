@@ -61,16 +61,16 @@ Public Class DeliveryReceiptPrintOptions
         Dim unitOfMeasureClause = $"{If(CheckBoxDoNotDisplayUOM.Checked,
             "''",
             If(RadioBtnUnitRoll.Checked,
-                "pil.UnitOfMeasure2",
+                "IFNULL(pil.UnitOfMeasure2, '')",
                 "IFNULL(oi.UnitOfLength, '')"))} `DataColumn2`,"
 
         Dim detailsClause =
             If(RadioBtnUnitRoll.Checked AndAlso Not CheckBoxRollWithPrice.Checked,
-            "CONCAT('**', p.ProductGroupName, '**\n', GROUP_CONCAT(CONCAT(p.ProductCode, '(', plci.QtyInCarton, ')') SEPARATOR ', ')) `DataColumn3`,",
+            "CONCAT(IFNULL(CONCAT('**', p.ProductGroupName, '**'), ''), '\n', GROUP_CONCAT(CONCAT(p.ProductCode, '(', plci.QtyInCarton, ')') SEPARATOR ', ')) `DataColumn3`,",
                 If(RadioBtnUnitRoll.Checked AndAlso CheckBoxRollWithPrice.Checked,
-                "CONCAT('**', p.ProductGroupName, '**\n', GROUP_CONCAT(CONCAT(p.ProductCode, '(', plci.QtyInCarton, '×', oi.SRP,')') SEPARATOR ', ')) `DataColumn3`,",
-                If(RadioBtnUnitNonRoll.Checked AndAlso Not CheckBoxMeterYardWithPrice.Checked, "CONCAT('**', p.ProductGroupName, '**\n', GROUP_CONCAT(CONCAT(p.ProductCode, '(', CAST(FORMAT((plci.QtyInCarton / oi.QtyOrdered) * IFNULL(oi.UnitOfLengthNumber, 0), 2) AS CHAR CHARACTER SET utf8), ')') SEPARATOR ', ')) `DataColumn3`,",
-                    If(RadioBtnUnitNonRoll.Checked AndAlso CheckBoxMeterYardWithPrice.Checked, "CONCAT('**', p.ProductGroupName, '**\n', GROUP_CONCAT(CONCAT(p.ProductCode, '(', CAST(FORMAT((plci.QtyInCarton / oi.QtyOrdered) * IFNULL(oi.UnitOfLengthNumber, 0), 0) AS CHAR CHARACTER SET UTF8), '×', IF(IFNULL(oi.UnitOfLengthNumber, 0)=0, 0, FORMAT((oi.SRP * oi.QtyOrdered) / oi.UnitOfLengthNumber, 2)), ')') SEPARATOR ', ')) `DataColumn3`,", String.Empty))))
+                "CONCAT(IFNULL(CONCAT('**', p.ProductGroupName, '**'), ''), '\n', GROUP_CONCAT(CONCAT(p.ProductCode, '(', plci.QtyInCarton, '×', oi.SRP,')') SEPARATOR ', ')) `DataColumn3`,",
+                If(RadioBtnUnitNonRoll.Checked AndAlso Not CheckBoxMeterYardWithPrice.Checked, "CONCAT(IFNULL(CONCAT('**', p.ProductGroupName, '**'), ''), '\n', GROUP_CONCAT(CONCAT(p.ProductCode, '(', CAST(FORMAT((plci.QtyInCarton / oi.QtyOrdered) * IFNULL(oi.UnitOfLengthNumber, 0), 2) AS CHAR CHARACTER SET utf8), ')') SEPARATOR ', ')) `DataColumn3`,",
+                    If(RadioBtnUnitNonRoll.Checked AndAlso CheckBoxMeterYardWithPrice.Checked, "CONCAT(IFNULL(CONCAT('**', p.ProductGroupName, '**'), ''), '\n', GROUP_CONCAT(CONCAT(p.ProductCode, '(', CAST(FORMAT((plci.QtyInCarton / oi.QtyOrdered) * IFNULL(oi.UnitOfLengthNumber, 0), 0) AS CHAR CHARACTER SET UTF8), '×', IF(IFNULL(oi.UnitOfLengthNumber, 0)=0, 0, FORMAT((oi.SRP * oi.QtyOrdered) / oi.UnitOfLengthNumber, 2)), ')') SEPARATOR ', ')) `DataColumn3`,", String.Empty))))
 
         Dim subTotalClause = If((RadioBtnUnitRoll.Checked AndAlso Not CheckBoxRollWithPrice.Checked) Or (RadioBtnUnitNonRoll.Checked AndAlso Not CheckBoxMeterYardWithPrice.Checked),
             "0 `DataColumn4`",
