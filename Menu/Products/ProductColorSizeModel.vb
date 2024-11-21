@@ -1,7 +1,6 @@
 ﻿Option Strict On
 
 Imports WarehouseManagementSystem.Core.Entities
-Imports WarehouseManagementSystem.Core.Enums
 Imports WarehouseManagementSystem.Utilities.Extensions
 
 Public Class ProductColorSizeModel
@@ -14,17 +13,23 @@ Public Class ProductColorSizeModel
     Private ReadOnly _pim As ProductImageManager
 
     'productInventoryLocation As ProductInventoryLocation,
-    Public Sub New(productInventoryLocations As List(Of ProductInventoryLocation),
+    Public Sub New(inventoryLocationId As Integer,
+        productInventoryLocations As List(Of ProductInventoryLocation),
         productColorSize As ProductColorSize,
         productImageConfigParser As ProductImageConfigParser)
 
-        '_productInventoryLocation = productInventoryLocation
         _productInventoryLocations = productInventoryLocations.
-            Where(Function(pil) pil.RackShelfColumn.Status = RackShelfColumnStatus.Active).
+            Where(Function(pil) pil.RackShelfColumn.IsActive).
             ToList()
+
         _ProductInventoryLocation = productInventoryLocations.
+            Where(Function(t) t.RackShelfColumn.IsActive).
+            Where(Function(t) t.RackShelfColumn.InventoryLocationID = inventoryLocationId).
+            Where(Function(t) t.ProductColorSizeID = If(productColorSize.RowID, 0)).
+            Where(Function(t) t.IsOrderable).
             OrderBy(Function(t) t.RackShelfColumn.PickOrderNo).
             FirstOrDefault()
+
         _productColorSize = productColorSize
         _productColor = productColorSize.ProductColor
 
