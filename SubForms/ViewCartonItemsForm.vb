@@ -97,6 +97,7 @@ Public Class ViewCartonItemsForm
                     "LEFT JOIN products p ON pc.productid = p.rowid INNER JOIN picklistorders plo ON plo.OrderItemID=pci.OrderItemID INNER JOIN picklistorderitems ploi ON ploi.PickListOrderID=plo.RowID AND ploi.`status` NOT IN ('Cancelled', 'Inactive')
 #AND oi.ProductInventoryLocationId=ploi.ProductInventoryLocationID
 AND ploi.QtyPicked > 0
+INNER JOIN picklist pl ON pl.RowID=plo.PickListID AND pl.`Status` NOT IN ('Cancelled', 'Cancelled')
 WHERE pci.packinglistcartonid = " & ipackinglistcartonid & " AND pci.organizationid = " & Z_OrganizationID & " AND pci.status != 'Inactive' ORDER BY p.productcode,c.colorname,pcs.size "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
