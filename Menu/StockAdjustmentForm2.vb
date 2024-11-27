@@ -479,7 +479,7 @@ Public Class StockAdjustmentForm2
 
                 Await orderDataService.ApproveStockAdjustment(order:=_selectedOrder, userId:=_userId)
 
-                MessageBox.Show(text:="Stock Transfer approved!",
+                MessageBox.Show(text:="Stock Adjustment approved!",
                     caption:="Approved",
                     icon:=MessageBoxIcon.Information,
                     buttons:=MessageBoxButtons.OK)
