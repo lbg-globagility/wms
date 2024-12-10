@@ -30,6 +30,15 @@ Public Class ProductColorSizeModel
             OrderBy(Function(t) t.RackShelfColumn.PickOrderNo).
             FirstOrDefault()
 
+        _fallbackProductInventoryLocation = productInventoryLocations.
+            Where(Function(t) t.RackShelfColumn.IsActive).
+            Where(Function(t) t.RackShelfColumn.InventoryLocationID = inventoryLocationId).
+            Where(Function(t) t.ProductColorSizeID = If(productColorSize.RowID, 0)).
+            OrderBy(Function(t) t.RackShelfColumn.PickOrderNo).
+            FirstOrDefault()
+
+        If _ProductInventoryLocation Is Nothing Then _ProductInventoryLocation = _fallbackProductInventoryLocation
+
         _productColorSize = productColorSize
         _productColor = productColorSize.ProductColor
 
@@ -127,6 +136,8 @@ Public Class ProductColorSizeModel
     End Property
 
     Public ReadOnly Property ProductInventoryLocation As ProductInventoryLocation
+
+    Private ReadOnly _fallbackProductInventoryLocation As ProductInventoryLocation
 
     Public ReadOnly Property Photo As String
         Get
