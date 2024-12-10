@@ -53,7 +53,7 @@ Public Class PickListAutomation
                         Where(Function(t) t.IsOrderable).
                         OrderBy(Function(t) t.RackShelfColumn.PickOrderNo)
 
-                    If productInventoryLocationQuery Is Nothing Then productInventoryLocationQuery = productInventoryLocations.
+                    If Not If(productInventoryLocationQuery?.Any(), False) Then productInventoryLocationQuery = productInventoryLocations.
                         Where(Function(t) t.RackShelfColumn.IsActive).
                         Where(Function(t) t.RackShelfColumn.InventoryLocationID = If(orderItem.InventoryLocationId, 0)).
                         Where(Function(t) t.ProductColorSizeID = If(orderItem.ProductColorSizeID, 0)).
