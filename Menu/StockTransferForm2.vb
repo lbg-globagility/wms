@@ -8,6 +8,7 @@ Imports WarehouseManagementSystem.Core.Enums
 Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
 Imports WarehouseManagementSystem.Core.Interfaces.Repositories
 Imports WarehouseManagementSystem.Desktop.Utilities
+Imports WarehouseManagementSystem.Infrastructure.Data.Extensions.ProductInventoryLocationExtensions
 
 Public Class StockTransferForm2
     Private _selectedOrder As Order
@@ -390,11 +391,8 @@ Public Class StockTransferForm2
 
             For Each productColorSizeModel In selectedProductColorSizeModels
                 Dim fromProductInventoryLocation = productInventoryLocationsSource.
-                    Where(Function(t) t.ProductColorSizeID = productColorSizeModel.ProductColorSizeId).
-                    Where(Function(t) t.RackShelfColumn.InventoryLocationID = inventoryLocationIdFrom).
-                    Where(Function(t) t.RackShelfColumn.IsActive).
-                    Where(Function(t) t.IsOrderable).
-                    FirstOrDefault()
+                    BestOrDefault(inventoryLocationId:=inventoryLocationIdFrom, productColorSizeId:=productColorSizeModel.ProductColorSizeId)
+
                 Dim newMovementHistoryFrom = MovementHistory.NewMovementHistory(organizationId:=Z_OrganizationID,
                     userId:=_userId,
                     productColorSizeID:=productColorSizeModel.ProductColorSizeId,
@@ -407,11 +405,9 @@ Public Class StockTransferForm2
 
                 _selectedOrder.AddMovementHistories(New List(Of MovementHistory) From {newMovementHistoryFrom})
 
-                Dim toProductInventoryLocation = productInventoryLocationsRecepient.
-                    Where(Function(t) t.ProductColorSizeID = productColorSizeModel.ProductColorSizeId).
-                    Where(Function(t) t.RackShelfColumn.InventoryLocationID = inventoryLocationIdTo).
-                    Where(Function(t) t.RackShelfColumn.IsActive).
-                    FirstOrDefault()
+                Dim toProductInventoryLocation = productInventoryLocationsRecepient.ToList().
+                    BestOrDefault(inventoryLocationId:=inventoryLocationIdTo, productColorSizeId:=productColorSizeModel.ProductColorSizeId)
+
                 Dim newMovementHistoryTo = MovementHistory.NewMovementHistory(organizationId:=Z_OrganizationID,
                     userId:=_userId,
                     productColorSizeID:=productColorSizeModel.ProductColorSizeId,

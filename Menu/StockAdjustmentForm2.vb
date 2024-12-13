@@ -8,6 +8,7 @@ Imports WarehouseManagementSystem.Core.Enums
 Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
 Imports WarehouseManagementSystem.Core.Interfaces.Repositories
 Imports WarehouseManagementSystem.Desktop.Utilities
+Imports WarehouseManagementSystem.Infrastructure.Data.Extensions.ProductInventoryLocationExtensions
 
 Public Class StockAdjustmentForm2
     Private _selectedOrder As Order
@@ -375,7 +376,7 @@ Public Class StockAdjustmentForm2
 
         Dim hasOrder As Boolean = _selectedOrder IsNot Nothing
 
-        Dim form As New ProductColorSizeSelectorDialog(inventoryLocationId:=CInt(cboFromInventory.SelectedValue))
+        Dim form As New ProductColorSizeSelectorDialog(inventoryLocationId:=CInt(cboToInventory.SelectedValue))
         If hasOrder Then form.ProductColorSizeExceptionIds = _selectedOrder.MovementHistories?.
             GroupBy(Function(t) t.ProductColorSizeID.Value).
             Select(Function(id) id.Key).
@@ -401,9 +402,8 @@ Public Class StockAdjustmentForm2
                 _selectedOrder.AddMovementHistories(New List(Of MovementHistory) From {newMovementHistoryFrom})
 
                 Dim toProductInventoryLocation = productInventoryLocations.
-                    Where(Function(t) t.ProductColorSizeID = productColorSizeModel.ProductColorSizeId).
-                    Where(Function(t) t.RackShelfColumn.InventoryLocationID = inventoryLocationIdTo).
-                    FirstOrDefault()
+                    BestOrDefault(inventoryLocationId:=inventoryLocationIdTo, productColorSizeId:=productColorSizeModel.ProductColorSizeId)
+
                 Dim newMovementHistoryTo = MovementHistory.NewMovementHistory(organizationId:=Z_OrganizationID,
                     userId:=_userId,
                     productColorSizeID:=productColorSizeModel.ProductColorSizeId,

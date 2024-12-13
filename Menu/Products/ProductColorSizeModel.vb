@@ -2,6 +2,7 @@
 
 Imports WarehouseManagementSystem.Core.Entities
 Imports WarehouseManagementSystem.Utilities.Extensions
+Imports WarehouseManagementSystem.Infrastructure.Data.Extensions.ProductInventoryLocationExtensions
 
 Public Class ProductColorSizeModel
 
@@ -22,22 +23,9 @@ Public Class ProductColorSizeModel
             Where(Function(pil) pil.RackShelfColumn.IsActive).
             ToList()
 
-        _ProductInventoryLocation = productInventoryLocations.
-            Where(Function(t) t.RackShelfColumn.IsActive).
-            Where(Function(t) t.RackShelfColumn.InventoryLocationID = inventoryLocationId).
-            Where(Function(t) t.ProductColorSizeID = If(productColorSize.RowID, 0)).
-            Where(Function(t) t.IsOrderable).
-            OrderBy(Function(t) t.RackShelfColumn.PickOrderNo).
-            FirstOrDefault()
-
-        _fallbackProductInventoryLocation = productInventoryLocations.
-            Where(Function(t) t.RackShelfColumn.IsActive).
-            Where(Function(t) t.RackShelfColumn.InventoryLocationID = inventoryLocationId).
-            Where(Function(t) t.ProductColorSizeID = If(productColorSize.RowID, 0)).
-            OrderBy(Function(t) t.RackShelfColumn.PickOrderNo).
-            FirstOrDefault()
-
-        If _ProductInventoryLocation Is Nothing Then _ProductInventoryLocation = _fallbackProductInventoryLocation
+        _ProductInventoryLocation = productInventoryLocations.BestOrDefault(
+            inventoryLocationId:=inventoryLocationId,
+            productColorSizeId:=If(productColorSize.RowID, 0))
 
         _productColorSize = productColorSize
         _productColor = productColorSize.ProductColor
@@ -136,8 +124,6 @@ Public Class ProductColorSizeModel
     End Property
 
     Public ReadOnly Property ProductInventoryLocation As ProductInventoryLocation
-
-    Private ReadOnly _fallbackProductInventoryLocation As ProductInventoryLocation
 
     Public ReadOnly Property Photo As String
         Get

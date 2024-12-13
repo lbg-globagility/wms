@@ -7,6 +7,8 @@ Imports WarehouseManagementSystem.Core.Enums
 Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
 Imports WarehouseManagementSystem.Core.Interfaces.Repositories
 Imports WarehouseManagementSystem.Utilities.Extensions
+Imports WarehouseManagementSystem.Infrastructure.Data.Extensions.ProductInventoryLocationExtensions
+
 Public Class ProductColorSizeSelectorDialog
 
     Private Class InvetoryTypeModel
@@ -83,7 +85,7 @@ Public Class ProductColorSizeSelectorDialog
             AddHandler cboInventoryName.SelectedValueChanged, AddressOf cboInventoryName_SelectedValueChanged
 
         Else
-            _baseSource = Await GetProductColorSizes()
+            _baseSource = Await GetProductColorSizes(_inventoryLocationId)
 
             grid.AutoGenerateColumns = False
             grid.DataSource = _baseSource
@@ -132,18 +134,23 @@ Public Class ProductColorSizeSelectorDialog
                     _picp)
             End Function
 
-        If Not _showAllInventory AndAlso If(ProductColorSizeExceptionIds?.Any(), False) Then
+        If Not _showAllInventory Then
             Return productColorSizes.
-                Where(Function(t) Not ProductColorSizeExceptionIds.Contains(t.RowID.Value)).
+                Where(Function(t) Not If(ProductColorSizeExceptionIds?.Contains(t.RowID.Value), False)).
                 Select(selector).
                 OrderBy(Function(t) t.ProductCode).
                 ToList()
         End If
 
-        Dim activeProductColorSizeIds = productInventoryLocations.Where(Function(t) t.RackShelfColumn.IsActive).GroupBy(Function(t) t.ProductColorSizeID).Select(Function(t) t.Key).ToArray()
+        Dim activeProductColorSizeIds = productInventoryLocations.
+            WhereActiveClause().
+            GroupBy(Function(t) t.ProductColorSizeID).
+            Select(Function(t) t.Key).
+            ToArray()
 
         Return productColorSizes.
             Where(Function(t) activeProductColorSizeIds.Contains(If(t.RowID, 0))).
+            Where(Function(t) Not If(ProductColorSizeExceptionIds?.Contains(t.RowID.Value), False)).
             Select(selector).
             OrderBy(Function(t) t.ProductCode).
             ToList()

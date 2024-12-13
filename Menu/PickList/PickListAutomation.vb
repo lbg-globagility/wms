@@ -4,10 +4,10 @@ Imports System.Collections.Concurrent
 Imports Microsoft.Extensions.DependencyInjection
 Imports WarehouseManagementSystem.Core.Entities
 Imports WarehouseManagementSystem.Core.Helpers
-Imports WarehouseManagementSystem.Core.Helpers.ProgressGenerator
 Imports WarehouseManagementSystem.Core.Interfaces
 Imports WarehouseManagementSystem.Core.Services.PickListAutomation
 Imports PickListEntity = WarehouseManagementSystem.Core.Entities.PickList
+Imports WarehouseManagementSystem.Infrastructure.Data.Extensions.ProductInventoryLocationExtensions
 
 Public Class PickListAutomation
     Inherits ProgressGenerator
@@ -45,20 +45,14 @@ Public Class PickListAutomation
                     Dim pickListOrderItem = pickListOrderItems.
                         FirstOrDefault(Function(t) t.PickListOrderID = If(pickListOrder.RowID, 0))
 
-                    Dim productInventoryLocationQuery = productInventoryLocations.
-                        Where(Function(t) If(t.RowID = orderItem.ProductInventoryLocationId, False)).
-                        Where(Function(t) t.RackShelfColumn.IsActive).
-                        Where(Function(t) t.RackShelfColumn.InventoryLocationID = If(orderItem.InventoryLocationId, 0)).
-                        Where(Function(t) t.ProductColorSizeID = If(orderItem.ProductColorSizeID, 0)).
-                        Where(Function(t) t.IsOrderable).
-                        OrderBy(Function(t) t.RackShelfColumn.PickOrderNo)
+                    Dim productInventoryLocationQuery = productInventoryLocations.BestFetchClause(
+                        productInventoryLocationId:=If(orderItem.ProductInventoryLocationId, 0),
+                        inventoryLocationId:=If(orderItem.InventoryLocationId, 0),
+                        productColorSizeId:=If(orderItem.ProductColorSizeID, 0))
 
-                    If Not If(productInventoryLocationQuery?.Any(), False) Then productInventoryLocationQuery = productInventoryLocations.
-                        Where(Function(t) t.RackShelfColumn.IsActive).
-                        Where(Function(t) t.RackShelfColumn.InventoryLocationID = If(orderItem.InventoryLocationId, 0)).
-                        Where(Function(t) t.ProductColorSizeID = If(orderItem.ProductColorSizeID, 0)).
-                        Where(Function(t) t.IsOrderable).
-                        OrderBy(Function(t) t.RackShelfColumn.PickOrderNo)
+                    If Not If(productInventoryLocationQuery?.Any(), False) Then productInventoryLocationQuery = productInventoryLocations.BestFetchClause(
+                        inventoryLocationId:=If(orderItem.InventoryLocationId, 0),
+                        productColorSizeId:=If(orderItem.ProductColorSizeID, 0))
 
                     If If(productInventoryLocationQuery?.Count(), 0) > 1 Then
 
