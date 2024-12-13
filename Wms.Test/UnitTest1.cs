@@ -1,6 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using System.Threading.Tasks;
+using WarehouseManagementSystem.Core.Entities;
 using WarehouseManagementSystem.Core.Interfaces.DomainServices;
 
 namespace Wms.Test
@@ -29,6 +30,16 @@ namespace Wms.Test
             var packingList1 = await packingListDataService.GetPackingListByOrderIdAsync(orderId: orderId1);
 
             Assert.IsNotNull(packingList1);
+        }
+
+        [Test]
+        public async Task Test2()
+        {
+            var lineupDataService = MainServiceProvider.GetRequiredService<ILineupDataService>();
+
+            await lineupDataService.CancelDeliveryAsync(
+                lineupId: 542,
+                userId: 1);
         }
     }
 }

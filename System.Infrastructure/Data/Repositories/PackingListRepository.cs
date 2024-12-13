@@ -22,6 +22,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
 
         public async Task<PackingList> GetByOrderIdAsync(int orderId) => await _context.PackingLists
             .Include(t => t.PackingListCartons)
+                .ThenInclude(t => t.PackingListCartonItems)
             .AsNoTracking()
             .FirstOrDefaultAsync(t => t.OrderID == orderId);
 

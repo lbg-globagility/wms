@@ -37,6 +37,14 @@ namespace WarehouseManagementSystem.Core.Entities
                 {
                     item.Status = PackingListCartonStatus.Cancelled;
                     item.SetEdited();
+
+                    if (!(item?.PackingListCartonItems?.Any() ?? false)) continue;
+
+                    foreach (var item2 in item?.PackingListCartonItems)
+                    {
+                        item2.SetStatusToInactive();
+                        item.SetEdited();
+                    }
                 }
         }
 

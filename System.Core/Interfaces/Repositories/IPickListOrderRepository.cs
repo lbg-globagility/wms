@@ -8,6 +8,6 @@ namespace WarehouseManagementSystem.Core.Interfaces.Repositories
 {
     public interface IPickListOrderRepository : ISavableRepository<PickListOrder>
     {
-        Task<ICollection<PickListOrder>> GetByOrderIdAsync(int orderId);
+        Task<ICollection<PickListOrder>> GetManyByOrderIdAsync(int orderId);
     }
 }

@@ -446,7 +446,7 @@ Public Class PackingListForm
             txtTotalItems.Text = dgCustomerOrderItems.Rows.Count
 
             Dim pickListOrderDataService = GetRequiredService(Of IPickListOrderDataService)()
-            Dim pickListOrders = Await pickListOrderDataService.GetByOrderIdAsync(orderId:=iorderid)
+            Dim pickListOrders = Await pickListOrderDataService.GetManyByOrderIdAsync(orderId:=iorderid)
 
             Dim gridOrderItemIds = If(dgCustomerOrderItems.Rows?.OfType(Of DataGridViewRow)?.Select(Function(t) CInt(t.Cells(ci_rowid.Name).Value)).ToArray(), Enumerable.Empty(Of Integer).ToArray())
 
@@ -4169,7 +4169,7 @@ ORDER BY ci.rowid;"
 
                 If Not If(orderItems?.Any(), False) Then
                     Dim pickListOrderDataService = GetRequiredService(Of IPickListOrderDataService)()
-                    Dim pickListOrders = Await pickListOrderDataService.GetByOrderIdAsync(orderId:=orderId)
+                    Dim pickListOrders = Await pickListOrderDataService.GetManyByOrderIdAsync(orderId:=orderId)
 
                     Dim verifiedItemsId = pickListOrders.Select(Function(t) t.OrderItemID).ToArray()
 

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using WarehouseManagementSystem.Core.Entities.Base;
 using WarehouseManagementSystem.Core.Enums;
 
@@ -44,5 +45,10 @@ namespace WarehouseManagementSystem.Core.Entities
                 quantity: quantity);
 
         public virtual PickListOrder PickListOrder { get; set; }
+
+        public void SetStatusToInactive()
+        {
+            Status = PackingListCartonItemStatus.Inactive;
+        }
     }
 }

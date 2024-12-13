@@ -61,5 +61,19 @@ namespace WarehouseManagementSystem.Core.Entities
                 orderId: orderId,
                 orderItemId: orderItemId,
                 status: status);
+
+        public void SetStatusToCancelled()
+        {
+            Status = PickListOrderStatus.Cancelled;
+            SetEdited();
+
+            if(!(PickListOrderItems?.Any() ?? false)) return;
+
+            foreach (var item in PickListOrderItems)
+            {
+                item.SetStatusToCancelled();
+                item.SetEdited();
+            }
+        }
     }
 }

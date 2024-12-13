@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Internal;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using WarehouseManagementSystem.Core.Entities;
 using WarehouseManagementSystem.Core.Enums;
@@ -38,7 +37,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
             _pickListOrderItemDataService = pickListOrderItemDataService;
         }
 
-        public async Task<ICollection<PickListOrder>> GetByOrderIdAsync(int orderId) => await _pickListOrderRepository.GetByOrderIdAsync(orderId: orderId);
+        public async Task<ICollection<PickListOrder>> GetManyByOrderIdAsync(int orderId) => await _pickListOrderRepository.GetManyByOrderIdAsync(orderId: orderId);
 
         protected override string CreateUserActivitySuffixIdentifier(PickListOrder entity) => $"{_entityName}.RowID: {entity.RowID}";
 
@@ -56,6 +55,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
                     .ToArray();
                 var orders = await _orderDataService.GetManyByIdsAsync(ids: orderIds);
 
+                var updatedOrders = new List<Order>();
                 var updatedOrderItems = new List<OrderItem>();
 
                 orders.ForEach(t =>
@@ -71,6 +71,8 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
                             item.SetEdited();
                             updatedOrderItems.Add(item);
                         }
+
+                        updatedOrders.Add(t);
                     }
                 });
 
@@ -85,7 +87,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
 
                 if (updatedOrderItems?.Any() ?? false) await _orderItemDataService.SaveManyAsync(userId: userId, updated: updatedOrderItems);
 
-                if (orders?.Any() ?? false) await _orderDataService.SaveManyAsync(userId: userId, updated: orders);
+                if (updatedOrders?.Any() ?? false) await _orderDataService.SaveManyAsync(userId: userId, updated: updatedOrders);
             }
 
             await base.SaveManyAsync(

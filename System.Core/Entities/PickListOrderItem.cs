@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using WarehouseManagementSystem.Core.Entities.Base;
 using WarehouseManagementSystem.Core.Enums;
 
@@ -16,7 +17,7 @@ namespace WarehouseManagementSystem.Core.Entities
         public string IssueFlg { get; set; }
         public PickListOrderItemStatus Status { get; set; }
         public string Remarks { get; set; }
-     }
+    }
 
     public partial class PickListOrderItem
     {
@@ -75,5 +76,10 @@ namespace WarehouseManagementSystem.Core.Entities
         public bool IsVerified => Status == PickListOrderItemStatus.Verified;
         public bool IsCancelled => Status == PickListOrderItemStatus.Cancelled;
         public bool IsInactive => Status == PickListOrderItemStatus.Inactive;
+
+        public void SetStatusToCancelled()
+        {
+            Status = PickListOrderItemStatus.Cancelled;
+        }
     }
 }
