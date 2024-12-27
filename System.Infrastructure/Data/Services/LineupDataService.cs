@@ -1,17 +1,13 @@
-﻿using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Drawing.Imaging;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading.Tasks;
 using WarehouseManagementSystem.Core.Entities;
 using WarehouseManagementSystem.Core.Exceptions;
 using WarehouseManagementSystem.Core.Interfaces;
 using WarehouseManagementSystem.Core.Interfaces.DomainServices;
 using WarehouseManagementSystem.Core.Interfaces.Repositories;
-using WarehouseManagementSystem.Infrastructure.Data.Repositories;
+using WarehouseManagementSystem.Infrastructure.Data.Extensions;
 
 namespace WarehouseManagementSystem.Infrastructure.Data.Services
 {
@@ -172,10 +168,12 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
                     var productColorSizeId = packingListCartonItem.OrderItem.ProductColorSizeID.Value;
                     var inventoryLocationId = packingListCartonItem.OrderItem.ProductInventoryLocation.RackShelfColumn.InventoryLocationID;
                     var productInventoryLocation = productInventoryLocations
-                        .Where(t => t.ProductColorSizeID == productColorSizeId)
-                        .Where(t => t.RackShelfColumn.InventoryLocationID == inventoryLocationId)
-                        .Where(t => (t.TotalReserveQty ?? 0) > 0 && (t.TotalReserveQty ?? 0) >= (packingListCartonItem.QtyInCarton ?? 0))
-                        .FirstOrDefault();
+                        .ToList()
+                        .BestOrDefault(inventoryLocationId: inventoryLocationId, productColorSizeId: productColorSizeId);
+                        //.Where(t => t.ProductColorSizeID == productColorSizeId)
+                        //.Where(t => t.RackShelfColumn.InventoryLocationID == inventoryLocationId)
+                        ////.Where(t => (t.TotalReserveQty ?? 0) > 0 && (t.TotalReserveQty ?? 0) >= (packingListCartonItem.QtyInCarton ?? 0))
+                        //.FirstOrDefault();
 
                     if (productInventoryLocation == null)
                         continue;

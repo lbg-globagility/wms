@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using WarehouseManagementSystem.Core.Entities.Base;
 
 namespace WarehouseManagementSystem.Core.Entities
@@ -71,7 +72,17 @@ namespace WarehouseManagementSystem.Core.Entities
                 unitOfMeasure2: unitOfMeasure2,
                 unitPriceOfUOM2: unitPriceOfUOM2);
 
-        public int TotalOrderableQty => (TotalAvailableQty ?? 0) - ((TotalAllocatedQty ?? 0) + (TotalReserveQty ?? 0));
+        public int TotalOrderableQty
+        {
+            get
+            {
+                var totalAllocatedQty = TotalAllocatedQty ?? 0;
+                var totalReserveQty = TotalReserveQty ?? 0;
+                int[] fsdfsd = { totalAllocatedQty < 0 ? 0 : totalAllocatedQty,
+                    totalReserveQty < 0 ? 0 : totalReserveQty };
+                return (TotalAvailableQty ?? 0) - fsdfsd.Sum();
+            }
+        }
 
         public virtual ICollection<OrderItem> OrderItems { get; set; }
 
