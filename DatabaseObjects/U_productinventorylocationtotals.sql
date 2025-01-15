@@ -9,14 +9,27 @@
 
 DROP PROCEDURE IF EXISTS `U_productinventorylocationtotals`;
 DELIMITER //
-CREATE PROCEDURE `U_productinventorylocationtotals`(IN `U_RowID` INT(11), IN `U_LastUpd` DATETIME, IN `U_LastUpdBy` INT(11), IN `U_TotalAvailableQty` INT(11), IN `U_TotalReserveQty` INT(11))
+CREATE PROCEDURE `U_productinventorylocationtotals`(
+	IN `U_RowID` INT(11),
+	IN `U_LastUpd` DATETIME,
+	IN `U_LastUpdBy` INT(11),
+	IN `U_TotalAvailableQty` INT(11),
+	IN `U_TotalReserveQty` INT(11)
+)
 BEGIN
+
+DECLARE _isThurston BOOL DEFAULT FALSE;
+
+SET _isThurston = EXISTS(SELECT i.RowID FROM systemowner i WHERE i.`Name`='Thurston' AND i.IsCurrentOwner='1' LIMIT 1);
+
 UPDATE productinventorylocation SET
 	LastUpd = U_LastUpd,
 	LastUpdBy = U_LastUpdBy,
 	TotalAvailableQty = U_TotalAvailableQty,
 	TotalReserveQty = U_TotalReserveQty
-WHERE RowID = U_RowID;
+WHERE RowID = U_RowID
+AND _isThurston = FALSE;
+
 END//
 DELIMITER ;
 
