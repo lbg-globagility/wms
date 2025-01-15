@@ -27,3 +27,6 @@ System.CustomUserControl/obj/Debug
 Wms.Test/bin/Debug/net461
 Wms.Test/obj/Debug/net461
 Wms.Test/obj/project.nuget*.cache
+Wms.Test/obj/project.assets*.json
+Wms.Test/obj/Wms.Test.csproj.nuget.dgspec*.json
+Wms.Test/obj/Wms.Test.csproj.nuget.g*.props
