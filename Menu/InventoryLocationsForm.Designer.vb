@@ -1930,6 +1930,7 @@ Partial Class InventoryLocationsForm
         Me.Column16.DefaultCellStyle = DataGridViewCellStyle12
         Me.Column16.HeaderText = "Total Allocated Qty"
         Me.Column16.Name = "Column16"
+        Me.Column16.Visible = False
         '
         'DataGridViewTextBoxColumn2
         '

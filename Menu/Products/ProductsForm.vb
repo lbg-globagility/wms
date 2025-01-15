@@ -39,6 +39,7 @@ Public Class ProductsForm
             viewName:=VIEW_NAME)
 
         PictureBox1.Visible = IsThurston
+        il_totalqtyallocated.Visible = Not IsThurston
 
         Me.Cursor = Cursors.WaitCursor
         Try
