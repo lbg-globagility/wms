@@ -104,7 +104,7 @@ Public Class PickListVerficationForm
             ToList()
 
         Dim pickListOrderDataService = GetRequiredService(Of IPickListOrderDataService)()
-        Await pickListOrderDataService.SaveManyAsync(updated:=updated, userId:=Z_UserID).
+        Await pickListOrderDataService.VerifyAsync(userId:=Z_UserID, pickListOrders:=updated).
             ContinueWith(
                 Async Function(antecedent)
                     If Not antecedent.IsCompleted Then Return

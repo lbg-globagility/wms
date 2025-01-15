@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using WarehouseManagementSystem.Core.Entities.Base;
-using WarehouseManagementSystem.Utilities.Extensions;
 
 namespace WarehouseManagementSystem.Core.Entities
 {
@@ -34,6 +33,8 @@ namespace WarehouseManagementSystem.Core.Entities
 
     public partial class MovementHistory
     {
+        public const string VERIFY_PL_QR = "Verify PL QR";
+        public const string COLUMN_TOTAL_RESERVE_QTY = "TotalReserveQty";
         public virtual Order Order { get; set; }
         public virtual ProductColorSize ProductColorSize { get; set; }
         public virtual ProductInventoryLocation ProductInventoryLocation { get; set; }

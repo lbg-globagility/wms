@@ -8,5 +8,7 @@ namespace WarehouseManagementSystem.Core.Interfaces.DomainServices
     public interface IPickListOrderDataService : IBaseSavableDataService<PickListOrder>
     {
         Task<ICollection<PickListOrder>> GetManyByOrderIdAsync(int orderId);
+
+        Task VerifyAsync(int userId, List<PickListOrder> pickListOrders);
     }
 }
