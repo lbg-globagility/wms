@@ -9,7 +9,7 @@ namespace WarehouseManagementSystem.Infrastructure.Excel.Import
         [ColumnName("Product Code")]
         public string ProductCode { get; set; }
 
-        [ColumnName("Product Name")]
+        [ColumnName("Product Group Name")]
         public string ProductGroupName { get; set; }
 
         [ColumnName("Brand Name")]
@@ -57,6 +57,7 @@ namespace WarehouseManagementSystem.Infrastructure.Excel.Import
         public bool HasColor => !string.IsNullOrEmpty(Colors);
         public bool HasStyle => !string.IsNullOrEmpty(Style);
         public bool HasSeasonCode => !string.IsNullOrEmpty(SeasonCode);
+        public bool HasProductGroupName => !string.IsNullOrEmpty(ProductGroupName);
 
         public string ErrorMessage
         {
@@ -67,6 +68,7 @@ namespace WarehouseManagementSystem.Infrastructure.Excel.Import
                     HasCategory ? string.Empty : "Invalid Category",
                     HasColor ? string.Empty : "Invalid Color",
                     HasStyle ? string.Empty : "Invalid Style",
+                    HasProductGroupName ? string.Empty : "Invalid ProductGroupName",
                     _errorMessage
                 };
                 var errorTexts2 = errorTexts.Where(t => !string.IsNullOrEmpty(t));

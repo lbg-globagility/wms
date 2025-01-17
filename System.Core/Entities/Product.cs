@@ -72,6 +72,7 @@ namespace WarehouseManagementSystem.Core.Entities
             BrandName = brandName;
             SKU = sku;
             SKU2 = sku2;
+            ProductGroupName = productGroupName;
         }
 
         public virtual Category Category { get; set; }
