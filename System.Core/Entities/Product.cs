@@ -73,6 +73,8 @@ namespace WarehouseManagementSystem.Core.Entities
             SKU = sku;
             SKU2 = sku2;
             ProductGroupName = productGroupName;
+            UnitOfMeasure2 = unitOfMeasure;
+            UnitPriceOfUOM2 = unitPrice;
         }
 
         public virtual Category Category { get; set; }

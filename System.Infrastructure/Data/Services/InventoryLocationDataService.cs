@@ -17,7 +17,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
         private readonly IProductColorSizeRepository _productColorSizeRepository;
         private readonly IInventoryLocationRepository _inventoryLocationRepository;
         private readonly IProductInventoryLocationRepository _productInventoryLocationRepository;
-        private readonly IRackShelfColumnRepository _rackShelfColumnRepository;
+        private readonly IRackShelfColumnDataService _rackShelfColumnDataService;
 
         public InventoryLocationDataService(IInventoryLocationRepository inventoryLocationRepository,
             IUserActivityRepository userActivityRepository,
@@ -26,7 +26,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
 
             IProductColorSizeRepository productColorSizeRepository,
             IProductInventoryLocationRepository productInventoryLocationRepository,
-            IRackShelfColumnRepository rackShelfColumnRepository) :
+            IRackShelfColumnDataService rackShelfColumnDataService) :
 
             base(inventoryLocationRepository,
                 userActivityRepository,
@@ -37,7 +37,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
             _productColorSizeRepository = productColorSizeRepository;
             _inventoryLocationRepository = inventoryLocationRepository;
             _productInventoryLocationRepository = productInventoryLocationRepository;
-            _rackShelfColumnRepository = rackShelfColumnRepository;
+            _rackShelfColumnDataService = rackShelfColumnDataService;
         }
 
         public async Task PopulateAllInventoryLocationWithProductColorSizesAsync(int organizationId, int userId, string[] productCodes)
@@ -97,8 +97,18 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
 
             var nonExistentProductColorSizeIds = nonExistentProductColorSizes.Select(t => t.RowID.Value).ToList();
 
-            await _rackShelfColumnRepository.SaveManyAsync(added: inventoryLocation.RackShelfColumns.Where(i => i.IsNewEntity).Where(t => t.ProductInventoryLocations.Any(f => nonExistentProductColorSizeIds.Contains(f.ProductColorSizeID))).ToList(),
-                updated: inventoryLocation.RackShelfColumns.Where(i => !i.IsNewEntity).Where(t => t.ProductInventoryLocations.Any(f => nonExistentProductColorSizeIds.Contains(f.ProductColorSizeID))).ToList());
+            var added = inventoryLocation.RackShelfColumns
+                .Where(i => i.IsNewEntity)
+                .Where(t => t.ProductInventoryLocations.Any(f => nonExistentProductColorSizeIds.Contains(f.ProductColorSizeID)))
+                .ToList();
+            var updated = inventoryLocation.RackShelfColumns
+                .Where(i => !i.IsNewEntity)
+                .Where(t => t.ProductInventoryLocations.Any(f => nonExistentProductColorSizeIds.Contains(f.ProductColorSizeID)))
+                .ToList();
+
+            await _rackShelfColumnDataService.SaveManyAsync(userId: userId,
+                added: added,
+                updated: updated);
         }
 
         public async Task<List<InventoryLocation>> GetManyByTypeAsync(int organizationId, InventoryLocationType inventoryLocationType) => await _inventoryLocationRepository.GetManyByTypeAsync(organizationId: organizationId, inventoryLocationType: inventoryLocationType);

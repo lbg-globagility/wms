@@ -63,13 +63,16 @@ namespace WarehouseManagementSystem.Core.Entities
 
                     foreach (var nonExistentProductColorSize in nonExistentProductColorSizes)
                     {
+                        var unitOfMeasure = nonExistentProductColorSize?.ProductColor?.Product?.UnitOfMeasure;
+                        var unitPrice = nonExistentProductColorSize?.ProductColor?.Product?.UnitPrice ?? 0;
+
                         var newProductInventoryLocation = ProductInventoryLocation.NewProductInventoryLocation(organizationId: organizationId,
                             userId: userId,
                             productColorSizeId: nonExistentProductColorSize.RowID.Value,
-                            unitOfMeasure: nonExistentProductColorSize?.ProductColor?.Product?.UnitOfMeasure,
-                            unitPrice: nonExistentProductColorSize?.ProductColor?.Product?.UnitPrice ?? 0,
-                            unitOfMeasure2: nonExistentProductColorSize.UnitOfMeasure2,
-                            unitPriceOfUOM2: nonExistentProductColorSize.UnitPriceOfUOM2);
+                            unitOfMeasure: unitOfMeasure,
+                            unitPrice: unitPrice,
+                            unitOfMeasure2: string.IsNullOrEmpty(nonExistentProductColorSize.UnitOfMeasure2) ? unitOfMeasure : nonExistentProductColorSize.UnitOfMeasure2,
+                            unitPriceOfUOM2: nonExistentProductColorSize.UnitPriceOfUOM2 ?? unitPrice);
 
                         newProductInventoryLocation.RackShelfColumnID = thisRackShelfColumn.RowID;
 
@@ -82,13 +85,16 @@ namespace WarehouseManagementSystem.Core.Entities
 
                     foreach (var nonExistentProductColorSize in nonExistentProductColorSizes)
                     {
+                        var unitOfMeasure = nonExistentProductColorSize?.ProductColor?.Product?.UnitOfMeasure;
+                        var unitPrice = nonExistentProductColorSize?.ProductColor?.Product?.UnitPrice ?? 0;
+
                         var newProductInventoryLocation = ProductInventoryLocation.NewProductInventoryLocation(organizationId: organizationId,
                             userId: userId,
                             productColorSizeId: nonExistentProductColorSize.RowID.Value,
-                            unitOfMeasure: nonExistentProductColorSize?.ProductColor?.Product?.UnitOfMeasure,
-                            unitPrice: nonExistentProductColorSize?.ProductColor?.Product?.UnitPrice ?? 0,
-                            unitOfMeasure2: nonExistentProductColorSize.UnitOfMeasure2,
-                            unitPriceOfUOM2: nonExistentProductColorSize.UnitPriceOfUOM2);
+                            unitOfMeasure: unitOfMeasure,
+                            unitPrice: unitPrice,
+                            unitOfMeasure2: string.IsNullOrEmpty(nonExistentProductColorSize.UnitOfMeasure2) ? unitOfMeasure : nonExistentProductColorSize.UnitOfMeasure2,
+                            unitPriceOfUOM2: nonExistentProductColorSize.UnitPriceOfUOM2 ?? unitPrice);
 
                         newRackShelfColumn.AddProductInventoryLocations(productInventoryLocations: new List<ProductInventoryLocation>() { newProductInventoryLocation });
                     }
@@ -106,13 +112,16 @@ namespace WarehouseManagementSystem.Core.Entities
 
                     foreach (var nonExistentProductColorSize in nonExistentProductColorSizes)
                     {
+                        var unitOfMeasure = nonExistentProductColorSize?.ProductColor?.Product?.UnitOfMeasure;
+                        var unitPrice = nonExistentProductColorSize?.ProductColor?.Product?.UnitPrice ?? 0;
+
                         var newProductInventoryLocation = ProductInventoryLocation.NewProductInventoryLocation(organizationId: organizationId,
                             userId: userId,
                             productColorSizeId: nonExistentProductColorSize.RowID.Value,
-                            unitOfMeasure: nonExistentProductColorSize?.ProductColor?.Product?.UnitOfMeasure,
-                            unitPrice: nonExistentProductColorSize?.ProductColor?.Product?.UnitPrice ?? 0,
-                            unitOfMeasure2: nonExistentProductColorSize.UnitOfMeasure2,
-                            unitPriceOfUOM2: nonExistentProductColorSize.UnitPriceOfUOM2);
+                            unitOfMeasure: unitOfMeasure,
+                            unitPrice: unitPrice,
+                            unitOfMeasure2: string.IsNullOrEmpty(nonExistentProductColorSize.UnitOfMeasure2) ? unitOfMeasure : nonExistentProductColorSize.UnitOfMeasure2,
+                            unitPriceOfUOM2: nonExistentProductColorSize.UnitPriceOfUOM2 ?? unitPrice);
 
                         newProductInventoryLocation.RackShelfColumnID = thisRackShelfColumn.RowID;
 
@@ -125,13 +134,16 @@ namespace WarehouseManagementSystem.Core.Entities
 
                     foreach (var nonExistentProductColorSize in nonExistentProductColorSizes)
                     {
+                        var unitOfMeasure = nonExistentProductColorSize?.ProductColor?.Product?.UnitOfMeasure;
+                        var unitPrice = nonExistentProductColorSize?.ProductColor?.Product?.UnitPrice ?? 0;
+
                         var newProductInventoryLocation = ProductInventoryLocation.NewProductInventoryLocation(organizationId: organizationId,
                             userId: userId,
                             productColorSizeId: nonExistentProductColorSize.RowID.Value,
-                            unitOfMeasure: nonExistentProductColorSize?.ProductColor?.Product?.UnitOfMeasure,
-                            unitPrice: nonExistentProductColorSize?.ProductColor?.Product?.UnitPrice ?? 0,
-                            unitOfMeasure2: nonExistentProductColorSize.UnitOfMeasure2,
-                            unitPriceOfUOM2: nonExistentProductColorSize.UnitPriceOfUOM2);
+                            unitOfMeasure: unitOfMeasure,
+                            unitPrice: unitPrice,
+                            unitOfMeasure2: string.IsNullOrEmpty(nonExistentProductColorSize.UnitOfMeasure2) ? unitOfMeasure : nonExistentProductColorSize.UnitOfMeasure2,
+                            unitPriceOfUOM2: nonExistentProductColorSize.UnitPriceOfUOM2 ?? unitPrice);
 
                         newRackShelfColumn.AddProductInventoryLocations(productInventoryLocations: new List<ProductInventoryLocation>() { newProductInventoryLocation });
                     }
