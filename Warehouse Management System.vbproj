@@ -451,6 +451,12 @@
     <Compile Include="Menu\PickList\PickListVerficationForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Menu\PickList\PrintPickListDateDialog.Designer.vb">
+      <DependentUpon>PrintPickListDateDialog.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Menu\PickList\PrintPickListDateDialog.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Menu\ProductInventoryLocation\RackShelfColumnForm.Designer.vb">
       <DependentUpon>RackShelfColumnForm.vb</DependentUpon>
     </Compile>
@@ -1195,6 +1201,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Menu\PickList\PickListVerficationForm.resx">
       <DependentUpon>PickListVerficationForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Menu\PickList\PrintPickListDateDialog.resx">
+      <DependentUpon>PrintPickListDateDialog.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Menu\ProductInventoryLocation\RackShelfColumnForm.resx">
       <DependentUpon>RackShelfColumnForm.vb</DependentUpon>

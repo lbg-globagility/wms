@@ -1669,61 +1669,6 @@ WHERE luc.OrganizationID={Z_OrganizationID};"
         Me.Cursor = Cursors.Default
     End Sub
 
-    Sub printDeliveryScheduleThurston(ByVal lineUpNo As Integer)
-        Try
-            printdatasetHthurston.Clear()
-            If conn.State = ConnectionState.Closed Then conn.Open()
-            Dim sql1 As String = "SELECT
-	                                CONCAT(COALESCE(c.FirstName, ''), ' ', COALESCE(c.MiddleName, ''), ' ', COALESCE(c.LastName, '')) AS Driver,
-	                                REPLACE(CONCAT_WS('\r\n', CONCAT_WS(
-                                        ' ',
-                                        COALESCE(c2.FirstName, ''),
-                                        NULLIF(COALESCE(c2.MiddleName, ''), ''),
-                                        COALESCE(c2.LastName, '')
-                                    ),
-												CONCAT_WS(
-                                        ' ',
-                                        COALESCE(c3.FirstName, ''),
-                                        NULLIF(COALESCE(c3.MiddleName, ''), ''),
-                                        COALESCE(c3.LastName, '')
-                                    )), '\n\n', '\b') AS Helper,
-	                                lu.LineUpDate AS 'Date',
-	                                GROUP_CONCAT(DISTINCT o.CustomerName) AS Customer,
-	                                GROUP_CONCAT(DISTINCT o.ReferenceNumber) AS 'P.O. NO.',
-	                                SUM(plci.QtyInCarton) AS Qty,
-	                                GROUP_CONCAT(IFNULL(IFNULL(p.ProductCode, IFNULL(pcs.SKU, pcs.SKU2)), '[NO SKU]'), '/', IFNULL(plci.QtyInCarton, '') SEPARATOR ' , ') AS 'Item / Description'
-
-		                                FROM
-		                                lineups lu
-
-		                                JOIN lineupcartons lc ON lu.RowID = lc.LineUpID
-		                                LEFT JOIN contacts c  ON lu.ContactID = c.RowID
-		                                LEFT JOIN contacts c2 ON lu.Helper1Id = c2.RowID
-		                                LEFT JOIN contacts c3 ON lu.Helper2Id = c3.RowID
-		                                JOIN orders o ON lu.OrderID = o.RowID
- 		                                JOIN packinglistcartonitems plci ON lc.PackingListCartonID = plci.PackingListCartonID
- 		                                JOIN orderitems oi ON plci.OrderItemID = oi.RowID
- 		                                JOIN productcolorsizes pcs ON oi.ProductColorSizeID = pcs.RowID
- 		                                JOIN productcolors pc ON pc.RowID=pcs.ProductColorID
- 		                                JOIN products p ON p.RowID=pc.ProductID
-
-			                                WHERE lu.LineUpNo = " & lineUpNo & " GROUP BY p.`Description`"
-            Dim cmd1 As New MySqlCommand(sql1, conn)
-            cmd1.CommandTimeout = commantimeoutlimit
-            Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
-            While reader1.Read()
-                If reader1.HasRows Then
-                    printdatasetHthurston.AddSetHRow(CStr(reader1(0)), CStr(reader1(1)), CStr(reader1(2)), CStr(reader1(3)), CStr(reader1(4)), CStr(reader1(5)), CStr(reader1(6)), "")
-                End If
-            End While
-            reader1.Close()
-        Catch ex As Exception
-            MsgBox(getErrExcptn(ex, Me.Name))
-        Finally
-            conn.Close()
-        End Try
-    End Sub
-
     Sub printTripTicketThurston(ByVal lineUpNo As Integer)
         Try
             printdatasetHthurston.Clear()

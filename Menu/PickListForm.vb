@@ -1,4 +1,5 @@
 ﻿Imports System.Threading
+Imports CrystalDecisions.CrystalReports.Engine
 Imports log4net
 Imports Microsoft.Extensions.DependencyInjection
 Imports MySql.Data.MySqlClient
@@ -2989,34 +2990,10 @@ Public Class PickListForm
 
         Dim printreport As New DeliverySchedule
 
-        Dim sql = <![CDATA[
-            SELECT
-            a.CompanyName `customer`,
-            GROUP_CONCAT(DISTINCT o.ReferenceNumber) `poNo`,
-            SUM(ploi.QtyPicked) `qty`,
-            GROUP_CONCAT(DISTINCT pil.UnitOfMeasure2 SEPARATOR '\n') `unit`,
-            GROUP_CONCAT(CONCAT(p.ProductCode, ' (', ploi.QtyPicked, ')') ORDER BY oi.RowID SEPARATOR ', ') `itemDescription`,
-            DATE_FORMAT(CURDATE(), '%M %e, %Y') `deliveryDate`
-            FROM picklistorders plo
-            INNER JOIN orders o ON o.RowID=plo.OrderID AND FIND_IN_SET(o.ReferenceNumber, @referenceNos) > 0 AND FIND_IN_SET(o.OrderNumber, @customerOrderNos) > 0
-            INNER JOIN accounts a ON a.RowID=o.AccountID
-            INNER JOIN orderitems oi ON oi.RowID=plo.OrderItemID
-            INNER JOIN productinventorylocation pil ON pil.RowID=oi.ProductInventoryLocationId
-            INNER JOIN productcolorsizes pcs ON pcs.RowID=pil.ProductColorSizeID
-            INNER JOIN productcolors pc ON pc.RowID=pcs.ProductColorID
-            INNER JOIN products p ON p.RowID=pc.ProductID
-            INNER JOIN picklistorderitems ploi ON ploi.PickListOrderID=plo.RowID AND IFNULL(ploi.QtyPicked, 0) > 0
-            WHERE plo.PickListID = @pickListId
-            AND FIND_IN_SET(o.AccountID, @customerIds) > 0
-            # GROUP BY a.RowID, o.ReferenceNumber, pil.UnitOfMeasure2
-            GROUP BY a.RowID, o.ReferenceNumber, p.ProductGroupName
-            ORDER BY a.CompanyName;
-            ]]>.Value
-
         Await FunctionUtils.TryCatchFunctionAsync(messageTitle:="Print Picklist",
             Async Function()
                 Using connection As New MySqlConnection(connectionString:=manager.GetConnString()),
-            command As New MySqlCommand(sql, connection)
+            command As New MySqlCommand("CALL PRINT_PICKLIST(@pickListId, @customerIds, @referenceNos, @customerOrderNos);", connection)
 
                     With command.Parameters
                         .AddWithValue("@pickListId", pickListId)
@@ -3046,6 +3023,24 @@ Public Class PickListForm
             End Function)
 
         Dim openreportviewer As New ReportViewer
+
+        Dim section = printreport.ReportDefinition.Sections.OfType(Of Section).FirstOrDefault()
+        Dim deliveryDate As TextObject = CType((section?.ReportObjects("deliveryDate1")), TextObject)
+
+        Dim sfdfsd = Date.Parse(txtPickListDate.Text)
+        Dim form = New PrintPickListDateDialog(sfdfsd)
+        If form.ShowDialog() = DialogResult.OK Then
+            deliveryDate.Text = form.SelectedDate
+        Else
+            deliveryDate.Text = Date.Now
+        End If
+
+        Dim pickListNo As TextObject = CType((section?.ReportObjects("driver1")), TextObject)
+        pickListNo.Text = txtPickListNo.Text
+
+        Dim pickerName As TextObject = CType((section?.ReportObjects("helper1")), TextObject)
+        pickerName.Text = cboPickerName.Text
+
         openreportviewer.CrystalReportViewer.ReportSource = printreport
         openreportviewer.Show()
     End Sub
