@@ -418,11 +418,14 @@ Public Class PrimaryForm
         Try
             dgLinedUpCO.Rows.Clear()
             If conn1.State = ConnectionState.Closed Then conn1.Open()
-            Dim sql1 As String = "SELECT co.rowid,COALESCE(co.ordernumber,''),COALESCE(co.referencenumber,''),COALESCE(co.drnumber,''),COALESCE(DATE_FORMAT(co.orderdate,'%d-%b-%Y'),''),COALESCE(DATE_FORMAT(co.targetdate,'%d-%b-%Y'),'')," &
+            Dim sql1 As String = "SELECT co.rowid,COALESCE(co.ordernumber,''),COALESCE(co.referencenumber,''),COALESCE(l.DeliveryNo,''),COALESCE(DATE_FORMAT(co.orderdate,'%d-%b-%Y'),''),COALESCE(DATE_FORMAT(co.targetdate,'%d-%b-%Y'),'')," &
                         "COALESCE(DATE_FORMAT(co.enddate,'%d-%b-%Y'),''),COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),''),COALESCE(CONCAT(COALESCE(cb.firstname,''),' ',COALESCE(cb.lastname,''),' - ',COALESCE(cb.rowid,'')),'')," &
                         "COALESCE(CONCAT(COALESCE(bc.branchcode,''),' - ',COALESCE(bc.branchname,'')),''),COALESCE(CONCAT(COALESCE(ve.companycode,''),' - ',COALESCE(ve.companyname,'')),''),COALESCE(CONCAT(COALESCE(cc.codename,''),' / ',COALESCE(c1.codeno,''),'-',COALESCE(c2.codeno,''),'-',COALESCE(c3.codeno,'')),'') " &
+                        ", l.LineUpNo " &
                         "FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid LEFT JOIN users cb ON co.createdby = cb.rowid LEFT JOIN branches bc ON co.branchid = bc.rowid LEFT JOIN companies ve ON co.companyid = ve.rowid LEFT JOIN combinecodings cc ON co.combinecodingid = cc.rowid " &
-                        "LEFT JOIN codings c1 ON cc.codingida = c1.rowid LEFT JOIN codings c2 ON cc.codingidb = c2.rowid LEFT JOIN codings c3 ON cc.codingidc = c3.rowid WHERE co.organizationid = " & Z_OrganizationID & $" AND co.ordertype = '{OrderType.CO.ToString()}' AND co.`status` = 'Lined Up' ORDER BY co.ordernumber DESC "
+                        "LEFT JOIN codings c1 ON cc.codingida = c1.rowid LEFT JOIN codings c2 ON cc.codingidb = c2.rowid LEFT JOIN codings c3 ON cc.codingidc = c3.rowid " &
+                        "INNER JOIN lineups l ON l.OrderID=co.RowID " &
+                        "WHERE co.organizationid = " & Z_OrganizationID & $" AND co.ordertype = '{OrderType.CO.ToString()}' AND co.`status` = 'Lined Up' ORDER BY co.ordernumber DESC "
             Dim cmd1 As New MySqlCommand(sql1, conn1)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             Dim n As Integer = 0
@@ -442,6 +445,7 @@ Public Class PrimaryForm
                     dgLinedUpCO.Item(lu_canceldate.Index, n).Value = reader1(6)
                     dgLinedUpCO.Item(lu_customername.Index, n).Value = reader1(7)
                     dgLinedUpCO.Item(lu_createdby.Index, n).Value = reader1(8)
+                    dgLinedUpCO.Item(lu_lineupno.Index, n).Value = reader1(12)
                     seqno = seqno + 1
                     n = n + 1
                 End If
