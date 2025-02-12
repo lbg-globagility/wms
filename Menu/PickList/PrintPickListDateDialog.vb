@@ -15,7 +15,7 @@
 
     Private Sub PrintPickListDateDialog_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         DateTimePicker1.Value = _date
-        DateTimePicker1.MinDate = _date
+        'DateTimePicker1.MinDate = _date
 
     End Sub
 
