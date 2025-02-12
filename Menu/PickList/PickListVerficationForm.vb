@@ -56,7 +56,10 @@ Public Class PickListVerficationForm
         Dim pickListDataService = GetRequiredService(Of IPickListDataService)()
         Dim picklist = Await pickListDataService.GetByIdAsync(_pickListId)
 
-        Dim picklistOrders = picklist.PickListOrders.Where(Function(t) Not t.IsInactiveStatus).ToList()
+        Dim picklistOrders = picklist.PickListOrders.
+            Where(Function(t) Not t.IsInactiveStatus).
+            OrderBy(Function(t) t.OrderItemID).
+            ToList()
 
         Dim dataSource = picklistOrders.
             Select(Function(t) New PickListOrderDto(t)).
