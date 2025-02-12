@@ -68,7 +68,7 @@ namespace WarehouseManagementSystem.Core.Entities
                 if (match.Success)
                     return match.Groups[1].Value;
 
-                return string.Empty;
+                return Driver?.FirstName;
             }
         }
 
