@@ -30,3 +30,4 @@ Wms.Test/obj/project.nuget*.cache
 Wms.Test/obj/project.assets*.json
 Wms.Test/obj/Wms.Test.csproj.nuget.dgspec*.json
 Wms.Test/obj/Wms.Test.csproj.nuget.g*.props
+Warehouse Management System.vbproj*.user
