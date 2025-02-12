@@ -1,17 +1,9 @@
 ﻿Imports MySql.Data.MySqlClient
-Imports System.IO
-Imports System.Windows.Forms
-Imports CrystalDecisions.CrystalReports.Engine
-Imports System.Linq
-Imports System.Collections
-Imports System.Collections.Generic
-Imports System.Data
-Imports System.Diagnostics
-Imports System.Runtime.InteropServices
-Imports System.Text.RegularExpressions
+Imports WarehouseManagementSystem.Core.Entities
+Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
 Public Class StockLevelForm
     Dim manager As New sqlModule.Manager
-    Dim conn As New MySqlConnection(Manager.GetConnString)
+    Dim conn As New MySqlConnection(manager.GetConnString)
     Dim sqlcmd As MySqlCommand
     Dim sqlrd As MySqlDataReader
     Dim printdataset As New DataSetA.SetADataTable
@@ -20,13 +12,16 @@ Public Class StockLevelForm
     Dim slproductimage As Object
     Dim slbrandid, slcategoryid As Integer
     Dim slconditionstringA, slconditionstringB, slconditionstringC As String
-    Private Sub StockLevelForm_Load(sender As Object, e As EventArgs) Handles Me.Load
+    Private Async Sub StockLevelForm_Load(sender As Object, e As EventArgs) Handles Me.Load
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
             clearfields()
             callAutoComplete()
             callAutoPopulate()
+
+            Await LoadCategoriesAsync()
+
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
@@ -34,6 +29,12 @@ Public Class StockLevelForm
         End Try
         Me.Cursor = Cursors.Default
     End Sub
+
+    Private Async Function LoadCategoriesAsync() As Task
+        Dim categories = (Await GetCategoriesAsync()).
+            OrderBy(Function(t) t.CategoryName).
+            ToList()
+    End Function
 #Region "Functions"
     Sub callAutoComplete()
         globalautocompleteBrandName(cboBrandName, "AND `status` = 'Active'", Me)
@@ -43,6 +44,12 @@ Public Class StockLevelForm
         globalautopopulateBrandName(cboBrandName, "AND `status` = 'Active'", Me)
         globalautopopulateCategory(cboCategory, "AND `status` = 'Active'", Me)
     End Sub
+
+    Private Async Function GetCategoriesAsync() As Task(Of List(Of Category))
+        Dim categoryDataService = GetRequiredService(Of ICategoryDataService)()
+        Return Await categoryDataService.GetAllByOrganizationIdAsync(Z_OrganizationID)
+    End Function
+
 #Region "Clear/Enable/Visible"
     Sub clearfields()
         Try
@@ -477,6 +484,10 @@ INNER JOIN rackshelfcolumn r ON r.RowID=pil.RackShelfColumnID AND r.`Status`='Ac
             conn.Close()
         End Try
         Me.Cursor = Cursors.Default
+    End Sub
+    Private Sub dgProductColorSizes_CellFormatting(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles dgProductColorSizes.CellFormatting
+        If e.RowIndex >= 0 Then dgProductColorSizes.Rows(e.RowIndex).HeaderCell.Value = $"{e.RowIndex + 1}"
+
     End Sub
 #Region "Datagrid Errors"
     Private Sub dgProductColorSizes_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgProductColorSizes.DataError

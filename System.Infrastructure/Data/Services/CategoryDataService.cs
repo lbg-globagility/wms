@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using WarehouseManagementSystem.Core.Entities;
+using WarehouseManagementSystem.Core.Enums;
 using WarehouseManagementSystem.Core.Interfaces;
 using WarehouseManagementSystem.Core.Interfaces.DomainServices;
 using WarehouseManagementSystem.Core.Interfaces.Repositories;
@@ -66,5 +67,8 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
         protected override string CreateUserActivitySuffixIdentifier(Category entity) => $" with `name` '{entity.CategoryName}' and `status` is '{entity.Status}'";
 
         protected override string GetUserActivityName(Category entity) => _entityName;
+
+        public async Task<List<Category>> GetAllByOrganizationIdAsync(int organizationId, CategoryStatus status = CategoryStatus.Active) => await _categoryRepository.GetAllByOrganizationIdAsync(organizationId);
+
     }
 }

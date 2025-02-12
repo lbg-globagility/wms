@@ -255,6 +255,7 @@ Partial Class StockLevelForm
         DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.ControlText
         DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
         Me.dgProductColorSizes.DefaultCellStyle = DataGridViewCellStyle2
+        Me.dgProductColorSizes.EnableHeadersVisualStyles = False
         Me.dgProductColorSizes.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
         Me.dgProductColorSizes.Location = New System.Drawing.Point(15, 25)
         Me.dgProductColorSizes.Name = "dgProductColorSizes"
@@ -267,6 +268,7 @@ Partial Class StockLevelForm
         DataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText
         DataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
         Me.dgProductColorSizes.RowHeadersDefaultCellStyle = DataGridViewCellStyle3
+        Me.dgProductColorSizes.RowHeadersWidth = 67
         Me.dgProductColorSizes.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.dgProductColorSizes.Size = New System.Drawing.Size(730, 460)
         Me.dgProductColorSizes.TabIndex = 9
@@ -290,6 +292,7 @@ Partial Class StockLevelForm
         Me.pcs_seqno.HeaderText = "Seq. No."
         Me.pcs_seqno.Name = "pcs_seqno"
         Me.pcs_seqno.ReadOnly = True
+        Me.pcs_seqno.Visible = False
         Me.pcs_seqno.Width = 50
         '
         'pcs_productcode
@@ -406,15 +409,15 @@ Partial Class StockLevelForm
     Friend WithEvents dgProductColorSizes As DevComponents.DotNetBar.Controls.DataGridViewX
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents errProvider As System.Windows.Forms.ErrorProvider
-    Friend WithEvents pcs_rowid As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents pcs_colorvalue As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents pcs_seqno As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents pcs_productcode As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents pcs_colorname As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents pcs_color As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents pcs_size As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents pcs_seasoncode As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents pcs_srp As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents pcs_totalqtyavailable As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents pcs_sku As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents pcs_rowid As DataGridViewTextBoxColumn
+    Friend WithEvents pcs_colorvalue As DataGridViewTextBoxColumn
+    Friend WithEvents pcs_seqno As DataGridViewTextBoxColumn
+    Friend WithEvents pcs_productcode As DataGridViewTextBoxColumn
+    Friend WithEvents pcs_colorname As DataGridViewTextBoxColumn
+    Friend WithEvents pcs_color As DataGridViewTextBoxColumn
+    Friend WithEvents pcs_size As DataGridViewTextBoxColumn
+    Friend WithEvents pcs_seasoncode As DataGridViewTextBoxColumn
+    Friend WithEvents pcs_srp As DataGridViewTextBoxColumn
+    Friend WithEvents pcs_totalqtyavailable As DataGridViewTextBoxColumn
+    Friend WithEvents pcs_sku As DataGridViewTextBoxColumn
 End Class

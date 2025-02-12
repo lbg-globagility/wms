@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WarehouseManagementSystem.Core.Entities;
+using WarehouseManagementSystem.Core.Enums;
 using WarehouseManagementSystem.Core.Interfaces.Repositories;
 using WarehouseManagementSystem.Infrastructure.Data.Repositories.Base;
 
@@ -51,5 +52,10 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
                 .Where(t => namesToLower.Contains(t.CategoryName.ToLower()))
                 .ToList());
         }
+
+        public async Task<List<Category>> GetAllByOrganizationIdAsync(int organizationId, CategoryStatus status = CategoryStatus.Active) => await _context.Categories
+            .Where(t => t.OrganizationID == organizationId)
+            .Where(t => t.Status == status)
+            .ToListAsync();
     }
 }
