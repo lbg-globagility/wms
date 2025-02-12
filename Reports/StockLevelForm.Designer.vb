@@ -42,19 +42,19 @@ Partial Class StockLevelForm
         Me.Label3 = New System.Windows.Forms.Label()
         Me.gbProductColorSizes = New System.Windows.Forms.GroupBox()
         Me.dgProductColorSizes = New DevComponents.DotNetBar.Controls.DataGridViewX()
+        Me.pcs_rowid = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.pcs_colorvalue = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.pcs_seqno = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.pcs_productcode = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.pcs_colorname = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.pcs_color = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.pcs_size = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.pcs_seasoncode = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.pcs_srp = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.pcs_totalqtyavailable = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.pcs_sku = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.errProvider = New System.Windows.Forms.ErrorProvider(Me.components)
-        Me.pcs_sku = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.pcs_totalqtyavailable = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.pcs_srp = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.pcs_seasoncode = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.pcs_size = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.pcs_color = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.pcs_colorname = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.pcs_productcode = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.pcs_seqno = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.pcs_colorvalue = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.pcs_rowid = New System.Windows.Forms.DataGridViewTextBoxColumn()
         CType(Me.pbClose, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.gbFilter.SuspendLayout()
         Me.pnlOptions.SuspendLayout()
@@ -257,7 +257,6 @@ Partial Class StockLevelForm
         Me.dgProductColorSizes.DefaultCellStyle = DataGridViewCellStyle2
         Me.dgProductColorSizes.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
         Me.dgProductColorSizes.Location = New System.Drawing.Point(15, 25)
-        Me.dgProductColorSizes.MultiSelect = False
         Me.dgProductColorSizes.Name = "dgProductColorSizes"
         Me.dgProductColorSizes.ReadOnly = True
         DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
@@ -271,6 +270,81 @@ Partial Class StockLevelForm
         Me.dgProductColorSizes.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.dgProductColorSizes.Size = New System.Drawing.Size(730, 460)
         Me.dgProductColorSizes.TabIndex = 9
+        '
+        'pcs_rowid
+        '
+        Me.pcs_rowid.HeaderText = "rowid"
+        Me.pcs_rowid.Name = "pcs_rowid"
+        Me.pcs_rowid.ReadOnly = True
+        Me.pcs_rowid.Visible = False
+        '
+        'pcs_colorvalue
+        '
+        Me.pcs_colorvalue.HeaderText = "colorvalue"
+        Me.pcs_colorvalue.Name = "pcs_colorvalue"
+        Me.pcs_colorvalue.ReadOnly = True
+        Me.pcs_colorvalue.Visible = False
+        '
+        'pcs_seqno
+        '
+        Me.pcs_seqno.HeaderText = "Seq. No."
+        Me.pcs_seqno.Name = "pcs_seqno"
+        Me.pcs_seqno.ReadOnly = True
+        Me.pcs_seqno.Width = 50
+        '
+        'pcs_productcode
+        '
+        Me.pcs_productcode.HeaderText = "Product Code"
+        Me.pcs_productcode.Name = "pcs_productcode"
+        Me.pcs_productcode.ReadOnly = True
+        Me.pcs_productcode.Width = 120
+        '
+        'pcs_colorname
+        '
+        Me.pcs_colorname.HeaderText = "Color Name"
+        Me.pcs_colorname.Name = "pcs_colorname"
+        Me.pcs_colorname.ReadOnly = True
+        '
+        'pcs_color
+        '
+        Me.pcs_color.HeaderText = ""
+        Me.pcs_color.Name = "pcs_color"
+        Me.pcs_color.ReadOnly = True
+        Me.pcs_color.Width = 40
+        '
+        'pcs_size
+        '
+        Me.pcs_size.HeaderText = "Size"
+        Me.pcs_size.Name = "pcs_size"
+        Me.pcs_size.ReadOnly = True
+        Me.pcs_size.Width = 50
+        '
+        'pcs_seasoncode
+        '
+        Me.pcs_seasoncode.HeaderText = "Season Code"
+        Me.pcs_seasoncode.Name = "pcs_seasoncode"
+        Me.pcs_seasoncode.ReadOnly = True
+        Me.pcs_seasoncode.Width = 70
+        '
+        'pcs_srp
+        '
+        Me.pcs_srp.HeaderText = "SRP"
+        Me.pcs_srp.Name = "pcs_srp"
+        Me.pcs_srp.ReadOnly = True
+        Me.pcs_srp.Width = 80
+        '
+        'pcs_totalqtyavailable
+        '
+        Me.pcs_totalqtyavailable.HeaderText = "Total Qty. Available"
+        Me.pcs_totalqtyavailable.Name = "pcs_totalqtyavailable"
+        Me.pcs_totalqtyavailable.ReadOnly = True
+        Me.pcs_totalqtyavailable.Width = 80
+        '
+        'pcs_sku
+        '
+        Me.pcs_sku.HeaderText = "SKU"
+        Me.pcs_sku.Name = "pcs_sku"
+        Me.pcs_sku.ReadOnly = True
         '
         'Label2
         '
@@ -287,81 +361,6 @@ Partial Class StockLevelForm
         'errProvider
         '
         Me.errProvider.ContainerControl = Me
-        '
-        'pcs_sku
-        '
-        Me.pcs_sku.HeaderText = "SKU"
-        Me.pcs_sku.Name = "pcs_sku"
-        Me.pcs_sku.ReadOnly = True
-        '
-        'pcs_totalqtyavailable
-        '
-        Me.pcs_totalqtyavailable.HeaderText = "Total Qty. Available"
-        Me.pcs_totalqtyavailable.Name = "pcs_totalqtyavailable"
-        Me.pcs_totalqtyavailable.ReadOnly = True
-        Me.pcs_totalqtyavailable.Width = 80
-        '
-        'pcs_srp
-        '
-        Me.pcs_srp.HeaderText = "SRP"
-        Me.pcs_srp.Name = "pcs_srp"
-        Me.pcs_srp.ReadOnly = True
-        Me.pcs_srp.Width = 80
-        '
-        'pcs_seasoncode
-        '
-        Me.pcs_seasoncode.HeaderText = "Season Code"
-        Me.pcs_seasoncode.Name = "pcs_seasoncode"
-        Me.pcs_seasoncode.ReadOnly = True
-        Me.pcs_seasoncode.Width = 70
-        '
-        'pcs_size
-        '
-        Me.pcs_size.HeaderText = "Size"
-        Me.pcs_size.Name = "pcs_size"
-        Me.pcs_size.ReadOnly = True
-        Me.pcs_size.Width = 50
-        '
-        'pcs_color
-        '
-        Me.pcs_color.HeaderText = ""
-        Me.pcs_color.Name = "pcs_color"
-        Me.pcs_color.ReadOnly = True
-        Me.pcs_color.Width = 40
-        '
-        'pcs_colorname
-        '
-        Me.pcs_colorname.HeaderText = "Color Name"
-        Me.pcs_colorname.Name = "pcs_colorname"
-        Me.pcs_colorname.ReadOnly = True
-        '
-        'pcs_productcode
-        '
-        Me.pcs_productcode.HeaderText = "Product Code"
-        Me.pcs_productcode.Name = "pcs_productcode"
-        Me.pcs_productcode.ReadOnly = True
-        Me.pcs_productcode.Width = 120
-        '
-        'pcs_seqno
-        '
-        Me.pcs_seqno.HeaderText = "Seq. No."
-        Me.pcs_seqno.Name = "pcs_seqno"
-        Me.pcs_seqno.ReadOnly = True
-        Me.pcs_seqno.Width = 50
-        '
-        'pcs_colorvalue
-        '
-        Me.pcs_colorvalue.HeaderText = "colorvalue"
-        Me.pcs_colorvalue.Name = "pcs_colorvalue"
-        Me.pcs_colorvalue.ReadOnly = True
-        Me.pcs_colorvalue.Visible = False
-        '
-        'pcs_rowid
-        '
-        Me.pcs_rowid.HeaderText = "rowid"
-        Me.pcs_rowid.Name = "pcs_rowid"
-        Me.pcs_rowid.ReadOnly = True
-        Me.pcs_rowid.Visible = False
         '
         'StockLevelForm
         '
