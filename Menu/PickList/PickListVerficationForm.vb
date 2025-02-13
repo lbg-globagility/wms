@@ -58,7 +58,8 @@ Public Class PickListVerficationForm
 
         Dim picklistOrders = picklist.PickListOrders.
             Where(Function(t) Not t.IsInactiveStatus).
-            OrderBy(Function(t) t.OrderItemID).
+            OrderBy(Function(t) t.OrderID).
+            ThenBy(Function(t) t.OrderItemID).
             ToList()
 
         Dim dataSource = picklistOrders.
