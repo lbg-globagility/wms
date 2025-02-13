@@ -3027,7 +3027,7 @@ Public Class PickListForm
         Dim section = printreport.ReportDefinition.Sections.OfType(Of Section).FirstOrDefault()
         Dim deliveryDate As TextObject = CType((section?.ReportObjects("deliveryDate1")), TextObject)
 
-        Dim sfdfsd = Date.Parse(txtPickListDate.Text)
+        Dim sfdfsd = Date.Parse(If(String.IsNullOrEmpty(txtPickListDate?.Text), Date.Now.ToShortDateString(), txtPickListDate.Text))
         Dim form = New PrintPickListDateDialog(sfdfsd)
         If form.ShowDialog() = DialogResult.OK Then
             deliveryDate.Text = form.SelectedDate
