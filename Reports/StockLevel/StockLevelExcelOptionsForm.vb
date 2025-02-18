@@ -1,6 +1,5 @@
 ﻿Option Strict On
 
-Imports System.Drawing.Design
 Imports OfficeOpenXml
 Imports WarehouseManagementSystem.Core.Entities
 Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
@@ -216,15 +215,8 @@ Partial Public Class StockLevelExcelOptionsForm
 
     End Sub
 
-End Class
-
-Partial Public Class StockLevelExcelOptionsForm
-
     Private Class StockLevelModel
-        Private ReadOnly _productInventoryLocation As ProductInventoryLocation
-
         Public Sub New(productInventoryLocation As ProductInventoryLocation)
-            _productInventoryLocation = productInventoryLocation
 
             Dim productColorSize = productInventoryLocation?.ProductColorSize
 
