@@ -1,4 +1,5 @@
-﻿Imports MySql.Data.MySqlClient
+﻿Imports System.Runtime.InteropServices.ComTypes
+Imports MySql.Data.MySqlClient
 Imports WarehouseManagementSystem.Core.Entities
 Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
 Public Class StockLevelForm
@@ -489,6 +490,19 @@ INNER JOIN rackshelfcolumn r ON r.RowID=pil.RackShelfColumnID AND r.`Status`='Ac
         If e.RowIndex >= 0 Then dgProductColorSizes.Rows(e.RowIndex).HeaderCell.Value = $"{e.RowIndex + 1}"
 
     End Sub
+
+    Private Sub linkExportToExcel_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles linkExportToExcel.LinkClicked
+        Dim form = New StockLevelExcelOptionsForm(Z_OrganizationID,
+            New Integer() {slcategoryid},
+            categoryName:=cboCategory.Text,
+            isDamageStocks:=rbtnDamageStocks.Checked)
+
+        If form.ShowDialog() = DialogResult.OK Then
+
+        End If
+
+    End Sub
+
 #Region "Datagrid Errors"
     Private Sub dgProductColorSizes_DataError(sender As Object, e As DataGridViewDataErrorEventArgs) Handles dgProductColorSizes.DataError
         Me.Cursor = Cursors.WaitCursor

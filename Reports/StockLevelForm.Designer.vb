@@ -55,6 +55,7 @@ Partial Class StockLevelForm
         Me.pcs_sku = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.errProvider = New System.Windows.Forms.ErrorProvider(Me.components)
+        Me.linkExportToExcel = New System.Windows.Forms.LinkLabel()
         CType(Me.pbClose, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.gbFilter.SuspendLayout()
         Me.pnlOptions.SuspendLayout()
@@ -313,6 +314,7 @@ Partial Class StockLevelForm
         Me.pcs_color.HeaderText = ""
         Me.pcs_color.Name = "pcs_color"
         Me.pcs_color.ReadOnly = True
+        Me.pcs_color.Visible = False
         Me.pcs_color.Width = 40
         '
         'pcs_size
@@ -365,6 +367,19 @@ Partial Class StockLevelForm
         '
         Me.errProvider.ContainerControl = Me
         '
+        'linkExportToExcel
+        '
+        Me.linkExportToExcel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.linkExportToExcel.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline
+        Me.linkExportToExcel.LinkColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(155, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.linkExportToExcel.Location = New System.Drawing.Point(280, 208)
+        Me.linkExportToExcel.Name = "linkExportToExcel"
+        Me.linkExportToExcel.Size = New System.Drawing.Size(80, 16)
+        Me.linkExportToExcel.TabIndex = 239
+        Me.linkExportToExcel.TabStop = True
+        Me.linkExportToExcel.Text = "Export to Excel"
+        Me.linkExportToExcel.TextAlign = System.Drawing.ContentAlignment.TopCenter
+        '
         'StockLevelForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -372,6 +387,7 @@ Partial Class StockLevelForm
         Me.AutoScroll = True
         Me.BackColor = System.Drawing.Color.White
         Me.ClientSize = New System.Drawing.Size(1200, 560)
+        Me.Controls.Add(Me.linkExportToExcel)
         Me.Controls.Add(Me.gbProductColorSizes)
         Me.Controls.Add(Me.gbFilter)
         Me.Controls.Add(Me.pbClose)
@@ -420,4 +436,5 @@ Partial Class StockLevelForm
     Friend WithEvents pcs_srp As DataGridViewTextBoxColumn
     Friend WithEvents pcs_totalqtyavailable As DataGridViewTextBoxColumn
     Friend WithEvents pcs_sku As DataGridViewTextBoxColumn
+    Friend WithEvents linkExportToExcel As LinkLabel
 End Class

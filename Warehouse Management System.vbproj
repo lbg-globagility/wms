@@ -884,6 +884,12 @@
     <Compile Include="Reports\StockLevelForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Reports\StockLevel\StockLevelExcelOptionsForm.Designer.vb">
+      <DependentUpon>StockLevelExcelOptionsForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\StockLevel\StockLevelExcelOptionsForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Settings\AddressForm.Designer.vb">
       <DependentUpon>AddressForm.vb</DependentUpon>
     </Compile>
@@ -1444,6 +1450,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\StockLevelForm.resx">
       <DependentUpon>StockLevelForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\StockLevel\StockLevelExcelOptionsForm.resx">
+      <DependentUpon>StockLevelExcelOptionsForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Settings\AddressForm.resx">
       <DependentUpon>AddressForm.vb</DependentUpon>

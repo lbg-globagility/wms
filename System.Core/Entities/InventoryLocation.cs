@@ -176,5 +176,7 @@ namespace WarehouseManagementSystem.Core.Entities
         public static Array GetTypes => Enum.GetValues(enumType: typeof(InventoryLocationType));
 
         public string NameAlternative => string.IsNullOrEmpty(Name) ? Type.ToString() : Name;
+
+        public bool IsActive => Status == "Active";
     }
 }

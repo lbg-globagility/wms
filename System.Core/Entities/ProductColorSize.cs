@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using WarehouseManagementSystem.Core.Entities.Base;
+using WarehouseManagementSystem.Core.Enums;
 
 namespace WarehouseManagementSystem.Core.Entities
 {
@@ -67,5 +68,7 @@ namespace WarehouseManagementSystem.Core.Entities
                 seasonCode: seasonCode);
 
         public bool HasColorAndSize(string colorName, decimal size) => ProductColor == null ? false : ProductColor.Color.ColorName.ToLower().Trim() == (colorName?.ToLower() ?? string.Empty).Trim() && Size == size;
+        
+        public bool IsActive => Status == ProductStatus.Active.ToString();
     }
 }
