@@ -23,14 +23,14 @@ Partial Class CustomerOrdersForm2
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle9 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle8 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(CustomerOrdersForm2))
-        Dim DataGridViewCellStyle7 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle10 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle11 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle12 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle13 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
         Me.gridOrders = New DevComponents.DotNetBar.Controls.DataGridViewX()
         Me.Column13 = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -55,6 +55,7 @@ Partial Class CustomerOrdersForm2
         Me.TextBoxSearch = New System.Windows.Forms.TextBox()
         Me.LinkLabelRefresh = New System.Windows.Forms.LinkLabel()
         Me.SplitContainer2 = New System.Windows.Forms.SplitContainer()
+        Me.cboCustomerName = New SergeUtils.EasyCompletionComboBox()
         Me.Label25 = New System.Windows.Forms.Label()
         Me.txtComments = New System.Windows.Forms.TextBox()
         Me.Panel4 = New System.Windows.Forms.Panel()
@@ -98,7 +99,6 @@ Partial Class CustomerOrdersForm2
         Me.txtOrderNumber = New System.Windows.Forms.TextBox()
         Me.txtDeliveryAddress = New System.Windows.Forms.TextBox()
         Me.dtpOrderDate = New System.Windows.Forms.DateTimePicker()
-        Me.cboCustomerName = New System.Windows.Forms.ComboBox()
         Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
         Me.ToolStripButtonNew = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripLabel3 = New System.Windows.Forms.ToolStripLabel()
@@ -190,14 +190,14 @@ Partial Class CustomerOrdersForm2
         Me.gridOrders.AllowUserToDeleteRows = False
         Me.gridOrders.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.gridOrders.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column13, Me.Column14, Me.Column19, Me.Column16, Me.Column18, Me.Column21, Me.Column15, Me.Column17, Me.Column20, Me.Column12})
-        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle2.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.gridOrders.DefaultCellStyle = DataGridViewCellStyle2
+        DataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle9.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.gridOrders.DefaultCellStyle = DataGridViewCellStyle9
         Me.gridOrders.Dock = System.Windows.Forms.DockStyle.Fill
         Me.gridOrders.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
         Me.gridOrders.Location = New System.Drawing.Point(0, 127)
@@ -266,9 +266,9 @@ Partial Class CustomerOrdersForm2
         'Column20
         '
         Me.Column20.DataPropertyName = "TotalAmount"
-        DataGridViewCellStyle1.Format = "N2"
-        DataGridViewCellStyle1.NullValue = Nothing
-        Me.Column20.DefaultCellStyle = DataGridViewCellStyle1
+        DataGridViewCellStyle8.Format = "N2"
+        DataGridViewCellStyle8.NullValue = Nothing
+        Me.Column20.DefaultCellStyle = DataGridViewCellStyle8
         Me.Column20.HeaderText = "Total Amount"
         Me.Column20.Name = "Column20"
         Me.Column20.ReadOnly = True
@@ -424,6 +424,7 @@ Partial Class CustomerOrdersForm2
         '
         'SplitContainer2.Panel1
         '
+        Me.SplitContainer2.Panel1.Controls.Add(Me.cboCustomerName)
         Me.SplitContainer2.Panel1.Controls.Add(Me.Label25)
         Me.SplitContainer2.Panel1.Controls.Add(Me.txtComments)
         Me.SplitContainer2.Panel1.Controls.Add(Me.Panel4)
@@ -454,7 +455,6 @@ Partial Class CustomerOrdersForm2
         Me.SplitContainer2.Panel1.Controls.Add(Me.txtOrderNumber)
         Me.SplitContainer2.Panel1.Controls.Add(Me.txtDeliveryAddress)
         Me.SplitContainer2.Panel1.Controls.Add(Me.dtpOrderDate)
-        Me.SplitContainer2.Panel1.Controls.Add(Me.cboCustomerName)
         Me.SplitContainer2.Panel1.Controls.Add(Me.ToolStrip1)
         Me.SplitContainer2.Panel1.Controls.Add(Me.Label9)
         '
@@ -466,6 +466,18 @@ Partial Class CustomerOrdersForm2
         Me.SplitContainer2.Size = New System.Drawing.Size(927, 713)
         Me.SplitContainer2.SplitterDistance = 301
         Me.SplitContainer2.TabIndex = 0
+        '
+        'cboCustomerName
+        '
+        Me.cboCustomerName.DisplayMember = "CompanyName"
+        Me.cboCustomerName.Font = New System.Drawing.Font("Segoe UI", 8.25!)
+        Me.cboCustomerName.FormattingEnabled = True
+        Me.cboCustomerName.Location = New System.Drawing.Point(168, 111)
+        Me.cboCustomerName.MatchingMethod = SergeUtils.StringMatchingMethod.UseWildcards
+        Me.cboCustomerName.Name = "cboCustomerName"
+        Me.cboCustomerName.Size = New System.Drawing.Size(208, 21)
+        Me.cboCustomerName.TabIndex = 757
+        Me.cboCustomerName.ValueMember = "RowID"
         '
         'Label25
         '
@@ -932,18 +944,6 @@ Partial Class CustomerOrdersForm2
         Me.dtpOrderDate.Size = New System.Drawing.Size(208, 22)
         Me.dtpOrderDate.TabIndex = 1
         '
-        'cboCustomerName
-        '
-        Me.cboCustomerName.CausesValidation = False
-        Me.cboCustomerName.DisplayMember = "CompanyName"
-        Me.cboCustomerName.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cboCustomerName.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cboCustomerName.Location = New System.Drawing.Point(168, 111)
-        Me.cboCustomerName.Name = "cboCustomerName"
-        Me.cboCustomerName.Size = New System.Drawing.Size(208, 21)
-        Me.cboCustomerName.TabIndex = 3
-        Me.cboCustomerName.ValueMember = "RowID"
-        '
         'ToolStrip1
         '
         Me.ToolStrip1.BackColor = System.Drawing.Color.Transparent
@@ -1080,14 +1080,14 @@ Partial Class CustomerOrdersForm2
         Me.gridOrderItems.AllowUserToDeleteRows = False
         Me.gridOrderItems.ColumnHeadersHeight = 40
         Me.gridOrderItems.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column23, Me.Column1, Me.Column2, Me.Column3, Me.Column4, Me.Column5, Me.Column9, Me.Column6, Me.Column7, Me.ColumnUnitOfLength, Me.Column22, Me.ColumnUnitOfLengthPriceText, Me.Column8, Me.Column10, Me.Column11, Me.ColumnDelete})
-        DataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle7.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.gridOrderItems.DefaultCellStyle = DataGridViewCellStyle7
+        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle6.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.gridOrderItems.DefaultCellStyle = DataGridViewCellStyle6
         Me.gridOrderItems.Dock = System.Windows.Forms.DockStyle.Fill
         Me.gridOrderItems.EnableHeadersVisualStyles = False
         Me.gridOrderItems.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
@@ -1134,8 +1134,8 @@ Partial Class CustomerOrdersForm2
         'Column5
         '
         Me.Column5.DataPropertyName = "QuantityOrdered"
-        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.Column5.DefaultCellStyle = DataGridViewCellStyle3
+        DataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.Column5.DefaultCellStyle = DataGridViewCellStyle10
         Me.Column5.HeaderText = "Number of Roll(s)"
         Me.Column5.Name = "Column5"
         Me.Column5.Width = 120
@@ -1151,20 +1151,20 @@ Partial Class CustomerOrdersForm2
         'Column6
         '
         Me.Column6.DataPropertyName = "UnitPrice"
-        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle4.Format = "N2"
-        DataGridViewCellStyle4.NullValue = Nothing
-        Me.Column6.DefaultCellStyle = DataGridViewCellStyle4
+        DataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle11.Format = "N2"
+        DataGridViewCellStyle11.NullValue = Nothing
+        Me.Column6.DefaultCellStyle = DataGridViewCellStyle11
         Me.Column6.HeaderText = "Price per Roll"
         Me.Column6.Name = "Column6"
         '
         'Column7
         '
         Me.Column7.DataPropertyName = "TotalItemPrice"
-        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle5.Format = "N2"
-        DataGridViewCellStyle5.NullValue = Nothing
-        Me.Column7.DefaultCellStyle = DataGridViewCellStyle5
+        DataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle12.Format = "N2"
+        DataGridViewCellStyle12.NullValue = Nothing
+        Me.Column7.DefaultCellStyle = DataGridViewCellStyle12
         Me.Column7.HeaderText = "Total Item Price (Roll)"
         Me.Column7.Name = "Column7"
         Me.Column7.ReadOnly = True
@@ -1185,8 +1185,8 @@ Partial Class CustomerOrdersForm2
         Me.Column22.BackgroundStyle.Class = "DataGridViewNumericBorder"
         Me.Column22.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
         Me.Column22.DataPropertyName = "UnitOfLengthNumber"
-        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopRight
-        Me.Column22.DefaultCellStyle = DataGridViewCellStyle6
+        DataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopRight
+        Me.Column22.DefaultCellStyle = DataGridViewCellStyle13
         Me.Column22.HeaderText = "Unit Length Number"
         Me.Column22.Increment = 1.0R
         Me.Column22.Name = "Column22"
@@ -1353,7 +1353,6 @@ Partial Class CustomerOrdersForm2
     Friend WithEvents txtOrderNumber As TextBox
     Friend WithEvents txtDeliveryAddress As TextBox
     Friend WithEvents dtpOrderDate As DateTimePicker
-    Friend WithEvents cboCustomerName As ComboBox
     Friend WithEvents Label36 As Label
     Friend WithEvents Label41 As Label
     Friend WithEvents Label29 As Label
@@ -1441,4 +1440,5 @@ Partial Class CustomerOrdersForm2
     Friend WithEvents Column10 As DataGridViewTextBoxColumn
     Friend WithEvents Column11 As DataGridViewTextBoxColumn
     Friend WithEvents ColumnDelete As DevComponents.DotNetBar.Controls.DataGridViewButtonXColumn
+    Friend WithEvents cboCustomerName As SergeUtils.EasyCompletionComboBox
 End Class
