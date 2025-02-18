@@ -1,9 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class StockLevelExcelOptionsForm
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -20,10 +20,9 @@ Partial Class StockLevelExcelOptionsForm
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.DataGridView1 = New System.Windows.Forms.DataGridView()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.RadioButton2 = New System.Windows.Forms.RadioButton()
         Me.RadioButton1 = New System.Windows.Forms.RadioButton()
@@ -37,7 +36,6 @@ Partial Class StockLevelExcelOptionsForm
         Me.Panel4 = New System.Windows.Forms.Panel()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Panel1.SuspendLayout()
-        CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox1.SuspendLayout()
         Me.Panel2.SuspendLayout()
         Me.Panel3.SuspendLayout()
@@ -45,23 +43,12 @@ Partial Class StockLevelExcelOptionsForm
         '
         'Panel1
         '
-        Me.Panel1.Controls.Add(Me.DataGridView1)
         Me.Panel1.Controls.Add(Me.GroupBox1)
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel1.Location = New System.Drawing.Point(0, 146)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(800, 143)
+        Me.Panel1.Size = New System.Drawing.Size(331, 143)
         Me.Panel1.TabIndex = 1
-        '
-        'DataGridView1
-        '
-        Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.DataGridView1.EnableHeadersVisualStyles = False
-        Me.DataGridView1.Location = New System.Drawing.Point(325, 6)
-        Me.DataGridView1.Name = "DataGridView1"
-        Me.DataGridView1.RowHeadersWidth = 67
-        Me.DataGridView1.Size = New System.Drawing.Size(457, 131)
-        Me.DataGridView1.TabIndex = 1
         '
         'GroupBox1
         '
@@ -131,14 +118,14 @@ Partial Class StockLevelExcelOptionsForm
         Me.Panel2.Enabled = False
         Me.Panel2.Location = New System.Drawing.Point(0, 289)
         Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(800, 35)
+        Me.Panel2.Size = New System.Drawing.Size(331, 35)
         Me.Panel2.TabIndex = 2
         '
         'Button2
         '
         Me.Button2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Button2.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.Button2.Location = New System.Drawing.Point(713, 6)
+        Me.Button2.Location = New System.Drawing.Point(244, 6)
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(75, 23)
         Me.Button2.TabIndex = 1
@@ -148,7 +135,7 @@ Partial Class StockLevelExcelOptionsForm
         'Button1
         '
         Me.Button1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Button1.Location = New System.Drawing.Point(632, 6)
+        Me.Button1.Location = New System.Drawing.Point(163, 6)
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(75, 23)
         Me.Button1.TabIndex = 0
@@ -160,7 +147,7 @@ Partial Class StockLevelExcelOptionsForm
         Me.FlowLayoutPanelCategories.Dock = System.Windows.Forms.DockStyle.Fill
         Me.FlowLayoutPanelCategories.Location = New System.Drawing.Point(16, 20)
         Me.FlowLayoutPanelCategories.Name = "FlowLayoutPanelCategories"
-        Me.FlowLayoutPanelCategories.Size = New System.Drawing.Size(784, 126)
+        Me.FlowLayoutPanelCategories.Size = New System.Drawing.Size(315, 126)
         Me.FlowLayoutPanelCategories.TabIndex = 0
         '
         'Panel3
@@ -171,7 +158,7 @@ Partial Class StockLevelExcelOptionsForm
         Me.Panel3.Dock = System.Windows.Forms.DockStyle.Top
         Me.Panel3.Location = New System.Drawing.Point(0, 0)
         Me.Panel3.Name = "Panel3"
-        Me.Panel3.Size = New System.Drawing.Size(800, 146)
+        Me.Panel3.Size = New System.Drawing.Size(331, 146)
         Me.Panel3.TabIndex = 0
         '
         'Panel4
@@ -188,7 +175,7 @@ Partial Class StockLevelExcelOptionsForm
         Me.Label1.Font = New System.Drawing.Font("Segoe UI Semibold", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label1.Location = New System.Drawing.Point(0, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(800, 20)
+        Me.Label1.Size = New System.Drawing.Size(331, 20)
         Me.Label1.TabIndex = 0
         Me.Label1.Text = "Select Category(ies)"
         '
@@ -197,7 +184,7 @@ Partial Class StockLevelExcelOptionsForm
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.White
-        Me.ClientSize = New System.Drawing.Size(800, 324)
+        Me.ClientSize = New System.Drawing.Size(331, 324)
         Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.Panel3)
         Me.Controls.Add(Me.Panel2)
@@ -208,7 +195,6 @@ Partial Class StockLevelExcelOptionsForm
         Me.Name = "StockLevelExcelOptionsForm"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Panel1.ResumeLayout(False)
-        CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
         Me.Panel2.ResumeLayout(False)
@@ -230,5 +216,4 @@ Partial Class StockLevelExcelOptionsForm
     Friend WithEvents Panel4 As Panel
     Friend WithEvents RadioButton2 As RadioButton
     Friend WithEvents RadioButton1 As RadioButton
-    Friend WithEvents DataGridView1 As DataGridView
 End Class

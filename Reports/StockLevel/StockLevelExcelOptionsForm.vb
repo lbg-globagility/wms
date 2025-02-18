@@ -124,9 +124,6 @@ Partial Public Class StockLevelExcelOptionsForm
             Select(Function(t) New StockLevelModel(t)).
             ToList()
 
-        DataGridView1.BindingContext = New BindingContext()
-        DataGridView1.DataSource = models
-
         Dim now = DateTime.Now
         Dim time = now.ToString("HHmm")
         Dim [date] = now.ToString("yyMMdd")
@@ -208,11 +205,6 @@ Partial Public Class StockLevelExcelOptionsForm
         End Using
 
         Process.Start(saveFileDialogHelperOutPut.FileInfo.FullName)
-    End Sub
-
-    Private Sub DataGridView1_CellFormatting(sender As Object, e As DataGridViewCellFormattingEventArgs) Handles DataGridView1.CellFormatting
-        If e.RowIndex >= 0 Then DataGridView1.Rows(e.RowIndex).HeaderCell.Value = $"{e.RowIndex + 1}"
-
     End Sub
 
     Private Class StockLevelModel
