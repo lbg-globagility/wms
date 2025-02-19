@@ -179,15 +179,17 @@ Partial Public Class StockLevelExcelOptionsForm
                     rowIndex += 1
                 Next
 
-                With defaultWorksheet.Cells(rowIndex, 7)
-                    .Formula = $"=SUM(G{initialRowIndex}:G{rowIndex - 1})"
-                    .Style.Font.Bold = True
-                    .Style.Numberformat.Format = "#,##0"
-                    .Style.HorizontalAlignment = Style.ExcelHorizontalAlignment.Right
-                    .Style.Border.Top.Style = Style.ExcelBorderStyle.Thin
-                End With
+                If CheckBox1.Checked Then
+                    With defaultWorksheet.Cells(rowIndex, 7)
+                        .Formula = $"=SUM(G{initialRowIndex}:G{rowIndex - 1})"
+                        .Style.Font.Bold = True
+                        .Style.Numberformat.Format = "#,##0"
+                        .Style.HorizontalAlignment = Style.ExcelHorizontalAlignment.Right
+                        .Style.Border.Top.Style = Style.ExcelBorderStyle.Thin
+                    End With
 
-                rowIndex += 2
+                    rowIndex += 2
+                End If
 
                 initialRowIndex = rowIndex
             Next
