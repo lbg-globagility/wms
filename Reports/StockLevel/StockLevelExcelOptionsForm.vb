@@ -227,6 +227,7 @@ Partial Public Class StockLevelExcelOptionsForm
             TotalAvailableQty = If(productInventoryLocation?.TotalAvailableQty, 0)
             UnitOfMeasure = productInventoryLocation?.UnitOfMeasure2
             CategoryName = productColorSize?.ProductColor?.Product?.Category?.CategoryName
+            ProductGroupName = productColorSize?.ProductColor?.Product?.ProductGroupName
         End Sub
 
         Public ReadOnly Property ProductCode As String
@@ -237,6 +238,7 @@ Partial Public Class StockLevelExcelOptionsForm
         Public ReadOnly Property TotalAvailableQty As Integer
         Public ReadOnly Property UnitOfMeasure As String
         Public ReadOnly Property CategoryName As String
+        Public ReadOnly Property ProductGroupName As String
     End Class
 
 End Class
