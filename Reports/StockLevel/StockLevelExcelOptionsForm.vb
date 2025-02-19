@@ -208,7 +208,10 @@ Partial Public Class StockLevelExcelOptionsForm
             excel.Save()
         End Using
 
+        DialogResult = DialogResult.OK
+
         Process.Start(saveFileDialogHelperOutPut.FileInfo.FullName)
+
     End Sub
 
     Private Class StockLevelModel
