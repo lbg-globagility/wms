@@ -24,6 +24,7 @@ Partial Class StockLevelExcelOptionsForm
     Private Sub InitializeComponent()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.CheckBox3 = New System.Windows.Forms.CheckBox()
         Me.RadioButton2 = New System.Windows.Forms.RadioButton()
         Me.RadioButton1 = New System.Windows.Forms.RadioButton()
         Me.CheckBox2 = New System.Windows.Forms.CheckBox()
@@ -52,21 +53,35 @@ Partial Class StockLevelExcelOptionsForm
         '
         'GroupBox1
         '
+        Me.GroupBox1.Controls.Add(Me.CheckBox3)
         Me.GroupBox1.Controls.Add(Me.RadioButton2)
         Me.GroupBox1.Controls.Add(Me.RadioButton1)
         Me.GroupBox1.Controls.Add(Me.CheckBox2)
         Me.GroupBox1.Controls.Add(Me.CheckBox1)
-        Me.GroupBox1.Location = New System.Drawing.Point(12, 6)
+        Me.GroupBox1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.GroupBox1.Location = New System.Drawing.Point(0, 0)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(307, 125)
+        Me.GroupBox1.Size = New System.Drawing.Size(331, 143)
         Me.GroupBox1.TabIndex = 0
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Options"
         '
+        'CheckBox3
+        '
+        Me.CheckBox3.AutoSize = True
+        Me.CheckBox3.Enabled = False
+        Me.CheckBox3.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CheckBox3.Location = New System.Drawing.Point(24, 90)
+        Me.CheckBox3.Name = "CheckBox3"
+        Me.CheckBox3.Size = New System.Drawing.Size(215, 17)
+        Me.CheckBox3.TabIndex = 3
+        Me.CheckBox3.Text = "Show subtotal per Product Group Name"
+        Me.CheckBox3.UseVisualStyleBackColor = True
+        '
         'RadioButton2
         '
         Me.RadioButton2.AutoSize = True
-        Me.RadioButton2.Location = New System.Drawing.Point(102, 21)
+        Me.RadioButton2.Location = New System.Drawing.Point(108, 21)
         Me.RadioButton2.Name = "RadioButton2"
         Me.RadioButton2.Size = New System.Drawing.Size(103, 17)
         Me.RadioButton2.TabIndex = 1
@@ -78,7 +93,7 @@ Partial Class StockLevelExcelOptionsForm
         'RadioButton1
         '
         Me.RadioButton1.AutoSize = True
-        Me.RadioButton1.Location = New System.Drawing.Point(6, 21)
+        Me.RadioButton1.Location = New System.Drawing.Point(12, 21)
         Me.RadioButton1.Name = "RadioButton1"
         Me.RadioButton1.Size = New System.Drawing.Size(90, 17)
         Me.RadioButton1.TabIndex = 0
@@ -91,10 +106,10 @@ Partial Class StockLevelExcelOptionsForm
         Me.CheckBox2.AutoSize = True
         Me.CheckBox2.Checked = True
         Me.CheckBox2.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBox2.Location = New System.Drawing.Point(6, 90)
+        Me.CheckBox2.Location = New System.Drawing.Point(12, 113)
         Me.CheckBox2.Name = "CheckBox2"
         Me.CheckBox2.Size = New System.Drawing.Size(118, 17)
-        Me.CheckBox2.TabIndex = 3
+        Me.CheckBox2.TabIndex = 4
         Me.CheckBox2.Text = "Show Grand Total"
         Me.CheckBox2.UseVisualStyleBackColor = True
         '
@@ -103,7 +118,7 @@ Partial Class StockLevelExcelOptionsForm
         Me.CheckBox1.AutoSize = True
         Me.CheckBox1.Checked = True
         Me.CheckBox1.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBox1.Location = New System.Drawing.Point(6, 67)
+        Me.CheckBox1.Location = New System.Drawing.Point(12, 67)
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(170, 17)
         Me.CheckBox1.TabIndex = 2
@@ -216,4 +231,5 @@ Partial Class StockLevelExcelOptionsForm
     Friend WithEvents Panel4 As Panel
     Friend WithEvents RadioButton2 As RadioButton
     Friend WithEvents RadioButton1 As RadioButton
+    Friend WithEvents CheckBox3 As CheckBox
 End Class

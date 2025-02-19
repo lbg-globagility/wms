@@ -37,6 +37,7 @@ Public Class SaveFileDialogHelper
         If newFile.Exists Then
             newFile.Delete()
             newFile = New FileInfo(fileName)
+            'newFile = newFile.CopyTo(fileName, True)
         End If
 
         Return SaveFileDialogHelperOutPut.Success(newFile)

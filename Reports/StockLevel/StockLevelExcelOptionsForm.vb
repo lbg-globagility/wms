@@ -98,6 +98,8 @@ Partial Public Class StockLevelExcelOptionsForm
 
         Dim productInventoryLocationDataService = GetRequiredService(Of IProductInventoryLocationDataService)()
 
+        If Not If(inventoryLocationIds?.Any(Function(i) i > 0), False) Then Return Enumerable.Empty(Of ProductInventoryLocation).ToList()
+
         Return (Await productInventoryLocationDataService.GetByInventoryLocationIdsAsync(inventoryLocationIds)).
             Where(Function(t) _categoryIds.Contains(If(t.ProductColorSize.ProductColor.Product.CategoryID, 0))).
             Where(Function(t) t.ProductColorSize.IsActive).
@@ -124,6 +126,15 @@ Partial Public Class StockLevelExcelOptionsForm
             Select(Function(t) New StockLevelModel(t)).
             ToList()
 
+        If Not If(models?.Any(), False) Then
+            MessageBox.Show("Please select one or more Category.",
+                "Invalid Category(ies)",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Warning)
+
+            Return
+        End If
+
         Dim now = DateTime.Now
         Dim time = now.ToString("HHmm")
         Dim [date] = now.ToString("yyMMdd")
@@ -143,7 +154,7 @@ Partial Public Class StockLevelExcelOptionsForm
             If defaultWorksheet Is Nothing Then defaultWorksheet = excel.Workbook.Worksheets.Add(Name:="Sheet1")
 
             Dim initialRowIndex = 1
-            defaultWorksheet.Cells(initialRowIndex, 1).Value = "Category"
+            defaultWorksheet.Cells(initialRowIndex, 1).Value = If(CheckBox3.Checked, String.Empty, "Category")
             defaultWorksheet.Cells(initialRowIndex, 2).Value = "ProductCode"
             defaultWorksheet.Cells(initialRowIndex, 3).Value = "ColorName"
             defaultWorksheet.Cells(initialRowIndex, 4).Value = "SeasonCode"
@@ -164,24 +175,76 @@ Partial Public Class StockLevelExcelOptionsForm
             For Each category In categories
                 Dim categoryName = String.Empty
 
-                For Each model In models.Where(Function(t) t.CategoryName = category.Key)
-                    Dim ifSame = categoryName = model.CategoryName
-                    If Not ifSame Then categoryName = model.CategoryName
+                Dim productColorSizesOfThisCategory = models.Where(Function(t) t.CategoryName = category.Key)
 
-                    defaultWorksheet.Cells(rowIndex, 1).Value = If(ifSame, String.Empty, categoryName)
-                    defaultWorksheet.Cells(rowIndex, 2).Value = model.ProductCode
-                    defaultWorksheet.Cells(rowIndex, 3).Value = model.ColorName
-                    defaultWorksheet.Cells(rowIndex, 4).Value = model.SeasonCode
-                    defaultWorksheet.Cells(rowIndex, 5).Value = model.SRP
-                    defaultWorksheet.Cells(rowIndex, 6).Value = model.SKU
-                    defaultWorksheet.Cells(rowIndex, 7).Value = model.TotalAvailableQty
-                    defaultWorksheet.Cells(rowIndex, 8).Value = model.UnitOfMeasure
-                    rowIndex += 1
-                Next
+                If CheckBox3.Checked Then
+                    Dim productColorSizesOfThisProductGroupNames = productColorSizesOfThisCategory.
+                        GroupBy(Function(t) t.ProductGroupName).
+                        ToList()
+
+                    For Each productGroup In productColorSizesOfThisProductGroupNames
+                        Dim productGroupName = String.Empty
+
+                        For Each productColorSize In productGroup
+
+                            Dim ifSame2 = productGroupName = productGroup.Key
+                            If Not ifSame2 Then productGroupName = productGroup.Key
+
+                            SetRowContent(defaultWorksheet,
+                                    rowIndex,
+                                    productGroupName,
+                                    productColorSize,
+                                    ifSame2)
+
+                            rowIndex += 1
+                        Next
+
+                        With defaultWorksheet.Cells(rowIndex, 6)
+                            .Value = $"{productGroupName} Sub-Total:"
+                            .Style.Font.Bold = True
+                            .Style.Font.Size -= 1
+                        End With
+
+                        With defaultWorksheet.Cells(rowIndex, 7)
+                            .Formula = $"=SUM(G{initialRowIndex}:G{rowIndex - 1})"
+                            .Style.Font.Bold = True
+                            .Style.Numberformat.Format = "#,##0"
+                            .Style.HorizontalAlignment = Style.ExcelHorizontalAlignment.Right
+                        End With
+
+                        rowIndex += 2
+
+                        initialRowIndex = rowIndex
+
+                    Next
+
+                Else
+                    For Each model In productColorSizesOfThisCategory
+                        Dim ifSame = categoryName = model.CategoryName
+                        If Not ifSame Then categoryName = model.CategoryName
+
+                        SetRowContent(defaultWorksheet,
+                            rowIndex,
+                            categoryName,
+                            model,
+                            ifSame)
+
+                        rowIndex += 1
+
+                    Next
+
+                End If
 
                 If CheckBox1.Checked Then
+                    With defaultWorksheet.Cells(rowIndex, 6)
+                        .Value = $"{categoryName} Sub-Total:"
+                        .Style.Font.Bold = True
+                    End With
+
                     With defaultWorksheet.Cells(rowIndex, 7)
-                        .Formula = $"=SUM(G{initialRowIndex}:G{rowIndex - 1})"
+                        If Not CheckBox3.Checked Then .Formula = $"=SUM(G{initialRowIndex}:G{rowIndex - 1})"
+                        If CheckBox3.Checked Then .Value = productColorSizesOfThisCategory.Sum(Function(t) t.TotalAvailableQty)
+
                         .Style.Font.Bold = True
                         .Style.Numberformat.Format = "#,##0"
                         .Style.HorizontalAlignment = Style.ExcelHorizontalAlignment.Right
@@ -195,6 +258,12 @@ Partial Public Class StockLevelExcelOptionsForm
             Next
 
             If CheckBox2.Checked Then
+                With defaultWorksheet.Cells(initialRowIndex, 6)
+                    .Value = "GRAND TOTAL:"
+                    .Style.Font.Bold = True
+                    .Style.Font.Size += 2
+                End With
+
                 With defaultWorksheet.Cells(initialRowIndex, 7)
                     .Value = models.Sum(Function(t) t.TotalAvailableQty)
                     .Style.Font.Bold = True
@@ -211,6 +280,27 @@ Partial Public Class StockLevelExcelOptionsForm
         DialogResult = DialogResult.OK
 
         Process.Start(saveFileDialogHelperOutPut.FileInfo.FullName)
+
+    End Sub
+
+    Private Sub SetRowContent(defaultWorksheet As ExcelWorksheet,
+            rowIndex As Integer,
+            defaultString As String,
+            model As StockLevelModel,
+            ifSame As Boolean)
+
+        defaultWorksheet.Cells(rowIndex, 1).Value = If(ifSame, String.Empty, defaultString)
+        defaultWorksheet.Cells(rowIndex, 2).Value = model.ProductCode
+        defaultWorksheet.Cells(rowIndex, 3).Value = model.ColorName
+        defaultWorksheet.Cells(rowIndex, 4).Value = model.SeasonCode
+        defaultWorksheet.Cells(rowIndex, 5).Value = model.SRP
+        defaultWorksheet.Cells(rowIndex, 6).Value = model.SKU
+        defaultWorksheet.Cells(rowIndex, 7).Value = model.TotalAvailableQty
+        defaultWorksheet.Cells(rowIndex, 8).Value = model.UnitOfMeasure
+    End Sub
+
+    Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged
+        CheckBox3.Enabled = CheckBox1.Checked
 
     End Sub
 
