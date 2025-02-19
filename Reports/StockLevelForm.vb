@@ -494,8 +494,7 @@ INNER JOIN rackshelfcolumn r ON r.RowID=pil.RackShelfColumnID AND r.`Status`='Ac
     Private Sub linkExportToExcel_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles linkExportToExcel.LinkClicked
         Dim form = New StockLevelExcelOptionsForm(Z_OrganizationID,
             New Integer() {slcategoryid},
-            categoryName:=cboCategory.Text,
-            isDamageStocks:=rbtnDamageStocks.Checked)
+            categoryName:=cboCategory.Text)
 
         If form.ShowDialog() = DialogResult.OK Then
 
