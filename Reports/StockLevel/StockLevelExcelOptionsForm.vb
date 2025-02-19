@@ -194,14 +194,16 @@ Partial Public Class StockLevelExcelOptionsForm
                 initialRowIndex = rowIndex
             Next
 
-            With defaultWorksheet.Cells(initialRowIndex, 7)
-                .Value = models.Sum(Function(t) t.TotalAvailableQty)
-                .Style.Font.Bold = True
-                .Style.Font.Size += 2
-                .Style.Numberformat.Format = "#,##0"
-                .Style.HorizontalAlignment = Style.ExcelHorizontalAlignment.Right
-                .Style.Border.Top.Style = Style.ExcelBorderStyle.Double
-            End With
+            If CheckBox2.Checked Then
+                With defaultWorksheet.Cells(initialRowIndex, 7)
+                    .Value = models.Sum(Function(t) t.TotalAvailableQty)
+                    .Style.Font.Bold = True
+                    .Style.Font.Size += 2
+                    .Style.Numberformat.Format = "#,##0"
+                    .Style.HorizontalAlignment = Style.ExcelHorizontalAlignment.Right
+                    .Style.Border.Top.Style = Style.ExcelBorderStyle.Double
+                End With
+            End If
 
             excel.Save()
         End Using
