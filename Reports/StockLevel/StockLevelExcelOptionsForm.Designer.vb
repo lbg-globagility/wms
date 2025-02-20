@@ -73,9 +73,9 @@ Partial Class StockLevelExcelOptionsForm
         Me.CheckBox3.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.CheckBox3.Location = New System.Drawing.Point(24, 90)
         Me.CheckBox3.Name = "CheckBox3"
-        Me.CheckBox3.Size = New System.Drawing.Size(215, 17)
+        Me.CheckBox3.Size = New System.Drawing.Size(249, 17)
         Me.CheckBox3.TabIndex = 3
-        Me.CheckBox3.Text = "Show subtotal per Product Group Name"
+        Me.CheckBox3.Text = "...and show subtotal per ““Product Group Name””"
         Me.CheckBox3.UseVisualStyleBackColor = True
         '
         'RadioButton2
@@ -120,9 +120,9 @@ Partial Class StockLevelExcelOptionsForm
         Me.CheckBox1.CheckState = System.Windows.Forms.CheckState.Checked
         Me.CheckBox1.Location = New System.Drawing.Point(12, 67)
         Me.CheckBox1.Name = "CheckBox1"
-        Me.CheckBox1.Size = New System.Drawing.Size(170, 17)
+        Me.CheckBox1.Size = New System.Drawing.Size(178, 17)
         Me.CheckBox1.TabIndex = 2
-        Me.CheckBox1.Text = "Show subtotal per Category"
+        Me.CheckBox1.Text = "Show subtotal per ““Category””"
         Me.CheckBox1.UseVisualStyleBackColor = True
         '
         'Panel2
