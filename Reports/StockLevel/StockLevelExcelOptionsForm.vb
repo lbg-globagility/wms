@@ -100,6 +100,29 @@ Partial Public Class StockLevelExcelOptionsForm
 
         If Not If(inventoryLocationIds?.Any(Function(i) i > 0), False) Then Return Enumerable.Empty(Of ProductInventoryLocation).ToList()
 
+        If CheckBox5.Checked Then
+            Return (Await productInventoryLocationDataService.GetByInventoryLocationIdsAsync(inventoryLocationIds)).
+                Where(Function(t) _categoryIds.Contains(If(t.ProductColorSize.ProductColor.Product.CategoryID, 0))).
+                Where(Function(t) t.ProductColorSize.IsActive).
+                Where(Function(t) t.RackShelfColumn.IsActive).
+                OrderBy(Function(t) t.ProductColorSize.ProductColor.Product.Category.CategoryName).
+                ThenBy(Function(t) t.ProductColorSize.ProductColor.Product.ProductCode).
+                ThenBy(Function(t) t.ProductColorSize.ProductColor.Color.ColorName).
+                ToList()
+        End If
+
+        If CheckBox4.Checked Then
+            Return (Await productInventoryLocationDataService.GetByInventoryLocationIdsAsync(inventoryLocationIds)).
+                Where(Function(t) _categoryIds.Contains(If(t.ProductColorSize.ProductColor.Product.CategoryID, 0))).
+                Where(Function(t) t.ProductColorSize.IsActive).
+                Where(Function(t) t.RackShelfColumn.IsActive).
+                Where(Function(t) If(t.TotalAvailableQty, 0) > -1).
+                OrderBy(Function(t) t.ProductColorSize.ProductColor.Product.Category.CategoryName).
+                ThenBy(Function(t) t.ProductColorSize.ProductColor.Product.ProductCode).
+                ThenBy(Function(t) t.ProductColorSize.ProductColor.Color.ColorName).
+                ToList()
+        End If
+
         Return (Await productInventoryLocationDataService.GetByInventoryLocationIdsAsync(inventoryLocationIds)).
             Where(Function(t) _categoryIds.Contains(If(t.ProductColorSize.ProductColor.Product.CategoryID, 0))).
             Where(Function(t) t.ProductColorSize.IsActive).
@@ -154,15 +177,19 @@ Partial Public Class StockLevelExcelOptionsForm
             If defaultWorksheet Is Nothing Then defaultWorksheet = excel.Workbook.Worksheets.Add(Name:="Sheet1")
 
             Dim initialRowIndex = 1
-            defaultWorksheet.Cells(initialRowIndex, 1).Value = If(CheckBox3.Checked, String.Empty, "Category")
-            defaultWorksheet.Cells(initialRowIndex, 2).Value = "ProductCode"
-            defaultWorksheet.Cells(initialRowIndex, 3).Value = "ColorName"
-            defaultWorksheet.Cells(initialRowIndex, 4).Value = "SeasonCode"
-            defaultWorksheet.Cells(initialRowIndex, 5).Value = "SRP"
-            defaultWorksheet.Cells(initialRowIndex, 6).Value = "SKU"
-            defaultWorksheet.Cells(initialRowIndex, 7).Value = "TotalAvailableQty"
-            defaultWorksheet.Cells(initialRowIndex, 8).Value = "UnitOfMeasure"
-            defaultWorksheet.Cells($"A{initialRowIndex}:H{initialRowIndex}").Style.Font.Bold = True
+            With defaultWorksheet
+                .Cells(initialRowIndex, 1).Value = If(CheckBox3.Checked, String.Empty, "Category")
+                .Cells(initialRowIndex, 2).Value = "ProductCode"
+                .Cells(initialRowIndex, 3).Value = "ColorName"
+                .Cells(initialRowIndex, 4).Value = "SeasonCode"
+                .Cells(initialRowIndex, 5).Value = "SRP"
+                .Cells(initialRowIndex, 6).Value = "SKU"
+                .Cells(initialRowIndex, 7).Value = "TotalAvailableQty"
+                .Cells(initialRowIndex, 8).Value = "UnitOfMeasure"
+                .Cells($"A{initialRowIndex}:H{initialRowIndex}").Style.Font.Bold = True
+
+                .View.FreezePanes(initialRowIndex + 1, 1)
+            End With
 
             initialRowIndex += 1
 
@@ -237,7 +264,7 @@ Partial Public Class StockLevelExcelOptionsForm
 
                 If CheckBox1.Checked Then
                     With defaultWorksheet.Cells(rowIndex, 6)
-                        .Value = $"{categoryName} Sub-Total:"
+                        .Value = $"{category.Key} Sub-Total:"
                         .Style.Font.Bold = True
                     End With
 
@@ -274,6 +301,8 @@ Partial Public Class StockLevelExcelOptionsForm
                 End With
             End If
 
+            defaultWorksheet.Cells.AutoFitColumns()
+
             excel.Save()
         End Using
 
@@ -289,14 +318,16 @@ Partial Public Class StockLevelExcelOptionsForm
             model As StockLevelModel,
             ifSame As Boolean)
 
-        defaultWorksheet.Cells(rowIndex, 1).Value = If(ifSame, String.Empty, defaultString)
-        defaultWorksheet.Cells(rowIndex, 2).Value = model.ProductCode
-        defaultWorksheet.Cells(rowIndex, 3).Value = model.ColorName
-        defaultWorksheet.Cells(rowIndex, 4).Value = model.SeasonCode
-        defaultWorksheet.Cells(rowIndex, 5).Value = model.SRP
-        defaultWorksheet.Cells(rowIndex, 6).Value = model.SKU
-        defaultWorksheet.Cells(rowIndex, 7).Value = model.TotalAvailableQty
-        defaultWorksheet.Cells(rowIndex, 8).Value = model.UnitOfMeasure
+        With defaultWorksheet
+            .Cells(rowIndex, 1).Value = If(ifSame, String.Empty, defaultString)
+            .Cells(rowIndex, 2).Value = model.ProductCode
+            .Cells(rowIndex, 3).Value = model.ColorName
+            .Cells(rowIndex, 4).Value = model.SeasonCode
+            .Cells(rowIndex, 5).Value = model.SRP
+            .Cells(rowIndex, 6).Value = model.SKU
+            .Cells(rowIndex, 7).Value = model.TotalAvailableQty
+            .Cells(rowIndex, 8).Value = model.UnitOfMeasure
+        End With
     End Sub
 
     Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged
@@ -304,7 +335,13 @@ Partial Public Class StockLevelExcelOptionsForm
 
     End Sub
 
+    Private Sub CheckBox4_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox4.CheckedChanged
+        CheckBox5.Enabled = CheckBox4.Checked
+
+    End Sub
+
     Private Class StockLevelModel
+
         Public Sub New(productInventoryLocation As ProductInventoryLocation)
 
             Dim productColorSize = productInventoryLocation?.ProductColorSize
