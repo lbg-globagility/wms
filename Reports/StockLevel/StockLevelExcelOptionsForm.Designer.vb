@@ -235,6 +235,7 @@ Partial Class StockLevelExcelOptionsForm
         Me.MinimizeBox = False
         Me.Name = "StockLevelExcelOptionsForm"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
+        Me.Text = "Stock Level — Excel export"
         Me.Panel1.ResumeLayout(False)
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
