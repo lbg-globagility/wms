@@ -27,8 +27,15 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Extensions
 
         public static IOrderedEnumerable<T> BestFetchClause<T>(this IEnumerable<T> list,
             int inventoryLocationId,
-            int productColorSizeId) where T : ProductInventoryLocation
+            int productColorSizeId,
+            bool ignoreOrderableQty = false) where T : ProductInventoryLocation
         {
+            if (ignoreOrderableQty) return list?
+                .WhereActiveClause()?
+                .Where(t => t.RackShelfColumn.InventoryLocationID == inventoryLocationId)?
+                .Where(t => t.ProductColorSizeID == productColorSizeId)?
+                .OrderBy(t => t.RackShelfColumn.PickOrderNo);
+
             return list?
                 .WhereActiveClause()?
                 .Where(t => t.RackShelfColumn.InventoryLocationID == inventoryLocationId)?
@@ -45,8 +52,16 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Extensions
         public static IOrderedEnumerable<T> BestFetchClause<T>(this IEnumerable<T> list,
             int productInventoryLocationId,
             int inventoryLocationId,
-            int productColorSizeId) where T : ProductInventoryLocation
+            int productColorSizeId,
+            bool ignoreOrderableQty = false) where T : ProductInventoryLocation
         {
+            if (ignoreOrderableQty) return list?
+                .Where(t => t.RowID == productInventoryLocationId)?
+                .WhereActiveClause()?
+                .Where(t => t.RackShelfColumn.InventoryLocationID == inventoryLocationId)?
+                .Where(t => t.ProductColorSizeID == productColorSizeId)?
+                .OrderBy(t => t.RackShelfColumn.PickOrderNo);
+
             return list?
                 .Where(t => t.RowID == productInventoryLocationId)?
                 .WhereActiveClause()?

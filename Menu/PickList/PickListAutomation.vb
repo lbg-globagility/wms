@@ -48,7 +48,8 @@ Public Class PickListAutomation
                     Dim productInventoryLocationQuery = productInventoryLocations.BestFetchClause(
                         productInventoryLocationId:=If(orderItem.ProductInventoryLocationId, 0),
                         inventoryLocationId:=If(orderItem.InventoryLocationId, 0),
-                        productColorSizeId:=If(orderItem.ProductColorSizeID, 0))
+                        productColorSizeId:=If(orderItem.ProductColorSizeID, 0),
+                        ignoreOrderableQty:=True)
 
                     If Not If(productInventoryLocationQuery?.Any(), False) Then productInventoryLocationQuery = productInventoryLocations.BestFetchClause(
                         inventoryLocationId:=If(orderItem.InventoryLocationId, 0),
