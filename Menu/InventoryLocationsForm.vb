@@ -9,6 +9,7 @@ Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
 Imports WarehouseManagementSystem.Core.Interfaces.Repositories
 Imports WarehouseManagementSystem.Desktop.Utilities
 Imports WarehouseManagementSystem.Utilities.Extensions
+Imports WarehouseManagementSystem.Infrastructure.Data.Extensions.ProductInventoryLocationExtensions
 
 Public Class InventoryLocationsForm
     Dim manager As New sqlModule.Manager
@@ -1834,9 +1835,10 @@ Public Class InventoryLocationsForm
 
         Dim model = CType(gridProductColorSizes.CurrentRow.DataBoundItem, ProductColorSizeModel)
         Dim productColorSizeId = GetCurrentProductColorSizeId()
+        Dim inventoryLocationId = GetCurrentInventoryLocationId()
 
         Dim dataSource = model.ProductInventoryLocations.
-            Where(Function(t) t.ProductColorSizeID = productColorSizeId).
+            BestFetchClause(inventoryLocationId:=inventoryLocationId, productColorSizeId:=productColorSizeId, ignoreOrderableQty:=True).
             Select(Function(t) New RackShelfColumnSimpleModel(productColorSizeId:=productColorSizeId, t.RackShelfColumn)).
             OrderByDescending(Function(t) t.HasAvailableQty).
             ThenBy(Function(t) t.PickOrderNo).
