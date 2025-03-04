@@ -1390,6 +1390,8 @@ Public Class ReceivingForm
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
             conn.Close()
+
+            If IsThurston Then cboInventorySource_SelectedIndexChanged(cboInventorySource, New EventArgs())
         End Try
         Me.Cursor = Cursors.Default
     End Sub
@@ -1870,6 +1872,13 @@ Public Class ReceivingForm
                     Exit Try
                 End If
             End If
+
+            If IsThurston AndAlso Not CInt(cboInventoryLocation.SelectedValue) > 0 Then
+                errProvider.SetError(cboInventoryLocation, "Please select a valid `Inventory`")
+                cboInventorySource_SelectedIndexChanged(cboInventorySource, New EventArgs())
+                Exit Try
+            End If
+
             If MessageBox.Show("Would you like to save the changes on this page?", "Saving", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
                 Me.Cursor = Cursors.WaitCursor
                 getSupplierCustomerID(cboAccountName.Text, Me)
