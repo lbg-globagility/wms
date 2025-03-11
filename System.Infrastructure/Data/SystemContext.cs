@@ -718,6 +718,14 @@ namespace WarehouseManagementSystem.Infrastructure.Data
                 t.Property(x => x.Status)
                     .HasConversion(converter);
             });
+
+            modelBuilder.Entity<LineupCarton>(t =>
+            {
+                t.HasMany(x => x.PackingListCartonItems)
+                    .WithOne(x => x.LineupCarton)
+                    .HasForeignKey(x => x.PackingListCartonID)
+                    .HasPrincipalKey(x => x.PackingListCartonID);
+            });
         }
     }
 }

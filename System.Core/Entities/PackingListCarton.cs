@@ -66,6 +66,7 @@ namespace WarehouseManagementSystem.Core.Entities
                     continue;
             }
         }
+        public virtual LineupCarton LineupCarton { get; set; }
 
         public static PackingListCarton NewPackingListCarton(int organizationId,
             int userId,

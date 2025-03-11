@@ -20,6 +20,7 @@ namespace WarehouseManagementSystem.Core.Entities
     {
         public virtual Lineup Lineup { get; set; }
         public virtual PackingListCarton PackingListCarton { get; set; }
-        public bool HasPackingListCartonItems => PackingListCarton?.PackingListCartonItems?.Any() ?? false;
+        public virtual ICollection<PackingListCartonItem> PackingListCartonItems { get; set; }
+        //public bool HasPackingListCartonItems => PackingListCarton?.PackingListCartonItems?.Any() ?? false;
     }
 }

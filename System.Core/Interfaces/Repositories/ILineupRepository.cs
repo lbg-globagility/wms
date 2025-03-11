@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using WarehouseManagementSystem.Core.Entities;
 
@@ -9,5 +10,6 @@ namespace WarehouseManagementSystem.Core.Interfaces.Repositories
         Task<List<Lineup>> GetAllByOrganizationIdAsync(int organizationId);
         //Task<Lineup> GetByIdAsync(int lineUpId);
         Task<Lineup> GetByLineupIdAsync(int lineUpId);
+        Task<List<Lineup>> GetByOrganizationIdAndDateRangeAsync(int organizationId, DateTime from, DateTime to);
     }
 }

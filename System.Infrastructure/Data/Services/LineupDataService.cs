@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using WarehouseManagementSystem.Core.Entities;
 using WarehouseManagementSystem.Core.Exceptions;
@@ -195,6 +196,8 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
         }
 
         public async Task<Lineup> GetByLineupIdAsync(int lineupId) => await _lineupRepository.GetByLineupIdAsync(lineupId);
+
+        public async Task<List<Lineup>> GetByOrganizationIdAndDateRangeAsync(int organizationId, DateTime from, DateTime to) => await _lineupRepository.GetByOrganizationIdAndDateRangeAsync(organizationId, from: from, to: to);
 
         protected override string CreateUserActivitySuffixIdentifier(Lineup entity) => $"LineUpNo: {entity.LineUpNo}, Date: {entity.LineUpDate}, and OrderId: {entity.OrderID}";
 

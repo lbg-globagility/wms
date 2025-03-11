@@ -46,6 +46,8 @@ namespace WarehouseManagementSystem.Core.Entities
 
         public virtual PickListOrder PickListOrder { get; set; }
 
+        public virtual LineupCarton LineupCarton { get; set; }
+        
         public void SetStatusToInactive()
         {
             Status = PackingListCartonItemStatus.Inactive;

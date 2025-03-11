@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -60,6 +61,32 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
             //.Where(t => t.LineupCartons.FirstOrDefault().LineUpID == lineUpId)
             //.AsNoTracking()
             //.FirstOrDefaultAsync();
+        }
+
+        public Task<List<Lineup>> GetByOrganizationIdAndDateRangeAsync(int organizationId, DateTime from, DateTime to)
+        {
+            var query = _context.Lineups
+            .Include(t => t.Order)
+            .Include(t => t.LineupCartons)
+                .ThenInclude(t => t.PackingListCartonItems)
+                    .ThenInclude(t => t.OrderItem)
+                        .ThenInclude(oi => oi.ProductInventoryLocation)
+                            .ThenInclude(pil => pil.RackShelfColumn)
+            .Include(t => t.LineupCartons)
+                .ThenInclude(t => t.PackingListCartonItems)
+                    .ThenInclude(t => t.OrderItem)
+                        .ThenInclude(oi => oi.ProductInventoryLocation)
+                            .ThenInclude(pil => pil.ProductColorSize)
+                                .ThenInclude(pcs => pcs.ProductColor)
+                                    .ThenInclude(pc => pc.Product)
+                                        .ThenInclude(p => p.Category)
+            .Where(t => t.OrganizationID == organizationId)
+            .AsNoTracking()
+            .AsQueryable();
+
+            return Task.FromResult(query.AsEnumerable()
+                .Where(t => t.IsConfirmedDelivery && (t.ConfirmedDeliveryTimeStamp.Value.Date >= from.Date && t.ConfirmedDeliveryTimeStamp.Value.Date <= to.Date))
+                .ToList());
         }
     }
 }

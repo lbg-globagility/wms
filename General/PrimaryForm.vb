@@ -1,7 +1,9 @@
 ﻿Imports System.Configuration
+Imports System.Threading
 Imports Microsoft.Extensions.DependencyInjection
 Imports MySql.Data.MySqlClient
 Imports OfficeOpenXml
+Imports OfficeOpenXml.FormulaParsing.Excel.Functions.Math
 Imports WarehouseManagementSystem.Core.Entities
 Imports WarehouseManagementSystem.Core.Enums
 Imports WarehouseManagementSystem.Core.Interfaces
@@ -47,6 +49,7 @@ Public Class PrimaryForm
     Public StkLvlForm As Boolean = False
     Public PckLstRForm As Boolean = False
     Private _systemOwner As SystemOwner
+    Private ReadOnly _serverConnectionLog As List(Of String) = New List(Of String)
 
     Private Async Sub PrimaryForm_Load(sender As Object, e As EventArgs) Handles Me.Load
         Dim _systemOwnerService = GetRequiredService(Of ISystemOwnerService)()
@@ -73,6 +76,9 @@ Public Class PrimaryForm
 
         If IsThurston Then
             msBundles.Visible = Not IsThurston
+
+            Dim cts = New CancellationTokenSource()
+            Await StartBackgroundTask(cts.Token)
         End If
     End Sub
 
@@ -1423,7 +1429,7 @@ Public Class PrimaryForm
 
 #End Region
 
-    Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
+    Private Async Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
         Try
             tsTimeValue.Text = Date.Now.ToString("h:mm:ss tt")
         Catch ex As Exception
@@ -1660,4 +1666,100 @@ Public Class PrimaryForm
 
     End Sub
 
+    Private Async Function CheckConnectionAsync() As Task(Of (String, Boolean))
+        Dim statusText = String.Empty
+        Dim isGoodStatus = False
+
+        Using command = New MySqlCommand(commandText:="SELECT CURDATE();",
+            connection:=New MySqlConnection(manager.GetConnString()))
+
+            Try
+                If Not command.Connection.State = ConnectionState.Open Then Await command.Connection.OpenAsync()
+
+                If command.Connection.State = ConnectionState.Open Then Await command.ExecuteReaderAsync()
+
+                statusText = $"[{Date.Now}] ✔ Server connection OK"
+                isGoodStatus = True
+
+                command.Connection.Close()
+
+            Catch ex As MySqlException
+                If command.Connection.State = ConnectionState.Open Then command.Connection.Close()
+
+                statusText = $"[{Date.Now}] ⚠ Error (Server): {GetInnerException(ex).Item2}"
+
+            Catch ex As Exception
+                If command.Connection.State = ConnectionState.Open Then command.Connection.Close()
+
+                statusText = $"[{Date.Now}] ⚠ Error (General): {GetInnerException(ex).Item2}"
+
+            Finally
+
+                If command.Connection.State = ConnectionState.Open Then command.Connection.Close()
+
+            End Try
+
+        End Using
+
+        Return (statusText, isGoodStatus)
+
+    End Function
+
+    Private Async Function StartBackgroundTask(token As CancellationToken) As Task
+        While Not token.IsCancellationRequested
+            Try
+                Await Task.Run(
+                    Async Function()
+                        Await CheckConnectionAsync().
+                        ContinueWith(
+                        Sub(antecedent)
+                            Dim status = antecedent.Result()
+
+                            Dim statusText = status.Item1
+                            _serverConnectionLog.Add(statusText)
+
+                        End Sub)
+
+                    End Function, token)
+
+                Await Task.Delay(5000, token)
+
+            Catch ex As TaskCanceledException
+                Debug.WriteLine("Background task cancelled.")
+
+            Catch ex As Exception
+                Debug.WriteLine($"Error in background task: {ex.Message}")
+
+            End Try
+
+        End While
+
+        Debug.WriteLine("Background task stopped.")
+
+    End Function
+
+    Private Sub NotifyIcon1_Click(sender As Object, e As EventArgs) Handles NotifyIcon1.Click
+        'NotifyIcon1_MouseDoubleClick(NotifyIcon1, e)
+
+    End Sub
+
+    Private Sub NotifyIcon1_MouseDoubleClick(sender As Object, e As MouseEventArgs) Handles NotifyIcon1.MouseDoubleClick
+        Dim form = New ServerConnectionMonitorLogsForm(serverConnectionLogs:=_serverConnectionLog)
+
+        form.ShowDialog()
+
+    End Sub
+
+    Private Sub SalesDeliveryToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SalesDeliveryToolStripMenuItem.Click
+        Dim form = New SalesAndDeliveryReportForm()
+
+        If form.ShowDialog() = DialogResult.OK Then Return
+
+    End Sub
+
+    Private Function GetInnerException(ex As Exception, Optional stackedErrorMessage As String = "") As (Exception, String)
+        If ex?.InnerException Is Nothing Then Return (ex, stackedErrorMessage)
+
+        Return GetInnerException(ex.InnerException, stackedErrorMessage:=String.Concat(stackedErrorMessage, ex.Message))
+    End Function
 End Class

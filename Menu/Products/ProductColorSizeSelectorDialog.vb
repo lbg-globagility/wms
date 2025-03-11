@@ -342,7 +342,7 @@ Public Class ProductColorSizeSelectorDialog
 
     End Sub
 
-    Function Lighten(orig As Drawing.Color, Optional percent As Integer = 80) As Drawing.Color
+    Public Shared Function Lighten(orig As Drawing.Color, Optional percent As Integer = 80) As Drawing.Color
         'get remainders
         Dim rr As Integer = 255 - orig.R
         Dim gr As Integer = 255 - orig.G

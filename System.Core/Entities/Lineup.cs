@@ -31,7 +31,7 @@ namespace WarehouseManagementSystem.Core.Entities
     public partial class Lineup
     {
         public Order Order { get; set; }
-        public bool IsConfirmedDelivery => Status == LineupStatus.ConfirmedDelivery;
+        public bool IsConfirmedDelivery => ConfirmedDeliveryTimeStamp != null && Status == LineupStatus.ConfirmedDelivery;
         public bool IsDelivered => Status == LineupStatus.Delivered;
         public bool IsCancelled => Status == LineupStatus.Cancelled;
 

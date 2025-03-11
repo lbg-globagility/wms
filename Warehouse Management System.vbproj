@@ -344,6 +344,12 @@
     <Compile Include="General\ReportViewer.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="General\ServerConnectionMonitorLogsForm.Designer.vb">
+      <DependentUpon>ServerConnectionMonitorLogsForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="General\ServerConnectionMonitorLogsForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Information\AboutForm.Designer.vb">
       <DependentUpon>AboutForm.vb</DependentUpon>
     </Compile>
@@ -866,6 +872,12 @@
     <Compile Include="Reports\PickListReportForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Reports\SalesAndDeliveryReportForm.Designer.vb">
+      <DependentUpon>SalesAndDeliveryReportForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\SalesAndDeliveryReportForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Reports\SalesAndQtyForm.Designer.vb">
       <DependentUpon>SalesAndQtyForm.vb</DependentUpon>
     </Compile>
@@ -1157,6 +1169,9 @@
     <EmbeddedResource Include="General\ReportViewer.resx">
       <DependentUpon>ReportViewer.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="General\ServerConnectionMonitorLogsForm.resx">
+      <DependentUpon>ServerConnectionMonitorLogsForm.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Information\AboutForm.resx">
       <DependentUpon>AboutForm.vb</DependentUpon>
     </EmbeddedResource>
@@ -1441,6 +1456,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\PickListReportForm.resx">
       <DependentUpon>PickListReportForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\SalesAndDeliveryReportForm.resx">
+      <DependentUpon>SalesAndDeliveryReportForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\SalesAndQtyForm.resx">
       <DependentUpon>SalesAndQtyForm.vb</DependentUpon>
