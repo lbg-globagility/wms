@@ -72,7 +72,7 @@ Public Class PrimaryForm
         Me.Cursor = Cursors.Default
 
         Dim appSettings = ConfigurationManager.AppSettings
-        ToolStripLabelVersion.Text = $"v{appSettings.Get("system.version")}"
+        ToolStripLabelVersion.Text = $"v{appSettings.Get("system.version")}{appSettings.Get("version.patch")}"
 
         If IsThurston Then
             msBundles.Visible = Not IsThurston

@@ -46,8 +46,9 @@ Public Class LoginForm
 
         Dim appSettings = ConfigurationManager.AppSettings
         Dim version = appSettings.Get("system.version")
+        Dim patch = appSettings.Get("version.patch")
 
-        LabelVersion.Text = $"v{version}"
+        LabelVersion.Text = $"v{version}{patch}"
 
         If systemInfo IsNot Nothing AndAlso
             Not version.IsEqualTo(systemInfo.Value) Then
