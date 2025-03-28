@@ -875,12 +875,18 @@ Public Class ReceivingForm
                         dgReceivingItems.Item(ci_remarks.Index, n).ReadOnly = legit
                         dgReceivingItems.Item(ci_reason.Index, n).ReadOnly = legit
                     End If
+
+                    If CDbl(dgReceivingItems.Item(ci_qtyordered.Index, n).Value) > 0 And
+                        CDbl(dgReceivingItems.Item(ci_qtyreceived.Index, n).Value) = 0 Then
+                        dgReceivingItems.Item(ci_qtyreceived.Index, n).Value = dgReceivingItems.Item(ci_qtyordered.Index, n).Value
+                    End If
+
                     dgReceivingItems.Item(ci_app.Index, n).Value = reader1(16)
-                    getTotalQtyAppliedA(CInt(reader1(0)), Me)
-                    dgReceivingItems.Item(ci_qtystocked.Index, n).Value = globaltotalqtyapplied
-                    seqno = seqno + 1
-                    n = n + 1
-                End If
+                        getTotalQtyAppliedA(CInt(reader1(0)), Me)
+                        dgReceivingItems.Item(ci_qtystocked.Index, n).Value = globaltotalqtyapplied
+                        seqno = seqno + 1
+                        n = n + 1
+                    End If
             End While
             reader1.Close()
             dgReceivingItems.Columns("ci_seqno").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
