@@ -87,7 +87,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
                     .Where(t => t.SearchableText.SimilarTo(searchText))
                     .AsQueryable()
                     .Page(pageOptions);
-                var count1 = pickList1.Count();
+                var count1 = pickList1.Select(t => t.RowID).Count();
 
                 pickList1 = SortMethod(q: pickList1);
 
@@ -96,7 +96,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
 
             query = SortMethod(q: query);
 
-            var count = query.AsEnumerable().Count();
+            var count = query.Select(t => t.RowID).AsEnumerable().Count();
             var pickLists = query.Page(pageOptions).AsEnumerable();
 
             return Task.FromResult(new PaginatedList<PickList>(items: pickLists, total: count));

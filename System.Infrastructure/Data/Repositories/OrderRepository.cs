@@ -1,11 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
-using OfficeOpenXml.Style;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Permissions;
 using System.Threading.Tasks;
 using WarehouseManagementSystem.Core.Entities;
 using WarehouseManagementSystem.Core.Enums;
@@ -243,7 +239,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
                     .Where(t => t.CustomerOrderSearchableString.SimilarTo(searchText))
                     .AsQueryable()
                     .Page(pageOptions);
-                var count1 = orders1.Count();
+                var count1 = orders1.Select(t => t.RowID).Count();
 
                 orders1 = SortMethod(q: orders1);
 
@@ -252,7 +248,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
 
             query = SortMethod(q: query);
 
-            var count = query.AsEnumerable().Count();
+            var count = query.Select(t => t.RowID).AsEnumerable().Count();
             var orders = query.Page(pageOptions).AsEnumerable();
 
             return Task.FromResult(new PaginatedList<Order>(items: orders, total: count));
