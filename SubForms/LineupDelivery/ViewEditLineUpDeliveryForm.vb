@@ -1343,9 +1343,7 @@ WHERE luc.OrganizationID={Z_OrganizationID};"
             dgCartons.Columns("ca_packeddate").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
             dgCartons.Columns("ca_status").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
             dgCartons.Columns("ca_option").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
-            If dgCartons.Rows.Count <> 0 Then
-                dgCartons.CurrentRow.Selected = False
-            End If
+            If dgCartons.Rows.Count <> 0 And dgCartons.CurrentRow IsNot Nothing Then dgCartons.CurrentRow.Selected = False
         Catch ex As Exception
             MsgBox(getErrExcptn(ex, Me.Name))
         Finally
