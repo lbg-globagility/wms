@@ -221,7 +221,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
             return query;
         }
 
-        public Task<PaginatedList<Order>> GetOrdersByOrderTypeAsync(PageOptions pageOptions,
+        public async Task<PaginatedList<Order>> GetOrdersByOrderTypeAsync(PageOptions pageOptions,
             int organizationId,
             OrderType orderType,
             string searchText = "")
@@ -237,21 +237,20 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
                 var orders1 = query
                     .AsEnumerable()
                     .Where(t => t.CustomerOrderSearchableString.SimilarTo(searchText))
-                    .AsQueryable()
-                    .Page(pageOptions);
+                    .AsQueryable();
+
                 var count1 = orders1.Select(t => t.RowID).Count();
 
-                orders1 = SortMethod(q: orders1);
+                var items = await SortMethod(q: orders1).Page(pageOptions).ToListAsync();
 
-                return Task.FromResult(new PaginatedList<Order>(items: orders1, total: count1));
+                return new PaginatedList<Order>(items: items, total: count1);
             }
 
-            query = SortMethod(q: query);
-
             var count = query.Select(t => t.RowID).AsEnumerable().Count();
-            var orders = query.Page(pageOptions).AsEnumerable();
 
-            return Task.FromResult(new PaginatedList<Order>(items: orders, total: count));
+            var orders = await SortMethod(q: query).Page(pageOptions).ToListAsync();
+
+            return new PaginatedList<Order>(items: orders, total: count);
 
             IQueryable<Order> SortMethod(IQueryable<Order> q)
             {
