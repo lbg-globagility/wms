@@ -1665,7 +1665,13 @@ Public Class ReturnsForm
                         dgProductColorSizes.Rows.Clear()
                     End If
                 ElseIf cboBy.Text = "ProductCode" Then
-                    getProductIDB(cboByPhrase.Text, Me)
+                    Dim param = New MySqlParameter()
+                    param.ParameterName = "@productCode"
+                    param.Value = cboByPhrase2.Text
+
+                    getProductIDB(globalformname:=Me,
+                        textQuery:=$"SELECT IFNULL(RowID,0) FROM products WHERE productcode = @productCode AND organizationid = {Z_OrganizationID};",
+                        params:=New List(Of MySqlParameter) From {param})
                     poproductid = globalproductid
                     If poproductid <> 0 Then
                         displayProductsB(poproductid)
@@ -2983,7 +2989,7 @@ Public Class ReturnsForm
         dgProductColors.Select()
 
         dgProductColors_CellClick(sender:=dgProductColors,
-            e:=New DataGridViewCellEventArgs(columnIndex:=dgProductColors.CurrentCell?.RowIndex, rowIndex:=dgProductColors.CurrentCell?.ColumnIndex))
+            e:=New DataGridViewCellEventArgs(columnIndex:=If(dgProductColors.CurrentCell?.RowIndex, -1), rowIndex:=If(dgProductColors.CurrentCell?.ColumnIndex, -1)))
 
         dgProductSizes.CurrentCell = dgProductSizes.Rows?.
             OfType(Of DataGridViewRow)?.

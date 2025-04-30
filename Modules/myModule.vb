@@ -1660,6 +1660,27 @@ WHERE o.organizationid = {Z_OrganizationID} AND o.status = '{globaliorderstatus}
         End Try
     End Sub
 
+    Public Sub getProductIDB(globalformname As Form,
+        textQuery As String,
+        params As List(Of MySqlParameter))
+
+        Try
+            globalproductid = 0
+            If globalconn.State = ConnectionState.Open Then globalconn.Close()
+            Dim dtGid As New DataTable
+            dtGid = getDataTableForSQL(textQuery, params)
+            If dtGid.Rows.Count <> 0 Then
+                globalproductid = dtGid.Rows(0)(0)
+            Else
+                globalproductid = 0
+            End If
+        Catch ex As Exception
+            MsgBox(getErrExcptn(ex, globalformname.Name))
+        Finally
+            globalconn.Close()
+        End Try
+    End Sub
+
     Sub getCategoryID(ByVal globalicategoryname As String, ByVal globalicondition As String, ByVal globalformname As Object)
         Try
             globalcategoryid = 0

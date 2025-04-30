@@ -35,12 +35,17 @@ Module mdlValidation
         End Try
         Return DataReturn
     End Function
-    Public Function getDataTableForSQL(ByVal COMMD As String)
+    Public Function getDataTableForSQL(ByVal COMMD As String,
+        Optional params As List(Of MySqlParameter) = Nothing)
+
         Dim mdlVconnection As MySqlConnection = New MySqlConnection(connectionString)
         Dim command As MySqlCommand = New MySqlCommand(COMMD, mdlVconnection)
         Try
             Dim DataReturn As New DataTable
             command.Connection.Open()
+            If If(params?.Any(), False) Then
+                command.Parameters.AddRange(params.ToArray())
+            End If
             Dim adapter As MySqlDataAdapter = New MySqlDataAdapter(command)
             adapter.Fill(DataReturn)
             Return DataReturn
