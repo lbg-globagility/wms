@@ -1723,7 +1723,13 @@ Public Class PurchaseForm
                         dgProductColorSizes.Rows.Clear()
                     End If
                 ElseIf cboBy.Text = "ProductCode" Then
-                    getProductIDB(cboByPhrase.Text, Me)
+                    Dim param = New MySqlParameter()
+                    param.ParameterName = "@productCode"
+                    param.Value = cboByPhrase2.Text
+
+                    getProductIDB(globalformname:=Me,
+                        textQuery:=$"SELECT IFNULL(RowID,0) FROM products WHERE productcode = @productCode AND organizationid = {Z_OrganizationID};",
+                        params:=New List(Of MySqlParameter) From {param})
                     poproductid = globalproductid
                     If poproductid <> 0 Then
                         displayProductsB(poproductid)
