@@ -241,14 +241,14 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
 
                 var count1 = orders1.Select(t => t.RowID).Count();
 
-                var items = await SortMethod(q: orders1).Page(pageOptions).ToListAsync();
+                var searchedItems = await Task.FromResult(SortMethod(q: orders1).Page(pageOptions).AsEnumerable().ToList());
 
-                return new PaginatedList<Order>(items: items, total: count1);
+                return new PaginatedList<Order>(items: searchedItems, total: count1);
             }
 
             var count = query.Select(t => t.RowID).AsEnumerable().Count();
 
-            var orders = await SortMethod(q: query).Page(pageOptions).ToListAsync();
+            var orders = await Task.FromResult(SortMethod(q: query).Page(pageOptions).AsEnumerable().ToList());
 
             return new PaginatedList<Order>(items: orders, total: count);
 

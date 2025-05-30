@@ -70,7 +70,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
                 .FirstOrDefault());
         }
 
-        public Task<PaginatedList<PickList>> GetPaginatedPickListsAsync(PageOptions pageOptions,
+        public async Task<PaginatedList<PickList>> GetPaginatedPickListsAsync(PageOptions pageOptions,
             int organizationId,
             string searchText = "")
         {
@@ -87,19 +87,19 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
                     .Where(t => t.SearchableText.SimilarTo(searchText))
                     .AsQueryable()
                     .Page(pageOptions);
+
                 var count1 = pickList1.Select(t => t.RowID).Count();
 
-                pickList1 = SortMethod(q: pickList1);
+                var searchedPickLists = await Task.FromResult(SortMethod(q: pickList1).Page(pageOptions).AsEnumerable().ToList());
 
-                return Task.FromResult(new PaginatedList<PickList>(items: pickList1, total: count1));
+                return new PaginatedList<PickList>(items: searchedPickLists, total: count1);
             }
 
-            query = SortMethod(q: query);
-
             var count = query.Select(t => t.RowID).AsEnumerable().Count();
-            var pickLists = query.Page(pageOptions).AsEnumerable();
 
-            return Task.FromResult(new PaginatedList<PickList>(items: pickLists, total: count));
+            var pickLists = await Task.FromResult(SortMethod(q: query).Page(pageOptions).AsEnumerable().ToList());
+
+            return new PaginatedList<PickList>(items: pickLists, total: count);
 
             IQueryable<PickList> SortMethod(IQueryable<PickList> q)
             {
