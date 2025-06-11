@@ -61,7 +61,7 @@ Public Class DeliveryReceiptPrintOptions
         Dim unitOfMeasureClause = $"{If(CheckBoxDoNotDisplayUOM.Checked,
             "''",
             If(RadioBtnUnitRoll.Checked,
-                "IFNULL(pil.UnitOfMeasure2, '')",
+                "IFNULL(pil.UnitOfMeasure2, IFNULL(pcs.UnitOfMeasure2, p.UnitOfMeasure2))",
                 "IFNULL(oi.UnitOfLength, '')"))} `DataColumn2`,"
 
         Dim detailsClause =
@@ -78,7 +78,9 @@ Public Class DeliveryReceiptPrintOptions
                 "SUM(plci.QtyInCarton * oi.SRP) `DataColumn4`",
                 "0 `DataColumn4`"))
 
-        Dim unitOfMeasureGroupClause = If(RadioBtnUnitRoll.Checked, "pil.UnitOfMeasure2", "IFNULL(oi.UnitOfLength, '')")
+        Dim unitOfMeasureGroupClause = If(RadioBtnUnitRoll.Checked,
+            "IFNULL(pil.UnitOfMeasure2, IFNULL(pcs.UnitOfMeasure2, p.UnitOfMeasure2))",
+            "IFNULL(oi.UnitOfLength, '')")
 
         Dim sql = String.Concat("SELECT
             IFNULL(o.DRNumber, lu.DeliveryNo) `DRNo`,
