@@ -1094,7 +1094,7 @@ Public Class ViewEditLineUpDeliveryForm
             If conn.State = ConnectionState.Closed Then conn.Open()
             Dim sql1 As String = "SELECT lu.rowid,COALESCE(lu.lineupno,''),COALESCE(lu.deliveryno,''),COALESCE(CONCAT(COALESCE(o.ordernumber,''),' (C.O. No.) / ',COALESCE(a.companyname,''),' - ',COALESCE(a.accountno,'')),'')," &
                         "COALESCE(DATE_FORMAT(lu.lineupdate,'%d-%b-%Y'),'') FROM lineups lu LEFT JOIN orders o ON lu.orderid = o.rowid LEFT JOIN accounts a ON o.accountid = a.rowid WHERE lu.organizationid = " & Z_OrganizationID & " " &
-                        "ORDER BY lu.Created DESC LIMIT " & istartpage & "," & pagedivisor & " "
+                        "ORDER BY lu.DeliveryNo*1 DESC, lu.LineUpNo*1 DESC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             Dim n As Integer = 0
@@ -1130,7 +1130,7 @@ Public Class ViewEditLineUpDeliveryForm
             Dim sql1 As String = "SELECT lu.rowid,COALESCE(lu.lineupno,''),COALESCE(lu.deliveryno,''),COALESCE(CONCAT(COALESCE(o.ordernumber,''),' (C.O. No.) / ',COALESCE(a.companyname,''),' - ',COALESCE(a.accountno,'')),'')," &
                         "COALESCE(DATE_FORMAT(lu.lineupdate,'%d-%b-%Y'),'') FROM lineups lu LEFT JOIN orders o ON lu.orderid = o.rowid LEFT JOIN accounts a ON o.accountid = a.rowid WHERE lu.organizationid = " & Z_OrganizationID & " " &
                         "AND (lu.deliveryno LIKE ""%" & isearchphrase & "%"" OR o.ordernumber LIKE ""%" & isearchphrase & "%"" OR lu.lineupno LIKE ""%" & isearchphrase & "%"" OR a.companyname LIKE ""%" & isearchphrase & "%"" OR lu.status LIKE ""%" & isearchphrase & "%"") " &
-                        "ORDER BY lu.Created DESC LIMIT " & istartpage & "," & pagedivisor & " "
+                        "ORDER BY lu.DeliveryNo*1 DESC, lu.LineUpNo*1 DESC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             Dim n As Integer = 0
@@ -1166,7 +1166,7 @@ Public Class ViewEditLineUpDeliveryForm
             Dim sql1 As String = "SELECT lu.rowid,COALESCE(lu.lineupno,''),COALESCE(lu.deliveryno,''),COALESCE(CONCAT(COALESCE(o.ordernumber,''),' (C.O. No.) / ',COALESCE(a.companyname,''),' - ',COALESCE(a.accountno,'')),'')," &
                         "COALESCE(DATE_FORMAT(lu.lineupdate,'%d-%b-%Y'),'') FROM lineups lu LEFT JOIN orders o ON lu.orderid = o.rowid LEFT JOIN accounts a ON o.accountid = a.rowid WHERE lu.organizationid = " & Z_OrganizationID & " " &
                         "AND (" & idatesearch & " >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " & idatesearch & " <= '" & dtpToSearch.Value.Year & "-" & dtpToSearch.Value.Month & "-" & dtpToSearch.Value.Day & "' ) " &
-                        "GROUP BY lu.rowid ORDER BY lu.Created DESC LIMIT " & istartpage & "," & pagedivisor & " "
+                        "GROUP BY lu.rowid ORDER BY lu.DeliveryNo*1 DESC, lu.LineUpNo*1 DESC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             Dim n As Integer = 0
@@ -1201,7 +1201,7 @@ Public Class ViewEditLineUpDeliveryForm
             If conn.State = ConnectionState.Closed Then conn.Open()
             Dim sql1 As String = "SELECT lu.rowid,COALESCE(lu.lineupno,''),COALESCE(lu.deliveryno,''),COALESCE(CONCAT(COALESCE(o.ordernumber,''),' (C.O. No.) / ',COALESCE(a.companyname,''),' - ',COALESCE(a.accountno,'')),'')," &
                         "COALESCE(DATE_FORMAT(lu.lineupdate,'%d-%b-%Y'),'') FROM lineups lu LEFT JOIN orders o ON lu.orderid = o.rowid LEFT JOIN accounts a ON o.accountid = a.rowid WHERE lu.organizationid = " & Z_OrganizationID & " " &
-                        "AND " & icommonphrase & " " & idatesearch & " ORDER BY lu.Created DESC LIMIT " & istartpage & "," & pagedivisor & " "
+                        "AND " & icommonphrase & " " & idatesearch & " ORDER BY lu.DeliveryNo*1 DESC, lu.LineUpNo*1 DESC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             Dim n As Integer = 0
