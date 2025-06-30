@@ -870,7 +870,7 @@ Public Class PackingListForm
             Dim sql1 As String = "SELECT pal.rowid,COALESCE(pal.packinglistno,''),DATE_FORMAT(pal.packinglistdate,'%d-%b-%Y'),COALESCE(co.ordernumber,'')," &
                         "COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),''),COALESCE(pal.status,'') FROM packinglist pal " &
                         "LEFT JOIN orders co ON pal.orderid = co.rowid LEFT JOIN accounts cu ON co.accountid = cu.rowid " &
-                        "WHERE pal.organizationid = " & Z_OrganizationID & " ORDER BY pal.packinglistdate DESC LIMIT " & istartpage & "," & pagedivisor & " "
+                        "WHERE pal.organizationid = " & Z_OrganizationID & " ORDER BY pal.PackingListNo+0 DESC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             Dim n As Integer = 0
@@ -909,7 +909,7 @@ Public Class PackingListForm
                         "COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),''),COALESCE(pal.`status`,'') FROM packinglist pal " &
                         "LEFT JOIN orders co ON pal.orderid = co.rowid LEFT JOIN accounts cu ON co.accountid = cu.rowid WHERE pal.organizationid = " & Z_OrganizationID & " AND " &
                         "(pal.packinglistno LIKE ""%" & isearchphrase & "%"" OR pal.status LIKE ""%" & isearchphrase & "%"" OR co.ordernumber LIKE ""%" & isearchphrase & "%"" OR cu.companyname LIKE ""%" & isearchphrase & "%"") " &
-                        "ORDER BY pal.packinglistdate DESC LIMIT " & istartpage & "," & pagedivisor & " "
+                        "ORDER BY pal.PackingListNo+0 DESC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             Dim n As Integer = 0
@@ -949,7 +949,7 @@ Public Class PackingListForm
                         "LEFT JOIN orders co ON pal.orderid = co.rowid LEFT JOIN accounts cu ON co.accountid = cu.rowid WHERE pal.organizationid = " & Z_OrganizationID & " " &
                         "AND (" & idatesearch & " >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " &
                         "" & idatesearch & " <= '" & dtpToSearch.Value.Year & "-" & dtpToSearch.Value.Month & "-" & dtpToSearch.Value.Day & "' ) " &
-                        "GROUP BY pal.rowid  ORDER BY pal.packinglistdate DESC LIMIT " & istartpage & "," & pagedivisor & " "
+                        "GROUP BY pal.rowid  ORDER BY pal.PackingListNo+0 DESC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             Dim n As Integer = 0
@@ -987,7 +987,7 @@ Public Class PackingListForm
             Dim sql1 As String = "SELECT pal.rowid,COALESCE(pal.packinglistno,''),DATE_FORMAT(pal.packinglistdate,'%d-%b-%Y'),COALESCE(co.ordernumber,'')," &
                         "COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),''),COALESCE(pal.status,'') FROM packinglist pal " &
                         "LEFT JOIN orders co ON pal.orderid = co.rowid LEFT JOIN accounts cu ON co.accountid = cu.rowid LEFT JOIN packinglistcartons pc ON pal.rowid = pc.packinglistid " &
-                        "WHERE pal.organizationid = " & Z_OrganizationID & " AND " & icommonphrase & " " & idatesearch & " GROUP BY pal.rowid ORDER BY pal.packinglistdate DESC LIMIT " & istartpage & "," & pagedivisor & " "
+                        "WHERE pal.organizationid = " & Z_OrganizationID & " AND " & icommonphrase & " " & idatesearch & " GROUP BY pal.rowid ORDER BY pal.PackingListNo+0 DESC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             Dim n As Integer = 0
