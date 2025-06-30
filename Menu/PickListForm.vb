@@ -831,7 +831,7 @@ Public Class PickListForm
             Dim sql1 As String = "SELECT pl.rowid,COALESCE(pl.picklistno,''),DATE_FORMAT(pl.picklistdate,'%d-%b-%Y'),COALESCE(pl.status,'') FROM picklist pl " &
                         "LEFT JOIN contacts co ON pl.contactid = co.rowid WHERE pl.organizationid = " & Z_OrganizationID & " AND " &
                         "(pl.picklistno LIKE ""%" & isearchphrase & "%"" OR pl.status LIKE ""%" & isearchphrase & "%"" OR co.firstname LIKE ""%" & isearchphrase & "%"" OR co.lastname LIKE ""%" & isearchphrase & "%"") " &
-                        "ORDER BY pl.picklistdate DESC,pl.picklistno LIMIT " & istartpage & "," & pagedivisor & " "
+                        "ORDER BY pl.picklistdate DESC,pl.picklistno+0 LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             Dim n As Integer = 0
@@ -866,7 +866,7 @@ Public Class PickListForm
             Dim sql1 As String = "SELECT pl.rowid,COALESCE(pl.picklistno,''),DATE_FORMAT(pl.picklistdate,'%d-%b-%Y'),COALESCE(pl.status,'') FROM picklist pl WHERE pl.organizationid = " & Z_OrganizationID & " " &
                         "AND (" & idatesearch & " >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " &
                         "" & idatesearch & " <= '" & dtpToSearch.Value.Year & "-" & dtpToSearch.Value.Month & "-" & dtpToSearch.Value.Day & "' ) " &
-                        "GROUP BY pl.rowid ORDER BY pl.picklistdate DESC,pl.picklistno LIMIT " & istartpage & "," & pagedivisor & " "
+                        "GROUP BY pl.rowid ORDER BY pl.picklistno+0 DESC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             Dim n As Integer = 0
@@ -902,7 +902,7 @@ Public Class PickListForm
                         "LEFT JOIN picklistorders plo ON pl.rowid = plo.picklistid LEFT JOIN orders co ON plo.orderid = co.rowid " &
                         "LEFT JOIN accounts cu ON co.accountid = cu.rowid LEFT JOIN picklistgroup pg ON cu.picklistgroupid = pg.rowid " &
                         "WHERE pl.organizationid = " & Z_OrganizationID & " AND " & icommonphrase & " " & idatesearch & " " &
-                        "GROUP BY pl.rowid ORDER BY pl.picklistdate DESC,pl.picklistno LIMIT " & istartpage & "," & pagedivisor & " "
+                        "GROUP BY pl.rowid ORDER BY pl.picklistno+0 DESC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             Dim n As Integer = 0
