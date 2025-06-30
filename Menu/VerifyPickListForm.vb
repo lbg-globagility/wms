@@ -353,7 +353,7 @@ Public Class VerifyPickListForm
             dgPickList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
             Dim sql1 As String = "SELECT pl.rowid,COALESCE(pl.picklistno,''),COALESCE(pl.status,''),COALESCE(DATE_FORMAT(pl.completeddate,'%d-%b-%Y'),'') " &
-                        "FROM picklist pl WHERE pl.organizationid = " & Z_OrganizationID & " ORDER BY pl.picklistno DESC LIMIT " & istartpage & "," & pagedivisor & " "
+                        "FROM picklist pl WHERE pl.organizationid = " & Z_OrganizationID & " ORDER BY pl.picklistno+0 DESC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             Dim n As Integer = 0
