@@ -91,5 +91,7 @@ namespace WarehouseManagementSystem.Core.Entities
         public bool IsStatusPartiallyVerified => Status == PickListStatus.PartiallyVerified;
         public bool IsStatusCompleted => Status == PickListStatus.Completed;
         public bool IsStatusCancelled => Status == PickListStatus.Cancelled;
+
+        public int PickListNumNumeric => int.Parse(PickListNo);
     }
 }

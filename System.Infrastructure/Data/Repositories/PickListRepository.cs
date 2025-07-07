@@ -124,12 +124,15 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
                             if (sort == "PickListDate")
                                 q = isFirstLoop ? q.OrderBy(x => x.PickListDate, direction: dir) : fsdfsd.ThenBy(x => x.Created, direction: dir);
                             if (sort == "PickListNo")
-                                q = isFirstLoop ? q.OrderBy(x => x.PickListNo, direction: dir) : fsdfsd.ThenBy(x => x.Created, direction: dir);
+                                q = isFirstLoop ? q.OrderBy(x => x.PickListNumNumeric, direction: dir) : fsdfsd.ThenBy(x => x.Created, direction: dir);
 
                             i++;
                         }
-                    } else if (pageOptions.Sort == "Created")
+                    }
+                    else if (pageOptions.Sort == "Created")
                         q = q.OrderBy(x => x.Created, pageOptions.Direction);
+                    else if (pageOptions.Sort == "PickListNo")
+                        q = q.OrderBy(x => x.PickListNumNumeric, pageOptions.Direction);
                 }
 
                 return q;

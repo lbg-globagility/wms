@@ -37,7 +37,7 @@ Public Class PickListForm
     Dim ploverallqtyordered, pltotalqtyordered, pltotalqtypicked, ploverallqtytopick, plqtytopick, plqtytopickbalance, plqtyorderedsum, pltotalqtytopicksum, plqtytopicksum As Integer
     Private _systemOwner As WarehouseManagementSystem.Core.Entities.SystemOwner
 
-    Private ReadOnly DEFAULT_PAGEOPTIONS As PageOptions = New PageOptions(pageIndex:=0, pageSize:=100, sort:="PickListDate,PickListNo", direction:="desc,asc")
+    Private ReadOnly DEFAULT_PAGEOPTIONS As PageOptions = New PageOptions(pageIndex:=0, pageSize:=100, sort:="PickListNo", direction:="desc")
     Private _pageOptions As PageOptions = DEFAULT_PAGEOPTIONS
 
     Private Async Sub PickListForm_Load(sender As Object, e As EventArgs) Handles Me.Load
@@ -831,7 +831,7 @@ Public Class PickListForm
             Dim sql1 As String = "SELECT pl.rowid,COALESCE(pl.picklistno,''),DATE_FORMAT(pl.picklistdate,'%d-%b-%Y'),COALESCE(pl.status,'') FROM picklist pl " &
                         "LEFT JOIN contacts co ON pl.contactid = co.rowid WHERE pl.organizationid = " & Z_OrganizationID & " AND " &
                         "(pl.picklistno LIKE ""%" & isearchphrase & "%"" OR pl.status LIKE ""%" & isearchphrase & "%"" OR co.firstname LIKE ""%" & isearchphrase & "%"" OR co.lastname LIKE ""%" & isearchphrase & "%"") " &
-                        "ORDER BY pl.picklistdate DESC,pl.picklistno+0 LIMIT " & istartpage & "," & pagedivisor & " "
+                        "ORDER BY pl.picklistno+0 DESC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             Dim n As Integer = 0
