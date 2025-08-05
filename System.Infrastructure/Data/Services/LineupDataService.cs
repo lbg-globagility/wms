@@ -82,7 +82,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
                     orderItemIds.Add(packingListCartonItem.OrderItem.RowID);
                     var productInventoryLocation = productInventoryLocations
                         .Where(t => t.ProductColorSizeID == productColorSizeId)
-                        .Where(t => (t.TotalReserveQty ?? 0) > 0 && (t.TotalReserveQty ?? 0) >= (packingListCartonItem.QtyInCarton ?? 0))
+                        //.Where(t => (t.TotalReserveQty ?? 0) > 0 && (t.TotalReserveQty ?? 0) >= (packingListCartonItem.QtyInCarton ?? 0))
                         .FirstOrDefault();
 
                     if (productInventoryLocation == null)
