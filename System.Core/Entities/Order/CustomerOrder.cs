@@ -21,6 +21,7 @@ namespace WarehouseManagementSystem.Core.Entities
         public void SetSubmittedToWarehouseCustomerOrder()
         {
             Status = OrderStatus.SubmittedToWarehouse;
+            DateSubmitted = DateTime.Now;
         }
 
         public void SetCancelledCustomerOrder()
