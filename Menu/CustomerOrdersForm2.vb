@@ -672,7 +672,7 @@ Public Class CustomerOrdersForm2
     Private Async Sub ToolStripButtonRevoke_Click(sender As Object, e As EventArgs) Handles ToolStripButtonRevoke.Click
         If If(_selectedOrder?.IsNewEntity, True) Then Return
 
-        Dim text = $"Are you sure you want to ""CANCEL"" this `Customer Order` #{_selectedOrder.OrderNumber} {If(String.IsNullOrEmpty(_selectedOrder.ReferenceNumber), String.Empty, $"P.O. #{_selectedOrder.ReferenceNumber}")}?{vbNewLine}{vbNewLine}If so, please coordinate to those user(s) who are involve on this transaction process."
+        Dim text = $"Are you sure you want to ""CANCEL"" this `Customer Order` #{_selectedOrder.OrderNumber} {If(String.IsNullOrEmpty(_selectedOrder.ReferenceNumber), String.Empty, $"P.O. #{_selectedOrder.ReferenceNumber}")}?"
         If Not MessageBox.Show(text:=text,
             caption:="WARNING: Revoke Customer Order",
             buttons:=MessageBoxButtons.YesNoCancel,
