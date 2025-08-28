@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Threading.Tasks;
 using WarehouseManagementSystem.Core.Entities;
@@ -75,6 +76,8 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
 
             CustomerOrderValidation(order);
 
+            await RevokeLineUpDeliveryAsync(order, userId);
+
             order.SetCancelledCustomerOrder();
 
             if ((order.RowID ?? 0) > 0)
@@ -89,6 +92,127 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
             }
 
             await SaveManyAsync(entities: new List<Order>() { order }, userId: userId);
+        }
+
+        private async Task RevokeLineUpDeliveryAsync(Order order, int userId)
+        {
+            var orderId = order.RowID.Value;
+
+            var lineups = await _lineupRepository.GetManyByOrderIdAsync(orderId);
+            var hasLineups = lineups?.Any(t => t.LineupCartons?.Any(x => x.PackingListCarton.PackingListCartonItems?.Any() ?? false) ?? false) ?? false;
+
+            if (hasLineups)
+            {
+                foreach (var lineup in lineups)
+                {
+                    var pcsIdsAndinvIds = new List<(int pcsId, int invId)>();
+                    foreach (var item1 in lineup.LineupCartons)
+                    {
+                        var packingListCartonItems = item1.PackingListCarton.PackingListCartonItems;
+                        if (!(packingListCartonItems?.Any() ?? false))
+                            continue;
+
+                        foreach (var packingListCartonItem in packingListCartonItems)
+                            pcsIdsAndinvIds.Add((pcsId: packingListCartonItem.OrderItem.ProductColorSizeID.Value, invId: packingListCartonItem.OrderItem.ProductInventoryLocation.RackShelfColumn.InventoryLocationID));
+                    }
+
+                    var productInventoryLocations = await _productInventoryLocationDataService.GetByProductColorSizeIdsAndInventoryLocationIdsAsync(
+                        organizationId: lineup.OrganizationID ?? 0,
+                        userId: userId,
+                        productColorSizeIdsAndInventoryIds: pcsIdsAndinvIds);
+
+                    var updatedProductInventoryLocations = new List<ProductInventoryLocation>();
+                    var orderItemIds = new List<int?>();
+                    foreach (var lineupCarton in lineup.LineupCartons)
+                    {
+                        var packingListCartonItems = lineupCarton.PackingListCarton.PackingListCartonItems;
+                        if (!packingListCartonItems.Any())
+                            continue;
+
+                        foreach (var packingListCartonItem in packingListCartonItems)
+                        {
+                            var productColorSizeId = packingListCartonItem.OrderItem.ProductColorSizeID.Value;
+                            orderItemIds.Add(packingListCartonItem.OrderItem.RowID);
+                            var productInventoryLocation = productInventoryLocations
+                                .Where(t => t.ProductColorSizeID == productColorSizeId)
+                                //.Where(t => (t.TotalReserveQty ?? 0) > 0 && (t.TotalReserveQty ?? 0) >= (packingListCartonItem.QtyInCarton ?? 0))
+                                .FirstOrDefault();
+
+                            if (productInventoryLocation == null)
+                                continue;
+
+                            var qty = packingListCartonItem?.OrderItem?.QtyOrdered ?? packingListCartonItem.QtyInCarton ?? 0;
+
+                            productInventoryLocation.TotalReserveQty -= qty;
+
+                            //productInventoryLocation.TotalAvailableQty -= qty;
+
+                            updatedProductInventoryLocations.Add(productInventoryLocation);
+                        }
+                    }
+
+                    var packingList = await _packingListRepository.GetByOrderIdAsync(orderId);
+                    packingList.SetStatusToCancelled();
+                    packingList.AuditUser(userId);
+                    await _packingListRepository.SaveManyAsync(updated: new List<PackingList>() { packingList });
+
+                    var pickListOrders = await _pickListOrderRepository.GetManyByOrderIdAsync(orderId);
+                    var updatedPickListOrders = new List<PickListOrder>();
+                    foreach (var pickListOrder in pickListOrders.Where(t => orderItemIds.Contains(t.OrderItemID)))
+                    {
+                        pickListOrder.SetStatusToCancelled();
+                        pickListOrder.AuditUser(userId);
+                        updatedPickListOrders.Add(pickListOrder);
+                    }
+                    await _pickListOrderRepository.SaveManyAsync(updated: updatedPickListOrders);
+
+                    await _productInventoryLocationDataService.SaveManyAsync(userId: userId, updated: updatedProductInventoryLocations);
+                }
+            }
+            else
+            {
+                var pickListOrders = await _pickListOrderRepository.GetManyByOrderIdAsync(orderId);
+                if (!hasLineups && (pickListOrders?.Any() ?? false))
+                {
+                    var updatedPickListOrders = new List<PickListOrder>();
+                    var orderItemIds = order.OrderItems.Select(t => t.RowID).ToArray();
+                    foreach (var pickListOrder in pickListOrders.Where(t => orderItemIds.Contains(t.OrderItemID)))
+                    {
+                        pickListOrder.SetStatusToCancelled();
+                        pickListOrder.AuditUser(userId);
+                        updatedPickListOrders.Add(pickListOrder);
+                    }
+                    await _pickListOrderRepository.SaveManyAsync(updated: updatedPickListOrders);
+
+                    var orderItems = await _orderItemDataService.GetByOrderIdAsync(orderId);
+
+                    var pcsIdsAndinvIds = new List<(int pcsId, int invId)>();
+                    orderItems.ForEach(t =>
+                    {
+                        var fsdaf = t.ProductInventoryLocation;
+                        pcsIdsAndinvIds.Add((fsdaf.ProductColorSizeID, fsdaf.RackShelfColumn.InventoryLocationID));
+                    });
+
+                    var productInventoryLocations = await _productInventoryLocationDataService.GetByProductColorSizeIdsAndInventoryLocationIdsAsync(
+                        organizationId: order.OrganizationID ?? 0,
+                        userId: userId,
+                        productColorSizeIdsAndInventoryIds: pcsIdsAndinvIds);
+
+                    var updatedProductInventoryLocations = new List<ProductInventoryLocation>();
+                    foreach (var productInventoryLocation in productInventoryLocations)
+                    {
+                        var orderItem = orderItems.FirstOrDefault(t => t.ProductInventoryLocationId == productInventoryLocation.RowID);
+                        var qty = orderItem.QtyOrdered;
+
+                        productInventoryLocation.TotalReserveQty -= qty;
+
+                        //productInventoryLocation.TotalAvailableQty -= qty;
+
+                        updatedProductInventoryLocations.Add(productInventoryLocation);
+                    }
+                    await _productInventoryLocationDataService.SaveManyAsync(userId: userId, updated: updatedProductInventoryLocations);
+                }
+            }
         }
 
         private void CustomerOrderValidation(Order order)
@@ -107,7 +231,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
             if (!oldEntity.IsCustomerOrderType) return;
 
             suffix = $" of Customer Order #{entity.OrderNumber}";
-            
+
         }
 
         public async Task SaveManyCustomerOrderAsync(int userId,
@@ -197,7 +321,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
                 });
 
                 await _orderItemDataService.SaveManyChangesAsync(userId: userId, added: addedOrderItems, updated: updatedOrderItems);
-                if(deletedOrderItems.Any()) await _orderItemDataService.DeleteManyAsync(userId: userId, deleted: deletedOrderItems);
+                if (deletedOrderItems.Any()) await _orderItemDataService.DeleteManyAsync(userId: userId, deleted: deletedOrderItems);
             }
 
             if (deleted != null)

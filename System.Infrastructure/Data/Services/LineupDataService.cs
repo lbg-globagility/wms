@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using WarehouseManagementSystem.Core.Entities;
 using WarehouseManagementSystem.Core.Exceptions;
@@ -17,7 +16,6 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
         private readonly ILineupRepository _lineupRepository;
         private readonly IProductInventoryLocationDataService _productInventoryLocationDataService;
         private readonly IPackingListDataService _packingListDataService;
-        private readonly IPickListDataService _pickListDataService;
         private readonly IOrderDataService _orderDataService;
         private readonly IPickListOrderDataService _pickListOrderDataService;
 
@@ -27,10 +25,9 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
             IPolicyHelper policy,
             IProductInventoryLocationDataService productInventoryLocationDataService,
             IPackingListDataService packingListDataService,
-            IPickListDataService pickListDataService,
             IOrderDataService orderDataService,
-            IPickListOrderDataService pickListOrderDataService) : 
-            
+            IPickListOrderDataService pickListOrderDataService) :
+
             base(lineupRepository,
                 userActivityRepository,
                 context,
@@ -40,7 +37,6 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
             _lineupRepository = lineupRepository;
             _productInventoryLocationDataService = productInventoryLocationDataService;
             _packingListDataService = packingListDataService;
-            _pickListDataService = pickListDataService;
             _orderDataService = orderDataService;
             _pickListOrderDataService = pickListOrderDataService;
         }
@@ -50,71 +46,6 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
             var lineup = await GetByLineupIdAsync(lineupId: lineupId);
 
             if (lineup.IsCancelled) BusinessLogicException.Throw("Invalid command: Delivery already cancelled.");
-
-            var order = lineup.Order;
-            var pcsIdsAndinvIds = new List<(int pcsId, int invId)>();
-            foreach (var item1 in lineup.LineupCartons)
-            {
-                var packingListCartonItems = item1.PackingListCarton.PackingListCartonItems;
-                if (!(packingListCartonItems?.Any() ?? false))
-                    continue;
-
-                foreach (var packingListCartonItem in packingListCartonItems)
-                    pcsIdsAndinvIds.Add((pcsId: packingListCartonItem.OrderItem.ProductColorSizeID.Value, invId: packingListCartonItem.OrderItem.ProductInventoryLocation.RackShelfColumn.InventoryLocationID));
-            }
-
-            var productInventoryLocations = await _productInventoryLocationDataService.GetByProductColorSizeIdsAndInventoryLocationIdsAsync(
-                organizationId: lineup.OrganizationID ?? 0,
-                userId: userId,
-                productColorSizeIdsAndInventoryIds: pcsIdsAndinvIds);
-
-            var updatedProductInventoryLocations = new List<ProductInventoryLocation>();
-            var orderItemIds = new List<int?>();
-            foreach (var lineupCarton in lineup.LineupCartons)
-            {
-                var packingListCartonItems = lineupCarton.PackingListCarton.PackingListCartonItems;
-                if (!packingListCartonItems.Any())
-                    continue;
-
-                foreach (var packingListCartonItem in packingListCartonItems)
-                {
-                    var productColorSizeId = packingListCartonItem.OrderItem.ProductColorSizeID.Value;
-                    orderItemIds.Add(packingListCartonItem.OrderItem.RowID);
-                    var productInventoryLocation = productInventoryLocations
-                        .Where(t => t.ProductColorSizeID == productColorSizeId)
-                        //.Where(t => (t.TotalReserveQty ?? 0) > 0 && (t.TotalReserveQty ?? 0) >= (packingListCartonItem.QtyInCarton ?? 0))
-                        .FirstOrDefault();
-
-                    if (productInventoryLocation == null)
-                        continue;
-
-                    var qty = packingListCartonItem?.OrderItem?.QtyOrdered ?? packingListCartonItem.QtyInCarton ?? 0;
-
-                    productInventoryLocation.TotalReserveQty -= qty;
-
-                    //productInventoryLocation.TotalAvailableQty -= qty;
-
-                    updatedProductInventoryLocations.Add(productInventoryLocation);
-                }
-            }
-
-            var packingList = await _packingListDataService.GetByOrderIdAsync(orderId: order.RowID.Value);
-            packingList.SetStatusToCancelled();
-            await _packingListDataService.SaveManyAsync(userId: userId, updated: new List<PackingList>() { packingList });
-
-            var pickListOrders = await _pickListOrderDataService.GetManyByOrderIdAsync(orderId: order.RowID.Value);
-            var updatedPickListOrders = new List<PickListOrder>();
-            foreach (var pickListOrder in pickListOrders.Where(t => orderItemIds.Contains(t.OrderItemID)))
-            {
-                pickListOrder.SetStatusToCancelled();
-                updatedPickListOrders.Add(pickListOrder);
-            }
-            await _pickListOrderDataService.SaveManyAsync(updated: updatedPickListOrders, userId: userId);
-
-            await _productInventoryLocationDataService.SaveManyAsync(userId: userId, updated: updatedProductInventoryLocations);
-
-            var customerOrder = await _orderDataService.GetCustomerOrderAsync(primaryKey: order.RowID.Value);
-            await _orderDataService.RevokeCustomerOrder(order: customerOrder, userId: userId);
 
             lineup.SetStatusToCancelled();
 
@@ -171,10 +102,10 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
                     var productInventoryLocation = productInventoryLocations
                         .ToList()
                         .BestOrDefault(inventoryLocationId: inventoryLocationId, productColorSizeId: productColorSizeId);
-                        //.Where(t => t.ProductColorSizeID == productColorSizeId)
-                        //.Where(t => t.RackShelfColumn.InventoryLocationID == inventoryLocationId)
-                        ////.Where(t => (t.TotalReserveQty ?? 0) > 0 && (t.TotalReserveQty ?? 0) >= (packingListCartonItem.QtyInCarton ?? 0))
-                        //.FirstOrDefault();
+                    //.Where(t => t.ProductColorSizeID == productColorSizeId)
+                    //.Where(t => t.RackShelfColumn.InventoryLocationID == inventoryLocationId)
+                    ////.Where(t => (t.TotalReserveQty ?? 0) > 0 && (t.TotalReserveQty ?? 0) >= (packingListCartonItem.QtyInCarton ?? 0))
+                    //.FirstOrDefault();
 
                     if (productInventoryLocation == null)
                         continue;
@@ -198,6 +129,8 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
         public async Task<Lineup> GetByLineupIdAsync(int lineupId) => await _lineupRepository.GetByLineupIdAsync(lineupId);
 
         public async Task<List<Lineup>> GetByOrganizationIdAndDateRangeAsync(int organizationId, DateTime from, DateTime to) => await _lineupRepository.GetByOrganizationIdAndDateRangeAsync(organizationId, from: from, to: to);
+
+        public async Task<List<Lineup>> GetManyByOrderIdAsync(int orderId) => await _lineupRepository.GetManyByOrderIdAsync(orderId);
 
         protected override string CreateUserActivitySuffixIdentifier(Lineup entity) => $"LineUpNo: {entity.LineUpNo}, Date: {entity.LineUpDate}, and OrderId: {entity.OrderID}";
 

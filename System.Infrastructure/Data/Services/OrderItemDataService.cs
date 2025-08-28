@@ -1,13 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json;
 using System.Threading.Tasks;
 using WarehouseManagementSystem.Core.Entities;
 using WarehouseManagementSystem.Core.Exceptions;
 using WarehouseManagementSystem.Core.Interfaces;
 using WarehouseManagementSystem.Core.Interfaces.DomainServices;
 using WarehouseManagementSystem.Core.Interfaces.Repositories;
-using WarehouseManagementSystem.Infrastructure.Data.Repositories;
 
 namespace WarehouseManagementSystem.Infrastructure.Data.Services
 {
@@ -64,7 +62,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
         {
             await ScrutinateUserPrivilegeAsync(userId: userId, orderItems: deleted);
 
-            if(deleted?.Any() ?? false) await SaveManyAsync(userId: userId, deleted: deleted);
+            if (deleted?.Any() ?? false) await SaveManyAsync(userId: userId, deleted: deleted);
         }
 
         public async Task SaveManyChangesAsync(int userId, List<OrderItem> added, List<OrderItem> updated)
@@ -86,5 +84,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
 
             await base.RecordUpdate(entity, oldEntity, suffix);
         }
+
+        public async Task<List<OrderItem>> GetByOrderIdAsync(int orderId) => await _orderItemRepository.GetByOrderIdAsync(orderId);
     }
 }

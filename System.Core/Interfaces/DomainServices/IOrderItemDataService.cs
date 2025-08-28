@@ -8,6 +8,7 @@ namespace WarehouseManagementSystem.Core.Interfaces.DomainServices
     public interface IOrderItemDataService : IBaseSavableDataService<OrderItem>
     {
         Task DeleteManyAsync(int userId, List<OrderItem> deleted);
+        Task<List<OrderItem>> GetByOrderIdAsync(int orderId);
         Task SaveManyChangesAsync(int userId, List<OrderItem> added, List<OrderItem> updated);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml.Style;
+using Remotion.Linq.Clauses;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
@@ -10,6 +11,7 @@ using WarehouseManagementSystem.Core.Exceptions;
 using WarehouseManagementSystem.Core.Interfaces;
 using WarehouseManagementSystem.Core.Interfaces.DomainServices;
 using WarehouseManagementSystem.Core.Interfaces.Repositories;
+using WarehouseManagementSystem.Infrastructure.Data.Repositories;
 
 namespace WarehouseManagementSystem.Infrastructure.Data.Services
 {
@@ -21,6 +23,9 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
         private readonly IMovementHistoryDataService _movementHistoryDataService;
         private readonly IProductInventoryLocationDataService _productInventoryLocationDataService;
         private readonly IOrderItemDataService _orderItemDataService;
+        private readonly ILineupRepository _lineupRepository;
+        private readonly IPackingListRepository _packingListRepository;
+        private readonly IPickListOrderRepository _pickListOrderRepository;
 
         public OrderDataService(IOrderRepository orderRepository,
             IUserActivityRepository userActivityRepository,
@@ -30,7 +35,10 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
             IPositionViewDataService positionViewDataService,
             IMovementHistoryDataService movementHistoryDataService,
             IProductInventoryLocationDataService productInventoryLocationDataService,
-            IOrderItemDataService orderItemDataService) :
+            IOrderItemDataService orderItemDataService,
+            ILineupRepository lineupRepository,
+            IPackingListRepository packingListRepository,
+            IPickListOrderRepository pickListOrderRepository) :
 
             base(orderRepository,
                 userActivityRepository,
@@ -44,6 +52,9 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
             _movementHistoryDataService = movementHistoryDataService;
             _productInventoryLocationDataService = productInventoryLocationDataService;
             _orderItemDataService = orderItemDataService;
+            _lineupRepository = lineupRepository;
+            _packingListRepository = packingListRepository;
+            _pickListOrderRepository = pickListOrderRepository;
         }
 
         public async Task<List<Order>> GetOrdersByOrderTypeAsync(int organizationId, OrderType orderType) =>

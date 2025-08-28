@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WarehouseManagementSystem.Core.Entities;
-using WarehouseManagementSystem.Core.Enums;
 using WarehouseManagementSystem.Core.Interfaces.Repositories;
 using WarehouseManagementSystem.Infrastructure.Data.Repositories.Base;
 
@@ -45,7 +44,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
                 .ThenInclude(t => t.PackingListCarton)
                     .ThenInclude(t => t.PackingListCartonItems)
                         .ThenInclude(t => t.PickListOrder)
-                            .ThenInclude(t=>t.PickListOrderItems)
+                            .ThenInclude(t => t.PickListOrderItems)
             .Where(t => t.LineupCartons.Any(luc => luc.LineUpID == lineUpId))
             .AsNoTracking()
             .AsQueryable();
@@ -88,5 +87,22 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
                 .Where(t => t.IsConfirmedDelivery && (t.ConfirmedDeliveryTimeStamp.Value.Date >= from.Date && t.ConfirmedDeliveryTimeStamp.Value.Date <= to.Date))
                 .ToList());
         }
+
+        public async Task<List<Lineup>> GetManyByOrderIdAsync(int orderId) => await _context.Lineups
+            .Include(t => t.Order)
+            .Include(t => t.LineupCartons)
+                .ThenInclude(t => t.PackingListCarton)
+                    .ThenInclude(t => t.PackingListCartonItems)
+                        .ThenInclude(t => t.OrderItem)
+                            .ThenInclude(oi => oi.ProductInventoryLocation)
+                                .ThenInclude(pil => pil.RackShelfColumn)
+            .Include(t => t.LineupCartons)
+                .ThenInclude(t => t.PackingListCarton)
+                    .ThenInclude(t => t.PackingListCartonItems)
+                        .ThenInclude(t => t.PickListOrder)
+                            .ThenInclude(t => t.PickListOrderItems)
+            .Where(t => t.OrderID == orderId)
+            .AsNoTracking()
+            .ToListAsync();
     }
 }

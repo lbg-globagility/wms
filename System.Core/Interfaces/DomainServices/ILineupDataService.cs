@@ -13,5 +13,6 @@ namespace WarehouseManagementSystem.Core.Interfaces.DomainServices
         Task<Lineup> GetByLineupIdAsync(int lineupId);
 
         Task<List<Lineup>> GetByOrganizationIdAndDateRangeAsync(int organizationId, DateTime from, DateTime to);
+        Task<List<Lineup>> GetManyByOrderIdAsync(int orderId);
     }
 }
