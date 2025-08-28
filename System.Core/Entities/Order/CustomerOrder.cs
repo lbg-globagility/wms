@@ -26,6 +26,7 @@ namespace WarehouseManagementSystem.Core.Entities
         public void SetCancelledCustomerOrder()
         {
             Status = OrderStatus.Cancelled;
+            EndDate = DateTime.Now;
         }
 
         public string CustomerNameText => Customer?.CompanyName;
