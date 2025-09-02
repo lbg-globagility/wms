@@ -28,9 +28,12 @@ namespace WarehouseManagementSystem.Core.Entities
 
         public virtual ICollection<PackingListCarton> PackingListCartons { get; set; }
 
+        public bool IsCancelled => Status == $"{OrderStatus.Cancelled}";
+
         public void SetStatusToCancelled()
         {
             Status = $"{OrderStatus.Cancelled}";
+            SetEdited();
 
             if(PackingListCartons != null)
                 foreach (var item in PackingListCartons)

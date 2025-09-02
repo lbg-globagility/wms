@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Threading.Tasks;
 using WarehouseManagementSystem.Core.Entities;
@@ -80,16 +79,16 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
 
             order.SetCancelledCustomerOrder();
 
-            if ((order.RowID ?? 0) > 0)
-            {
-                var originOrder = await _orderRepository.GetByIdAsync(order.RowID.Value);
-                if ((!(!originOrder.IsStatusCancelled && order.IsStatusCancelled)) // when cancelling an already cancelled order
-                    || (originOrder.IsStatusDelivery && order.IsStatusCancelled)) // when cancelling a confirmed delivered transaction
-                {
-                    order.Status = originOrder.Status;
-                    BusinessLogicException.Throw(message: "Customer Order cannot be `CANCELLED` anymore.");
-                }
-            }
+            //if ((order.RowID ?? 0) > 0)
+            //{
+            //    var originOrder = await _orderRepository.GetByIdAsync(order.RowID.Value);
+            //    if ((!(!originOrder.IsStatusCancelled && order.IsStatusCancelled)) // when cancelling an already cancelled order
+            //        || (originOrder.IsStatusDelivery && order.IsStatusCancelled)) // when cancelling a confirmed delivered transaction
+            //    {
+            //        order.Status = originOrder.Status;
+            //        BusinessLogicException.Throw(message: "Customer Order cannot be `CANCELLED` anymore.");
+            //    }
+            //}
 
             await SaveManyAsync(entities: new List<Order>() { order }, userId: userId);
         }
@@ -143,20 +142,22 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
 
                             var qty = packingListCartonItem?.OrderItem?.QtyOrdered ?? packingListCartonItem.QtyInCarton ?? 0;
 
-                            productInventoryLocation.TotalReserveQty -= qty;
-
-                            //productInventoryLocation.TotalAvailableQty -= qty;
+                            if (lineup.IsConfirmedDelivery)
+                                productInventoryLocation.TotalAvailableQty += qty;
 
                             updatedProductInventoryLocations.Add(productInventoryLocation);
                         }
                     }
 
-                    var packingList = await _packingListRepository.GetByOrderIdAsync(orderId);
-                    packingList.SetStatusToCancelled();
-                    packingList.AuditUser(userId);
-                    await _packingListRepository.SaveManyAsync(updated: new List<PackingList>() { packingList });
+                    var packingList = await _packingListRepository.GetByOrderIdAsync(lineup.OrderID.Value);
+                    if (!packingList.IsCancelled)
+                    {
+                        packingList.SetStatusToCancelled();
+                        packingList.AuditUser(userId);
+                        await _packingListRepository.SaveManyAsync(updated: new List<PackingList>() { packingList });
+                    }
 
-                    var pickListOrders = await _pickListOrderRepository.GetManyByOrderIdAsync(orderId);
+                    var pickListOrders = await _pickListOrderRepository.GetManyByOrderIdAsync(lineup.OrderID.Value);
                     var updatedPickListOrders = new List<PickListOrder>();
                     foreach (var pickListOrder in pickListOrders.Where(t => orderItemIds.Contains(t.OrderItemID)))
                     {
@@ -167,24 +168,26 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
                     await _pickListOrderRepository.SaveManyAsync(updated: updatedPickListOrders);
 
                     await _productInventoryLocationDataService.SaveManyAsync(userId: userId, updated: updatedProductInventoryLocations);
+
+                    lineup.SetStatusToCancelled();
+                    lineup.AuditUser(userId);
+                    await _lineupRepository.SaveManyAsync(new List<Lineup>() { lineup });
                 }
             }
             else
             {
-                var pickListOrders = await _pickListOrderRepository.GetManyByOrderIdAsync(orderId);
+                var orderItemIds = order.OrderItems.Select(t => t.RowID).ToArray();
+                var pickListOrders = (await _pickListOrderRepository.GetManyByOrderIdAsync(orderId))
+                    .Where(t => t.PickList.Status != PickListStatus.Cancelled)
+                    .Where(t => !t.IsCancelledStatus)
+                    .Where(t => orderItemIds.Contains(t.OrderItemID))
+                    .ToList();
+
                 if (!hasLineups && (pickListOrders?.Any() ?? false))
                 {
-                    var updatedPickListOrders = new List<PickListOrder>();
-                    var orderItemIds = order.OrderItems.Select(t => t.RowID).ToArray();
-                    foreach (var pickListOrder in pickListOrders.Where(t => orderItemIds.Contains(t.OrderItemID)))
-                    {
-                        pickListOrder.SetStatusToCancelled();
-                        pickListOrder.AuditUser(userId);
-                        updatedPickListOrders.Add(pickListOrder);
-                    }
-                    await _pickListOrderRepository.SaveManyAsync(updated: updatedPickListOrders);
-
-                    var orderItems = await _orderItemDataService.GetByOrderIdAsync(orderId);
+                    var orderItems = (await _orderItemDataService.GetByOrderIdAsync(orderId))
+                        .Where(t => pickListOrders?.Any(x => x.OrderItemID == t.RowID) ?? false)
+                        .ToList();
 
                     var pcsIdsAndinvIds = new List<(int pcsId, int invId)>();
                     orderItems.ForEach(t =>
@@ -204,13 +207,35 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
                         var orderItem = orderItems.FirstOrDefault(t => t.ProductInventoryLocationId == productInventoryLocation.RowID);
                         var qty = orderItem.QtyOrdered;
 
-                        productInventoryLocation.TotalReserveQty -= qty;
+                        if (pickListOrders?.FirstOrDefault(t => t.OrderItemID == orderItem.RowID)?.IsVerifiedStatus ?? false)
+                            productInventoryLocation.TotalReserveQty -= qty;
+                        else
+                            continue;
 
                         //productInventoryLocation.TotalAvailableQty -= qty;
 
                         updatedProductInventoryLocations.Add(productInventoryLocation);
                     }
-                    await _productInventoryLocationDataService.SaveManyAsync(userId: userId, updated: updatedProductInventoryLocations);
+                    if(updatedProductInventoryLocations?.Any() ?? false) await _productInventoryLocationDataService.SaveManyAsync(userId: userId, updated: updatedProductInventoryLocations);
+
+                    var updatedPickListOrders = new List<PickListOrder>();
+                    foreach (var pickListOrder in pickListOrders)
+                    {
+                        pickListOrder.SetStatusToCancelled();
+                        pickListOrder.AuditUser(userId);
+                        updatedPickListOrders.Add(pickListOrder);
+                    }
+                    await _pickListOrderRepository.SaveManyAsync(updated: updatedPickListOrders);
+
+                    var packinglists = await _packingListRepository.GetManyByOrderIdsAsync(new int[] { orderId });
+                    var updatedPackingLists = new List<PackingList>();
+                    foreach (var packinglist in packinglists)
+                    {
+                        packinglist.SetStatusToCancelled();
+                        packinglist.AuditUser(userId);
+                        updatedPackingLists.Add(packinglist);
+                    }
+                    await _packingListRepository.SaveManyAsync(updated: updatedPackingLists);
                 }
             }
         }
@@ -222,7 +247,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
             if ((order.AccountID ?? 0) == 0) BusinessLogicException.Throw(message: "Invalid Customer Name.");
             if ((order.AgentID ?? 0) == 0) BusinessLogicException.Throw(message: "Invalid Agent value.");
             if (!order.HasOrderItems) BusinessLogicException.Throw(message: "Invalid Order Item(s).");
-            if (order.IsStatusDelivery) BusinessLogicException.Throw(message: "Changes can't be made to this transaction, as it's already been completed.");
+            //if (order.IsStatusDelivery) BusinessLogicException.Throw(message: "Changes can't be made to this transaction, as it's already been completed.");
             if (order.IsStatusCancelled) BusinessLogicException.Throw(message: "Changes can't be made to this transaction, as it's already been cancelled.");
         }
 

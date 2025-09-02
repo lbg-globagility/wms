@@ -28,6 +28,7 @@ namespace WarehouseManagementSystem.Core.Entities
         {
             Status = OrderStatus.Cancelled;
             EndDate = DateTime.Now;
+            SetEdited();
         }
 
         public string CustomerNameText => Customer?.CompanyName;
