@@ -61,7 +61,7 @@ namespace WarehouseManagementSystem.Core.Entities
         {
             get
             {
-                string input = Driver.FirstName;
+                string input = Driver == null ? string.Empty : Driver?.FirstName;
                 string pattern = @"\((.*?)\)";
 
                 var match = Regex.Match(input, pattern);

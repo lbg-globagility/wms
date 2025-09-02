@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore.Internal;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -77,5 +76,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
         new public async Task<PickList> GetByIdAsync(int id) => await _pickListRepository.GetByIdAsync(id);
 
         public async Task<PickList> GetLastAsync(int organizationId) => await _pickListRepository.GetLastAsync(organizationId);
+
+        public async Task<List<PickList>> GetManyByOrderIdAsync(int orderId) => await _pickListRepository.GetManyByOrderIdAsync(orderId);
     }
 }

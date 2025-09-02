@@ -703,6 +703,9 @@ Public Class CustomerOrdersForm2
             Async Function()
                 ApplyCustomerOrderChanges(_selectedOrder)
 
+                Dim form = New CustomerOrderCancellationForm(userId:=Z_UserID, orderId:=If(_selectedOrder.RowID, 0))
+                If Not form.ShowDialog() = DialogResult.OK Then Return
+
                 Dim orderDataService = GetRequiredService(Of IOrderDataService)()
                 Await orderDataService.RevokeCustomerOrder(order:=_selectedOrder, userId:=Z_UserID)
             End Function,

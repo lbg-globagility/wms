@@ -240,6 +240,9 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="TreeGridView, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\TreeGridView.1.0.0\lib\net452\TreeGridView.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
@@ -396,6 +399,12 @@
       <DependentUpon>CustomerOrdersForm2.vb</DependentUpon>
     </Compile>
     <Compile Include="Menu\CustomerOrdersForm2.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Menu\CustomerOrder\CustomerOrderCancellationForm.Designer.vb">
+      <DependentUpon>CustomerOrderCancellationForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Menu\CustomerOrder\CustomerOrderCancellationForm.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Menu\CustomerOrder\CustomerOrderInventoryLocationSelectorDialog.Designer.vb">
@@ -1195,6 +1204,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Menu\CustomerOrdersForm2.resx">
       <DependentUpon>CustomerOrdersForm2.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Menu\CustomerOrder\CustomerOrderCancellationForm.resx">
+      <DependentUpon>CustomerOrderCancellationForm.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Menu\CustomerOrder\CustomerOrderInventoryLocationSelectorDialog.resx">
       <DependentUpon>CustomerOrderInventoryLocationSelectorDialog.vb</DependentUpon>

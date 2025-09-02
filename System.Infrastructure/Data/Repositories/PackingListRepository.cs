@@ -31,6 +31,9 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
 
             return await _context.PackingLists
                 .Include(t => t.PackingListCartons)
+                    .ThenInclude(t => t.PackingListCartonItems)
+                        .ThenInclude(t => t.OrderItem)
+                            .ThenInclude(oi => oi.ProductInventoryLocation)
                 .AsNoTracking()
                 .Where(t => ids.Contains(t.OrderID.Value))
                 .ToListAsync();

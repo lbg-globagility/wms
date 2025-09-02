@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using WarehouseManagementSystem.Core.Entities;
 using WarehouseManagementSystem.Core.Helpers;
 using WarehouseManagementSystem.Core.Interfaces.DomainServices.Base;
@@ -14,5 +15,7 @@ namespace WarehouseManagementSystem.Core.Interfaces.DomainServices
             string searchText = "");
 
         Task<PickList> GetLastAsync(int organizationId);
+
+        Task<List<PickList>> GetManyByOrderIdAsync(int orderId);
     }
 }

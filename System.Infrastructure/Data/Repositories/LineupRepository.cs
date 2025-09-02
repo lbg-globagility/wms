@@ -101,6 +101,11 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
                     .ThenInclude(t => t.PackingListCartonItems)
                         .ThenInclude(t => t.PickListOrder)
                             .ThenInclude(t => t.PickListOrderItems)
+            .Include(t => t.Driver)
+            .Include(t => t.Helper1)
+            .Include(t => t.Helper2)
+            .Include(t => t.DeliveryTruckShift)
+                .ThenInclude(x => x.DeliveryTruck)
             .Where(t => t.OrderID == orderId)
             .AsNoTracking()
             .ToListAsync();

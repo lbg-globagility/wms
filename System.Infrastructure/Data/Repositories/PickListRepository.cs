@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WarehouseManagementSystem.Core.Entities;
-using WarehouseManagementSystem.Core.Enums;
 using WarehouseManagementSystem.Core.Helpers;
 using WarehouseManagementSystem.Core.Interfaces.Repositories;
 using WarehouseManagementSystem.Infrastructure.Data.Repositories.Base;
@@ -68,6 +68,24 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
                 .AsEnumerable()
                 .OrderByDescending(o => o.PickListNumberInt)
                 .FirstOrDefault());
+        }
+
+        public Task<List<PickList>> GetManyByOrderIdAsync(int orderId)
+        {
+            var query = _context.PickLists
+                .Include(t => t.PickListOrders)
+                    .ThenInclude(t => t.OrderItem)
+                        .ThenInclude(t => t.ProductInventoryLocation)
+                            .ThenInclude(t => t.RackShelfColumn)
+                                .ThenInclude(t => t.InventoryLocation)
+                .Include(t => t.PickListOrders)
+                    .ThenInclude(t => t.PickListOrderItems)
+                .AsNoTracking()
+                .AsQueryable();
+
+            return Task.FromResult(query.AsEnumerable()
+                .Where(t => t.PickListOrders.Any(x => x.OrderID == orderId))
+                .ToList());
         }
 
         public async Task<PaginatedList<PickList>> GetPaginatedPickListsAsync(PageOptions pageOptions,
@@ -139,6 +157,6 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
             }
         }
 
-        
+
     }
 }

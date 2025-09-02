@@ -178,7 +178,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
             {
                 var orderItemIds = order.OrderItems.Select(t => t.RowID).ToArray();
                 var pickListOrders = (await _pickListOrderRepository.GetManyByOrderIdAsync(orderId))
-                    .Where(t => t.PickList.Status != PickListStatus.Cancelled)
+                    .Where(t => !t.PickList.IsStatusCancelled)
                     .Where(t => !t.IsCancelledStatus)
                     .Where(t => orderItemIds.Contains(t.OrderItemID))
                     .ToList();
@@ -205,9 +205,10 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
                     foreach (var productInventoryLocation in productInventoryLocations)
                     {
                         var orderItem = orderItems.FirstOrDefault(t => t.ProductInventoryLocationId == productInventoryLocation.RowID);
-                        var qty = orderItem.QtyOrdered;
+                        if (orderItem == null) continue;
+                        var qty = orderItem?.QtyOrdered ?? 0;
 
-                        if (pickListOrders?.FirstOrDefault(t => t.OrderItemID == orderItem.RowID)?.IsVerifiedStatus ?? false)
+                        if (pickListOrders?.FirstOrDefault(t => t.OrderItemID == (orderItem?.RowID ?? 0))?.IsVerifiedStatus ?? false)
                             productInventoryLocation.TotalReserveQty -= qty;
                         else
                             continue;
@@ -247,8 +248,8 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
             if ((order.AccountID ?? 0) == 0) BusinessLogicException.Throw(message: "Invalid Customer Name.");
             if ((order.AgentID ?? 0) == 0) BusinessLogicException.Throw(message: "Invalid Agent value.");
             if (!order.HasOrderItems) BusinessLogicException.Throw(message: "Invalid Order Item(s).");
-            //if (order.IsStatusDelivery) BusinessLogicException.Throw(message: "Changes can't be made to this transaction, as it's already been completed.");
-            if (order.IsStatusCancelled) BusinessLogicException.Throw(message: "Changes can't be made to this transaction, as it's already been cancelled.");
+            if (order.IsStatusDelivery) BusinessLogicException.Throw(message: "Changes can not be made, transaction already completed.");
+            if (order.IsStatusCancelled) BusinessLogicException.Throw(message: "Changes can not be made, transaction already cancelled.");
         }
 
         private void CustomerOrderRecordUpdate(Order entity, Order oldEntity, string suffix = "")
