@@ -145,7 +145,7 @@ Public Class CustomerOrderCancellationForm
                 Dim r = pil.RackShelfColumn
                 Dim i = r.InventoryLocation
 
-                Dim info = $"[{i.Name}: {String.Join(String.Empty, r.RackNo, r.ShelfNo, r.ColumnNo)}]"
+                Dim info = $"[{i.Name}: {String.Join(String.Empty, r.RackNo, r.ShelfNo, r.ColumnNo)}] {If(pickListOrder.IsVerifiedStatus And pickListOrder.PickListOrderItem.IsVerified, String.Concat("[✔", pickListOrder.PickListOrderItem.Status.ToString(), "]"), String.Empty)}"
                 Dim n1 = n0.Nodes.Add($"{oi.ItemCode} → {pickListOrder.PickListOrderItem.QtyPicked}{If(String.IsNullOrEmpty(oi.UnitOfMeasure), oi?.ProductInventoryLocation?.UnitOfMeasure2, oi.UnitOfMeasure)} × {oi.SRP.Value:n2} = {oi.TotalItemPrice:n2} → {info}")
                 DoNotShowCheckBox(n1)
 

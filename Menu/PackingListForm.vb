@@ -1094,7 +1094,10 @@ WHERE ci.orderid = {palorderid} AND ci.organizationid = {Z_OrganizationID} AND c
 {addedConditionClause}
 {groupingClause}
 ORDER BY ci.rowid;"
-            Dim cmd1 As New MySqlCommand(sql1, conn)
+
+            Dim sqlText = $"CALL GetListToPack2({Z_OrganizationID}, {palorderid}, {msNew.Enabled});"
+
+            Dim cmd1 As New MySqlCommand(sqlText, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             Dim n As Integer = 0
             Dim seqno As Integer = 1
@@ -4199,5 +4202,36 @@ ORDER BY ci.rowid;"
                 tsrefreshperformclick()
             End Sub, scheduler:=TaskScheduler.FromCurrentSynchronizationContext)
     End Function
+
+    Private Sub cboCustomerOrderInfo_DropDown(sender As Object, e As EventArgs) Handles cboCustomerOrderInfo.DropDown
+        Dim grp As Graphics = cboCustomerOrderInfo.CreateGraphics()
+
+        Dim vertScrollBarWidth As Integer = If(cboCustomerOrderInfo.Items.Count > cboCustomerOrderInfo.MaxDropDownItems, SystemInformation.VerticalScrollBarWidth, 0)
+
+        Dim wiidth As Integer = 0
+
+        Dim i = 0
+
+        Dim drp_downwidhths As Integer()
+
+        ReDim drp_downwidhths(cboCustomerOrderInfo.Items.Count() - 1)
+
+        For Each strRow In cboCustomerOrderInfo.Items.OfType(Of Object).Select(Function(t) t)
+
+            wiidth = CInt(grp.MeasureString(CStr(strRow.ToString()), cboCustomerOrderInfo.Font).Width) + vertScrollBarWidth
+
+            drp_downwidhths(i) = wiidth
+
+            i += 1
+
+        Next
+
+        Dim max_drp_downwidhth As Integer = drp_downwidhths.Max
+
+        If max_drp_downwidhth = 0 Then Return
+
+        cboCustomerOrderInfo.DropDownWidth = max_drp_downwidhth
+
+    End Sub
 
 End Class

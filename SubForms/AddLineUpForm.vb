@@ -1,5 +1,7 @@
-﻿Imports Microsoft.Extensions.DependencyInjection
+﻿Imports DevComponents.DotNetBar
+Imports Microsoft.Extensions.DependencyInjection
 Imports MySql.Data.MySqlClient
+Imports Remotion.Linq.Clauses
 Imports WarehouseManagementSystem.Core.Enums
 Imports WarehouseManagementSystem.Core.Interfaces
 Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
@@ -33,8 +35,8 @@ Public Class AddLineUpForm
         Try
             errProvider.Clear()
             clearfields()
-            callAutoComplete()
-            callAutoPopulate()
+            Await callAutoComplete()
+            Await callAutoPopulate()
             getLineUpNo(Me)
             txtLineUpNo.Text = globallineupno
             txtStatus.Text = "Lined Up"
@@ -62,17 +64,86 @@ Public Class AddLineUpForm
 
 #Region "Functions"
 
-    Sub callAutoComplete()
-        globalautocompleteOrderInfoB(cboCustomerOrderInfo, Me)
+    Private Async Function callAutoComplete() As Task
+        'globalautocompleteOrderInfoB(cboCustomerOrderInfo, Me)
+        Await LoadCustomerOrderInfo1()
         globalautocompleteTruckShiftInfo(cboTruckShiftInfo, Me)
         globalautocompleteContactName(cboDriverName, "Driver", Me)
-    End Sub
+    End Function
 
-    Sub callAutoPopulate()
-        globalautopopulateOrderInfoB(cboCustomerOrderInfo, Me)
+    Private Async Function callAutoPopulate() As Task
+        'globalautopopulateOrderInfoB(cboCustomerOrderInfo, Me)
+        Await LoadCustomerOrderInfo2()
         globalautopopulateTruckShiftInfo(cboTruckShiftInfo, Me)
         globalautopopulateContactName(cboDriverName, "Driver", Me)
-    End Sub
+    End Function
+
+    Private Async Function GetCustomerOrderInfo() As Task(Of DataTable)
+        Dim result As New DataTable
+
+        Dim strQuery = <![CDATA[CALL GetCustomerOrderInfo(@orgId);]]>.Value
+
+        Using command = New MySqlCommand(strQuery, New MySqlConnection(manager.GetConnString()))
+
+            With command.Parameters
+                .AddWithValue("@orgId", Z_OrganizationID)
+            End With
+
+            Dim adapter As New MySqlDataAdapter
+
+            Await command.Connection.OpenAsync()
+
+            Try
+                adapter.SelectCommand = command
+                Dim dataSet As New DataSet
+                adapter.Fill(dataSet)
+
+                result = dataSet.Tables?.OfType(Of DataTable)?.FirstOrDefault()
+            Catch ex As Exception
+                MessageBox.Show(String.Concat("Oops! something went wrong, please contact Globagility Inc."),
+                    String.Empty,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Exclamation)
+
+            End Try
+
+        End Using
+
+        Return result
+    End Function
+
+    Private Async Function LoadCustomerOrderInfo1() As Task
+        Dim dataSource = Await GetCustomerOrderInfo()
+        If dataSource Is Nothing Then Return
+
+        Dim orderinfo As New AutoCompleteStringCollection
+
+        For Each row In dataSource.Rows.OfType(Of DataRow)
+            orderinfo.Add(row(0).ToString())
+        Next
+
+        With cboCustomerOrderInfo
+            .AutoCompleteSource = AutoCompleteSource.CustomSource
+            .AutoCompleteCustomSource = orderinfo
+            .AutoCompleteMode = AutoCompleteMode.Suggest
+        End With
+
+    End Function
+
+    Private Async Function LoadCustomerOrderInfo2() As Task
+        Dim dataSource = Await GetCustomerOrderInfo()
+        If dataSource Is Nothing Then Return
+
+        With cboCustomerOrderInfo
+            .Items.Clear()
+
+            For Each row In dataSource.Rows.OfType(Of DataRow)
+                .Items.Add(row(0).ToString())
+            Next
+
+        End With
+
+    End Function
 
 #Region "Clear/Enable/Visible"
 
@@ -256,7 +327,8 @@ Public Class AddLineUpForm
             dgCartons.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
             Dim sql1 As String = "SELECT pc.rowid,COALESCE(pc.cartonno,''),COALESCE(CONCAT(COALESCE(c.firstname,''),' ',COALESCE(c.middlename,''),' ',COALESCE(c.lastname,''),' ',COALESCE(c.suffix,''),' - ',COALESCE(c.contactno,'')),''),COALESCE(DATE_FORMAT(pc.packeddate,'%d-%b-%Y'),''),COALESCE(pc.`status`,''),COALESCE(cs.sizename,'')," &
-                        $"COALESCE(cs.`length`,0),COALESCE(cs.`width`,0),COALESCE(cs.`height`,0) FROM packinglistcartons pc LEFT JOIN contacts c ON pc.contactid = c.rowid LEFT JOIN cartonsizes cs ON pc.cartonsizeid = cs.rowid {If(IsThurston, $"INNER JOIN packinglist pl ON pl.RowID=pc.PackingListID INNER JOIN orders o ON o.RowID=pl.OrderID AND LOCATE(CONCAT_WS(' ', o.OrderNumber, '(C.O. No.)'), '{cboCustomerOrderInfo.Text.Trim().Replace("'", "\'")}') > 0", String.Empty)} WHERE pc.packinglistid = {ipackinglistid} AND pc.organizationid = " & Z_OrganizationID & " AND pc.`status` = 'Active' ORDER BY pc.cartonno "
+                        $"COALESCE(cs.`length`,0),COALESCE(cs.`width`,0),COALESCE(cs.`height`,0) FROM packinglistcartons pc LEFT JOIN contacts c ON pc.contactid = c.rowid LEFT JOIN cartonsizes cs ON pc.cartonsizeid = cs.rowid {If(IsThurston, $"INNER JOIN packinglist pl ON pl.RowID=pc.PackingListID INNER JOIN orders o ON o.RowID=pl.OrderID AND LOCATE(CONCAT_WS(' ', o.OrderNumber, '(C.O. No.)'), '{cboCustomerOrderInfo.Text.Trim().Replace("'", "\'")}') > 0", String.Empty)} WHERE pc.packinglistid = {ipackinglistid} AND pc.organizationid = " & Z_OrganizationID & " ORDER BY pc.cartonno "
+            ''AND pc.`status` = 'Active' 
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             Dim n As Integer = 0
@@ -522,13 +594,23 @@ Public Class AddLineUpForm
     '    End Try
     '    Me.Cursor = Cursors.Default
     'End Sub
-    Private Sub cboCustomerOrderInfo_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboCustomerOrderInfo.SelectedIndexChanged
+    Private Async Sub cboCustomerOrderInfo_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cboCustomerOrderInfo.SelectedIndexChanged
         Me.Cursor = Cursors.WaitCursor
         Try
             errProvider.Clear()
             If LTrim(cboCustomerOrderInfo.Text) <> "" Then
                 getOrderIDD(cboCustomerOrderInfo.Text, Me)
                 aludpackinglistid = globalpackinglistid : aludorderid = globalorderid
+
+                If aludpackinglistid = 0 Then
+                    Dim selectedOrder = (Await GetCustomerOrderInfo())?.Rows.
+                        OfType(Of DataRow).
+                        FirstOrDefault(Function(r) r(0).ToString() = cboCustomerOrderInfo.Text.Trim())
+
+                    aludpackinglistid = Integer.Parse(selectedOrder("PackingListID")?.ToString())
+
+                End If
+
                 If aludpackinglistid <> 0 Then
                     getOrderInfo(aludorderid, Me)
                     txtPONo.Text = globalorderpono
@@ -1325,6 +1407,37 @@ Public Class AddLineUpForm
         If form.ShowDialog() = DialogResult.OK Then
             Await GetHelpersAsync()
         End If
+    End Sub
+
+    Private Sub cboCustomerOrderInfo_DropDown(sender As Object, e As EventArgs) Handles cboCustomerOrderInfo.DropDown
+        Dim grp As Graphics = cboCustomerOrderInfo.CreateGraphics()
+
+        Dim vertScrollBarWidth As Integer = If(cboCustomerOrderInfo.Items.Count > cboCustomerOrderInfo.MaxDropDownItems, SystemInformation.VerticalScrollBarWidth, 0)
+
+        Dim wiidth As Integer = 0
+
+        Dim i = 0
+
+        Dim drp_downwidhths As Integer()
+
+        ReDim drp_downwidhths(cboCustomerOrderInfo.Items.Count() - 1)
+
+        For Each strRow In cboCustomerOrderInfo.Items.OfType(Of Object).Select(Function(t) t)
+
+            wiidth = CInt(grp.MeasureString(CStr(strRow.ToString()), cboCustomerOrderInfo.Font).Width) + vertScrollBarWidth
+
+            drp_downwidhths(i) = wiidth
+
+            i += 1
+
+        Next
+
+        Dim max_drp_downwidhth As Integer = drp_downwidhths.Max
+
+        If max_drp_downwidhth = 0 Then Return
+
+        cboCustomerOrderInfo.DropDownWidth = max_drp_downwidhth
+
     End Sub
 
     Private ReadOnly Property IsThurston As Boolean

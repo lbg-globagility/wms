@@ -1023,7 +1023,10 @@ GROUP BY plci.OrderItemID) i ON i.OrderID=o.RowID
 
 WHERE o.organizationid = {Z_OrganizationID} AND o.status = '{globaliorderstatus}' AND o.ordertype = '{globaliordertype}' AND oi.QtyOrdered > (IFNULL(plo2.`QtyInCarton`, 0) - IFNULL(i.`TotalQtyInCarton`, 0)) GROUP BY o.rowid ORDER BY o.ordernumber) {appendUnionClause(Z_OrganizationID)}"
             If globalconn.State = ConnectionState.Closed Then globalconn.Open()
-            Dim cmd1 As New MySqlCommand(sql1, globalconn)
+
+            Dim queryText = $"CALL GetListToPack({Z_OrganizationID});"
+
+            Dim cmd1 As New MySqlCommand(queryText, globalconn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader()
             While reader1.Read()
                 globalicombobox.Items.Add(reader1(0).ToString())
