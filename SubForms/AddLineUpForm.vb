@@ -1,7 +1,5 @@
-﻿Imports DevComponents.DotNetBar
-Imports Microsoft.Extensions.DependencyInjection
+﻿Imports Microsoft.Extensions.DependencyInjection
 Imports MySql.Data.MySqlClient
-Imports Remotion.Linq.Clauses
 Imports WarehouseManagementSystem.Core.Enums
 Imports WarehouseManagementSystem.Core.Interfaces
 Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
