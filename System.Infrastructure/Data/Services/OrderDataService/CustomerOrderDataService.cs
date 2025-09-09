@@ -98,7 +98,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
             var orderId = order.RowID.Value;
 
             var lineups = await _lineupRepository.GetManyByOrderIdAsync(orderId);
-            var hasLineups = lineups?.Any(t => t.LineupCartons?.Any(x => x.PackingListCarton.PackingListCartonItems?.Any() ?? false) ?? false) ?? false;
+            var hasLineups = lineups?.Where(t => !t.IsCancelled)?.Any(t => t.LineupCartons?.Any(x => x.PackingListCarton.PackingListCartonItems?.Any() ?? false) ?? false) ?? false;
 
             if (hasLineups)
             {
@@ -159,7 +159,10 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
 
                     var pickListOrders = await _pickListOrderRepository.GetManyByOrderIdAsync(lineup.OrderID.Value);
                     var updatedPickListOrders = new List<PickListOrder>();
-                    foreach (var pickListOrder in pickListOrders.Where(t => orderItemIds.Contains(t.OrderItemID)))
+                    foreach (var pickListOrder in pickListOrders
+                        .Where(t => !t.PickList.IsStatusCancelled)
+                        .Where(t => !t.IsCancelledStatus)
+                        .Where(t => orderItemIds.Contains(t.OrderItemID)))
                     {
                         pickListOrder.SetStatusToCancelled();
                         pickListOrder.AuditUser(userId);
@@ -167,11 +170,11 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
                     }
                     await _pickListOrderRepository.SaveManyAsync(updated: updatedPickListOrders);
 
-                    await _productInventoryLocationDataService.SaveManyAsync(userId: userId, updated: updatedProductInventoryLocations);
-
                     lineup.SetStatusToCancelled();
                     lineup.AuditUser(userId);
                     await _lineupRepository.SaveManyAsync(new List<Lineup>() { lineup });
+
+                    await _productInventoryLocationDataService.SaveManyAsync(userId: userId, updated: updatedProductInventoryLocations);
                 }
             }
             else
@@ -208,7 +211,8 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
                         if (orderItem == null) continue;
                         var qty = orderItem?.QtyOrdered ?? 0;
 
-                        if (pickListOrders?.FirstOrDefault(t => t.OrderItemID == (orderItem?.RowID ?? 0))?.IsVerifiedStatus ?? false)
+                        var picklistOrder = pickListOrders?.FirstOrDefault(t => t.OrderItemID == (orderItem?.RowID ?? 0));
+                        if ((picklistOrder?.IsVerifiedStatus ?? false) && (picklistOrder?.PickListOrderItem?.IsVerified ?? false))
                             productInventoryLocation.TotalReserveQty -= qty;
                         else
                             continue;
