@@ -27,7 +27,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
 
         public async Task<ICollection<PackingList>> GetManyByOrderIdsAsync(int[] ids)
         {
-            if (ids?.Any() ?? false) return Enumerable.Empty<PackingList>().ToList();
+            if (!(ids?.Any() ?? false)) return Enumerable.Empty<PackingList>().ToList();
 
             return await _context.PackingLists
                 .Include(t => t.PackingListCartons)

@@ -14,86 +14,69 @@ CREATE PROCEDURE `GetListToPack`(
 )
 BEGIN
 
-DROP TEMPORARY TABLE IF EXISTS `packinglistinlineup`;
-CREATE TEMPORARY TABLE IF NOT EXISTS `packinglistinlineup`
+DROP TEMPORARY TABLE IF EXISTS `packingslate`;
+CREATE TEMPORARY TABLE IF NOT EXISTS `packingslate`
 SELECT
-/*pal.RowID `PackingListID`,
-palci.*
-*/
-palci.`OrderItemID`, pal.RowID `PackingListID`, palci.`RowID`, palci.`OrganizationID`, palci.`Created`, palci.`CreatedBy`, palci.`LastUpd`, palci.`LastUpdBy`, palci.`PackingListCartonID`, palci.`QtyInCarton`, palci.`Status`, piloi.QtyPicked, lu.RowID `LineupId`, lu.`Status` `LineupStatus`, o.`Status` `OrderStatus`, o.RowID `OrderID`
+/*o.`Status`, #1
+oi.`Status`, #2
+pil.`Status`, #3
+pilo.`Status`, #4
+piloi.`Status`, #5
+pal.`Status`, #6
+palc.`Status`, #7
+palco.`Status`, #8
+lu1.`Status`, #9*/
 
-FROM packinglist pal
-INNER JOIN orders o ON o.RowID=pal.OrderID AND o.`Status` != 'Cancelled'
+#piloi.QtyPicked, IFNULL(palco.QtyInCarton, 0) `QtyInCarton`, lu1.RowID `LineupId`,
+MIN(piloi.QtyPicked) `QtyPicked`, SUM(IFNULL(palco.QtyInCarton, 0)) `QtyInCarton`, SUM(IFNULL(palco2.QtyInCarton, 0)) `QtyInCarton2`, lu1.RowID `LineupId`,
 
-INNER JOIN packinglistcartons palc ON palc.PackingListID=pal.RowID AND palc.`Status` != 'Cancelled'
-INNER JOIN packinglistcartonitems palci ON palci.PackingListCartonID=palc.RowID AND palci.`Status` != 'Cancelled'
+o.OrderNumber, pilo.OrderID, pilo.OrderItemID,
 
-INNER JOIN orderitems oi ON oi.OrderID=pal.OrderID AND oi.RowID=palci.OrderItemID AND oi.`Status` != 'Cancelled'
+IFNULL(CONCAT(IFNULL(o.OrderNumber,''),' (C.O. No.) / ',IFNULL(a.CompanyName,''),' - ',IFNULL(a.AccountNo,'')),'') `TextDisplay`
 
-LEFT JOIN lineups lu ON lu.PackingListID=pal.RowID AND lu.`Status` != 'Cancelled'
-
-INNER JOIN picklistorders pilo ON pilo.OrderID=oi.OrderID AND pilo.OrderItemID=oi.RowID AND pilo.`Status` NOT IN ('Cancelled', 'Inactive') AND pilo.`Status`='Verified'
-INNER JOIN picklistorderitems piloi ON piloi.PickListOrderID=pilo.RowID AND piloi.`Status` NOT IN ('Cancelled', 'Inactive')
-INNER JOIN picklist pil ON pil.RowID=pilo.PickListID AND pil.`Status` NOT IN ('Completed', 'Cancelled', 'Inactive')
-
-WHERE pal.`Status` != 'Cancelled'
-AND pal.OrganizationID=_orgId
-
-UNION
-SELECT
-#NULL `PackingListID`, NULL `RowID`, pil.`OrganizationID`, NULL `Created`, NULL `CreatedBy`, NULL `LastUpd`, NULL `LastUpdBy`, NULL `PackingListCartonID`, pilo.`OrderItemID`, 0 `QtyInCarton`, piloi.`Status`, piloi.QtyPicked `QtyPicked`, NULL `LineupId`, NULL `LineupStatus`, NULL `OrderStatus`, pilo.OrderID `OrderID`
-pilo.`OrderItemID`, NULL `PackingListID`, NULL `RowID`, pil.`OrganizationID`, NULL `Created`, NULL `CreatedBy`, NULL `LastUpd`, NULL `LastUpdBy`, NULL `PackingListCartonID`, 0 `QtyInCarton`, piloi.`Status`, piloi.QtyPicked `QtyPicked`, NULL `LineupId`, NULL `LineupStatus`, NULL `OrderStatus`, pilo.OrderID `OrderID`
 FROM picklist pil
-INNER JOIN picklistorders pilo ON pilo.PickListID=pil.RowID AND pilo.`Status` NOT IN ('Cancelled', 'Inactive') AND pilo.`Status`='Verified' #AND pilo.OrderItemID NOT IN (SELECT DISTINCT `OrderItemID` FROM `xyz`)
-INNER JOIN picklistorderitems piloi ON piloi.PickListOrderID=pilo.RowID AND piloi.`Status` NOT IN ('Cancelled', 'Inactive')
-WHERE pil.OrganizationID=_orgId
-AND pil.`Status` NOT IN ('Completed', 'Cancelled', 'Inactive')
+INNER JOIN picklistorders pilo ON pilo.PickListID=pil.RowID AND pilo.`Status` NOT IN ('Cancelled', 'Inactive') AND pilo.`Status`='Verified'
+INNER JOIN picklistorderitems piloi ON piloi.PickListOrderID=pilo.RowID AND piloi.`Status` NOT IN ('Cancelled', 'Inactive') AND piloi.`Status`=pilo.`Status`
+
+INNER JOIN orders o ON o.RowID=pilo.OrderID AND o.`Status` != 'Cancelled'
+#AND o.RowID=886
+#AND o.OrderNumber=2462 # 2459 2459
+
+INNER JOIN orderitems oi ON oi.RowID=pilo.OrderItemID AND oi.OrderID=o.RowID
+
+LEFT JOIN packinglist pal ON pal.OrderID=o.RowID AND pal.`Status` NOT IN ('Cancelled')
+LEFT JOIN packinglistcartons palc ON palc.PackingListID=pal.RowID AND palc.`Status` NOT IN ('Cancelled')
+LEFT JOIN packinglistcartonitems palco ON palco.OrderItemID=oi.RowID AND palco.PackingListCartonID=palc.RowID AND palco.`Status` NOT IN ('Cancelled')
+
+LEFT JOIN lineups lu1 ON lu1.PackingListID = pal.RowID AND lu1.`Status` NOT IN ('Cancelled')
+
+LEFT JOIN packinglist pal2 ON pal2.RowID = lu1.PackingListID AND pal2.`Status` NOT IN ('Cancelled')
+LEFT JOIN packinglistcartons palc2 ON pal2.RowID = palc2.PackingListID AND palc2.`Status` NOT IN ('Cancelled')
+LEFT JOIN packinglistcartonitems palco2 ON palco2.OrderItemID=oi.RowID AND palco2.PackingListCartonID = palc2.RowID AND palco2.`Status` NOT IN ('Cancelled')
+
+INNER JOIN accounts a ON a.RowID=o.AccountID
+
+WHERE pil.`Status` NOT IN ('Cancelled', 'Inactive')
+AND IF(pal.RowID IS NULL, TRUE, IFNULL(palco.QtyInCarton, 0) > 0)
+#AND pal.`Status` NOT IN ('Cancelled')
+AND IFNULL(lu1.`Status`, '') NOT IN ('Confirmed Delivery')
+
+GROUP BY pilo.OrderItemID
+HAVING IF(FIND_IN_SET(0, GROUP_CONCAT(IFNULL(lu1.RowID, 0))) > 0, SUM(IFNULL(palco.QtyInCarton, 0)) < MIN(piloi.QtyPicked), SUM(IFNULL(palco.QtyInCarton, 0) + IFNULL(palco2.QtyInCarton, 0)) < MIN(piloi.QtyPicked))
+#HAVING SUM(IFNULL(palco.QtyInCarton, 0)) <= MIN(piloi.QtyPicked)
+
+#ORDER BY pilo.OrderItemID # pilo.OrderID, 
+ORDER BY CAST(o.OrderNumber AS UNSIGNED) DESC
 ;
 
 
-DROP TEMPORARY TABLE IF EXISTS `packinglistnotinlineup`;
-CREATE TEMPORARY TABLE IF NOT EXISTS `packinglistnotinlineup`
 SELECT
-palci.*
-
-FROM lineups lu
-INNER JOIN packinglist pal ON pal.RowID=lu.PackingListID AND pal.`Status` != 'Cancelled'
-INNER JOIN orders o ON o.RowID=pal.OrderID AND o.`Status` != 'Cancelled'
-
-INNER JOIN packinglistcartons palc ON palc.PackingListID=pal.RowID AND palc.`Status` != 'Cancelled'
-INNER JOIN packinglistcartonitems palci ON palci.PackingListCartonID=palc.RowID AND palci.`Status` != 'Cancelled'
-
-INNER JOIN orderitems oi ON oi.OrderID=pal.OrderID AND oi.RowID=palci.OrderItemID AND oi.`Status` != 'Cancelled'
-
-WHERE lu.`Status` != 'Cancelled'
-AND lu.PackingListID NOT IN (SELECT `PackingListID` FROM `packinglistinlineup` WHERE `PackingListID` IS NOT NULL)
-AND lu.OrganizationID=_orgId
+DISTINCT i.`TextDisplay`
+FROM `packingslate` i
+ORDER BY CAST(i.OrderNumber AS UNSIGNED) DESC
 ;
 
 
-SELECT
-#DISTINCT
-#t.`TextDisplay`
-t.*, GROUP_CONCAT(t.`OrderNumber`) `Result`
-FROM (SELECT
-		COALESCE(CONCAT(COALESCE(o.OrderNumber,''),' (C.O. No.) / ',COALESCE(a.CompanyName,''),' - ',COALESCE(a.AccountNo,'')),'') `TextDisplay`,
-		i.`OrderID`,
-		CAST(o.OrderNumber AS UNSIGNED) `OrderNumber`
-		FROM `packinglistinlineup` i
-		LEFT JOIN `packinglistnotinlineup` ii ON ii.OrderItemID=i.OrderItemID
-		INNER JOIN orders o ON o.RowID=i.`OrderID`
-		INNER JOIN accounts a ON a.RowID=o.AccountID
-#		WHERE ((i.QtyInCarton + IFNULL(ii.QtyInCarton, 0)) MOD i.QtyPicked) != 0
-#		WHERE ((i.QtyInCarton + IFNULL(ii.QtyInCarton, 0)) MOD i.QtyPicked) BETWEEN 0 AND i.QtyPicked
-#		WHERE (i.QtyInCarton + IFNULL(ii.QtyInCarton, 0)) BETWEEN 0 AND i.QtyPicked
-		GROUP BY i.OrderItemID
-#		HAVING SUM(i.QtyInCarton) < MIN(i.QtyPicked)
-		HAVING SUM(i.QtyInCarton + IFNULL(ii.QtyInCarton, 0)) < MIN(i.QtyPicked)
-		ORDER BY CAST(o.OrderNumber AS UNSIGNED) DESC) t
-GROUP BY t.`OrderID`
-ORDER BY t.`OrderNumber` DESC
-;
-	
 END//
 DELIMITER ;
 

@@ -70,9 +70,14 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
                 .FirstOrDefault());
         }
 
-        public Task<List<PickList>> GetManyByOrderIdAsync(int orderId)
+        public async Task<List<PickList>> GetManyByOrderIdAsync(int orderId)
         {
-            var query = _context.PickLists
+            var picklistOrders = await _context.PickListOrders
+                .Where(t => t.OrderID == orderId)
+                .ToListAsync();
+            var picklistIds = picklistOrders.Select(t => t.PickListID.Value).ToArray();
+
+            return await _context.PickLists
                 .Include(t => t.PickListOrders)
                     .ThenInclude(t => t.OrderItem)
                         .ThenInclude(t => t.ProductInventoryLocation)
@@ -81,11 +86,8 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
                 .Include(t => t.PickListOrders)
                     .ThenInclude(t => t.PickListOrderItems)
                 .AsNoTracking()
-                .AsQueryable();
-
-            return Task.FromResult(query.AsEnumerable()
-                .Where(t => t.PickListOrders.Any(x => x.OrderID == orderId))
-                .ToList());
+                .Where(t => picklistIds.Contains(t.RowID.Value))
+                .ToListAsync();
         }
 
         public async Task<PaginatedList<PickList>> GetPaginatedPickListsAsync(PageOptions pageOptions,

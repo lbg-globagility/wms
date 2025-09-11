@@ -59,7 +59,7 @@ Public Class CustomerOrderCancellationForm
 
         Dim lksdjf = Await pickListDataService.GetManyByOrderIdAsync(_orderId)
 
-        Return (Await pickListDataService.GetManyByOrderIdAsync(_orderId)).
+        Return lksdjf.
             Where(Function(t) Not t.IsStatusCancelled).
             ToList()
 

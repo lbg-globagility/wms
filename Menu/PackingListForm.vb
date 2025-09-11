@@ -1095,7 +1095,9 @@ WHERE ci.orderid = {palorderid} AND ci.organizationid = {Z_OrganizationID} AND c
 {groupingClause}
 ORDER BY ci.rowid;"
 
-            Dim sqlText = $"CALL GetListToPack2({Z_OrganizationID}, {palorderid}, {msNew.Enabled});"
+            Dim packinglistId = If(dgPackingList.CurrentRow Is Nothing, 0, Integer.Parse(dgPackingList.CurrentRow.Cells(pal_rowid.Name).Value))
+
+            Dim sqlText = $"CALL GetListToPack2({Z_OrganizationID}, {palorderid}, {packinglistId}, {msNew.Enabled});"
 
             Dim cmd1 As New MySqlCommand(sqlText, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader

@@ -15,41 +15,59 @@ CREATE PROCEDURE `GetCustomerOrderInfo`(
 BEGIN
 
 SELECT
-#t.`ordernumber`, t.PackingListID
-t.*
+DISTINCT IFNULL(CONCAT(IFNULL(a.CompanyName,''),' - ', IFNULL(a.AccountNo,''),' / ',IFNULL(o.OrderNumber,''),' (C.O. No.) / ',CONCAT(IFNULL(pal.PackingListNo,''),' (Pa.L. No.)')),'') `ordernumber`
+
 FROM (SELECT
 #		COALESCE(CONCAT(COALESCE(o.OrderNumber,''),' (C.O. No.) / ',  COALESCE(a.CompanyName,''),' - ',  COALESCE(a.AccountNo,''),' / ', CONCAT(COALESCE(pal.PackingListNo,''),' (Pa.L. No.)')),'') `ordernumber`
-		COALESCE(CONCAT(COALESCE(a.CompanyName,''),' - ', COALESCE(a.AccountNo,''),' / ',COALESCE(o.OrderNumber,''),' (C.O. No.) / ',CONCAT(COALESCE(pal.PackingListNo,''),' (Pa.L. No.)')),'') `ordernumber`
-		
-		, oi.*, SUM(palci.QtyInCarton) `palciQtyInCarton`, MIN(piloi.QtyPicked) `piloiQtyPicked`, palc.PackingListID
+#		COALESCE(CONCAT(COALESCE(a.CompanyName,''),' - ', COALESCE(a.AccountNo,''),' / ',COALESCE(o.OrderNumber,''),' (C.O. No.) / ',CONCAT(COALESCE(pal.PackingListNo,''),' (Pa.L. No.)')),'') `ordernumber`
+		pilo.OrderItemID
+		/*, oi.*, SUM(palci.QtyInCarton) `palciQtyInCarton`, MIN(piloi.QtyPicked) `piloiQtyPicked`, palc.PackingListID
 		
 		, SUM(palci.QtyInCarton) < MIN(piloi.QtyPicked) `Result1`
 		, SUM(palci.QtyInCarton) = MIN(piloi.QtyPicked) AND FIND_IN_SET('Completed', GROUP_CONCAT(pal.`Status`)) = 0 AND FIND_IN_SET('Delivered', GROUP_CONCAT(pal.`Status`)) = 0 AND FIND_IN_SET('Cancelled', GROUP_CONCAT(pal.`Status`)) = 0 AND FIND_IN_SET('Inactive', GROUP_CONCAT(pal.`Status`)) = 0 `Result2`
-		, GROUP_CONCAT(pal.`Status`) `Statuses`
+		, GROUP_CONCAT(pal.`Status`) `Statuses`*/
 		
-		FROM packinglist pal
-		INNER JOIN orders o ON o.RowID=pal.OrderID AND o.`Status` != 'Cancelled'
-		INNER JOIN accounts a ON a.RowID=o.AccountID
+		, CAST(o.OrderNumber AS UNSIGNED) `OrderNum`
+		, GROUP_CONCAT(pal.RowID) `PackinglistIds`
 		
-		INNER JOIN packinglistcartons palc ON palc.PackingListID=pal.RowID AND palc.`Status` NOT IN ('Completed', 'Delivered', 'Cancelled')
-		INNER JOIN packinglistcartonitems palci ON palci.PackingListCartonID=palc.RowID AND palci.`Status` != 'Cancelled'
+		FROM picklist pil
+		INNER JOIN picklistorders pilo ON pilo.PickListID=pil.RowID AND pilo.`Status` NOT IN ('Cancelled', 'Inactive') AND pilo.`Status`='Verified'
+		INNER JOIN picklistorderitems piloi ON piloi.PickListOrderID=pilo.RowID AND piloi.`Status` NOT IN ('Cancelled', 'Inactive') AND piloi.`Status`=pilo.`Status`
 		
-		INNER JOIN orderitems oi ON oi.OrderID=pal.OrderID AND oi.RowID=palci.OrderItemID AND oi.`Status` != 'Cancelled'
+		INNER JOIN orders o ON o.RowID=pilo.OrderID AND o.`Status` != 'Cancelled'
+		#AND o.OrderNumber=2395 # 2459 2459
 		
-		LEFT JOIN lineups lu ON lu.PackingListID=pal.RowID AND lu.`Status` != 'Cancelled'
+		INNER JOIN orderitems oi ON oi.RowID=pilo.OrderItemID AND oi.OrderID=o.RowID
 		
-		INNER JOIN picklistorders pilo ON pilo.OrderID=oi.OrderID AND pilo.OrderItemID=oi.RowID AND pilo.`Status` NOT IN ('Cancelled', 'Inactive') AND pilo.`Status`='Verified'
-		INNER JOIN picklistorderitems piloi ON piloi.PickListOrderID=pilo.RowID AND piloi.`Status` NOT IN ('Cancelled', 'Inactive')
-		INNER JOIN picklist pil ON pil.RowID=pilo.PickListID AND pil.`Status` NOT IN ('Cancelled', 'Inactive') # 'Completed'
+		LEFT JOIN packinglist pal ON pal.OrderID=o.RowID AND pal.`Status` NOT IN ('Cancelled')
+		LEFT JOIN packinglistcartons palc ON palc.PackingListID=pal.RowID AND palc.`Status` NOT IN ('Cancelled')
+		LEFT JOIN packinglistcartonitems palco ON palco.OrderItemID=oi.RowID AND palco.PackingListCartonID=palc.RowID AND palco.`Status` NOT IN ('Cancelled')
 		
-		WHERE pal.`Status` NOT IN ('Cancelled', 'Inactive') # 'Completed', 'Delivered', 
-		AND pal.OrganizationID=_orgId
+		LEFT JOIN lineups lu1 ON lu1.PackingListID = pal.RowID AND lu1.`Status` NOT IN ('Cancelled')
 		
-		GROUP BY oi.RowID
-		HAVING IF(SUM(palci.QtyInCarton) < MIN(piloi.QtyPicked), TRUE, SUM(palci.QtyInCarton) = MIN(piloi.QtyPicked) AND FIND_IN_SET('Completed', GROUP_CONCAT(pal.`Status`)) = 0 AND FIND_IN_SET('Delivered', GROUP_CONCAT(pal.`Status`)) = 0 AND FIND_IN_SET('Cancelled', GROUP_CONCAT(pal.`Status`)) = 0 AND FIND_IN_SET('Inactive', GROUP_CONCAT(pal.`Status`)) = 0)
-		ORDER BY CAST(o.OrderNumber AS UNSIGNED) DESC
+		LEFT JOIN packinglist pal2 ON pal2.RowID = lu1.PackingListID AND pal2.`Status` NOT IN ('Cancelled')
+		LEFT JOIN packinglistcartons palc2 ON pal2.RowID = palc2.PackingListID AND palc2.`Status` NOT IN ('Cancelled')
+		LEFT JOIN packinglistcartonitems palco2 ON palco2.OrderItemID=oi.RowID AND palco2.PackingListCartonID = palc2.RowID AND palco2.`Status` NOT IN ('Cancelled')
+		
+#		INNER JOIN accounts a ON a.RowID=o.AccountID
+		
+		WHERE pil.`Status` NOT IN ('Cancelled', 'Inactive')
+		AND IF(pal.RowID IS NULL, TRUE, IFNULL(palco.QtyInCarton, 0) > 0)
+		AND IFNULL(lu1.`Status`, '') NOT IN ('Confirmed Delivery')
+		
+		AND pil.OrganizationID=_orgId
+		
+		GROUP BY pilo.OrderItemID
+		HAVING IF(FIND_IN_SET(0, GROUP_CONCAT(IFNULL(pal.RowID, 0))) = 0 AND FIND_IN_SET(0, GROUP_CONCAT(IFNULL(lu1.RowID, 0))) > 0, # has packing list and no lineup
+		SUM(IFNULL(palco.QtyInCarton, 0)) <= MIN(piloi.QtyPicked),
+		IF(FIND_IN_SET(0, GROUP_CONCAT(IFNULL(lu1.RowID, 0))) > 0, SUM(IFNULL(palco.QtyInCarton, 0)) < MIN(piloi.QtyPicked), SUM(IFNULL(palco.QtyInCarton, 0) + IFNULL(palco2.QtyInCarton, 0)) < MIN(piloi.QtyPicked)))
+		AND FIND_IN_SET('Cancelled', GROUP_CONCAT(IFNULL(pal.`Status`, 0))) = 0
 		) t
-GROUP BY t.PackingListID
+INNER JOIN packinglist pal ON FIND_IN_SET(pal.RowID, t.`PackinglistIds`) > 0
+INNER JOIN orders o ON o.RowID=pal.OrderID
+INNER JOIN accounts a ON a.RowID=o.AccountID
+#GROUP BY t.PackingListID
+ORDER BY t.`OrderNum` DESC
 ;
 
 /*FROM orderitems oi

@@ -94,7 +94,7 @@ Public Class ViewCartonItemsForm
             If conn.State = ConnectionState.Closed Then conn.Open()
             Dim sql1 As String = "SELECT pci.rowid,COALESCE(c.colorvalue,''),COALESCE(p.productcode,''),COALESCE(c.colorname,''),COALESCE(pcs.size,''),COALESCE(pcs.seasoncode,''),COALESCE(pci.qtyincarton,0),COALESCE(pcs.sku,''),COALESCE(oi.unitofmeasure,''),COALESCE(oi.itemtype,''),COALESCE(oi.sku,'') " &
                     "FROM packinglistcartonitems pci LEFT JOIN orderitems oi ON pci.orderitemid = oi.rowid LEFT JOIN productcolorsizes pcs ON oi.productcolorsizeid = pcs.rowid LEFT JOIN productcolors pc ON pcs.productcolorid = pc.rowid LEFT JOIN colors c ON pc.colorid = c.rowid " &
-                    "LEFT JOIN products p ON pc.productid = p.rowid INNER JOIN picklistorders plo ON plo.OrderItemID=pci.OrderItemID INNER JOIN picklistorderitems ploi ON ploi.PickListOrderID=plo.RowID AND ploi.`status` NOT IN ('Cancelled', 'Inactive')
+                    "LEFT JOIN products p ON pc.productid = p.rowid INNER JOIN picklistorders plo ON plo.OrderItemID=pci.OrderItemID AND plo.`Status`='Verified' INNER JOIN picklistorderitems ploi ON ploi.PickListOrderID=plo.RowID AND ploi.`status` NOT IN ('Cancelled', 'Inactive') AND ploi.`Status`=plo.`Status`
 #AND oi.ProductInventoryLocationId=ploi.ProductInventoryLocationID
 AND ploi.QtyPicked > 0
 INNER JOIN picklist pl ON pl.RowID=plo.PickListID AND pl.`Status` NOT IN ('New', 'Cancelled')

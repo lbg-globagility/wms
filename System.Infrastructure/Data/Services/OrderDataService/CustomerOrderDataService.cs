@@ -162,6 +162,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
                     foreach (var pickListOrder in pickListOrders
                         .Where(t => !t.PickList.IsStatusCancelled)
                         .Where(t => !t.IsCancelledStatus)
+                        .Where(t => !t.IsInactiveStatus)
                         .Where(t => orderItemIds.Contains(t.OrderItemID)))
                     {
                         pickListOrder.SetStatusToCancelled();
@@ -252,7 +253,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
             if ((order.AccountID ?? 0) == 0) BusinessLogicException.Throw(message: "Invalid Customer Name.");
             if ((order.AgentID ?? 0) == 0) BusinessLogicException.Throw(message: "Invalid Agent value.");
             if (!order.HasOrderItems) BusinessLogicException.Throw(message: "Invalid Order Item(s).");
-            if (order.IsStatusDelivery) BusinessLogicException.Throw(message: "Changes can not be made, transaction already completed.");
+            //if (order.IsStatusDelivery) BusinessLogicException.Throw(message: "Changes can not be made, transaction already completed.");
             if (order.IsStatusCancelled) BusinessLogicException.Throw(message: "Changes can not be made, transaction already cancelled.");
         }
 
