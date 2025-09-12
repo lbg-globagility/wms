@@ -107,8 +107,8 @@ Public Class DeliveryReceiptPrintOptions
             INNER JOIN productcolors pc ON pc.RowID=pcs.ProductColorID
             INNER JOIN products p ON p.RowID=pc.ProductID
             INNER JOIN productinventorylocation pil ON pil.RowID=oi.ProductInventoryLocationId
-            INNER JOIN picklistorders plo ON plo.OrderItemID=oi.RowID
-            INNER JOIN picklistorderitems ploi ON ploi.PickListOrderID=plo.RowID AND ploi.`status` NOT IN ('Cancelled', 'Inactive')
+            INNER JOIN picklistorders plo ON plo.OrderItemID=oi.RowID AND plo.`Status`='Verified'
+            INNER JOIN picklistorderitems ploi ON ploi.PickListOrderID=plo.RowID AND ploi.`status` NOT IN ('Cancelled', 'Inactive') AND ploi.`Status`=plo.`Status`
             #AND oi.ProductInventoryLocationId=ploi.ProductInventoryLocationID
             AND ploi.QtyPicked > 0
             INNER JOIN picklist pl ON pl.RowID=plo.PickListID AND pl.`Status` NOT IN ('New', 'Cancelled')

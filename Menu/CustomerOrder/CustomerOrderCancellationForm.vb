@@ -10,7 +10,7 @@ Public Class CustomerOrderCancellationForm
     Private Const COLUMN_WIDTH As Integer = 764
     Private ReadOnly _userId As Integer
     Private ReadOnly _orderId As Integer
-    Private Const SECONDS_FIVE As Integer = 5
+    Private ReadOnly SECONDS_FIVE As Integer = If(Debugger.IsAttached, 1, 5)
     Private _cts As CancellationTokenSource
 
     Public Sub New(userId As Integer, orderId As Integer)
@@ -68,6 +68,8 @@ Public Class CustomerOrderCancellationForm
     Private Async Function LoadLineupAsync() As Task
         Dim lineups = Await GetLineupsAsync()
 
+        Dim picklistOrders = Await GetPicklistOrdersAsync()
+
         For Each lineup In lineups
             Dim text = $"DR# {lineup.DeliveryNo}, Lineup#: {lineup.LineUpNo}({lineup.Status.ToString()}), Plate#: {lineup.PlateNo}, Driver: {If(String.IsNullOrEmpty(lineup.DeliveredBy), "None", lineup.DeliveredBy)}, Helper(s): {If(String.IsNullOrEmpty(lineup.Helpers), "None", lineup.Helpers)}"
 
@@ -84,6 +86,9 @@ Public Class CustomerOrderCancellationForm
                 For Each packingListCartonItem In lineupCarton.PackingListCarton.PackingListCartonItems.OrderBy(Function(t) t.OrderItemID)
                     Dim oi = packingListCartonItem.OrderItem
 
+                    Dim picklistOrder = picklistOrders.FirstOrDefault(Function(t) t.OrderItemID = If(oi.RowID, 0) And t.IsVerifiedStatus)
+                    If picklistOrder Is Nothing Then Continue For
+
                     Dim n2 = n1.Nodes.Add($"{oi.ItemCode} → {packingListCartonItem.QtyInCarton}{If(String.IsNullOrEmpty(oi.UnitOfMeasure), oi?.ProductInventoryLocation?.UnitOfMeasure2, oi.UnitOfMeasure)} × {oi.SRP.Value:n2} = {oi.TotalItemPrice:n2}")
                     DoNotShowCheckBox(n2)
                 Next
@@ -96,8 +101,16 @@ Public Class CustomerOrderCancellationForm
         TabPage1.Text = $"Lineup/Delivery ({If(lineups?.Count(), 0)})"
     End Function
 
+    Private Async Function GetPicklistOrdersAsync() As Task(Of ICollection(Of PickListOrder))
+        Dim pickListOrderDataServicev = GetRequiredService(Of IPickListOrderDataService)()
+        Dim picklistOrders = Await pickListOrderDataServicev.GetManyByOrderIdAsync(_orderId)
+        Return picklistOrders
+    End Function
+
     Private Async Function LoadPackingListAsync() As Task
         Dim packingLists = Await GetPackingListsAsync()
+
+        Dim picklistOrders = Await GetPicklistOrdersAsync()
 
         For Each packingList In packingLists
             Dim text = $"Packing List # {packingList.PackingListNo}"
@@ -114,6 +127,9 @@ Public Class CustomerOrderCancellationForm
 
                 For Each packingListCartonItem In packingListCarton.PackingListCartonItems.OrderBy(Function(t) t.OrderItemID)
                     Dim oi = packingListCartonItem.OrderItem
+
+                    Dim picklistOrder = picklistOrders.FirstOrDefault(Function(t) t.OrderItemID = If(oi.RowID, 0) And t.IsVerifiedStatus)
+                    If picklistOrder Is Nothing Then Continue For
 
                     Dim n2 = n1.Nodes.Add($"{oi.ItemCode} → {packingListCartonItem.QtyInCarton}{If(String.IsNullOrEmpty(oi.UnitOfMeasure), oi?.ProductInventoryLocation?.UnitOfMeasure2, oi.UnitOfMeasure)} × {oi.SRP.Value:n2} = {oi.TotalItemPrice:n2}")
                     DoNotShowCheckBox(n2)

@@ -85,5 +85,10 @@ namespace WarehouseManagementSystem.Core.Entities
                 amount: amount);
 
         public bool HasPackingListCartonItems => PackingListCartonItems?.Any() ?? false;
+
+        public void SetStatusToCancelled()
+        {
+            Status = PackingListCartonStatus.Cancelled;
+        }
     }
 }

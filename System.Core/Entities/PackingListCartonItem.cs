@@ -53,5 +53,10 @@ namespace WarehouseManagementSystem.Core.Entities
             Status = PackingListCartonItemStatus.Inactive;
             SetEdited();
         }
+
+        public void SetStatusToCancelled()
+        {
+            Status = PackingListCartonItemStatus.Inactive;
+        }
     }
 }

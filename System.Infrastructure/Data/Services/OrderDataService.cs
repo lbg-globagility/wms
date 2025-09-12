@@ -1,9 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using OfficeOpenXml.Style;
-using Remotion.Linq.Clauses;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json;
 using System.Threading.Tasks;
 using WarehouseManagementSystem.Core.Entities;
 using WarehouseManagementSystem.Core.Enums;
@@ -26,6 +23,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
         private readonly ILineupRepository _lineupRepository;
         private readonly IPackingListRepository _packingListRepository;
         private readonly IPickListOrderRepository _pickListOrderRepository;
+        private readonly IPackingListCartonRepository _packingListCartonRepository;
 
         public OrderDataService(IOrderRepository orderRepository,
             IUserActivityRepository userActivityRepository,
@@ -38,7 +36,8 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
             IOrderItemDataService orderItemDataService,
             ILineupRepository lineupRepository,
             IPackingListRepository packingListRepository,
-            IPickListOrderRepository pickListOrderRepository) :
+            IPickListOrderRepository pickListOrderRepository,
+            IPackingListCartonRepository packingListCartonRepository) :
 
             base(orderRepository,
                 userActivityRepository,
@@ -55,6 +54,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
             _lineupRepository = lineupRepository;
             _packingListRepository = packingListRepository;
             _pickListOrderRepository = pickListOrderRepository;
+            _packingListCartonRepository = packingListCartonRepository;
         }
 
         public async Task<List<Order>> GetOrdersByOrderTypeAsync(int organizationId, OrderType orderType) =>
@@ -168,14 +168,14 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
 
                 ThrowError();
             }
-            
+
             if (isDoingUpdateWithNoUpdatePrivilege)
                 ThrowError();
 
             void ThrowError() => BusinessLogicException.ThrowInsufficientPrivilege();
         }
 
-        protected override string CreateUserActivitySuffixIdentifier(Order entity) => $" #{entity.OrderNumber}{entity.OrderTypeText}, `date` { (entity.OrderDate != null ? entity.OrderDate?.ToShortDateString() : "[nodate]") }, and `status` is '{entity.Status}'";
+        protected override string CreateUserActivitySuffixIdentifier(Order entity) => $" #{entity.OrderNumber}{entity.OrderTypeText}, `date` {(entity.OrderDate != null ? entity.OrderDate?.ToShortDateString() : "[nodate]")}, and `status` is '{entity.Status}'";
 
         protected override string GetUserActivityName(Order entity) => _entityName;
 
