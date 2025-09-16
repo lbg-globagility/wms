@@ -12,5 +12,6 @@ namespace WarehouseManagementSystem.Core.Interfaces.Repositories
         Task<Lineup> GetByLineupIdAsync(int lineUpId);
         Task<List<Lineup>> GetByOrganizationIdAndDateRangeAsync(int organizationId, DateTime from, DateTime to);
         Task<List<Lineup>> GetManyByOrderIdAsync(int orderId);
+        Task<List<Lineup>> GetManyByOrderIdsAsync(int[] orderIds);
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Remotion.Linq.Clauses;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -105,7 +106,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
                     //.Where(t => t.ProductColorSizeID == productColorSizeId)
                     //.Where(t => t.RackShelfColumn.InventoryLocationID == inventoryLocationId)
                     ////.Where(t => (t.TotalReserveQty ?? 0) > 0 && (t.TotalReserveQty ?? 0) >= (packingListCartonItem.QtyInCarton ?? 0))
-                    //.FirstOrDefault();
+                    //.FirstOrDefault();^
 
                     if (productInventoryLocation == null)
                         continue;
@@ -131,6 +132,8 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
         public async Task<List<Lineup>> GetByOrganizationIdAndDateRangeAsync(int organizationId, DateTime from, DateTime to) => await _lineupRepository.GetByOrganizationIdAndDateRangeAsync(organizationId, from: from, to: to);
 
         public async Task<List<Lineup>> GetManyByOrderIdAsync(int orderId) => await _lineupRepository.GetManyByOrderIdAsync(orderId);
+
+        public async Task<List<Lineup>> GetManyByOrderIdsAsync(int[] orderIds) => await _lineupRepository.GetManyByOrderIdsAsync(orderIds);
 
         protected override string CreateUserActivitySuffixIdentifier(Lineup entity) => $"LineUpNo: {entity.LineUpNo}, Date: {entity.LineUpDate}, and OrderId: {entity.OrderID}";
 

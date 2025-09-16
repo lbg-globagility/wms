@@ -34,4 +34,10 @@ Public Class PickListOrderDto
         End Get
     End Property
 
+    Public ReadOnly Property IsReadOnly As Boolean
+
+    Friend Sub SetReadOnly(bool As Boolean)
+        _IsReadOnly = bool
+    End Sub
+
 End Class

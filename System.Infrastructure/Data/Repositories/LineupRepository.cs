@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Remotion.Linq.Clauses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -79,6 +80,11 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
                                 .ThenInclude(pcs => pcs.ProductColor)
                                     .ThenInclude(pc => pc.Product)
                                         .ThenInclude(p => p.Category)
+            .Include(t => t.LineupCartons)
+                .ThenInclude(t => t.PackingListCarton)
+                    .ThenInclude(t => t.PackingListCartonItems)
+                        .ThenInclude(t => t.PickListOrder)
+                            .ThenInclude(t => t.PickListOrderItems)
             .Where(t => t.OrganizationID == organizationId)
             .AsNoTracking()
             .AsQueryable();
@@ -107,6 +113,28 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
             .Include(t => t.DeliveryTruckShift)
                 .ThenInclude(x => x.DeliveryTruck)
             .Where(t => t.OrderID == orderId)
+            .AsNoTracking()
+            .ToListAsync();
+
+        public async Task<List<Lineup>> GetManyByOrderIdsAsync(int[] orderIds) => await _context.Lineups
+            .Include(t => t.Order)
+            .Include(t => t.LineupCartons)
+                .ThenInclude(t => t.PackingListCarton)
+                    .ThenInclude(t => t.PackingListCartonItems)
+                        .ThenInclude(t => t.OrderItem)
+                            .ThenInclude(oi => oi.ProductInventoryLocation)
+                                .ThenInclude(pil => pil.RackShelfColumn)
+            .Include(t => t.LineupCartons)
+                .ThenInclude(t => t.PackingListCarton)
+                    .ThenInclude(t => t.PackingListCartonItems)
+                        .ThenInclude(t => t.PickListOrder)
+                            .ThenInclude(t => t.PickListOrderItems)
+            .Include(t => t.Driver)
+            .Include(t => t.Helper1)
+            .Include(t => t.Helper2)
+            .Include(t => t.DeliveryTruckShift)
+                .ThenInclude(x => x.DeliveryTruck)
+            .Where(t => orderIds.Contains(t.OrderID ?? 0))
             .AsNoTracking()
             .ToListAsync();
     }

@@ -63,8 +63,21 @@ Public Class PickListVerficationForm
             ThenBy(Function(t) t.OrderItemID).
             ToList()
 
+        Dim orderIds = picklistOrders.Select(Function(t) t.OrderID).ToArray()
+
+        Dim lineupDataService = GetRequiredService(Of ILineupDataService)()
+        Dim sdfsd = Await lineupDataService.GetManyByOrderIdsAsync(orderIds)
+
         Dim dataSource = picklistOrders.
-            Select(Function(t) New PickListOrderDto(t)).
+            Select(Function(t)
+                       Dim fsdfsd = New PickListOrderDto(t)
+
+                       Dim lkjlfk = sdfsd.FirstOrDefault(Function(f) f.LineupCartons.Any(Function(j) j.PackingListCarton.PackingListCartonItems.Any(Function(l) l.PickListOrder.OrderID = t.OrderID And l.PickListOrder.IsVerifiedStatus And If(l.PickListOrder.PickListOrderItem?.IsVerified, False))))
+
+                       fsdfsd.SetReadOnly(bool:=lkjlfk IsNot Nothing)
+
+                       Return fsdfsd
+                   End Function).
             ToList()
 
         Return dataSource
@@ -179,6 +192,15 @@ Public Class PickListVerficationForm
             ToList()
 
         btnOK.Enabled = If(editedPickListOrders?.Any(), False)
+    End Sub
+
+    Private Sub dataGrid_CellBeginEdit(sender As Object, e As DataGridViewCellCancelEventArgs) Handles dataGrid.CellBeginEdit
+        If Not e.RowIndex > -1 Then Return
+
+        Dim model = CType(dataGrid.CurrentRow.DataBoundItem, PickListOrderDto)
+
+        e.Cancel = model.IsReadOnly
+
     End Sub
 
 End Class

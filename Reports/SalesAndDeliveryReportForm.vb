@@ -47,7 +47,7 @@ Public Class SalesAndDeliveryReportForm
     End Sub
 
     Private Async Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        If Not (DateTimePicker1.Value.Date <= DateTimePicker2.Value.Date) Then
+        If Not (DateTimePicker1.Value.Date <= If(DateTimePicker2.Checked, DateTimePicker2.Value.Date, DateTimePicker1.Value.Date)) Then
             MessageBox.Show("Invalid date range.", "Invalid Date Range", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Return
         End If
@@ -60,7 +60,10 @@ Public Class SalesAndDeliveryReportForm
         lineups.ForEach(Sub(t)
                             t.LineupCartons.ToList().
                             ForEach(Sub(tt)
-                                        packingListCartonItems.AddRange(tt.PackingListCartonItems)
+
+                                        Dim pofds = tt.PackingListCartonItems.Where(Function(f) If(f.PickListOrder?.IsVerifiedStatus, False) And If(f.PickListOrder.PickListOrderItem?.IsVerified, False))
+
+                                        packingListCartonItems.AddRange(pofds)
 
                                     End Sub)
 
@@ -245,11 +248,16 @@ Public Class SalesAndDeliveryReportForm
 
         Dim lineupDataService = GetRequiredService(Of ILineupDataService)()
 
-        Return Await lineupDataService.GetByOrganizationIdAndDateRangeAsync(
+        Dim khkj = Await lineupDataService.GetByOrganizationIdAndDateRangeAsync(
             organizationId:=Z_OrganizationID,
             from:=from,
             [to]:=[to])
 
+        Dim lineups = khkj.
+            Where(Function(t) If(t.LineupCartons?.Any(Function(f) If(f.PackingListCarton?.PackingListCartonItems?.Any(Function(j) j.PickListOrder.IsVerifiedStatus), False)), False)).
+            ToList()
+
+        Return lineups
     End Function
 
     Private Sub SetRowContent(defaultWorksheet As ExcelWorksheet,

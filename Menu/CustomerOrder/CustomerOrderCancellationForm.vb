@@ -1,6 +1,7 @@
 ﻿Option Strict On
 
 Imports System.Threading
+Imports Remotion.Linq.Clauses
 Imports TreeGridView
 Imports WarehouseManagementSystem.Core.Entities
 Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
@@ -86,7 +87,7 @@ Public Class CustomerOrderCancellationForm
                 For Each packingListCartonItem In lineupCarton.PackingListCarton.PackingListCartonItems.OrderBy(Function(t) t.OrderItemID)
                     Dim oi = packingListCartonItem.OrderItem
 
-                    Dim picklistOrder = picklistOrders.FirstOrDefault(Function(t) t.OrderItemID = If(oi.RowID, 0) And t.IsVerifiedStatus)
+                    Dim picklistOrder = picklistOrders.FirstOrDefault(Function(t) t.OrderID = _orderId And t.OrderItemID = If(oi.RowID, 0) And t.IsVerifiedStatus)
                     If picklistOrder Is Nothing Then Continue For
 
                     Dim n2 = n1.Nodes.Add($"{oi.ItemCode} → {packingListCartonItem.QtyInCarton}{If(String.IsNullOrEmpty(oi.UnitOfMeasure), oi?.ProductInventoryLocation?.UnitOfMeasure2, oi.UnitOfMeasure)} × {oi.SRP.Value:n2} = {oi.TotalItemPrice:n2}")
@@ -155,7 +156,7 @@ Public Class CustomerOrderCancellationForm
             Dim n0 = node
             DoNotShowCheckBox(n0)
 
-            For Each pickListOrder In pickList.PickListOrders.OrderBy(Function(t) t.OrderItemID)
+            For Each pickListOrder In pickList.PickListOrders.Where(Function(t) t.OrderID = _orderId).OrderBy(Function(t) t.OrderItemID)
                 Dim oi = pickListOrder.OrderItem
                 Dim pil = oi.ProductInventoryLocation
                 Dim r = pil.RackShelfColumn
