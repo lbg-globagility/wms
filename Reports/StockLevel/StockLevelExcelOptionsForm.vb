@@ -1,5 +1,6 @@
 ﻿Option Strict On
 
+Imports Microsoft.EntityFrameworkCore.Internal
 Imports OfficeOpenXml
 Imports WarehouseManagementSystem.Core.Entities
 Imports WarehouseManagementSystem.Core.Interfaces.DomainServices
@@ -212,10 +213,15 @@ Partial Public Class StockLevelExcelOptionsForm
                     For Each productGroup In productColorSizesOfThisProductGroupNames
                         Dim productGroupName = String.Empty
 
-                        For Each productColorSize In productGroup
+                        For Each productColorSizes In productGroup.GroupBy(Function(t) t.ProductColorSizeID)
 
                             Dim ifSame2 = productGroupName = productGroup.Key
                             If Not ifSame2 Then productGroupName = productGroup.Key
+
+                            Dim productColorSize = productColorSizes.FirstOrDefault()
+                            If productColorSize Is Nothing Then Continue For
+
+                            productColorSize.SetTotalQtyPerProductCode(totalAvailableQtyPerProductCode:=If(productColorSizes?.Sum(Function(t) t.TotalAvailableQty), 0))
 
                             SetRowContent(defaultWorksheet,
                                     rowIndex,
@@ -246,18 +252,27 @@ Partial Public Class StockLevelExcelOptionsForm
                     Next
 
                 Else
-                    For Each model In productColorSizesOfThisCategory
-                        Dim ifSame = categoryName = model.CategoryName
-                        If Not ifSame Then categoryName = model.CategoryName
+                    For Each categoryGroup In productColorSizesOfThisCategory.
+                        GroupBy(Function(t) t.CategoryName)
 
-                        SetRowContent(defaultWorksheet,
-                            rowIndex,
-                            categoryName,
-                            model,
-                            ifSame)
+                        For Each productGroup In productColorSizesOfThisCategory.
+                            Where(Function(t) t.CategoryName = categoryGroup.Key).
+                            GroupBy(Function(t) t.ProductColorSizeID)
 
-                        rowIndex += 1
+                            Dim ifSame = categoryName = categoryGroup.Key
+                            If Not ifSame Then categoryName = categoryGroup.Key
 
+                            Dim model = productGroup.FirstOrDefault()
+                            model.SetTotalQtyPerProductCode(If(productGroup?.Sum(Function(t) t.TotalAvailableQty), 0))
+
+                            SetRowContent(defaultWorksheet,
+                                rowIndex,
+                                categoryName,
+                                model,
+                                ifSame)
+
+                            rowIndex += 1
+                        Next
                     Next
 
                 End If
@@ -340,7 +355,7 @@ Partial Public Class StockLevelExcelOptionsForm
 
     End Sub
 
-    Private Class StockLevelModel
+    Public Class StockLevelModel
 
         Public Sub New(productInventoryLocation As ProductInventoryLocation)
 
@@ -355,6 +370,7 @@ Partial Public Class StockLevelExcelOptionsForm
             UnitOfMeasure = productInventoryLocation?.UnitOfMeasure2
             CategoryName = productColorSize?.ProductColor?.Product?.Category?.CategoryName
             ProductGroupName = productColorSize?.ProductColor?.Product?.ProductGroupName
+            ProductColorSizeID = If(productColorSize?.RowID, 0)
         End Sub
 
         Public ReadOnly Property ProductCode As String
@@ -366,6 +382,12 @@ Partial Public Class StockLevelExcelOptionsForm
         Public ReadOnly Property UnitOfMeasure As String
         Public ReadOnly Property CategoryName As String
         Public ReadOnly Property ProductGroupName As String
+        Public ReadOnly Property ProductColorSizeID As Integer
+
+        Friend Sub SetTotalQtyPerProductCode(totalAvailableQtyPerProductCode As Integer)
+            _TotalAvailableQty = totalAvailableQtyPerProductCode
+        End Sub
+
     End Class
 
 End Class

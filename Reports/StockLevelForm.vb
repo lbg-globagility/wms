@@ -88,7 +88,7 @@ INNER JOIN products p ON pc.productid = p.rowid
 LEFT JOIN companies v ON p.companyid = v.rowid
 LEFT JOIN brands b ON p.brandid = b.rowid
 INNER JOIN productinventorylocation pil ON pil.ProductColorSizeID=pcs.RowID AND pil.TotalAvailableQty > 0
-INNER JOIN rackshelfcolumn r ON r.RowID=pil.RackShelfColumnID AND r.`Status`='Active' WHERE pcs.`Status`='Active' AND pcs.organizationid = " & Z_OrganizationID & " AND " & iconditionstring & " ORDER BY b.brandname,p.productcode,c.colorname "
+INNER JOIN rackshelfcolumn r ON r.RowID=pil.RackShelfColumnID AND r.`Status`='Active' WHERE pcs.`Status`='Active' AND pcs.organizationid = " & Z_OrganizationID & " AND " & iconditionstring & " GROUP BY pcs.RowID ORDER BY b.brandname,p.productcode,c.colorname "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
             Dim seqno As Integer = 1
