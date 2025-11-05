@@ -1069,7 +1069,7 @@ Public Class AccountsForm
             Dim sql1 As String = "SELECT COALESCE(c.accountno,''),COALESCE(c.companyname,''),COALESCE(CONCAT(COALESCE(pa.companyname,''),' - ',COALESCE(pa.accountno,'')),''),COALESCE(c.mainphone,''),COALESCE(CONCAT(COALESCE(cp.firstname,''),' ',COALESCE(cp.middlename,''),' ',COALESCE(cp.lastname,'')),'')," &
                         "COALESCE(CONCAT(COALESCE(ad.streetaddress1,''),' ',COALESCE(ad.streetaddress2,''),' ',COALESCE(ad.barangay,''),' ',COALESCE(ad.citytown,''),' ',COALESCE(ad.province,''),' ',COALESCE(ad.state,''),' ',COALESCE(ad.zipcode,''),' ',COALESCE(ad.country,'')),''),COALESCE(c.faxnumber,'')," &
                         "COALESCE(c.altphone,''),COALESCE(c.website,''),COALESCE(c.vatregistrationno,''),COALESCE(c.comments,''),COALESCE(c.status,''),COALESCE(c.emailaddress,''),COALESCE(c.primaryaddressid,0),COALESCE(c.primarycontactid,0),COALESCE(pg.groupname,''),COALESCE(c.deliveryhours,'')," &
-                        "COALESCE(CONCAT(COALESCE(bc.branchcode,''),' - ',COALESCE(bc.branchname,'')),'') FROM accounts c LEFT JOIN accounts pa ON c.parentaccountid = pa.rowid LEFT JOIN contacts cp ON c.primarycontactid = cp.rowid LEFT JOIN address ad ON c.primaryaddressid = ad.rowid " &
+                        "COALESCE(CONCAT(COALESCE(bc.branchcode,''),' - ',COALESCE(bc.branchname,'')),''), c.AgentID FROM accounts c LEFT JOIN accounts pa ON c.parentaccountid = pa.rowid LEFT JOIN contacts cp ON c.primarycontactid = cp.rowid LEFT JOIN address ad ON c.primaryaddressid = ad.rowid " &
                         "LEFT JOIN picklistgroup pg ON c.picklistgroupid = pg.rowid LEFT JOIN branches bc ON c.branchid = bc.rowid WHERE c.rowid = " & icustomerid & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -1093,6 +1093,12 @@ Public Class AccountsForm
                     cboPickingGroup.Text = reader1(15)
                     txtDeliveryHours.Text = reader1(16)
                     cboBranchCodeNameInfo.Text = reader1(17)
+
+                    If IsDBNull(reader1(18)) Then
+                        cboAgent.SelectedIndex = -1
+                    Else
+                        cboAgent.SelectedValue = CInt(reader1(18))
+                    End If
                 End If
             End While
             reader1.Close()
