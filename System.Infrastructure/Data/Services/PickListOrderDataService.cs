@@ -118,7 +118,7 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
                     transactionType: MovementHistory.VERIFY_PL_QR,
                     columnName: MovementHistory.COLUMN_TOTAL_RESERVE_QTY));
 
-                productInventoryLocation.TotalReserveQty += qty;
+                productInventoryLocation.TotalReserveQty = (productInventoryLocation.TotalReserveQty ?? 0) + qty;
 
                 productInventoryLocation.SetEdited();
 
