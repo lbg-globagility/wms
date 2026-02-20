@@ -3001,7 +3001,7 @@ Public Class PickListForm
                         Dim customerIds = String.Join(separator:=",", customerRows.Select(Function(t) CInt(t.Tag)).ToArray())
                         .AddWithValue("@customerIds", customerIds)
 
-                        Dim poNos = String.Join(separator:=",", customerRows.Select(Function(t) CInt(t.Cells(co_pono.Name).Value)).ToArray())
+                        Dim poNos = String.Join(separator:=",", customerRows.Select(Function(t) CStr(t.Cells(co_pono.Name).Value)).ToArray())
                         .AddWithValue("@referenceNos", poNos)
 
                         Dim customerOrderNos = String.Join(separator:=",", customerRows.Select(Function(t) CInt(t.Cells(co_customerorderno.Name).Value)).ToArray())
