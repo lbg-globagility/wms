@@ -20,5 +20,14 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Repositories
             .AsNoTracking()
             .Where(t => t.OrderID == orderId)
             .ToListAsync();
+
+        public override Task SaveManyAsync(List<PickListOrder> added = null, List<PickListOrder> updated = null, List<PickListOrder> deleted = null)
+        {
+            return base.SaveManyAsync(added, updated, deleted)
+                .ContinueWith(_ => {
+                    foreach (var entry in _context.ChangeTracker.Entries().ToList())
+                        entry.State = EntityState.Detached;
+                });
+        }
     }
 }

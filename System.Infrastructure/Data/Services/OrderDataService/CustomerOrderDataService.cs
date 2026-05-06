@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Drawing.Drawing2D;
 using System.Linq;
@@ -253,14 +254,15 @@ namespace WarehouseManagementSystem.Infrastructure.Data.Services
                     updatedProductInventoryLocations.Add(productInventoryLocation);
                 }
 
-                var updatedPickListOrders = new List<PickListOrder>();
+                //var updatedPickListOrders = new List<PickListOrder>();
                 foreach (var pickListOrder in pickListOrders)
                 {
                     pickListOrder.SetStatusToCancelled();
                     pickListOrder.AuditUser(userId);
-                    updatedPickListOrders.Add(pickListOrder);
+                    //updatedPickListOrders.Add(pickListOrder);
                 }
-                await _pickListOrderRepository.SaveManyAsync(updated: updatedPickListOrders);
+                foreach (var item in pickListOrders.GroupBy(t => t.PickListID))
+                    await _pickListOrderRepository.SaveManyAsync(updated: item.ToList());
 
                 var packinglists = await _packingListRepository.GetManyByOrderIdsAsync(new int[] { orderId });
                 var updatedPackingLists = new List<PackingList>();
