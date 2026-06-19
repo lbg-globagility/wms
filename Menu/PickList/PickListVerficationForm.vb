@@ -58,6 +58,7 @@ Public Class PickListVerficationForm
 
         Dim picklistOrders = picklist.PickListOrders.
             Where(Function(t) Not t.IsInactiveStatus).
+            Where(Function(t) Not If(t?.Order?.IsStatusCancelled, False)).
             OrderBy(Function(t) t.OrderID).
             ThenBy(Function(t) t.OrderItem?.ProductColorSize?.ProductColor?.Product?.ProductGroupName).
             ThenBy(Function(t) t.OrderItemID).
