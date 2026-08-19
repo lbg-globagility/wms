@@ -1093,7 +1093,7 @@ Public Class ViewEditLineUpDeliveryForm
             dgLineUpList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
             Dim sql1 As String = "SELECT lu.rowid,COALESCE(lu.lineupno,''),COALESCE(lu.deliveryno,''),COALESCE(CONCAT(COALESCE(o.ordernumber,''),' (C.O. No.) / ',COALESCE(a.companyname,''),' - ',COALESCE(a.accountno,'')),'')," &
-                        "COALESCE(DATE_FORMAT(lu.lineupdate,'%d-%b-%Y'),'') FROM lineups lu LEFT JOIN orders o ON lu.orderid = o.rowid LEFT JOIN accounts a ON o.accountid = a.rowid WHERE lu.organizationid = " & Z_OrganizationID & " " &
+                        "COALESCE(DATE_FORMAT(lu.lineupdate,'%d-%b-%Y'),''),COALESCE(o.referencenumber,'') FROM lineups lu LEFT JOIN orders o ON lu.orderid = o.rowid LEFT JOIN accounts a ON o.accountid = a.rowid WHERE lu.organizationid = " & Z_OrganizationID & " " &
                         "ORDER BY lu.DeliveryNo*1 DESC, lu.LineUpNo*1 DESC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -1106,6 +1106,7 @@ Public Class ViewEditLineUpDeliveryForm
                     dgLineUpList.Item(lu_deliveryno.Index, n).Value = reader1(2)
                     dgLineUpList.Item(lu_customerorderinfo.Index, n).Value = reader1(3)
                     dgLineUpList.Item(lu_deliverydate.Index, n).Value = reader1(4)
+                    dgLineUpList.Item(lu_pono.Index, n).Value = reader1(5)
                     n = n + 1
                 End If
             End While
@@ -1113,6 +1114,7 @@ Public Class ViewEditLineUpDeliveryForm
             dgLineUpList.Columns("lu_lineupno").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
             dgLineUpList.Columns("lu_deliveryno").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
             dgLineUpList.Columns("lu_deliverydate").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
+            dgLineUpList.Columns("lu_pono").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
             If dgLineUpList.Rows.Count <> 0 Then
                 dgLineUpList.CurrentRow.Selected = False
             End If
@@ -1128,8 +1130,8 @@ Public Class ViewEditLineUpDeliveryForm
             dgLineUpList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
             Dim sql1 As String = "SELECT lu.rowid,COALESCE(lu.lineupno,''),COALESCE(lu.deliveryno,''),COALESCE(CONCAT(COALESCE(o.ordernumber,''),' (C.O. No.) / ',COALESCE(a.companyname,''),' - ',COALESCE(a.accountno,'')),'')," &
-                        "COALESCE(DATE_FORMAT(lu.lineupdate,'%d-%b-%Y'),'') FROM lineups lu LEFT JOIN orders o ON lu.orderid = o.rowid LEFT JOIN accounts a ON o.accountid = a.rowid WHERE lu.organizationid = " & Z_OrganizationID & " " &
-                        "AND (lu.deliveryno LIKE ""%" & isearchphrase & "%"" OR o.ordernumber LIKE ""%" & isearchphrase & "%"" OR lu.lineupno LIKE ""%" & isearchphrase & "%"" OR a.companyname LIKE ""%" & isearchphrase & "%"" OR lu.status LIKE ""%" & isearchphrase & "%"") " &
+                        "COALESCE(DATE_FORMAT(lu.lineupdate,'%d-%b-%Y'),''),COALESCE(o.referencenumber,'') FROM lineups lu LEFT JOIN orders o ON lu.orderid = o.rowid LEFT JOIN accounts a ON o.accountid = a.rowid WHERE lu.organizationid = " & Z_OrganizationID & " " &
+                        "AND (lu.deliveryno LIKE ""%" & isearchphrase & "%"" OR o.ordernumber LIKE ""%" & isearchphrase & "%"" OR lu.lineupno LIKE ""%" & isearchphrase & "%"" OR a.companyname LIKE ""%" & isearchphrase & "%"" OR lu.status LIKE ""%" & isearchphrase & "%"" OR o.referencenumber LIKE ""%" & isearchphrase & "%"") " &
                         "ORDER BY lu.DeliveryNo*1 DESC, lu.LineUpNo*1 DESC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -1142,6 +1144,7 @@ Public Class ViewEditLineUpDeliveryForm
                     dgLineUpList.Item(lu_deliveryno.Index, n).Value = reader1(2)
                     dgLineUpList.Item(lu_customerorderinfo.Index, n).Value = reader1(3)
                     dgLineUpList.Item(lu_deliverydate.Index, n).Value = reader1(4)
+                    dgLineUpList.Item(lu_pono.Index, n).Value = reader1(5)
                     n = n + 1
                 End If
             End While
@@ -1149,6 +1152,7 @@ Public Class ViewEditLineUpDeliveryForm
             dgLineUpList.Columns("lu_lineupno").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
             dgLineUpList.Columns("lu_deliveryno").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
             dgLineUpList.Columns("lu_deliverydate").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
+            dgLineUpList.Columns("lu_pono").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
             If dgLineUpList.Rows.Count <> 0 Then
                 dgLineUpList.CurrentRow.Selected = False
             End If
@@ -1164,7 +1168,7 @@ Public Class ViewEditLineUpDeliveryForm
             dgLineUpList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
             Dim sql1 As String = "SELECT lu.rowid,COALESCE(lu.lineupno,''),COALESCE(lu.deliveryno,''),COALESCE(CONCAT(COALESCE(o.ordernumber,''),' (C.O. No.) / ',COALESCE(a.companyname,''),' - ',COALESCE(a.accountno,'')),'')," &
-                        "COALESCE(DATE_FORMAT(lu.lineupdate,'%d-%b-%Y'),'') FROM lineups lu LEFT JOIN orders o ON lu.orderid = o.rowid LEFT JOIN accounts a ON o.accountid = a.rowid WHERE lu.organizationid = " & Z_OrganizationID & " " &
+                        "COALESCE(DATE_FORMAT(lu.lineupdate,'%d-%b-%Y'),''),COALESCE(o.referencenumber,'') FROM lineups lu LEFT JOIN orders o ON lu.orderid = o.rowid LEFT JOIN accounts a ON o.accountid = a.rowid WHERE lu.organizationid = " & Z_OrganizationID & " " &
                         "AND (" & idatesearch & " >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " & idatesearch & " <= '" & dtpToSearch.Value.Year & "-" & dtpToSearch.Value.Month & "-" & dtpToSearch.Value.Day & "' ) " &
                         "GROUP BY lu.rowid ORDER BY lu.DeliveryNo*1 DESC, lu.LineUpNo*1 DESC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
@@ -1178,6 +1182,7 @@ Public Class ViewEditLineUpDeliveryForm
                     dgLineUpList.Item(lu_deliveryno.Index, n).Value = reader1(2)
                     dgLineUpList.Item(lu_customerorderinfo.Index, n).Value = reader1(3)
                     dgLineUpList.Item(lu_deliverydate.Index, n).Value = reader1(4)
+                    dgLineUpList.Item(lu_pono.Index, n).Value = reader1(5)
                     n = n + 1
                 End If
             End While
@@ -1185,6 +1190,7 @@ Public Class ViewEditLineUpDeliveryForm
             dgLineUpList.Columns("lu_lineupno").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
             dgLineUpList.Columns("lu_deliveryno").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
             dgLineUpList.Columns("lu_deliverydate").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
+            dgLineUpList.Columns("lu_pono").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
             If dgLineUpList.Rows.Count <> 0 Then
                 dgLineUpList.CurrentRow.Selected = False
             End If
@@ -1200,7 +1206,7 @@ Public Class ViewEditLineUpDeliveryForm
             dgLineUpList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
             Dim sql1 As String = "SELECT lu.rowid,COALESCE(lu.lineupno,''),COALESCE(lu.deliveryno,''),COALESCE(CONCAT(COALESCE(o.ordernumber,''),' (C.O. No.) / ',COALESCE(a.companyname,''),' - ',COALESCE(a.accountno,'')),'')," &
-                        "COALESCE(DATE_FORMAT(lu.lineupdate,'%d-%b-%Y'),'') FROM lineups lu LEFT JOIN orders o ON lu.orderid = o.rowid LEFT JOIN accounts a ON o.accountid = a.rowid WHERE lu.organizationid = " & Z_OrganizationID & " " &
+                        "COALESCE(DATE_FORMAT(lu.lineupdate,'%d-%b-%Y'),''),COALESCE(o.referencenumber,'') FROM lineups lu LEFT JOIN orders o ON lu.orderid = o.rowid LEFT JOIN accounts a ON o.accountid = a.rowid WHERE lu.organizationid = " & Z_OrganizationID & " " &
                         "AND " & icommonphrase & " " & idatesearch & " ORDER BY lu.DeliveryNo*1 DESC, lu.LineUpNo*1 DESC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -1213,6 +1219,7 @@ Public Class ViewEditLineUpDeliveryForm
                     dgLineUpList.Item(lu_deliveryno.Index, n).Value = reader1(2)
                     dgLineUpList.Item(lu_customerorderinfo.Index, n).Value = reader1(3)
                     dgLineUpList.Item(lu_deliverydate.Index, n).Value = reader1(4)
+                    dgLineUpList.Item(lu_pono.Index, n).Value = reader1(5)
                     n = n + 1
                 End If
             End While
@@ -1220,6 +1227,7 @@ Public Class ViewEditLineUpDeliveryForm
             dgLineUpList.Columns("lu_lineupno").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
             dgLineUpList.Columns("lu_deliveryno").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
             dgLineUpList.Columns("lu_deliverydate").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
+            dgLineUpList.Columns("lu_pono").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
             If dgLineUpList.Rows.Count <> 0 Then
                 dgLineUpList.CurrentRow.Selected = False
             End If
@@ -1235,7 +1243,7 @@ Public Class ViewEditLineUpDeliveryForm
             dgLineUpList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
             Dim sql1 As String = "SELECT lu.rowid,COALESCE(lu.lineupno,''),COALESCE(lu.deliveryno,''),COALESCE(CONCAT(COALESCE(o.ordernumber,''),' (C.O. No.) / ',COALESCE(a.companyname,''),' - ',COALESCE(a.accountno,'')),'')," &
-                        "COALESCE(DATE_FORMAT(lu.lineupdate,'%d-%b-%Y'),'') FROM lineups lu LEFT JOIN orders o ON lu.orderid = o.rowid LEFT JOIN accounts a ON o.accountid = a.rowid WHERE lu.organizationid = " & Z_OrganizationID & " " &
+                        "COALESCE(DATE_FORMAT(lu.lineupdate,'%d-%b-%Y'),''),COALESCE(o.referencenumber,'') FROM lineups lu LEFT JOIN orders o ON lu.orderid = o.rowid LEFT JOIN accounts a ON o.accountid = a.rowid WHERE lu.organizationid = " & Z_OrganizationID & " " &
                         "AND lu.lineupdate = '" & ilineupdate & "' " & iconditionstring & " ORDER BY lu.deliveryno DESC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -1248,6 +1256,7 @@ Public Class ViewEditLineUpDeliveryForm
                     dgLineUpList.Item(lu_deliveryno.Index, n).Value = reader1(2)
                     dgLineUpList.Item(lu_customerorderinfo.Index, n).Value = reader1(3)
                     dgLineUpList.Item(lu_deliverydate.Index, n).Value = reader1(4)
+                    dgLineUpList.Item(lu_pono.Index, n).Value = reader1(5)
                     n = n + 1
                 End If
             End While
@@ -1255,6 +1264,7 @@ Public Class ViewEditLineUpDeliveryForm
             dgLineUpList.Columns("lu_lineupno").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
             dgLineUpList.Columns("lu_deliveryno").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
             dgLineUpList.Columns("lu_deliverydate").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
+            dgLineUpList.Columns("lu_pono").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
             If dgLineUpList.Rows.Count <> 0 Then
                 dgLineUpList.CurrentRow.Selected = False
             End If

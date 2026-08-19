@@ -2024,6 +2024,9 @@ Public Class ProductsForm
                             Description:=txtDescription.Text,
                             UnitPrice:=If(IsNumeric(txtSRP.Text), CDec(txtSRP.Text), 0.0),
                             Image:=txtImagePath.Text,
+                            IsThurston:=IsThurston,
+                            UnitOfMeasure2:=cboUnitOfMeasure.Text,
+                            UnitPriceOfUOM2:=If(IsNumeric(txtSRP.Text), CDec(txtSRP.Text), 0.0),
                             globalformname:=Me)
                     End If
                     If myModule.systemerrorfound = True Then

@@ -31,11 +31,6 @@ Partial Class ViewEditLineUpDeliveryForm
         Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.Label16 = New System.Windows.Forms.Label()
         Me.dgLineUpList = New DevComponents.DotNetBar.Controls.DataGridViewX()
-        Me.lu_rowid = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.lu_lineupno = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.lu_deliveryno = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.lu_customerorderinfo = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.lu_deliverydate = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.tsRefresh = New System.Windows.Forms.ToolStripButton()
         Me.cmdLast = New System.Windows.Forms.ToolStripButton()
         Me.cmdNext = New System.Windows.Forms.ToolStripButton()
@@ -150,6 +145,12 @@ Partial Class ViewEditLineUpDeliveryForm
         Me.lblsavemsg = New System.Windows.Forms.Label()
         Me.errProvider = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.lblTitle = New System.Windows.Forms.Label()
+        Me.lu_rowid = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.lu_lineupno = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.lu_deliveryno = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.lu_pono = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.lu_customerorderinfo = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.lu_deliverydate = New System.Windows.Forms.DataGridViewTextBoxColumn()
         CType(Me.dgLineUpList, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ToolStrip3.SuspendLayout()
         Me.gbLineUpList.SuspendLayout()
@@ -205,7 +206,7 @@ Partial Class ViewEditLineUpDeliveryForm
         DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
         Me.dgLineUpList.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
         Me.dgLineUpList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgLineUpList.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.lu_rowid, Me.lu_lineupno, Me.lu_deliveryno, Me.lu_customerorderinfo, Me.lu_deliverydate})
+        Me.dgLineUpList.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.lu_rowid, Me.lu_lineupno, Me.lu_deliveryno, Me.lu_pono, Me.lu_customerorderinfo, Me.lu_deliverydate})
         DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
         DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window
         DataGridViewCellStyle2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -222,39 +223,6 @@ Partial Class ViewEditLineUpDeliveryForm
         Me.dgLineUpList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.dgLineUpList.Size = New System.Drawing.Size(325, 275)
         Me.dgLineUpList.TabIndex = 17
-        '
-        'lu_rowid
-        '
-        Me.lu_rowid.HeaderText = "rowid"
-        Me.lu_rowid.Name = "lu_rowid"
-        Me.lu_rowid.ReadOnly = True
-        Me.lu_rowid.Visible = False
-        '
-        'lu_lineupno
-        '
-        Me.lu_lineupno.HeaderText = "Line-Up No."
-        Me.lu_lineupno.Name = "lu_lineupno"
-        Me.lu_lineupno.ReadOnly = True
-        Me.lu_lineupno.Width = 80
-        '
-        'lu_deliveryno
-        '
-        Me.lu_deliveryno.HeaderText = "S.I./D.R. No."
-        Me.lu_deliveryno.Name = "lu_deliveryno"
-        Me.lu_deliveryno.ReadOnly = True
-        Me.lu_deliveryno.Width = 80
-        '
-        'lu_customerorderinfo
-        '
-        Me.lu_customerorderinfo.HeaderText = "Customer Order Info."
-        Me.lu_customerorderinfo.Name = "lu_customerorderinfo"
-        Me.lu_customerorderinfo.ReadOnly = True
-        '
-        'lu_deliverydate
-        '
-        Me.lu_deliverydate.HeaderText = "Delivery Date"
-        Me.lu_deliverydate.Name = "lu_deliverydate"
-        Me.lu_deliverydate.ReadOnly = True
         '
         'tsRefresh
         '
@@ -1479,6 +1447,45 @@ Partial Class ViewEditLineUpDeliveryForm
         Me.lblTitle.Text = "View / Edit Line-Up And Delivery"
         Me.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
+        'lu_rowid
+        '
+        Me.lu_rowid.HeaderText = "rowid"
+        Me.lu_rowid.Name = "lu_rowid"
+        Me.lu_rowid.ReadOnly = True
+        Me.lu_rowid.Visible = False
+        '
+        'lu_lineupno
+        '
+        Me.lu_lineupno.HeaderText = "Line-Up No."
+        Me.lu_lineupno.Name = "lu_lineupno"
+        Me.lu_lineupno.ReadOnly = True
+        Me.lu_lineupno.Width = 80
+        '
+        'lu_deliveryno
+        '
+        Me.lu_deliveryno.HeaderText = "S.I./D.R. No."
+        Me.lu_deliveryno.Name = "lu_deliveryno"
+        Me.lu_deliveryno.ReadOnly = True
+        Me.lu_deliveryno.Width = 80
+        '
+        'lu_pono
+        '
+        Me.lu_pono.HeaderText = "P.O. No"
+        Me.lu_pono.Name = "lu_pono"
+        Me.lu_pono.ReadOnly = True
+        '
+        'lu_customerorderinfo
+        '
+        Me.lu_customerorderinfo.HeaderText = "Customer Order Info."
+        Me.lu_customerorderinfo.Name = "lu_customerorderinfo"
+        Me.lu_customerorderinfo.ReadOnly = True
+        '
+        'lu_deliverydate
+        '
+        Me.lu_deliverydate.HeaderText = "Delivery Date"
+        Me.lu_deliverydate.Name = "lu_deliverydate"
+        Me.lu_deliverydate.ReadOnly = True
+        '
         'ViewEditLineUpDeliveryForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -1623,11 +1630,6 @@ Partial Class ViewEditLineUpDeliveryForm
     Friend WithEvents txtSizeName As System.Windows.Forms.TextBox
     Friend WithEvents Label24 As System.Windows.Forms.Label
     Friend WithEvents txtBoxCBM As System.Windows.Forms.TextBox
-    Friend WithEvents lu_rowid As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents lu_lineupno As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents lu_deliveryno As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents lu_customerorderinfo As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents lu_deliverydate As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents ca_rowid As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents ca_packinglistcartonid As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents ca_seqno As System.Windows.Forms.DataGridViewTextBoxColumn
@@ -1651,4 +1653,10 @@ Partial Class ViewEditLineUpDeliveryForm
     Friend WithEvents TripTicketToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents GatePassToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents FlowLayoutPanel1 As FlowLayoutPanel
+    Friend WithEvents lu_rowid As DataGridViewTextBoxColumn
+    Friend WithEvents lu_lineupno As DataGridViewTextBoxColumn
+    Friend WithEvents lu_deliveryno As DataGridViewTextBoxColumn
+    Friend WithEvents lu_pono As DataGridViewTextBoxColumn
+    Friend WithEvents lu_customerorderinfo As DataGridViewTextBoxColumn
+    Friend WithEvents lu_deliverydate As DataGridViewTextBoxColumn
 End Class

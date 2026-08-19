@@ -64,7 +64,7 @@ Partial Class EditCartonForm
         Me.lblTitle.Name = "lblTitle"
         Me.lblTitle.Size = New System.Drawing.Size(404, 28)
         Me.lblTitle.TabIndex = 9
-        Me.lblTitle.Text = "Edit Box"
+        Me.lblTitle.Text = "Edit Bundle"
         Me.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'msMenu

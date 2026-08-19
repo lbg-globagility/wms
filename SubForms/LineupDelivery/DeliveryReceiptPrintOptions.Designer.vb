@@ -24,6 +24,7 @@ Partial Class DeliveryReceiptPrintOptions
     Private Sub InitializeComponent()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
+        Me.CheckBoxFontCalibri = New System.Windows.Forms.CheckBox()
         Me.CheckBoxBasedOnPOnumber = New System.Windows.Forms.CheckBox()
         Me.CheckBoxExcelCopyforDotMatrix = New System.Windows.Forms.CheckBox()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
@@ -35,7 +36,7 @@ Partial Class DeliveryReceiptPrintOptions
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.ButtonCancel = New System.Windows.Forms.Button()
         Me.ButtonOK = New System.Windows.Forms.Button()
-        Me.CheckBoxFontCalibri = New System.Windows.Forms.CheckBox()
+        Me.CheckBoxDoNotDisplayTIN = New System.Windows.Forms.CheckBox()
         Me.Panel1.SuspendLayout()
         Me.GroupBox3.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
@@ -65,6 +66,16 @@ Partial Class DeliveryReceiptPrintOptions
         Me.GroupBox3.TabStop = False
         Me.GroupBox3.Text = "Others"
         '
+        'CheckBoxFontCalibri
+        '
+        Me.CheckBoxFontCalibri.AutoSize = True
+        Me.CheckBoxFontCalibri.Location = New System.Drawing.Point(11, 69)
+        Me.CheckBoxFontCalibri.Name = "CheckBoxFontCalibri"
+        Me.CheckBoxFontCalibri.Size = New System.Drawing.Size(89, 17)
+        Me.CheckBoxFontCalibri.TabIndex = 2
+        Me.CheckBoxFontCalibri.Text = "Font: Calibri"
+        Me.CheckBoxFontCalibri.UseVisualStyleBackColor = True
+        '
         'CheckBoxBasedOnPOnumber
         '
         Me.CheckBoxBasedOnPOnumber.AutoSize = True
@@ -87,6 +98,7 @@ Partial Class DeliveryReceiptPrintOptions
         '
         'GroupBox2
         '
+        Me.GroupBox2.Controls.Add(Me.CheckBoxDoNotDisplayTIN)
         Me.GroupBox2.Controls.Add(Me.CheckBoxDoNotDisplayUOM)
         Me.GroupBox2.Controls.Add(Me.CheckBoxMeterYardWithPrice)
         Me.GroupBox2.Controls.Add(Me.CheckBoxRollWithPrice)
@@ -103,7 +115,7 @@ Partial Class DeliveryReceiptPrintOptions
         'CheckBoxDoNotDisplayUOM
         '
         Me.CheckBoxDoNotDisplayUOM.AutoSize = True
-        Me.CheckBoxDoNotDisplayUOM.Location = New System.Drawing.Point(11, 90)
+        Me.CheckBoxDoNotDisplayUOM.Location = New System.Drawing.Point(12, 79)
         Me.CheckBoxDoNotDisplayUOM.Name = "CheckBoxDoNotDisplayUOM"
         Me.CheckBoxDoNotDisplayUOM.Size = New System.Drawing.Size(136, 17)
         Me.CheckBoxDoNotDisplayUOM.TabIndex = 4
@@ -185,15 +197,17 @@ Partial Class DeliveryReceiptPrintOptions
         Me.ButtonOK.Text = "O&K"
         Me.ButtonOK.UseVisualStyleBackColor = True
         '
-        'CheckBoxFontCalibri
+        'CheckBoxDoNotDisplayTIN
         '
-        Me.CheckBoxFontCalibri.AutoSize = True
-        Me.CheckBoxFontCalibri.Location = New System.Drawing.Point(11, 69)
-        Me.CheckBoxFontCalibri.Name = "CheckBoxFontCalibri"
-        Me.CheckBoxFontCalibri.Size = New System.Drawing.Size(89, 17)
-        Me.CheckBoxFontCalibri.TabIndex = 2
-        Me.CheckBoxFontCalibri.Text = "Font: Calibri"
-        Me.CheckBoxFontCalibri.UseVisualStyleBackColor = True
+        Me.CheckBoxDoNotDisplayTIN.AutoSize = True
+        Me.CheckBoxDoNotDisplayTIN.Checked = True
+        Me.CheckBoxDoNotDisplayTIN.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.CheckBoxDoNotDisplayTIN.Location = New System.Drawing.Point(12, 102)
+        Me.CheckBoxDoNotDisplayTIN.Name = "CheckBoxDoNotDisplayTIN"
+        Me.CheckBoxDoNotDisplayTIN.Size = New System.Drawing.Size(126, 17)
+        Me.CheckBoxDoNotDisplayTIN.TabIndex = 5
+        Me.CheckBoxDoNotDisplayTIN.Text = "Do not display TIN?"
+        Me.CheckBoxDoNotDisplayTIN.UseVisualStyleBackColor = True
         '
         'DeliveryReceiptPrintOptions
         '
@@ -234,4 +248,5 @@ Partial Class DeliveryReceiptPrintOptions
     Friend WithEvents CheckBoxDoNotDisplayUOM As CheckBox
     Friend WithEvents CheckBoxBasedOnPOnumber As CheckBox
     Friend WithEvents CheckBoxFontCalibri As CheckBox
+    Friend WithEvents CheckBoxDoNotDisplayTIN As CheckBox
 End Class

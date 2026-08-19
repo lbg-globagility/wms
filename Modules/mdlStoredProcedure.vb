@@ -3207,6 +3207,9 @@ Module mdlStoredProcedure
                             ByVal Description As String,
                             ByVal UnitPrice As Decimal,
                             ByVal Image As String,
+                            ByVal IsThurston As Boolean,
+                            ByVal UnitOfMeasure2 As String,
+                            ByVal UnitPriceOfUOM2 As Decimal,
                             ByVal globalformname As Object) As Boolean
 
         Dim F_return As Boolean = False
@@ -3230,6 +3233,9 @@ Module mdlStoredProcedure
                 .Parameters.AddWithValue("U_Description", Description)
                 .Parameters.AddWithValue("U_UnitPrice", UnitPrice)
                 .Parameters.AddWithValue("U_Image", If(String.IsNullOrEmpty(Image), DBNull.Value, Image))
+                .Parameters.AddWithValue("U_IsThurston", IsThurston)
+                .Parameters.AddWithValue("U_UnitOfMeasure2", UnitOfMeasure2)
+                .Parameters.AddWithValue("U_UnitPriceOfUOM2", UnitPriceOfUOM2)
                 .CommandType = CommandType.StoredProcedure
                 F_return = (.ExecuteNonQuery > 0)
             Catch ex As Exception

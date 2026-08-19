@@ -996,7 +996,7 @@ Public Class CustomerOrdersForm
             dgCustomerOrderList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
             Dim sql1 As String = "SELECT co.rowid,COALESCE(co.ordernumber,''),DATE_FORMAT(co.orderdate,'%d-%b-%Y'),COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),'')," &
-                        "COALESCE(co.status,''),COALESCE(co.referencenumber,'') FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid WHERE co.organizationid = " & Z_OrganizationID & $" AND co.ordertype = '{OrderType.CO.ToString()}' " &
+                        "COALESCE(co.status,''),COALESCE(co.referencenumber,''),COALESCE(co.drnumber,'') FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid WHERE co.organizationid = " & Z_OrganizationID & $" AND co.ordertype = '{OrderType.CO.ToString()}' " &
                         "ORDER BY co.ordernumber DESC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -1010,6 +1010,7 @@ Public Class CustomerOrdersForm
                     dgCustomerOrderList.Item(co_customername.Index, n).Value = reader1(3)
                     dgCustomerOrderList.Item(co_status.Index, n).Value = reader1(4)
                     dgCustomerOrderList.Item(co_pono.Index, n).Value = reader1(5)
+                    dgCustomerOrderList.Item(co_sidrno.Index, n).Value = reader1(6)
                     n = n + 1
                 End If
             End While
@@ -1018,6 +1019,7 @@ Public Class CustomerOrdersForm
             dgCustomerOrderList.Columns("co_pono").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
             dgCustomerOrderList.Columns("co_customerorderdate").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
             dgCustomerOrderList.Columns("co_status").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
+            dgCustomerOrderList.Columns("co_sidrno").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
             If dgCustomerOrderList.Rows.Count <> 0 Then
                 dgCustomerOrderList.CurrentRow.Selected = False
             End If
@@ -1033,8 +1035,8 @@ Public Class CustomerOrdersForm
             dgCustomerOrderList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
             Dim sql1 As String = "SELECT co.rowid,COALESCE(co.ordernumber,''),DATE_FORMAT(co.orderdate,'%d-%b-%Y'),COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),'')," &
-                        "COALESCE(co.status,''),COALESCE(co.referencenumber,'') FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid WHERE co.organizationid = " & Z_OrganizationID & $" AND co.ordertype = '{OrderType.CO.ToString()}' AND " &
-                        "(co.ordernumber LIKE ""%" & isearchphrase & "%"" OR co.referencenumber LIKE ""%" & isearchphrase & "%"" OR co.status LIKE ""%" & isearchphrase & "%"" OR cu.companyname LIKE ""%" & isearchphrase & "%"") " &
+                        "COALESCE(co.status,''),COALESCE(co.referencenumber,''),COALESCE(co.drnumber,'') FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid WHERE co.organizationid = " & Z_OrganizationID & $" AND co.ordertype = '{OrderType.CO.ToString()}' AND " &
+                        "(co.ordernumber LIKE ""%" & isearchphrase & "%"" OR co.referencenumber LIKE ""%" & isearchphrase & "%"" OR co.status LIKE ""%" & isearchphrase & "%"" OR cu.companyname LIKE ""%" & isearchphrase & "%""  OR co.drnumber LIKE ""%" & isearchphrase & "%"") " &
                         "ORDER BY co.ordernumber DESC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -1048,6 +1050,7 @@ Public Class CustomerOrdersForm
                     dgCustomerOrderList.Item(co_customername.Index, n).Value = reader1(3)
                     dgCustomerOrderList.Item(co_status.Index, n).Value = reader1(4)
                     dgCustomerOrderList.Item(co_pono.Index, n).Value = reader1(5)
+                    dgCustomerOrderList.Item(co_sidrno.Index, n).Value = reader1(6)
                     n = n + 1
                 End If
             End While
@@ -1056,6 +1059,7 @@ Public Class CustomerOrdersForm
             dgCustomerOrderList.Columns("co_pono").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
             dgCustomerOrderList.Columns("co_customerorderdate").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
             dgCustomerOrderList.Columns("co_status").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
+            dgCustomerOrderList.Columns("co_sidrno").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
             If dgCustomerOrderList.Rows.Count <> 0 Then
                 dgCustomerOrderList.CurrentRow.Selected = False
             End If
@@ -1071,7 +1075,7 @@ Public Class CustomerOrdersForm
             dgCustomerOrderList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
             Dim sql1 As String = "SELECT co.rowid,COALESCE(co.ordernumber,''),DATE_FORMAT(co.orderdate,'%d-%b-%Y'),COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),'')," &
-                        "COALESCE(co.status,''),COALESCE(co.referencenumber,'') FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid WHERE co.organizationid = " & Z_OrganizationID & $" AND co.ordertype = '{OrderType.CO.ToString()}' AND " &
+                        "COALESCE(co.status,''),COALESCE(co.referencenumber,''),COALESCE(co.drnumber,'') FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid WHERE co.organizationid = " & Z_OrganizationID & $" AND co.ordertype = '{OrderType.CO.ToString()}' AND " &
                         "(" & idatesearch & " >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " &
                         "" & idatesearch & " <= '" & dtpToSearch.Value.Year & "-" & dtpToSearch.Value.Month & "-" & dtpToSearch.Value.Day & "' ) " &
                         "GROUP BY co.rowid ORDER BY co.ordernumber DESC LIMIT " & istartpage & "," & pagedivisor & " "
@@ -1087,6 +1091,7 @@ Public Class CustomerOrdersForm
                     dgCustomerOrderList.Item(co_customername.Index, n).Value = reader1(3)
                     dgCustomerOrderList.Item(co_status.Index, n).Value = reader1(4)
                     dgCustomerOrderList.Item(co_pono.Index, n).Value = reader1(5)
+                    dgCustomerOrderList.Item(co_sidrno.Index, n).Value = reader1(6)
                     n = n + 1
                 End If
             End While
@@ -1095,6 +1100,7 @@ Public Class CustomerOrdersForm
             dgCustomerOrderList.Columns("co_pono").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
             dgCustomerOrderList.Columns("co_customerorderdate").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
             dgCustomerOrderList.Columns("co_status").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
+            dgCustomerOrderList.Columns("co_sidrno").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
             If dgCustomerOrderList.Rows.Count <> 0 Then
                 dgCustomerOrderList.CurrentRow.Selected = False
             End If
@@ -1110,7 +1116,7 @@ Public Class CustomerOrdersForm
             dgCustomerOrderList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
             Dim sql1 As String = "SELECT co.rowid,COALESCE(co.ordernumber,''),DATE_FORMAT(co.orderdate,'%d-%b-%Y'),COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),'')," &
-                        "COALESCE(co.status,''),COALESCE(co.referencenumber,'') FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid WHERE co.organizationid = " & Z_OrganizationID & " " &
+                        "COALESCE(co.status,''),COALESCE(co.referencenumber,''),COALESCE(co.drnumber,'') FROM orders co LEFT JOIN accounts cu ON co.accountid = cu.rowid WHERE co.organizationid = " & Z_OrganizationID & " " &
                         $"AND co.ordertype = '{OrderType.CO.ToString()}' AND " & icommonphrase & " " & idatesearch & " ORDER BY co.ordernumber DESC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -1124,6 +1130,7 @@ Public Class CustomerOrdersForm
                     dgCustomerOrderList.Item(co_customername.Index, n).Value = reader1(3)
                     dgCustomerOrderList.Item(co_status.Index, n).Value = reader1(4)
                     dgCustomerOrderList.Item(co_pono.Index, n).Value = reader1(5)
+                    dgCustomerOrderList.Item(co_sidrno.Index, n).Value = reader1(6)
                     n = n + 1
                 End If
             End While
@@ -1132,6 +1139,7 @@ Public Class CustomerOrdersForm
             dgCustomerOrderList.Columns("co_pono").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
             dgCustomerOrderList.Columns("co_customerorderdate").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
             dgCustomerOrderList.Columns("co_status").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
+            dgCustomerOrderList.Columns("co_sidrno").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
             If dgCustomerOrderList.Rows.Count <> 0 Then
                 dgCustomerOrderList.CurrentRow.Selected = False
             End If

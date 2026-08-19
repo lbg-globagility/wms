@@ -23,18 +23,19 @@ Partial Class CustomerOrdersForm2
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim DataGridViewCellStyle9 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle8 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(CustomerOrdersForm2))
+        Dim DataGridViewCellStyle7 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle10 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle11 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle12 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle13 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
         Me.gridOrders = New DevComponents.DotNetBar.Controls.DataGridViewX()
         Me.Column13 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column14 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.SIDRNo = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column19 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column16 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column18 = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -189,15 +190,15 @@ Partial Class CustomerOrdersForm2
         Me.gridOrders.AllowUserToAddRows = False
         Me.gridOrders.AllowUserToDeleteRows = False
         Me.gridOrders.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.gridOrders.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column13, Me.Column14, Me.Column19, Me.Column16, Me.Column18, Me.Column21, Me.Column15, Me.Column17, Me.Column20, Me.Column12})
-        DataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle9.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.gridOrders.DefaultCellStyle = DataGridViewCellStyle9
+        Me.gridOrders.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column13, Me.Column14, Me.SIDRNo, Me.Column19, Me.Column16, Me.Column18, Me.Column21, Me.Column15, Me.Column17, Me.Column20, Me.Column12})
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle2.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.gridOrders.DefaultCellStyle = DataGridViewCellStyle2
         Me.gridOrders.Dock = System.Windows.Forms.DockStyle.Fill
         Me.gridOrders.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
         Me.gridOrders.Location = New System.Drawing.Point(0, 127)
@@ -220,6 +221,13 @@ Partial Class CustomerOrdersForm2
         Me.Column14.HeaderText = "P.O. No."
         Me.Column14.Name = "Column14"
         Me.Column14.ReadOnly = True
+        '
+        'SIDRNo
+        '
+        Me.SIDRNo.DataPropertyName = "DRNumber"
+        Me.SIDRNo.HeaderText = "S.I./D.R. No"
+        Me.SIDRNo.Name = "SIDRNo"
+        Me.SIDRNo.ReadOnly = True
         '
         'Column19
         '
@@ -266,9 +274,9 @@ Partial Class CustomerOrdersForm2
         'Column20
         '
         Me.Column20.DataPropertyName = "TotalAmount"
-        DataGridViewCellStyle8.Format = "N2"
-        DataGridViewCellStyle8.NullValue = Nothing
-        Me.Column20.DefaultCellStyle = DataGridViewCellStyle8
+        DataGridViewCellStyle1.Format = "N2"
+        DataGridViewCellStyle1.NullValue = Nothing
+        Me.Column20.DefaultCellStyle = DataGridViewCellStyle1
         Me.Column20.HeaderText = "Total Amount"
         Me.Column20.Name = "Column20"
         Me.Column20.ReadOnly = True
@@ -1080,14 +1088,14 @@ Partial Class CustomerOrdersForm2
         Me.gridOrderItems.AllowUserToDeleteRows = False
         Me.gridOrderItems.ColumnHeadersHeight = 40
         Me.gridOrderItems.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column23, Me.Column1, Me.Column2, Me.Column3, Me.Column4, Me.Column5, Me.Column9, Me.Column6, Me.Column7, Me.ColumnUnitOfLength, Me.Column22, Me.ColumnUnitOfLengthPriceText, Me.Column8, Me.Column10, Me.Column11, Me.ColumnDelete})
-        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        DataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle6.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        DataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.gridOrderItems.DefaultCellStyle = DataGridViewCellStyle6
+        DataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle7.Font = New System.Drawing.Font("Segoe UI", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.gridOrderItems.DefaultCellStyle = DataGridViewCellStyle7
         Me.gridOrderItems.Dock = System.Windows.Forms.DockStyle.Fill
         Me.gridOrderItems.EnableHeadersVisualStyles = False
         Me.gridOrderItems.GridColor = System.Drawing.Color.FromArgb(CType(CType(208, Byte), Integer), CType(CType(215, Byte), Integer), CType(CType(229, Byte), Integer))
@@ -1134,8 +1142,8 @@ Partial Class CustomerOrdersForm2
         'Column5
         '
         Me.Column5.DataPropertyName = "QuantityOrdered"
-        DataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.Column5.DefaultCellStyle = DataGridViewCellStyle10
+        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.Column5.DefaultCellStyle = DataGridViewCellStyle3
         Me.Column5.HeaderText = "Number of Roll(s)"
         Me.Column5.Name = "Column5"
         Me.Column5.Width = 120
@@ -1151,20 +1159,20 @@ Partial Class CustomerOrdersForm2
         'Column6
         '
         Me.Column6.DataPropertyName = "UnitPrice"
-        DataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle11.Format = "N2"
-        DataGridViewCellStyle11.NullValue = Nothing
-        Me.Column6.DefaultCellStyle = DataGridViewCellStyle11
+        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle4.Format = "N2"
+        DataGridViewCellStyle4.NullValue = Nothing
+        Me.Column6.DefaultCellStyle = DataGridViewCellStyle4
         Me.Column6.HeaderText = "Price per Roll"
         Me.Column6.Name = "Column6"
         '
         'Column7
         '
         Me.Column7.DataPropertyName = "TotalItemPrice"
-        DataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        DataGridViewCellStyle12.Format = "N2"
-        DataGridViewCellStyle12.NullValue = Nothing
-        Me.Column7.DefaultCellStyle = DataGridViewCellStyle12
+        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        DataGridViewCellStyle5.Format = "N2"
+        DataGridViewCellStyle5.NullValue = Nothing
+        Me.Column7.DefaultCellStyle = DataGridViewCellStyle5
         Me.Column7.HeaderText = "Total Item Price (Roll)"
         Me.Column7.Name = "Column7"
         Me.Column7.ReadOnly = True
@@ -1185,8 +1193,8 @@ Partial Class CustomerOrdersForm2
         Me.Column22.BackgroundStyle.Class = "DataGridViewNumericBorder"
         Me.Column22.BackgroundStyle.CornerType = DevComponents.DotNetBar.eCornerType.Square
         Me.Column22.DataPropertyName = "UnitOfLengthNumber"
-        DataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopRight
-        Me.Column22.DefaultCellStyle = DataGridViewCellStyle13
+        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopRight
+        Me.Column22.DefaultCellStyle = DataGridViewCellStyle6
         Me.Column22.HeaderText = "Unit Length Number"
         Me.Column22.Increment = 1.0R
         Me.Column22.Name = "Column22"
@@ -1408,16 +1416,6 @@ Partial Class CustomerOrdersForm2
     Friend WithEvents TextBoxSearch As TextBox
     Friend WithEvents btnClearSearch As Button
     Friend WithEvents CheckBoxShowAll As CheckBox
-    Friend WithEvents Column13 As DataGridViewTextBoxColumn
-    Friend WithEvents Column14 As DataGridViewTextBoxColumn
-    Friend WithEvents Column19 As DataGridViewTextBoxColumn
-    Friend WithEvents Column16 As DataGridViewTextBoxColumn
-    Friend WithEvents Column18 As DataGridViewTextBoxColumn
-    Friend WithEvents Column21 As DataGridViewTextBoxColumn
-    Friend WithEvents Column15 As DataGridViewTextBoxColumn
-    Friend WithEvents Column17 As DataGridViewTextBoxColumn
-    Friend WithEvents Column20 As DataGridViewTextBoxColumn
-    Friend WithEvents Column12 As DataGridViewTextBoxColumn
     Friend WithEvents LinkLabelRefresh As LinkLabel
     Friend WithEvents ContextMenuStrip2 As ContextMenuStrip
     Friend WithEvents ContextMenuStrip3 As ContextMenuStrip
@@ -1441,4 +1439,15 @@ Partial Class CustomerOrdersForm2
     Friend WithEvents Column11 As DataGridViewTextBoxColumn
     Friend WithEvents ColumnDelete As DevComponents.DotNetBar.Controls.DataGridViewButtonXColumn
     Friend WithEvents cboCustomerName As SergeUtils.EasyCompletionComboBox
+    Friend WithEvents Column13 As DataGridViewTextBoxColumn
+    Friend WithEvents Column14 As DataGridViewTextBoxColumn
+    Friend WithEvents SIDRNo As DataGridViewTextBoxColumn
+    Friend WithEvents Column19 As DataGridViewTextBoxColumn
+    Friend WithEvents Column16 As DataGridViewTextBoxColumn
+    Friend WithEvents Column18 As DataGridViewTextBoxColumn
+    Friend WithEvents Column21 As DataGridViewTextBoxColumn
+    Friend WithEvents Column15 As DataGridViewTextBoxColumn
+    Friend WithEvents Column17 As DataGridViewTextBoxColumn
+    Friend WithEvents Column20 As DataGridViewTextBoxColumn
+    Friend WithEvents Column12 As DataGridViewTextBoxColumn
 End Class

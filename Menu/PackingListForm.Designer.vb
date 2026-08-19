@@ -124,12 +124,6 @@ Partial Class PackingListForm
         Me.Label11 = New System.Windows.Forms.Label()
         Me.cmdLast = New System.Windows.Forms.ToolStripButton()
         Me.dgPackingList = New DevComponents.DotNetBar.Controls.DataGridViewX()
-        Me.pal_rowid = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.pal_packinglistno = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.pal_packinglistdate = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.pal_customerorderno = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.pal_customername = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.pal_status = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Label16 = New System.Windows.Forms.Label()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
         Me.gbPackingList = New System.Windows.Forms.GroupBox()
@@ -192,6 +186,13 @@ Partial Class PackingListForm
         Me.cmsOptions = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.cmsEdit = New System.Windows.Forms.ToolStripMenuItem()
         Me.cmsDelete = New System.Windows.Forms.ToolStripMenuItem()
+        Me.pal_rowid = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.pal_packinglistno = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.pal_packinglistdate = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.pal_pono = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.pal_customerorderno = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.pal_customername = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.pal_status = New System.Windows.Forms.DataGridViewTextBoxColumn()
         CType(Me.dgCustomerOrderItems, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.gbCustomerOrderItems.SuspendLayout()
         CType(Me.errProvider, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -569,7 +570,7 @@ Partial Class PackingListForm
         Me.btnAddToCarton.Name = "btnAddToCarton"
         Me.btnAddToCarton.Size = New System.Drawing.Size(95, 75)
         Me.btnAddToCarton.TabIndex = 31
-        Me.btnAddToCarton.Text = "Add To Box"
+        Me.btnAddToCarton.Text = "Add to Bundle"
         Me.btnAddToCarton.UseVisualStyleBackColor = False
         '
         'txtTotalQtyInCartonSum
@@ -1110,7 +1111,7 @@ Partial Class PackingListForm
         DataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
         Me.dgPackingList.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle4
         Me.dgPackingList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgPackingList.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.pal_rowid, Me.pal_packinglistno, Me.pal_packinglistdate, Me.pal_customerorderno, Me.pal_customername, Me.pal_status})
+        Me.dgPackingList.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.pal_rowid, Me.pal_packinglistno, Me.pal_packinglistdate, Me.pal_pono, Me.pal_customerorderno, Me.pal_customername, Me.pal_status})
         DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
         DataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window
         DataGridViewCellStyle5.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -1127,44 +1128,6 @@ Partial Class PackingListForm
         Me.dgPackingList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.dgPackingList.Size = New System.Drawing.Size(324, 296)
         Me.dgPackingList.TabIndex = 16
-        '
-        'pal_rowid
-        '
-        Me.pal_rowid.HeaderText = "rowid"
-        Me.pal_rowid.Name = "pal_rowid"
-        Me.pal_rowid.ReadOnly = True
-        Me.pal_rowid.Visible = False
-        '
-        'pal_packinglistno
-        '
-        Me.pal_packinglistno.HeaderText = "Packing List No."
-        Me.pal_packinglistno.Name = "pal_packinglistno"
-        Me.pal_packinglistno.ReadOnly = True
-        '
-        'pal_packinglistdate
-        '
-        Me.pal_packinglistdate.HeaderText = "Packing List Date"
-        Me.pal_packinglistdate.Name = "pal_packinglistdate"
-        Me.pal_packinglistdate.ReadOnly = True
-        '
-        'pal_customerorderno
-        '
-        Me.pal_customerorderno.HeaderText = "Customer Order No."
-        Me.pal_customerorderno.Name = "pal_customerorderno"
-        Me.pal_customerorderno.ReadOnly = True
-        '
-        'pal_customername
-        '
-        Me.pal_customername.HeaderText = "Customer Name"
-        Me.pal_customername.Name = "pal_customername"
-        Me.pal_customername.ReadOnly = True
-        '
-        'pal_status
-        '
-        Me.pal_status.HeaderText = "Status"
-        Me.pal_status.Name = "pal_status"
-        Me.pal_status.ReadOnly = True
-        Me.pal_status.Width = 80
         '
         'Label16
         '
@@ -1825,6 +1788,50 @@ Partial Class PackingListForm
         Me.cmsDelete.Size = New System.Drawing.Size(107, 22)
         Me.cmsDelete.Text = "Delete"
         '
+        'pal_rowid
+        '
+        Me.pal_rowid.HeaderText = "rowid"
+        Me.pal_rowid.Name = "pal_rowid"
+        Me.pal_rowid.ReadOnly = True
+        Me.pal_rowid.Visible = False
+        '
+        'pal_packinglistno
+        '
+        Me.pal_packinglistno.HeaderText = "Packing List No."
+        Me.pal_packinglistno.Name = "pal_packinglistno"
+        Me.pal_packinglistno.ReadOnly = True
+        '
+        'pal_packinglistdate
+        '
+        Me.pal_packinglistdate.HeaderText = "Packing List Date"
+        Me.pal_packinglistdate.Name = "pal_packinglistdate"
+        Me.pal_packinglistdate.ReadOnly = True
+        '
+        'pal_pono
+        '
+        Me.pal_pono.HeaderText = "P.O. No"
+        Me.pal_pono.Name = "pal_pono"
+        Me.pal_pono.ReadOnly = True
+        '
+        'pal_customerorderno
+        '
+        Me.pal_customerorderno.HeaderText = "Customer Order No."
+        Me.pal_customerorderno.Name = "pal_customerorderno"
+        Me.pal_customerorderno.ReadOnly = True
+        '
+        'pal_customername
+        '
+        Me.pal_customername.HeaderText = "Customer Name"
+        Me.pal_customername.Name = "pal_customername"
+        Me.pal_customername.ReadOnly = True
+        '
+        'pal_status
+        '
+        Me.pal_status.HeaderText = "Status"
+        Me.pal_status.Name = "pal_status"
+        Me.pal_status.ReadOnly = True
+        Me.pal_status.Width = 80
+        '
         'PackingListForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -1955,12 +1962,6 @@ Partial Class PackingListForm
     Friend WithEvents txtStatus As System.Windows.Forms.TextBox
     Friend WithEvents Label12 As System.Windows.Forms.Label
     Friend WithEvents btnAddToCarton As System.Windows.Forms.Button
-    Friend WithEvents pal_rowid As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents pal_packinglistno As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents pal_packinglistdate As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents pal_customerorderno As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents pal_customername As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents pal_status As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents cmsOptions As System.Windows.Forms.ContextMenuStrip
     Friend WithEvents cmsEdit As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents cmsDelete As System.Windows.Forms.ToolStripMenuItem
@@ -2035,4 +2036,11 @@ Partial Class PackingListForm
     Friend WithEvents tsLarge As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents tsExtraSmall As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents tsExtraLarge As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents pal_rowid As DataGridViewTextBoxColumn
+    Friend WithEvents pal_packinglistno As DataGridViewTextBoxColumn
+    Friend WithEvents pal_packinglistdate As DataGridViewTextBoxColumn
+    Friend WithEvents pal_pono As DataGridViewTextBoxColumn
+    Friend WithEvents pal_customerorderno As DataGridViewTextBoxColumn
+    Friend WithEvents pal_customername As DataGridViewTextBoxColumn
+    Friend WithEvents pal_status As DataGridViewTextBoxColumn
 End Class

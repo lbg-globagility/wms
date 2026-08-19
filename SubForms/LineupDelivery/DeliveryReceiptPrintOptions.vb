@@ -39,8 +39,12 @@ Public Class DeliveryReceiptPrintOptions
         Dim companyNameTitle As TextObject = CType((section?.ReportObjects("CompanyNameTitle1")), TextObject)
         companyNameTitle.Text = deliveryReceiptDto.CompanyNameTitle
 
+        Dim tinClause = If(CheckBoxDoNotDisplayTIN.Checked, deliveryReceiptDto.SupportingInfo.Replace("VAT REG. TIN: 010-257-738-00000", ""),
+            deliveryReceiptDto.SupportingInfo)
+
         Dim supportingInfo As TextObject = CType((section?.ReportObjects("SupportingInfo1")), TextObject)
-        supportingInfo.Text = deliveryReceiptDto.SupportingInfo
+        'supportingInfo.Text = deliveryReceiptDto.SupportingInfo
+        supportingInfo.Text = tinClause
 
         Dim deliveryReceiptCaption As TextObject = CType((section?.ReportObjects("DeliveryReceiptCaption1")), TextObject)
         deliveryReceiptCaption.Text = deliveryReceiptDto.DeliveryReceiptCaption
@@ -234,5 +238,9 @@ Public Class DeliveryReceiptPrintOptions
     Private Sub RadioBtnUnitNonRoll_CheckedChanged(sender As Object, e As EventArgs) Handles RadioBtnUnitNonRoll.CheckedChanged
         CheckBoxMeterYardWithPrice.Enabled = RadioBtnUnitNonRoll.Enabled
         CheckBoxRollWithPrice.Enabled = Not RadioBtnUnitNonRoll.Enabled
+    End Sub
+
+    Private Sub ButtonOK_Click(sender As Object, e As EventArgs) Handles ButtonOK.Click
+
     End Sub
 End Class

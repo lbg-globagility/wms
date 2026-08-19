@@ -868,7 +868,7 @@ Public Class PackingListForm
             dgPackingList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
             Dim sql1 As String = "SELECT pal.rowid,COALESCE(pal.packinglistno,''),DATE_FORMAT(pal.packinglistdate,'%d-%b-%Y'),COALESCE(co.ordernumber,'')," &
-                        "COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),''),COALESCE(pal.status,'') FROM packinglist pal " &
+                        "COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),''),COALESCE(pal.status,''),COALESCE(co.referencenumber,'') FROM packinglist pal " &
                         "LEFT JOIN orders co ON pal.orderid = co.rowid LEFT JOIN accounts cu ON co.accountid = cu.rowid " &
                         "WHERE pal.organizationid = " & Z_OrganizationID & " ORDER BY pal.PackingListNo+0 DESC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
@@ -883,6 +883,7 @@ Public Class PackingListForm
                     dgPackingList.Item(pal_customerorderno.Index, n).Value = reader1(3)
                     dgPackingList.Item(pal_customername.Index, n).Value = reader1(4)
                     dgPackingList.Item(pal_status.Index, n).Value = reader1(5)
+                    dgPackingList.Item(pal_pono.Index, n).Value = reader1(6)
                     n = n + 1
                 End If
             End While
@@ -891,6 +892,7 @@ Public Class PackingListForm
             dgPackingList.Columns("pal_packinglistdate").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
             dgPackingList.Columns("pal_customerorderno").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
             dgPackingList.Columns("pal_status").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
+            dgPackingList.Columns("pal_pono").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
             If dgPackingList.Rows.Count <> 0 Then
                 dgPackingList.CurrentRow.Selected = False
             End If
@@ -906,9 +908,9 @@ Public Class PackingListForm
             dgPackingList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
             Dim sql1 As String = "SELECT pal.rowid,COALESCE(pal.packinglistno,''),DATE_FORMAT(pal.packinglistdate,'%d-%b-%Y'),COALESCE(co.ordernumber,'')," &
-                        "COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),''),COALESCE(pal.`status`,'') FROM packinglist pal " &
+                        "COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),''),COALESCE(pal.`status`,''),COALESCE(co.referencenumber,'') FROM packinglist pal " &
                         "LEFT JOIN orders co ON pal.orderid = co.rowid LEFT JOIN accounts cu ON co.accountid = cu.rowid WHERE pal.organizationid = " & Z_OrganizationID & " AND " &
-                        "(pal.packinglistno LIKE ""%" & isearchphrase & "%"" OR pal.status LIKE ""%" & isearchphrase & "%"" OR co.ordernumber LIKE ""%" & isearchphrase & "%"" OR cu.companyname LIKE ""%" & isearchphrase & "%"") " &
+                        "(pal.packinglistno LIKE ""%" & isearchphrase & "%"" OR pal.status LIKE ""%" & isearchphrase & "%"" OR co.ordernumber LIKE ""%" & isearchphrase & "%"" OR cu.companyname LIKE ""%" & isearchphrase & "%"" OR co.referencenumber LIKE ""%" & isearchphrase & "%"") " &
                         "ORDER BY pal.PackingListNo+0 DESC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
             Dim reader1 As MySqlDataReader = cmd1.ExecuteReader
@@ -922,6 +924,7 @@ Public Class PackingListForm
                     dgPackingList.Item(pal_customerorderno.Index, n).Value = reader1(3)
                     dgPackingList.Item(pal_customername.Index, n).Value = reader1(4)
                     dgPackingList.Item(pal_status.Index, n).Value = reader1(5)
+                    dgPackingList.Item(pal_pono.Index, n).Value = reader1(6)
                     n = n + 1
                 End If
             End While
@@ -930,6 +933,7 @@ Public Class PackingListForm
             dgPackingList.Columns("pal_packinglistdate").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
             dgPackingList.Columns("pal_customerorderno").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
             dgPackingList.Columns("pal_status").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
+            dgPackingList.Columns("pal_pono").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
             If dgPackingList.Rows.Count <> 0 Then
                 dgPackingList.CurrentRow.Selected = False
             End If
@@ -945,7 +949,7 @@ Public Class PackingListForm
             dgPackingList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
             Dim sql1 As String = "SELECT pal.rowid,COALESCE(pal.packinglistno,''),DATE_FORMAT(pal.packinglistdate,'%d-%b-%Y'),COALESCE(co.ordernumber,'')," &
-                        "COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),''),COALESCE(pal.status,'') FROM packinglist pal " &
+                        "COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),''),COALESCE(pal.status,''),COALESCE(co.referencenumber,'') FROM packinglist pal " &
                         "LEFT JOIN orders co ON pal.orderid = co.rowid LEFT JOIN accounts cu ON co.accountid = cu.rowid WHERE pal.organizationid = " & Z_OrganizationID & " " &
                         "AND (" & idatesearch & " >= '" & dtpFromSearch.Value.Year & "-" & dtpFromSearch.Value.Month & "-" & dtpFromSearch.Value.Day & "' AND " &
                         "" & idatesearch & " <= '" & dtpToSearch.Value.Year & "-" & dtpToSearch.Value.Month & "-" & dtpToSearch.Value.Day & "' ) " &
@@ -962,6 +966,7 @@ Public Class PackingListForm
                     dgPackingList.Item(pal_customerorderno.Index, n).Value = reader1(3)
                     dgPackingList.Item(pal_customername.Index, n).Value = reader1(4)
                     dgPackingList.Item(pal_status.Index, n).Value = reader1(5)
+                    dgPackingList.Item(pal_pono.Index, n).Value = reader1(6)
                     n = n + 1
                 End If
             End While
@@ -970,6 +975,7 @@ Public Class PackingListForm
             dgPackingList.Columns("pal_packinglistdate").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
             dgPackingList.Columns("pal_customerorderno").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
             dgPackingList.Columns("pal_status").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
+            dgPackingList.Columns("pal_pono").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
             If dgPackingList.Rows.Count <> 0 Then
                 dgPackingList.CurrentRow.Selected = False
             End If
@@ -985,7 +991,7 @@ Public Class PackingListForm
             dgPackingList.Rows.Clear()
             If conn.State = ConnectionState.Closed Then conn.Open()
             Dim sql1 As String = "SELECT pal.rowid,COALESCE(pal.packinglistno,''),DATE_FORMAT(pal.packinglistdate,'%d-%b-%Y'),COALESCE(co.ordernumber,'')," &
-                        "COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),''),COALESCE(pal.status,'') FROM packinglist pal " &
+                        "COALESCE(CONCAT(COALESCE(cu.companyname,''),' - ',COALESCE(cu.accountno,'')),''),COALESCE(pal.status,''),COALESCE(co.referencenumber,'') FROM packinglist pal " &
                         "LEFT JOIN orders co ON pal.orderid = co.rowid LEFT JOIN accounts cu ON co.accountid = cu.rowid LEFT JOIN packinglistcartons pc ON pal.rowid = pc.packinglistid " &
                         "WHERE pal.organizationid = " & Z_OrganizationID & " AND " & icommonphrase & " " & idatesearch & " GROUP BY pal.rowid ORDER BY pal.PackingListNo+0 DESC LIMIT " & istartpage & "," & pagedivisor & " "
             Dim cmd1 As New MySqlCommand(sql1, conn)
@@ -1000,6 +1006,7 @@ Public Class PackingListForm
                     dgPackingList.Item(pal_customerorderno.Index, n).Value = reader1(3)
                     dgPackingList.Item(pal_customername.Index, n).Value = reader1(4)
                     dgPackingList.Item(pal_status.Index, n).Value = reader1(5)
+                    dgPackingList.Item(pal_pono.Index, n).Value = reader1(6)
                     n = n + 1
                 End If
             End While
@@ -1008,6 +1015,7 @@ Public Class PackingListForm
             dgPackingList.Columns("pal_packinglistdate").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
             dgPackingList.Columns("pal_customerorderno").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
             dgPackingList.Columns("pal_status").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
+            dgPackingList.Columns("pal_pono").DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
             If dgPackingList.Rows.Count <> 0 Then
                 dgPackingList.CurrentRow.Selected = False
             End If
@@ -2562,7 +2570,7 @@ ORDER BY ci.rowid;"
                     Exit Try
                 End If
                 Dim addtocartonlinkform As New AddToCartonForm
-                addtocartonlinkform.lblTitle.Text = "Add To Box - Bundle Items"
+                addtocartonlinkform.lblTitle.Text = "Add To Bundle"
                 addtocartonlinkform.atcorderid = palorderid
                 addtocartonlinkform.atcpackinglistid = CInt(dgPackingList.CurrentRow.Cells("pal_rowid").Value)
                 addtocartonlinkform.atcorderitemid = CInt(dgCustomerOrderItems.CurrentRow.Cells("ci_rowid").Value)
